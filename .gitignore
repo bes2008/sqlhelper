@@ -1,8 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea/
-.idea/vcs.xml
 sqlhelper-dialect/sqlhelper-dialect.iml
 sqlhelper-dialect/target/
 sqlhelper-mybatis/sqlhelper-mybatis.iml
+sqlhelper-mybatis/target/
 sqlhelper.iml
 src/
