@@ -1,9 +1,9 @@
 /*
  * Copyright 2019 the original author or authors.
  *
- * Licensed under the LGPL, Version 2.1 (the "License");
+ * Licensed under the LGPL, Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at  http://www.gnu.org/licenses/lgpl-2.1.html
+ * You may obtain a copy of the License at  http://www.gnu.org/licenses/lgpl-3.0.html
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,7 @@ public class SQL2008StandardLimitHandler
         extends AbstractLimitHandler {
     public static final SQL2008StandardLimitHandler INSTANCE = new SQL2008StandardLimitHandler();
 
-
+    @Override
     public String processSql(String sql, RowSelection selection) {
         if (LimitHelper.useLimit(getDialect(), selection)) {
             return sql + (LimitHelper.hasFirstRow(selection) ? " offset ? rows fetch next ? rows only" : " fetch first ? rows only");

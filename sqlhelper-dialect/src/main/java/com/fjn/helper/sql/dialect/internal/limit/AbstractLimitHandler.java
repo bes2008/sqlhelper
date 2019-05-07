@@ -1,9 +1,10 @@
+
 /*
  * Copyright 2019 the original author or authors.
  *
- * Licensed under the LGPL, Version 2.1 (the "License");
+ * Licensed under the LGPL, Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at  http://www.gnu.org/licenses/lgpl-2.1.html
+ * You may obtain a copy of the License at  http://www.gnu.org/licenses/lgpl-3.0.html
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,17 +33,19 @@ public abstract class AbstractLimitHandler extends LimitHandler {
         return zeroBasedFirstResult;
     }
 
+    @Override
     public int bindLimitParametersAtStartOfQuery(RowSelection selection, PreparedStatement statement, int index)
             throws SQLException {
         return this.dialect.isBindLimitParametersFirst() ? bindLimitParameters(selection, statement, index) : 0;
     }
 
+    @Override
     public int bindLimitParametersAtEndOfQuery(RowSelection selection, PreparedStatement statement, int index)
             throws SQLException {
         return !this.dialect.isBindLimitParametersFirst() ? bindLimitParameters(selection, statement, index) : 0;
     }
 
-
+    @Override
     public void setMaxRows(RowSelection selection, PreparedStatement statement)
             throws SQLException {
     }
