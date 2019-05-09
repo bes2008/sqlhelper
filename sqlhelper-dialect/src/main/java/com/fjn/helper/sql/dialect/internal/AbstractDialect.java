@@ -79,58 +79,37 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     @Override
     public boolean isSupportsLimit() {
-        if (this.delegate == null) {
-            return false;
-        }
-        return this.delegate.isSupportsLimit();
+        return this.delegate == null ? false : this.delegate.isSupportsLimit();
     }
 
     @Override
     public boolean isSupportsLimitOffset() {
-        if (this.delegate == null) {
-            return isSupportsLimit();
-        }
-        return this.delegate.isSupportsLimitOffset();
+        return this.delegate == null ? isSupportsLimit() : this.delegate.isSupportsLimitOffset();
     }
 
     @Override
     public boolean isSupportsVariableLimit() {
-        if (this.delegate == null) {
-            return isSupportsLimit();
-        }
-        return this.delegate.isSupportsVariableLimit();
+        return this.delegate == null ? false : this.delegate.isSupportsVariableLimit();
     }
 
     @Override
     public boolean isBindLimitParametersInReverseOrder() {
-        if (this.delegate == null) {
-            return false;
-        }
-        return this.delegate.isBindLimitParametersInReverseOrder();
+        return this.delegate == null ? false : this.delegate.isBindLimitParametersInReverseOrder();
     }
 
     @Override
     public boolean isBindLimitParametersFirst() {
-        if (this.delegate == null) {
-            return false;
-        }
-        return this.delegate.isBindLimitParametersFirst();
+        return this.delegate == null ? false : this.delegate.isBindLimitParametersFirst();
     }
 
     @Override
     public boolean isUseMaxForLimit() {
-        if (this.delegate == null) {
-            return false;
-        }
-        return this.delegate.isUseMaxForLimit();
+        return this.delegate == null ? false : this.delegate.isUseMaxForLimit();
     }
 
     @Override
     public boolean isForceLimitUsage() {
-        if (this.delegate == null) {
-            return false;
-        }
-        return this.delegate.isForceLimitUsage();
+        return this.delegate == null ? false : this.delegate.isForceLimitUsage();
     }
 
     protected AbstractDialect getRealDialect() {
@@ -149,31 +128,35 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     @Override
     public String getLimitSql(String sql, RowSelection selection) {
-        return getRealDialect().limitHandler.processSql(sql, selection);
+        return getLimitHandler().processSql(sql, selection);
     }
 
     @Override
     public void setMaxRows(RowSelection selection, PreparedStatement statement) throws SQLException {
-        getRealDialect().limitHandler.setMaxRows(selection, statement);
+        getLimitHandler().setMaxRows(selection, statement);
     }
 
     @Override
     public int bindLimitParametersAtEndOfQuery(RowSelection selection, PreparedStatement statement, int index) throws SQLException {
-        return getRealDialect().limitHandler.bindLimitParametersAtEndOfQuery(selection, statement, index);
+        return getLimitHandler().bindLimitParametersAtEndOfQuery(selection, statement, index);
     }
 
     @Override
     public int bindLimitParametersAtStartOfQuery(RowSelection selection, PreparedStatement statement, int index) throws SQLException {
-        return getRealDialect().limitHandler.bindLimitParametersAtStartOfQuery(selection, statement, index);
+        return getLimitHandler().bindLimitParametersAtStartOfQuery(selection, statement, index);
+    }
+
+    protected UrlParser getUrlParser() {
+        return getRealDialect().urlParser;
     }
 
     @Override
     public DatabaseInfo parse(String jdbcUrl) {
-        return getRealDialect().urlParser.parse(jdbcUrl);
+        return getUrlParser().parse(jdbcUrl);
     }
 
     @Override
     public List<String> getUrlSchemas() {
-        return getRealDialect().urlParser.getUrlSchemas();
+        return getUrlParser().getUrlSchemas();
     }
 }
