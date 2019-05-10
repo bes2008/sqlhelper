@@ -273,16 +273,17 @@ public class MyBatisPagingPluginWrapper {
             return executor.query(ms, parameter, RowBounds.DEFAULT, resultHandler, cacheKey, pageBoundSql);
         }
 
-        private int executeCount(final MappedStatement ms, final Object parameter, final RowBounds rowBounds, final ResultHandler resultHandler, final Executor executor, final BoundSql boundSql) throws SQLException {
+        private int executeCount(final MappedStatement ms, final Object parameter, final RowBounds rowBounds, final ResultHandler resultHandler, final Executor executor, final BoundSql boundSql) throws Throwable {
             final MyBatisPagingRequestContext requestContext = PAGING_CONTEXT.get();
             final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
             final String countStatementId = this.getCountStatementId(request, ms.getId());
             int count;
+            BoundSql countBoundSql = null;
             try {
                 MappedStatement countStatement = this.extractCountStatementFromConfiguration(ms.getConfiguration(), countStatementId);
                 if (countStatement != null) {
                     final CacheKey countKey = executor.createCacheKey(countStatement, parameter, RowBounds.DEFAULT, boundSql);
-                    final BoundSql countBoundSql = countStatement.getBoundSql(parameter);
+                    countBoundSql = countStatement.getBoundSql(parameter);
                     requestContext.countSql = countBoundSql;
                     final Object countResultList = executor.query(countStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey, countBoundSql);
                     count = ((Number) ((List) countResultList).get(0)).intValue();
@@ -291,15 +292,21 @@ public class MyBatisPagingPluginWrapper {
                     final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
                     final CacheKey countKey2 = executor.createCacheKey(countStatement, parameter, RowBounds.DEFAULT, boundSql);
                     final String countSql = instrumentor.countSql(boundSql.getSql());
-                    final BoundSql countBoundSql2 = new BoundSql(countStatement.getConfiguration(), countSql, boundSql.getParameterMappings(), parameter);
-                    requestContext.countSql = countBoundSql2;
+                    countBoundSql = new BoundSql(countStatement.getConfiguration(), countSql, boundSql.getParameterMappings(), parameter);
+                    requestContext.countSql = countBoundSql;
                     for (final String key : additionalParameters.keySet()) {
-                        countBoundSql2.setAdditionalParameter(key, additionalParameters.get(key));
+                        countBoundSql.setAdditionalParameter(key, additionalParameters.get(key));
                     }
-                    final Object countResultList2 = executor.query(countStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey2, countBoundSql2);
+                    final Object countResultList2 = executor.query(countStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey2, countBoundSql);
                     count = ((Number) ((List) countResultList2).get(0)).intValue();
                 }
-            } finally {
+            }catch (Throwable ex){
+                if(countBoundSql!=null) {
+                    logger.error("error occur when execute count sql [{}], error: {}", countBoundSql.getSql(), ex.getMessage(), ex);
+                }
+                throw ex;
+            }
+            finally {
                 requestContext.countSql = null;
             }
             return count;
