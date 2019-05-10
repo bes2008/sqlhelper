@@ -28,7 +28,7 @@ public class SQLStatementInstrumentor {
     private static final ThreadLocal<Dialect> DIALECT_HOLDER;
 
     public SQLStatementInstrumentor() {
-        this.dialectRegistry = new DialectRegistry();
+        this.dialectRegistry = DialectRegistry.getInstance();
     }
 
     public boolean beginIfSupportsLimit(final Statement statement) {

@@ -32,11 +32,26 @@ import java.util.Map;
 import java.util.Properties;
 
 public class DialectRegistry {
-    private static final Logger logger;
-    private static final Map<String, Dialect> nameToDialectMap;
-    private static final Map<String, String> classNameToNameMap;
-    private static final Map<DatabaseMetaData, Holder<Dialect>> dbToDialectMap;
+
+    private static final Logger logger = LoggerFactory.getLogger((Class) DialectRegistry.class);
+    ;
+    private static final Map<String, Dialect> nameToDialectMap = new HashMap<String, Dialect>();
+    private static final Map<String, String> classNameToNameMap = new HashMap<String, String>();
+    private static final Map<DatabaseMetaData, Holder<Dialect>> dbToDialectMap = new HashMap<DatabaseMetaData, Holder<Dialect>>();
     private static final Properties vendorDatabaseIdMappings = new Properties();
+
+    static {
+        registerBuiltinDialects();
+    }
+
+    private DialectRegistry() {
+    }
+
+    private static final DialectRegistry registry = new DialectRegistry();
+
+    public static DialectRegistry getInstance() {
+        return registry;
+    }
 
     public Dialect getDialectByClassName(final String className) {
         final String dialectName = (String) DialectRegistry.classNameToNameMap.get(className);
@@ -92,18 +107,17 @@ public class DialectRegistry {
         Arrays.asList(dialects).forEach(DialectRegistry::registerDialectByClass);
     }
 
-    private static void loadDatabaseIdMappings(){
+    private static void loadDatabaseIdMappings() {
         InputStream inputStream = DialectRegistry.class.getResourceAsStream("/sqlhelper-dialect-databaseid.properties");
-        if(inputStream!=null){
+        if (inputStream != null) {
             try {
                 vendorDatabaseIdMappings.load(inputStream);
-            }catch (Throwable ex){
+            } catch (Throwable ex) {
                 logger.error(ex.getMessage(), ex);
-            }
-            finally {
+            } finally {
                 try {
                     inputStream.close();
-                }catch (Throwable ex){
+                } catch (Throwable ex) {
                     // Ignore it
                 }
             }
@@ -114,7 +128,7 @@ public class DialectRegistry {
         return vendorDatabaseIdMappings;
     }
 
-    public static void setDatabaseId(String keywordsInDriver, String databaseId){
+    public static void setDatabaseId(String keywordsInDriver, String databaseId) {
         vendorDatabaseIdMappings.setProperty(keywordsInDriver, databaseId);
     }
 
@@ -219,11 +233,5 @@ public class DialectRegistry {
         return dialect;
     }
 
-    static {
-        logger = LoggerFactory.getLogger((Class) DialectRegistry.class);
-        nameToDialectMap = new HashMap<String, Dialect>();
-        classNameToNameMap = new HashMap<String, String>();
-        dbToDialectMap = new HashMap<DatabaseMetaData, Holder<Dialect>>();
-        registerBuiltinDialects();
-    }
+
 }
