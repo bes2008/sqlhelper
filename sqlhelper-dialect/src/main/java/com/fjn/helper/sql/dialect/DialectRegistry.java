@@ -22,18 +22,21 @@ import com.fjn.helper.sql.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.DatabaseMetaData;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class DialectRegistry {
     private static final Logger logger;
     private static final Map<String, Dialect> nameToDialectMap;
     private static final Map<String, String> classNameToNameMap;
     private static final Map<DatabaseMetaData, Holder<Dialect>> dbToDialectMap;
+    private static final Properties vendorDatabaseIdMappings = new Properties();
 
     public Dialect getDialectByClassName(final String className) {
         final String dialectName = (String) DialectRegistry.classNameToNameMap.get(className);
@@ -57,6 +60,8 @@ public class DialectRegistry {
     }
 
     private static void registerBuiltinDialects() {
+        loadDatabaseIdMappings();
+
         final Class<? extends Dialect>[] dialects = (Class<? extends Dialect>[]) new Class[]{
                 Cache71Dialect.class,
                 CUBRIDDialect.class,
@@ -85,6 +90,32 @@ public class DialectRegistry {
                 TeradataDialect.class,
                 TimesTenDialect.class};
         Arrays.asList(dialects).forEach(DialectRegistry::registerDialectByClass);
+    }
+
+    private static void loadDatabaseIdMappings(){
+        InputStream inputStream = DialectRegistry.class.getResourceAsStream("/sqlhelper-dialect-databaseid.properties");
+        if(inputStream!=null){
+            try {
+                vendorDatabaseIdMappings.load(inputStream);
+            }catch (Throwable ex){
+                logger.error(ex.getMessage(), ex);
+            }
+            finally {
+                try {
+                    inputStream.close();
+                }catch (Throwable ex){
+                    // Ignore it
+                }
+            }
+        }
+    }
+
+    public static Properties getVendorDatabaseIdMappings() {
+        return vendorDatabaseIdMappings;
+    }
+
+    public static void setDatabaseId(String keywordsInDriver, String databaseId){
+        vendorDatabaseIdMappings.setProperty(keywordsInDriver, databaseId);
     }
 
     public void registerDialectByClassName(final String className) throws ClassNotFoundException {
@@ -184,6 +215,7 @@ public class DialectRegistry {
         }
         DialectRegistry.nameToDialectMap.put(name, dialect);
         DialectRegistry.classNameToNameMap.put(clazz.getCanonicalName(), name);
+        setDatabaseId(name, name);
         return dialect;
     }
 
