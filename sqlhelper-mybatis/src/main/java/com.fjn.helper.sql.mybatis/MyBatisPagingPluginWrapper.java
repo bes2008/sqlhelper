@@ -96,17 +96,6 @@ public class MyBatisPagingPluginWrapper {
         MyBatisPagingPluginWrapper.instrumentor = instrumentor;
     }
 
-    private static String getDatabaseId(final MappedStatement ms) {
-        String databaseId = ms.getDatabaseId();
-        if (databaseId == null) {
-            databaseId = pluginConfig.dialect;
-        }
-        if (databaseId == null) {
-            return ms.getConfiguration().getDatabaseId();
-        }
-        return databaseId;
-    }
-
 
     public static class PluginGlobalConfig {
         public boolean count;
@@ -260,6 +249,21 @@ public class MyBatisPagingPluginWrapper {
             return instrumentor.beginIfSupportsLimit(databaseId);
         }
 
+        private String getDatabaseId(final MappedStatement ms) {
+            PagingRequest request = PAGING_CONTEXT.getPagingRequest();
+            String databaseId = request.getDialect();
+            if (databaseId == null) {
+                databaseId = ms.getDatabaseId();
+            }
+            if (databaseId == null) {
+                databaseId = pluginConfig.dialect;
+            }
+            if (databaseId == null) {
+                return ms.getConfiguration().getDatabaseId();
+            }
+            return databaseId;
+        }
+
         private List executeQuery(final MappedStatement ms, final Object parameter, final RowBounds rowBounds, final ResultHandler resultHandler, final Executor executor, final BoundSql boundSql, final CacheKey cacheKey) throws SQLException {
             final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
             final RowSelection rowSelection = rowSelectionBuilder.build(request);
@@ -268,7 +272,7 @@ public class MyBatisPagingPluginWrapper {
             final BoundSql pageBoundSql = new BoundSql(ms.getConfiguration(), pageSql, boundSql.getParameterMappings(), parameter);
             final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
             for (final String key : additionalParameters.keySet()) {
-                pageBoundSql.setAdditionalParameter(key, additionalParameters.get( key));
+                pageBoundSql.setAdditionalParameter(key, additionalParameters.get(key));
             }
             return executor.query(ms, parameter, RowBounds.DEFAULT, resultHandler, cacheKey, pageBoundSql);
         }
@@ -300,13 +304,12 @@ public class MyBatisPagingPluginWrapper {
                     final Object countResultList2 = executor.query(countStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey2, countBoundSql);
                     count = ((Number) ((List) countResultList2).get(0)).intValue();
                 }
-            }catch (Throwable ex){
-                if(countBoundSql!=null) {
+            } catch (Throwable ex) {
+                if (countBoundSql != null) {
                     logger.error("error occur when execute count sql [{}], error: {}", countBoundSql.getSql(), ex.getMessage(), ex);
                 }
                 throw ex;
-            }
-            finally {
+            } finally {
                 requestContext.countSql = null;
             }
             return count;

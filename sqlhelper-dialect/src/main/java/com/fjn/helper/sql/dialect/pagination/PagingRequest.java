@@ -19,6 +19,7 @@ package com.fjn.helper.sql.dialect.pagination;
 public class PagingRequest<E, R> {
     private Boolean count = null;
     private String countSqlId;
+    private String dialect;
     private int pageNo;
     private int pageSize;
     private int fetchSize;
@@ -111,5 +112,13 @@ public class PagingRequest<E, R> {
 
     public void setResult(PagingResult result) {
         this.result = result;
+    }
+
+    public String getDialect() {
+        return dialect;
+    }
+
+    public void setDialect(String dialect) {
+        this.dialect = dialect;
     }
 }
