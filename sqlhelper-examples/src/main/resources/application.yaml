@@ -1,0 +1,15 @@
+server:
+  port: 8088
+
+
+mybatis:
+  configuration:
+    default-scripting-language: com.fjn.helper.sql.mybatis.MyBatisPagingPluginWrapper.CustomScriptLanguageDriver
+    # org.apache.ibatis.scripting.xmltags.XMLLanguageDriver
+        #
+
+
+spring:
+  datasource:
+    url:
+
