@@ -4,3 +4,4 @@ SQL Tools ( <b>Dialect</b>, <b>Pagination</b>, <b>UrlParser</b>, <b>SqlStatement
 ## modules
 sqlhelper-dialect : the core <br/> 
 sqlhelper-mybatis : the mybatis tools (MyBatis Pagination Plugin)
+sqlhelper-examples: some examples for there tools
