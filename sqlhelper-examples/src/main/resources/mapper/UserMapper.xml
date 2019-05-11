@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fjn.helper.examples.mybatis.dao.UserDao">
+    <resultMap id="entity" type="com.fjn.helper.examples.model.User">
+        <id property="id" column="ID" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="name" column="NAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="age" column="AGE" javaType="java.lang.Integer" jdbcType="INT"/>
+    </resultMap>
+
+    <sql id="all_columns">
+        ID,
+        NAME,
+        AGE
+    </sql>
+
+    <insert id="insert" parameterType="com.fjn.helper.examples.model.User">
+        INSERT INTO
+        USER (<include refid="all_columns"/>)
+        VALUES (
+        #{id},
+        #{name},
+        #{age}
+        )
+    </insert>
+
+    <update id="updateById" parameterType="com.fjn.helper.examples.model.User">
+        UPDATE USER
+        SET
+            NAME = #{name},
+            AGE  = #{age}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        DELETE FROM USER
+        WHERE ID = #{id}
+    </delete>
+
+    <select id="selectById" parameterType="java.lang.String" resultMap="entity">
+        SELECT
+        <include refid="all_columns"/>
+        FROM USER
+        WHERE ID = #{id}
+    </select>
+
+    <select id="selectByLimit" parameterType="com.fjn.helper.examples.model.User" resultMap="entity">
+        SELECT
+        <include refid="all_columns"/>
+        FROM USER
+        WHERE 1=1
+        <if test="id!=null and id != ''">AND ID = #{id}</if>
+        <if test="name!=null and name != ''">AND NAME = #{name}</if>
+        <if test="age!=null and age ge 0">AND AGE = #{age}</if>
+    </select>
+</mapper>
