@@ -32,6 +32,11 @@
                 <version>20.0</version>
             </dependency>
             <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.8.5</version>
+            </dependency>
+            <dependency>
                 <groupId>com.fjn.helper</groupId>
                 <artifactId>sqlhelper-dialect</artifactId>
                 <version>${project.version}</version>
@@ -51,6 +56,10 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
         </dependency>
 
 

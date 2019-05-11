@@ -41,6 +41,7 @@ public class DialectRegistry {
     private static final Properties vendorDatabaseIdMappings = new Properties();
 
     static {
+        loadDatabaseIdMappings();
         registerBuiltinDialects();
     }
 
@@ -58,12 +59,10 @@ public class DialectRegistry {
         if (dialectName != null) {
             return this.getDialectByName(dialectName);
         }
-
         return null;
     }
 
     public Dialect getDialectByName(final String databaseId) {
-
         return DialectRegistry.nameToDialectMap.get(databaseId);
     }
 
@@ -75,7 +74,7 @@ public class DialectRegistry {
     }
 
     private static void registerBuiltinDialects() {
-        loadDatabaseIdMappings();
+        logger.info("Start to register builtin dialects");
 
         final Class<? extends Dialect>[] dialects = (Class<? extends Dialect>[]) new Class[]{
                 Cache71Dialect.class,
@@ -108,6 +107,7 @@ public class DialectRegistry {
     }
 
     private static void loadDatabaseIdMappings() {
+        logger.info("Start to load database id mappings");
         InputStream inputStream = DialectRegistry.class.getResourceAsStream("/sqlhelper-dialect-databaseid.properties");
         if (inputStream != null) {
             try {
@@ -201,7 +201,7 @@ public class DialectRegistry {
                     DialectRegistry.logger.info("Can't find the driver based constructor for dialect {}", (Object) name);
                 }
             } catch (Throwable ex) {
-                DialectRegistry.logger.info("Can't find driver class {} for {}  dialect", (Object) driverClassName, (Object) name);
+                DialectRegistry.logger.info("Can't find driver class {} for {} dialect", (Object) driverClassName, (Object) name);
             }
         }
         if (driverClass == null || driverConstructor == null) {

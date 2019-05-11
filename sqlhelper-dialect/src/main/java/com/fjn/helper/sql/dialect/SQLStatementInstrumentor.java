@@ -15,6 +15,7 @@
 
 package com.fjn.helper.sql.dialect;
 
+import com.fjn.helper.sql.dialect.conf.SQLInstrumentConfig;
 import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

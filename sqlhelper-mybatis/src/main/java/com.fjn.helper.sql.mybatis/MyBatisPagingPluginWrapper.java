@@ -15,12 +15,14 @@
 package com.fjn.helper.sql.mybatis;
 
 import com.fjn.helper.sql.dialect.*;
+import com.fjn.helper.sql.dialect.conf.SQLInstrumentConfig;
 import com.fjn.helper.sql.dialect.pagination.*;
 import com.fjn.helper.sql.dialect.parameter.BaseQueryParameters;
 import com.fjn.helper.sql.util.Initializable;
 import com.fjn.helper.sql.util.StringUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.gson.GsonBuilder;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.Executor;
@@ -65,6 +67,11 @@ public class MyBatisPagingPluginWrapper {
     }
 
     public void initPlugin(final PluginGlobalConfig pluginConfig) {
+        initPlugin(pluginConfig, null);
+    }
+
+    public void initPlugin(final PluginGlobalConfig pluginConfig, SQLInstrumentConfig instrumentConfig) {
+        logger.info("Init mybatis pagination plugin with plugin config:{}, sql instrumentor config: {}", pluginConfig, instrumentConfig);
         if (StringUtil.isBlank(pluginConfig.dialect)) {
             pluginConfig.dialect = null;
         }
@@ -73,7 +80,7 @@ public class MyBatisPagingPluginWrapper {
         }
         MyBatisPagingPluginWrapper.pluginConfig = pluginConfig;
         setInstrumentor(new SQLStatementInstrumentor());
-        final SQLInstrumentConfig instrumentConfig = new SQLInstrumentConfig();
+        instrumentConfig = instrumentConfig == null ? new SQLInstrumentConfig() : instrumentConfig;
         instrumentor.setConfig(instrumentConfig);
         this.getPlugins().forEach(plugin -> {
             if (plugin instanceof Initializable) {
@@ -116,6 +123,11 @@ public class MyBatisPagingPluginWrapper {
 
         boolean enableCountCache() {
             return this.countCacheMaxCapacity > 0;
+        }
+
+        @Override
+        public String toString() {
+            return new GsonBuilder().serializeNulls().create().toJson(this);
         }
     }
 

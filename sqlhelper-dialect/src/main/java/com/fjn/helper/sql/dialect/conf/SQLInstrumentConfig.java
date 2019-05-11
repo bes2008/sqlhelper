@@ -13,29 +13,33 @@
  * limitations under the License.
  */
 
-package com.fjn.helper.sql.dialect;
+package com.fjn.helper.sql.dialect.conf;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class SQLInstrumentConfig {
     private String dialect;
     private String dialectClassName;
 
     public String getDialect() {
-        
         return this.dialect;
     }
 
     public void setDialect(final String dialect) {
-        
         this.dialect = dialect;
     }
 
     public String getDialectClassName() {
-        
         return this.dialectClassName;
     }
 
     public void setDialectClassName(final String dialectClassName) {
-        
         this.dialectClassName = dialectClassName;
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        return gson.toJson(this);
     }
 }
