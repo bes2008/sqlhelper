@@ -10,6 +10,7 @@
     <modules>
         <module>sqlhelper-dialect</module>
         <module>sqlhelper-mybatis</module>
+        <module>sqlhelper-examples</module>
     </modules>
 
     <packaging>pom</packaging>
