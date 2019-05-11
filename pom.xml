@@ -36,6 +36,11 @@
                 <artifactId>sqlhelper-dialect</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.fjn.helper</groupId>
+                <artifactId>sqlhelper-mybatis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -47,6 +52,8 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
+
+
     </dependencies>
 
     <build>
