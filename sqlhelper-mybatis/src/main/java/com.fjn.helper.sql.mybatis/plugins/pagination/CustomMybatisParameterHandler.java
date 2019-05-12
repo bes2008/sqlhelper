@@ -2,9 +2,7 @@ package com.fjn.helper.sql.mybatis.plugins.pagination;
 
 import com.fjn.helper.sql.dialect.PrepareParameterSetter;
 import com.fjn.helper.sql.dialect.QueryParameters;
-import com.fjn.helper.sql.dialect.SQLStatementInstrumentor;
 import com.fjn.helper.sql.dialect.pagination.PagingContextHolder;
-import com.fjn.helper.sql.mybatis.MybatisPagingPluginWrapper;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.*;

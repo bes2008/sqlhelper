@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.fjn.helper.sql.mybatis;
+package com.fjn.helper.sql.mybatis.plugins.pagination;
 
 import com.fjn.helper.sql.dialect.RowSelection;
 import com.fjn.helper.sql.dialect.SQLStatementInstrumentor;
@@ -21,8 +21,6 @@ import com.fjn.helper.sql.dialect.pagination.PagingContextHolder;
 import com.fjn.helper.sql.dialect.pagination.PagingRequest;
 import com.fjn.helper.sql.dialect.pagination.PagingRequestBasedRowSelectionBuilder;
 import com.fjn.helper.sql.dialect.pagination.PagingResult;
-import com.fjn.helper.sql.mybatis.plugins.pagination.MybatisPagingRequestContext;
-import com.fjn.helper.sql.mybatis.plugins.pagination.PaginationPluginConfig;
 import com.fjn.helper.sql.util.Initializable;
 import com.fjn.helper.sql.util.Strings;
 import com.google.common.cache.Cache;

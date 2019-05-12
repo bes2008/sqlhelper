@@ -1,6 +1,6 @@
 package com.fjn.helper.examples.mybatis.spring.boot.config;
 
-import com.fjn.helper.sql.mybatis.MybatisPagingPluginWrapper;
+import com.fjn.helper.sql.mybatis.plugins.pagination.MybatisPagingPluginWrapper;
 import com.fjn.helper.sql.mybatis.MybatisUtils;
 import com.fjn.helper.sql.mybatis.plugins.pagination.CustomScriptLanguageDriver;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
