@@ -28,32 +28,36 @@ public class PagingResult<E> {
         return this.pageNo;
     }
 
-    public void setPageNo(int pageNo) {
+    public PagingResult<E> setPageNo(int pageNo) {
         this.pageNo = pageNo;
+        return this;
     }
 
     public int getPageSize() {
         return this.pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public PagingResult<E> setPageSize(int pageSize) {
         this.pageSize = pageSize;
+        return this;
     }
 
     public int getTotal() {
         return this.total;
     }
 
-    public void setTotal(int total) {
+    public PagingResult<E> setTotal(int total) {
         this.total = total;
+        return this;
     }
 
     public List<E> getItems() {
         return this.items;
     }
 
-    public void setItems(List<E> items) {
+    public PagingResult<E> setItems(List<E> items) {
         this.items = items;
+        return this;
     }
 
     public int getPageCount() {

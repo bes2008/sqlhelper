@@ -32,8 +32,9 @@ public class PagingRequest<E, R> {
         return this.countSqlId;
     }
 
-    public void setCountSqlId(String countSqlId) {
+    public PagingRequest<E,R> setCountSqlId(String countSqlId) {
         this.countSqlId = countSqlId;
+        return this;
     }
 
     public boolean isValidRequest() {
@@ -47,40 +48,45 @@ public class PagingRequest<E, R> {
         return this.pageNo;
     }
 
-    public void setPageNo(int pageNo) {
+    public PagingRequest<E, R> setPageNo(int pageNo) {
         this.pageNo = pageNo;
+        return this;
     }
 
     public int getPageSize() {
         return this.pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public PagingRequest<E, R> setPageSize(int pageSize) {
         this.pageSize = pageSize;
+        return this;
     }
 
     public int getFetchSize() {
         return this.fetchSize;
     }
 
-    public void setFetchSize(int fetchSize) {
+    public PagingRequest setFetchSize(int fetchSize) {
         this.fetchSize = fetchSize;
+        return this;
     }
 
     public int getTimeout() {
         return this.timeout;
     }
 
-    public void setTimeout(int timeout) {
+    public PagingRequest<E,R> setTimeout(int timeout) {
         this.timeout = timeout;
+        return this;
     }
 
     public String getOrderBy() {
         return this.orderBy;
     }
 
-    public void setOrderBy(String orderBy) {
+    public PagingRequest<E,R> setOrderBy(String orderBy) {
         this.orderBy = orderBy;
+        return this;
     }
 
     public boolean needOrderBy() {
@@ -94,31 +100,35 @@ public class PagingRequest<E, R> {
         return (E) this.condition;
     }
 
-    public void setCondition(E condition) {
+    public PagingRequest<E,R> setCondition(E condition) {
         this.condition = condition;
+        return this;
     }
 
     public Boolean getCount() {
         return this.count;
     }
 
-    public void setCount(Boolean count) {
+    public PagingRequest<E,R> setCount(Boolean count) {
         this.count = count;
+        return this;
     }
 
     public PagingResult<R> getResult() {
         return this.result;
     }
 
-    public void setResult(PagingResult result) {
+    public PagingRequest<E,R> setResult(PagingResult result) {
         this.result = result;
+        return this;
     }
 
     public String getDialect() {
         return dialect;
     }
 
-    public void setDialect(String dialect) {
+    public PagingRequest<E,R> setDialect(String dialect) {
         this.dialect = dialect;
+        return this;
     }
 }
