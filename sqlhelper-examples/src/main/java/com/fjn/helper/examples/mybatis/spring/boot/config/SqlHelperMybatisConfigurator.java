@@ -2,6 +2,7 @@ package com.fjn.helper.examples.mybatis.spring.boot.config;
 
 import com.fjn.helper.sql.mybatis.MybatisPagingPluginWrapper;
 import com.fjn.helper.sql.mybatis.MybatisUtils;
+import com.fjn.helper.sql.mybatis.plugins.pagination.CustomScriptLanguageDriver;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.Configuration;
@@ -30,7 +31,7 @@ public class SqlHelperMybatisConfigurator implements ConfigurationCustomizer {
     }
 
     @Bean
-    public DatabaseIdProvider databaseIdProvider(){
+    public DatabaseIdProvider databaseIdProvider() {
         return MybatisUtils.vendorDatabaseIdProvider();
     }
 
@@ -44,7 +45,7 @@ public class SqlHelperMybatisConfigurator implements ConfigurationCustomizer {
     @Override
     public void customize(Configuration configuration) {
         logger.info("Start to customize mybatis configuration with mybatis-spring-boot-autoconfigure");
-        configuration.setDefaultScriptingLanguage(MybatisPagingPluginWrapper.CustomScriptLanguageDriver.class);
+        configuration.setDefaultScriptingLanguage(CustomScriptLanguageDriver.class);
         List<Interceptor> sqlhelperPlugins = mybatisPagingPluginWrapper.getPlugins();
         for (Interceptor sqlhelperPlugin : sqlhelperPlugins) {
             configuration.addInterceptor(sqlhelperPlugin);

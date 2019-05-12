@@ -18,7 +18,7 @@ import com.fjn.helper.sql.dialect.annotation.Driver;
 import com.fjn.helper.sql.dialect.annotation.Name;
 import com.fjn.helper.sql.dialect.internal.*;
 import com.fjn.helper.sql.util.Holder;
-import com.fjn.helper.sql.util.StringUtil;
+import com.fjn.helper.sql.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,7 +140,7 @@ public class DialectRegistry {
         final Class<? extends Dialect> clazz = loadDialectClass(className);
         try {
             final Dialect dialect = registerDialectByClass(clazz);
-            if (!StringUtil.isBlank(dialectName) && dialect != null) {
+            if (!Strings.isBlank(dialectName) && dialect != null) {
                 DialectRegistry.nameToDialectMap.put(dialectName, dialect);
             }
         } catch (Throwable ex) {
@@ -178,7 +178,7 @@ public class DialectRegistry {
         String name;
         if (nameAnno != null) {
             name = nameAnno.value();
-            if (StringUtil.isBlank(name)) {
+            if (Strings.isBlank(name)) {
                 throw new RuntimeException("@Name is empty in class" + clazz.getClass());
             }
         } else {
@@ -190,7 +190,7 @@ public class DialectRegistry {
         Constructor<? extends Dialect> driverConstructor = null;
         if (driverAnno != null) {
             final String driverClassName = driverAnno.value();
-            if (StringUtil.isBlank(driverClassName)) {
+            if (Strings.isBlank(driverClassName)) {
                 throw new RuntimeException("@Driver is empty in class" + clazz.getClass());
             }
             try {

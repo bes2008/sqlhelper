@@ -15,7 +15,7 @@
 
 package com.fjn.helper.sql.util;
 
-public class StringUtil {
+public class Strings {
     public static boolean isBlank(String str) {
         return str == null || str.trim().isEmpty();
     }

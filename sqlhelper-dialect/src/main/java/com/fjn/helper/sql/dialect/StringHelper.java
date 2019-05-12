@@ -15,11 +15,11 @@
 
 package com.fjn.helper.sql.dialect;
 
-import com.fjn.helper.sql.util.StringUtil;
+import com.fjn.helper.sql.util.Strings;
 
 import java.util.*;
 
-public class StringHelper extends StringUtil
+public class StringHelper extends Strings
 {
     private static final int ALIAS_TRUNCATE_LENGTH = 10;
     public static final String WHITESPACE = " \n\r\f\t";

@@ -18,11 +18,13 @@ import com.fjn.helper.sql.dialect.*;
 import com.fjn.helper.sql.dialect.conf.SQLInstrumentConfig;
 import com.fjn.helper.sql.dialect.pagination.*;
 import com.fjn.helper.sql.dialect.parameter.BaseQueryParameters;
+import com.fjn.helper.sql.mybatis.plugins.pagination.CustomMybatisParameterHandler;
+import com.fjn.helper.sql.mybatis.plugins.pagination.MybatisPagingRequestContext;
+import com.fjn.helper.sql.mybatis.plugins.pagination.PaginationPluginConfig;
 import com.fjn.helper.sql.util.Initializable;
-import com.fjn.helper.sql.util.StringUtil;
+import com.fjn.helper.sql.util.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.gson.GsonBuilder;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.Executor;
@@ -53,11 +55,11 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings({"cast", "unchecked", "rawtypes"})
 public class MybatisPagingPluginWrapper {
     private static final Logger logger = LoggerFactory.getLogger(MybatisPagingPluginWrapper.class);
-    private static PagingContextHolder<MybatisPagingRequestContext> PAGING_CONTEXT = (PagingContextHolder<MybatisPagingRequestContext>) PagingContextHolder.getContext();
+    private static final PagingContextHolder<MybatisPagingRequestContext> PAGING_CONTEXT = (PagingContextHolder<MybatisPagingRequestContext>) PagingContextHolder.getContext();
     private static PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
 
-    private static PluginGlobalConfig pluginConfig = new PluginGlobalConfig();
-    private static SQLStatementInstrumentor instrumentor;
+    private static PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
+    private static SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
 
     private static final int NON_CACHE_QUERY_METHOD_PARAMS = 4;
     private ExecutorInterceptor executorInterceptor;
@@ -66,17 +68,17 @@ public class MybatisPagingPluginWrapper {
         PAGING_CONTEXT.setContextClass(MybatisPagingRequestContext.class);
     }
 
-    public void initPlugin(final PluginGlobalConfig pluginConfig) {
+    public void initPlugin(final PaginationPluginConfig pluginConfig) {
         initPlugin(pluginConfig, null);
     }
 
-    public void initPlugin(final PluginGlobalConfig pluginConfig, SQLInstrumentConfig instrumentConfig) {
+    public void initPlugin(final PaginationPluginConfig pluginConfig, SQLInstrumentConfig instrumentConfig) {
         logger.info("Init mybatis pagination plugin with plugin config:{}, sql instrumentor config: {}", pluginConfig, instrumentConfig);
-        if (StringUtil.isBlank(pluginConfig.dialect)) {
-            pluginConfig.dialect = null;
+        if (Strings.isBlank(pluginConfig.getDialect())) {
+            pluginConfig.setDialect(null);
         }
-        if (StringUtil.isBlank(pluginConfig.dialectClassName)) {
-            pluginConfig.dialectClassName = null;
+        if (Strings.isBlank(pluginConfig.getDialectClassName())) {
+            pluginConfig.setDialectClassName(null);
         }
         MybatisPagingPluginWrapper.pluginConfig = pluginConfig;
         setInstrumentor(new SQLStatementInstrumentor());
@@ -100,35 +102,13 @@ public class MybatisPagingPluginWrapper {
     }
 
     public void setInstrumentor(final SQLStatementInstrumentor instrumentor) {
-        MybatisPagingPluginWrapper.instrumentor = instrumentor;
+        if(instrumentor!=null) {
+            MybatisPagingPluginWrapper.instrumentor = instrumentor;
+        }
     }
 
-
-    public static class PluginGlobalConfig {
-        public boolean count;
-        public int countCacheInitCapacity;
-        public int countCacheMaxCapacity;
-        public String countSuffix;
-        public int countCacheExpireInSeconds;
-        public String dialect;
-        public String dialectClassName;
-
-        public PluginGlobalConfig() {
-            this.count = true;
-            this.countCacheInitCapacity = 10;
-            this.countCacheMaxCapacity = 1000;
-            this.countSuffix = "_COUNT";
-            this.countCacheExpireInSeconds = 5;
-        }
-
-        boolean enableCountCache() {
-            return this.countCacheMaxCapacity > 0;
-        }
-
-        @Override
-        public String toString() {
-            return new GsonBuilder().serializeNulls().create().toJson(this);
-        }
+    public static SQLStatementInstrumentor getInstrumentor() {
+        return instrumentor;
     }
 
     static class BoundSqls {
@@ -168,10 +148,10 @@ public class MybatisPagingPluginWrapper {
             if (MybatisPagingPluginWrapper.pluginConfig.enableCountCache()) {
                 this.countStatementCache = CacheBuilder.newBuilder()
                         .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-                        .expireAfterWrite(pluginConfig.countCacheExpireInSeconds, TimeUnit.SECONDS)
-                        .initialCapacity(pluginConfig.countCacheInitCapacity)
-                        .maximumSize(pluginConfig.countCacheMaxCapacity).build();
-                this.countSuffix = (StringUtil.isBlank(MybatisPagingPluginWrapper.pluginConfig.countSuffix) ? "_COUNT" : pluginConfig.countSuffix.trim());
+                        .expireAfterWrite(pluginConfig.getCountCacheExpireInSeconds(), TimeUnit.SECONDS)
+                        .initialCapacity(pluginConfig.getCountCacheInitCapacity())
+                        .maximumSize(pluginConfig.getCountCacheMaxCapacity()).build();
+                this.countSuffix = (Strings.isBlank(MybatisPagingPluginWrapper.pluginConfig.getCountSuffix()) ? "_COUNT" : pluginConfig.getCountSuffix().trim());
             }
         }
 
@@ -268,7 +248,7 @@ public class MybatisPagingPluginWrapper {
                 databaseId = ms.getDatabaseId();
             }
             if (databaseId == null) {
-                databaseId = pluginConfig.dialect;
+                databaseId = pluginConfig.getDialect();
             }
             if (databaseId == null) {
                 return ms.getConfiguration().getDatabaseId();
@@ -300,7 +280,7 @@ public class MybatisPagingPluginWrapper {
                 if (countStatement != null) {
                     final CacheKey countKey = executor.createCacheKey(countStatement, parameter, RowBounds.DEFAULT, boundSql);
                     countBoundSql = countStatement.getBoundSql(parameter);
-                    requestContext.countSql = countBoundSql;
+                    requestContext.setCountSql(countBoundSql);
                     final Object countResultList = executor.query(countStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey, countBoundSql);
                     count = ((Number) ((List) countResultList).get(0)).intValue();
                 } else {
@@ -309,7 +289,7 @@ public class MybatisPagingPluginWrapper {
                     final CacheKey countKey2 = executor.createCacheKey(countStatement, parameter, RowBounds.DEFAULT, boundSql);
                     final String countSql = instrumentor.countSql(boundSql.getSql());
                     countBoundSql = new BoundSql(countStatement.getConfiguration(), countSql, boundSql.getParameterMappings(), parameter);
-                    requestContext.countSql = countBoundSql;
+                    requestContext.setCountSql(countBoundSql);
                     for (final String key : additionalParameters.keySet()) {
                         countBoundSql.setAdditionalParameter(key, additionalParameters.get(key));
                     }
@@ -322,20 +302,20 @@ public class MybatisPagingPluginWrapper {
                 }
                 throw ex;
             } finally {
-                requestContext.countSql = null;
+                requestContext.setCountSql(null);
             }
             return count;
         }
 
         private boolean needCount(final PagingRequest request) {
             if (request.getCount() == null) {
-                return pluginConfig.count;
+                return pluginConfig.isCount();
             }
             return Boolean.TRUE.compareTo(request.getCount()) == 0;
         }
 
         private String getCountStatementId(final PagingRequest request, final String currentSqlId) {
-            if (!StringUtil.isBlank(request.getCountSqlId())) {
+            if (!Strings.isBlank(request.getCountSqlId())) {
                 return request.getCountSqlId();
             }
             return currentSqlId + this.countSuffix;
@@ -384,103 +364,5 @@ public class MybatisPagingPluginWrapper {
             }
             return countStatement;
         }
-    }
-
-    public static class CustomScriptLanguageDriver extends XMLLanguageDriver {
-        @Override
-        public ParameterHandler createParameterHandler(final MappedStatement mappedStatement, final Object parameterObject, final BoundSql boundSql) {
-            return new CustomParameterHandler(mappedStatement, parameterObject, boundSql);
-        }
-    }
-
-    public static class CustomParameterHandler implements ParameterHandler, PrepareParameterSetter {
-        private final TypeHandlerRegistry typeHandlerRegistry;
-        private final MappedStatement mappedStatement;
-        private final Object parameterObject;
-        private final BoundSql boundSql;
-        private final Configuration configuration;
-
-        CustomParameterHandler(final MappedStatement mappedStatement, final Object parameterObject, final BoundSql boundSql) {
-            this.mappedStatement = mappedStatement;
-            this.configuration = mappedStatement.getConfiguration();
-            this.typeHandlerRegistry = mappedStatement.getConfiguration().getTypeHandlerRegistry();
-            this.parameterObject = parameterObject;
-            this.boundSql = boundSql;
-        }
-
-        @Override
-        public Object getParameterObject() {
-            return this.parameterObject;
-        }
-
-        private boolean isPagingCountStatement() {
-            final MybatisPagingRequestContext requestContext = PAGING_CONTEXT.get();
-            return requestContext.countSql == this.boundSql;
-        }
-
-        @Override
-        public void setParameters(final PreparedStatement ps) {
-            if (PAGING_CONTEXT.getPagingRequest() == null || this.isPagingCountStatement()) {
-                this.setOriginalParameters(ps, 1);
-                return;
-            }
-            try {
-                final MybatisQueryParameters queryParameters = new MybatisQueryParameters();
-                queryParameters.setRowSelection(PAGING_CONTEXT.getRowSelection());
-                queryParameters.setCallable(this.mappedStatement.getStatementType() == StatementType.CALLABLE);
-                queryParameters.setParameters(this.getParameterObject());
-                instrumentor.bindParameters(ps, this, queryParameters, true);
-            } catch (SQLException ex) {
-                logger.error("errorCode:{},message:{}", ex.getErrorCode(), ex.getMessage(), ex);
-            }
-        }
-
-        @Override
-        public int setParameters(final PreparedStatement ps, final QueryParameters parameters, final int startIndex) {
-            this.setOriginalParameters(ps, startIndex);
-            return this.boundSql.getParameterMappings().size();
-        }
-
-        private void setOriginalParameters(final PreparedStatement ps, final int startIndex) {
-            ErrorContext.instance().activity("setting parameters").object(this.mappedStatement.getParameterMap().getId());
-            final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
-            if (parameterMappings != null) {
-                for (int i = 0; i < parameterMappings.size(); ++i) {
-                    final ParameterMapping parameterMapping = parameterMappings.get(i);
-                    if (parameterMapping.getMode() != ParameterMode.OUT) {
-                        final String propertyName = parameterMapping.getProperty();
-                        Object value;
-                        if (this.boundSql.hasAdditionalParameter(propertyName)) {
-                            value = this.boundSql.getAdditionalParameter(propertyName);
-                        } else if (this.parameterObject == null) {
-                            value = null;
-                        } else if (this.typeHandlerRegistry.hasTypeHandler(this.parameterObject.getClass())) {
-                            value = this.parameterObject;
-                        } else {
-                            final MetaObject metaObject = this.configuration.newMetaObject(this.parameterObject);
-                            value = metaObject.getValue(propertyName);
-                        }
-                        final TypeHandler typeHandler = parameterMapping.getTypeHandler();
-                        JdbcType jdbcType = parameterMapping.getJdbcType();
-                        if (value == null && jdbcType == null) {
-                            jdbcType = this.configuration.getJdbcTypeForNull();
-                        }
-                        try {
-                            typeHandler.setParameter(ps, i + startIndex, value, jdbcType);
-                        } catch (TypeException | SQLException e) {
-                            throw new TypeException("Could not set parameters for mapping: " + parameterMapping + ". Cause: " + e, e);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private static class MybatisQueryParameters extends BaseQueryParameters<Object> {
-    }
-
-    public static class MybatisPagingRequestContext extends PagingRequestContext {
-        BoundSql countSql;
-        BoundSql querySql;
     }
 }
