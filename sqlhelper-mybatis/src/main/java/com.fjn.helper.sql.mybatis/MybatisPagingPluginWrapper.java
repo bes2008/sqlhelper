@@ -14,11 +14,13 @@
 
 package com.fjn.helper.sql.mybatis;
 
-import com.fjn.helper.sql.dialect.*;
+import com.fjn.helper.sql.dialect.RowSelection;
+import com.fjn.helper.sql.dialect.SQLStatementInstrumentor;
 import com.fjn.helper.sql.dialect.conf.SQLInstrumentConfig;
-import com.fjn.helper.sql.dialect.pagination.*;
-import com.fjn.helper.sql.dialect.parameter.BaseQueryParameters;
-import com.fjn.helper.sql.mybatis.plugins.pagination.CustomMybatisParameterHandler;
+import com.fjn.helper.sql.dialect.pagination.PagingContextHolder;
+import com.fjn.helper.sql.dialect.pagination.PagingRequest;
+import com.fjn.helper.sql.dialect.pagination.PagingRequestBasedRowSelectionBuilder;
+import com.fjn.helper.sql.dialect.pagination.PagingResult;
 import com.fjn.helper.sql.mybatis.plugins.pagination.MybatisPagingRequestContext;
 import com.fjn.helper.sql.mybatis.plugins.pagination.PaginationPluginConfig;
 import com.fjn.helper.sql.util.Initializable;
@@ -26,25 +28,16 @@ import com.fjn.helper.sql.util.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.apache.ibatis.cache.CacheKey;
-import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.plugin.*;
-import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.TypeException;
-import org.apache.ibatis.type.TypeHandler;
-import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -57,9 +50,8 @@ public class MybatisPagingPluginWrapper {
     private static final Logger logger = LoggerFactory.getLogger(MybatisPagingPluginWrapper.class);
     private static final PagingContextHolder<MybatisPagingRequestContext> PAGING_CONTEXT = (PagingContextHolder<MybatisPagingRequestContext>) PagingContextHolder.getContext();
     private static PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
-
+    private static SQLStatementInstrumentor instrumentor;
     private static PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
-    private static SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
 
     private static final int NON_CACHE_QUERY_METHOD_PARAMS = 4;
     private ExecutorInterceptor executorInterceptor;
@@ -74,12 +66,6 @@ public class MybatisPagingPluginWrapper {
 
     public void initPlugin(final PaginationPluginConfig pluginConfig, SQLInstrumentConfig instrumentConfig) {
         logger.info("Init mybatis pagination plugin with plugin config:{}, sql instrumentor config: {}", pluginConfig, instrumentConfig);
-        if (Strings.isBlank(pluginConfig.getDialect())) {
-            pluginConfig.setDialect(null);
-        }
-        if (Strings.isBlank(pluginConfig.getDialectClassName())) {
-            pluginConfig.setDialectClassName(null);
-        }
         MybatisPagingPluginWrapper.pluginConfig = pluginConfig;
         setInstrumentor(new SQLStatementInstrumentor());
         instrumentConfig = instrumentConfig == null ? new SQLInstrumentConfig() : instrumentConfig;
@@ -96,13 +82,13 @@ public class MybatisPagingPluginWrapper {
     }
 
     public List<Interceptor> getPlugins() {
-        final List<Interceptor> interceptors = new ArrayList<Interceptor>();
+        final List<Interceptor> interceptors = new ArrayList<>();
         interceptors.add(this.executorInterceptor);
         return interceptors;
     }
 
-    public void setInstrumentor(final SQLStatementInstrumentor instrumentor) {
-        if(instrumentor!=null) {
+    private void setInstrumentor(final SQLStatementInstrumentor instrumentor) {
+        if (instrumentor != null) {
             MybatisPagingPluginWrapper.instrumentor = instrumentor;
         }
     }
@@ -139,8 +125,13 @@ public class MybatisPagingPluginWrapper {
         private Cache<String, MappedStatement> countStatementCache;
         private String countSuffix;
 
-        public ExecutorInterceptor() {
+        ExecutorInterceptor() {
             this.countSuffix = "_COUNT";
+        }
+
+        @Override
+        public String toString() {
+            return this.getClass().getCanonicalName();
         }
 
         @Override
@@ -248,7 +239,7 @@ public class MybatisPagingPluginWrapper {
                 databaseId = ms.getDatabaseId();
             }
             if (databaseId == null) {
-                databaseId = pluginConfig.getDialect();
+                databaseId = instrumentor.getConfig().getDialect();
             }
             if (databaseId == null) {
                 return ms.getConfiguration().getDatabaseId();

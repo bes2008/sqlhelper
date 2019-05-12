@@ -138,7 +138,7 @@ public class SQLStatementInstrumentor {
                 }
             }
         } catch (SQLException ex) {
-            SQLStatementInstrumentor.logger.error("Set sql parameter fail, errorCode: {}, stack:{}", (Object) Integer.valueOf(ex.getErrorCode()), (Object) ex);
+            logger.error("Set sql parameter fail, errorCode: {}, stack:{}", (Object) Integer.valueOf(ex.getErrorCode()), (Object) ex);
         }
         return statement;
     }

@@ -8,8 +8,6 @@ public class PaginationPluginConfig {
     private int countCacheMaxCapacity = 1000;
     private String countSuffix = "_COUNT";
     private int countCacheExpireInSeconds = 5;
-    private String dialect;
-    private String dialectClassName;
 
     public PaginationPluginConfig() {
     }
@@ -61,21 +59,5 @@ public class PaginationPluginConfig {
 
     public void setCountCacheExpireInSeconds(int countCacheExpireInSeconds) {
         this.countCacheExpireInSeconds = countCacheExpireInSeconds;
-    }
-
-    public String getDialect() {
-        return dialect;
-    }
-
-    public void setDialect(String dialect) {
-        this.dialect = dialect;
-    }
-
-    public String getDialectClassName() {
-        return dialectClassName;
-    }
-
-    public void setDialectClassName(String dialectClassName) {
-        this.dialectClassName = dialectClassName;
     }
 }

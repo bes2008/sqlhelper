@@ -48,6 +48,7 @@ public class SqlHelperMybatisConfigurator implements ConfigurationCustomizer {
         configuration.setDefaultScriptingLanguage(CustomScriptLanguageDriver.class);
         List<Interceptor> sqlhelperPlugins = mybatisPagingPluginWrapper.getPlugins();
         for (Interceptor sqlhelperPlugin : sqlhelperPlugins) {
+            logger.info("Add interceptor {} to mybatis configuration", sqlhelperPlugin);
             configuration.addInterceptor(sqlhelperPlugin);
         }
     }
