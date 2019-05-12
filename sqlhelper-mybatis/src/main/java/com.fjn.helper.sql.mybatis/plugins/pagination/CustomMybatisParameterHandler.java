@@ -2,7 +2,7 @@ package com.fjn.helper.sql.mybatis.plugins.pagination;
 
 import com.fjn.helper.sql.dialect.PrepareParameterSetter;
 import com.fjn.helper.sql.dialect.QueryParameters;
-import com.fjn.helper.sql.dialect.pagination.PagingContextHolder;
+import com.fjn.helper.sql.dialect.pagination.PagingRequestContextHolder;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.*;
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class CustomMybatisParameterHandler implements ParameterHandler, PrepareParameterSetter {
     private static final Logger logger = LoggerFactory.getLogger(CustomMybatisParameterHandler.class);
-    private static final PagingContextHolder<MybatisPagingRequestContext> PAGING_CONTEXT = (PagingContextHolder<MybatisPagingRequestContext>) PagingContextHolder.getContext();
+    private static final PagingRequestContextHolder<MybatisPagingRequestContext> PAGING_CONTEXT = (PagingRequestContextHolder<MybatisPagingRequestContext>) PagingRequestContextHolder.getContext();
 
     private final TypeHandlerRegistry typeHandlerRegistry;
     private final MappedStatement mappedStatement;

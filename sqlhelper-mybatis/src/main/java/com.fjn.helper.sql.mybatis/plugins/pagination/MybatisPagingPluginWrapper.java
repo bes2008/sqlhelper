@@ -17,7 +17,7 @@ package com.fjn.helper.sql.mybatis.plugins.pagination;
 import com.fjn.helper.sql.dialect.RowSelection;
 import com.fjn.helper.sql.dialect.SQLStatementInstrumentor;
 import com.fjn.helper.sql.dialect.conf.SQLInstrumentConfig;
-import com.fjn.helper.sql.dialect.pagination.PagingContextHolder;
+import com.fjn.helper.sql.dialect.pagination.PagingRequestContextHolder;
 import com.fjn.helper.sql.dialect.pagination.PagingRequest;
 import com.fjn.helper.sql.dialect.pagination.PagingRequestBasedRowSelectionBuilder;
 import com.fjn.helper.sql.dialect.pagination.PagingResult;
@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings({"cast", "unchecked", "rawtypes"})
 public class MybatisPagingPluginWrapper {
     private static final Logger logger = LoggerFactory.getLogger(MybatisPagingPluginWrapper.class);
-    private static final PagingContextHolder<MybatisPagingRequestContext> PAGING_CONTEXT = (PagingContextHolder<MybatisPagingRequestContext>) PagingContextHolder.getContext();
+    private static final PagingRequestContextHolder<MybatisPagingRequestContext> PAGING_CONTEXT = (PagingRequestContextHolder<MybatisPagingRequestContext>) PagingRequestContextHolder.getContext();
     private static PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
     private static SQLStatementInstrumentor instrumentor;
     private static PaginationPluginConfig pluginConfig = new PaginationPluginConfig();

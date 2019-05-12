@@ -19,15 +19,15 @@ import com.fjn.helper.sql.dialect.RowSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PagingContextHolder<E extends PagingRequestContext> {
-    private static final Logger logger = LoggerFactory.getLogger(PagingContextHolder.class);
+public class PagingRequestContextHolder<E extends PagingRequestContext> {
+    private static final Logger logger = LoggerFactory.getLogger(PagingRequestContextHolder.class);
 
-    private final ThreadLocal<E> variables = new ThreadLocal();
+    private final ThreadLocal<E> variables = new ThreadLocal<E>();
 
-    private static final PagingContextHolder INSTANCE = new PagingContextHolder();
+    private static final PagingRequestContextHolder INSTANCE = new PagingRequestContextHolder();
     private Class<E> clazz;
 
-    public static PagingContextHolder getContext() {
+    public static PagingRequestContextHolder getContext() {
         return INSTANCE;
     }
 

@@ -2,7 +2,7 @@ package com.fjn.helper.examples.mybatis.controller;
 
 import com.fjn.helper.examples.model.User;
 import com.fjn.helper.examples.mybatis.dao.UserDao;
-import com.fjn.helper.sql.dialect.pagination.PagingContextHolder;
+import com.fjn.helper.sql.dialect.pagination.PagingRequestContextHolder;
 import com.fjn.helper.sql.dialect.pagination.PagingRequest;
 import com.fjn.helper.sql.dialect.pagination.PagingResult;
 import io.swagger.annotations.Api;
@@ -49,7 +49,7 @@ public class UserController {
         PagingRequest request = new PagingRequest()
                 .setPageNo(1)
                 .setPageSize(10);
-        PagingContextHolder.getContext().setPagingRequest(request);
+        PagingRequestContextHolder.getContext().setPagingRequest(request);
         List<User> users = userDao.selectByLimit(queryCondtion);
         request.getResult().setItems(users);
         return request.getResult();
