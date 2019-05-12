@@ -9,16 +9,16 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 public class SqlHelperMybatisProperties {
 
     @NestedConfigurationProperty
-    private SQLInstrumentConfig instrument = new SQLInstrumentConfig();
+    private SQLInstrumentConfig instrumentor = new SQLInstrumentConfig();
     @NestedConfigurationProperty
     private MybatisPagingPluginWrapper.PluginGlobalConfig pagination = new MybatisPagingPluginWrapper.PluginGlobalConfig();
 
-    public SQLInstrumentConfig getInstrument() {
-        return instrument;
+    public SQLInstrumentConfig getInstrumentor() {
+        return instrumentor;
     }
 
-    public void setInstrument(SQLInstrumentConfig instrument) {
-        this.instrument = instrument;
+    public void setInstrumentor(SQLInstrumentConfig instrumentor) {
+        this.instrumentor = instrumentor;
     }
 
     public MybatisPagingPluginWrapper.PluginGlobalConfig getPagination() {

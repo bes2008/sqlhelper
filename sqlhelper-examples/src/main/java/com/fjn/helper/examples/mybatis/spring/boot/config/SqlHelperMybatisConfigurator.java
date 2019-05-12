@@ -37,7 +37,7 @@ public class SqlHelperMybatisConfigurator implements ConfigurationCustomizer {
     @Bean
     public MybatisPagingPluginWrapper mybatisPagingPluginWrapper(@Autowired SqlHelperMybatisProperties sqlHelperMybatisProperties) {
         MybatisPagingPluginWrapper wrapper = new MybatisPagingPluginWrapper();
-        wrapper.initPlugin(sqlHelperMybatisProperties.getPagination(), sqlHelperMybatisProperties.getInstrument());
+        wrapper.initPlugin(sqlHelperMybatisProperties.getPagination(), sqlHelperMybatisProperties.getInstrumentor());
         return wrapper;
     }
 
