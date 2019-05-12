@@ -1,7 +1,7 @@
 package com.fjn.helper.examples.mybatis.spring.boot.config;
 
 import com.fjn.helper.sql.dialect.conf.SQLInstrumentConfig;
-import com.fjn.helper.sql.mybatis.MyBatisPagingPluginWrapper;
+import com.fjn.helper.sql.mybatis.MybatisPagingPluginWrapper;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
@@ -11,7 +11,7 @@ public class SqlHelperMybatisProperties {
     @NestedConfigurationProperty
     private SQLInstrumentConfig instrument = new SQLInstrumentConfig();
     @NestedConfigurationProperty
-    private MyBatisPagingPluginWrapper.PluginGlobalConfig pagination = new MyBatisPagingPluginWrapper.PluginGlobalConfig();
+    private MybatisPagingPluginWrapper.PluginGlobalConfig pagination = new MybatisPagingPluginWrapper.PluginGlobalConfig();
 
     public SQLInstrumentConfig getInstrument() {
         return instrument;
@@ -21,11 +21,11 @@ public class SqlHelperMybatisProperties {
         this.instrument = instrument;
     }
 
-    public MyBatisPagingPluginWrapper.PluginGlobalConfig getPagination() {
+    public MybatisPagingPluginWrapper.PluginGlobalConfig getPagination() {
         return pagination;
     }
 
-    public void setPagination(MyBatisPagingPluginWrapper.PluginGlobalConfig pagination) {
+    public void setPagination(MybatisPagingPluginWrapper.PluginGlobalConfig pagination) {
         this.pagination = pagination;
     }
 }

@@ -51,9 +51,9 @@ import java.util.concurrent.TimeUnit;
  *
  */
 @SuppressWarnings({"cast", "unchecked", "rawtypes"})
-public class MyBatisPagingPluginWrapper {
-    private static final Logger logger = LoggerFactory.getLogger(MyBatisPagingPluginWrapper.class);
-    private static PagingContextHolder<MyBatisPagingRequestContext> PAGING_CONTEXT = (PagingContextHolder<MyBatisPagingRequestContext>) PagingContextHolder.getContext();
+public class MybatisPagingPluginWrapper {
+    private static final Logger logger = LoggerFactory.getLogger(MybatisPagingPluginWrapper.class);
+    private static PagingContextHolder<MybatisPagingRequestContext> PAGING_CONTEXT = (PagingContextHolder<MybatisPagingRequestContext>) PagingContextHolder.getContext();
     private static PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
 
     private static PluginGlobalConfig pluginConfig = new PluginGlobalConfig();
@@ -63,7 +63,7 @@ public class MyBatisPagingPluginWrapper {
     private ExecutorInterceptor executorInterceptor;
 
     static {
-        PAGING_CONTEXT.setContextClass(MyBatisPagingRequestContext.class);
+        PAGING_CONTEXT.setContextClass(MybatisPagingRequestContext.class);
     }
 
     public void initPlugin(final PluginGlobalConfig pluginConfig) {
@@ -78,7 +78,7 @@ public class MyBatisPagingPluginWrapper {
         if (StringUtil.isBlank(pluginConfig.dialectClassName)) {
             pluginConfig.dialectClassName = null;
         }
-        MyBatisPagingPluginWrapper.pluginConfig = pluginConfig;
+        MybatisPagingPluginWrapper.pluginConfig = pluginConfig;
         setInstrumentor(new SQLStatementInstrumentor());
         instrumentConfig = instrumentConfig == null ? new SQLInstrumentConfig() : instrumentConfig;
         instrumentor.setConfig(instrumentConfig);
@@ -89,7 +89,7 @@ public class MyBatisPagingPluginWrapper {
         });
     }
 
-    public MyBatisPagingPluginWrapper() {
+    public MybatisPagingPluginWrapper() {
         this.executorInterceptor = new ExecutorInterceptor();
     }
 
@@ -100,7 +100,7 @@ public class MyBatisPagingPluginWrapper {
     }
 
     public void setInstrumentor(final SQLStatementInstrumentor instrumentor) {
-        MyBatisPagingPluginWrapper.instrumentor = instrumentor;
+        MybatisPagingPluginWrapper.instrumentor = instrumentor;
     }
 
 
@@ -165,13 +165,13 @@ public class MyBatisPagingPluginWrapper {
 
         @Override
         public void init() {
-            if (MyBatisPagingPluginWrapper.pluginConfig.enableCountCache()) {
+            if (MybatisPagingPluginWrapper.pluginConfig.enableCountCache()) {
                 this.countStatementCache = CacheBuilder.newBuilder()
                         .concurrencyLevel(Runtime.getRuntime().availableProcessors())
                         .expireAfterWrite(pluginConfig.countCacheExpireInSeconds, TimeUnit.SECONDS)
                         .initialCapacity(pluginConfig.countCacheInitCapacity)
                         .maximumSize(pluginConfig.countCacheMaxCapacity).build();
-                this.countSuffix = (StringUtil.isBlank(MyBatisPagingPluginWrapper.pluginConfig.countSuffix) ? "_COUNT" : pluginConfig.countSuffix.trim());
+                this.countSuffix = (StringUtil.isBlank(MybatisPagingPluginWrapper.pluginConfig.countSuffix) ? "_COUNT" : pluginConfig.countSuffix.trim());
             }
         }
 
@@ -290,7 +290,7 @@ public class MyBatisPagingPluginWrapper {
         }
 
         private int executeCount(final MappedStatement ms, final Object parameter, final RowBounds rowBounds, final ResultHandler resultHandler, final Executor executor, final BoundSql boundSql) throws Throwable {
-            final MyBatisPagingRequestContext requestContext = PAGING_CONTEXT.get();
+            final MybatisPagingRequestContext requestContext = PAGING_CONTEXT.get();
             final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
             final String countStatementId = this.getCountStatementId(request, ms.getId());
             int count;
@@ -378,7 +378,7 @@ public class MyBatisPagingPluginWrapper {
                 builder.flushCacheRequired(ms.isFlushCacheRequired());
                 builder.useCache(ms.isUseCache());
                 countStatement = builder.build();
-                if (MyBatisPagingPluginWrapper.pluginConfig.enableCountCache()) {
+                if (MybatisPagingPluginWrapper.pluginConfig.enableCountCache()) {
                     this.countStatementCache.put(countStatementId, countStatement);
                 }
             }
@@ -414,7 +414,7 @@ public class MyBatisPagingPluginWrapper {
         }
 
         private boolean isPagingCountStatement() {
-            final MyBatisPagingRequestContext requestContext = PAGING_CONTEXT.get();
+            final MybatisPagingRequestContext requestContext = PAGING_CONTEXT.get();
             return requestContext.countSql == this.boundSql;
         }
 
@@ -425,7 +425,7 @@ public class MyBatisPagingPluginWrapper {
                 return;
             }
             try {
-                final MyBatisQueryParameters queryParameters = new MyBatisQueryParameters();
+                final MybatisQueryParameters queryParameters = new MybatisQueryParameters();
                 queryParameters.setRowSelection(PAGING_CONTEXT.getRowSelection());
                 queryParameters.setCallable(this.mappedStatement.getStatementType() == StatementType.CALLABLE);
                 queryParameters.setParameters(this.getParameterObject());
@@ -476,10 +476,10 @@ public class MyBatisPagingPluginWrapper {
         }
     }
 
-    private static class MyBatisQueryParameters extends BaseQueryParameters<Object> {
+    private static class MybatisQueryParameters extends BaseQueryParameters<Object> {
     }
 
-    public static class MyBatisPagingRequestContext extends PagingRequestContext {
+    public static class MybatisPagingRequestContext extends PagingRequestContext {
         BoundSql countSql;
         BoundSql querySql;
     }

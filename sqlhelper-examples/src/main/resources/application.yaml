@@ -5,7 +5,7 @@ mybatis:
   type-aliases-package: com.fjn.helper.examples.mybatis.spring.boot
   mapper-locations: classpath:dao/*.xml
   configuration:
-    default-scripting-language: com.fjn.helper.sql.mybatis.MyBatisPagingPluginWrapper.CustomScriptLanguageDriver
+    default-scripting-language: com.fjn.helper.sql.mybatis.MybatisPagingPluginWrapper.CustomScriptLanguageDriver
     # org.apache.ibatis.scripting.xmltags.XMLLanguageDriver
         #
 

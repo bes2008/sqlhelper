@@ -17,7 +17,7 @@ package com.fjn.helper.sql.mybatis;
 import com.fjn.helper.sql.dialect.DialectRegistry;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 
-public class MyBatisUtils {
+public class MybatisUtils {
     private static final VendorDatabaseIdProvider vendorDatabaseIdProvider = new VendorDatabaseIdProvider();
 
     static {
