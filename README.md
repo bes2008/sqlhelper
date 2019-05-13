@@ -19,7 +19,7 @@ Oracle, Mysql, MariaDB, Sql server, H2, SQLite, HSqlDb, Derby, DB2, Informix, Fi
 
 #### 2、 installation
 
-##### case 1, use it with spring boot appliction: 
+##### case 1, use it with spring boot application: 
  just need to import sqlhelper-mybatis-spring-boot-autoconfigure.jar and sqlhelper-mybatis-spring-boot-starter.jar:
 
 <pre>
