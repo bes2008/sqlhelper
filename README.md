@@ -15,7 +15,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 Oracle, Mysql, MariaDB, Sql server, H2, SQLite, HSqlDb, Derby, DB2, Informix, Firebird, CacheDB, CUBRID, HANA, Ingres, Interbase, PostgreSQL, TimesTen<br>
 2. multiple databases are supported in one application <br>
 3. auto detect dialect<br>
-4. the performance is higher than Mybatis-PageHelper, because the limit、offset will be setted by use PrepareStatement placeholder '?' 
+4. **the performance is higher than Mybatis-PageHelper**, because the limit、offset will be setted by use PrepareStatement placeholder '?' 
 
 #### 2、 installation
 
