@@ -14,11 +14,10 @@
 
 package com.fjn.helper.sql.mybatis.spring.boot.autoconfigure;
 
-import com.fjn.helper.sql.mybatis.plugins.pagination.MybatisPagingPluginWrapper;
 import com.fjn.helper.sql.mybatis.MybatisUtils;
 import com.fjn.helper.sql.mybatis.plugins.pagination.CustomScriptLanguageDriver;
+import com.fjn.helper.sql.mybatis.plugins.pagination.MybatisPaginationPlugin;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
-import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.Configuration;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
@@ -26,10 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-
-import java.util.List;
+import org.springframework.context.annotation.DependsOn;
 
 @org.springframework.context.annotation.Configuration
 @EnableConfigurationProperties(SqlHelperMybatisProperties.class)
@@ -37,33 +36,31 @@ import java.util.List;
 public class SqlHelperMybatisAutoConfiguration implements ConfigurationCustomizer {
     private static final Logger logger = LoggerFactory.getLogger(SqlHelperMybatisAutoConfiguration.class);
 
-    private MybatisPagingPluginWrapper mybatisPagingPluginWrapper;
-
-    @Autowired
-    public void setMybatisPagingPluginWrapper(MybatisPagingPluginWrapper mybatisPagingPluginWrapper) {
-        this.mybatisPagingPluginWrapper = mybatisPagingPluginWrapper;
-    }
-
     @Bean
     public DatabaseIdProvider databaseIdProvider() {
         return MybatisUtils.vendorDatabaseIdProvider();
     }
 
-    @Bean
-    public MybatisPagingPluginWrapper mybatisPagingPluginWrapper(@Autowired SqlHelperMybatisProperties sqlHelperMybatisProperties) {
-        MybatisPagingPluginWrapper wrapper = new MybatisPagingPluginWrapper();
-        wrapper.initPlugin(sqlHelperMybatisProperties.getPagination(), sqlHelperMybatisProperties.getInstrumentor());
-        return wrapper;
+    private SqlHelperMybatisProperties sqlHelperMybatisProperties;
+
+    @Autowired
+    public void setSqlHelperMybatisProperties(SqlHelperMybatisProperties sqlHelperMybatisProperties) {
+        this.sqlHelperMybatisProperties = sqlHelperMybatisProperties;
     }
 
     @Override
     public void customize(Configuration configuration) {
         logger.info("Start to customize mybatis configuration with mybatis-spring-boot-autoconfigure");
         configuration.setDefaultScriptingLanguage(CustomScriptLanguageDriver.class);
-        List<Interceptor> sqlhelperPlugins = mybatisPagingPluginWrapper.getPlugins();
-        for (Interceptor sqlhelperPlugin : sqlhelperPlugins) {
-            logger.info("Add interceptor {} to mybatis configuration", sqlhelperPlugin);
-            configuration.addInterceptor(sqlhelperPlugin);
-        }
+
+        MybatisPaginationPlugin plugin = new MybatisPaginationPlugin();
+        plugin.setPaginationPluginConfig(sqlHelperMybatisProperties.getPagination());
+        plugin.setInstrumentorConfig(sqlHelperMybatisProperties.getInstrumentor());
+        plugin.init();
+
+        logger.info("Add interceptor {} to mybatis configuration", plugin);
+        configuration.addInterceptor(plugin);
     }
+
+
 }

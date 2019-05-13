@@ -21,7 +21,7 @@ import java.util.List;
 
 public class CustomMybatisParameterHandler implements ParameterHandler, PrepareParameterSetter {
     private static final Logger logger = LoggerFactory.getLogger(CustomMybatisParameterHandler.class);
-    private static final PagingRequestContextHolder<MybatisPagingRequestContext> PAGING_CONTEXT = (PagingRequestContextHolder<MybatisPagingRequestContext>) PagingRequestContextHolder.getContext();
+    private static final PagingRequestContextHolder<MybatisPaginationRequestContext> PAGING_CONTEXT = (PagingRequestContextHolder<MybatisPaginationRequestContext>) PagingRequestContextHolder.getContext();
 
     private final TypeHandlerRegistry typeHandlerRegistry;
     private final MappedStatement mappedStatement;
@@ -43,7 +43,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
     }
 
     private boolean isPagingCountStatement() {
-        final MybatisPagingRequestContext requestContext = PAGING_CONTEXT.get();
+        final MybatisPaginationRequestContext requestContext = PAGING_CONTEXT.get();
         return requestContext.getCountSql() == this.boundSql;
     }
 
@@ -58,7 +58,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
             queryParameters.setRowSelection(PAGING_CONTEXT.getRowSelection());
             queryParameters.setCallable(this.mappedStatement.getStatementType() == StatementType.CALLABLE);
             queryParameters.setParameters(this.getParameterObject());
-            MybatisPagingPluginWrapper.getInstrumentor().bindParameters(ps, this, queryParameters, true);
+            MybatisPaginationPlugin.getInstrumentor().bindParameters(ps, this, queryParameters, true);
         } catch (SQLException ex) {
             logger.error("errorCode:{},message:{}", ex.getErrorCode(), ex.getMessage(), ex);
         }

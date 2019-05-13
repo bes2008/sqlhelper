@@ -3,7 +3,7 @@ package com.fjn.helper.sql.mybatis.plugins.pagination;
 import com.fjn.helper.sql.dialect.pagination.PagingRequestContext;
 import org.apache.ibatis.mapping.BoundSql;
 
-public class MybatisPagingRequestContext extends PagingRequestContext {
+public class MybatisPaginationRequestContext extends PagingRequestContext {
     private BoundSql countSql;
     private BoundSql querySql;
 
