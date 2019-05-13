@@ -4,17 +4,9 @@ server:
 mybatis:
   type-aliases-package: com.fjn.helper.examples.model
   mapper-locations: classpath*:mapper/*.xml
-  configuration:
-    default-scripting-language: com.fjn.helper.sql.mybatis.plugins.pagination.CustomScriptLanguageDriver
-    # org.apache.ibatis.scripting.xmltags.XMLLanguageDriver
-        #
 
 spring:
   datasource:
     url: jdbc:h2:~/test
     driver-class-name: org.h2.Driver
     username: sa
-sqlhelper:
-  mybatis:
-    pagination:
-      count: true
