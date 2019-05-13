@@ -10,15 +10,16 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 
 ## tools usage
 ### mybatis pagination (MyBatis 分页插件)
-####1、Supports
+#### 1、Supports
 1. support follow databases:<br>
 Oracle, Mysql, MariaDB, Sql server, H2, SQLite, HSqlDb, Derby, DB2, Informix, Firebird, CacheDB, CUBRID, HANA, Ingres, Interbase, PostgreSQL, TimesTen<br>
 2. multiple databases support<br>
 3. auto detect dialect<br>
+4. the performance is higher than Mybatis-PageHelper, because the limit、offset will be setted by use PrepareStatement placeholder '?' 
 
-####2、 installation
+#### 2、 installation
 
-**case 1, use it with spring boot appliction:**
+##### case 1, use it with spring boot appliction: 
  just need to import sqlhelper-mybatis-spring-boot-autoconfigure.jar and sqlhelper-mybatis-spring-boot-starter.jar:
 
 <pre>
@@ -36,7 +37,7 @@ Oracle, Mysql, MariaDB, Sql server, H2, SQLite, HSqlDb, Derby, DB2, Informix, Fi
 
 also see **sqlhelper-examples** module
 
-**case 2, other appliction** : <br>
+##### case 2, other appliction : 
 1.import dependencies:
 <pre>
     &lt;dependency>
@@ -75,3 +76,22 @@ also see **sqlhelper-examples** module
       &lt;/plugin>
     &lt;/plugins>
 </pre>
+
+
+#### 2、 How to
+you can use it like this:
+<pre>
+    @GetMapping
+    public PagingResult list(){
+        User queryCondtion = new User();
+        queryCondtion.setAge(10);
+        PagingRequest request = new PagingRequest()
+                .setPageNo(1)
+                .setPageSize(10);
+        PagingRequestContextHolder.getContext().setPagingRequest(request);
+        List<User> users = userDao.selectByLimit(queryCondtion);
+        request.getResult().setItems(users);
+        return request.getResult();
+    }
+</pre>
+
