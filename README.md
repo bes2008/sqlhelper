@@ -9,11 +9,11 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 
 
 ## tools usage
-### mybatis pagination (MyBatis 分页插件)
+### mybatis pagination plugin
 #### 1、Supports
 1. support follow databases:<br>
 Oracle, Mysql, MariaDB, Sql server, H2, SQLite, HSqlDb, Derby, DB2, Informix, Firebird, CacheDB, CUBRID, HANA, Ingres, Interbase, PostgreSQL, TimesTen<br>
-2. multiple databases support<br>
+2. multiple databases are supported in one application <br>
 3. auto detect dialect<br>
 4. the performance is higher than Mybatis-PageHelper, because the limit、offset will be setted by use PrepareStatement placeholder '?' 
 
