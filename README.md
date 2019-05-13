@@ -4,5 +4,5 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 ## modules
 **sqlhelper-dialect** : the core <br/> 
 **sqlhelper-mybatis** : the mybatis tools (MyBatis Pagination Plugin)<br/> 
+**sqlhelper-mybatis-spring-boot**: spring boot autoconfigure, starter for sqlhelper in mybatis environment<br/>
 **sqlhelper-examples**: some examples for there tools<br/> 
-**sqlhelper-mybatis-spring-boot**: spring boot autoconfigure, starter for sqlhelper in mybatis environment
