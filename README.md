@@ -10,6 +10,68 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 
 ## tools usage
 ### mybatis pagination (MyBatis 分页插件)
-**case 1, use it with spring boot appliction:**
- 
+####1、Supports
+1. support follow databases:<br>
+Oracle, Mysql, MariaDB, Sql server, H2, SQLite, HSqlDb, Derby, DB2, Informix, Firebird, CacheDB, CUBRID, HANA, Ingres, Interbase, PostgreSQL, TimesTen<br>
+2. multiple databases support<br>
+3. auto detect dialect<br>
 
+####2、 installation
+
+**case 1, use it with spring boot appliction:**
+ just need to import sqlhelper-mybatis-spring-boot-autoconfigure.jar and sqlhelper-mybatis-spring-boot-starter.jar:
+
+<pre>
+    &lt;dependency>
+        &lt;groupId>com.fjn.helper&lt;/groupId>
+        &lt;artifactId>sqlhelper-mybatis-spring-boot-autoconfigure&lt;/artifactId>
+        &lt;version>${sqlhelper.version}&lt;/version>
+    &lt;/dependency>
+    &lt;dependency>
+        &lt;groupId>com.fjn.helper&lt;/groupId>
+        &lt;artifactId>sqlhelper-mybatis-spring-boot-starter&lt;/artifactId>
+        &lt;version>${sqlhelper.version}&lt;/version>
+    &lt;/dependency>
+</pre>  
+
+also see **sqlhelper-examples** module
+
+**case 2, other appliction** : <br>
+1.import dependencies:
+<pre>
+    &lt;dependency>
+        &lt;groupId>com.fjn.helper&lt;/groupId>
+        &lt;artifactId>sqlhelper-dialect&lt;/artifactId>
+        &lt;version>${sqlhelper.version}&lt;/version>
+    &lt;/dependency>
+</pre>        
+2.config **mybatis-config.xml** ：
+<pre>
+    &lt;configuration>
+        ...
+        &lt;databaseIdProvider type="DB_VENDOR">
+          &lt;property name="SQL Server" value="sqlserver"/>
+          &lt;property name="DB2" value="db2"/>
+          &lt;property name="Oracle" value="oracle" />
+        &lt;/databaseIdProvider>
+        ...
+        &lt;settings>
+            ...
+            &lt;setting name="defaultScriptingLanguage" value="com.fjn.helper.sql.mybatis.plugins.pagination.CustomScriptLanguageDriver" />
+            ...
+        &lt;/settings>
+        ...
+    &lt;/configuration>
+    
+    &lt;plugins>
+      &lt;plugin interceptor="com.fjn.helper.sql.mybatis.plugins.pagination.MybatisPaginationPlugin">
+        &lt;property name="sqlhelper.mybatis.pagination.count" value="true"/>
+        &lt;property name="sqlhelper.mybatis.pagination.countCacheInitCapacity" value="10"/>
+        &lt;property name="sqlhelper.mybatis.pagination.countCacheMaxCapacity" value="1000"/>
+        &lt;property name="sqlhelper.mybatis.pagination.countSuffix" value="_COUNT"/>
+        &lt;property name="sqlhelper.mybatis.pagination.countCacheExpireInSeconds" value="5"/>
+        
+        &lt;property name="sqlhelper.mybatis.instrumentor.dialect" value="mysql"/>
+      &lt;/plugin>
+    &lt;/plugins>
+</pre>
