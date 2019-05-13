@@ -26,10 +26,8 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.DatabaseMetaData;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.sql.SQLException;
+import java.util.*;
 
 public class DialectRegistry {
 
@@ -37,7 +35,8 @@ public class DialectRegistry {
     ;
     private static final Map<String, Dialect> nameToDialectMap = new HashMap<String, Dialect>();
     private static final Map<String, String> classNameToNameMap = new HashMap<String, String>();
-    private static final Map<DatabaseMetaData, Holder<Dialect>> dbToDialectMap = new HashMap<DatabaseMetaData, Holder<Dialect>>();
+    // key:DatabaseMetaData.getProduceName() + getDriver();
+    private static final Map<String, Holder<Dialect>> dbToDialectMap = new HashMap<String, Holder<Dialect>>();
     private static final Properties vendorDatabaseIdMappings = new Properties();
 
     static {
@@ -66,11 +65,52 @@ public class DialectRegistry {
         return DialectRegistry.nameToDialectMap.get(databaseId);
     }
 
-    public Dialect getDialectByDatabaseMetadata(final DatabaseMetaData databaseMetaData) {
-        if (databaseMetaData != null) {
-            return ((Holder<Dialect>) DialectRegistry.dbToDialectMap.get(databaseMetaData)).get();
+    private static String databaseIdStringLowerCase(DatabaseMetaData databaseMetaData){
+        return databaseIdString(databaseMetaData).toLowerCase();
+    }
+
+    private static String databaseIdString(DatabaseMetaData databaseMetaData){
+        try {
+            return databaseMetaData.getDatabaseProductName();
+        }catch (SQLException ex){
+            try {
+                return databaseMetaData.getDriverName().toLowerCase() +" version: "+ databaseMetaData.getDriverVersion().toLowerCase();
+            }catch (SQLException ex1) {
+                // ignore it
+            }
         }
-        return null;
+        try {
+            return databaseMetaData.getURL();
+        }catch (SQLException ex){
+
+        }
+        return databaseMetaData.getClass().getCanonicalName();
+    }
+
+    public Dialect getDialectByDatabaseMetadata(final DatabaseMetaData databaseMetaData) {
+        Dialect dialect = null;
+        if (databaseMetaData != null) {
+            String databaseIdString = databaseIdStringLowerCase(databaseMetaData);
+            try {
+                dialect = ((Holder<Dialect>) DialectRegistry.dbToDialectMap.get(databaseIdString)).get();
+            }catch (NullPointerException ex){
+                // ignore
+            }
+            if(dialect==null){
+                Enumeration<String> keys = ( Enumeration<String>)vendorDatabaseIdMappings.propertyNames();
+                while (keys.hasMoreElements()){
+                    String key = keys.nextElement();
+                    if(databaseIdString.contains(key.toLowerCase())){
+                        dialect = getDialectByName(vendorDatabaseIdMappings.getProperty(key));
+                        if(dialect!=null){
+                            dbToDialectMap.put(databaseIdString,new Holder<Dialect>(dialect));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return dialect;
     }
 
     private static void registerBuiltinDialects() {

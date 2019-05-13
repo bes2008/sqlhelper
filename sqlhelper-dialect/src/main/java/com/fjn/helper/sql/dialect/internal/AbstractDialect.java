@@ -89,7 +89,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     @Override
     public boolean isSupportsVariableLimit() {
-        return this.delegate == null ? false : this.delegate.isSupportsVariableLimit();
+        return this.delegate == null ? isSupportsLimit() : this.delegate.isSupportsVariableLimit();
     }
 
     @Override
