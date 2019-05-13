@@ -65,15 +65,7 @@ also see **sqlhelper-examples** module
     &lt;/configuration>
     
     &lt;plugins>
-      &lt;plugin interceptor="com.fjn.helper.sql.mybatis.plugins.pagination.MybatisPaginationPlugin">
-        &lt;property name="sqlhelper.mybatis.pagination.count" value="true"/>
-        &lt;property name="sqlhelper.mybatis.pagination.countCacheInitCapacity" value="10"/>
-        &lt;property name="sqlhelper.mybatis.pagination.countCacheMaxCapacity" value="1000"/>
-        &lt;property name="sqlhelper.mybatis.pagination.countSuffix" value="_COUNT"/>
-        &lt;property name="sqlhelper.mybatis.pagination.countCacheExpireInSeconds" value="5"/>
-        
-        &lt;property name="sqlhelper.mybatis.instrumentor.dialect" value="mysql"/>
-      &lt;/plugin>
+      &lt;plugin interceptor="com.fjn.helper.sql.mybatis.plugins.pagination.MybatisPaginationPlugin" />
     &lt;/plugins>
 </pre>
 
