@@ -4,7 +4,7 @@
     <resultMap id="entity" type="com.fjn.helper.examples.model.User">
         <id property="id" column="ID" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result property="name" column="NAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
-        <result property="age" column="AGE" javaType="java.lang.Integer" jdbcType="INT"/>
+        <result property="age" column="AGE" javaType="java.lang.Integer" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="all_columns">
@@ -50,6 +50,6 @@
         WHERE 1=1
         <if test="id!=null and id != ''">AND ID = #{id}</if>
         <if test="name!=null and name != ''">AND NAME = #{name}</if>
-        <if test="age!=null and age ge 0">AND AGE = #{age}</if>
+        <if test="age!=null and age gte 0">AND AGE = #{age}</if>
     </select>
 </mapper>
