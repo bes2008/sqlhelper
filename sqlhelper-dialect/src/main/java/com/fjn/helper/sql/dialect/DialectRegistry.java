@@ -142,7 +142,10 @@ public class DialectRegistry {
                 SQLiteDialect.class,
                 SybaseDialect.class,
                 TeradataDialect.class,
-                TimesTenDialect.class};
+                TimesTenDialect.class,
+                KingbaseDialect.class,
+                OscarDialect.class,
+                DmDialect.class};
         Arrays.asList(dialects).forEach(DialectRegistry::registerDialectByClass);
     }
 

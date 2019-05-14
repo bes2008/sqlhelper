@@ -11,7 +11,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 ## tools usage
 ### mybatis pagination plugin
 #### 1、Supports
-1. support follow databases:
+1. supports the following databases:
     + Oracle
     + Mysql
     + MariaDB
@@ -19,6 +19,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + SQL Server
     + OSCAR (神通数据库)
     + DM (达梦数据库)
+    + Kingbase (人大金仓数据库)
     + H2
     + SQLite
     + HSqlDb
