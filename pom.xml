@@ -13,7 +13,21 @@
         <module>sqlhelper-examples</module>
         <module>sqlhelper-mybatis-spring-boot</module>
     </modules>
-
+    <developers>
+        <developer>
+            <id>f1194361820</id>
+            <name>f1194361820</name>
+            <email>fs1194361820@163.com</email>
+            <url>http://www.cnblogs.com/f1194361820</url>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>LGPL 3.0</name>
+            <url>https://github.com/f1194361820/sqlhelper/blob/master/LICENSE</url>
+            <distribution>manual</distribution>
+        </license>
+    </licenses>
     <packaging>pom</packaging>
     <properties>
         <slf4j.version>1.7.25</slf4j.version>
