@@ -22,6 +22,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + OSCAR (神通数据库)
     + DM (达梦数据库)
     + Kingbase (人大金仓数据库)
+    + Phoenix (HBase JDBC Client)
     + H2
     + SQLite
     + HSqlDb
