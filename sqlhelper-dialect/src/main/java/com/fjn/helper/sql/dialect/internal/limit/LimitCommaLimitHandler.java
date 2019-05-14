@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -13,26 +12,24 @@
  * limitations under the License.
  */
 
-package com.fjn.helper.sql.dialect.internal;
+package com.fjn.helper.sql.dialect.internal.limit;
 
 import com.fjn.helper.sql.dialect.RowSelection;
-import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
-import com.fjn.helper.sql.dialect.internal.limit.LimitOnlyLimitHandler;
 
-public class MckoiDialect extends AbstractDialect {
-    public MckoiDialect(){
-        super();
-        setLimitHandler(new LimitOnlyLimitHandler());
+/**
+ *  select * from TABLE where xxx
+ *  limit $offset, $limit
+ */
+public class LimitCommaLimitHandler extends AbstractLimitHandler {
+
+    @Override
+    public String processSql(String sql, RowSelection rowSelection) {
+        return getLimitString(sql, LimitHelper.hasFirstRow(rowSelection));
     }
 
     @Override
-    public boolean isSupportsLimit() {
-        return true;
-    }
-
-    @Override
-    public boolean isSupportsLimitOffset() {
-        return false;
+    protected String getLimitString(String sql, boolean hasOffset) {
+        return sql + (hasOffset ? " limit ?, ?" : " limit ?");
     }
 
 }

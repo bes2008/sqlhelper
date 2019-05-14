@@ -21,8 +21,8 @@ import java.sql.CallableStatement;
 import java.sql.SQLException;
 
 
-public class Cache71Dialect extends AbstractDialect {
-    public Cache71Dialect() {
+public class CacheDialect extends AbstractDialect {
+    public CacheDialect() {
         super();
         setLimitHandler(new TopLimitHandler() {
             @Override

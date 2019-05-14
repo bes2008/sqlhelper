@@ -15,12 +15,12 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.internal.limit.CUBRIDLimitHandler;
+import com.fjn.helper.sql.dialect.internal.limit.LimitCommaLimitHandler;
 
 public class CUBRIDDialect extends AbstractDialect {
     public CUBRIDDialect() {
         super();
-        setLimitHandler(new CUBRIDLimitHandler());
+        setLimitHandler(new LimitCommaLimitHandler());
     }
 
     @Override

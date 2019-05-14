@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -15,37 +14,28 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
 import com.fjn.helper.sql.dialect.RowSelection;
 import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
-import com.fjn.helper.sql.dialect.internal.limit.LimitOffsetLimitHandler;
+import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
 
-import java.io.FilterReader;
-import java.io.Reader;
+public class VerticaDialect extends AbstractDialect {
+    public VerticaDialect(){
+        setLimitHandler(new AbstractLimitHandler() {
+            @Override
+            public String processSql(String sql, RowSelection rowSelection) {
+                return getLimitString(sql, LimitHelper.hasFirstRow(rowSelection));
+            }
 
-
-public class HANADialect extends AbstractDialect {
-    private static final long serialVersionUID = -379042275442752102L;
-
-    private static class CloseSuppressingReader extends FilterReader {
-        protected CloseSuppressingReader(Reader in) {
-            super(in);
-        }
-
-        @Override
-        public void close() {
-        }
-    }
-
-
-    public HANADialect() {
-        super();
-        setLimitHandler(new LimitOffsetLimitHandler());
+            @Override
+            protected String getLimitString(String sql, boolean hasOffset) {
+                return "select * from ("+sql+") _xx_TMP  limit ?";
+            }
+        });
     }
 
     @Override
-    public boolean isBindLimitParametersInReverseOrder() {
-        return true;
+    public boolean isSupportsLimitOffset() {
+        return false;
     }
 
     @Override

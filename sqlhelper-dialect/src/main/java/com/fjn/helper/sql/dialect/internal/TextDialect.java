@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -15,14 +14,12 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.RowSelection;
-import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
-import com.fjn.helper.sql.dialect.internal.limit.LimitOnlyLimitHandler;
+import com.fjn.helper.sql.dialect.internal.limit.LimitCommaLimitHandler;
 
-public class MckoiDialect extends AbstractDialect {
-    public MckoiDialect(){
+public class TextDialect extends AbstractDialect {
+    public TextDialect(){
         super();
-        setLimitHandler(new LimitOnlyLimitHandler());
+        setLimitHandler(new LimitCommaLimitHandler());
     }
 
     @Override
@@ -32,7 +29,6 @@ public class MckoiDialect extends AbstractDialect {
 
     @Override
     public boolean isSupportsLimitOffset() {
-        return false;
+        return true;
     }
-
 }

@@ -117,7 +117,7 @@ public class DialectRegistry {
         logger.info("Start to register builtin dialects");
 
         final Class<? extends Dialect>[] dialects = (Class<? extends Dialect>[]) new Class[]{
-                Cache71Dialect.class,
+                CacheDialect.class,
                 CUBRIDDialect.class,
                 DB2Dialect.class,
                 DerbyDialect.class,
@@ -137,7 +137,7 @@ public class DialectRegistry {
                 PostgreSQLDialect.class,
                 ProgressDialect.class,
                 RDMSOS2200Dialect.class,
-                SAPDBDialect.class,
+                SAPMaxDBDialect.class,
                 SQLServerDialect.class,
                 SQLiteDialect.class,
                 SybaseDialect.class,

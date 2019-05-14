@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -15,5 +14,26 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-public class SAPDBDialect extends AbstractDialect {
+import com.fjn.helper.sql.dialect.internal.limit.LimitOnlyLimitHandler;
+
+public class ElasticsearchDialect extends AbstractDialect {
+    public ElasticsearchDialect(){
+        super();
+        setLimitHandler(new LimitOnlyLimitHandler());
+    }
+
+    @Override
+    public boolean isSupportsLimit() {
+        return true;
+    }
+
+    @Override
+    public boolean isSupportsLimitOffset() {
+        return false;
+    }
+
+    @Override
+    public boolean isBindLimitParametersInReverseOrder() {
+        return true;
+    }
 }

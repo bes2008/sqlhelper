@@ -18,21 +18,43 @@ package com.fjn.helper.sql.dialect.internal;
 import com.fjn.helper.sql.dialect.RowSelection;
 import com.fjn.helper.sql.dialect.annotation.Name;
 import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
+import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
 
-@Name("mimer")
-public class MimerSQLDialect extends AbstractDialect {
-    public MimerSQLDialect(){
+@Name("sap")
+public class SAPMaxDBDialect extends AbstractDialect {
+
+    public SAPMaxDBDialect() {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
             public String processSql(String sql, RowSelection rowSelection) {
-                return null;
+                boolean hasOffset = LimitHelper.hasFirstRow(rowSelection);
+                return getLimitString(sql, hasOffset);
+            }
+
+            @Override
+            protected String getLimitString(String sql, boolean hasOffset) {
+                sql =  "select * from (" + sql +") where rowno < ? ";
+                if(hasOffset){
+                    sql = sql + " and rowno >= ?";
+                }
+                return sql;
             }
         });
     }
 
     @Override
+    public boolean isSupportsLimit() {
+        return true;
+    }
+
+    @Override
     public boolean isSupportsLimitOffset() {
+        return true;
+    }
+
+    @Override
+    public boolean isBindLimitParametersInReverseOrder() {
         return false;
     }
 }

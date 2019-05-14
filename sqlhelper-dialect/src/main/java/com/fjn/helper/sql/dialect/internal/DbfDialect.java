@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -13,22 +12,23 @@
  * limitations under the License.
  */
 
-package com.fjn.helper.sql.dialect.internal.limit;
+package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.RowSelection;
+import com.fjn.helper.sql.dialect.internal.limit.LimitCommaLimitHandler;
 
+public class DbfDialect extends AbstractDialect {
+    public DbfDialect(){
+        super();
+        setLimitHandler(new LimitCommaLimitHandler());
+    }
 
-public class CUBRIDLimitHandler
-        extends AbstractLimitHandler {
     @Override
-    public String processSql(String sql, RowSelection selection) {
-        if (LimitHelper.useLimit(getDialect(), selection)) {
+    public boolean isSupportsLimit() {
+        return true;
+    }
 
-
-            boolean useLimitOffset = LimitHelper.hasFirstRow(selection);
-            return sql + (useLimitOffset ? " limit ?, ?" : " limit ?");
-        }
-
-        return sql;
+    @Override
+    public boolean isSupportsLimitOffset() {
+        return true;
     }
 }

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -17,12 +16,22 @@ package com.fjn.helper.sql.dialect.internal;
 
 import com.fjn.helper.sql.dialect.RowSelection;
 import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
-import com.fjn.helper.sql.dialect.internal.limit.LimitOnlyLimitHandler;
+import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
 
-public class MckoiDialect extends AbstractDialect {
-    public MckoiDialect(){
-        super();
-        setLimitHandler(new LimitOnlyLimitHandler());
+public class OpenbaseDialect extends AbstractDialect {
+    public OpenbaseDialect() {
+        setLimitHandler(new AbstractLimitHandler() {
+            @Override
+            public String processSql(String sql, RowSelection rowSelection) {
+                return getLimitString(sql, LimitHelper.hasFirstRow(rowSelection));
+            }
+
+            @Override
+            protected String getLimitString(String sql, boolean hasOffset) {
+                // http://openbase.wikidot.com/openbase-sql:select-statements
+                return "select * from (" + sql + ") _xx_TMP RETURN RESULT " + (hasOffset ? " ? TO ?" : " ?");
+            }
+        });
     }
 
     @Override
@@ -32,7 +41,13 @@ public class MckoiDialect extends AbstractDialect {
 
     @Override
     public boolean isSupportsLimitOffset() {
-        return false;
+        return true;
     }
+
+    @Override
+    public boolean isBindLimitParametersInReverseOrder() {
+        return true;
+    }
+
 
 }
