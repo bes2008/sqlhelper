@@ -34,9 +34,11 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + Interbase
     + Teradata 
     + TimesTen
-2. multiple databases are supported in one application <br>
-3. auto detect dialect<br>
-4. **the performance is higher than Mybatis-PageHelper**, because the limit、offset will be setted with PrepareStatement placeholder '?' 
+2. supports multiple databases in one application 
+3. supports auto detect dialect, so the dialect option is optional
+4. **the performance is higher than Mybatis-PageHelper**, because the limit、offset will be setted with PrepareStatement placeholder '?'
+5. supports spring boot 1.x , 2.x
+6. supports mybatis 3.x 
 
 #### Installation
 
