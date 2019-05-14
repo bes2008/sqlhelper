@@ -32,6 +32,11 @@ public class SQLiteDialect extends AbstractDialect {
     }
 
     @Override
+    public boolean isSupportsLimitOffset() {
+        return true;
+    }
+
+    @Override
     public boolean isBindLimitParametersInReverseOrder() {
         return true;
     }
