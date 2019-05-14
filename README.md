@@ -2,10 +2,12 @@
 SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
 
 ## modules
-**sqlhelper-dialect** : the core <br/> 
+**sqlhelper-dialect** : the core<br/>
 **sqlhelper-mybatis** : the mybatis tools (MyBatis Pagination Plugin)<br/> 
 **sqlhelper-mybatis-spring-boot**: spring boot autoconfigure, starter for sqlhelper in mybatis environment<br/>
-**sqlhelper-examples**: some examples for there tools<br/> 
+**sqlhelper-mybatis-over-pagehelper**: migrate your application from ***mybatis-pagehelper*** to us <br/> 
+**sqlhelper-examples**: some examples for there tools<br/>
+ 
 
 
 ## tools usage
@@ -111,3 +113,12 @@ you can use it like this:
 </pre>
 
 
+### Migrate from mybatis-pagehelper
+just replace mybatis-pagehelper dependencies to sqlhelper-mybatis-over-pagehelper:
+<pre>
+    &lt;dependency>
+        &lt;groupId>com.fjn.helper&lt;/groupId>
+        &lt;artifactId>sqlhelper-mybatis-over-pagehelper&lt;/artifactId>
+        &lt;version>${sqlhelper.version}&lt;/version>
+    &lt;/dependency>
+</pre>
