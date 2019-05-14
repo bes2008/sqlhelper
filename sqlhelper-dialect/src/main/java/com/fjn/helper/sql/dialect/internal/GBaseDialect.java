@@ -14,17 +14,11 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.RowSelection;
-import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
-import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
 import com.fjn.helper.sql.dialect.internal.limit.OracleXLimitHandler;
-import com.fjn.helper.sql.dialect.internal.urlparser.OscarUrlParser;
 
-import java.util.Locale;
-
-public class OscarDialect extends AbstractDialect {
-    public OscarDialect(){
-        setUrlParser(new OscarUrlParser());
+public class GBaseDialect extends AbstractDialect {
+    public GBaseDialect(){
+        super();
         setLimitHandler(new OracleXLimitHandler());
     }
 

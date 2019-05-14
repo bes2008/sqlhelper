@@ -117,35 +117,66 @@ public class DialectRegistry {
         logger.info("Start to register builtin dialects");
 
         final Class<? extends Dialect>[] dialects = (Class<? extends Dialect>[]) new Class[]{
+
+                AccessDialect.class,
+
                 CacheDialect.class,
                 CUBRIDDialect.class,
+
+                DbfDialect.class,
                 DB2Dialect.class,
                 DerbyDialect.class,
+                DmDialect.class,
+
+                ElasticsearchDialect.class,
+                ExcelDialect.class,
+
                 FirebirdDialect.class,
                 FrontBaseDialect.class,
-                H2Dialect.class, HSQLDialect.class,
+
+                GBaseDialect.class,
+
+                H2Dialect.class,
+                HSQLDialect.class,
+                HANADialect.class,
+
                 InformixDialect.class,
                 IngresDialect.class,
                 InterbaseDialect.class,
+
                 JDataStoreDialect.class,
+
+                KingbaseDialect.class,
+
                 MckoiDialect.class,
                 MimerSQLDialect.class,
                 MySQLDialect.class,
                 MariaDBDialect.class,
+                MonetDialect.class,
+
                 OracleDialect.class,
+                OpenbaseDialect.class,
+                OscarDialect.class,
+
+                ParadoxDialect.class,
                 PointbaseDialect.class,
                 PostgreSQLDialect.class,
                 ProgressDialect.class,
+                PhoenixDialect.class,
+
                 RDMSOS2200Dialect.class,
+
                 SAPMaxDBDialect.class,
                 SQLServerDialect.class,
                 SQLiteDialect.class,
                 SybaseDialect.class,
+
                 TeradataDialect.class,
                 TimesTenDialect.class,
-                KingbaseDialect.class,
-                OscarDialect.class,
-                DmDialect.class};
+                TextDialect.class,
+
+                VerticaDialect.class
+                };
         Arrays.asList(dialects).forEach(DialectRegistry::registerDialectByClass);
     }
 

@@ -30,6 +30,8 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + F
         + Firebird
         + Fontbase
+    + G
+        + GBase (南大通用)
     + H
         + H2
         + HANA (HANAColumn, HANAStore)
@@ -59,7 +61,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + PostgreSQL
         + Progress
     + R
-        + RDMSOS2002
+        + RDMSOS2200
     + S
         + SAPMAXDB
         + SQLite
