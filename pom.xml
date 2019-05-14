@@ -12,6 +12,7 @@
         <module>sqlhelper-mybatis</module>
         <module>sqlhelper-examples</module>
         <module>sqlhelper-mybatis-spring-boot</module>
+        <module>sqlhelper-mybatis-over-pagehelper</module>
     </modules>
     <developers>
         <developer>
