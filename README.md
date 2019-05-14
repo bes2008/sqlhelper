@@ -123,3 +123,4 @@ just replace mybatis-pagehelper dependencies to sqlhelper-mybatis-over-pagehelpe
         &lt;version>${sqlhelper.version}&lt;/version>
     &lt;/dependency>
 </pre>
+use it, your code will not make any changes
