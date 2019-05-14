@@ -10,7 +10,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 
 ## tools usage
 ### mybatis pagination plugin
-#### 1、Supports
+#### Key Features
 1. supports the following databases:
     + Oracle
     + Mysql
@@ -38,7 +38,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 3. auto detect dialect<br>
 4. **the performance is higher than Mybatis-PageHelper**, because the limit、offset will be setted with PrepareStatement placeholder '?' 
 
-#### 2、 installation
+#### Installation
 
 ##### case 1, use it with spring boot application: 
  just import dependencies:
@@ -91,7 +91,7 @@ also see **sqlhelper-examples** module
 </pre>
 
 
-#### 3、 How to
+#### How to
 you can use it like this:
 <pre>
     @GetMapping
