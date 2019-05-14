@@ -30,8 +30,8 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
 
     public SQLServerDialect() {
         super();
-        setUrlParser(new SqlServerUrlParser());
         setDelegate(new SQLServer2008Dialect());
+        setUrlParser(new SqlServerUrlParser());
     }
 
     @Override
@@ -87,7 +87,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
     }
 
     class SQLServer2005Dialect extends AbstractTransactSQLDialect {
-        public SQLServer2005Dialect() {
+        private SQLServer2005Dialect() {
             setLimitHandler(new SQLServer2005LimitHandler());
         }
 
@@ -113,7 +113,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
     }
 
     class SQLServer2008Dialect extends AbstractTransactSQLDialect {
-        public SQLServer2008Dialect() {
+        private SQLServer2008Dialect() {
             setLimitHandler(new AbstractLimitHandler() {
                 @Override
                 public String processSql(String sql, RowSelection selection) {
@@ -146,5 +146,8 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         public boolean isSupportsVariableLimit() {
             return true;
         }
+    }
+
+    class SQLServer2012Dialect extends SQLServer2008Dialect{
     }
 }
