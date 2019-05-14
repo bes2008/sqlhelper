@@ -6,7 +6,7 @@
 
     <groupId>com.fjn.helper</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <modules>
         <module>sqlhelper-dialect</module>
         <module>sqlhelper-mybatis</module>
