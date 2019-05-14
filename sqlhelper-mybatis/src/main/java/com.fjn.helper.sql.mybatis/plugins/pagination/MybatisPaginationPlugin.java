@@ -187,15 +187,23 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         } catch (Throwable ex2) {
             logger.error(ex2.getMessage(), ex2);
         } finally {
-            PAGING_CONTEXT.remove();
+            invalidatePagingRequest();
             instrumentor.finish();
         }
         return rs;
     }
 
+    private void invalidatePagingRequest(){
+        PagingRequest request = PAGING_CONTEXT.getPagingRequest();
+        if(request!=null){
+            request.clear();
+        }
+        PAGING_CONTEXT.remove();
+    }
+
     private boolean beginIfSupportsLimit(final MappedStatement statement) {
         if (statement.getStatementType() != StatementType.PREPARED || SqlCommandType.SELECT != statement.getSqlCommandType() || PAGING_CONTEXT.getPagingRequest() == null || !PAGING_CONTEXT.getPagingRequest().isValidRequest()) {
-            PAGING_CONTEXT.remove();
+            invalidatePagingRequest();
             return false;
         }
         final String databaseId = getDatabaseId(statement);

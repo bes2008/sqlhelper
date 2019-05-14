@@ -16,6 +16,9 @@
 package com.fjn.helper.sql.dialect.pagination;
 
 
+import java.util.Collection;
+import java.util.Collections;
+
 public class PagingRequest<E, R> {
     private Boolean count = null;
     private String countSqlId;
@@ -130,5 +133,13 @@ public class PagingRequest<E, R> {
     public PagingRequest<E,R> setDialect(String dialect) {
         this.dialect = dialect;
         return this;
+    }
+
+    public void clear(){
+        if(result!=null) {
+            result.setItems(Collections.EMPTY_LIST);
+        }
+        setResult(null);
+        setCondition(null);
     }
 }
