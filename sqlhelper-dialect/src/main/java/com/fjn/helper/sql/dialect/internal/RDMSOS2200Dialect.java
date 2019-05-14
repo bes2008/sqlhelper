@@ -15,11 +15,12 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
+import com.fjn.helper.sql.dialect.annotation.Name;
 import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
 import com.fjn.helper.sql.dialect.RowSelection;
 import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
 
-
+@Name("rdmsos")
 public class RDMSOS2200Dialect extends AbstractDialect {
 
     public RDMSOS2200Dialect() {

@@ -14,29 +14,63 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 ### mybatis pagination plugin
 #### Key Features
 1. supports the following databases:
-    + Oracle
-    + Mysql
-    + MariaDB
-    + PostgreSQL
-    + SQL Server
-    + OSCAR (神通数据库)
-    + DM (达梦数据库)
-    + Kingbase (人大金仓数据库)
-    + Phoenix (HBase JDBC Client)
-    + H2
-    + SQLite
-    + HSqlDb
-    + Derby
-    + DB2
-    + Informix
-    + Firebird
-    + CacheDB
-    + CUBRID
-    + HANA
-    + Ingres
-    + Interbase
-    + Teradata 
-    + TimesTen
+    + A
+        + Access
+    + C
+        + Cache (CacheDB)
+        + CUBRID
+    + D
+        + DBF
+        + DB2
+        + Derby
+        + DM (达梦数据库)
+    + E      
+        + Elasticsearch
+        + Excel
+    + F
+        + Firebird
+        + Fontbase
+    + H
+        + H2
+        + HANA (HANAColumn, HANAStore)
+        + HSQL        
+    + I
+        + Informix
+        + Ingres
+        + Interbase
+    + J
+        + JDataStore
+    + K
+        + Kingbase (人大金仓)        
+    + M
+        + MariaDb
+        + MySQL
+        + Mckoi
+        + Mimer
+        + Monet
+    + O
+        + Oracle (8i,9,9i,10g,11g,12c)
+        + OSACR (神通数据库)
+        + Openbase
+    + P 
+        + Paradox
+        + Phoenix (HBase JDBC Client)
+        + Pointbase
+        + PostgreSQL
+        + Progress
+    + R
+        + RDMSOS2002
+    + S
+        + SAPMAXDB
+        + SQLite
+        + SQLServer (SQLServer 2005,2008,2012)
+    + T
+        + Teradata
+        + Text
+        + TimesTen
+    + V
+        + Vertica
+
 2. supports multiple databases in one application 
 3. supports auto detect dialect, so the dialect option is optional
 4. **the performance is higher than Mybatis-PageHelper**, because the limit、offset will be setted with PrepareStatement placeholder '?'

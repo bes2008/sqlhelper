@@ -29,6 +29,9 @@ public class MonetDialect extends AbstractDialect{
                 return getLimitString(sql, rowSelection.getOffset()>0);
             }
 
+            /**
+             * https://www.monetdb.org/Documentation/Manuals/SQLreference/SQLSyntaxOverview#SELECT
+             */
             @Override
             protected String getLimitString(String sql, boolean hasOffset) {
                 sql = sql.trim();
