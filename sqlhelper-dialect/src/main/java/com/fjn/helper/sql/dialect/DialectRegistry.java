@@ -126,6 +126,7 @@ public class DialectRegistry {
                 CacheDialect.class,
                 ClickHouseDialect.class,
                 CubridDialect.class,
+                CockroachDialect.class,
 
                 DbfDialect.class,
                 DB2Dialect.class,
