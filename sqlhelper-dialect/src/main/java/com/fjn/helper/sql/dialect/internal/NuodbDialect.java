@@ -17,7 +17,7 @@ package com.fjn.helper.sql.dialect.internal;
 import com.fjn.helper.sql.dialect.internal.limit.LimitCommaLimitHandler;
 
 /**
- *
+ * http://doc.nuodb.com/Latest/Default.htm#SELECT.htm
  * <pre>
  *     SELECT  [ optimizer_hint ]
  [ ALL | DISTINCT ]
