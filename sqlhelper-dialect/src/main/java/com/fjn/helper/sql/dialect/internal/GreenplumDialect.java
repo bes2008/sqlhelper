@@ -31,7 +31,26 @@ public class GreenplumDialect extends AbstractDialect {
 
             @Override
             protected String getLimitString(String sql, boolean hasOffset) {
-                // http://gpdb.docs.pivotal.io/5180/ref_guide/sql_commands/SELECT.html
+                //
+                /*
+                 *
+                 reference:  http://gpdb.docs.pivotal.io/5180/ref_guide/sql_commands/SELECT.html
+                 Select Syntax:
+
+                 SELECT [ALL | DISTINCT [ON (expression [, ...])]]
+                 | expression [[AS] output_name] [, ...]
+                 [FROM from_item [, ...]]
+                 [WHERE condition]
+                 [GROUP BY grouping_element [, ...]]
+                 [HAVING condition [, ...]]
+                 [WINDOW window_name AS (window_specification)]
+                 [{UNION | INTERSECT | EXCEPT} [ALL] select]
+                 [ORDER BY expression [ASC | DESC | USING operator] [NULLS {FIRST | LAST}] [, ...]]
+                 [LIMIT {count | ALL}]
+                 [OFFSET start]
+                 [FOR {UPDATE | SHARE} [OF table_name [, ...]] [NOWAIT] [...]]
+                 */
+
                 sql = sql.trim();
                 String forUpdateClause = null;
                 boolean isForUpdate = false;
