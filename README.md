@@ -42,6 +42,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Hive
         + HSQL        
     + I
+        + Ignite (Apache Ignite)
         + Impala (Apache Impala)
         + Informix
         + Ingres

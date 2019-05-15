@@ -146,6 +146,7 @@ public class DialectRegistry {
                 HSQLDialect.class,
                 HiveDialect.class,
 
+                IgniteDialect.class,
                 ImpalaDialect.class,
                 InformixDialect.class,
                 IngresDialect.class,
