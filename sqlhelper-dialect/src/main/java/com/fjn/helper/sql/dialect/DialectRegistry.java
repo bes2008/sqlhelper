@@ -163,6 +163,7 @@ public class DialectRegistry {
                 MckoiDialect.class,
                 MemSQLDialect.class,
                 MimerSQLDialect.class,
+                MSQLDialect.class,
                 MySQLDialect.class,
                 MonetDialect.class,
                 MaxDBDialect.class,
