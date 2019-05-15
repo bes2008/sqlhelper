@@ -38,23 +38,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
 
     class SQLServer2000Dialect extends AbstractTransactSQLDialect {
         private SQLServer2000Dialect() {
-            setLimitHandler(new TopLimitHandler() {
-                @Override
-                public String getLimitString(String querySelect, int offset, int limit) {
-                    if (offset > 0) {
-                        throw new UnsupportedOperationException("query result offset is not supported");
-                    }
-
-
-                    return new StringBuilder(querySelect.length() + 8).append(querySelect).insert(getAfterSelectInsertPoint(querySelect), " top " + limit).toString();
-                }
-
-                private int getAfterSelectInsertPoint(String sql) {
-                    int selectIndex = sql.toLowerCase(Locale.ROOT).indexOf("select");
-                    int selectDistinctIndex = sql.toLowerCase(Locale.ROOT).indexOf("select distinct");
-                    return selectIndex + (selectDistinctIndex == selectIndex ? 15 : 6);
-                }
-            });
+            setLimitHandler(new TopLimitHandler());
         }
 
         @Override
@@ -79,7 +63,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
 
         @Override
         public boolean isBindLimitParametersFirst() {
-            return false;
+            return true;
         }
     }
 

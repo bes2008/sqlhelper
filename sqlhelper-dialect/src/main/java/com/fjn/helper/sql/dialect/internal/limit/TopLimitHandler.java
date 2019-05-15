@@ -20,25 +20,57 @@ import java.util.Locale;
 
 
 public class TopLimitHandler extends AbstractLimitHandler {
+    private static final String SELECT_LOWERCASE="select";
+    private static final String SELECT_DISTINCT_LOWERCASE="select distinct";
+    private static final String SELECT_ALL_LOWERCASE="select all";
+
     @Override
-    public String processSql(String sql, RowSelection selection) {
-        if (LimitHelper.hasFirstRow(selection)) {
-            throw new UnsupportedOperationException("query result offset is not supported");
+    public String processSql(String sql, RowSelection rowSelection) {
+        return getLimitString(sql, LimitHelper.hasFirstRow(rowSelection));
+    }
+
+    @Override
+    protected String getLimitString(String sql, boolean hasOffset) {
+        /*
+         *  reference: http://docs.openlinksw.com/virtuoso/topselectoption/
+         *  Select Syntax:
+         *
+         *  query_term :  SELECT opt_top selection ....
+
+            opt_top :  opt_all_distinct [ TOP INTNUM ]
+                    |  opt_all_distinct [ TOP SKIPINTNUM, INTNUM ]
+                    |  opt_all_distinct [ TOP (num_scalar_exp) ]
+                    |  opt_all_distinct [ TOP (skip_num_scalar_exp, num_scalar_exp) ]
+            opt_all_distinct : [ ALL | DISTINCT ]
+         *
+         */
+
+        sql = sql.trim();
+        String sqlLowercase = sql.toLowerCase(Locale.ROOT);
+        int selectIndex = sqlLowercase.indexOf(SELECT_LOWERCASE);
+        int selectDistinctIndex = sqlLowercase.indexOf(SELECT_DISTINCT_LOWERCASE);
+        int selectAllIndex = sqlLowercase.indexOf(SELECT_ALL_LOWERCASE);
+
+        int insertionPoint = -1;
+        if(selectDistinctIndex!=-1){
+            insertionPoint = selectDistinctIndex + SELECT_DISTINCT_LOWERCASE.length();
+        }else if(selectAllIndex!=-1){
+            insertionPoint = selectAllIndex + SELECT_ALL_LOWERCASE.length();
+        }else if(selectIndex!=-1){
+            insertionPoint = selectIndex + SELECT_LOWERCASE.length();
+        }else{
+            return sql;
         }
 
-        int selectIndex = sql.toLowerCase(Locale.ROOT).indexOf("select");
-        int selectDistinctIndex = sql.toLowerCase(Locale.ROOT).indexOf("select distinct");
-        int insertionPoint = selectIndex + (selectDistinctIndex == selectIndex ? 15 : 6);
-
-
-        StringBuilder sb = new StringBuilder(sql.length() + 8).append(sql);
-
-        if (this.dialect.isSupportsVariableLimit()) {
-            sb.insert(insertionPoint, " TOP ? ");
-        } else {
-            sb.insert(insertionPoint, " TOP " + getMaxOrLimit(selection) + " ");
+        if(insertionPoint<0){
+            return sql;
         }
-
-        return sb.toString();
+        StringBuilder sql2 = new StringBuilder(sql.length() + 50).append(sql);
+        if(hasOffset && dialect.isSupportsLimitOffset()){
+            sql2.insert(insertionPoint, " TOP ?, ? ");
+        }else {
+            sql2.insert(insertionPoint, " TOP ? ");
+        }
+        return sql2.toString();
     }
 }
