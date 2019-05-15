@@ -190,6 +190,7 @@ public class DialectRegistry {
                 SybaseDialect.class,
 
                 TeradataDialect.class,
+                TiDBDialect.class,
                 TimesTenDialect.class,
                 TextDialect.class,
 

@@ -86,6 +86,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + T
         + Teradata
         + Text
+        + TiDB
         + TimesTen
     + V
         + Vertica
