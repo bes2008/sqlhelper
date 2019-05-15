@@ -63,6 +63,19 @@ public interface Dialect extends UrlParser {
      */
     String getLimitSql(String query, RowSelection rowSelection);
 
+    /**
+     * Whether bind parameter in reverse or not.
+     *
+     * Here assume the normal order is: $offset, $limit
+     * so the reverse order is: $limit, $offset
+     *
+     * Based on the assume,
+     * case 1:
+     *  limit $offset, $limit  ==> reverse = false
+     * case 2:
+     *  limit $limit offset $offset ==> reverse = true
+     * @return
+     */
     boolean isBindLimitParametersInReverseOrder();
 
     boolean isBindLimitParametersFirst();

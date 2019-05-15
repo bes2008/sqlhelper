@@ -20,6 +20,9 @@ import com.fjn.helper.sql.dialect.RowSelection;
  * select * from
  * where xxxx
  * limit $limit offset $Offset
+ *
+ * every dialect use the limitHandler should set bindLimitParameterInReverseOrder = true
+ *
  */
 public class LimitOffsetLimitHandler extends AbstractLimitHandler{
     @Override

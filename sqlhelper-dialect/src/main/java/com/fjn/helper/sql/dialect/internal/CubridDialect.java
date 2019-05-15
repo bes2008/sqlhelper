@@ -17,14 +17,19 @@ package com.fjn.helper.sql.dialect.internal;
 
 import com.fjn.helper.sql.dialect.internal.limit.LimitCommaLimitHandler;
 
-public class CUBRIDDialect extends AbstractDialect {
-    public CUBRIDDialect() {
+public class CubridDialect extends AbstractDialect {
+    public CubridDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
     }
 
     @Override
     public boolean isSupportsLimit() {
+        return true;
+    }
+
+    @Override
+    public boolean isSupportsLimitOffset() {
         return true;
     }
 }

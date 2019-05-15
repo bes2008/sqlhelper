@@ -121,7 +121,7 @@ public class DialectRegistry {
                 AccessDialect.class,
 
                 CacheDialect.class,
-                CUBRIDDialect.class,
+                CubridDialect.class,
 
                 DbfDialect.class,
                 DB2Dialect.class,

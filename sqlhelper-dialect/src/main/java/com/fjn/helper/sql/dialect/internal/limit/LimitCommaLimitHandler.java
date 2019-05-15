@@ -19,6 +19,8 @@ import com.fjn.helper.sql.dialect.RowSelection;
 /**
  *  select * from TABLE where xxx
  *  limit $offset, $limit
+ *
+ *  every dialect use the limitHandler should set bindLimitParameterInReverseOrder = false
  */
 public class LimitCommaLimitHandler extends AbstractLimitHandler {
 

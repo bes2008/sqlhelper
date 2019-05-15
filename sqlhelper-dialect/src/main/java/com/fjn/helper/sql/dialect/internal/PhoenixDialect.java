@@ -34,6 +34,6 @@ public class PhoenixDialect extends AbstractDialect {
 
     @Override
     public boolean isBindLimitParametersInReverseOrder() {
-        return false;
+        return true;
     }
 }

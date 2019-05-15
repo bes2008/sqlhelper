@@ -57,6 +57,6 @@ public class H2Dialect extends AbstractDialect {
 
     @Override
     public boolean isBindLimitParametersInReverseOrder() {
-        return false;
+        return true;
     }
 }
