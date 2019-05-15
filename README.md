@@ -55,6 +55,8 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Mimer
         + Monet
         + MAXDB (SAP MaxDB)
+    + N
+        + Netezza (IBM Netezza)        
     + O
         + Oracle (8i,9,9i,10g,11g,12c)
         + OSACR (神通数据库)

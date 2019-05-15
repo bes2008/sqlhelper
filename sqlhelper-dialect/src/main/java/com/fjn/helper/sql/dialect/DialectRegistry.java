@@ -159,6 +159,8 @@ public class DialectRegistry {
                 MariaDBDialect.class,
                 MonetDialect.class,
 
+                NetezzaDialect.class,
+
                 OracleDialect.class,
                 OpenbaseDialect.class,
                 OscarDialect.class,
