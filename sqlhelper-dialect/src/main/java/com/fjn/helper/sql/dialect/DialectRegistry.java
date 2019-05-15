@@ -134,6 +134,7 @@ public class DialectRegistry {
                 ExcelDialect.class,
 
                 FirebirdDialect.class,
+                FileMaker.class,
                 FrontBaseDialect.class,
 
                 GBaseDialect.class,
