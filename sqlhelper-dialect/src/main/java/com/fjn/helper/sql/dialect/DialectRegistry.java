@@ -194,7 +194,8 @@ public class DialectRegistry {
                 TextDialect.class,
 
                 VerticaDialect.class,
-                VirtuosoDialect.class
+                VirtuosoDialect.class,
+                VoltDBDialect.class
                 };
         Arrays.asList(dialects).forEach(DialectRegistry::registerDialectByClass);
     }

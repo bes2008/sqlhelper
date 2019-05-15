@@ -90,6 +90,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + V
         + Vertica
         + Virtuoso
+        + VoltDB
 
 2. supports multiple databases in one application 
 3. supports auto detect dialect, so the dialect option is optional
