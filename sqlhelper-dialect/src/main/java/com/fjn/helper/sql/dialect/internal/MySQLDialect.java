@@ -24,7 +24,6 @@ import com.fjn.helper.sql.dialect.internal.urlparser.MySqlUrlParser;
 import java.sql.CallableStatement;
 import java.sql.SQLException;
 
-
 public class MySQLDialect extends AbstractDialect {
 
     public MySQLDialect() {

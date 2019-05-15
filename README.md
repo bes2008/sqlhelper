@@ -16,6 +16,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 1. supports the following databases:
     + A
         + Access
+        + Aurora (Amazon Aurora)
         + Azure (Microsoft Azure Cloud Database)
     + C
         + Cache (CacheDB)
