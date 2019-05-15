@@ -58,6 +58,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Mimer
         + Monet
         + MAXDB (SAP MaxDB)
+        + MemSQL
     + N
         + Netezza (IBM Netezza)        
     + O

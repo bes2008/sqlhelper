@@ -156,10 +156,11 @@ public class DialectRegistry {
 
                 KingbaseDialect.class,
 
+                MariaDBDialect.class,
                 MckoiDialect.class,
+                MemSQLDialect.class,
                 MimerSQLDialect.class,
                 MySQLDialect.class,
-                MariaDBDialect.class,
                 MonetDialect.class,
 
                 NetezzaDialect.class,
