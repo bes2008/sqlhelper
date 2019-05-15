@@ -15,9 +15,10 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
+import com.fjn.helper.sql.dialect.annotation.Name;
 import com.fjn.helper.sql.dialect.internal.limit.LimitOffsetLimitHandler;
 
-
+@Name("hana")
 public class HANADialect extends AbstractDialect {
 
     public HANADialect() {

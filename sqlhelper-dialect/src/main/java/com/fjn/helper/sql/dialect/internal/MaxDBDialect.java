@@ -20,10 +20,10 @@ import com.fjn.helper.sql.dialect.annotation.Name;
 import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
 import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
 
-@Name("sap")
-public class SAPMaxDBDialect extends AbstractDialect {
+@Name("maxdb")
+public class MaxDBDialect extends AbstractDialect {
 
-    public SAPMaxDBDialect() {
+    public MaxDBDialect() {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override

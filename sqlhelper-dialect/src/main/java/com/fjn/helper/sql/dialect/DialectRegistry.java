@@ -166,7 +166,7 @@ public class DialectRegistry {
 
                 RDMSOS2200Dialect.class,
 
-                SAPMaxDBDialect.class,
+                MaxDBDialect.class,
                 SQLServerDialect.class,
                 SQLiteDialect.class,
                 SybaseDialect.class,

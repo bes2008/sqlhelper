@@ -29,7 +29,7 @@ public class OpenbaseDialect extends AbstractDialect {
             @Override
             protected String getLimitString(String sql, boolean hasOffset) {
                 // http://openbase.wikidot.com/openbase-sql:select-statements
-                return "select * from (" + sql + ") _xx_TMP RETURN RESULT " + (hasOffset ? " ? TO ?" : " ?");
+                return sql +" RETURN RESULT " + (hasOffset ? " ? TO ?" : " ?");
             }
         });
     }
@@ -46,8 +46,11 @@ public class OpenbaseDialect extends AbstractDialect {
 
     @Override
     public boolean isBindLimitParametersInReverseOrder() {
-        return true;
+        return false;
     }
 
-
+    @Override
+    public boolean isUseMaxForLimit() {
+        return true;
+    }
 }

@@ -34,7 +34,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + GBase (南大通用)
     + H
         + H2
-        + HANA (HANAColumn, HANAStore)
+        + HANA (SAP HANAColumn, HANAStore)
         + HSQL        
     + I
         + Informix
@@ -50,6 +50,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Mckoi
         + Mimer
         + Monet
+        + MAXDB (SAP MaxDB)
     + O
         + Oracle (8i,9,9i,10g,11g,12c)
         + OSACR (神通数据库)
@@ -62,8 +63,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Progress
     + R
         + RDMSOS2200
-    + S
-        + SAPMAXDB
+    + S        
         + SQLite
         + SQLServer (SQLServer 2005,2008,2012)
     + T

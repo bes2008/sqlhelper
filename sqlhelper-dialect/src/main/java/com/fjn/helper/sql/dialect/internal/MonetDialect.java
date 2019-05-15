@@ -67,7 +67,7 @@ public class MonetDialect extends AbstractDialect{
 
     @Override
     public boolean isBindLimitParametersInReverseOrder() {
-        return false;
+        return true;
     }
 
 
