@@ -170,6 +170,7 @@ public class DialectRegistry {
                 MaxDBDialect.class,
 
                 NetezzaDialect.class,
+                NuodbDialect.class,
 
                 OmnisciDialect.class,
                 OpenbaseDialect.class,

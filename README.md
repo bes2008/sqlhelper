@@ -65,7 +65,8 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + MemSQL
         + MSQL (MiniSQL)
     + N
-        + Netezza (IBM Netezza)        
+        + Netezza (IBM Netezza)
+        + NuoDB        
     + O
         + Omnisci
         + Oracle (8i,9,9i,10g,11g,12c)
