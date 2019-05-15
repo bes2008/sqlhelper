@@ -40,6 +40,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Hive
         + HSQL        
     + I
+        + Impala (Apache Impala)
         + Informix
         + Ingres
         + Interbase
