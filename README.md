@@ -65,6 +65,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Progress
     + R
         + RDMSOS2200
+        + Redshift (Amazon Redshift)
     + S        
         + SQLite
         + SQLServer (SQLServer 2005,2008,2012,2017)

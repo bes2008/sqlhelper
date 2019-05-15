@@ -169,6 +169,7 @@ public class DialectRegistry {
                 PhoenixDialect.class,
 
                 RDMSOS2200Dialect.class,
+                RedshiftDialect.class,
 
                 MaxDBDialect.class,
                 SQLServerDialect.class,
