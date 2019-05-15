@@ -65,7 +65,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + RDMSOS2200
     + S        
         + SQLite
-        + SQLServer (SQLServer 2005,2008,2012)
+        + SQLServer (SQLServer 2005,2008,2012,2017)
     + T
         + Teradata
         + Text

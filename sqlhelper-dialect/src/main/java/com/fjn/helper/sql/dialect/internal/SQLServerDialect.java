@@ -15,11 +15,8 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
+import com.fjn.helper.sql.dialect.internal.limit.*;
 import com.fjn.helper.sql.dialect.RowSelection;
-import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
-import com.fjn.helper.sql.dialect.internal.limit.SQLServer2005LimitHandler;
-import com.fjn.helper.sql.dialect.internal.limit.TopLimitHandler;
 import com.fjn.helper.sql.dialect.internal.urlparser.SqlServerUrlParser;
 
 import java.util.Locale;
@@ -114,17 +111,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
 
     class SQLServer2008Dialect extends AbstractTransactSQLDialect {
         private SQLServer2008Dialect() {
-            setLimitHandler(new AbstractLimitHandler() {
-                @Override
-                public String processSql(String sql, RowSelection selection) {
-                    if (LimitHelper.useLimit(getDialect(), selection)) {
-                        return sql + (LimitHelper.hasFirstRow(selection) ? " offset ? rows fetch next ? rows only" : " fetch first ? rows only");
-                    }
-
-
-                    return sql;
-                }
-            });
+            setLimitHandler(new SQL2008StandardLimitHandler());
         }
 
         @Override
@@ -150,4 +137,6 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
 
     class SQLServer2012Dialect extends SQLServer2008Dialect{
     }
+
+    class SQLServer2017Dialect extends SQLServer2012Dialect{}
 }
