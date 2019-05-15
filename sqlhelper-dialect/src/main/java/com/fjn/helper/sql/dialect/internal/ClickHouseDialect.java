@@ -16,6 +16,9 @@ package com.fjn.helper.sql.dialect.internal;
 
 import com.fjn.helper.sql.dialect.internal.limit.LimitCommaLimitHandler;
 
+/**
+ * https://clickhouse.yandex/docs/en/query_language/select/
+ */
 public class ClickHouseDialect extends AbstractDialect {
     public ClickHouseDialect(){
         super();
