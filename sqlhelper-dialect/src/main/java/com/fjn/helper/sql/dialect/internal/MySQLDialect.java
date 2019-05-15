@@ -38,6 +38,11 @@ public class MySQLDialect extends AbstractDialect {
     }
 
     @Override
+    public boolean isSupportsLimitOffset() {
+        return true;
+    }
+
+    @Override
     public int registerResultSetOutParameter(CallableStatement statement, int col)
             throws SQLException {
         return col;

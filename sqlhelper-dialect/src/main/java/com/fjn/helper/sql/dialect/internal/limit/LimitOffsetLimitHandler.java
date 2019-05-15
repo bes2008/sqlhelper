@@ -27,6 +27,18 @@ import java.util.Locale;
  *
  */
 public class LimitOffsetLimitHandler extends AbstractLimitHandler{
+    // OFFSET $offset ROWS
+    private boolean offsetRowsSuffix = false;
+
+    public boolean isOffsetRowsSuffix() {
+        return offsetRowsSuffix;
+    }
+
+    public LimitOffsetLimitHandler setOffsetRowsSuffix(boolean offsetRowsSuffix) {
+        this.offsetRowsSuffix = offsetRowsSuffix;
+        return this;
+    }
+
     @Override
     public String processSql(String sql, RowSelection rowSelection) {
         return getLimitString(sql, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
@@ -51,13 +63,13 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
 
         if(getDialect().isSupportsVariableLimit()) {
             if (hasOffset) {
-                sql2.append(" limit ? offset ? ");
+                sql2.append(" limit ? offset ? " + (offsetRowsSuffix ? "rows":""));
             } else {
                 sql2.append(" limit ?");
             }
         }else{
             if (hasOffset) {
-                sql2.append(" limit "+limit+" offset "+offset+" ");
+                sql2.append(" limit "+limit+" offset "+offset+" " + (offsetRowsSuffix ? "rows":""));
             } else {
                 sql2.append(" limit "+limit);
             }

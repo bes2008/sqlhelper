@@ -169,15 +169,17 @@ public class DialectRegistry {
 
                 NetezzaDialect.class,
 
-                OracleDialect.class,
+                OmnisciDialect.class,
                 OpenbaseDialect.class,
+                OpenEdgeDialect.class,
+                OracleDialect.class,
                 OscarDialect.class,
 
                 ParadoxDialect.class,
                 PointbaseDialect.class,
                 PostgreSQLDialect.class,
-                OpenEdgeDialect.class,
                 PhoenixDialect.class,
+                PerconaMysqlDialect.class,
 
                 RDMSOS2200Dialect.class,
                 RedshiftDialect.class,
