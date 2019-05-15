@@ -138,6 +138,7 @@ public class DialectRegistry {
                 FrontBaseDialect.class,
 
                 GBaseDialect.class,
+                GreenplumDialect.class,
 
                 H2Dialect.class,
                 HANADialect.class,
