@@ -147,6 +147,7 @@ public class DialectRegistry {
 
                 H2Dialect.class,
                 HANADialect.class,
+                HawqDialect.class,
                 HSQLDialect.class,
                 HiveDialect.class,
 

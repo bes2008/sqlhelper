@@ -43,6 +43,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + H
         + H2
         + HANA (SAP HANAColumn, HANAStore)
+        + Hawq (Apache Hawq)
         + Hive
         + HSQL        
     + I
