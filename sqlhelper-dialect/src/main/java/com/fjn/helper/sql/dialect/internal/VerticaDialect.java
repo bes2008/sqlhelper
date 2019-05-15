@@ -28,7 +28,7 @@ public class VerticaDialect extends AbstractDialect {
 
             @Override
             protected String getLimitString(String sql, boolean hasOffset) {
-                return "select * from ("+sql+") _xx_TMP  limit ?";
+                return sql+" limit ?";
             }
         });
     }

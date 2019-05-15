@@ -172,7 +172,7 @@ public class DialectRegistry {
                 ParadoxDialect.class,
                 PointbaseDialect.class,
                 PostgreSQLDialect.class,
-                ProgressDialect.class,
+                OpenEdgeDialect.class,
                 PhoenixDialect.class,
 
                 RDMSOS2200Dialect.class,

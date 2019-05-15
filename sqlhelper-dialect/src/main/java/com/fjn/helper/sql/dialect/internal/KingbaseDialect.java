@@ -14,43 +14,11 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.RowSelection;
-import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
+import com.fjn.helper.sql.dialect.internal.limit.LimitOffsetLimitHandler;
 
 public class KingbaseDialect extends AbstractDialect {
     public KingbaseDialect(){
-        setLimitHandler(new AbstractLimitHandler() {
-            @Override
-            public String processSql(String sql, RowSelection rowSelection) {
-                boolean hasOffset = rowSelection.getOffset() > 0;
-                return getLimitString(sql, hasOffset);
-            }
-
-            @Override
-            public String getLimitString(String sql, boolean hasOffset) {
-                sql = sql.trim();
-                while (sql.endsWith(";")){
-                    sql = sql.substring(0, sql.length() -1);
-                }
-                String forUpdateClause = " for update";
-                boolean isForUpdate = false;
-                if(sql.toLowerCase().endsWith(forUpdateClause)){
-                    sql = sql.substring(0, sql.length() -forUpdateClause.length());
-                    isForUpdate = true;
-                }
-                StringBuilder pagingSql = new StringBuilder(sql.length() + 100);
-
-                if(hasOffset){
-                    pagingSql.append(sql).append(" limit ? offset ? ");
-                }else{
-                    pagingSql.append(sql).append(" limit ? ");
-                }
-                if(isForUpdate){
-                    pagingSql.append(forUpdateClause);
-                }
-                return pagingSql.toString();
-            }
-        });
+        setLimitHandler(new LimitOffsetLimitHandler());
     }
 
     @Override

@@ -18,22 +18,16 @@ import com.fjn.helper.sql.dialect.RowSelection;
 
 import java.util.Locale;
 
-/**
- * select * from
- * where xxxx
- * limit $limit offset $Offset
- *
- * every dialect use the limitHandler should set bindLimitParameterInReverseOrder = true
- *
- */
-public class LimitOffsetLimitHandler extends AbstractLimitHandler{
+public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
     @Override
     public String processSql(String sql, RowSelection rowSelection) {
-        return getLimitString(sql, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
+        return getLimitString(sql, rowSelection.getOffset(), getMaxOrLimit(rowSelection));
     }
 
     @Override
     protected String getLimitString(String sql, int offset, int limit) {
+        // https://fmhelp.filemaker.com/docs/16/en/fm16_sql_reference.pdf
+        // https://documentation.progress.com/output/ua/OpenEdge_latest/#page/dmsrf%2Foffset-and-fetch-clauses.html%23wwID0E6CPQ
         boolean hasOffset = offset>0;
         sql = sql.trim();
         String forUpdateClause = "";
@@ -46,23 +40,35 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
             isForUpdate = true;
         }
 
+        int withClauseIndex = sqlLowercase.lastIndexOf("with ",sqlLowercase.length()- (forUpdateClause.length()+7));
+        boolean hasWithClause = false;
+        String withClause = null;
+        if(withClauseIndex>0){
+            sql = sql.substring(0, withClauseIndex-1);
+            hasWithClause = true;
+            withClause = sqlLowercase.substring(withClauseIndex);
+        }
+
         StringBuilder sql2 = new StringBuilder(sql.length() + 100);
         sql2.append(sql);
 
         if(getDialect().isSupportsVariableLimit()) {
             if (hasOffset) {
-                sql2.append(" limit ? offset ? ");
+                sql2.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
             } else {
-                sql2.append(" limit ?");
+                sql2.append(" FETCH FIRST ? ROWS ONLY");
             }
         }else{
             if (hasOffset) {
-                sql2.append(" limit "+limit+" offset "+offset+" ");
+                sql2.append(" OFFSET "+offset+" ROWS FETCH NEXT "+limit+" ROWS ONLY");
             } else {
-                sql2.append(" limit "+limit);
+                sql2.append(" FETCH FIRST "+limit+" ROWS ONLY");
             }
         }
-        if(isForUpdate){
+        if(hasWithClause){
+            sql2.append(withClause);
+        }
+        else if(isForUpdate){
             sql2.append(forUpdateClause);
         }
         return sql2.toString();

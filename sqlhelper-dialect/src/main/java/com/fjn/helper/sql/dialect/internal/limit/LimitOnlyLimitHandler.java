@@ -25,11 +25,16 @@ import com.fjn.helper.sql.dialect.RowSelection;
 public class LimitOnlyLimitHandler extends AbstractLimitHandler{
     @Override
     public String processSql(String sql, RowSelection rowSelection) {
-        return getLimitString(sql, rowSelection.getOffset()> 0);
+        return getLimitString(sql, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
     }
 
     @Override
-    protected String getLimitString(String sql, boolean hasOffset) {
-        return sql + " limit ?";
+    protected String getLimitString(String sql, int offset, int limit) {
+        if(getDialect().isSupportsVariableLimit()) {
+            return sql + " limit ?";
+        }
+        else {
+            return sql + " limit "+ limit;
+        }
     }
 }

@@ -26,12 +26,17 @@ public class LimitCommaLimitHandler extends AbstractLimitHandler {
 
     @Override
     public String processSql(String sql, RowSelection rowSelection) {
-        return getLimitString(sql, LimitHelper.hasFirstRow(rowSelection));
+        return getLimitString(sql, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
     }
 
     @Override
-    protected String getLimitString(String sql, boolean hasOffset) {
-        return sql + (hasOffset ? " limit ?, ?" : " limit ?");
+    protected String getLimitString(String sql, int offset, int limit) {
+        boolean hasOffset = offset>0;
+        if(getDialect().isSupportsVariableLimit()) {
+            return sql + (hasOffset ? " limit ?, ?" : " limit ?");
+        }else{
+            return sql + (hasOffset ? (" limit "+offset+", "+limit) : (" limit " + limit));
+        }
     }
 
 }
