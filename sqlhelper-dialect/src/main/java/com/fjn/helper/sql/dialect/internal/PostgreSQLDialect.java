@@ -15,9 +15,6 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
-import com.fjn.helper.sql.dialect.RowSelection;
-import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
 import com.fjn.helper.sql.dialect.internal.limit.LimitOffsetLimitHandler;
 import com.fjn.helper.sql.dialect.internal.urlparser.PostgreSQLUrlParser;
 
@@ -39,8 +36,13 @@ public class PostgreSQLDialect extends AbstractDialect {
     }
 
     @Override
-    public boolean isBindLimitParametersInReverseOrder() {
+    public boolean isSupportsLimitOffset() {
         return true;
+    }
+
+    @Override
+    public boolean isBindLimitParametersInReverseOrder() {
+        return false;
     }
 
     @Override

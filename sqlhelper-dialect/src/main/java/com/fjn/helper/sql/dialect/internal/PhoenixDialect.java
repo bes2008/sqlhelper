@@ -14,24 +14,12 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.RowSelection;
-import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
-import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
+import com.fjn.helper.sql.dialect.internal.limit.LimitOffsetLimitHandler;
 
 public class PhoenixDialect extends AbstractDialect {
     public PhoenixDialect() {
-        setLimitHandler(new AbstractLimitHandler() {
-            @Override
-            public String processSql(String sql, RowSelection selection) {
-                boolean hasOffset = LimitHelper.hasFirstRow(selection);
-                return getLimitString(sql, hasOffset);
-            }
-
-            @Override
-            public String getLimitString(String sql, boolean hasOffset) {
-                return sql + (hasOffset ? " offset ? limit ?" : " limit ?");
-            }
-        });
+        super();
+        setLimitHandler(new LimitOffsetLimitHandler());
     }
 
     @Override
@@ -40,12 +28,12 @@ public class PhoenixDialect extends AbstractDialect {
     }
 
     @Override
-    public boolean isBindLimitParametersFirst() {
+    public boolean isSupportsLimitOffset() {
         return true;
     }
 
     @Override
     public boolean isBindLimitParametersInReverseOrder() {
-        return true;
+        return false;
     }
 }

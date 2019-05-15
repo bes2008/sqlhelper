@@ -15,9 +15,6 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.RowSelection;
-import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
-import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
 import com.fjn.helper.sql.dialect.internal.limit.LimitOffsetLimitHandler;
 
 public class SQLiteDialect extends AbstractDialect {
@@ -38,6 +35,6 @@ public class SQLiteDialect extends AbstractDialect {
 
     @Override
     public boolean isBindLimitParametersInReverseOrder() {
-        return true;
+        return false;
     }
 }

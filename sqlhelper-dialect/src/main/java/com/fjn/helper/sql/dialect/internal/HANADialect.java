@@ -15,28 +15,10 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
-import com.fjn.helper.sql.dialect.RowSelection;
-import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
 import com.fjn.helper.sql.dialect.internal.limit.LimitOffsetLimitHandler;
-
-import java.io.FilterReader;
-import java.io.Reader;
 
 
 public class HANADialect extends AbstractDialect {
-    private static final long serialVersionUID = -379042275442752102L;
-
-    private static class CloseSuppressingReader extends FilterReader {
-        protected CloseSuppressingReader(Reader in) {
-            super(in);
-        }
-
-        @Override
-        public void close() {
-        }
-    }
-
 
     public HANADialect() {
         super();
@@ -45,11 +27,16 @@ public class HANADialect extends AbstractDialect {
 
     @Override
     public boolean isBindLimitParametersInReverseOrder() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isSupportsLimit() {
+        return true;
+    }
+
+    @Override
+    public boolean isSupportsLimitOffset() {
         return true;
     }
 }
