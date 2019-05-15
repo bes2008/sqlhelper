@@ -18,6 +18,17 @@ import com.fjn.helper.sql.dialect.RowSelection;
 
 import java.util.Locale;
 
+
+/**
+ * select *
+ * from xx
+ * where ...
+ * group by ...
+ * order by ...
+ * offset ? rows fetch next ? rows only
+ *
+ *  every dialect use the limitHandler should set bindLimitParameterInReverseOrder = false
+ */
 public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
     @Override
     public String processSql(String sql, RowSelection rowSelection) {

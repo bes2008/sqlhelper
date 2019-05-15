@@ -164,6 +164,7 @@ public class DialectRegistry {
                 MimerSQLDialect.class,
                 MySQLDialect.class,
                 MonetDialect.class,
+                MaxDBDialect.class,
 
                 NetezzaDialect.class,
 
@@ -180,7 +181,7 @@ public class DialectRegistry {
                 RDMSOS2200Dialect.class,
                 RedshiftDialect.class,
 
-                MaxDBDialect.class,
+                SnowflakeDialect.class,
                 SQLServerDialect.class,
                 SQLiteDialect.class,
                 SybaseDialect.class,
