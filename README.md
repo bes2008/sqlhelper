@@ -20,7 +20,8 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Azure (Microsoft Azure Cloud Database)
     + C
         + Cache (CacheDB)
-        + CUBRID
+        + ClickHouse
+        + Cubrid
     + D
         + DBF
         + DB2

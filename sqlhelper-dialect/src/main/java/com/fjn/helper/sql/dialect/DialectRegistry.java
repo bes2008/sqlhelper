@@ -124,6 +124,7 @@ public class DialectRegistry {
                 AzureDialect.class,
 
                 CacheDialect.class,
+                ClickHouseDialect.class,
                 CubridDialect.class,
 
                 DbfDialect.class,
