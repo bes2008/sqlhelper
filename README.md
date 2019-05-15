@@ -16,6 +16,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 1. supports the following databases:
     + A
         + Access
+        + Azure (Microsoft Azure Cloud Database)
     + C
         + Cache (CacheDB)
         + CUBRID
@@ -58,7 +59,6 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + P 
         + Paradox
         + Phoenix (HBase JDBC Client)
-        + Pointbase
         + PostgreSQL
         + Progress
     + R

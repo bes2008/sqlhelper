@@ -118,7 +118,9 @@ public class DialectRegistry {
 
         final Class<? extends Dialect>[] dialects = (Class<? extends Dialect>[]) new Class[]{
 
+
                 AccessDialect.class,
+                AzureDialect.class,
 
                 CacheDialect.class,
                 CubridDialect.class,
