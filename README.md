@@ -65,6 +65,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Oracle (8i,9,9i,10g,11g,12c)
         + OSACR (神通数据库)
         + Openbase
+        + OpenEdge
     + P 
         + Paradox
         + Phoenix (HBase JDBC Client)
