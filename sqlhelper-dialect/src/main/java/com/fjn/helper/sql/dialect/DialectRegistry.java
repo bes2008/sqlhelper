@@ -140,8 +140,9 @@ public class DialectRegistry {
                 GBaseDialect.class,
 
                 H2Dialect.class,
-                HSQLDialect.class,
                 HANADialect.class,
+                HSQLDialect.class,
+                HiveDialect.class,
 
                 InformixDialect.class,
                 IngresDialect.class,
