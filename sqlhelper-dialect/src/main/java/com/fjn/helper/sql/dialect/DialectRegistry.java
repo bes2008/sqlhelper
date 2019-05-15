@@ -187,7 +187,8 @@ public class DialectRegistry {
                 TimesTenDialect.class,
                 TextDialect.class,
 
-                VerticaDialect.class
+                VerticaDialect.class,
+                VirtuosoDialect.class
                 };
         Arrays.asList(dialects).forEach(DialectRegistry::registerDialectByClass);
     }

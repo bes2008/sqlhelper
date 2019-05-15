@@ -82,6 +82,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + TimesTen
     + V
         + Vertica
+        + Virtuoso
 
 2. supports multiple databases in one application 
 3. supports auto detect dialect, so the dialect option is optional

@@ -19,8 +19,7 @@ import com.fjn.helper.sql.dialect.RowSelection;
 import java.util.Locale;
 
 
-public class TopLimitHandler
-        extends AbstractLimitHandler {
+public class TopLimitHandler extends AbstractLimitHandler {
     @Override
     public String processSql(String sql, RowSelection selection) {
         if (LimitHelper.hasFirstRow(selection)) {
