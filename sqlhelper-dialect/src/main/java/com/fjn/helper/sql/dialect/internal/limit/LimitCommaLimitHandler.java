@@ -16,10 +16,12 @@ package com.fjn.helper.sql.dialect.internal.limit;
 
 import com.fjn.helper.sql.dialect.RowSelection;
 
+import java.util.Locale;
+
 /**
  *  select * from TABLE where xxx
  *  limit $offset, $limit
- *
+ *  [for update]
  *  every dialect use the limitHandler should set bindLimitParameterInReverseOrder = false
  */
 public class LimitCommaLimitHandler extends AbstractLimitHandler {
@@ -32,11 +34,30 @@ public class LimitCommaLimitHandler extends AbstractLimitHandler {
     @Override
     protected String getLimitString(String sql, int offset, int limit) {
         boolean hasOffset = offset>0;
-        if(getDialect().isSupportsVariableLimit()) {
-            return sql + (hasOffset ? " limit ?, ?" : " limit ?");
-        }else{
-            return sql + (hasOffset ? (" limit "+offset+", "+limit) : (" limit " + limit));
+
+        sql = sql.trim();
+        String forUpdateClause = "";
+        boolean isForUpdate = false;
+        String sqlLowercase = sql.toLowerCase(Locale.ROOT);
+        int forUpdateIndex = sqlLowercase.lastIndexOf("for update");
+        if (forUpdateIndex > -1) {
+            forUpdateClause = sql.substring(forUpdateIndex);
+            sql = sql.substring(0, forUpdateIndex - 1);
+            isForUpdate = true;
         }
+
+        StringBuilder sql2 = new StringBuilder(sql.length() + 100);
+        sql2.append(sql);
+
+        if(getDialect().isSupportsVariableLimit()) {
+            sql2.append(hasOffset ? " limit ?, ?" : " limit ?");
+        }else{
+            sql2.append(hasOffset ? (" limit "+offset+", "+limit) : (" limit " + limit));
+        }
+        if(isForUpdate){
+            sql2.append(forUpdateClause);
+        }
+        return sql2.toString();
     }
 
 }

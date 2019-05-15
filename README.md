@@ -17,6 +17,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + A
         + Access
         + Aurora (Amazon Aurora)
+        + Altibase
         + Azure (Microsoft Azure Cloud Database)
     + C
         + Cache (CacheDB)
