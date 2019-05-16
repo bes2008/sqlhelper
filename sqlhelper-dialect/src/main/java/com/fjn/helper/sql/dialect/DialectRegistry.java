@@ -139,6 +139,7 @@ public class DialectRegistry {
                 DrillDialect.class,
 
                 ElasticsearchDialect.class,
+                EXtremeSQLDialect.class,
 
                 FirebirdDialect.class,
                 FileMakerDialect.class,
