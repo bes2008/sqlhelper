@@ -100,6 +100,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + V
         + Vertica
         + Virtuoso
+        + VistaDB
         + VoltDB
 
 2. supports multiple databases in one application 

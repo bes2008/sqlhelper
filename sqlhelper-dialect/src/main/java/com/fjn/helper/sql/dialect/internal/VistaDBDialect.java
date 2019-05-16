@@ -12,22 +12,33 @@
  * limitations under the License.
  */
 
-package com.fjn.helper.sql.dialect.internal.limit;
+package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.RowSelection;
 
-public class SQL2008StandardLimitHandler  extends AbstractLimitHandler {
+import com.fjn.helper.sql.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 
+public class VistaDBDialect extends AbstractDialect {
+    public VistaDBDialect(){
+        super();
+        setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
+    }
     @Override
-    public String processSql(String sql, RowSelection selection) {
-        if (LimitHelper.useLimit(getDialect(), selection)) {
-            return sql + (LimitHelper.hasFirstRow(selection) ? " offset ? rows fetch next ? rows only" : " fetch first ? rows only");
-        }
-        return sql;
+    public boolean isSupportsLimit() {
+        return true;
     }
 
     @Override
-    protected String getLimitString(String sql, boolean hasOffset) {
-        return sql + (hasOffset ? " offset ? rows fetch next ? rows only" : " fetch first ? rows only");
+    public boolean isUseMaxForLimit() {
+        return true;
+    }
+
+    @Override
+    public boolean isSupportsLimitOffset() {
+        return true;
+    }
+
+    @Override
+    public boolean isSupportsVariableLimit() {
+        return true;
     }
 }

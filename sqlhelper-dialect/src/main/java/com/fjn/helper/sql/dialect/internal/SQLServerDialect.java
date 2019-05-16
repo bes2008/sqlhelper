@@ -95,7 +95,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
 
     class SQLServer2008Dialect extends AbstractTransactSQLDialect {
         private SQLServer2008Dialect() {
-            setLimitHandler(new SQL2008StandardLimitHandler());
+            setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
         }
 
         @Override
