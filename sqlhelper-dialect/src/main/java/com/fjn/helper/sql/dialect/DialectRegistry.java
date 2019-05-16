@@ -128,7 +128,7 @@ public class DialectRegistry {
                 ClickHouseDialect.class,
                 ClustrixDialect.class,
                 CrateDialect.class,
-                CTreeACEDialect.class,
+                CTreeDialect.class,
                 CubridDialect.class,
                 CockroachDialect.class,
 
