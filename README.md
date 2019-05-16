@@ -22,6 +22,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Altibase
         + Azure (Microsoft Azure Cloud Database)
     + B
+        + BigObject
         + Brytlyt
     + C
         + Cache (CacheDB)
