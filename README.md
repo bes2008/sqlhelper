@@ -104,6 +104,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + TiDB
         + TimesTen
     + V
+        + Valentina
         + Vertica
         + Virtuoso
         + VistaDB

@@ -210,6 +210,7 @@ public class DialectRegistry {
                 TiDBDialect.class,
                 TimesTenDialect.class,
 
+                ValentinaDialect.class,
                 VerticaDialect.class,
                 VirtuosoDialect.class,
                 VistaDBDialect.class,
