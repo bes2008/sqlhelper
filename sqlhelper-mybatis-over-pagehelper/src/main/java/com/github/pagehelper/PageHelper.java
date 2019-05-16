@@ -61,12 +61,6 @@ public class PageHelper{
         }
 
         @Override
-        public void clear() {
-            page.close();
-            super.clear();
-        }
-
-        @Override
         public void clear(boolean clearResult){
             page.close();
             super.clear(clearResult);
