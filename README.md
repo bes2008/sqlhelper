@@ -92,6 +92,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Redshift (Amazon Redshift)
         + RBase
     + S        
+        + SequoiaDB (巨杉数据库)
         + SnowflakeDialect
         + SpliceMachine
         + SQLite

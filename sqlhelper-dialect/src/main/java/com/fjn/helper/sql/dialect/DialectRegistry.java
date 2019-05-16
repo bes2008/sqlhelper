@@ -196,6 +196,7 @@ public class DialectRegistry {
                 RedshiftDialect.class,
                 RBaseDialect.class,
 
+                SequoiaDBDialect.class,
                 SnappyDataDialect.class,
                 SnowflakeDialect.class,
                 SpliceMachineDialect.class,
