@@ -141,7 +141,7 @@ public class DialectRegistry {
                 DrillDialect.class,
 
                 ElasticsearchDialect.class,
-                XtremeSQLDialect.class,
+                EsgynDBDialect.class,
 
                 FirebirdDialect.class,
                 FileMakerDialect.class,
@@ -213,7 +213,9 @@ public class DialectRegistry {
                 VerticaDialect.class,
                 VirtuosoDialect.class,
                 VistaDBDialect.class,
-                VoltDBDialect.class
+                VoltDBDialect.class,
+
+                XtremeSQLDialect.class
                 };
         Arrays.asList(dialects).forEach(DialectRegistry::registerDialectByClass);
     }

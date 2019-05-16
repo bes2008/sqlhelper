@@ -37,6 +37,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Drill (Apache Drill)
     + E      
         + Elasticsearch
+        + EsgynDB
     + F
         + Firebird
         + FileMaker
