@@ -12,14 +12,23 @@
  * limitations under the License.
  */
 
-package com.fjn.helper.sql.dialect.internal;
+package com.fjn.helper.sql.dialect;
 
-import com.fjn.helper.sql.dialect.internal.limit.LimitCommaLimitHandler;
+import com.fjn.helper.sql.dialect.internal.AbstractDialect;
+import com.fjn.helper.sql.dialect.internal.limit.TopLimitHandler;
 
-public class ExcelDialect extends AbstractDialect {
-    public ExcelDialect(){
+/**
+ * https://www.nexusdb.com/support/index.php?q=selectstatement.htm
+ */
+public class NexusDBDialect extends AbstractDialect{
+    public NexusDBDialect(){
         super();
-        setLimitHandler(new LimitCommaLimitHandler());
+        setLimitHandler(new TopLimitHandler());
+    }
+
+    @Override
+    public boolean isBindLimitParametersFirst() {
+        return true;
     }
 
     @Override
@@ -29,6 +38,11 @@ public class ExcelDialect extends AbstractDialect {
 
     @Override
     public boolean isSupportsLimitOffset() {
+        return true;
+    }
+
+    @Override
+    public boolean isBindLimitParametersInReverseOrder() {
         return true;
     }
 }

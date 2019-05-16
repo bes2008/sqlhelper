@@ -173,6 +173,7 @@ public class DialectRegistry {
                 MaxDBDialect.class,
 
                 NetezzaDialect.class,
+                NexusDBDialect.class,
                 NuodbDialect.class,
 
                 OmnisciDialect.class,

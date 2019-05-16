@@ -26,11 +26,11 @@ public class TopLimitHandler extends AbstractLimitHandler {
 
     @Override
     public String processSql(String sql, RowSelection rowSelection) {
-        return getLimitString(sql, LimitHelper.hasFirstRow(rowSelection));
+        return getLimitString(sql, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
     }
 
     @Override
-    protected String getLimitString(String sql, boolean hasOffset) {
+    protected String getLimitString(String sql, int offset, int limit) {
         /*
          *  reference: http://docs.openlinksw.com/virtuoso/topselectoption/
          *  Select Syntax:
@@ -44,7 +44,7 @@ public class TopLimitHandler extends AbstractLimitHandler {
             opt_all_distinct : [ ALL | DISTINCT ]
          *
          */
-
+        boolean hasOffset = offset > 0;
         sql = sql.trim();
         String sqlLowercase = sql.toLowerCase(Locale.ROOT);
         int selectIndex = sqlLowercase.indexOf(SELECT_LOWERCASE);
@@ -66,10 +66,23 @@ public class TopLimitHandler extends AbstractLimitHandler {
             return sql;
         }
         StringBuilder sql2 = new StringBuilder(sql.length() + 50).append(sql);
-        if(hasOffset && dialect.isSupportsLimitOffset()){
-            sql2.insert(insertionPoint, " TOP ?, ? ");
+        if(getDialect().isSupportsVariableLimit()){
+            if(getDialect().isSupportsLimitOffset() && hasOffset){
+                sql2.insert(insertionPoint, " TOP ?, ? ");
+            }else{
+                sql2.insert(insertionPoint, " TOP ? ");
+            }
         }else {
-            sql2.insert(insertionPoint, " TOP ? ");
+            if(getDialect().isSupportsLimitOffset() && hasOffset){
+                if(getDialect().isBindLimitParametersInReverseOrder()){
+                    sql2.insert(insertionPoint, " TOP "+limit+", "+offset+" ");
+                }else{
+                    sql2.insert(insertionPoint, " TOP "+offset+", "+limit+" ");
+                }
+
+            }else{
+                sql2.insert(insertionPoint, " TOP "+limit);
+            }
         }
         return sql2.toString();
     }

@@ -69,6 +69,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + MSQL (MiniSQL)
     + N
         + Netezza (IBM Netezza)
+        + NexusDB
         + NuoDB        
     + O
         + Omnisci
