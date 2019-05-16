@@ -53,6 +53,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + HANA (SAP HANAColumn, HANAStore)
         + Hawq (Apache Hawq)
         + Hive
+        + HighGo (瀚高数据库)
         + HSQL        
     + I
         + Ignite (Apache Ignite)
@@ -88,7 +89,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Omnisci
         + Oracle (8i,9,9i,10g,11g,12c)
         + OSACR (神通数据库)
-        + Openbase
+        + Openbase (东软集团)
         + OpenEdge
     + P 
         + Paradox
@@ -108,7 +109,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + SQLServer (SQLServer 2005,2008,2012,2017)
     + T
         + Teradata
-        + TiDB
+        + TiDB (北京平凯星辰科技)
         + TimesTen
         + Transbase
     + V

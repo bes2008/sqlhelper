@@ -157,6 +157,7 @@ public class DialectRegistry {
                 HawqDialect.class,
                 HSQLDialect.class,
                 HiveDialect.class,
+                HighGoDialect.class,
 
                 IgniteDialect.class,
                 ImpalaDialect.class,
