@@ -23,6 +23,7 @@ public class TopLimitHandler extends AbstractLimitHandler {
     private static final String SELECT_LOWERCASE="select";
     private static final String SELECT_DISTINCT_LOWERCASE="select distinct";
     private static final String SELECT_ALL_LOWERCASE="select all";
+    private boolean useSkipTop=false;
 
     @Override
     public String processSql(String sql, RowSelection rowSelection) {
@@ -68,16 +69,24 @@ public class TopLimitHandler extends AbstractLimitHandler {
         StringBuilder sql2 = new StringBuilder(sql.length() + 50).append(sql);
         if(getDialect().isSupportsVariableLimit()){
             if(getDialect().isSupportsLimitOffset() && hasOffset){
-                sql2.insert(insertionPoint, " TOP ?, ? ");
+                if(!isUseSkipTop()) {
+                    sql2.insert(insertionPoint, " TOP ?, ? ");
+                }else{
+                    sql2.insert(insertionPoint, " SKIP ? TOP ? ");
+                }
             }else{
                 sql2.insert(insertionPoint, " TOP ? ");
             }
         }else {
             if(getDialect().isSupportsLimitOffset() && hasOffset){
-                if(getDialect().isBindLimitParametersInReverseOrder()){
-                    sql2.insert(insertionPoint, " TOP "+limit+", "+offset+" ");
+                if(!isUseSkipTop()) {
+                    if (getDialect().isBindLimitParametersInReverseOrder()) {
+                        sql2.insert(insertionPoint, " TOP " + limit + ", " + offset + " ");
+                    } else {
+                        sql2.insert(insertionPoint, " TOP " + offset + ", " + limit + " ");
+                    }
                 }else{
-                    sql2.insert(insertionPoint, " TOP "+offset+", "+limit+" ");
+                    sql2.insert(insertionPoint, " SKIP " + offset + " TOP " + limit + " ");
                 }
 
             }else{
@@ -85,5 +94,14 @@ public class TopLimitHandler extends AbstractLimitHandler {
             }
         }
         return sql2.toString();
+    }
+
+    public boolean isUseSkipTop() {
+        return useSkipTop;
+    }
+
+    public TopLimitHandler setUseSkipTop(boolean useSkipTop) {
+        this.useSkipTop = useSkipTop;
+        return this;
     }
 }
