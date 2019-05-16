@@ -118,8 +118,8 @@ public class DialectRegistry {
 
         final Class<? extends Dialect>[] dialects = (Class<? extends Dialect>[]) new Class[]{
 
-
                 AccessDialect.class,
+                ActorDBDialect.class,
                 AgensGraphDialect.class,
                 AltibaseDialect.class,
                 AuroraDialect.class,
