@@ -21,6 +21,8 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Aurora (Amazon Aurora)
         + Altibase
         + Azure (Microsoft Azure Cloud Database)
+    + B
+        + Brytlyt
     + C
         + Cache (CacheDB)
         + ClickHouse

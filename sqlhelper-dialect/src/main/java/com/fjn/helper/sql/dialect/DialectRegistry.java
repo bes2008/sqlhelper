@@ -125,6 +125,8 @@ public class DialectRegistry {
                 AuroraDialect.class,
                 AzureDialect.class,
 
+                BrytlytDialect.class,
+
                 CacheDialect.class,
                 ClickHouseDialect.class,
                 ClustrixDialect.class,
