@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -15,27 +14,23 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.RowSelection;
-import com.fjn.helper.sql.dialect.annotation.Name;
-import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
+import com.fjn.helper.sql.dialect.internal.limit.LimitOnlyLimitHandler;
 
-/**
- * https://download.mimer.com/pub/developer/docs/html_101/Mimer_SQL_Engine_DocSet/index.htm
- */
-@Name("mimer")
-public class MimerSQLDialect extends AbstractDialect {
-    public MimerSQLDialect(){
+public class SnappyDataDialect extends AbstractDialect {
+    public SnappyDataDialect(){
         super();
-        setLimitHandler(new AbstractLimitHandler() {
-            @Override
-            public String processSql(String sql, RowSelection rowSelection) {
-                return null;
-            }
-        });
+        setLimitHandler(new LimitOnlyLimitHandler());
+    }
+
+    @Override
+    public boolean isSupportsLimit() {
+        return true;
     }
 
     @Override
     public boolean isSupportsLimitOffset() {
         return false;
     }
+
+
 }

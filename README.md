@@ -63,11 +63,12 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Kognitio
     + M
         + MariaDb
+        + MaxCompute
+        + MAXDB (SAP MaxDB)
         + MySQL
         + Mckoi
         + Mimer
         + Monet
-        + MAXDB (SAP MaxDB)
         + MemSQL
         + MSQL (MiniSQL)
     + N

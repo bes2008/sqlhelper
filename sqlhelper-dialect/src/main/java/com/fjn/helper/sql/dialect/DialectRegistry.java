@@ -167,6 +167,7 @@ public class DialectRegistry {
                 KognitioDialect.class,
 
                 MariaDBDialect.class,
+                MaxComputeDialect.class,
                 MckoiDialect.class,
                 MemSQLDialect.class,
                 MimerSQLDialect.class,
@@ -195,6 +196,7 @@ public class DialectRegistry {
                 RedshiftDialect.class,
                 RBaseDialect.class,
 
+                SnappyDataDialect.class,
                 SnowflakeDialect.class,
                 SpliceMachineDialect.class,
                 SQLiteDialect.class,
