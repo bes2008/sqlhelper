@@ -196,9 +196,9 @@ public class DialectRegistry {
 
                 SnowflakeDialect.class,
                 SpliceMachineDialect.class,
-                SQLServerDialect.class,
                 SQLiteDialect.class,
-                SybaseDialect.class,
+                SQLServerDialect.class,
+                SQReamDialect.class,
 
                 TeradataDialect.class,
                 TiDBDialect.class,

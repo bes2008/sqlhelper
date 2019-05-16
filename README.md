@@ -90,10 +90,11 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Redshift (Amazon Redshift)
         + RBase
     + S        
-        + SQLite
-        + SQLServer (SQLServer 2005,2008,2012,2017)
         + SnowflakeDialect
         + SpliceMachine
+        + SQLite
+        + SQLServer (SQLServer 2005,2008,2012,2017)
+        
     + T
         + Teradata
         + TiDB
