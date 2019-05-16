@@ -66,6 +66,8 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Kingbase (人大金仓)
         + Kinetica   
         + Kognitio
+    + L
+        + LeanXcale        
     + M
         + MariaDb
         + MaxCompute

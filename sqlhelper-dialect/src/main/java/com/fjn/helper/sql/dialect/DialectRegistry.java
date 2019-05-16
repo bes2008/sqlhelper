@@ -170,6 +170,8 @@ public class DialectRegistry {
                 KineticaDialect.class,
                 KognitioDialect.class,
 
+                LeanXcaleDialect.class,
+
                 MariaDBDialect.class,
                 MaxComputeDialect.class,
                 MckoiDialect.class,
