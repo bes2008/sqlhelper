@@ -64,6 +64,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + J
         + JDataStore
     + K
+        + K-DB (浪潮数据库)
         + Kingbase (人大金仓)
         + Kinetica   
         + Kognitio

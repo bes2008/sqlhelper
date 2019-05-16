@@ -167,6 +167,7 @@ public class DialectRegistry {
 
                 JDataStoreDialect.class,
 
+                KDBDialect.class,
                 KingbaseDialect.class,
                 KineticaDialect.class,
                 KognitioDialect.class,
