@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -15,29 +14,21 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.annotation.Name;
-import com.fjn.helper.sql.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
+import com.fjn.helper.sql.dialect.internal.limit.LimitCommaLimitHandler;
 
-/**
- * HyperSQL
- * http://hsqldb.org/doc/2.0/guide/dataaccess-chapt.html#dac_sql_select_statement
- */
-@Name("hsql")
-public class HSQLDialect extends AbstractDialect {
-
-    public HSQLDialect() {
+public class RBaseDialect extends AbstractDialect {
+    public RBaseDialect(){
         super();
-        setLimitHandler(new OffsetFetchFirstOnlyLimitHandler().setSupportUsingIndexClauseInSelectEnd(true));
+        setLimitHandler(new LimitCommaLimitHandler());
+    }
+
+    @Override
+    public boolean isSupportsLimitOffset() {
+        return true;
     }
 
     @Override
     public boolean isSupportsLimit() {
         return true;
     }
-
-    @Override
-    public boolean isBindLimitParametersFirst() {
-        return false;
-    }
-
 }

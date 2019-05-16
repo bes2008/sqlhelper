@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -15,19 +14,15 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.annotation.Name;
-import com.fjn.helper.sql.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
+import com.fjn.helper.sql.dialect.internal.limit.LimitOnlyLimitHandler;
 
 /**
- * HyperSQL
- * http://hsqldb.org/doc/2.0/guide/dataaccess-chapt.html#dac_sql_select_statement
+ * https://kognitio.com/documentation/latest/sqlref/select.html
  */
-@Name("hsql")
-public class HSQLDialect extends AbstractDialect {
-
-    public HSQLDialect() {
+public class KognitioDialect extends AbstractDialect {
+    public KognitioDialect(){
         super();
-        setLimitHandler(new OffsetFetchFirstOnlyLimitHandler().setSupportUsingIndexClauseInSelectEnd(true));
+        setLimitHandler(new LimitOnlyLimitHandler());
     }
 
     @Override
@@ -36,8 +31,7 @@ public class HSQLDialect extends AbstractDialect {
     }
 
     @Override
-    public boolean isBindLimitParametersFirst() {
+    public boolean isSupportsLimitOffset() {
         return false;
     }
-
 }

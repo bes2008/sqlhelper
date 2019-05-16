@@ -22,8 +22,10 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + C
         + Cache (CacheDB)
         + ClickHouse
+        + ClustrixDB
         + Cockroach
-        + Cubrid        
+        + Crate
+        + Cubrid       
     + D
         + DBF
         + DB2
@@ -32,11 +34,9 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Drill (Apache Drill)
     + E      
         + Elasticsearch
-        + Excel
     + F
         + Firebird
         + FileMaker
-        + Fontbase
     + G
         + GBase (南大通用)
         + Greenplum
@@ -52,10 +52,12 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Informix
         + Ingres
         + Interbase
+        + Iris
     + J
         + JDataStore
     + K
-        + Kingbase (人大金仓)        
+        + Kingbase (人大金仓)   
+        + Kognitio     
     + M
         + MariaDb
         + MySQL
@@ -83,13 +85,14 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + R
         + RDMSOS2200
         + Redshift (Amazon Redshift)
+        + RBase
     + S        
         + SQLite
         + SQLServer (SQLServer 2005,2008,2012,2017)
         + SnowflakeDialect
+        + SpliceMachine
     + T
         + Teradata
-        + Text
         + TiDB
         + TimesTen
     + V

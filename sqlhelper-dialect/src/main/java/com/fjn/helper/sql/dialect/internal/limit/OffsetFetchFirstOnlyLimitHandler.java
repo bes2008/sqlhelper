@@ -30,6 +30,7 @@ import java.util.Locale;
  *  every dialect use the limitHandler should set bindLimitParameterInReverseOrder = false
  */
 public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
+
     @Override
     public String processSql(String sql, RowSelection rowSelection) {
         return getLimitString(sql, rowSelection.getOffset(), getMaxOrLimit(rowSelection));
@@ -60,6 +61,18 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
             withClause = sqlLowercase.substring(withClauseIndex);
         }
 
+        boolean hasUsingIndexClause=false;
+        String usingIndexClause= null;
+        int usingIndexIndex=-1;
+        if(isSupportUsingIndexClauseInSelectEnd()){
+            usingIndexIndex = sqlLowercase.lastIndexOf("using index", sqlLowercase.length() - 11);
+            if(usingIndexIndex>0){
+                sql = sql.substring(0, usingIndexIndex-1);
+                hasUsingIndexClause = true;
+                usingIndexClause = sqlLowercase.substring(usingIndexIndex);
+            }
+        }
+
         StringBuilder sql2 = new StringBuilder(sql.length() + 100);
         sql2.append(sql);
 
@@ -81,7 +94,21 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
         }
         else if(isForUpdate){
             sql2.append(forUpdateClause);
+        }else if(hasUsingIndexClause){
+            sql2.append(usingIndexClause);
         }
         return sql2.toString();
     }
+
+    private boolean isSupportUsingIndexClauseInSelectEnd = false;
+
+    public boolean isSupportUsingIndexClauseInSelectEnd() {
+        return isSupportUsingIndexClauseInSelectEnd;
+    }
+
+    public OffsetFetchFirstOnlyLimitHandler setSupportUsingIndexClauseInSelectEnd(boolean supportUsingIndexClauseInSelectEnd) {
+        isSupportUsingIndexClauseInSelectEnd = supportUsingIndexClauseInSelectEnd;
+        return this;
+    }
+
 }

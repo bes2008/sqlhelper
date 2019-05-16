@@ -136,10 +136,15 @@ public class PagingRequest<E, R> {
     }
 
     public void clear(){
-        if(result!=null) {
-            result.setItems(Collections.EMPTY_LIST);
+        clear(true);
+    }
+
+    public void clear(boolean clearResult){
+        if(clearResult) {
+            if(result!=null) {
+                result.setItems(Collections.EMPTY_LIST);
+            }
         }
-        setResult(null);
         setCondition(null);
     }
 }

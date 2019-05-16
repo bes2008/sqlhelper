@@ -126,6 +126,8 @@ public class DialectRegistry {
 
                 CacheDialect.class,
                 ClickHouseDialect.class,
+                ClustrixDialect.class,
+                CrateDialect.class,
                 CubridDialect.class,
                 CockroachDialect.class,
 
@@ -136,11 +138,9 @@ public class DialectRegistry {
                 DrillDialect.class,
 
                 ElasticsearchDialect.class,
-                ExcelDialect.class,
 
                 FirebirdDialect.class,
                 FileMaker.class,
-                FrontBaseDialect.class,
 
                 GBaseDialect.class,
                 GreenplumDialect.class,
@@ -156,10 +156,12 @@ public class DialectRegistry {
                 InformixDialect.class,
                 IngresDialect.class,
                 InterbaseDialect.class,
+                IrisDialect.class,
 
                 JDataStoreDialect.class,
 
                 KingbaseDialect.class,
+                KognitioDialect.class,
 
                 MariaDBDialect.class,
                 MckoiDialect.class,
@@ -187,8 +189,10 @@ public class DialectRegistry {
 
                 RDMSOS2200Dialect.class,
                 RedshiftDialect.class,
+                RBaseDialect.class,
 
                 SnowflakeDialect.class,
+                SpliceMachineDialect.class,
                 SQLServerDialect.class,
                 SQLiteDialect.class,
                 SybaseDialect.class,
@@ -196,7 +200,6 @@ public class DialectRegistry {
                 TeradataDialect.class,
                 TiDBDialect.class,
                 TimesTenDialect.class,
-                TextDialect.class,
 
                 VerticaDialect.class,
                 VirtuosoDialect.class,
