@@ -18,8 +18,7 @@ package com.fjn.helper.sql.dialect.internal.limit;
 import com.fjn.helper.sql.dialect.RowSelection;
 
 
-public class FirstLimitHandler
-        extends LegacyFirstLimitHandler {
+public class FirstLimitHandler extends LegacyFirstLimitHandler {
     @Override
     public String processSql(String sql, RowSelection selection) {
         boolean hasOffset = LimitHelper.hasFirstRow(selection);

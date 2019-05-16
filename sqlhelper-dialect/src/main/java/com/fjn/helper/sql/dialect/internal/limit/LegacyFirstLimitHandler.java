@@ -20,8 +20,7 @@ import com.fjn.helper.sql.dialect.RowSelection;
 import java.util.Locale;
 
 
-public class LegacyFirstLimitHandler
-        extends AbstractLimitHandler {
+public class LegacyFirstLimitHandler extends AbstractLimitHandler {
     public static final LegacyFirstLimitHandler INSTANCE = new LegacyFirstLimitHandler();
 
     @Override

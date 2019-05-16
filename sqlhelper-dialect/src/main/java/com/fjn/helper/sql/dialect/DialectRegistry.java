@@ -213,6 +213,7 @@ public class DialectRegistry {
                 TeradataDialect.class,
                 TiDBDialect.class,
                 TimesTenDialect.class,
+                TransbaseDialect.class,
 
                 ValentinaDialect.class,
                 VerticaDialect.class,

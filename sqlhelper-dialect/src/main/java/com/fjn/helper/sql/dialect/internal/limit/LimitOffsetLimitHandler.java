@@ -69,7 +69,7 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
             }
         }
         if(isForUpdate){
-            sql2.append(forUpdateClause);
+            sql2.append(" " + forUpdateClause);
         }
         return sql2.toString();
     }

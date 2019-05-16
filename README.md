@@ -108,6 +108,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Teradata
         + TiDB
         + TimesTen
+        + Transbase
     + V
         + Valentina
         + Vertica

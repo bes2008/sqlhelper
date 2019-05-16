@@ -98,9 +98,9 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
             sql2.append(withClause);
         }
         else if(isForUpdate){
-            sql2.append(forUpdateClause);
+            sql2.append(" " + forUpdateClause);
         }else if(hasUsingIndexClause){
-            sql2.append(usingIndexClause);
+            sql2.append(" " + usingIndexClause);
         }
         return sql2.toString();
     }
