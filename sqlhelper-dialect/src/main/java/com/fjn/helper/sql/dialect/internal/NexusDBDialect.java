@@ -14,24 +14,30 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.internal.limit.LimitOffsetLimitHandler;
+import com.fjn.helper.sql.dialect.internal.AbstractDialect;
+import com.fjn.helper.sql.dialect.internal.limit.TopLimitHandler;
 
 /**
- * https://www.omnisci.com/docs/latest/5_dml.html#select
+ * https://www.nexusdb.com/support/index.php?q=selectstatement.htm
  */
-public class OmnisciDialect extends AbstractDialect {
-    public OmnisciDialect(){
+public class NexusDBDialect extends AbstractDialect{
+    public NexusDBDialect(){
         super();
-        setLimitHandler(new LimitOffsetLimitHandler().setHasOffsetRowsSuffix(true));
+        setLimitHandler(new TopLimitHandler());
     }
 
     @Override
-    public boolean isSupportsLimitOffset() {
+    public boolean isBindLimitParametersFirst() {
         return true;
     }
 
     @Override
     public boolean isSupportsLimit() {
+        return true;
+    }
+
+    @Override
+    public boolean isSupportsLimitOffset() {
         return true;
     }
 

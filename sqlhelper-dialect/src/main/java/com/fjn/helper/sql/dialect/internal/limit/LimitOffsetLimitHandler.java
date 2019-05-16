@@ -28,16 +28,8 @@ import java.util.Locale;
  */
 public class LimitOffsetLimitHandler extends AbstractLimitHandler{
     // OFFSET $offset ROWS
-    private boolean offsetRowsSuffix = false;
-
-    public boolean isOffsetRowsSuffix() {
-        return offsetRowsSuffix;
-    }
-
-    public LimitOffsetLimitHandler setOffsetRowsSuffix(boolean offsetRowsSuffix) {
-        this.offsetRowsSuffix = offsetRowsSuffix;
-        return this;
-    }
+    private boolean hasOffsetRowsSuffix = false;
+    private boolean isSupportForUpdate;
 
     @Override
     public String processSql(String sql, RowSelection rowSelection) {
@@ -50,12 +42,14 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
         sql = sql.trim();
         String forUpdateClause = "";
         boolean isForUpdate = false;
-        String sqlLowercase = sql.toLowerCase(Locale.ROOT);
-        int forUpdateIndex = sqlLowercase.lastIndexOf("for update");
-        if (forUpdateIndex > -1) {
-            forUpdateClause = sql.substring(forUpdateIndex);
-            sql = sql.substring(0, forUpdateIndex - 1);
-            isForUpdate = true;
+        if(isSupportForUpdate()) {
+            String sqlLowercase = sql.toLowerCase(Locale.ROOT);
+            int forUpdateIndex = sqlLowercase.lastIndexOf("for update");
+            if (forUpdateIndex > -1) {
+                forUpdateClause = sql.substring(forUpdateIndex);
+                sql = sql.substring(0, forUpdateIndex - 1);
+                isForUpdate = true;
+            }
         }
 
         StringBuilder sql2 = new StringBuilder(sql.length() + 100);
@@ -63,13 +57,13 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
 
         if(getDialect().isSupportsVariableLimit()) {
             if (hasOffset) {
-                sql2.append(" limit ? offset ? " + (offsetRowsSuffix ? "rows":""));
+                sql2.append(" limit ? offset ? " + (hasOffsetRowsSuffix ? "rows":""));
             } else {
                 sql2.append(" limit ?");
             }
         }else{
             if (hasOffset) {
-                sql2.append(" limit "+limit+" offset "+offset+" " + (offsetRowsSuffix ? "rows":""));
+                sql2.append(" limit "+limit+" offset "+offset+" " + (hasOffsetRowsSuffix ? "rows":""));
             } else {
                 sql2.append(" limit "+limit);
             }
@@ -78,5 +72,24 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
             sql2.append(forUpdateClause);
         }
         return sql2.toString();
+    }
+
+
+    public boolean isHasOffsetRowsSuffix() {
+        return hasOffsetRowsSuffix;
+    }
+
+    public LimitOffsetLimitHandler setHasOffsetRowsSuffix(boolean hasOffsetRowsSuffix) {
+        this.hasOffsetRowsSuffix = hasOffsetRowsSuffix;
+        return this;
+    }
+
+    public boolean isSupportForUpdate() {
+        return isSupportForUpdate;
+    }
+
+    public LimitOffsetLimitHandler setSupportForUpdate(boolean supportForUpdate) {
+        isSupportForUpdate = supportForUpdate;
+        return this;
     }
 }

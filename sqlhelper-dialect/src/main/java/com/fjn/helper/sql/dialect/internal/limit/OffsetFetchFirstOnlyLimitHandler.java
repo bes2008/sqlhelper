@@ -45,26 +45,31 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
         String forUpdateClause = "";
         boolean isForUpdate = false;
         String sqlLowercase = sql.toLowerCase(Locale.ROOT);
-        int forUpdateIndex = sqlLowercase.lastIndexOf("for update");
-        if (forUpdateIndex > -1) {
-            forUpdateClause = sql.substring(forUpdateIndex);
-            sql = sql.substring(0, forUpdateIndex - 1);
-            isForUpdate = true;
+        if(isSupportForUpdate()) {
+            int forUpdateIndex = sqlLowercase.lastIndexOf("for update");
+            if (forUpdateIndex > -1) {
+                forUpdateClause = sql.substring(forUpdateIndex);
+                sql = sql.substring(0, forUpdateIndex - 1);
+                isForUpdate = true;
+            }
         }
 
-        int withClauseIndex = sqlLowercase.lastIndexOf("with ",sqlLowercase.length()- (forUpdateClause.length()+7));
+
         boolean hasWithClause = false;
         String withClause = null;
-        if(withClauseIndex>0){
-            sql = sql.substring(0, withClauseIndex-1);
-            hasWithClause = true;
-            withClause = sqlLowercase.substring(withClauseIndex);
+        if(isSupportWithInSelectEnd()) {
+            int withClauseIndex = sqlLowercase.lastIndexOf("with ",sqlLowercase.length()- (forUpdateClause.length()+7));
+            if (withClauseIndex > 0) {
+                sql = sql.substring(0, withClauseIndex - 1);
+                hasWithClause = true;
+                withClause = sqlLowercase.substring(withClauseIndex);
+            }
         }
 
         boolean hasUsingIndexClause=false;
         String usingIndexClause= null;
-        int usingIndexIndex=-1;
         if(isSupportUsingIndexClauseInSelectEnd()){
+            int usingIndexIndex=-1;
             usingIndexIndex = sqlLowercase.lastIndexOf("using index", sqlLowercase.length() - 11);
             if(usingIndexIndex>0){
                 sql = sql.substring(0, usingIndexIndex-1);
@@ -101,7 +106,8 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
     }
 
     private boolean isSupportUsingIndexClauseInSelectEnd = false;
-
+    private boolean supportForUpdate = true;
+    private boolean supportWithInSelectEnd = true;
     public boolean isSupportUsingIndexClauseInSelectEnd() {
         return isSupportUsingIndexClauseInSelectEnd;
     }
@@ -111,4 +117,21 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
         return this;
     }
 
+    public boolean isSupportForUpdate() {
+        return supportForUpdate;
+    }
+
+    public OffsetFetchFirstOnlyLimitHandler setSupportForUpdate(boolean supportForUpdate) {
+        this.supportForUpdate = supportForUpdate;
+        return this;
+    }
+
+    public boolean isSupportWithInSelectEnd() {
+        return supportWithInSelectEnd;
+    }
+
+    public OffsetFetchFirstOnlyLimitHandler setSupportWithInSelectEnd(boolean supportWithInSelectEnd) {
+        this.supportWithInSelectEnd = supportWithInSelectEnd;
+        return this;
+    }
 }

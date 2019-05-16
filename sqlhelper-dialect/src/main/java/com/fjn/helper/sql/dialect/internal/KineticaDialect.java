@@ -12,28 +12,18 @@
  * limitations under the License.
  */
 
-package com.fjn.helper.sql.dialect;
+package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.internal.AbstractDialect;
-import com.fjn.helper.sql.dialect.internal.limit.TopLimitHandler;
+import com.fjn.helper.sql.dialect.internal.limit.LimitCommaLimitHandler;
 
 /**
- * https://www.nexusdb.com/support/index.php?q=selectstatement.htm
+ * https://www.kinetica.com/docs/concepts/sql.html#query
+ * @author https://github.com/f1194361820
  */
-public class NexusDBDialect extends AbstractDialect{
-    public NexusDBDialect(){
+public class KineticaDialect extends AbstractDialect {
+    public KineticaDialect(){
         super();
-        setLimitHandler(new TopLimitHandler());
-    }
-
-    @Override
-    public boolean isBindLimitParametersFirst() {
-        return true;
-    }
-
-    @Override
-    public boolean isSupportsLimit() {
-        return true;
+        setLimitHandler(new LimitCommaLimitHandler());
     }
 
     @Override
@@ -42,7 +32,7 @@ public class NexusDBDialect extends AbstractDialect{
     }
 
     @Override
-    public boolean isBindLimitParametersInReverseOrder() {
+    public boolean isSupportsLimit() {
         return true;
     }
 }

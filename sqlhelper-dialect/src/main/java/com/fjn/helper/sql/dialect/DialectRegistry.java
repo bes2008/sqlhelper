@@ -140,7 +140,7 @@ public class DialectRegistry {
                 ElasticsearchDialect.class,
 
                 FirebirdDialect.class,
-                FileMaker.class,
+                FileMakerDialect.class,
 
                 GBaseDialect.class,
                 GreenplumDialect.class,
@@ -161,6 +161,7 @@ public class DialectRegistry {
                 JDataStoreDialect.class,
 
                 KingbaseDialect.class,
+                KineticaDialect.class,
                 KognitioDialect.class,
 
                 MariaDBDialect.class,
