@@ -24,6 +24,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + ClickHouse
         + ClustrixDB
         + Cockroach
+        + ComDB2
         + Crate
         + CTree (CTreeACE, CTreeEDGE, CTreeRTG)
         + Cubrid       

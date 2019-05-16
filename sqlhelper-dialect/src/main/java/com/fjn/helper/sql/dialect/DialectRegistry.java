@@ -131,6 +131,7 @@ public class DialectRegistry {
                 CTreeDialect.class,
                 CubridDialect.class,
                 CockroachDialect.class,
+                ComDB2Dialect.class,
 
                 DbfDialect.class,
                 DB2Dialect.class,
