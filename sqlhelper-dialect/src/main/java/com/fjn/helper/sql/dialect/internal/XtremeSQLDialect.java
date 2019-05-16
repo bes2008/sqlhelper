@@ -14,13 +14,15 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
+import com.fjn.helper.sql.dialect.annotation.Name;
 import com.fjn.helper.sql.dialect.internal.limit.LimitCommaLimitHandler;
 
 /**
  * https://www.mcobject.com/docs/eXtremeDB.htm#Users_Guides/SQL/SQL_Features/Limit.htm?Highlight=limit%20offset
  */
-public class EXtremeSQLDialect extends AbstractDialect{
-    public EXtremeSQLDialect(){
+@Name("xtreme")
+public class XtremeSQLDialect extends AbstractDialect{
+    public XtremeSQLDialect(){
         super();
         setLimitHandler(new LimitCommaLimitHandler());
     }
