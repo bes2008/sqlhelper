@@ -120,6 +120,7 @@ public class DialectRegistry {
 
 
                 AccessDialect.class,
+                AgensGraphDialect.class,
                 AltibaseDialect.class,
                 AuroraDialect.class,
                 AzureDialect.class,

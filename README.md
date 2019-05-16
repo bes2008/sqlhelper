@@ -16,6 +16,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 1. supports the following databases, your can find them in [DB Engines](https://db-engines.com/en/ranking/relational+dbms):    
     + A
         + Access
+        + AgensGraph
         + Aurora (Amazon Aurora)
         + Altibase
         + Azure (Microsoft Azure Cloud Database)

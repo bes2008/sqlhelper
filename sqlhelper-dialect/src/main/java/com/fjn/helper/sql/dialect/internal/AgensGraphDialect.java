@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -16,25 +15,11 @@
 package com.fjn.helper.sql.dialect.internal;
 
 import com.fjn.helper.sql.dialect.internal.limit.LimitOffsetLimitHandler;
-import com.fjn.helper.sql.dialect.internal.urlparser.PostgreSQLUrlParser;
 
-import java.sql.CallableStatement;
-import java.sql.SQLException;
-
-/**
- * https://www.postgresql.org/docs/current/queries-limit.html
- */
-public class PostgreSQLDialect extends AbstractDialect {
-
-    public PostgreSQLDialect() {
+public class AgensGraphDialect extends AbstractDialect {
+    public AgensGraphDialect(){
         super();
-        setUrlParser(new PostgreSQLUrlParser());
         setLimitHandler(new LimitOffsetLimitHandler());
-    }
-
-    @Override
-    public boolean isSupportsLimit() {
-        return true;
     }
 
     @Override
@@ -43,14 +28,12 @@ public class PostgreSQLDialect extends AbstractDialect {
     }
 
     @Override
-    public boolean isBindLimitParametersInReverseOrder() {
+    public boolean isSupportsLimit() {
         return true;
     }
 
     @Override
-    public int registerResultSetOutParameter(CallableStatement statement, int col)
-            throws SQLException {
-        statement.registerOutParameter(col++, 1111);
-        return col;
+    public boolean isBindLimitParametersInReverseOrder() {
+        return true;
     }
 }
