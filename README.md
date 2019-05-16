@@ -37,7 +37,6 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Drill (Apache Drill)
     + E      
         + Elasticsearch
-        + EXtremeSQL
     + F
         + Firebird
         + FileMaker
@@ -99,7 +98,6 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + SpliceMachine
         + SQLite
         + SQLServer (SQLServer 2005,2008,2012,2017)
-        
     + T
         + Teradata
         + TiDB
@@ -109,6 +107,8 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
         + Virtuoso
         + VistaDB
         + VoltDB
+    + X
+        + Xtreme (EXtremeSQL, XtremeData)
 
 2. supports multiple databases in one application 
 3. supports auto detect dialect, so the dialect option is optional
