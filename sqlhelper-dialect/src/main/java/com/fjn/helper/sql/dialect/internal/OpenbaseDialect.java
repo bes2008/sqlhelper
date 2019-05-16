@@ -14,24 +14,14 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.RowSelection;
-import com.fjn.helper.sql.dialect.internal.limit.AbstractLimitHandler;
-import com.fjn.helper.sql.dialect.internal.limit.LimitHelper;
+import com.fjn.helper.sql.dialect.internal.limit.ReturnResultsLimitHandler;
 
+/**
+ * http://openbase.wikidot.com/openbase-sql:select-statements
+ */
 public class OpenbaseDialect extends AbstractDialect {
     public OpenbaseDialect() {
-        setLimitHandler(new AbstractLimitHandler() {
-            @Override
-            public String processSql(String sql, RowSelection rowSelection) {
-                return getLimitString(sql, LimitHelper.hasFirstRow(rowSelection));
-            }
-
-            @Override
-            protected String getLimitString(String sql, boolean hasOffset) {
-                // http://openbase.wikidot.com/openbase-sql:select-statements
-                return sql +" RETURN RESULT " + (hasOffset ? " ? TO ?" : " ?");
-            }
-        });
+        setLimitHandler(new ReturnResultsLimitHandler());
     }
 
     @Override
