@@ -18,6 +18,7 @@ import com.fjn.helper.sql.dialect.annotation.Driver;
 import com.fjn.helper.sql.dialect.annotation.Name;
 import com.fjn.helper.sql.dialect.internal.*;
 import com.fjn.helper.sql.util.Holder;
+import com.fjn.helper.sql.util.Reflects;
 import com.fjn.helper.sql.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -226,7 +227,10 @@ public class DialectRegistry {
 
                 XtremeSQLDialect.class
                 };
-        Arrays.asList(dialects).forEach(DialectRegistry::registerDialectByClass);
+
+        for (Class<? extends Dialect> clazz : Arrays.asList(dialects)) {
+            registerDialectByClass(clazz);
+        }
     }
 
     private static void loadDatabaseIdMappings() {
@@ -297,7 +301,8 @@ public class DialectRegistry {
 
     private static Dialect registerDialectByClass(final Class<? extends Dialect> clazz) {
         Dialect dialect = null;
-        final Name nameAnno = (Name) clazz.getDeclaredAnnotation(Name.class);
+
+        final Name nameAnno = (Name) Reflects.getDeclaredAnnotation(clazz, Name.class);
         String name;
         if (nameAnno != null) {
             name = nameAnno.value();
@@ -308,7 +313,7 @@ public class DialectRegistry {
             final String simpleClassName = clazz.getSimpleName().toLowerCase();
             name = simpleClassName.replaceAll("dialect", "");
         }
-        final Driver driverAnno = (Driver) clazz.getDeclaredAnnotation(Driver.class);
+        final Driver driverAnno = (Driver)  Reflects.getDeclaredAnnotation(clazz, Driver.class);
         Class<? extends java.sql.Driver> driverClass = null;
         Constructor<? extends Dialect> driverConstructor = null;
         if (driverAnno != null) {

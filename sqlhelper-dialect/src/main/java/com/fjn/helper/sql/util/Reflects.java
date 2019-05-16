@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -13,21 +12,18 @@
  * limitations under the License.
  */
 
-package com.fjn.helper.sql.dialect.internal.urlparser;
+package com.fjn.helper.sql.util;
 
-import com.fjn.helper.sql.dialect.DatabaseInfo;
+import java.lang.annotation.Annotation;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class NoopUrlParser implements UrlParser {
-    @Override
-    public DatabaseInfo parse(String url) {
-        return UnKnownDatabaseInfo.INSTANCE;
-    }
-
-    @Override
-    public List<String> getUrlSchemas() {
-        return new ArrayList<String>();
+public class Reflects {
+    public static Annotation getDeclaredAnnotation(Class clazz, Class<? extends Annotation> annotationClazz){
+        Annotation[] annotations = clazz.getDeclaredAnnotations();
+        for(Annotation anno : annotations){
+            if(annotationClazz.isInstance(anno)){
+                return anno;
+            }
+        }
+        return null;
     }
 }

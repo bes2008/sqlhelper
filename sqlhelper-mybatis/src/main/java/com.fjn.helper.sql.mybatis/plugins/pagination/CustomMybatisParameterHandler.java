@@ -96,7 +96,9 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
                     }
                     try {
                         typeHandler.setParameter(ps, i + startIndex, value, jdbcType);
-                    } catch (TypeException | SQLException e) {
+                    } catch (TypeException e) {
+                        throw new TypeException("Could not set parameters for mapping: " + parameterMapping + ". Cause: " + e, e);
+                    }catch (SQLException e){
                         throw new TypeException("Could not set parameters for mapping: " + parameterMapping + ". Cause: " + e, e);
                     }
                 }

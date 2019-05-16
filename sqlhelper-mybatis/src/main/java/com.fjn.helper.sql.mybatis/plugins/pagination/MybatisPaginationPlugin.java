@@ -318,8 +318,8 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             }
             builder.timeout(ms.getTimeout());
             builder.parameterMap(ms.getParameterMap());
-            final List<ResultMap> resultMaps = new ArrayList<>();
-            final ResultMap resultMap = new ResultMap.Builder(ms.getConfiguration(), ms.getId(), Long.class, Collections.emptyList()).build();
+            final List<ResultMap> resultMaps = new ArrayList<ResultMap>();
+            final ResultMap resultMap = new ResultMap.Builder(ms.getConfiguration(), ms.getId(), Long.class, new ArrayList<ResultMapping>()).build();
             resultMaps.add(resultMap);
             builder.resultMaps(resultMaps);
             builder.resultSetType(ms.getResultSetType());

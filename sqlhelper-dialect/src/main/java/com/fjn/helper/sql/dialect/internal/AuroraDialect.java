@@ -32,7 +32,7 @@ public class AuroraDialect extends AbstractDialect {
 
     private WorkingWith workingWith;
 
-    private static final Map<WorkingWith, LimitHandler> limitHandlerMap = new HashMap<>();
+    private static final Map<WorkingWith, LimitHandler> limitHandlerMap = new HashMap<WorkingWith, LimitHandler>();
 
     static {
         limitHandlerMap.put(WorkingWith.MySQL, new LimitCommaLimitHandler());

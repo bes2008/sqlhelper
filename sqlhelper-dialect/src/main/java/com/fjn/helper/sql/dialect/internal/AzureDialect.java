@@ -14,7 +14,7 @@
 
 package com.fjn.helper.sql.dialect.internal;
 
-import com.fjn.helper.sql.dialect.internal.limit.SQL2008StandardLimitHandler;
+import com.fjn.helper.sql.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 
 /**
  * Microsoft Azure Cloud Database
@@ -22,7 +22,7 @@ import com.fjn.helper.sql.dialect.internal.limit.SQL2008StandardLimitHandler;
 public class AzureDialect extends AbstractDialect{
     public AzureDialect(){
         super();
-        setLimitHandler(new SQL2008StandardLimitHandler());
+        setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
     }
 
     @Override

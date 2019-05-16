@@ -47,8 +47,10 @@ public class BaseQueryParameters<P> implements QueryParameters<P> {
             return ((Object[]) parameters).length;
         }
         if (parameters instanceof Iterable) {
-            Holder<Integer> count = new Holder<>();
-            ((Iterable) parameters).forEach(parameter -> count.set(count.get() + 1));
+            Holder<Integer> count = new Holder<Integer>();
+            for (Object parameter : ((Iterable) parameters)) {
+                count.set(count.get() + 1);
+            }
             return count.get();
         }
         return 1;
