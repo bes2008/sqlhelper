@@ -42,6 +42,7 @@ public class DialectRegistry {
     static {
         loadDatabaseIdMappings();
         registerBuiltinDialects();
+        loadCustomDialects();
     }
 
     private DialectRegistry() {
@@ -111,6 +112,18 @@ public class DialectRegistry {
             }
         }
         return dialect;
+    }
+
+    private static void loadCustomDialects(){
+        loadCustomDialects(DialectRegistry.class.getClassLoader());
+    }
+    public static void loadCustomDialects(ClassLoader classLoader){
+        ServiceLoader<AbstractDialect> serviceLoader = ServiceLoader.load(AbstractDialect.class, classLoader);
+        Iterator<AbstractDialect> iter = serviceLoader.iterator();
+        while (iter.hasNext()){
+            AbstractDialect dialect = iter.next();
+            registerDialectByClass(dialect.getClass(), dialect);
+        }
     }
 
     private static void registerBuiltinDialects() {
@@ -228,7 +241,7 @@ public class DialectRegistry {
                 };
 
         for (Class<? extends Dialect> clazz : Arrays.asList(dialects)) {
-            registerDialectByClass(clazz);
+            registerDialectByClass(clazz,null);
         }
     }
 
@@ -298,8 +311,10 @@ public class DialectRegistry {
         throw new ClassCastException(error);
     }
 
-    private static Dialect registerDialectByClass(final Class<? extends Dialect> clazz) {
-        Dialect dialect = null;
+    private static Dialect registerDialectByClass(final Class<? extends Dialect> clazz){
+        return registerDialectByClass(clazz,null);
+    }
+    private static Dialect registerDialectByClass(final Class<? extends Dialect> clazz, Dialect dialect) {
 
         final Name nameAnno = (Name) Reflects.getDeclaredAnnotation(clazz, Name.class);
         String name;
@@ -312,46 +327,48 @@ public class DialectRegistry {
             final String simpleClassName = clazz.getSimpleName().toLowerCase();
             name = simpleClassName.replaceAll("dialect", "");
         }
-        final Driver driverAnno = (Driver)  Reflects.getDeclaredAnnotation(clazz, Driver.class);
-        Class<? extends java.sql.Driver> driverClass = null;
-        Constructor<? extends Dialect> driverConstructor = null;
-        if (driverAnno != null) {
-            final String driverClassName = driverAnno.value();
-            if (Strings.isBlank(driverClassName)) {
-                throw new RuntimeException("@Driver is empty in class" + clazz.getClass());
-            }
-            try {
-                driverClass = loadDriverClass(driverClassName);
-                try {
-                    driverConstructor = clazz.getDeclaredConstructor(java.sql.Driver.class);
-                } catch (Throwable ex) {
-                    DialectRegistry.logger.info("Can't find the driver based constructor for dialect {}", (Object) name);
+        if(dialect==null) {
+            final Driver driverAnno = (Driver) Reflects.getDeclaredAnnotation(clazz, Driver.class);
+            Class<? extends java.sql.Driver> driverClass = null;
+            Constructor<? extends Dialect> driverConstructor = null;
+            if (driverAnno != null) {
+                final String driverClassName = driverAnno.value();
+                if (Strings.isBlank(driverClassName)) {
+                    throw new RuntimeException("@Driver is empty in class" + clazz.getClass());
                 }
-            } catch (Throwable ex) {
-                DialectRegistry.logger.info("Can't find driver class {} for {} dialect", (Object) driverClassName, (Object) name);
+                try {
+                    driverClass = loadDriverClass(driverClassName);
+                    try {
+                        driverConstructor = clazz.getDeclaredConstructor(java.sql.Driver.class);
+                    } catch (Throwable ex) {
+                        DialectRegistry.logger.info("Can't find the driver based constructor for dialect {}", (Object) name);
+                    }
+                } catch (Throwable ex) {
+                    DialectRegistry.logger.info("Can't find driver class {} for {} dialect", (Object) driverClassName, (Object) name);
+                }
             }
-        }
-        if (driverClass == null || driverConstructor == null) {
-            try {
-                dialect = (Dialect) clazz.newInstance();
-            } catch (InstantiationException e2) {
-                final String error = "Class " + clazz.getCanonicalName() + "need a <init>() ";
-                throw new ClassFormatError(error);
-            } catch (IllegalAccessException e3) {
-                final String error = "Class " + clazz.getCanonicalName() + "need a public <init>() ";
-                throw new ClassFormatError(error);
-            }
-        } else {
-            try {
-                dialect = (AbstractDialect) driverConstructor.newInstance(driverClass);
-            } catch (InstantiationException e2) {
-                final String error = "Class " + clazz.getCanonicalName() + "need a <init>(Driver) ";
-                throw new ClassFormatError(error);
-            } catch (IllegalAccessException e3) {
-                final String error = "Class " + clazz.getCanonicalName() + "need a public <init>(Driver) ";
-                throw new ClassFormatError(error);
-            } catch (InvocationTargetException e) {
-                DialectRegistry.logger.error("Register dialect {} fail: {}", new Object[]{name, e.getMessage(), e});
+            if (driverClass == null || driverConstructor == null) {
+                try {
+                    dialect = (Dialect) clazz.newInstance();
+                } catch (InstantiationException e2) {
+                    final String error = "Class " + clazz.getCanonicalName() + "need a <init>() ";
+                    throw new ClassFormatError(error);
+                } catch (IllegalAccessException e3) {
+                    final String error = "Class " + clazz.getCanonicalName() + "need a public <init>() ";
+                    throw new ClassFormatError(error);
+                }
+            } else {
+                try {
+                    dialect = (AbstractDialect) driverConstructor.newInstance(driverClass);
+                } catch (InstantiationException e2) {
+                    final String error = "Class " + clazz.getCanonicalName() + "need a <init>(Driver) ";
+                    throw new ClassFormatError(error);
+                } catch (IllegalAccessException e3) {
+                    final String error = "Class " + clazz.getCanonicalName() + "need a public <init>(Driver) ";
+                    throw new ClassFormatError(error);
+                } catch (InvocationTargetException e) {
+                    DialectRegistry.logger.error("Register dialect {} fail: {}", new Object[]{name, e.getMessage(), e});
+                }
             }
         }
         DialectRegistry.nameToDialectMap.put(name, dialect);
