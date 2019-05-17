@@ -20,10 +20,10 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + GBase (南大通用)
     + DM (达梦)
     + OSCAR (神州通用)
-    + HighGo (瀚高数据库)
+    + HighGo (瀚高)
     + KingBase (金仓)
     + OpenBase (东软)
-    + SequoiaDB (巨杉数据库)
+    + SequoiaDB (巨杉)
     
     If you want know all RDMBS ranking, you can find them in [DB Engines](https://db-engines.com/en/ranking/relational+dbms).
     
