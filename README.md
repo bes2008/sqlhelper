@@ -13,8 +13,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 ## tools usage
 ### mybatis pagination plugin
 #### Key Features
-1. [supported 90+ databases](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database). you can find them in [DB Engines](https://db-engines.com/en/ranking/relational+dbms):
-,conatins almost all chinese database:
+1. Supported 90+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
     + TiDB (北京平凯星辰科技))
     + MaxCompute (阿里巴巴)
     + K-DB (浪潮)
@@ -25,11 +24,14 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + KingBase (金仓)
     + OpenBase (东软)
     + SequoiaDB (巨杉数据库)
-2. supports multiple databases in one application 
-3. supports auto detect dialect, so the dialect option is optional
-4. **the performance is higher than Mybatis-PageHelper**, because the limit、offset will be setted with PrepareStatement placeholder '?'
-5. supports spring boot 1.x , 2.x
-6. supports mybatis 3.x 
+    
+    If you want know all RDMBS ranking, you can find them in [DB Engines](https://db-engines.com/en/ranking/relational+dbms).
+    
+2. Supports multiple databases in one application 
+3. Supports auto detect dialect, so the dialect option is optional
+4. **The performance is higher than Mybatis-PageHelper**, because the limit、offset will be setted with PrepareStatement placeholder '?'
+5. Supports spring boot 1.x , 2.x
+6. Supports mybatis 3.x 
 
 #### Installation
 
