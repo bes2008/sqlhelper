@@ -32,6 +32,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 4. **The performance is higher than Mybatis-PageHelper**, because the limit、offset will be setted with PrepareStatement placeholder '?'
 5. Supports spring boot 1.x , 2.x
 6. Supports mybatis 3.x 
+7. Supports JDK6+
 
 #### Installation
 
