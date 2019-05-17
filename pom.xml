@@ -6,7 +6,8 @@
 
     <groupId>com.github.fangjinuo</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>1.0</version>
+    <version>1.0-RELEASE</version>
+    <name>sqlhelper</name>
     <modules>
         <module>sqlhelper-dialect</module>
         <module>sqlhelper-mybatis</module>
@@ -16,12 +17,28 @@
     </modules>
     <developers>
         <developer>
-            <id>f1194361820</id>
-            <name>f1194361820</name>
+            <id>fangjinuo</id>
+            <name>jinuo.fang</name>
             <email>fs1194361820@163.com</email>
             <url>http://www.cnblogs.com/f1194361820</url>
         </developer>
     </developers>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype_oss</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype_oss</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
+    <scm>
+        <tag>1.0-RELEASE</tag>
+        <url>https://github.com/fangjinuo/sqlhelper.git</url>
+        <connection>https://github.com/fangjinuo/sqlhelper.git</connection>
+        <developerConnection>https://github.com/fangjinuo/sqlhelper.git</developerConnection>
+    </scm>
     <licenses>
         <license>
             <name>LGPL 3.0</name>
@@ -170,6 +187,11 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -192,6 +214,126 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+
+
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>deploy</id>
+            <properties>
+                <gpg.executable>gpg</gpg.executable>
+                <!--
+                <gpg.passphrase>sqlhelper</gpg.passphrase>
+                -->
+                <gpg.homedir>c:/Users/Administrator/.gnupg</gpg.homedir>
+                <!--
+                <gpg.passphrase>YOUR GPG PASSPHRASE</gpg.passphrase>
+                可以这样配置在pom.xml文件中，也可以在执行mvn 命令时，加上-Dgpg.passphrase=YOUR_GPG_PASSPHRASE
+                -->
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.8.2</version>
+                        <executions>
+                            <execution>
+                                <id>deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>sonatype_oss</serverId>
+                            <nexusUrl>https://oss.sonatype.org</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-scm-plugin</artifactId>
+                        <version>1.8.1</version>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <version>2.5.3</version>
+                        <configuration>
+                            <useReleaseProfile>false</useReleaseProfile>
+                            <pushChanges>false</pushChanges>
+                            <autoVersionSubmodules>true</autoVersionSubmodules>
+                            <useReleaseProfile>false</useReleaseProfile>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-scm-plugin</artifactId>
+                                <version>1.8.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.1.2</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <configuration>
+                            <aggregate>true</aggregate>
+                            <charset>UTF-8</charset>
+                            <encoding>UTF-8</encoding>
+                            <docencoding>UTF-8</docencoding>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
