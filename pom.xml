@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.fjn.helper</groupId>
+    <groupId>com.fjn.helper.sqlhelper</groupId>
     <artifactId>sqlhelper</artifactId>
     <version>1.0</version>
     <modules>
@@ -136,22 +136,22 @@
 
 
             <dependency>
-                <groupId>com.fjn.helper</groupId>
+                <groupId>com.fjn.helper.sqlhelper</groupId>
                 <artifactId>sqlhelper-dialect</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fjn.helper</groupId>
+                <groupId>com.fjn.helper.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fjn.helper</groupId>
+                <groupId>com.fjn.helper.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis-spring-boot-autoconfigure</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fjn.helper</groupId>
+                <groupId>com.fjn.helper.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
