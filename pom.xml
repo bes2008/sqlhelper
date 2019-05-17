@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.fangjinuo.helper.sqlhelper</groupId>
+    <groupId>com.github.fangjinuo</groupId>
     <artifactId>sqlhelper</artifactId>
     <version>1.0</version>
     <modules>
@@ -25,7 +25,7 @@
     <licenses>
         <license>
             <name>LGPL 3.0</name>
-            <url>https://github.com/f1194361820/sqlhelper/blob/master/LICENSE</url>
+            <url>https://github.com/fangjinuo/sqlhelper/blob/master/LICENSE</url>
             <distribution>manual</distribution>
         </license>
     </licenses>
@@ -136,22 +136,22 @@
 
 
             <dependency>
-                <groupId>com.github.fangjinuo.helper.sqlhelper</groupId>
+                <groupId>com.github.fangjinuo</groupId>
                 <artifactId>sqlhelper-dialect</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.helper.sqlhelper</groupId>
+                <groupId>com.github.fangjinuo</groupId>
                 <artifactId>sqlhelper-mybatis</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.helper.sqlhelper</groupId>
+                <groupId>com.github.fangjinuo</groupId>
                 <artifactId>sqlhelper-mybatis-spring-boot-autoconfigure</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.helper.sqlhelper</groupId>
+                <groupId>com.github.fangjinuo</groupId>
                 <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>

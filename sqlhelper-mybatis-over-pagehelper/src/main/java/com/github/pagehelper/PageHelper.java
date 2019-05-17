@@ -24,8 +24,8 @@
 
 package com.github.pagehelper;
 
-import com.fjn.helper.sql.dialect.pagination.PagingRequest;
-import com.fjn.helper.sql.dialect.pagination.PagingRequestContextHolder;
+import com.github.fangjinuo.sqlhelper.dialect.pagination.PagingRequest;
+import com.github.fangjinuo.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.github.pagehelper.util.PageObjectUtil;
 
 import java.util.Properties;
