@@ -30,9 +30,10 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 2. Supports multiple databases in one application 
 3. Supports auto detect dialect, so the dialect option is optional
 4. **The performance is higher than Mybatis-PageHelper**, because the limit、offset will be setted with PrepareStatement placeholder '?'
-5. Supports spring boot 1.x , 2.x
-6. Supports mybatis 3.x 
-7. Supports JDK6+
+5. Supports plugin use Java SPI
+6. Supports spring boot 1.x , 2.x
+7. Supports mybatis 3.x 
+8. Supports JDK6+
 
 #### Installation
 
