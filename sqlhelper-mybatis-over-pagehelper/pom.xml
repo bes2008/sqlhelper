@@ -4,7 +4,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.fjn.helper.sqlhelper</groupId>
+        <groupId>com.github.fangjinuo.helper.sqlhelper</groupId>
         <artifactId>sqlhelper</artifactId>
         <version>1.0</version>
     </parent>
@@ -13,7 +13,7 @@
     <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.fjn.helper.sqlhelper</groupId>
+            <groupId>com.github.fangjinuo.helper.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatis</artifactId>
         </dependency>
     </dependencies>

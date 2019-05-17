@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.fjn.helper.sqlhelper</groupId>
+        <groupId>com.github.fangjinuo.helper.sqlhelper</groupId>
         <artifactId>sqlhelper</artifactId>
         <version>1.0</version>
     </parent>
@@ -17,7 +17,7 @@
             <artifactId>mybatis</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.fjn.helper.sqlhelper</groupId>
+            <groupId>com.github.fangjinuo.helper.sqlhelper</groupId>
             <artifactId>sqlhelper-dialect</artifactId>
         </dependency>
     </dependencies>
