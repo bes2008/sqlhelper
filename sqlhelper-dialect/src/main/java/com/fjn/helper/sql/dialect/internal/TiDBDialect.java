@@ -29,7 +29,7 @@ import com.fjn.helper.sql.dialect.internal.limit.LimitOffsetLimitHandler;
 public class TiDBDialect extends AbstractDialect {
     public TiDBDialect(){
         super();
-        setLimitHandler(new LimitOffsetLimitHandler());
+        setLimitHandler(new LimitOffsetLimitHandler().setSupportLockInModeClause(true));
     }
 
     @Override

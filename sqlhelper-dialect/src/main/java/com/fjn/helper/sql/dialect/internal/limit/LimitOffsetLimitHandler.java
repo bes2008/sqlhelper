@@ -29,7 +29,8 @@ import java.util.Locale;
 public class LimitOffsetLimitHandler extends AbstractLimitHandler{
     // OFFSET $offset ROWS
     private boolean hasOffsetRowsSuffix = false;
-    private boolean isSupportForUpdate;
+    private boolean supportForUpdate;
+    private boolean supportLockInModeClause;
 
     @Override
     public String processSql(String sql, RowSelection rowSelection) {
@@ -42,13 +43,24 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
         sql = sql.trim();
         String forUpdateClause = "";
         boolean isForUpdate = false;
+        String sqlLowercase = sql.toLowerCase(Locale.ROOT);
         if(isSupportForUpdate()) {
-            String sqlLowercase = sql.toLowerCase(Locale.ROOT);
             int forUpdateIndex = sqlLowercase.lastIndexOf("for update");
             if (forUpdateIndex > -1) {
                 forUpdateClause = sql.substring(forUpdateIndex);
                 sql = sql.substring(0, forUpdateIndex - 1);
                 isForUpdate = true;
+            }
+        }
+
+        String lockInClause="";
+        boolean hasLockInClause = false;
+        if(!isForUpdate && isSupportLockInModeClause()){
+            int lockInIndex = sqlLowercase.lastIndexOf("lock in");
+            if (lockInIndex > -1) {
+                lockInClause = sql.substring(lockInIndex);
+                sql = sql.substring(0, lockInIndex - 1);
+                hasLockInClause = true;
             }
         }
 
@@ -71,6 +83,9 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
         if(isForUpdate){
             sql2.append(" " + forUpdateClause);
         }
+        if(hasLockInClause){
+            sql2.append(" " + lockInClause);
+        }
         return sql2.toString();
     }
 
@@ -85,11 +100,20 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
     }
 
     public boolean isSupportForUpdate() {
-        return isSupportForUpdate;
+        return supportForUpdate;
     }
 
     public LimitOffsetLimitHandler setSupportForUpdate(boolean supportForUpdate) {
-        isSupportForUpdate = supportForUpdate;
+        this.supportForUpdate = supportForUpdate;
+        return this;
+    }
+
+    public boolean isSupportLockInModeClause() {
+        return supportLockInModeClause;
+    }
+
+    public LimitOffsetLimitHandler setSupportLockInModeClause(boolean supportLockInModeClause) {
+        this.supportLockInModeClause = supportLockInModeClause;
         return this;
     }
 }
