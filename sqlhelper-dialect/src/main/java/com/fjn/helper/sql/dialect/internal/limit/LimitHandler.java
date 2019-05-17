@@ -23,7 +23,7 @@ import java.sql.SQLException;
 
 
 public abstract class LimitHandler {
-    protected Dialect dialect;
+    private Dialect dialect;
 
     public Dialect getDialect() {
         return this.dialect;

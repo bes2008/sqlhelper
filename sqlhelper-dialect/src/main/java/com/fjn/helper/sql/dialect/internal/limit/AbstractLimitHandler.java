@@ -15,7 +15,6 @@
 
 package com.fjn.helper.sql.dialect.internal.limit;
 
-import com.fjn.helper.sql.dialect.Dialect;
 import com.fjn.helper.sql.dialect.RowSelection;
 
 import java.sql.PreparedStatement;
@@ -23,11 +22,6 @@ import java.sql.SQLException;
 
 
 public abstract class AbstractLimitHandler extends LimitHandler {
-    @Override
-    public Dialect getDialect() {
-        return this.dialect;
-    }
-
 
     protected int convertToFirstRowValue(int zeroBasedFirstResult) {
         return zeroBasedFirstResult;
@@ -36,13 +30,13 @@ public abstract class AbstractLimitHandler extends LimitHandler {
     @Override
     public int bindLimitParametersAtStartOfQuery(RowSelection selection, PreparedStatement statement, int index)
             throws SQLException {
-        return this.dialect.isBindLimitParametersFirst() ? bindLimitParameters(selection, statement, index) : 0;
+        return getDialect().isBindLimitParametersFirst() ? bindLimitParameters(selection, statement, index) : 0;
     }
 
     @Override
     public int bindLimitParametersAtEndOfQuery(RowSelection selection, PreparedStatement statement, int index)
             throws SQLException {
-        return !this.dialect.isBindLimitParametersFirst() ? bindLimitParameters(selection, statement, index) : 0;
+        return !getDialect().isBindLimitParametersFirst() ? bindLimitParameters(selection, statement, index) : 0;
     }
 
     @Override
@@ -51,15 +45,15 @@ public abstract class AbstractLimitHandler extends LimitHandler {
     }
 
 
-    protected final int bindLimitParameters(RowSelection selection, PreparedStatement statement, int index)
+    private int bindLimitParameters(RowSelection selection, PreparedStatement statement, int index)
             throws SQLException {
-        if ((!this.dialect.isSupportsVariableLimit()) || (!LimitHelper.hasMaxRows(selection))) {
+        if ((!getDialect().isSupportsVariableLimit()) || (!LimitHelper.hasMaxRows(selection))) {
             return 0;
         }
         int firstRow = convertToFirstRowValue(LimitHelper.getFirstRow(selection));
         int lastRow = getMaxOrLimit(selection);
-        boolean hasFirstRow = (this.dialect.isSupportsLimitOffset()) && ((firstRow > 0) || (this.dialect.isForceLimitUsage()));
-        boolean reverse = this.dialect.isBindLimitParametersInReverseOrder();
+        boolean hasFirstRow = (getDialect().isSupportsLimitOffset()) && ((firstRow > 0) || (getDialect().isForceLimitUsage()));
+        boolean reverse = getDialect().isBindLimitParametersInReverseOrder();
         if (hasFirstRow) {
             statement.setInt(index + (reverse ? 1 : 0), firstRow);
         }
@@ -70,7 +64,7 @@ public abstract class AbstractLimitHandler extends LimitHandler {
 
     protected final int getMaxOrLimit(RowSelection selection) {
         int firstRow = convertToFirstRowValue(LimitHelper.getFirstRow(selection));
-        int lastRow = selection.getLimit().intValue();
-        return this.dialect.isUseMaxForLimit() ? lastRow + firstRow : lastRow;
+        int lastRow = selection.getLimit();
+        return getDialect().isUseMaxForLimit() ? lastRow + firstRow : lastRow;
     }
 }

@@ -70,7 +70,6 @@ public class QueryInterceptor implements Interceptor {
             cacheKey = (CacheKey) args[4];
             boundSql = (BoundSql) args[5];
         }
-        //TODO 自己要进行的各种处理
         //注：下面的方法可以根据自己的逻辑调用多次，在分页插件中，count 和 page 各调用了一次
         return executor.query(ms, parameter, rowBounds, resultHandler, cacheKey, boundSql);
     }

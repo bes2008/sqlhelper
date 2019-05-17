@@ -31,7 +31,7 @@ public class DefaultLimitHandler
 
     @Override
     public String processSql(String sql, RowSelection selection) {
-        boolean useLimitOffset = (this.dialect.isSupportsLimit()) && (this.dialect.isSupportsLimitOffset()) && (LimitHelper.hasFirstRow(selection)) && (LimitHelper.hasMaxRows(selection));
+        boolean useLimitOffset = (getDialect().isSupportsLimit()) && (getDialect().isSupportsLimitOffset()) && (LimitHelper.hasFirstRow(selection)) && (LimitHelper.hasMaxRows(selection));
         return getLimitString(sql, useLimitOffset ?
 
                         LimitHelper.getFirstRow(selection) : 0,

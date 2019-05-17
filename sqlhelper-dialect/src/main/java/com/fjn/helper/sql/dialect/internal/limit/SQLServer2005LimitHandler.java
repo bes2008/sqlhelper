@@ -95,7 +95,7 @@ public class SQLServer2005LimitHandler
 
 
     protected String fillAliasInSelectClause(StringBuilder sb) {
-        String separator = System.lineSeparator();
+        String separator = System.getProperty("line.separator");
         List<String> aliases = new LinkedList();
         int startPos = getSelectColumnsStartPosition(sb);
         int endPos = shallowIndexOfPattern(sb, FROM_PATTERN, startPos);
@@ -155,8 +155,9 @@ public class SQLServer2005LimitHandler
         int startPos = getSelectStartPosition(sb);
 
         String sql = sb.toString().substring(startPos).toLowerCase();
-        if (sql.startsWith("select distinct "))
+        if (sql.startsWith("select distinct ")) {
             return startPos + "select distinct ".length();
+        }
         if (sql.startsWith("select ")) {
             return startPos + "select ".length();
         }

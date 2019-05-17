@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
-
+@SuppressWarnings("unchecked")
 public class CustomMybatisParameterHandler implements ParameterHandler, PrepareParameterSetter {
     private static final Logger logger = LoggerFactory.getLogger(CustomMybatisParameterHandler.class);
     private static final PagingRequestContextHolder<MybatisPaginationRequestContext> PAGING_CONTEXT = (PagingRequestContextHolder<MybatisPaginationRequestContext>) PagingRequestContextHolder.getContext();

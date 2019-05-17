@@ -17,6 +17,10 @@ package com.fjn.helper.sql.dialect.internal;
 
 import com.fjn.helper.sql.dialect.internal.limit.LimitCommaLimitHandler;
 
+/**
+ * @author https://github.com/f1194361820
+ */
+@SuppressWarnings("unchecked")
 public class CubridDialect extends AbstractDialect {
     public CubridDialect() {
         super();

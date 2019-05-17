@@ -33,7 +33,6 @@ import java.util.*;
 public class DialectRegistry {
 
     private static final Logger logger = LoggerFactory.getLogger((Class) DialectRegistry.class);
-    ;
     private static final Map<String, Dialect> nameToDialectMap = new HashMap<String, Dialect>();
     private static final Map<String, String> classNameToNameMap = new HashMap<String, String>();
     // key:DatabaseMetaData.getProduceName() + getDriver();
