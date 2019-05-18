@@ -42,12 +42,12 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 
 <pre>
     &lt;dependency>
-        &lt;groupId>com.fjn.helper&lt;/groupId>
+        &lt;groupId>com.github.fangjinuo&lt;/groupId>
         &lt;artifactId>sqlhelper-mybatis-spring-boot-autoconfigure&lt;/artifactId>
         &lt;version>${sqlhelper.version}&lt;/version>
     &lt;/dependency>
     &lt;dependency>
-        &lt;groupId>com.fjn.helper&lt;/groupId>
+        &lt;groupId>com.github.fangjinuo&lt;/groupId>
         &lt;artifactId>sqlhelper-mybatis-spring-boot-starter&lt;/artifactId>
         &lt;version>${sqlhelper.version}&lt;/version>
     &lt;/dependency>
@@ -59,7 +59,7 @@ also see **sqlhelper-examples** module
 1.import dependencies:
 <pre>
     &lt;dependency>
-        &lt;groupId>com.fjn.helper&lt;/groupId>
+        &lt;groupId>com.github.fangjinuo&lt;/groupId>
         &lt;artifactId>sqlhelper-dialect&lt;/artifactId>
         &lt;version>${sqlhelper.version}&lt;/version>
     &lt;/dependency>
@@ -76,14 +76,14 @@ also see **sqlhelper-examples** module
         ...
         &lt;settings>
             ...
-            &lt;setting name="defaultScriptingLanguage" value="com.fjn.helper.sql.mybatis.plugins.pagination.CustomScriptLanguageDriver" />
+            &lt;setting name="defaultScriptingLanguage" value="com.github.fangjinuo.sqlhelper.mybatis.plugins.pagination.CustomScriptLanguageDriver" />
             ...
         &lt;/settings>
         ...
     &lt;/configuration>
     
     &lt;plugins>
-      &lt;plugin interceptor="com.fjn.helper.sql.mybatis.plugins.pagination.MybatisPaginationPlugin" />
+      &lt;plugin interceptor="com.github.fangjinuo.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin" />
     &lt;/plugins>
 </pre>
 
@@ -110,7 +110,7 @@ you can use it like this:
 just replace mybatis-pagehelper dependencies to sqlhelper-mybatis-over-pagehelper:
 <pre>
     &lt;dependency>
-        &lt;groupId>com.fjn.helper&lt;/groupId>
+        &lt;groupId>com.github.fangjinuo&lt;/groupId>
         &lt;artifactId>sqlhelper-mybatis-over-pagehelper&lt;/artifactId>
         &lt;version>${sqlhelper.version}&lt;/version>
     &lt;/dependency>
