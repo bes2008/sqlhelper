@@ -1,6 +1,6 @@
 
 <a href="https://travis-ci.org/fangjinuo/sqlhelper" target="_blank">![Build Status](https://www.travis-ci.org/fangjinuo/sqlhelper.svg?branch=master)</a>
-
+<a href="https://codebeat.co/projects/github-com-fangjinuo-sqlhelper-master/settings" target="_blank">[![code quality](https://codebeat.co/badges/37791135-62dd-4d5e-800f-35668895324a)](https://codebeat.co/projects/github-com-fangjinuo-sqlhelper-master)</a>
 # sqlhelper
 SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
 
