@@ -56,7 +56,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 
 also see **sqlhelper-examples** module
 
-##### case 2, other appliction : 
+##### case 2, other application (without springboot): 
 1.import dependencies:
 <pre>
     &lt;dependency>
