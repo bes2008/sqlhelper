@@ -1,5 +1,5 @@
 
-[![Build Status](https://www.travis-ci.org/fangjinuo/sqlhelper.svg?branch=master)](https://travis-ci.org/fangjinuo/sqlhelper)
+<a href="https://travis-ci.org/fangjinuo/sqlhelper" target="_blank">![Build Status](https://www.travis-ci.org/fangjinuo/sqlhelper.svg?branch=master)</a>
 
 # sqlhelper
 SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
