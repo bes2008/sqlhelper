@@ -1,0 +1,10 @@
+language: java
+jdk:
+  - oraclejdk8
+  - oraclejdk9
+  - openjdk8
+git:
+  quiet: true
+branches:
+  only:
+    - master
