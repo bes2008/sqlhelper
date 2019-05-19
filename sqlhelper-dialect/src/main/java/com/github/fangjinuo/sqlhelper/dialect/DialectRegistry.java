@@ -154,7 +154,7 @@ public class DialectRegistry {
                 DB2Dialect.class,
                 DerbyDialect.class,
                 DmDialect.class,
-                DoirsDialect.class,
+                DorisDialect.class,
                 DrillDialect.class,
 
                 ElasticsearchDialect.class,

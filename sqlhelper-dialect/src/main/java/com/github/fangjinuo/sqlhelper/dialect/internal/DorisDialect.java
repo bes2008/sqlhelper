@@ -2,8 +2,8 @@ package com.github.fangjinuo.sqlhelper.dialect.internal;
 
 import com.github.fangjinuo.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
-public class DoirsDialect extends AbstractDialect {
-    public DoirsDialect (){
+public class DorisDialect extends AbstractDialect {
+    public DorisDialect(){
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
     }

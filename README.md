@@ -15,7 +15,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 #### Key Features
 1. Supported 90+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
     + TiDB (北京平凯星辰科技))
-    + Doirs (Apache Doirs，百度研发)
+    + Doris (Apache Doris，百度研发)
     + MaxCompute (阿里巴巴)
     + K-DB (浪潮)
     + GBase (南大通用)
