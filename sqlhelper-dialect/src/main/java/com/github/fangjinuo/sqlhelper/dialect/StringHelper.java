@@ -37,12 +37,12 @@ public class StringHelper {
     }
     
     public static String join(final String seperator, final String[] strings) {
-        final int length = /*EL:28*/strings.length;
+        final int length = strings.length;
         if (length == 0) {
             return "";
         }
-        final int firstStringLength = /*EL:35*/(strings[0] != null) ? strings[0].length() : 4;
-        final StringBuilder buf = /*EL:36*/new StringBuilder(length * firstStringLength).append(strings[0]);
+        final int firstStringLength = (strings[0] != null) ? strings[0].length() : 4;
+        final StringBuilder buf = new StringBuilder(length * firstStringLength).append(strings[0]);
         for (int i = 1; i < length; ++i) {
             buf.append(seperator).append(strings[i]);
         }
@@ -50,11 +50,11 @@ public class StringHelper {
     }
     
     public static String joinWithQualifierAndSuffix(final String[] values, final String qualifier, final String suffix, final String deliminator) {
-        final int length = /*EL:49*/values.length;
+        final int length = values.length;
         if (length == 0) {
             return "";
         }
-        final StringBuilder buf = /*EL:53*/new StringBuilder(length * (values[0].length() + suffix.length())).append(/*EL:54*/qualify(qualifier, values[0])).append(suffix);
+        final StringBuilder buf = new StringBuilder(length * (values[0].length() + suffix.length())).append(qualify(qualifier, values[0])).append(suffix);
         for (int i = 1; i < length; ++i) {
             buf.append(deliminator).append(qualify(qualifier, values[i])).append(suffix);
         }
@@ -62,7 +62,7 @@ public class StringHelper {
     }
     
     public static String join(final String seperator, final Iterator objects) {
-        final StringBuilder buf = /*EL:62*/new StringBuilder();
+        final StringBuilder buf = new StringBuilder();
         if (objects.hasNext()) {
             buf.append(objects.next());
         }
@@ -77,7 +77,7 @@ public class StringHelper {
     }
     
     public static String[] add(final String[] x, final String sep, final String[] y) {
-        final String[] result = /*EL:77*/new String[x.length];
+        final String[] result = new String[x.length];
         for (int i = 0; i < x.length; ++i) {
             result[i] = x[i] + sep + y[i];
         }
@@ -85,7 +85,7 @@ public class StringHelper {
     }
     
     public static String repeat(final String string, final int times) {
-        final StringBuilder buf = /*EL:85*/new StringBuilder(string.length() * times);
+        final StringBuilder buf = new StringBuilder(string.length() * times);
         for (int i = 0; i < times; ++i) {
             buf.append(string);
         }
@@ -93,7 +93,7 @@ public class StringHelper {
     }
     
     public static String repeat(final String string, final int times, final String deliminator) {
-        final StringBuilder buf = /*EL:93*/new StringBuilder(string.length() * times + deliminator.length() * (times - 1)).append(string);
+        final StringBuilder buf = new StringBuilder(string.length() * times + deliminator.length() * (times - 1)).append(string);
         for (int i = 1; i < times; ++i) {
             buf.append(deliminator).append(string);
         }
@@ -101,7 +101,7 @@ public class StringHelper {
     }
     
     public static String repeat(final char character, final int times) {
-        final char[] buffer = /*EL:102*/new char[times];
+        final char[] buffer = new char[times];
         Arrays.fill(buffer, character);
         return new String(buffer);
     }
@@ -111,7 +111,7 @@ public class StringHelper {
     }
     
     public static String[] replace(final String[] templates, final String placeholder, final String replacement) {
-        final String[] result = /*EL:113*/new String[templates.length];
+        final String[] result = new String[templates.length];
         for (int i = 0; i < templates.length; ++i) {
             result[i] = replace(templates[i], placeholder, replacement);
         }
@@ -126,19 +126,19 @@ public class StringHelper {
         if (template == null) {
             return null;
         }
-        final int loc = /*EL:133*/template.indexOf(placeholder);
+        final int loc = template.indexOf(placeholder);
         if (loc < 0) {
             return template;
         }
-        final String beforePlaceholder = /*EL:137*/template.substring(0, loc);
-        final String afterPlaceholder = /*EL:138*/template.substring(loc + placeholder.length());
+        final String beforePlaceholder = template.substring(0, loc);
+        final String afterPlaceholder = template.substring(loc + placeholder.length());
         return replace(beforePlaceholder, afterPlaceholder, placeholder, replacement, wholeWords, encloseInParensIfNecessary);
     }
     
     public static String replace(final String beforePlaceholder, final String afterPlaceholder, final String placeholder, final String replacement, final boolean wholeWords, final boolean encloseInParensIfNecessary) {
-        final boolean actuallyReplace = /*EL:158*/!wholeWords || afterPlaceholder.length() == /*EL:160*/0 || /*EL:161*/!Character.isJavaIdentifierPart(afterPlaceholder.charAt(0));
-        final boolean encloseInParens = /*EL:173*/actuallyReplace && encloseInParensIfNecessary && /*EL:176*/getLastNonWhitespaceCharacter(beforePlaceholder) != '(' && /*EL:177*/(getLastNonWhitespaceCharacter(beforePlaceholder) != ',' || getFirstNonWhitespaceCharacter(afterPlaceholder) != ')');
-        final StringBuilder buf = /*EL:179*/new StringBuilder(beforePlaceholder);
+        final boolean actuallyReplace = !wholeWords || afterPlaceholder.length() == 0 || !Character.isJavaIdentifierPart(afterPlaceholder.charAt(0));
+        final boolean encloseInParens = actuallyReplace && encloseInParensIfNecessary && getLastNonWhitespaceCharacter(beforePlaceholder) != '(' && (getLastNonWhitespaceCharacter(beforePlaceholder) != ',' || getFirstNonWhitespaceCharacter(afterPlaceholder) != ')');
+        final StringBuilder buf = new StringBuilder(beforePlaceholder);
         if (encloseInParens) {
             buf.append('(');
         }
@@ -146,14 +146,14 @@ public class StringHelper {
         if (encloseInParens) {
             buf.append(')');
         }
-        buf.append(/*EL:188*/replace(afterPlaceholder, placeholder, replacement, wholeWords, encloseInParensIfNecessary));
+        buf.append(replace(afterPlaceholder, placeholder, replacement, wholeWords, encloseInParensIfNecessary));
         return buf.toString();
     }
     
     public static char getLastNonWhitespaceCharacter(final String str) {
         if (str != null && str.length() > 0) {
             for (int i = str.length() - 1; i >= 0; --i) {
-                final char ch = /*EL:202*/str.charAt(i);
+                final char ch = str.charAt(i);
                 if (!Character.isWhitespace(ch)) {
                     return ch;
                 }
@@ -165,7 +165,7 @@ public class StringHelper {
     public static char getFirstNonWhitespaceCharacter(final String str) {
         if (str != null && str.length() > 0) {
             for (int i = 0; i < str.length(); ++i) {
-                final char ch = /*EL:214*/str.charAt(i);
+                final char ch = str.charAt(i);
                 if (!Character.isWhitespace(ch)) {
                     return ch;
                 }
@@ -178,7 +178,7 @@ public class StringHelper {
         if (template == null) {
             return null;
         }
-        final int loc = /*EL:227*/template.indexOf(placeholder);
+        final int loc = template.indexOf(placeholder);
         if (loc < 0) {
             return template;
         }
@@ -190,9 +190,9 @@ public class StringHelper {
     }
     
     public static String[] split(final String separators, final String list, final boolean include) {
-        final StringTokenizer tokens = /*EL:241*/new StringTokenizer(list, separators, include);
-        final String[] result = /*EL:242*/new String[tokens.countTokens()];
-        int i = /*EL:243*/0;
+        final StringTokenizer tokens = new StringTokenizer(list, separators, include);
+        final String[] result = new String[tokens.countTokens()];
+        int i = 0;
         while (tokens.hasMoreTokens()) {
             result[i++] = tokens.nextToken();
         }
@@ -200,9 +200,9 @@ public class StringHelper {
     }
     
     public static String[] splitTrimmingTokens(final String separators, final String list, final boolean include) {
-        final StringTokenizer tokens = /*EL:251*/new StringTokenizer(list, separators, include);
-        final String[] result = /*EL:252*/new String[tokens.countTokens()];
-        int i = /*EL:253*/0;
+        final StringTokenizer tokens = new StringTokenizer(list, separators, include);
+        final String[] result = new String[tokens.countTokens()];
+        int i = 0;
         while (tokens.hasMoreTokens()) {
             result[i++] = tokens.nextToken().trim();
         }
@@ -210,12 +210,12 @@ public class StringHelper {
     }
     
     public static String unqualify(final String qualifiedName) {
-        final int loc = /*EL:261*/qualifiedName.lastIndexOf(46);
+        final int loc = qualifiedName.lastIndexOf(46);
         return (loc < 0) ? qualifiedName : qualifiedName.substring(loc + 1);
     }
     
     public static String qualifier(final String qualifiedName) {
-        final int loc = /*EL:266*/qualifiedName.lastIndexOf(46);
+        final int loc = qualifiedName.lastIndexOf(46);
         return (loc < 0) ? "" : qualifiedName.substring(0, loc);
     }
     
@@ -223,7 +223,7 @@ public class StringHelper {
         if (name == null) {
             return null;
         }
-        final int breakPoint = /*EL:282*/name.lastIndexOf(46);
+        final int breakPoint = name.lastIndexOf(46);
         if (breakPoint < 0) {
             return name;
         }
@@ -231,8 +231,8 @@ public class StringHelper {
     }
     
     public static String collapseQualifier(final String qualifier, final boolean includeDots) {
-        final StringTokenizer tokenizer = /*EL:300*/new StringTokenizer(qualifier, ".");
-        String collapsed = /*EL:301*/Character.toString(tokenizer.nextToken().charAt(0));
+        final StringTokenizer tokenizer = new StringTokenizer(qualifier, ".");
+        String collapsed = Character.toString(tokenizer.nextToken().charAt(0));
         while (tokenizer.hasMoreTokens()) {
             if (includeDots) {
                 collapsed += '.';
@@ -260,7 +260,7 @@ public class StringHelper {
         if (suffix == null) {
             return columns;
         }
-        final String[] qualified = /*EL:346*/new String[columns.length];
+        final String[] qualified = new String[columns.length];
         for (int i = 0; i < columns.length; ++i) {
             qualified[i] = suffix(columns[i], suffix);
         }
@@ -272,26 +272,26 @@ public class StringHelper {
     }
     
     public static String root(final String qualifiedName) {
-        final int loc = /*EL:358*/qualifiedName.indexOf(".");
+        final int loc = qualifiedName.indexOf(".");
         return (loc < 0) ? qualifiedName : qualifiedName.substring(0, loc);
     }
     
     public static String unroot(final String qualifiedName) {
-        final int loc = /*EL:363*/qualifiedName.indexOf(".");
+        final int loc = qualifiedName.indexOf(".");
         return (loc < 0) ? qualifiedName : qualifiedName.substring(loc + 1, qualifiedName.length());
     }
     
     public static boolean booleanValue(final String tfString) {
-        final String trimmed = /*EL:368*/tfString.trim().toLowerCase(Locale.ROOT);
+        final String trimmed = tfString.trim().toLowerCase(Locale.ROOT);
         return trimmed.equals("true") || trimmed.equals("t");
     }
     
     public static String toString(final Object[] array) {
-        final int len = /*EL:373*/array.length;
+        final int len = array.length;
         if (len == 0) {
             return "";
         }
-        final StringBuilder buf = /*EL:377*/new StringBuilder(len * 12);
+        final StringBuilder buf = new StringBuilder(len * 12);
         for (int i = 0; i < len - 1; ++i) {
             buf.append(array[i]).append(", ");
         }
@@ -300,8 +300,8 @@ public class StringHelper {
     
     
     private static String[] multiply(final String[] strings, final String placeholder, final String[] replacements) {
-        final String[] results = /*EL:393*/new String[replacements.length * strings.length];
-        int n = /*EL:394*/0;
+        final String[] results = new String[replacements.length * strings.length];
+        int n = 0;
         for (final String replacement : replacements) {
             for (final String string : strings) {
                 results[n++] = replaceOnce(string, placeholder, replacement);
@@ -317,11 +317,11 @@ public class StringHelper {
         if (string == null) {
             return 0;
         }
-        int count = /*EL:413*/0;
-        final int stringLength = /*EL:414*/string.length();
-        boolean inQuote = /*EL:415*/false;
+        int count = 0;
+        final int stringLength = string.length();
+        boolean inQuote = false;
         for (int indx = 0; indx < stringLength; ++indx) {
-            final char c = /*EL:417*/string.charAt(indx);
+            final char c = string.charAt(indx);
             if (inQuote) {
                 if ('\'' == c) {
                     inQuote = false;
@@ -367,8 +367,8 @@ public class StringHelper {
         if (prefix == null) {
             return names;
         }
-        final int len = /*EL:462*/names.length;
-        final String[] qualified = /*EL:463*/new String[len];
+        final int len = names.length;
+        final String[] qualified = new String[len];
         for (int i = 0; i < len; ++i) {
             qualified[i] = qualify(prefix, names[i]);
         }
@@ -379,8 +379,8 @@ public class StringHelper {
         if (prefix == null) {
             return names;
         }
-        final int len = /*EL:474*/names.length;
-        final String[] qualified = /*EL:475*/new String[len];
+        final int len = names.length;
+        final String[] qualified = new String[len];
         for (int i = 0; i < len; ++i) {
             if (names[i].indexOf(46) < 0) {
                 qualified[i] = qualify(prefix, names[i]);
@@ -402,7 +402,7 @@ public class StringHelper {
     }
     
     public static int firstIndexOfChar(final String sqlString, final String string, final int startindex) {
-        final BitSet keys = /*EL:497*/new BitSet();
+        final BitSet keys = new BitSet();
         for (int i = 0, size = string.length(); i < size; ++i) {
             keys.set(string.charAt(i));
         }
@@ -425,7 +425,7 @@ public class StringHelper {
     }
     
     private static String generateAliasRoot(final String description) {
-        String result = /*EL:540*/truncate(unqualifyEntityName(description), 10).toLowerCase(Locale.ROOT).replace(/*EL:541*/'/', '_').replace(/*EL:542*/'$', '_');
+        String result = truncate(unqualifyEntityName(description), 10).toLowerCase(Locale.ROOT).replace('/', '_').replace('$', '_');
         result = cleanAlias(result);
         if (Character.isDigit(result.charAt(result.length() - 1))) {
             return result + "x";
@@ -434,7 +434,7 @@ public class StringHelper {
     }
     
     private static String cleanAlias(final String alias) {
-        final char[] chars = /*EL:560*/alias.toCharArray();
+        final char[] chars = alias.toCharArray();
         if (!Character.isLetter(chars[0])) {
             for (int i = 1; i < chars.length; ++i) {
                 if (Character.isLetter(chars[i])) {
@@ -447,7 +447,7 @@ public class StringHelper {
     
     public static String unqualifyEntityName(final String entityName) {
         String result = unqualify(entityName);
-        final int slashPos = /*EL:576*/result.indexOf(47);
+        final int slashPos = result.indexOf(47);
         if (slashPos > 0) {
             result = result.substring(0, slashPos - 1);
         }
@@ -495,8 +495,8 @@ public class StringHelper {
     }
     
     public static <T> String join(final Collection<T> values, final Renderer<T> renderer) {
-        final StringBuilder buffer = /*EL:658*/new StringBuilder();
-        boolean firstPass = /*EL:659*/true;
+        final StringBuilder buffer = new StringBuilder();
+        boolean firstPass = true;
         for (final T value : values) {
             if (firstPass) {
                 firstPass = false;
