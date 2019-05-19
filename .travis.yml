@@ -1,10 +1,22 @@
 language: java
 jdk:
+  - oraclejdk6
+  - oraclejdk7
   - oraclejdk8
   - oraclejdk9
+  - openjdk6
+  - openjdk7
   - openjdk8
 git:
   quiet: true
 branches:
   only:
     - master
+notifications:
+  slack:
+    on_success: always
+  email:
+    recipients:
+      - fs1194361820@163.com
+    on_success: never
+    on_failure: always
