@@ -37,11 +37,11 @@ public class H2Dialect extends AbstractDialect {
                 querySequenceString = "select name from information_schema.sequences";
             }
             if ((majorVersion <= 1) && (minorVersion <= 2) && (buildId < 139)) {
+                // ignore
             }
-
-
             return;
         } catch (Exception localException) {
+            // ignore it
         }
     }
 
