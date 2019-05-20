@@ -6,7 +6,7 @@
 
     <groupId>com.github.fangjinuo</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>1.0.1</version>
+    <version>1.1-RELEASE</version>
     <name>sqlhelper</name>
     <description>
         Supports SQL Tools ( Dialect, Pagination, UrlParser, SqlStatementParser, WallFilter, BatchExecutor for Test) based Java
@@ -38,7 +38,7 @@
         </repository>
     </distributionManagement>
     <scm>
-        <tag>1.0-RELEASE</tag>
+        <tag>1.1-RELEASE</tag>
         <url>https://github.com/fangjinuo/sqlhelper.git</url>
         <connection>https://github.com/fangjinuo/sqlhelper.git</connection>
         <developerConnection>https://github.com/fangjinuo/sqlhelper.git</developerConnection>
