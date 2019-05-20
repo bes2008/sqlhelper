@@ -96,81 +96,54 @@ public class OracleDialect extends AbstractDialect {
         }
     }
 
+    private class Oracle8i9LimitHandler extends AbstractLimitHandler{
+        @Override
+        public String processSql(String sql, RowSelection selection) {
+            boolean hasOffset = LimitHelper.hasFirstRow(selection);
+            return getLimitString(sql, hasOffset);
+        }
+
+        @Override
+        public String getLimitString(String sql, boolean hasOffset) {
+            sql = sql.trim();
+            boolean isForUpdate = false;
+            if (sql.toLowerCase(Locale.ROOT).endsWith(" for update")) {
+                sql = sql.substring(0, sql.length() - 11);
+                isForUpdate = true;
+            }
+
+            StringBuilder pagingSelect = new StringBuilder(sql.length() + 100);
+            if (hasOffset) {
+                pagingSelect.append("select * from ( select row_.*, rownum rownum_ from ( ");
+            } else {
+                pagingSelect.append("select * from ( ");
+            }
+            pagingSelect.append(sql);
+            if (hasOffset) {
+                pagingSelect.append(" ) row_ ) where rownum_ <= ? and rownum_ > ?");
+            } else {
+                pagingSelect.append(" ) where rownum <= ?");
+            }
+
+            if (isForUpdate) {
+                pagingSelect.append(" for update");
+            }
+
+            return pagingSelect.toString();
+        }
+    }
+
     private class Oracle8iDialect extends OracleBaseDialect {
         private Oracle8iDialect() {
             super();
-            setLimitHandler(new AbstractLimitHandler() {
-                @Override
-                public String processSql(String sql, RowSelection selection) {
-                    boolean hasOffset = LimitHelper.hasFirstRow(selection);
-                    return getLimitString(sql, hasOffset);
-                }
-
-                @Override
-                public String getLimitString(String sql, boolean hasOffset) {
-                    sql = sql.trim();
-                    boolean isForUpdate = false;
-                    if (sql.toLowerCase(Locale.ROOT).endsWith(" for update")) {
-                        sql = sql.substring(0, sql.length() - 11);
-                        isForUpdate = true;
-                    }
-
-                    StringBuilder pagingSelect = new StringBuilder(sql.length() + 100);
-                    if (hasOffset) {
-                        pagingSelect.append("select * from ( select row_.*, rownum rownum_ from ( ");
-                    } else {
-                        pagingSelect.append("select * from ( ");
-                    }
-                    pagingSelect.append(sql);
-                    if (hasOffset) {
-                        pagingSelect.append(" ) row_ ) where rownum_ <= ? and rownum_ > ?");
-                    } else {
-                        pagingSelect.append(" ) where rownum <= ?");
-                    }
-
-                    if (isForUpdate) {
-                        pagingSelect.append(" for update");
-                    }
-
-                    return pagingSelect.toString();
-                }
-            });
+            setLimitHandler(new Oracle8i9LimitHandler());
         }
     }
 
     private class Oracle9Dialect extends OracleBaseDialect {
         private Oracle9Dialect() {
             super();
-            setLimitHandler(new DefaultLimitHandler(this) {
-                @Override
-                public String getLimitString(String sql, boolean hasOffset) {
-                    sql = sql.trim();
-                    boolean isForUpdate = false;
-                    if (sql.toLowerCase(Locale.ROOT).endsWith(" for update")) {
-                        sql = sql.substring(0, sql.length() - 11);
-                        isForUpdate = true;
-                    }
-
-                    StringBuilder pagingSelect = new StringBuilder(sql.length() + 100);
-                    if (hasOffset) {
-                        pagingSelect.append("select * from ( select row_.*, rownum rownum_ from ( ");
-                    } else {
-                        pagingSelect.append("select * from ( ");
-                    }
-                    pagingSelect.append(sql);
-                    if (hasOffset) {
-                        pagingSelect.append(" ) row_ where rownum <= ?) where rownum_ > ?");
-                    } else {
-                        pagingSelect.append(" ) where rownum <= ?");
-                    }
-
-                    if (isForUpdate) {
-                        pagingSelect.append(" for update");
-                    }
-
-                    return pagingSelect.toString();
-                }
-            });
+            setLimitHandler(new Oracle8i9LimitHandler());
         }
     }
 
