@@ -15,8 +15,29 @@
 
 package com.github.fangjinuo.sqlhelper.util;
 
+import java.util.Iterator;
+
 public class Strings {
     public static boolean isBlank(String str) {
         return str == null || str.trim().isEmpty();
     }
+
+    public static String truncate(final String string, final int length) {
+        if (string.length() <= length) {
+            return string;
+        }
+        return string.substring(0, length);
+    }
+
+    public static String join(final String seperator, final Iterator objects) {
+        final StringBuilder buf = new StringBuilder();
+        if (objects.hasNext()) {
+            buf.append(objects.next());
+        }
+        while (objects.hasNext()) {
+            buf.append(seperator).append(objects.next());
+        }
+        return buf.toString();
+    }
+
 }

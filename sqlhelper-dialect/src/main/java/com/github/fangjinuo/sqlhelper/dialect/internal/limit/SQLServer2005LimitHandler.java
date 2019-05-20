@@ -15,6 +15,7 @@
 package com.github.fangjinuo.sqlhelper.dialect.internal.limit;
 
 import com.github.fangjinuo.sqlhelper.dialect.RowSelection;
+import com.github.fangjinuo.sqlhelper.util.Strings;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -69,7 +70,7 @@ public class SQLServer2005LimitHandler
 
 
             sb.insert(0, "WITH query AS (").append(") SELECT ").append(selectClause).append(" FROM query ");
-            sb.append("WHERE __hibernate_row_nr__ >= ? AND __hibernate_row_nr__ < ?");
+            sb.append("WHERE __sqlhelper_row_nr__ >= ? AND __sqlhelper_row_nr__ < ?");
         } else {
             addTopExpression(sb);
         }
@@ -91,9 +92,9 @@ public class SQLServer2005LimitHandler
     }
 
 
-    protected String fillAliasInSelectClause(StringBuilder sb) {
+    private String fillAliasInSelectClause(StringBuilder sb) {
         String separator = System.getProperty("line.separator");
-        List<String> aliases = new LinkedList();
+        List<String> aliases = new LinkedList<String>();
         int startPos = getSelectColumnsStartPosition(sb);
         int endPos = shallowIndexOfPattern(sb, FROM_PATTERN, startPos);
 
@@ -144,19 +145,7 @@ public class SQLServer2005LimitHandler
         }
 
 
-        return selectsMultipleColumns ? "*" : join(", ", aliases.iterator());
-    }
-
-
-    public static String join(final String seperator, final Iterator objects) {
-        final StringBuilder buf = new StringBuilder();
-        if (objects.hasNext()) {
-            buf.append(objects.next());
-        }
-        while (objects.hasNext()) {
-            buf.append(seperator).append(objects.next());
-        }
-        return buf.toString();
+        return selectsMultipleColumns ? "*" : Strings.join(", ", aliases.iterator());
     }
 
 
@@ -212,16 +201,6 @@ public class SQLServer2005LimitHandler
         return '\0';
     }
 
-    public static String replaceOnce(final String template, final String placeholder, final String replacement) {
-        if (template == null) {
-            return null;
-        }
-        final int loc = template.indexOf(placeholder);
-        if (loc < 0) {
-            return template;
-        }
-        return template.substring(0, loc) + replacement + template.substring(loc + placeholder.length());
-    }
 
 
     private static String unqualify(final String qualifiedName) {
@@ -230,20 +209,15 @@ public class SQLServer2005LimitHandler
     }
 
 
-    private static String truncate(final String string, final int length) {
-        if (string.length() <= length) {
-            return string;
-        }
-        return string.substring(0, length);
-    }
 
 
-    public static String generateAlias(final String description, final int unique) {
+
+    private static String generateAlias(final String description, final int unique) {
         return generateAliasRoot(description) + Integer.toString(unique) + '_';
     }
 
     private static String generateAliasRoot(final String description) {
-        String result = truncate(unqualifyEntityName(description), 10).toLowerCase(Locale.ROOT).replace('/', '_').replace('$', '_');
+        String result = Strings.truncate(unqualifyEntityName(description), 10).toLowerCase(Locale.ROOT).replace('/', '_').replace('$', '_');
         result = cleanAlias(result);
         if (Character.isDigit(result.charAt(result.length() - 1))) {
             return result + "x";
@@ -317,13 +291,13 @@ public class SQLServer2005LimitHandler
     }
 
 
-    protected void encloseWithOuterQuery(StringBuilder sql) {
+    private void encloseWithOuterQuery(StringBuilder sql) {
         sql.insert(0, "SELECT inner_query.*, ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) as __hibernate_row_nr__ FROM ( ");
         sql.append(" ) inner_query ");
     }
 
 
-    protected void addTopExpression(StringBuilder sql) {
+    private void addTopExpression(StringBuilder sql) {
         int selectPos = shallowIndexOfPattern(sql, SELECT_PATTERN, 0);
         int selectDistinctPos = shallowIndexOfPattern(sql, SELECT_DISTINCT_PATTERN, 0);
         if (selectPos == selectDistinctPos) {
