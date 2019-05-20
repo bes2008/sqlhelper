@@ -18,10 +18,14 @@ package com.github.fangjinuo.sqlhelper.dialect.internal;
 import com.github.fangjinuo.sqlhelper.dialect.DatabaseInfo;
 import com.github.fangjinuo.sqlhelper.dialect.Dialect;
 import com.github.fangjinuo.sqlhelper.dialect.RowSelection;
+import com.github.fangjinuo.sqlhelper.dialect.annotation.Name;
 import com.github.fangjinuo.sqlhelper.dialect.internal.limit.DefaultLimitHandler;
 import com.github.fangjinuo.sqlhelper.dialect.internal.limit.LimitHandler;
+import com.github.fangjinuo.sqlhelper.dialect.internal.urlparser.CommonUrlParser;
 import com.github.fangjinuo.sqlhelper.dialect.internal.urlparser.NoopUrlParser;
 import com.github.fangjinuo.sqlhelper.dialect.internal.urlparser.UrlParser;
+import com.github.fangjinuo.sqlhelper.util.Reflects;
+import com.github.fangjinuo.sqlhelper.util.Strings;
 
 import java.sql.CallableStatement;
 import java.sql.Driver;
@@ -49,6 +53,21 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         this();
     }
 
+    @Override
+    public String getDatabaseId() {
+        final Name nameAnno = (Name) Reflects.getDeclaredAnnotation(this.getClass(), Name.class);
+        String name;
+        if (nameAnno != null) {
+            name = nameAnno.value();
+            if (Strings.isBlank(name)) {
+                throw new RuntimeException("@Name is empty in class" + this.getClass().getClass());
+            }
+        } else {
+            final String simpleClassName = this.getClass().getSimpleName().toLowerCase();
+            name = simpleClassName.replaceAll("dialect", "");
+        }
+        return name;
+    }
 
     public final Properties getDefaultProperties() {
         return this.properties;
@@ -74,8 +93,12 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     }
 
     protected void setUrlParser(UrlParser urlParser) {
+        if(urlParser instanceof CommonUrlParser) {
+            ((CommonUrlParser)urlParser).setDialect(this);
+        }
         getRealDialect().urlParser = urlParser;
     }
+
 
     @Override
     public boolean isSupportsLimit() {

@@ -54,6 +54,10 @@ public class DialectRegistry {
         return registry;
     }
 
+    public Collection<Dialect> getDialects(){
+        return nameToDialectMap.values();
+    }
+
     public Dialect getDialectByClassName(final String className) {
         final String dialectName = (String) DialectRegistry.classNameToNameMap.get(className);
         if (dialectName != null) {

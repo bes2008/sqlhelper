@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class JtdsUrlParser implements UrlParser {
+public class JtdsUrlParser extends CommonUrlParser {
     public static final int DEFAULT_PORT = 1433;
     static final String URL_PREFIX = "jdbc:jtds:sqlserver:";
     private static final Logger logger = LoggerFactory.getLogger(JtdsUrlParser.class);
@@ -39,26 +39,7 @@ public class JtdsUrlParser implements UrlParser {
     }
 
     @Override
-    public DatabaseInfo parse(final String jdbcUrl) {
-        if (jdbcUrl == null) {
-            logger.info("jdbcUrl may not be null");
-            return UnKnownDatabaseInfo.INSTANCE;
-        }
-        if (!jdbcUrl.startsWith("jdbc:jtds:sqlserver:")) {
-            logger.info("jdbcUrl has invalid prefix.(url:{}, prefix:{})", (Object) jdbcUrl, (Object) "jdbc:jtds:sqlserver:");
-            return UnKnownDatabaseInfo.INSTANCE;
-        }
-        DatabaseInfo result = null;
-        try {
-            result = this.parse0(jdbcUrl);
-        } catch (Exception e) {
-            logger.info("JtdsJdbcUrl parse error. url: {}, Caused: {}", new Object[]{jdbcUrl, e.getMessage(), e});
-            result = UnKnownDatabaseInfo.createUnknownDataBase("sqlserver", jdbcUrl);
-        }
-        return result;
-    }
-
-    private DatabaseInfo parse0(final String url) {
+    protected DatabaseInfo parse0(final String url, String urlPrefix) {
         final StringMaker maker = new StringMaker(url);
         maker.lower().after("jdbc:jtds:sqlserver:");
         final StringMaker before = maker.after("//").before(';');

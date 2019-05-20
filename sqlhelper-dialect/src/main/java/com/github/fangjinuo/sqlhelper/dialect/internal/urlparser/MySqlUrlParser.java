@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MySqlUrlParser implements UrlParser {
+public class MySqlUrlParser extends CommonUrlParser {
     private static final String URL_PREFIX = "jdbc:mysql:";
     private static final String LOADBALANCE_URL_PREFIX = "jdbc:mysql:loadbalance:";
     private static final Logger logger = LoggerFactory.getLogger(MySqlUrlParser.class);

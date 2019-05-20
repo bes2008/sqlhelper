@@ -23,6 +23,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public interface Dialect extends UrlParser {
+    String getDatabaseId();
+
     /**
      * Does this dialect support some form of limiting query results
      * via a soI clause?

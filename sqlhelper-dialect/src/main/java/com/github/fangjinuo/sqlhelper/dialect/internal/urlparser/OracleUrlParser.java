@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class OracleUrlParser implements UrlParser {
+public class OracleUrlParser extends CommonUrlParser {
     private static final String URL_PREFIX = "jdbc:oracle:";
     private static final Logger logger = LoggerFactory.getLogger(OracleUrlParser.class);
     private static final List<String> URL_SCHEMAS = Arrays.asList(new String[]{URL_PREFIX});
@@ -42,27 +42,7 @@ public class OracleUrlParser implements UrlParser {
     }
     
     @Override
-    public DatabaseInfo parse(final String jdbcUrl) {
-        if (jdbcUrl == null) {
-            logger.info("jdbcUrl may not be null");
-            return UnKnownDatabaseInfo.INSTANCE;
-        }
-        if (!jdbcUrl.startsWith("jdbc:oracle:")) {
-            logger.info("jdbcUrl has invalid prefix.(url:{}, prefix:{})", (Object)jdbcUrl, (Object)"jdbc:oracle:");
-            return UnKnownDatabaseInfo.INSTANCE;
-        }
-        DatabaseInfo result = null;
-        try {
-            result = this.parse0(jdbcUrl);
-        }
-        catch (Exception e) {
-            logger.info("OracleJdbcUrl parse error. url: {}, Caused: {}", new Object[] { jdbcUrl, e.getMessage(), e });
-            result = UnKnownDatabaseInfo.createUnknownDataBase("oracle", jdbcUrl);
-        }
-        return result;
-    }
-    
-    private DatabaseInfo parse0(final String jdbcUrl) {
+    protected DatabaseInfo parse0(final String jdbcUrl, String urlPrefix) {
         final StringMaker maker = new StringMaker(jdbcUrl);
         maker.after("jdbc:oracle:").after(":");
         final String description = maker.after('@').value().trim();

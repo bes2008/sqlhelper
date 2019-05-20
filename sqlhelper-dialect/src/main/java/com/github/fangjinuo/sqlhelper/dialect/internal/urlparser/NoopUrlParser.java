@@ -20,7 +20,7 @@ import com.github.fangjinuo.sqlhelper.dialect.DatabaseInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoopUrlParser implements UrlParser {
+public class NoopUrlParser extends CommonUrlParser {
     @Override
     public DatabaseInfo parse(String url) {
         return UnKnownDatabaseInfo.INSTANCE;

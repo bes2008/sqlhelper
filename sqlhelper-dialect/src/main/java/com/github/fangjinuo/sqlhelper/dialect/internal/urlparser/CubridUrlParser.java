@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CubridUrlParser implements UrlParser {
+public class CubridUrlParser extends CommonUrlParser {
     public static final String DEFAULT_HOSTNAME = "localhost";
     public static final int DEFAULT_PORT = 30000;
     public static final String DEFAULT_USER = "public";
@@ -50,10 +50,6 @@ public class CubridUrlParser implements UrlParser {
 
     @Override
     public DatabaseInfo parse(final String jdbcUrl) {
-        if (jdbcUrl == null) {
-            logger.info("jdbcUrl may not be null");
-            return UnKnownDatabaseInfo.INSTANCE;
-        }
         final Matcher matcher = CubridUrlParser.PREFIX_PATTERN.matcher(jdbcUrl);
         if (!matcher.find()) {
             logger.info("jdbcUrl has invalid prefix.(url:{}, prefix-pattern:{})", (Object) jdbcUrl, (Object) "jdbc:cubrid(-oracle|-mysql)?:");

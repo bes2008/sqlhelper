@@ -25,8 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class MariaDBUrlParser implements UrlParser
-{
+public class MariaDBUrlParser extends CommonUrlParser{
     private static final String URL_PREFIX = "jdbc:mariadb:";
     private static final String MYSQL_URL_PREFIX = "jdbc:mysql:";
     private static final Logger logger =LoggerFactory.getLogger(MariaDBUrlParser.class) ;
@@ -38,9 +37,7 @@ public class MariaDBUrlParser implements UrlParser
     }
     public MariaDBUrlParser() {
     }
-    
 
-    
     private DatabaseInfo parse0(final String url, final Type type) {
         if (this.isLoadbalanceUrl(url, type)) {
             return this.parseLoadbalancedUrl(url, type);

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PostgreSQLUrlParser implements UrlParser {
+public class PostgreSQLUrlParser extends CommonUrlParser {
     private static final String URL_PREFIX = "jdbc:postgresql:";
     private static final String LOADBALANCE_URL_PREFIX = "jdbc:postgresql:loadbalance:";
     private static final Logger logger = LoggerFactory.getLogger(PostgreSQLUrlParser.class);

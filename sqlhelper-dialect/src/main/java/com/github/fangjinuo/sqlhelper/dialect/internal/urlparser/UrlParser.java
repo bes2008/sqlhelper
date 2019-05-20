@@ -16,6 +16,7 @@
 package com.github.fangjinuo.sqlhelper.dialect.internal.urlparser;
 
 import com.github.fangjinuo.sqlhelper.dialect.DatabaseInfo;
+import com.github.fangjinuo.sqlhelper.dialect.Dialect;
 
 import java.util.List;
 
