@@ -15,13 +15,10 @@
 package com.github.fangjinuo.sqlhelper.dialect.internal.limit;
 
 import com.github.fangjinuo.sqlhelper.dialect.RowSelection;
-import com.github.fangjinuo.sqlhelper.dialect.StringHelper;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -118,7 +115,7 @@ public class SQLServer2005LimitHandler
                 } else {
                     String alias = getAlias(expression);
                     if (alias == null) {
-                        alias = StringHelper.generateAlias("page", unique);
+                        alias = generateAlias("page", unique);
                         sb.insert(nextComa, " as " + alias);
                         int aliasExprLength = (" as " + alias).length();
                         unique++;
@@ -139,7 +136,7 @@ public class SQLServer2005LimitHandler
         } else {
             String alias = getAlias(expression);
             if (alias == null) {
-                alias = StringHelper.generateAlias("page", unique);
+                alias = generateAlias("page", unique);
                 boolean endWithSeparator = sb.substring(endPos - separator.length()).startsWith(separator);
                 sb.insert(endPos - (endWithSeparator ? 2 : 1), " as " + alias);
             }
@@ -147,8 +144,134 @@ public class SQLServer2005LimitHandler
         }
 
 
-        return selectsMultipleColumns ? "*" : StringHelper.join(", ", aliases.iterator());
+        return selectsMultipleColumns ? "*" : join(", ", aliases.iterator());
     }
+
+
+    public static String join(final String seperator, final Iterator objects) {
+        final StringBuilder buf = new StringBuilder();
+        if (objects.hasNext()) {
+            buf.append(objects.next());
+        }
+        while (objects.hasNext()) {
+            buf.append(seperator).append(objects.next());
+        }
+        return buf.toString();
+    }
+
+
+    private static String replace(final String template, final String placeholder, final String replacement, final boolean wholeWords, final boolean encloseInParensIfNecessary) {
+        if (template == null) {
+            return null;
+        }
+        final int loc = template.indexOf(placeholder);
+        if (loc < 0) {
+            return template;
+        }
+        final String beforePlaceholder = template.substring(0, loc);
+        final String afterPlaceholder = template.substring(loc + placeholder.length());
+        return replace(beforePlaceholder, afterPlaceholder, placeholder, replacement, wholeWords, encloseInParensIfNecessary);
+    }
+
+    private static String replace(final String beforePlaceholder, final String afterPlaceholder, final String placeholder, final String replacement, final boolean wholeWords, final boolean encloseInParensIfNecessary) {
+        final boolean actuallyReplace = !wholeWords || afterPlaceholder.length() == 0 || !Character.isJavaIdentifierPart(afterPlaceholder.charAt(0));
+        final boolean encloseInParens = actuallyReplace && encloseInParensIfNecessary && getLastNonWhitespaceCharacter(beforePlaceholder) != '(' && (getLastNonWhitespaceCharacter(beforePlaceholder) != ',' || getFirstNonWhitespaceCharacter(afterPlaceholder) != ')');
+        final StringBuilder buf = new StringBuilder(beforePlaceholder);
+        if (encloseInParens) {
+            buf.append('(');
+        }
+        buf.append(actuallyReplace ? replacement : placeholder);
+        if (encloseInParens) {
+            buf.append(')');
+        }
+        buf.append(replace(afterPlaceholder, placeholder, replacement, wholeWords, encloseInParensIfNecessary));
+        return buf.toString();
+    }
+
+    private static char getLastNonWhitespaceCharacter(final String str) {
+        if (str != null && str.length() > 0) {
+            for (int i = str.length() - 1; i >= 0; --i) {
+                final char ch = str.charAt(i);
+                if (!Character.isWhitespace(ch)) {
+                    return ch;
+                }
+            }
+        }
+        return '\0';
+    }
+
+    private static char getFirstNonWhitespaceCharacter(final String str) {
+        if (str != null && str.length() > 0) {
+            for (int i = 0; i < str.length(); ++i) {
+                final char ch = str.charAt(i);
+                if (!Character.isWhitespace(ch)) {
+                    return ch;
+                }
+            }
+        }
+        return '\0';
+    }
+
+    public static String replaceOnce(final String template, final String placeholder, final String replacement) {
+        if (template == null) {
+            return null;
+        }
+        final int loc = template.indexOf(placeholder);
+        if (loc < 0) {
+            return template;
+        }
+        return template.substring(0, loc) + replacement + template.substring(loc + placeholder.length());
+    }
+
+
+    private static String unqualify(final String qualifiedName) {
+        final int loc = qualifiedName.lastIndexOf(46);
+        return (loc < 0) ? qualifiedName : qualifiedName.substring(loc + 1);
+    }
+
+
+    private static String truncate(final String string, final int length) {
+        if (string.length() <= length) {
+            return string;
+        }
+        return string.substring(0, length);
+    }
+
+
+    public static String generateAlias(final String description, final int unique) {
+        return generateAliasRoot(description) + Integer.toString(unique) + '_';
+    }
+
+    private static String generateAliasRoot(final String description) {
+        String result = truncate(unqualifyEntityName(description), 10).toLowerCase(Locale.ROOT).replace('/', '_').replace('$', '_');
+        result = cleanAlias(result);
+        if (Character.isDigit(result.charAt(result.length() - 1))) {
+            return result + "x";
+        }
+        return result;
+    }
+
+    private static String cleanAlias(final String alias) {
+        final char[] chars = alias.toCharArray();
+        if (!Character.isLetter(chars[0])) {
+            for (int i = 1; i < chars.length; ++i) {
+                if (Character.isLetter(chars[i])) {
+                    return alias.substring(i);
+                }
+            }
+        }
+        return alias;
+    }
+
+    private static String unqualifyEntityName(final String entityName) {
+        String result = unqualify(entityName);
+        final int slashPos = result.indexOf(47);
+        if (slashPos > 0) {
+            result = result.substring(0, slashPos - 1);
+        }
+        return result;
+    }
+
 
 
     private int getSelectColumnsStartPosition(StringBuilder sb) {
