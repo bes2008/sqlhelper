@@ -6,8 +6,8 @@
     "CYCLO": [20, 30, 40, 60],
     "LOC": [50, 70, 100, 150],
     "TOTAL_COMPLEXITY": [100, 180, 280, 400],
-    "TOTAL_LOC": [300, 400, 500, 600],
+    "TOTAL_LOC": [500, 700, 900, 1000],
     "TOO_MANY_IVARS": [10, 15, 20, 30],
-    "TOO_MANY_FUNCTIONS": [50, 60, 70, 80]
+    "TOO_MANY_FUNCTIONS": [60, 70, 90, 100]
   }
 }
