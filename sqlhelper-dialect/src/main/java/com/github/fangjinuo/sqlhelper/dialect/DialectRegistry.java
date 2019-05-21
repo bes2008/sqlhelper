@@ -87,7 +87,7 @@ public class DialectRegistry {
         try {
             return databaseMetaData.getURL();
         }catch (SQLException ex){
-
+            logger.warn(ex.getMessage(), ex);
         }
         return databaseMetaData.getClass().getCanonicalName();
     }
@@ -305,6 +305,7 @@ public class DialectRegistry {
         try {
             clazz = Class.forName(className, true, DialectRegistry.class.getClassLoader());
         } catch (ClassNotFoundException ex) {
+            // NOOP
         }
         if (clazz == null) {
             clazz = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
