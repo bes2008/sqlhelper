@@ -18,6 +18,11 @@
         <module>sqlhelper-examples</module>
         <module>sqlhelper-mybatis-spring-boot</module>
         <module>sqlhelper-mybatis-over-pagehelper</module>
+        <!--
+        <module>sqlhelper-jfinal</module>
+        <module>sqlhelper-hibernate</module>
+        <module>sqlhelper-jooq</module>
+        -->
     </modules>
     <developers>
         <developer>
@@ -61,7 +66,7 @@
 
         <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
 
-        <swagger.version>2.9.2</swagger.version>
+
     </properties>
 
     <dependencyManagement>
@@ -104,15 +109,6 @@
                 <version>${mybatis.springboot.version}</version>
             </dependency>
 
-
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring.boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot</artifactId>
@@ -142,16 +138,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-configuration-processor</artifactId>
                 <version>${spring.boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${swagger.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger.version}</version>
             </dependency>
 
 
@@ -191,11 +177,6 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -218,8 +199,6 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-
-
         </plugins>
     </build>
 
@@ -234,6 +213,15 @@
                 可以这样配置在pom.xml文件中，也可以在执行mvn 命令时，加上-Dgpg.passphrase=YOUR_GPG_PASSPHRASE
                 -->
             </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                </dependency>
+            </dependencies>
+
             <build>
                 <plugins>
                     <plugin>

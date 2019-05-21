@@ -17,6 +17,8 @@
         <module>sqlhelper-mybatis-spring-boot-starter</module>
     </modules>
 
+    <dependencies>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
