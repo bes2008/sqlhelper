@@ -1,7 +1,14 @@
+[![License](https://img.shields.io/badge/license-LGPL3.0-green.svg)](https://github.com/fangjinuo/sqlhelper/blob/master/LICENSE)
 
-<a href="https://travis-ci.org/fangjinuo/sqlhelper" target="_blank">![Build Status](https://www.travis-ci.org/fangjinuo/sqlhelper.svg?branch=master)</a>
-<a href="https://codebeat.co/projects/github-com-fangjinuo-sqlhelper-master/settings" target="_blank">[![code quality](https://codebeat.co/badges/37791135-62dd-4d5e-800f-35668895324a)](https://codebeat.co/projects/github-com-fangjinuo-sqlhelper-master)</a>
+[![Build Status](https://www.travis-ci.org/fangjinuo/sqlhelper.svg?branch=master)](https://travis-ci.org/fangjinuo/sqlhelper)
+[![code quality](https://codebeat.co/badges/37791135-62dd-4d5e-800f-35668895324a)](https://codebeat.co/projects/github-com-fangjinuo-sqlhelper-master)
 [![CodeFactor](https://www.codefactor.io/repository/github/fangjinuo/sqlhelper/badge/master)](https://www.codefactor.io/repository/github/fangjinuo/sqlhelper/overview/master)
+
+[![JDK](https://img.shields.io/badge/JDK-1.6+-green.svg)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
+[![MyBatis](https://img.shields.io/badge/MyBatis-3.x-green.svg)](http://www.mybatis.org/mybatis-3/index.html)
+[![SpringBoot](https://img.shields.io/badge/SpringBoot-1.x-green.svg)](https://spring.io/projects/spring-boot/)
+[![SpringBoot](https://img.shields.io/badge/SpringBoot-2.x-green.svg)](https://spring.io/projects/spring-boot/)
+
 # sqlhelper
 SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
 
