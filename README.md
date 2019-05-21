@@ -47,12 +47,12 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 
 <pre>
     &lt;dependency>
-        &lt;groupId>com.github.fangjinuo&lt;/groupId>
+        &lt;groupId>com.github.fangjinuo.sqlhelper&lt;/groupId>
         &lt;artifactId>sqlhelper-mybatis-spring-boot-autoconfigure&lt;/artifactId>
         &lt;version>${sqlhelper.version}&lt;/version>
     &lt;/dependency>
     &lt;dependency>
-        &lt;groupId>com.github.fangjinuo&lt;/groupId>
+        &lt;groupId>com.github.fangjinuo.sqlhelper&lt;/groupId>
         &lt;artifactId>sqlhelper-mybatis-spring-boot-starter&lt;/artifactId>
         &lt;version>${sqlhelper.version}&lt;/version>
     &lt;/dependency>
@@ -64,7 +64,7 @@ also see **sqlhelper-examples** module
 1.import dependencies:
 <pre>
     &lt;dependency>
-        &lt;groupId>com.github.fangjinuo&lt;/groupId>
+        &lt;groupId>com.github.fangjinuo.sqlhelper&lt;/groupId>
         &lt;artifactId>sqlhelper-dialect&lt;/artifactId>
         &lt;version>${sqlhelper.version}&lt;/version>
     &lt;/dependency>
@@ -115,7 +115,7 @@ you can use it like this:
 just replace mybatis-pagehelper dependencies to sqlhelper-mybatis-over-pagehelper:
 <pre>
     &lt;dependency>
-        &lt;groupId>com.github.fangjinuo&lt;/groupId>
+        &lt;groupId>com.github.fangjinuo.sqlhelper&lt;/groupId>
         &lt;artifactId>sqlhelper-mybatis-over-pagehelper&lt;/artifactId>
         &lt;version>${sqlhelper.version}&lt;/version>
     &lt;/dependency>
