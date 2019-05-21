@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.github.fangjinuo</groupId>
+        <groupId>com.github.fangjinuo.sqlhelper</groupId>
         <artifactId>sqlhelper</artifactId>
         <version>1.1.1</version>
     </parent>
@@ -86,15 +86,15 @@
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo</groupId>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatis-spring-boot-autoconfigure</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo</groupId>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo</groupId>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatis</artifactId>
         </dependency>
         <dependency>
@@ -116,8 +116,6 @@
     </dependencies>
     <build>
         <plugins>
-
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
