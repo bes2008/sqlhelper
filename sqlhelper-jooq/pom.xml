@@ -12,5 +12,12 @@
 
     <artifactId>sqlhelper-jooq</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>3.11.11</version>
+        </dependency>
+    </dependencies>
 
 </project>
