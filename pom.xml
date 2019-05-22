@@ -63,7 +63,7 @@
         <mybatis.spring.version>2.0.0</mybatis.spring.version>
         <mybatis.springboot.version>2.0.0</mybatis.springboot.version>
 
-        <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
+        <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
 
 
     </properties>
