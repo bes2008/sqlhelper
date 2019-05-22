@@ -19,11 +19,9 @@
         <module>sqlhelper-examples</module>
         <module>sqlhelper-mybatis-spring-boot</module>
         <module>sqlhelper-mybatis-over-pagehelper</module>
-        <!--
         <module>sqlhelper-jfinal</module>
         <module>sqlhelper-hibernate</module>
         <module>sqlhelper-jooq</module>
-        -->
     </modules>
     <developers>
         <developer>

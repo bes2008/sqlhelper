@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.github.fangjinuo.sqlhelper.examples.mybatis.dao.UserDao">
-    <resultMap id="entity" type="com.github.fangjinuo.sqlhelper.examples.model.User">
+<mapper namespace="com.github.fangjinuo.sqlhelper.examples.common.dao.UserDao">
+    <resultMap id="entity" type="com.github.fangjinuo.sqlhelper.examples.common.model.User">
         <id property="id" column="ID" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result property="name" column="NAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result property="age" column="AGE" javaType="java.lang.Integer" jdbcType="INTEGER"/>
@@ -13,7 +13,7 @@
         AGE
     </sql>
 
-    <insert id="insert" parameterType="com.github.fangjinuo.sqlhelper.examples.model.User">
+    <insert id="insert" parameterType="com.github.fangjinuo.sqlhelper.examples.common.model.User">
         INSERT INTO
         USER (<include refid="all_columns"/>)
         VALUES (
@@ -23,7 +23,7 @@
         )
     </insert>
 
-    <update id="updateById" parameterType="com.github.fangjinuo.sqlhelper.examples.model.User">
+    <update id="updateById" parameterType="com.github.fangjinuo.sqlhelper.examples.common.model.User">
         UPDATE USER
         SET
             NAME = #{name},
@@ -43,7 +43,7 @@
         WHERE ID = #{id}
     </select>
 
-    <select id="selectByLimit" parameterType="com.github.fangjinuo.sqlhelper.examples.model.User" resultMap="entity">
+    <select id="selectByLimit" parameterType="com.github.fangjinuo.sqlhelper.examples.common.model.User" resultMap="entity">
         SELECT
         <include refid="all_columns"/>
         FROM USER

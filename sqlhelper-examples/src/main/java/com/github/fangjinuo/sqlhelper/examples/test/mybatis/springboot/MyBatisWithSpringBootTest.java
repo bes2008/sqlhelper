@@ -12,34 +12,16 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.sqlhelper.examples.model;
+package com.github.fangjinuo.sqlhelper.examples.test.mybatis.springboot;
 
-public class User {
-    private String id;
-    private String name;
-    private int age;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
+@SpringBootApplication(scanBasePackages = {"com.github.fangjinuo.sqlhelper.examples.common"})
+@MapperScan("com.github.fangjinuo.sqlhelper.examples.dao")
+public class MyBatisWithSpringBootTest {
+    public static void main(String[] args) {
+        SpringApplication.run(MyBatisWithSpringBootTest.class, args);
     }
 }

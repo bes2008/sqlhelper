@@ -12,16 +12,17 @@
  * limitations under the License.
  */
 
-package com.github.fangjinuo.sqlhelper.examples.mybatis.spring.boot;
+package com.github.fangjinuo.sqlhelper.examples.common.dao;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.github.fangjinuo.sqlhelper.examples.common.model.User;
+import org.springframework.stereotype.Repository;
 
-@SpringBootApplication(scanBasePackages = {"com.github.fangjinuo.sqlhelper.examples.mybatis"})
-@MapperScan("com.github.fangjinuo.sqlhelper.examples.mybatis.dao")
-public class App {
-    public static void main(String[] args) {
-        SpringApplication.run(App.class, args);
-    }
+import java.util.List;
+@Repository
+public interface UserDao {
+    void insert(User user);
+    void updateById(User user);
+    void deleteById(String id);
+    List<User> selectByLimit(User limit);
+    User selectById(String id);
 }
