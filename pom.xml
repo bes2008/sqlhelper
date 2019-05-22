@@ -57,7 +57,7 @@
     <packaging>pom</packaging>
     <properties>
         <slf4j.version>1.7.25</slf4j.version>
-        <guava.version>20.0</guava.version>
+        <guava.version>23.0</guava.version>
         <gson.version>2.8.5</gson.version>
         <mybatis.version>3.5.0</mybatis.version>
         <mybatis.spring.version>2.0.0</mybatis.spring.version>
