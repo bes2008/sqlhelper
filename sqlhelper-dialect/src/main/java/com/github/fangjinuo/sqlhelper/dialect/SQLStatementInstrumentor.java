@@ -58,7 +58,7 @@ public class SQLStatementInstrumentor {
         return supports;
     }
 
-    private Dialect getCurrentDialect() {
+    public Dialect getCurrentDialect() {
         return SQLStatementInstrumentor.DIALECT_HOLDER.get();
     }
 
@@ -87,6 +87,10 @@ public class SQLStatementInstrumentor {
 
     public String instrumentSql(String sql, final RowSelection selection) {
         final Dialect dialect = this.getCurrentDialect();
+        return instrumentSql(dialect, sql, selection);
+    }
+
+    public String instrumentSql(Dialect dialect, String sql, final RowSelection selection) {
         if (LimitHelper.useLimit(dialect, selection)) {
             sql = dialect.getLimitSql(sql, selection);
         }
@@ -116,6 +120,10 @@ public class SQLStatementInstrumentor {
 
     public PreparedStatement bindParameters(final PreparedStatement statement, final PrepareParameterSetter parameterSetter, final QueryParameters queryParameters, final boolean setOriginalParameters) throws SQLException, SQLDialectException {
         final Dialect dialect = this.getDialect(statement);
+        return bindParameters(dialect,statement,parameterSetter,queryParameters,setOriginalParameters);
+    }
+
+    public PreparedStatement bindParameters(Dialect dialect, final PreparedStatement statement, final PrepareParameterSetter parameterSetter, final QueryParameters queryParameters, final boolean setOriginalParameters) throws SQLException, SQLDialectException {
         final RowSelection selection = queryParameters.getRowSelection();
         final boolean callable = queryParameters.isCallable();
         try {

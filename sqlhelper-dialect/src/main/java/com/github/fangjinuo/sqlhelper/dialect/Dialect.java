@@ -96,4 +96,11 @@ public interface Dialect extends UrlParser {
     void setMaxRows(RowSelection paramRowSelection, PreparedStatement paramPreparedStatement)
             throws SQLException;
 
+    /**
+     * Database identifier: tableName, columnName, schema, keyword.
+     *
+     * @param identifier the name can be one of them: tableName, columnName, schemaName etc..
+     * @return `identifier`
+     */
+    String getQuotedIdentifier(String identifier);
 }

@@ -182,4 +182,30 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     public List<String> getUrlSchemas() {
         return getUrlParser().getUrlSchemas();
     }
+
+    @Override
+    public String getQuotedIdentifier(String identifier) {
+        if(identifier==null){
+            return null;
+        }
+        if(delegate==null){
+            identifier=identifier.trim();
+            while (identifier.charAt(0)==getBeforeQuote()){
+                identifier=identifier.substring(1);
+            }
+            while (identifier.charAt(identifier.length()-1)==getAfterQuote()){
+                identifier=identifier.substring(0,identifier.length()-1);
+            }
+            return getBeforeQuote()+identifier+getAfterQuote();
+        }
+        return delegate.getQuotedIdentifier(identifier);
+    }
+
+    protected char getBeforeQuote(){
+        return '"';
+    }
+
+    protected char getAfterQuote(){
+        return '"';
+    }
 }

@@ -36,4 +36,14 @@ public class CubridDialect extends AbstractDialect {
     public boolean isSupportsLimitOffset() {
         return true;
     }
+
+    @Override
+    protected char getBeforeQuote() {
+        return '[';
+    }
+
+    @Override
+    protected char getAfterQuote() {
+        return ']';
+    }
 }

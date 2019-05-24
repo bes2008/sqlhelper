@@ -88,6 +88,16 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         public boolean isSupportsVariableLimit() {
             return true;
         }
+
+        @Override
+        protected char getBeforeQuote() {
+            return '[';
+        }
+
+        @Override
+        protected char getAfterQuote() {
+            return ']';
+        }
     }
 
     class SQLServer2008Dialect extends AbstractTransactSQLDialect {
@@ -114,10 +124,30 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         public boolean isSupportsVariableLimit() {
             return true;
         }
+
+        @Override
+        protected char getBeforeQuote() {
+            return '[';
+        }
+
+        @Override
+        protected char getAfterQuote() {
+            return ']';
+        }
     }
 
     class SQLServer2012Dialect extends SQLServer2008Dialect{
     }
 
     class SQLServer2017Dialect extends SQLServer2012Dialect{}
+
+    @Override
+    protected char getBeforeQuote() {
+        return '[';
+    }
+
+    @Override
+    protected char getAfterQuote() {
+        return ']';
+    }
 }

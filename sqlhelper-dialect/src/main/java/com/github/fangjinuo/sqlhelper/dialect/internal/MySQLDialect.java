@@ -44,4 +44,14 @@ public class MySQLDialect extends AbstractDialect {
             throws SQLException {
         return col;
     }
+
+    @Override
+    protected char getBeforeQuote() {
+        return '`';
+    }
+
+    @Override
+    protected char getAfterQuote() {
+        return '`';
+    }
 }
