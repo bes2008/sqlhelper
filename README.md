@@ -65,7 +65,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 |  spring boot             |         1.x, 2.x   |         1.x, 2.x  |
 |  JDK                     |         1.6+       |         1.6+      |
 |  jFinal                  |         X          |         √        |
-|  国产数据库               |         X          |    √ （全支持）  |
+|  国产数据库               |         X          | √ （参加上述列表）|
                      
 
 
