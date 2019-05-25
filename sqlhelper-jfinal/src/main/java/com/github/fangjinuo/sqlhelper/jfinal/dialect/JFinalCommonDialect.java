@@ -1,4 +1,4 @@
-package com.github.fangjinuo.jfinal.dialect;
+package com.github.fangjinuo.sqlhelper.jfinal.dialect;
 
 import com.github.fangjinuo.sqlhelper.dialect.RowSelection;
 import com.github.fangjinuo.sqlhelper.dialect.SQLStatementInstrumentor;
@@ -41,7 +41,7 @@ public class JFinalCommonDialect extends Dialect {
     @Override
     public String forPaginate(int pageNumber, int pageSize, StringBuilder findSql) {
         RowSelection rowSelection = new RowSelection();
-        rowSelection.setOffset((pageNumber - 1) * pageSize);
+        rowSelection.setOffset(pageNumber <=0 ? 0: (pageNumber - 1) * pageSize);
         rowSelection.setLimit(pageSize);
         if (instrumentor.beginIfSupportsLimit(databaseId)) {
             pagingRequestHolder.set(rowSelection);
