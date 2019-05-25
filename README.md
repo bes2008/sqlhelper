@@ -73,84 +73,19 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
                      
 
 
-#### Installation
-
-##### case 1, use it with spring boot application: 
- just import dependencies:
-
-<pre>
-    &lt;dependency>
-        &lt;groupId>com.github.fangjinuo.sqlhelper&lt;/groupId>
-        &lt;artifactId>sqlhelper-mybatis-spring-boot-autoconfigure&lt;/artifactId>
-        &lt;version>${sqlhelper.version}&lt;/version>
-    &lt;/dependency>
-    &lt;dependency>
-        &lt;groupId>com.github.fangjinuo.sqlhelper&lt;/groupId>
-        &lt;artifactId>sqlhelper-mybatis-spring-boot-starter&lt;/artifactId>
-        &lt;version>${sqlhelper.version}&lt;/version>
-    &lt;/dependency>
-</pre>  
-
-also see **sqlhelper-examples** module
-
-##### case 2, other application (without springboot): 
-1.import dependencies:
-<pre>
-    &lt;dependency>
-        &lt;groupId>com.github.fangjinuo.sqlhelper&lt;/groupId>
-        &lt;artifactId>sqlhelper-dialect&lt;/artifactId>
-        &lt;version>${sqlhelper.version}&lt;/version>
-    &lt;/dependency>
-</pre>        
-2.config **mybatis-config.xml** ：
-<pre>
-    &lt;configuration>
-        ...
-        &lt;databaseIdProvider type="DB_VENDOR">
-          &lt;property name="SQL Server" value="sqlserver"/>
-          &lt;property name="DB2" value="db2"/>
-          &lt;property name="Oracle" value="oracle" />
-        &lt;/databaseIdProvider>
-        ...
-        &lt;settings>
-            ...
-            &lt;setting name="defaultScriptingLanguage" value="com.github.fangjinuo.sqlhelper.mybatis.plugins.pagination.CustomScriptLanguageDriver" />
-            ...
-        &lt;/settings>
-        ...
-    &lt;/configuration>
-    
-    &lt;plugins>
-      &lt;plugin interceptor="com.github.fangjinuo.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin" />
-    &lt;/plugins>
-</pre>
-
-
-#### How to
-you can use it like this:
-<pre>
-    @GetMapping
-    public PagingResult list(){
-        User queryCondtion = new User();
-        queryCondtion.setAge(10);
-        PagingRequest request = new PagingRequest()
-                .setPageNo(1)
-                .setPageSize(10);
-        PagingRequestContextHolder.getContext().setPagingRequest(request);
-        List<User> users = userDao.selectByLimit(queryCondtion);
-        request.getResult().setItems(users);
-        return request.getResult();
-    }
-</pre>
-
-
-### Migrate from mybatis-pagehelper
-just replace mybatis-pagehelper dependencies to sqlhelper-mybatis-over-pagehelper:
-<pre>
-    &lt;dependency>
-        &lt;groupId>com.github.fangjinuo.sqlhelper&lt;/groupId>
-        &lt;artifactId>sqlhelper-mybatis-over-pagehelper&lt;/artifactId>
-        &lt;version>${sqlhelper.version}&lt;/version>
-    &lt;/dependency>
-</pre>
-use it, your code will not make any changes
+# Pagination
+* [Key Features](https://github.com/f1194361820/sqlhelper/wiki/Pagination_KeyFeatures)
+  + [Use it in MyBatis, jFinal application](https://github.com/f1194361820/sqlhelper/wiki/Pagination_KeyFeatures)
+  + [Higher performance than Mybatis-Pagehelper](https://github.com/f1194361820/sqlhelper/wiki/Pagination_KeyFeatures)
+  + [Zero Configuration](https://github.com/f1194361820/sqlhelper/wiki/Pagination_KeyFeatures)
+  + [Supports 90+ databases](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)
+* [Quick Start](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart)
+  + [in MyBatis application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
+    - [Installation](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
+    - [How To](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
+    - [Migrate from mybatis-pagehelper application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
+  + [in jFinal application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_jFinal)
+    - [Installation](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_jFinal)
+    - [How To](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_jFinal)
+* Advanced Usage
+# UrlParser
