@@ -74,11 +74,6 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 
 
 # Pagination
-* [Key Features](https://github.com/f1194361820/sqlhelper/wiki/Pagination_KeyFeatures)
-  + [Use it in MyBatis, jFinal application](https://github.com/f1194361820/sqlhelper/wiki/Pagination_KeyFeatures)
-  + [Higher performance than Mybatis-Pagehelper](https://github.com/f1194361820/sqlhelper/wiki/Pagination_KeyFeatures)
-  + [Zero Configuration](https://github.com/f1194361820/sqlhelper/wiki/Pagination_KeyFeatures)
-  + [Supports 90+ databases](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)
 * [Quick Start](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart)
   + [in MyBatis application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
     - [Installation](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
