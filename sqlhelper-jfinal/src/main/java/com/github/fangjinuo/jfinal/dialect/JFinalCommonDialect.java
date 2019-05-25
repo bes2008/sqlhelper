@@ -19,6 +19,7 @@ public class JFinalCommonDialect extends Dialect {
     private com.github.fangjinuo.sqlhelper.dialect.Dialect delegate;
     private String databaseId;
     private SQLStatementInstrumentor instrumentor;
+    private ThreadLocal<RowSelection> pagingRequestHolder = new ThreadLocal<RowSelection>();
 
     public JFinalCommonDialect(String databaseId) {
         this.databaseId = databaseId.toLowerCase();
@@ -31,8 +32,6 @@ public class JFinalCommonDialect extends Dialect {
     private String getQuotedIdentifier(String identifier) {
         return delegate == null ? identifier : delegate.getQuotedIdentifier(identifier);
     }
-
-    private ThreadLocal<RowSelection> pagingRequestHolder = new ThreadLocal<RowSelection>();
 
     @Override
     public String forTableBuilderDoBuild(String tableName) {
