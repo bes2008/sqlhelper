@@ -190,11 +190,15 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         }
         if(delegate==null){
             identifier=identifier.trim();
-            while (identifier.charAt(0)==getBeforeQuote()){
-                identifier=identifier.substring(1);
+            if(!Strings.isBlank(""+getBeforeQuote())) {
+                while (identifier.charAt(0) == getBeforeQuote()) {
+                    identifier = identifier.substring(1);
+                }
             }
-            while (identifier.charAt(identifier.length()-1)==getAfterQuote()){
-                identifier=identifier.substring(0,identifier.length()-1);
+            if(!Strings.isBlank(""+getAfterQuote())) {
+                while (identifier.charAt(identifier.length() - 1) == getAfterQuote()) {
+                    identifier = identifier.substring(0, identifier.length() - 1);
+                }
             }
             return getBeforeQuote()+identifier+getAfterQuote();
         }
@@ -202,10 +206,10 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     }
 
     protected char getBeforeQuote(){
-        return '"';
+        return delegate==null?'"':delegate.getBeforeQuote();
     }
 
     protected char getAfterQuote(){
-        return '"';
+        return delegate==null?'"':delegate.getAfterQuote();
     }
 }
