@@ -26,7 +26,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 **sqlhelper-mybatis-spring-boot**: spring boot autoconfigure, starter for sqlhelper in mybatis environment<br/>
 **sqlhelper-mybatis-over-pagehelper**: migrate your application from ***mybatis-pagehelper*** <br/> 
 **sqlhelper-jfinal**: use it in jFinal application environment<br/>
-**sqlhelper-jooq**: use it in JOOQ application environment<br/>
+**sqlhelper-ebean**: use it in Ebean application environment<br/>
 **sqlhelper-examples**: some examples for there tools<br/>
  
 
