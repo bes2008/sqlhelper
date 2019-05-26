@@ -52,7 +52,7 @@ public class LimitCommaLimitHandler extends AbstractLimitHandler {
         StringBuilder sql2 = new StringBuilder(sql.length() + 100);
         sql2.append(sql);
 
-        if (getDialect().isSupportsVariableLimit()) {
+        if (getDialect().isUseLimitInVariableMode()) {
             sql2.append(hasOffset ? " limit ?, ?" : " limit ?");
         } else {
             sql2.append(hasOffset ? (" limit " + offset + ", " + limit) : (" limit " + limit));

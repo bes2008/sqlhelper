@@ -47,7 +47,7 @@ public abstract class AbstractLimitHandler extends LimitHandler {
 
     private int bindLimitParameters(RowSelection selection, PreparedStatement statement, int index)
             throws SQLException {
-        if ((!getDialect().isSupportsVariableLimit()) || (!LimitHelper.hasMaxRows(selection))) {
+        if ((!getDialect().isUseLimitInVariableMode()) || (!LimitHelper.hasMaxRows(selection))) {
             return 0;
         }
         int firstRow = convertToFirstRowValue(LimitHelper.getFirstRow(selection));

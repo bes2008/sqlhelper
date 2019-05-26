@@ -40,6 +40,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     private UrlParser urlParser;
     private LimitHandler limitHandler;
+    private Boolean isUseLimitInVariableMode = null;
 
     private final Properties properties = new Properties();
 
@@ -79,8 +80,8 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     }
 
 
-    protected LimitHandler getLimitHandler() {
-        return this.delegate != null ? this.delegate.getLimitHandler() : this.limitHandler;
+    public LimitHandler getLimitHandler() {
+        return getRealDialect().limitHandler;
     }
 
     protected void setLimitHandler(LimitHandler limitHandler) {
@@ -113,6 +114,26 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     @Override
     public boolean isSupportsVariableLimit() {
         return this.delegate == null ? isSupportsLimit() : this.delegate.isSupportsVariableLimit();
+    }
+
+    @Override
+    public void setUseLimitInVariableMode(boolean variableMode) {
+        AbstractDialect d = getRealDialect();
+        if(d.isSupportsVariableLimit()) {
+            d.isUseLimitInVariableMode = variableMode;
+        }else{
+            d.isUseLimitInVariableMode = false;
+        }
+    }
+
+    @Override
+    public boolean isUseLimitInVariableMode() {
+        AbstractDialect d= getRealDialect();
+        if(d.isUseLimitInVariableMode==null){
+            return d.isSupportsVariableLimit();
+        }else{
+            return d.isUseLimitInVariableMode;
+        }
     }
 
     @Override
@@ -205,11 +226,16 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         return delegate.getQuotedIdentifier(identifier);
     }
 
-    protected char getBeforeQuote(){
+    public char getBeforeQuote(){
         return delegate==null?'"':delegate.getBeforeQuote();
     }
 
-    protected char getAfterQuote(){
+    public char getAfterQuote(){
         return delegate==null?'"':delegate.getAfterQuote();
+    }
+
+    @Override
+    public boolean isSupportsDistinct() {
+        return delegate==null?true:delegate.isSupportsDistinct();
     }
 }

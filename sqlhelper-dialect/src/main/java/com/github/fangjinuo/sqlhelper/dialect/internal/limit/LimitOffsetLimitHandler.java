@@ -67,7 +67,7 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
         StringBuilder sql2 = new StringBuilder(sql.length() + 100);
         sql2.append(sql);
 
-        if(getDialect().isSupportsVariableLimit()) {
+        if(getDialect().isUseLimitInVariableMode()) {
             if (hasOffset) {
                 sql2.append(" limit ? offset ? " + (hasOffsetRowsSuffix ? "rows":""));
             } else {

@@ -31,7 +31,7 @@ public class ReturnResultsLimitHandler extends AbstractLimitHandler {
     @Override
     protected String getLimitString(String sql, int offset, int limit) {
         boolean hasOffset = offset > 0;
-        if (getDialect().isSupportsVariableLimit()) {
+        if (getDialect().isUseLimitInVariableMode()) {
             return sql + " RETURN RESULT " + (hasOffset ? " ? TO ?" : " ?");
         } else {
             return sql + " RETURN RESULT " + (hasOffset ? (offset + " TO ") : "") + limit;

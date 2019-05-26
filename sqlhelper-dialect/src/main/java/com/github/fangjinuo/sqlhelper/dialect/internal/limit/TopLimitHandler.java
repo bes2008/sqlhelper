@@ -67,7 +67,7 @@ public class TopLimitHandler extends AbstractLimitHandler {
             return sql;
         }
         StringBuilder sql2 = new StringBuilder(sql.length() + 50).append(sql);
-        if(getDialect().isSupportsVariableLimit()){
+        if(getDialect().isUseLimitInVariableMode()){
             if(getDialect().isSupportsLimitOffset() && hasOffset){
                 if(!isUseSkipTop()) {
                     sql2.insert(insertionPoint, " TOP ?, ? ");

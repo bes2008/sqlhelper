@@ -81,7 +81,7 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
         StringBuilder sql2 = new StringBuilder(sql.length() + 100);
         sql2.append(sql);
 
-        if(getDialect().isSupportsVariableLimit()) {
+        if(getDialect().isUseLimitInVariableMode()) {
             if (hasOffset) {
                 sql2.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
             } else {

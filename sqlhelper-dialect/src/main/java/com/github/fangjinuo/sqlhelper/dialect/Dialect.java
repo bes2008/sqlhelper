@@ -56,6 +56,16 @@ public interface Dialect extends UrlParser {
      */
     boolean isSupportsVariableLimit();
 
+    /**
+     * Whether set limit or offset with placeholder '?'
+     * @return true if use '?' for limit or offset variable, else false
+     */
+    boolean isUseLimitInVariableMode();
+
+    /**
+     * Whether set limit or offset with placeholder '?'
+     */
+    void setUseLimitInVariableMode(boolean variableMode);
 
     /**
      * Given a limit and an offset, apply the limit clause to the query.
@@ -103,4 +113,10 @@ public interface Dialect extends UrlParser {
      * @return `identifier`
      */
     String getQuotedIdentifier(String identifier);
+
+    char getBeforeQuote();
+
+    char getAfterQuote();
+
+    boolean isSupportsDistinct();
 }

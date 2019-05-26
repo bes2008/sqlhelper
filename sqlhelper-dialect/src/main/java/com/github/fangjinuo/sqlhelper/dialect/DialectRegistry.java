@@ -276,6 +276,26 @@ public class DialectRegistry {
         vendorDatabaseIdMappings.setProperty(keywordsInDriver, databaseId);
     }
 
+    /**
+     *  guess based productName, url, driver etc
+     * @return database id
+     */
+    public static String guessDatabaseId(String productName){
+
+        if(productName==null){
+            return null;
+        }
+        Iterator<Object> iter =(vendorDatabaseIdMappings.keySet().iterator());
+        productName = productName.toLowerCase();
+        while (iter.hasNext()){
+            String databaseId = iter.next().toString().toLowerCase();
+            if(productName.contains(databaseId)){
+                return databaseId;
+            }
+        }
+        return null;
+    }
+
     public void registerDialectByClassName(final String className) throws ClassNotFoundException {
         this.registerDialect(null, className);
     }

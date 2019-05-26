@@ -43,7 +43,7 @@ public class FirstOrderLimitHandler extends AbstractLimitHandler {
         sql2.append(sql);
 
         // you can look FIRST as limit
-        if(getDialect().isSupportsVariableLimit()) {
+        if(getDialect().isUseLimitInVariableMode()) {
             if (hasOffset) {
                 sql2.append(" FIRST ? TO ? ");
             } else {
