@@ -46,12 +46,12 @@ public class MySQLDialect extends AbstractDialect {
     }
 
     @Override
-    protected char getBeforeQuote() {
+    public char getBeforeQuote() {
         return '`';
     }
 
     @Override
-    protected char getAfterQuote() {
+    public char getAfterQuote() {
         return '`';
     }
 }

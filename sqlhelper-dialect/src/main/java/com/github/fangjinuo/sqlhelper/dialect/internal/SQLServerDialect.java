@@ -90,12 +90,12 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         }
 
         @Override
-        protected char getBeforeQuote() {
+        public char getBeforeQuote() {
             return '[';
         }
 
         @Override
-        protected char getAfterQuote() {
+        public char getAfterQuote() {
             return ']';
         }
     }
@@ -126,12 +126,12 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         }
 
         @Override
-        protected char getBeforeQuote() {
+        public char getBeforeQuote() {
             return '[';
         }
 
         @Override
-        protected char getAfterQuote() {
+        public char getAfterQuote() {
             return ']';
         }
     }
@@ -142,12 +142,12 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
     class SQLServer2017Dialect extends SQLServer2012Dialect{}
 
     @Override
-    protected char getBeforeQuote() {
+    public char getBeforeQuote() {
         return '[';
     }
 
     @Override
-    protected char getAfterQuote() {
+    public char getAfterQuote() {
         return ']';
     }
 }
