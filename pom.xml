@@ -21,7 +21,6 @@
         <module>sqlhelper-mybatis-over-pagehelper</module>
         <module>sqlhelper-jfinal</module>
         <module>sqlhelper-hibernate</module>
-        <module>sqlhelper-jooq</module>
         <module>sqlhelper-mango</module>
     </modules>
     <developers>
