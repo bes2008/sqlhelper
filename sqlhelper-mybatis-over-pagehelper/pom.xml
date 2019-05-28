@@ -11,6 +11,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
+
+    <description>
+        supports migrate from mybatis-pagehelper
+    </description>
+
+
     <dependencies>
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>

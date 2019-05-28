@@ -12,6 +12,12 @@
 
     <artifactId>sqlhelper-mybatis-spring-boot</artifactId>
     <packaging>pom</packaging>
+
+    <description>
+        use sqlhelper-mybatis in spring boot application
+    </description>
+
+
     <modules>
         <module>sqlhelper-mybatis-spring-boot-autoconfigure</module>
         <module>sqlhelper-mybatis-spring-boot-starter</module>
