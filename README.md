@@ -4,11 +4,14 @@
 [![code quality](https://codebeat.co/badges/37791135-62dd-4d5e-800f-35668895324a)](https://codebeat.co/projects/github-com-fangjinuo-sqlhelper-master)
 [![CodeFactor](https://www.codefactor.io/repository/github/fangjinuo/sqlhelper/badge/master)](https://www.codefactor.io/repository/github/fangjinuo/sqlhelper/overview/master)
 
-[![JDK](https://img.shields.io/badge/JDK-1.6+-green.svg)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
+
 [![MyBatis](https://img.shields.io/badge/MyBatis-3.x-green.svg)](http://www.mybatis.org/mybatis-3/index.html)
 [![jFinal](https://img.shields.io/badge/jFinal-3.x-green.svg)](https://github.com/jfinal/jfinal)
 [![jFinal](https://img.shields.io/badge/jFinal-4.x-green.svg)](https://github.com/jfinal/jfinal)
 [![EBean](https://img.shields.io/badge/Ebean-11.x-green.svg)](https://ebean.io/docs/query/sqlquery)
+[![Mango](https://img.shields.io/badge/Mango-1.6.x-green.svg)](https://github.com/jfaster/mango)
+
+[![JDK](https://img.shields.io/badge/JDK-1.6+-green.svg)](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-1.x-green.svg)](https://spring.io/projects/spring-boot/)
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-2.x-green.svg)](https://spring.io/projects/spring-boot/)
 
@@ -34,7 +37,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 ## tools usage
 ### pagination plugin
 #### Key Features
-1. Supports MyBatis, JFinal, Ebean
+1. Supports MyBatis, JFinal, EBean, Mango
 2. Supported 90+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
     + TiDB (北京平凯星辰科技))
     + Doris (Apache Doris，百度研发)
@@ -70,18 +73,21 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 |  spring boot             |         1.x, 2.x   |         1.x, 2.x  |
 |  JDK                     |         1.6+       |         1.6+      |
 |  jFinal                  |         X          |         √        |
+|  Mango                   |         X          |         √        |
+|  EBean                   |         X          |         √        | 
 |  国产数据库               |         X          | √ （参见上述列表）|
                      
 
 
 # Pagination
 * [Quick Start](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart)
-  + [in MyBatis application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
+  + [MyBatis application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
     - [Installation](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
     - [How To](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
     - [Migrate from mybatis-pagehelper application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
-  + [in jFinal application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_jFinal)
+  + [jFinal application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_jFinal)
     - [Installation](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_jFinal)
     - [How To](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_jFinal)
+  + [EBean application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_ebean)
 * Advanced Usage
 # UrlParser
