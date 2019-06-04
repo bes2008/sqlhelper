@@ -23,6 +23,7 @@
         <module>sqlhelper-hibernate</module>
         <module>sqlhelper-mango</module>
         <module>sqlhelper-ebean</module>
+        <module>sqlhelper-batchinsert</module>
     </modules>
     <developers>
         <developer>
