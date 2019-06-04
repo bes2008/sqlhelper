@@ -46,6 +46,10 @@ public class PagingRequest<E, R> {
         return true;
     }
 
+    public PagingRequest<E,R> limit(int pageNo, int pageSize){
+        return this.setPageNo(pageNo).setPageSize(pageSize);
+    }
+
     public int getPageNo() {
         return this.pageNo;
     }
