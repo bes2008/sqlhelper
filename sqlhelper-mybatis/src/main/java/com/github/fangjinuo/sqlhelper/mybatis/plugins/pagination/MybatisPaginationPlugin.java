@@ -208,7 +208,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         }
         if(PAGING_CONTEXT.get().getQuerySqlId()!=null){
             if(!PAGING_CONTEXT.get().getQuerySqlId().equals(statement.getId())){
-                // the statement is a nested statment
+                // the statement is a nested statement
                 return false;
             }
         }else{
