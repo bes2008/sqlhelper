@@ -206,6 +206,14 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             invalidatePagingRequest(true);
             return false;
         }
+        if(PAGING_CONTEXT.get().getQuerySqlId()!=null){
+            if(!PAGING_CONTEXT.get().getQuerySqlId().equals(statement.getId())){
+                // the statement is a nested statment
+                return false;
+            }
+        }else{
+            PAGING_CONTEXT.get().setQuerySqlId(statement.getId());
+        }
         final String databaseId = getDatabaseId(statement);
         return instrumentor.beginIfSupportsLimit(databaseId);
     }

@@ -5,7 +5,7 @@ import org.apache.ibatis.mapping.BoundSql;
 
 public class MybatisPaginationRequestContext extends PagingRequestContext {
     private BoundSql countSql;
-    private BoundSql querySql;
+    private String querySqlId;
 
     public BoundSql getCountSql() {
         return countSql;
@@ -15,11 +15,11 @@ public class MybatisPaginationRequestContext extends PagingRequestContext {
         this.countSql = countSql;
     }
 
-    public BoundSql getQuerySql() {
-        return querySql;
+    public String getQuerySqlId() {
+        return querySqlId;
     }
 
-    public void setQuerySql(BoundSql querySql) {
-        this.querySql = querySql;
+    public void setQuerySqlId(String querySqlId) {
+        this.querySqlId = querySqlId;
     }
 }
