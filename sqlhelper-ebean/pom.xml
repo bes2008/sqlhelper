@@ -11,7 +11,7 @@
 
     <artifactId>sqlhelper-ebean</artifactId>
     <description>
-        supports Ebean (an ORM framework)
+        Supports Ebean (an ORM framework)
     </description>
 
     <dependencies>

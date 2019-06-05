@@ -10,7 +10,7 @@
     <name>sqlhelper</name>
     <description>
         JDBC Extensions:
-        Supports SQL Tools ( Dialect, Pagination, UrlParser, SqlStatementParser, WallFilter, BatchExecutor for Test) based Java
+        Supports SQL Tools (ORM, Dialect, Pagination, UrlParser, SqlStatementParser, WallFilter, BatchExecutor for Test) based Java
     </description>
     <url>https://github.com/fangjinuo/sqlhelper</url>
     <modules>

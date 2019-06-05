@@ -11,7 +11,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlhelper-hibernate</artifactId>
-
+    <description>
+        Supports hibernate
+    </description>
     <dependencies>
         <dependency>
             <groupId>org.hibernate</groupId>

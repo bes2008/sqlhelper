@@ -12,7 +12,7 @@
 
     <artifactId>sqlhelper-jfinal</artifactId>
     <description>
-        supports jFinal (an ORM framework)
+        Supports jFinal (an ORM framework)
     </description>
 
     <dependencies>

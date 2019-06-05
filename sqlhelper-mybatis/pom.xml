@@ -12,7 +12,7 @@
     <artifactId>sqlhelper-mybatis</artifactId>
     <packaging>jar</packaging>
     <description>
-        supports mybatis (an ORM framework)
+        Supports mybatis (an ORM framework)
     </description>
 
     <dependencies>

@@ -11,6 +11,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlhelper-batchinsert</artifactId>
+    <description>
+        Supports batch insert for performance test
+    </description>
 
 
 </project>
