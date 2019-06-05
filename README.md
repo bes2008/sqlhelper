@@ -15,7 +15,7 @@
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-1.x-green.svg)](https://spring.io/projects/spring-boot/)
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-2.x-green.svg)](https://spring.io/projects/spring-boot/)
 
-[![maven](https://img.shields.io/badge/maven-v1.1.2-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper)
+[![maven](https://img.shields.io/badge/maven-v1.2.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper)
 [![maven](https://img.shields.io/badge/maven-v1.1.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper)
 [![maven](https://img.shields.io/badge/maven-v1.1.RELEASE-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo)
 [![maven](https://img.shields.io/badge/maven-v1.0.RELEASE-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo)
@@ -91,4 +91,15 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     - [How To](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_jFinal)
   + [EBean application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_ebean)
 * Advanced Usage
+
 # UrlParser
+Parse jdbc url.
+## usage:
+<pre>
+String url = "jdbc:mysql://${localhost}:${port}....";
+DatabaseInfo dbinfo = new JdbcUrlParser().parse(url)
+...
+</pre> 
+
+# Batch Insert Tool
+ If you want to optimize SQL performance, it is essential to create a large amount of sample data. This tool can meet your needs.
