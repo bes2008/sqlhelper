@@ -47,9 +47,16 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
         return requestContext.getCountSql() == this.boundSql;
     }
 
+    private boolean isNestedStatement(){
+        if(PAGING_CONTEXT.get().getQuerySqlId()!=null && PAGING_CONTEXT.get().getQuerySqlId().equals(mappedStatement.getId())){
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public void setParameters(final PreparedStatement ps) {
-        if (PAGING_CONTEXT.getPagingRequest() == null || this.isPagingCountStatement()) {
+        if (PAGING_CONTEXT.getPagingRequest() == null || this.isPagingCountStatement() || isNestedStatement()) {
             this.setOriginalParameters(ps, 1);
             return;
         }
