@@ -24,6 +24,7 @@
         <module>sqlhelper-mango</module>
         <module>sqlhelper-ebean</module>
         <module>sqlhelper-batchinsert</module>
+        <module>sqlhelper-ormlite</module>
     </modules>
     <developers>
         <developer>
