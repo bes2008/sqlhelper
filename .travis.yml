@@ -1,12 +1,34 @@
 language: java
-jdk:
-  - oraclejdk8
-  - openjdk8
+
+
+matrix:
+  include:
+    - jdk: oraclejdk8
+      env: compilejdk=oraclejdk8
+    - jdk: openjdk7
+      env: compilejdk=openjdk7
+    - jdk: openjdk8
+      env: compilejdk=openjdk8
+    - jdk: openjdk10
+      env: compilejdk=openjdk10
+
+install: true  # use it to skip default install dependencies command: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+before_script:
+  - export
+#  - !!str "[[ $compilejdk = 'openjdk6' ]] && export JAVA_HOME='/usr/lib/jvm/java-6-openjdk-amd64'"
+  - export
+  - java -version
+  - mvn --version
+script:
+  - mvn clean package -DskipDocs -s "$TRAVIS_BUILD_DIR/maven_settings_for_travisci.xml"
+
 git:
   quiet: true
 branches:
   only:
     - master
+
 notifications:
   slack:
     on_success: always
