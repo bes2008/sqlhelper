@@ -21,7 +21,7 @@ before_script:
   - java -version
   - mvn --version
 script:
-  - mvn clean package -DskipDocs -s "$TRAVIS_BUILD_DIR/maven_settings_for_travisci.xml"
+  - mvn clean package -DskipTests -DskipDocs -s "$TRAVIS_BUILD_DIR/maven_settings_for_travisci.xml"
 
 git:
   quiet: true
