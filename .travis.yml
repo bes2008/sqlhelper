@@ -12,17 +12,7 @@ matrix:
     - jdk: openjdk10
       env: compilejdk=openjdk10
 
-install: true  # use it to skip default install dependencies command: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
-before_script:
-  - export
-#  - !!str "[[ $compilejdk = 'openjdk6' ]] && export JAVA_HOME='/usr/lib/jvm/java-6-openjdk-amd64'"
-  - export
-  - java -version
-  - mvn --version
-script:
-#  - mvn clean package -DskipTests -DskipDocs -s "$TRAVIS_BUILD_DIR/maven_settings_for_travisci.xml"
-  - mvn clean package -DskipTests -DskipDocs
 git:
   quiet: true
 branches:
