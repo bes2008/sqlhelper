@@ -22,6 +22,7 @@ public class PagingRequest<E, R> {
     private Boolean count = null;
     private String countSqlId;
     private String dialect;
+    // begin 1
     private int pageNo;
     private int pageSize;
     private int fetchSize;

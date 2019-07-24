@@ -156,33 +156,42 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                 final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
                 final PagingResult result = new PagingResult();
                 request.setResult(result);
-                boolean needQuery = true;
-                try {
-                    if (this.needCount(request)) {
-                        final int count = this.executeCount(ms, parameter, rowBounds, resultHandler, executor, boundSql);
-                        if (count == 0) {
-                            needQuery = false;
+                result.setPageSize(request.getPageSize());
+                result.setPageNo(request.getPageNo());
+                List items = new ArrayList();
+                result.setItems(items);
+                if(request.getPageSize() > 0) {
+                    boolean needQuery = true;
+                    try {
+                        if (this.needCount(request)) {
+                            final int count = this.executeCount(ms, parameter, rowBounds, resultHandler, executor, boundSql);
+                            if (count == 0) {
+                                needQuery = false;
+                            }
+                            result.setTotal(count);
+                            int maxPageCount = result.getMaxPageCount();
+                            if(request.getPageNo() > maxPageCount){
+                                request.setPageNo(maxPageCount);
+                            }
                         }
-                        result.setTotal(count);
-                    }
-                } catch (Throwable ex) {
-                    logger.error(ex.getMessage(), ex);
-                } finally {
-                    if (needQuery) {
-                        List items = this.executeQuery(ms, parameter, rowBounds, resultHandler, executor, boundSql, cacheKey);
-                        if (items == null) {
-                            items = new ArrayList();
+                    } catch (Throwable ex) {
+                        logger.error(ex.getMessage(), ex);
+                    } finally {
+                        if (needQuery) {
+                            items = this.executeQuery(ms, parameter, rowBounds, resultHandler, executor, boundSql, cacheKey);
+                            if (items == null) {
+                                items = new ArrayList();
+                            }
                         }
-                        result.setPageSize(request.getPageSize());
-                        result.setPageNo(request.getPageNo());
-                        result.setItems(items);
-                        rs = items;
-                    } else {
-                        rs = new ArrayList();
                     }
                 }
+                rs = items;
             } else {
+                // not a paging request
                 rs = invocation.proceed();
+                if(rs == null){
+                    rs = new ArrayList();
+                }
             }
         } catch (Throwable ex2) {
             logger.error(ex2.getMessage(), ex2);

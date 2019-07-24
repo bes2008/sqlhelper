@@ -60,7 +60,7 @@ public class PagingResult<E> {
         return this;
     }
 
-    public int getPageCount() {
+    public int getMaxPageCount() {
         if ((this.total <= 0) || (this.pageSize <= 0)) {
             return 0;
         }
