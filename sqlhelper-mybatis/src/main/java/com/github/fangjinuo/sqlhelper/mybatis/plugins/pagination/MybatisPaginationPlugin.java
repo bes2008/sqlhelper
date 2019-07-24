@@ -178,10 +178,9 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                         logger.error(ex.getMessage(), ex);
                     } finally {
                         if (needQuery) {
-                            items = this.executeQuery(ms, parameter, rowBounds, resultHandler, executor, boundSql, cacheKey);
-                            if (items == null) {
-                                items = new ArrayList();
-                                result.setItems(items);
+                            List rows = this.executeQuery(ms, parameter, rowBounds, resultHandler, executor, boundSql, cacheKey);
+                            if (rows != null) {
+                                items.addAll(rows);
                             }
                         }
                     }
