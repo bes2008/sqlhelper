@@ -157,7 +157,6 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                 final PagingResult result = new PagingResult();
                 request.setResult(result);
                 result.setPageSize(request.getPageSize());
-                result.setPageNo(request.getPageNo());
                 List items = new ArrayList();
                 result.setItems(items);
                 if(request.getPageSize() > 0) {
@@ -172,6 +171,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                             int maxPageCount = result.getMaxPageCount();
                             if(request.getPageNo() > maxPageCount){
                                 request.setPageNo(maxPageCount);
+                                result.setPageNo(request.getPageNo());
                             }
                         }
                     } catch (Throwable ex) {
@@ -181,10 +181,12 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                             items = this.executeQuery(ms, parameter, rowBounds, resultHandler, executor, boundSql, cacheKey);
                             if (items == null) {
                                 items = new ArrayList();
+                                result.setItems(items);
                             }
                         }
                     }
                 }
+                result.setPageNo(request.getPageNo());
                 rs = items;
             } else {
                 // not a paging request
