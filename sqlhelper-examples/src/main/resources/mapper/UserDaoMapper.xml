@@ -50,6 +50,6 @@
         WHERE 1=1
         <if test="id!=null and id != ''">AND ID = #{id}</if>
         <if test="name!=null and name != ''">AND NAME = #{name}</if>
-        <if test="age!=null and age gte 0">AND AGE = #{age}</if>
+        <if test="age!=null and age gte 0">AND AGE > #{age}</if>
     </select>
 </mapper>

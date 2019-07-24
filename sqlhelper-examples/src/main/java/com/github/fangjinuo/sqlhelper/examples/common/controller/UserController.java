@@ -57,12 +57,12 @@ public class UserController {
     }
 
     @GetMapping
-    public PagingResult list(){
+    public PagingResult list(@RequestParam(name="pageNo", required = false) int pageNo, @RequestParam(name = "pageSize",required = false) int pageSize ){
         User queryCondtion = new User();
         queryCondtion.setAge(10);
         PagingRequest request = new PagingRequest()
-                .setPageNo(1)
-                .setPageSize(10);
+                .setPageNo(pageNo<0 ? 1 : pageNo)
+                .setPageSize(pageSize <0 ? 10 :pageSize);
         PagingRequestContextHolder.getContext().setPagingRequest(request);
         List<User> users = userDao.selectByLimit(queryCondtion);
         request.getResult().setItems(users);
