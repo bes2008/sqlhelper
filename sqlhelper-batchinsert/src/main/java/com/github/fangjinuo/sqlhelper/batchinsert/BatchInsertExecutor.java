@@ -27,7 +27,6 @@ import java.util.concurrent.Future;
 
 public class BatchInsertExecutor {
     private static final Logger logger = LoggerFactory.getLogger(BatchInsertExecutor.class);
-    public static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private ConnectionFactory connFactory = null;
 
@@ -69,6 +68,7 @@ public class BatchInsertExecutor {
     }
 
     public void startup(){
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         logger.info("startup() insert time: {}", df.format(new Date(System.currentTimeMillis())));
         long time =end;
         while ((time = nextTime())<= end){
@@ -97,6 +97,7 @@ public class BatchInsertExecutor {
             if (executor!=null && !executor.isShutdown() && !executor.isTerminated()){
                 executor.shutdownNow();
             }
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             logger.info("shutdown() insert time: {}", df.format(new Date(System.currentTimeMillis())));
         }
     }

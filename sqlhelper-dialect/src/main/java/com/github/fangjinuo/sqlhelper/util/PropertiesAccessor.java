@@ -40,7 +40,7 @@ public class PropertiesAccessor {
     }
 
     public Short getShort(String key) {
-        return getShort(key, new Short("" + 0));
+        return getShort(key, Short.valueOf("" + 0));
     }
 
     public Short getShort(String key, short defaultValue) {

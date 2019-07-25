@@ -96,7 +96,7 @@ public class OracleDialect extends AbstractDialect {
         }
     }
 
-    private class Oracle8i9LimitHandler extends AbstractLimitHandler{
+    private static class Oracle8i9LimitHandler extends AbstractLimitHandler{
         @Override
         public String processSql(String sql, RowSelection selection) {
             boolean hasOffset = LimitHelper.hasFirstRow(selection);

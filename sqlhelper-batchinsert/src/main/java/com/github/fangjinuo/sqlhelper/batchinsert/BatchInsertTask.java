@@ -23,10 +23,10 @@ public abstract class BatchInsertTask implements Callable<BatchInsertResult> {
     protected String start;
     protected ConnectionFactory connFactory;
 
-   public BatchInsertTask(String startTime, long seed){
-       this.start = startTime;
-       this.random = new Random(seed);
-   }
+    public BatchInsertTask(String startTime, long seed) {
+        this.start = startTime;
+        this.random = new Random(seed);
+    }
 
     public void setConnFactory(ConnectionFactory connFactory) {
         this.connFactory = connFactory;
@@ -34,10 +34,11 @@ public abstract class BatchInsertTask implements Callable<BatchInsertResult> {
 
     @Override
     public BatchInsertResult call() throws SQLException {
-       int realInsertRows = batchInsertTable();
+        int realInsertRows = batchInsertTable();
         return new BatchInsertResult(start, getExpectInsertRows(), realInsertRows);
     }
 
     protected abstract int getExpectInsertRows();
+
     protected abstract int batchInsertTable() throws SQLException;
 }

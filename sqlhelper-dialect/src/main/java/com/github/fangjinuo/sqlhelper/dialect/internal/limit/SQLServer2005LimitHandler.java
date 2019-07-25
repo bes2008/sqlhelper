@@ -32,7 +32,7 @@ public class SQLServer2005LimitHandler
     private static final String ORDER_BY = "order by";
     private static final String SELECT_DISTINCT = "select distinct";
     private static final String SELECT_DISTINCT_SPACE = "select distinct ";
-    final String SELECT_SPACE = "select ";
+    private static final String SELECT_SPACE = "select ";
 
     private static final Pattern SELECT_DISTINCT_PATTERN = buildShallowIndexPattern("select distinct ", true);
     private static final Pattern SELECT_PATTERN = buildShallowIndexPattern("select(.*)", true);

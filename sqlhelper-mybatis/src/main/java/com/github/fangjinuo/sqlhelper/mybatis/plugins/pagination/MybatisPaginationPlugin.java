@@ -250,8 +250,8 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         final String pageSql = instrumentor.instrumentSql(boundSql.getSql(), rowSelection);
         final BoundSql pageBoundSql = new BoundSql(ms.getConfiguration(), pageSql, boundSql.getParameterMappings(), parameter);
         final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
-        for (final String key : additionalParameters.keySet()) {
-            pageBoundSql.setAdditionalParameter(key, additionalParameters.get(key));
+        for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {
+            pageBoundSql.setAdditionalParameter(entry.getKey(), entry.getValue());
         }
         return executor.query(ms, parameter, RowBounds.DEFAULT, resultHandler, cacheKey, pageBoundSql);
     }
@@ -277,8 +277,8 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                 final String countSql = instrumentor.countSql(boundSql.getSql());
                 countBoundSql = new BoundSql(countStatement.getConfiguration(), countSql, boundSql.getParameterMappings(), parameter);
                 requestContext.setCountSql(countBoundSql);
-                for (final String key : additionalParameters.keySet()) {
-                    countBoundSql.setAdditionalParameter(key, additionalParameters.get(key));
+                for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {
+                    countBoundSql.setAdditionalParameter(entry.getKey(), entry.getValue());
                 }
                 final Object countResultList2 = executor.query(countStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey2, countBoundSql);
                 count = ((Number) ((List) countResultList2).get(0)).intValue();

@@ -24,8 +24,6 @@ public class UnKnownDatabaseInfo {
     public static final DatabaseInfo INSTANCE;
 
     public static DatabaseInfo createUnknownDataBase(final String url) {
-        final List<String> list = new ArrayList<String>();
-        list.add("unknown");
         return createUnknownDataBase(null, url);
     }
 

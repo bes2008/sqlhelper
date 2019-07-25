@@ -26,6 +26,7 @@ package com.github.pagehelper;
 
 import com.google.gson.GsonBuilder;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -116,7 +117,7 @@ public class PageInfo<T> extends PageSerializable<T> {
                 //计算实际的endRow（最后一页的时候特殊）
                 this.endRow = this.startRow - 1 + this.size;
             }
-        } else if (list instanceof Collection) {
+        } else {
             this.pageNum = 1;
             this.pageSize = list.size();
 
@@ -125,15 +126,15 @@ public class PageInfo<T> extends PageSerializable<T> {
             this.startRow = 0;
             this.endRow = list.size() > 0 ? list.size() - 1 : 0;
         }
-        if (list instanceof Collection) {
-            this.navigatePages = navigatePages;
-            //计算导航页
-            calcNavigatepageNums();
-            //计算前后页，第一页，最后一页
-            calcPage();
-            //判断页面边界
-            judgePageBoudary();
-        }
+
+        this.navigatePages = navigatePages;
+        //计算导航页
+        calcNavigatepageNums();
+        //计算前后页，第一页，最后一页
+        calcPage();
+        //判断页面边界
+        judgePageBoudary();
+
     }
 
     public static <T> PageInfo<T> of(List<T> list) {
@@ -311,11 +312,13 @@ public class PageInfo<T> extends PageSerializable<T> {
     }
 
     public int[] getNavigatepageNums() {
-        return navigatepageNums;
+        return Arrays.copyOf(navigatepageNums, navigatepageNums.length);
     }
 
     public void setNavigatepageNums(int[] navigatepageNums) {
-        this.navigatepageNums = navigatepageNums;
+        if(navigatepageNums!=null) {
+            this.navigatepageNums = navigatepageNums;
+        }
     }
 
     public int getNavigateFirstPage() {

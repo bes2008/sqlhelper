@@ -26,23 +26,6 @@ public class H2Dialect extends AbstractDialect {
     public H2Dialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
-
-        String querySequenceString = "select sequence_name from information_schema.sequences";
-        try {
-            Class h2ConstantsClass = Class.forName("org.h2.engine.Constants");
-            int majorVersion = ((Integer) h2ConstantsClass.getDeclaredField("VERSION_MAJOR").get(null)).intValue();
-            int minorVersion = ((Integer) h2ConstantsClass.getDeclaredField("VERSION_MINOR").get(null)).intValue();
-            int buildId = ((Integer) h2ConstantsClass.getDeclaredField("BUILD_ID").get(null)).intValue();
-            if (buildId < 32) {
-                querySequenceString = "select name from information_schema.sequences";
-            }
-            if ((majorVersion <= 1) && (minorVersion <= 2) && (buildId < 139)) {
-                // ignore
-            }
-            return;
-        } catch (Exception localException) {
-            // ignore it
-        }
     }
 
     @Override

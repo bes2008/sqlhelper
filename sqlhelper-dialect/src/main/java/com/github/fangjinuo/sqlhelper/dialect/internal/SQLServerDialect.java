@@ -33,7 +33,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         return false;
     }
 
-    class SQLServer2000Dialect extends AbstractTransactSQLDialect {
+    private static class SQLServer2000Dialect extends AbstractTransactSQLDialect {
         private SQLServer2000Dialect() {
             setLimitHandler(new TopLimitHandler());
         }
@@ -64,7 +64,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         }
     }
 
-    class SQLServer2005Dialect extends AbstractTransactSQLDialect {
+    private static class SQLServer2005Dialect extends AbstractTransactSQLDialect {
         private SQLServer2005Dialect() {
             setLimitHandler(new SQLServer2005LimitHandler());
         }
