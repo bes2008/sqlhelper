@@ -27,7 +27,7 @@ public interface Dialect extends UrlParser {
 
     /**
      * Does this dialect support some form of limiting query results
-     * via a soI clause?
+     * via a sql clause?
      *
      * @return True if this dialect supports some form of LIMIT.
      */
@@ -35,13 +35,13 @@ public interface Dialect extends UrlParser {
 
     /**
      * Generally if there is no, limit applied to a query we do not apply any limits
-     * . to the soI query. This option forces that the limit be written to the sol query.
-     * s ereturn True to force limit into soL query even if none specified in query, false otherwise
+     *  to the sql query. This option forces that the limit be written to the sql query.
+     * @return True to force limit into soL query even if none specified in query, false otherwise
      */
     boolean isForceLimitUsage();
 
     /**
-     * Does this dialect ' s LIMIT support (if any) additionally
+     * Does this dialect's LIMIT support (if any) additionally
      * support specifying an offset?
      *
      * @return True if the dialect supports an offset within the limit support
@@ -86,7 +86,6 @@ public interface Dialect extends UrlParser {
      *  limit $offset, $limit  ==> reverse = false
      * case 2:
      *  limit $limit offset $offset ==> reverse = true
-     * @return
      */
     boolean isBindLimitParametersInReverseOrder();
 
@@ -114,9 +113,20 @@ public interface Dialect extends UrlParser {
      */
     String getQuotedIdentifier(String identifier);
 
+    /**
+     * Get quote for symbol (e.g. table name, field name)
+     * @return the quote
+     */
     char getBeforeQuote();
 
+    /**
+     * Get quote for symbol (e.g. table name, field name)
+     * @return the quote
+     */
     char getAfterQuote();
 
+    /**
+     * Whether supports distinct keyword
+     */
     boolean isSupportsDistinct();
 }

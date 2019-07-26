@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -36,8 +35,7 @@ import java.util.Properties;
 
 
 public abstract class AbstractDialect<T extends AbstractDialect> implements Dialect {
-    protected AbstractDialect delegate = null;
-
+    private AbstractDialect delegate = null;
     private UrlParser urlParser;
     private LimitHandler limitHandler;
     private Boolean isUseLimitInVariableMode = null;
@@ -94,8 +92,8 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     }
 
     protected void setUrlParser(UrlParser urlParser) {
-        if(urlParser instanceof CommonUrlParser) {
-            ((CommonUrlParser)urlParser).setDialect(this);
+        if (urlParser instanceof CommonUrlParser) {
+            ((CommonUrlParser) urlParser).setDialect(this);
         }
         getRealDialect().urlParser = urlParser;
     }
@@ -119,19 +117,19 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     @Override
     public void setUseLimitInVariableMode(boolean variableMode) {
         AbstractDialect d = getRealDialect();
-        if(d.isSupportsVariableLimit()) {
+        if (d.isSupportsVariableLimit()) {
             d.isUseLimitInVariableMode = variableMode;
-        }else{
+        } else {
             d.isUseLimitInVariableMode = false;
         }
     }
 
     @Override
     public boolean isUseLimitInVariableMode() {
-        AbstractDialect d= getRealDialect();
-        if(d.isUseLimitInVariableMode==null){
+        AbstractDialect d = getRealDialect();
+        if (d.isUseLimitInVariableMode == null) {
             return d.isSupportsVariableLimit();
-        }else{
+        } else {
             return d.isUseLimitInVariableMode;
         }
     }
@@ -206,36 +204,36 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     @Override
     public String getQuotedIdentifier(String identifier) {
-        if(identifier==null){
+        if (identifier == null) {
             return null;
         }
-        if(delegate==null){
-            identifier=identifier.trim();
-            if(!Strings.isBlank(""+getBeforeQuote())) {
+        if (delegate == null) {
+            identifier = identifier.trim();
+            if (!Strings.isBlank("" + getBeforeQuote())) {
                 while (identifier.charAt(0) == getBeforeQuote()) {
                     identifier = identifier.substring(1);
                 }
             }
-            if(!Strings.isBlank(""+getAfterQuote())) {
+            if (!Strings.isBlank("" + getAfterQuote())) {
                 while (identifier.charAt(identifier.length() - 1) == getAfterQuote()) {
                     identifier = identifier.substring(0, identifier.length() - 1);
                 }
             }
-            return getBeforeQuote()+identifier+getAfterQuote();
+            return getBeforeQuote() + identifier + getAfterQuote();
         }
         return delegate.getQuotedIdentifier(identifier);
     }
 
-    public char getBeforeQuote(){
-        return delegate==null?'"':delegate.getBeforeQuote();
+    public char getBeforeQuote() {
+        return delegate == null ? '"' : delegate.getBeforeQuote();
     }
 
-    public char getAfterQuote(){
-        return delegate==null?'"':delegate.getAfterQuote();
+    public char getAfterQuote() {
+        return delegate == null ? '"' : delegate.getAfterQuote();
     }
 
     @Override
     public boolean isSupportsDistinct() {
-        return delegate==null?true:delegate.isSupportsDistinct();
+        return delegate == null ? true : delegate.isSupportsDistinct();
     }
 }
