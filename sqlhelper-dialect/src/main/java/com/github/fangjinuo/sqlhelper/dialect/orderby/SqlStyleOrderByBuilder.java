@@ -21,7 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class SqlSegmentOrderByBuilder implements OrderByBuilder<String> {
+/**
+ * expression1, expression2 desc, expression3 asc;
+ */
+public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
 
     private final List<String> keywordsAfterOrderBy = new ArrayList<String>(Arrays.asList(new String[]{
             "limit", "offset", "PROCEDURE"
