@@ -61,20 +61,22 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
         return orderBy;
     }
 
-    public String getAscSymbol() {
+    public String ascSymbol() {
         return ascSymbol;
     }
 
-    public void setAscSymbol(String ascSymbol) {
+    public SymbolStyleOrderByBuilder ascSymbol(String ascSymbol) {
         this.ascSymbol = ascSymbol;
+        return this;
     }
 
-    public String getDescSymbol() {
+    public String descSymbol() {
         return descSymbol;
     }
 
-    public void setDescSymbol(String descSymbol) {
+    public SymbolStyleOrderByBuilder descSymbol(String descSymbol) {
         this.descSymbol = descSymbol;
+        return this;
     }
 
 }

@@ -30,18 +30,20 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
             "limit", "offset", "PROCEDURE"
     }));
 
-    public void addKeywords(List<String> keywords) {
+    public SqlStyleOrderByBuilder addKeywords(List<String> keywords) {
         if (keywords != null) {
             for (String keyword : keywords) {
                 addKeyword(keyword);
             }
         }
+        return this;
     }
 
-    public void addKeyword(String keyword) {
+    public SqlStyleOrderByBuilder addKeyword(String keyword) {
         if (!Strings.isBlank(keyword)) {
             keywordsAfterOrderBy.add(keyword.toLowerCase());
         }
+        return this;
     }
 
     @Override
