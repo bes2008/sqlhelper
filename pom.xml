@@ -66,7 +66,7 @@
         <mybatis.spring.version>2.0.1</mybatis.spring.version>
         <mybatis.springboot.version>2.0.1</mybatis.springboot.version>
         <junit.version>4.12</junit.version>
-        <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
+        <spring.boot.version>2.1.6.RELEASE</spring.boot.version>
 
 
     </properties>
