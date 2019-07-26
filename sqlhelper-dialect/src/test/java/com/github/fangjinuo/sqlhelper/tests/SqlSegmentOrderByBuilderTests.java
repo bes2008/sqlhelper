@@ -14,13 +14,13 @@
 
 package com.github.fangjinuo.sqlhelper.tests;
 
-import com.github.fangjinuo.sqlhelper.dialect.orderby.StringOrderByBuilder;
+import com.github.fangjinuo.sqlhelper.dialect.orderby.SqlSegmentOrderByBuilder;
 import org.junit.Test;
 
-public class StringOrderByBuilderTests {
+public class SqlSegmentOrderByBuilderTests {
     @Test
     public void test() {
-        StringOrderByBuilder builder = new StringOrderByBuilder();
+        SqlSegmentOrderByBuilder builder = new SqlSegmentOrderByBuilder();
         System.out.println(builder.build(null).toString());
         System.out.println(builder.build(" ").toString());
         System.out.println(builder.build("  \t  ").toString());
