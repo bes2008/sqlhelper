@@ -103,7 +103,9 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     @Override
     public Object plugin(final Object target) {
         if (target instanceof Executor) {
-            logger.debug("wrap mybatis executor {}", target.getClass());
+            if(logger.isDebugEnabled()) {
+                logger.debug("wrap mybatis executor {}", target.getClass());
+            }
             return Plugin.wrap(target, this);
         }
         return target;
@@ -249,6 +251,10 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         return statement.getStatementType() == StatementType.PREPARED && SqlCommandType.SELECT == statement.getSqlCommandType() && isPagingRequest();
     }
 
+    private boolean isPagingRequest() {
+        return PAGING_CONTEXT.getPagingRequest() != null;
+    }
+
     private boolean isNestedQueryInPagingRequest(final MappedStatement statement) {
         if (PAGING_CONTEXT.get().getQuerySqlId() != null) {
             if (!PAGING_CONTEXT.get().getQuerySqlId().equals(statement.getId())) {
@@ -257,10 +263,6 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             }
         }
         return false;
-    }
-
-    private boolean isPagingRequest() {
-        return PAGING_CONTEXT.getPagingRequest() != null;
     }
 
     private boolean beginIfSupportsLimit(final MappedStatement statement) {
