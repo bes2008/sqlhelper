@@ -61,8 +61,7 @@ public class UserController {
         User queryCondtion = new User();
         queryCondtion.setAge(10);
         PagingRequest request = new PagingRequest()
-                .setPageNo(pageNo<0 ? 1 : pageNo)
-                .setPageSize(pageSize <0 ? 10 :pageSize);
+                .limit(pageNo, pageSize);
         PagingRequestContextHolder.getContext().setPagingRequest(request);
         List<User> users = userDao.selectByLimit(queryCondtion);
         request.getResult().setItems(users);
