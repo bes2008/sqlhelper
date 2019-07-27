@@ -16,6 +16,7 @@
 package com.github.fangjinuo.sqlhelper.dialect.pagination;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 public class PagingRequest<E, R> {
@@ -23,7 +24,7 @@ public class PagingRequest<E, R> {
     private String countSqlId;
     private String dialect;
     // begin 1
-    private int pageNo;
+    private int pageNo = 1;
     private int pageSize;
     private int fetchSize;
     private int timeout;
@@ -35,19 +36,30 @@ public class PagingRequest<E, R> {
         return this.countSqlId;
     }
 
-    public PagingRequest<E,R> setCountSqlId(String countSqlId) {
+    public PagingRequest<E, R> setCountSqlId(String countSqlId) {
         this.countSqlId = countSqlId;
         return this;
     }
 
-    public boolean isValidRequest() {
-        if ((this.pageNo < 0) || (this.pageSize < 0)) {
-            return false;
-        }
-        return true;
+    /**
+     * Nothing to do, will not do query, the result is empty list
+     */
+    public boolean isEmptyRequest() {
+        return this.pageSize == 0;
     }
 
-    public PagingRequest<E,R> limit(int pageNo, int pageSize){
+    /**
+     * Get all matched records with out paging limit
+     */
+    public boolean isGetAllRequest() {
+        return this.pageSize < 0;
+    }
+
+    public boolean isValidRequest() {
+        return this.pageSize > 0;
+    }
+
+    public PagingRequest<E, R> limit(int pageNo, int pageSize) {
         return this.setPageNo(pageNo).setPageSize(pageSize);
     }
 
@@ -56,6 +68,9 @@ public class PagingRequest<E, R> {
     }
 
     public PagingRequest<E, R> setPageNo(int pageNo) {
+        if (pageNo <= 0) {
+            return this;
+        }
         this.pageNo = pageNo;
         return this;
     }
@@ -82,7 +97,7 @@ public class PagingRequest<E, R> {
         return this.timeout;
     }
 
-    public PagingRequest<E,R> setTimeout(int timeout) {
+    public PagingRequest<E, R> setTimeout(int timeout) {
         this.timeout = timeout;
         return this;
     }
@@ -91,7 +106,7 @@ public class PagingRequest<E, R> {
         return this.orderBy;
     }
 
-    public PagingRequest<E,R> setOrderBy(String orderBy) {
+    public PagingRequest<E, R> setOrderBy(String orderBy) {
         this.orderBy = orderBy;
         return this;
     }
@@ -107,7 +122,7 @@ public class PagingRequest<E, R> {
         return (E) this.condition;
     }
 
-    public PagingRequest<E,R> setCondition(E condition) {
+    public PagingRequest<E, R> setCondition(E condition) {
         this.condition = condition;
         return this;
     }
@@ -116,7 +131,7 @@ public class PagingRequest<E, R> {
         return this.count;
     }
 
-    public PagingRequest<E,R> setCount(Boolean count) {
+    public PagingRequest<E, R> setCount(Boolean count) {
         this.count = count;
         return this;
     }
@@ -125,7 +140,7 @@ public class PagingRequest<E, R> {
         return this.result;
     }
 
-    public PagingRequest<E,R> setResult(PagingResult result) {
+    public PagingRequest<E, R> setResult(PagingResult result) {
         this.result = result;
         return this;
     }
@@ -134,19 +149,19 @@ public class PagingRequest<E, R> {
         return dialect;
     }
 
-    public PagingRequest<E,R> setDialect(String dialect) {
+    public PagingRequest<E, R> setDialect(String dialect) {
         this.dialect = dialect;
         return this;
     }
 
-    public void clear(){
+    public void clear() {
         clear(true);
     }
 
-    public void clear(boolean clearResult){
-        if(clearResult) {
-            if(result!=null) {
-                result.setItems(Collections.EMPTY_LIST);
+    public void clear(boolean clearResult) {
+        if (clearResult) {
+            if (result != null) {
+                result.setItems(new ArrayList());
             }
         }
         setCondition(null);

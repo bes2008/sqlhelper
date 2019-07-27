@@ -152,14 +152,47 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         }
         Object rs = null;
         try {
-            if (this.beginIfSupportsLimit(ms)) {
+            if (!isPagingRequest(ms)) {
+                // not a paging request
+                rs = invocation.proceed();
+                if (rs == null) {
+                    rs = new ArrayList();
+                }
+                invalidatePagingRequest(true);
+            } else if (isNestedQueryInPagingRequest(ms)) {
+                rs = invocation.proceed();
+                if (rs == null) {
+                    rs = new ArrayList();
+                }
+            } else {
                 final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
                 final PagingResult result = new PagingResult();
                 request.setResult(result);
                 result.setPageSize(request.getPageSize());
                 List items = new ArrayList();
+                int requestPageNo = request.getPageNo();
+                result.setPageNo(request.getPageNo());
                 result.setItems(items);
-                if(request.getPageSize() > 0) {
+
+                if (request.isEmptyRequest()) {
+                    result.setTotal(0);
+                    rs = items;
+                    return rs;
+                }
+                if (request.isGetAllRequest()) {
+                    invalidatePagingRequest(false);
+                    rs = invocation.proceed();
+                    if (rs == null) {
+                        rs = new ArrayList();
+                    }
+                    if (rs instanceof Collection) {
+                        items.addAll((Collection) rs);
+                        result.setTotal(items.size());
+                        return rs;
+                    }
+                }
+
+                if (this.beginIfSupportsLimit(ms)) {
                     boolean needQuery = true;
                     try {
                         if (this.needCount(request)) {
@@ -169,9 +202,9 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                             }
                             result.setTotal(count);
                             int maxPageCount = result.getMaxPageCount();
-                            if(request.getPageNo() > maxPageCount){
+                            if (requestPageNo > maxPageCount) {
                                 request.setPageNo(maxPageCount);
-                                result.setPageNo(request.getPageNo());
+                                result.setPageNo(maxPageCount);
                             }
                         }
                     } catch (Throwable ex) {
@@ -184,15 +217,16 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                             }
                         }
                     }
+                    request.setPageNo(requestPageNo);
+                    result.setPageNo(request.getPageNo());
+                    rs = items;
+                } else {
+                    rs = invocation.proceed();
+                    if (rs == null) {
+                        rs = new ArrayList();
+                    }
                 }
-                result.setPageNo(request.getPageNo());
-                rs = items;
-            } else {
-                // not a paging request
-                rs = invocation.proceed();
-                if(rs == null){
-                    rs = new ArrayList();
-                }
+
             }
         } catch (Throwable ex2) {
             logger.error(ex2.getMessage(), ex2);
@@ -203,25 +237,42 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         return rs;
     }
 
-    private void invalidatePagingRequest(boolean force){
+    private void invalidatePagingRequest(boolean force) {
         PagingRequest request = PAGING_CONTEXT.getPagingRequest();
-        if(request!=null){
+        if (request != null) {
             request.clear(force);
         }
         PAGING_CONTEXT.remove();
     }
 
+    private boolean isPagingRequest(final MappedStatement statement) {
+        return statement.getStatementType() == StatementType.PREPARED && SqlCommandType.SELECT == statement.getSqlCommandType() && isPagingRequest();
+    }
+
+    private boolean isNestedQueryInPagingRequest(final MappedStatement statement) {
+        if (PAGING_CONTEXT.get().getQuerySqlId() != null) {
+            if (!PAGING_CONTEXT.get().getQuerySqlId().equals(statement.getId())) {
+                // the statement is a nested statement
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isPagingRequest() {
+        return PAGING_CONTEXT.getPagingRequest() != null;
+    }
+
     private boolean beginIfSupportsLimit(final MappedStatement statement) {
-        if (statement.getStatementType() != StatementType.PREPARED || SqlCommandType.SELECT != statement.getSqlCommandType() || PAGING_CONTEXT.getPagingRequest() == null || !PAGING_CONTEXT.getPagingRequest().isValidRequest()) {
-            invalidatePagingRequest(true);
+        if (!PAGING_CONTEXT.getPagingRequest().isValidRequest()) {
+            invalidatePagingRequest(false);
             return false;
         }
-        if(PAGING_CONTEXT.get().getQuerySqlId()!=null){
-            if(!PAGING_CONTEXT.get().getQuerySqlId().equals(statement.getId())){
-                // the statement is a nested statement
+        if (PAGING_CONTEXT.get().getQuerySqlId() != null) {
+            if(isNestedQueryInPagingRequest(statement)){
                 return false;
             }
-        }else{
+        } else {
             PAGING_CONTEXT.get().setQuerySqlId(statement.getId());
         }
         final String databaseId = getDatabaseId(statement);
