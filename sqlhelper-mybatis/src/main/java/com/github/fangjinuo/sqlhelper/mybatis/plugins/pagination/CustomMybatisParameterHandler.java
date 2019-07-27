@@ -65,7 +65,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
 
     @Override
     public void setParameters(final PreparedStatement ps) {
-        if (isInvalidPagingRequest() || !isInPagingRequestScope() || this.isPagingCountStatement() || isNestedStatement()) {
+        if ( !isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || isNestedStatement()) {
             this.setOriginalParameters(ps, 1);
             return;
         }
