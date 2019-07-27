@@ -346,10 +346,10 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     }
 
     private boolean needCount(final PagingRequest request) {
-        if (request.getCount() == null) {
+        if (request.needCount() == null) {
             return pluginConfig.isCount();
         }
-        return Boolean.TRUE.compareTo(request.getCount()) == 0;
+        return Boolean.TRUE.compareTo(request.needCount()) == 0;
     }
 
     private String getCountStatementId(final PagingRequest request, final String currentSqlId) {
