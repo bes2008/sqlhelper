@@ -41,7 +41,7 @@ public class Page<E> extends ArrayList<E> implements Closeable {
     /**
      * 页码，从1开始
      */
-    private int pageNum;
+    private int pageNum = 1;
     /**
      * 页面大小
      */
@@ -103,10 +103,10 @@ public class Page<E> extends ArrayList<E> implements Closeable {
         super(0);
         if (pageNum == 1 && pageSize == Integer.MAX_VALUE) {
             pageSizeZero = true;
-            pageSize = 0;
+            pageSize = -1;
         }
-        this.pageNum = pageNum;
-        this.pageSize = pageSize;
+        setPageNum(pageNum);
+        setPageSize(pageSize);
         this.count = count;
         calculateStartAndEndRow();
         setReasonable(reasonable);
@@ -121,7 +121,7 @@ public class Page<E> extends ArrayList<E> implements Closeable {
         super(0);
         if (rowBounds[0] == 0 && rowBounds[1] == Integer.MAX_VALUE) {
             pageSizeZero = true;
-            this.pageSize = 0;
+            this.pageSize = -1;
         } else {
             this.pageSize = rowBounds[1];
             this.pageNum = rowBounds[1] != 0 ? (int) (Math.ceil(((double) rowBounds[0] + rowBounds[1]) / rowBounds[1])) : 0;
@@ -158,8 +158,9 @@ public class Page<E> extends ArrayList<E> implements Closeable {
     }
 
     public Page<E> setPageNum(int pageNum) {
-        //分页合理化，针对不合理的页码自动处理
-        this.pageNum = ((reasonable != null && reasonable) && pageNum <= 0) ? 1 : pageNum;
+        if(pageNum > 0) {
+            this.pageNum = pageNum;
+        }
         return this;
     }
 
@@ -253,8 +254,18 @@ public class Page<E> extends ArrayList<E> implements Closeable {
      * 计算起止行号
      */
     private void calculateStartAndEndRow() {
-        this.startRow = this.pageNum > 0 ? (this.pageNum - 1) * this.pageSize : 0;
-        this.endRow = this.startRow + this.pageSize * (this.pageNum > 0 ? 1 : 0);
+        if(pageSize<0){
+            this.startRow = 0;
+            this.endRow = Integer.MAX_VALUE;
+        }
+        else if (pageSize ==0){
+            this.startRow = -1;
+            this.endRow = -1;
+        }
+        else if (pageSize>0){
+            this.startRow = (pageNum - 1) * pageSize;
+            this.endRow = startRow + pageSize;
+        }
     }
 
     public boolean isCount() {

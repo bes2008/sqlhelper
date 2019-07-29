@@ -41,6 +41,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings({"unchecked","unused"})
 @Intercepts({@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}), @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class})})
 public class MybatisPaginationPlugin implements Interceptor, Initializable {
     private static final Logger logger = LoggerFactory.getLogger(MybatisPaginationPlugin.class);

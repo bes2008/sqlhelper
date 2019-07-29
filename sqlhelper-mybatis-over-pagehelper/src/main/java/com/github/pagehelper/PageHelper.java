@@ -56,7 +56,11 @@ public class PageHelper{
             this.setCount(page.isCount());
             this.setOrderBy(page.getOrderBy());
             this.setPageNo(page.getPageNum());
-            this.setPageSize(page.getPageSize());
+            int pageSize = page.getPageSize();
+            if (pageSize ==0){
+                pageSize = -1;
+            }
+            this.setPageSize(pageSize);
             return this;
         }
 

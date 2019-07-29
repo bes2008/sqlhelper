@@ -29,6 +29,9 @@ public class PagingRequestBasedRowSelectionBuilder implements RowSelectionBuilde
             rowSelection.setLimit(request.getPageSize());
             int pageNo = request.getPageNo();
             int offset = pageNo > 0 ? (pageNo - 1) * request.getPageSize() : 0;
+            if(new Long(offset) -1L + new Long(rowSelection.getLimit()) > Integer.MAX_VALUE){
+                rowSelection.setFetchSize(Integer.MAX_VALUE - offset);
+            }
             rowSelection.setOffset(offset);
             return rowSelection;
         }

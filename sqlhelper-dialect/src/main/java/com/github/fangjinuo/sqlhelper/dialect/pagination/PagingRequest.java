@@ -17,7 +17,6 @@ package com.github.fangjinuo.sqlhelper.dialect.pagination;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class PagingRequest<E, R> {
     private Boolean count = null;
@@ -52,7 +51,7 @@ public class PagingRequest<E, R> {
      * Get all matched records with out paging limit
      */
     public boolean isGetAllRequest() {
-        return this.pageSize < 0;
+        return this.pageSize < 0 && pageNo ==1;
     }
 
     public boolean isValidRequest() {
@@ -80,6 +79,10 @@ public class PagingRequest<E, R> {
     }
 
     public PagingRequest<E, R> setPageSize(int pageSize) {
+        if(pageSize < 0){
+            pageSize = -1;
+            return this;
+        }
         this.pageSize = pageSize;
         return this;
     }

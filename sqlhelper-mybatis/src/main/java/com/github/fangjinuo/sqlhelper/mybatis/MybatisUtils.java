@@ -16,6 +16,7 @@ package com.github.fangjinuo.sqlhelper.mybatis;
 
 import com.github.fangjinuo.sqlhelper.dialect.DialectRegistry;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
+import org.apache.ibatis.session.RowBounds;
 
 public class MybatisUtils {
     private static final VendorDatabaseIdProvider vendorDatabaseIdProvider = new VendorDatabaseIdProvider();
@@ -26,5 +27,9 @@ public class MybatisUtils {
 
     public static VendorDatabaseIdProvider vendorDatabaseIdProvider() {
         return vendorDatabaseIdProvider;
+    }
+
+    public static boolean isValidRowBounds(RowBounds rowBounds){
+        return rowBounds.getOffset() != RowBounds.NO_ROW_OFFSET || rowBounds.getLimit() != RowBounds.NO_ROW_LIMIT;
     }
 }
