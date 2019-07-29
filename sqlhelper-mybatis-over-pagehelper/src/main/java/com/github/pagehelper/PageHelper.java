@@ -30,7 +30,7 @@ import com.github.pagehelper.util.PageObjectUtil;
 
 import java.util.Properties;
 
-public class PageHelper{
+public class PageHelper {
     private static final ThreadLocal<Page> LOCAL_PAGE = new ThreadLocal<Page>();
     private static boolean DEFAULT_COUNT = true;
 
@@ -45,19 +45,20 @@ public class PageHelper{
         PagingRequestContextHolder.getContext().setPagingRequest(pagingRequest);
     }
 
-    public static class PagingRequestAdapter extends PagingRequest{
+    public static class PagingRequestAdapter extends PagingRequest {
         private Page page;
 
-        PagingRequestAdapter(){
+        PagingRequestAdapter() {
 
         }
-        PagingRequestAdapter setPage(Page page){
+
+        PagingRequestAdapter setPage(Page page) {
             this.page = page;
             this.setCount(page.isCount());
             this.setOrderBy(page.getOrderBy());
             this.setPageNo(page.getPageNum());
             int pageSize = page.getPageSize();
-            if (pageSize ==0){
+            if (pageSize == 0) {
                 pageSize = -1;
             }
             this.setPageSize(pageSize);
@@ -65,7 +66,7 @@ public class PageHelper{
         }
 
         @Override
-        public void clear(boolean clearResult){
+        public void clear(boolean clearResult) {
             page.close();
             super.clear(clearResult);
         }
@@ -221,9 +222,9 @@ public class PageHelper{
      *
      * @param properties 插件属性
      */
-    protected static void setStaticProperties(Properties properties){
+    protected static void setStaticProperties(Properties properties) {
         //defaultCount，这是一个全局生效的参数，多数据源时也是统一的行为
-        if(properties != null){
+        if (properties != null) {
             DEFAULT_COUNT = Boolean.valueOf(properties.getProperty("defaultCount", "true"));
         }
     }
