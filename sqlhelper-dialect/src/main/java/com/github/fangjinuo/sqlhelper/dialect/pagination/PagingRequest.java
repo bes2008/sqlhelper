@@ -130,7 +130,7 @@ public class PagingRequest<E, R> {
         return this;
     }
 
-    public Boolean getCount() {
+    public Boolean needCount() {
         return this.count;
     }
 

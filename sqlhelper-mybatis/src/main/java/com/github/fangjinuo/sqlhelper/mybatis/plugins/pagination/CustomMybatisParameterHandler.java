@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+
 @SuppressWarnings("unchecked")
 public class CustomMybatisParameterHandler implements ParameterHandler, PrepareParameterSetter {
     private static final Logger logger = LoggerFactory.getLogger(CustomMybatisParameterHandler.class);
@@ -47,16 +48,24 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
         return requestContext.getCountSql() == this.boundSql;
     }
 
-    private boolean isNestedStatement(){
-        if(PAGING_CONTEXT.get().getQuerySqlId()!=null && PAGING_CONTEXT.get().getQuerySqlId().equals(mappedStatement.getId())){
+    private boolean isNestedStatement() {
+        if (PAGING_CONTEXT.get().getQuerySqlId() != null && PAGING_CONTEXT.get().getQuerySqlId().equals(mappedStatement.getId())) {
             return false;
         }
         return true;
     }
 
+    private boolean isInPagingRequestScope(){
+        return PAGING_CONTEXT.getPagingRequest() != null;
+    }
+
+    private boolean isInvalidPagingRequest(){
+        return !PAGING_CONTEXT.getPagingRequest().isValidRequest();
+    }
+
     @Override
     public void setParameters(final PreparedStatement ps) {
-        if (PAGING_CONTEXT.getPagingRequest() == null || this.isPagingCountStatement() || isNestedStatement()) {
+        if ( !isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || isNestedStatement()) {
             this.setOriginalParameters(ps, 1);
             return;
         }
@@ -105,7 +114,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
                         typeHandler.setParameter(ps, i + startIndex, value, jdbcType);
                     } catch (TypeException e) {
                         throw new TypeException("Could not set parameters for mapping: " + parameterMapping + ". Cause: " + e, e);
-                    }catch (SQLException e){
+                    } catch (SQLException e) {
                         throw new TypeException("Could not set parameters for mapping: " + parameterMapping + ". Cause: " + e, e);
                     }
                 }
