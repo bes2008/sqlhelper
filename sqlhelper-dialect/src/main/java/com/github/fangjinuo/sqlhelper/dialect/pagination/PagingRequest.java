@@ -27,7 +27,7 @@ public class PagingRequest<E, R> {
     // pageSize =0, is Empty paging request, the limit is 0
     // pageSize > 0, the limit is pageSize
     private int pageSize;
-    private int fetchSize;
+    private Integer fetchSize;
     private int timeout;
     private String orderBy;
     private E condition;
@@ -93,7 +93,7 @@ public class PagingRequest<E, R> {
         return this;
     }
 
-    public int getFetchSize() {
+    public Integer getFetchSize() {
         return this.fetchSize;
     }
 
