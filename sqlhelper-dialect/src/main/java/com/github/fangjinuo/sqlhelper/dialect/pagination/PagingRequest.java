@@ -15,7 +15,6 @@
 
 package com.github.fangjinuo.sqlhelper.dialect.pagination;
 
-
 import java.util.ArrayList;
 
 public class PagingRequest<E, R> {
@@ -24,6 +23,9 @@ public class PagingRequest<E, R> {
     private String dialect;
     // begin 1
     private int pageNo = 1;
+    // pageSize < 0, the limit is Integer.MAX
+    // pageSize =0, is Empty paging request, the limit is 0
+    // pageSize > 0, the limit is pageSize
     private int pageSize;
     private int fetchSize;
     private int timeout;
