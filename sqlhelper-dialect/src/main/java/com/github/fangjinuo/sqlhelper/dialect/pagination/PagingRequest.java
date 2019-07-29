@@ -51,11 +51,15 @@ public class PagingRequest<E, R> {
      * Get all matched records with out paging limit
      */
     public boolean isGetAllRequest() {
-        return this.pageSize < 0 && pageNo ==1;
+        return this.pageSize < 0 && pageNo == 1;
+    }
+
+    public boolean isGetAllFromNonZeroOffsetRequest() {
+        return this.pageSize < 0 && pageNo > 1;
     }
 
     public boolean isValidRequest() {
-        return this.pageSize > 0;
+        return this.pageSize > 0 || isGetAllFromNonZeroOffsetRequest();
     }
 
     public PagingRequest<E, R> limit(int pageNo, int pageSize) {
@@ -79,7 +83,7 @@ public class PagingRequest<E, R> {
     }
 
     public PagingRequest<E, R> setPageSize(int pageSize) {
-        if(pageSize < 0){
+        if (pageSize < 0) {
             pageSize = -1;
             return this;
         }

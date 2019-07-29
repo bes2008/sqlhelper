@@ -73,6 +73,9 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     @Override
     public void init() {
         if (!inited) {
+
+            rowSelectionBuilder.setDefaultPageSize(pluginConfig.getDefaultPageSize());
+
             if (pluginConfig.enableCountCache()) {
                 this.countStatementCache = CacheBuilder.newBuilder()
                         .concurrencyLevel(Runtime.getRuntime().availableProcessors())
@@ -95,6 +98,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         pluginConfig.setCountCacheInitCapacity(accessor.getInteger(paginationPluginConfigPrefix + "countCacheInitCapacity", pluginConfig.getCountCacheInitCapacity()));
         pluginConfig.setCountCacheMaxCapacity(accessor.getInteger(paginationPluginConfigPrefix + "countCacheMaxCapacity", pluginConfig.getCountCacheMaxCapacity()));
         pluginConfig.setCountSuffix(accessor.getString(paginationPluginConfigPrefix + "countSuffix", pluginConfig.getCountSuffix()));
+        pluginConfig.setDefaultPageSize(accessor.getInteger(paginationPluginConfigPrefix + "defaultPageSize", pluginConfig.getDefaultPageSize()));
 
         String instrumentorConfigPrefix = "sqlhelper.mybatis.instrumentor.";
         instrumentConfig.setDialect(accessor.getString(instrumentorConfigPrefix + "dialect", instrumentConfig.getDialect()));
@@ -205,9 +209,11 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                             }
                             result.setTotal(count);
                             int maxPageCount = result.getMaxPageCount();
-                            if (requestPageNo > maxPageCount) {
-                                request.setPageNo(maxPageCount);
-                                result.setPageNo(maxPageCount);
+                            if(maxPageCount>=0){
+                                if (requestPageNo > maxPageCount) {
+                                    request.setPageNo(maxPageCount);
+                                    result.setPageNo(maxPageCount);
+                                }
                             }
                         }
                     } catch (Throwable ex) {

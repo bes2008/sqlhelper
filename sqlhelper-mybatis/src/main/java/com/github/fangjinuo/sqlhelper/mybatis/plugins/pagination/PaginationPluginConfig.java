@@ -8,6 +8,7 @@ public class PaginationPluginConfig {
     private int countCacheMaxCapacity = 1000;
     private String countSuffix = "_COUNT";
     private int countCacheExpireInSeconds = 5;
+    private int defaultPageSize = 10;
 
     public PaginationPluginConfig() {
     }
@@ -59,5 +60,13 @@ public class PaginationPluginConfig {
 
     public void setCountCacheExpireInSeconds(int countCacheExpireInSeconds) {
         this.countCacheExpireInSeconds = countCacheExpireInSeconds;
+    }
+
+    public int getDefaultPageSize() {
+        return defaultPageSize;
+    }
+
+    public void setDefaultPageSize(int defaultPageSize) {
+        this.defaultPageSize = defaultPageSize;
     }
 }

@@ -61,8 +61,11 @@ public class PagingResult<E> {
     }
 
     public int getMaxPageCount() {
-        if ((this.total <= 0) || (this.pageSize <= 0)) {
+        if ((this.total <= 0) || (this.pageSize == 0)) {
             return 0;
+        }
+        if (pageSize < 0) {
+            return -1;
         }
         return this.total / this.pageSize + (this.total % this.pageSize == 0 ? 0 : 1);
     }

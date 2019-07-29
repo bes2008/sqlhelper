@@ -17,8 +17,11 @@ package com.github.fangjinuo.sqlhelper.dialect.pagination;
 
 import com.github.fangjinuo.sqlhelper.dialect.RowSelection;
 import com.github.fangjinuo.sqlhelper.dialect.RowSelectionBuilder;
+import com.github.fangjinuo.sqlhelper.dialect.conf.Settings;
 
 public class PagingRequestBasedRowSelectionBuilder implements RowSelectionBuilder<PagingRequest> {
+    private int defaultPageSize = Settings.getInstance().getPageSize();
+
     @Override
     public RowSelection build(PagingRequest request)
             throws IllegalArgumentException {
@@ -28,14 +31,27 @@ public class PagingRequestBasedRowSelectionBuilder implements RowSelectionBuilde
             rowSelection.setTimeout(request.getTimeout());
             rowSelection.setLimit(request.getPageSize());
             int pageNo = request.getPageNo();
-            int offset = pageNo > 0 ? (pageNo - 1) * request.getPageSize() : 0;
-            if(new Long(offset) -1L + new Long(rowSelection.getLimit()) > Integer.MAX_VALUE){
+            int offset = 0;
+            if (request.isGetAllFromNonZeroOffsetRequest()) {
+                offset = (pageNo - 1) * getDefaultPageSize();
+            } else {
+                offset = pageNo > 0 ? (pageNo - 1) * request.getPageSize() : 0;
+            }
+            if (new Long(offset) - 1L + new Long(rowSelection.getLimit()) > Integer.MAX_VALUE) {
                 rowSelection.setFetchSize(Integer.MAX_VALUE - offset);
             }
             rowSelection.setOffset(offset);
             return rowSelection;
         }
         throw new IllegalArgumentException("PagingRequest is illegal");
+    }
+
+    public int getDefaultPageSize() {
+        return defaultPageSize;
+    }
+
+    public void setDefaultPageSize(int defaultPageSize) {
+        this.defaultPageSize = defaultPageSize;
     }
 }
 

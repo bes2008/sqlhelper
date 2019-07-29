@@ -15,4 +15,25 @@
 
 package com.github.fangjinuo.sqlhelper.dialect.conf;
 
-public class Settings {}
+public class Settings {
+    private static final Settings instance = new Settings();
+
+    private Settings() {
+    }
+
+    private int pageSize = 10;
+
+    public static Settings getInstance() {
+        return instance;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        if (pageSize > 0) {
+            this.pageSize = pageSize;
+        }
+    }
+}
