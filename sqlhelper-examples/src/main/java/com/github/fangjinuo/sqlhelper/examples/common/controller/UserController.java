@@ -17,13 +17,14 @@ package com.github.fangjinuo.sqlhelper.examples.common.controller;
 import com.github.fangjinuo.sqlhelper.dialect.pagination.PagingRequest;
 import com.github.fangjinuo.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.github.fangjinuo.sqlhelper.dialect.pagination.PagingResult;
-import com.github.fangjinuo.sqlhelper.examples.common.model.User;
 import com.github.fangjinuo.sqlhelper.examples.common.dao.UserDao;
+import com.github.fangjinuo.sqlhelper.examples.common.model.User;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @Api
 @RestController
 @RequestMapping("/users")
@@ -36,28 +37,28 @@ public class UserController {
     }
 
     @PostMapping
-    public void add(User user){
+    public void add(User user) {
         userDao.insert(user);
     }
 
     @PutMapping("/{id}")
-    public void update(String id, User user){
+    public void update(String id, User user) {
         user.setId(id);
         User u = userDao.selectById(id);
-        if(u==null){
+        if (u == null) {
             add(user);
-        }else {
+        } else {
             userDao.updateById(user);
         }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@RequestParam("id") String id){
+    public void deleteById(@RequestParam("id") String id) {
         userDao.deleteById(id);
     }
 
     @GetMapping
-    public PagingResult list(@RequestParam(name="pageNo", required = false) int pageNo, @RequestParam(name = "pageSize",required = false) int pageSize ){
+    public PagingResult list(@RequestParam(name = "pageNo", required = false) int pageNo, @RequestParam(name = "pageSize", required = false) int pageSize) {
         User queryCondtion = new User();
         queryCondtion.setAge(10);
         PagingRequest request = new PagingRequest()
@@ -69,7 +70,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getById(@RequestParam("id") String id){
+    public User getById(@RequestParam("id") String id) {
         return userDao.selectById(id);
     }
 }
