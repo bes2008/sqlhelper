@@ -29,14 +29,17 @@ public class PagingRequestBasedRowSelectionBuilder implements RowSelectionBuilde
             RowSelection rowSelection = new RowSelection();
             rowSelection.setFetchSize(request.getFetchSize());
             rowSelection.setTimeout(request.getTimeout());
-            rowSelection.setLimit(request.getPageSize());
+
             int pageNo = request.getPageNo();
             int offset = 0;
+            int limit = request.getPageSize();
             if (request.isGetAllFromNonZeroOffsetRequest()) {
                 offset = (pageNo - 1) * getDefaultPageSize();
+                limit = Integer.MAX_VALUE;
             } else {
                 offset = pageNo > 0 ? (pageNo - 1) * request.getPageSize() : 0;
             }
+            rowSelection.setLimit(limit);
             if (new Long(offset) - 1L + new Long(rowSelection.getLimit()) > Integer.MAX_VALUE) {
                 rowSelection.setFetchSize(Integer.MAX_VALUE - offset);
             }

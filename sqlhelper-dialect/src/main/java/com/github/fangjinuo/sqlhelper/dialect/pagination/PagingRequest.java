@@ -84,7 +84,7 @@ public class PagingRequest<E, R> {
 
     public PagingRequest<E, R> setPageSize(int pageSize) {
         if (pageSize < 0) {
-            pageSize = -1;
+            this.pageSize = -1;
             return this;
         }
         this.pageSize = pageSize;
