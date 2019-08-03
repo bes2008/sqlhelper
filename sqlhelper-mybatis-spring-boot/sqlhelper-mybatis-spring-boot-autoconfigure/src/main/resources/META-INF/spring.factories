@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.github.fangjinuo.sqlhelper.mybatis.spring.boot.autoconfigure.SqlHelperMybatisAutoConfiguration
+  com.jn.sqlhelper.mybatis.spring.boot.autoconfigure.SqlHelperMybatisAutoConfiguration
