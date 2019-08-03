@@ -18,6 +18,8 @@ package com.jn.sqlhelper.util;
 import java.util.Iterator;
 
 public class Strings {
+    private Strings(){}
+
     public static boolean isBlank(String str) {
         return str == null || str.trim().isEmpty();
     }
