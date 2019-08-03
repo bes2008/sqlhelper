@@ -23,6 +23,7 @@ import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestBasedRowSelectionBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
+import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.util.Initializable;
 import com.jn.sqlhelper.util.PropertiesAccessor;
 import com.jn.sqlhelper.util.Strings;
@@ -158,6 +159,9 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             boundSql = (BoundSql) args[5];
         }
         Object rs = null;
+
+        // TODO supports rowbounds
+
         try {
             if (!isPagingRequest(ms)) {
                 // not a paging request
@@ -245,6 +249,16 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         }
         return rs;
     }
+
+    private void setPagingRequestBasedRowBounds(RowBounds rowBounds) {
+        if (MybatisUtils.isPagingRowBounds(rowBounds)) {
+            PagingRequest request = new PagingRequest();
+            request.setPageSize(rowBounds.getLimit());
+            request.setPageNo(rowBounds.getOffset() / rowBounds.getLimit() + rowBounds.getOffset() % rowBounds.getLimit() == 0 ? 0 : 1);
+            PagingRequestContextHolder.getContext().setPagingRequest(request);
+        }
+    }
+
 
     private void invalidatePagingRequest(boolean force) {
         PagingRequest request = PAGING_CONTEXT.getPagingRequest();

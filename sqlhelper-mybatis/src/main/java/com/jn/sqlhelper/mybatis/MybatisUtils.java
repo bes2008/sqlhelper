@@ -29,7 +29,10 @@ public class MybatisUtils {
         return vendorDatabaseIdProvider;
     }
 
-    public static boolean isValidRowBounds(RowBounds rowBounds) {
+    public static boolean isPagingRowBounds(RowBounds rowBounds) {
+        if(rowBounds == null || rowBounds == RowBounds.DEFAULT){
+            return false;
+        }
         return rowBounds.getOffset() != RowBounds.NO_ROW_OFFSET || rowBounds.getLimit() != RowBounds.NO_ROW_LIMIT;
     }
 }
