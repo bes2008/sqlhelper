@@ -160,7 +160,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         }
         Object rs = null;
 
-        // TODO supports rowbounds
+        setPagingRequestBasedRowBounds(rowBounds);
 
         try {
             if (!isPagingRequest(ms)) {
