@@ -20,7 +20,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
  * https://kognitio.com/documentation/latest/sqlref/select.html
  */
 public class KognitioDialect extends AbstractDialect {
-    public KognitioDialect(){
+    public KognitioDialect() {
         super();
         setLimitHandler(new LimitOnlyLimitHandler());
     }

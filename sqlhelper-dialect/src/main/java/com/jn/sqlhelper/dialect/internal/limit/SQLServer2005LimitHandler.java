@@ -19,7 +19,10 @@ import com.jn.sqlhelper.util.Strings;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,6 +80,7 @@ public class SQLServer2005LimitHandler
 
         return sb.toString();
     }
+
     @Override
     public int bindLimitParametersAtStartOfQuery(RowSelection selection, PreparedStatement statement, int index) throws SQLException {
         if (this.topAdded) {
@@ -202,14 +206,10 @@ public class SQLServer2005LimitHandler
     }
 
 
-
     private static String unqualify(final String qualifiedName) {
         final int loc = qualifiedName.lastIndexOf(46);
         return (loc < 0) ? qualifiedName : qualifiedName.substring(loc + 1);
     }
-
-
-
 
 
     private static String generateAlias(final String description, final int unique) {
@@ -245,7 +245,6 @@ public class SQLServer2005LimitHandler
         }
         return result;
     }
-
 
 
     private int getSelectColumnsStartPosition(StringBuilder sb) {

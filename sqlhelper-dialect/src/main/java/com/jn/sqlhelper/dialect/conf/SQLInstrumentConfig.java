@@ -14,6 +14,7 @@
  */
 
 package com.jn.sqlhelper.dialect.conf;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

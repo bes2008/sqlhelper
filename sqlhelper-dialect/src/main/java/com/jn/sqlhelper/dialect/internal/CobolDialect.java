@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 
 public class CobolDialect extends AbstractDialect {
-    public CobolDialect(){
+    public CobolDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
     }

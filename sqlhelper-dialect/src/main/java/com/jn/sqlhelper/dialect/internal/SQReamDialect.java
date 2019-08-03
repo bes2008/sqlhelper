@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
 
 public class SQReamDialect extends AbstractDialect {
-    public SQReamDialect(){
+    public SQReamDialect() {
         super();
         setLimitHandler(new LimitOnlyLimitHandler());
     }

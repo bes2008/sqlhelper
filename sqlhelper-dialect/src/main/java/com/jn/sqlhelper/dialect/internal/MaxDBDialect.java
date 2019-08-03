@@ -34,8 +34,8 @@ public class MaxDBDialect extends AbstractDialect {
 
             @Override
             protected String getLimitString(String sql, boolean hasOffset) {
-                sql =  "select * from (" + sql +") where rowno < ? ";
-                if(hasOffset){
+                sql = "select * from (" + sql + ") where rowno < ? ";
+                if (hasOffset) {
                     sql = sql + " and rowno >= ?";
                 }
                 return sql;

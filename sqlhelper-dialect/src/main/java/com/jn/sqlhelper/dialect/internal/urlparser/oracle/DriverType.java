@@ -15,8 +15,7 @@
 
 package com.jn.sqlhelper.dialect.internal.urlparser.oracle;
 
-public enum DriverType
-{
-    THIN, 
+public enum DriverType {
+    THIN,
     OCI;
 }

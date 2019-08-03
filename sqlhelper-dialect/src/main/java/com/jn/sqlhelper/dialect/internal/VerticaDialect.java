@@ -14,12 +14,12 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
-import com.jn.sqlhelper.dialect.RowSelection;
 
 public class VerticaDialect extends AbstractDialect {
-    public VerticaDialect(){
+    public VerticaDialect() {
         setLimitHandler(new AbstractLimitHandler() {
             @Override
             public String processSql(String sql, RowSelection rowSelection) {
@@ -28,7 +28,7 @@ public class VerticaDialect extends AbstractDialect {
 
             @Override
             protected String getLimitString(String sql, boolean hasOffset) {
-                return sql+" limit ?";
+                return sql + " limit ?";
             }
         });
     }

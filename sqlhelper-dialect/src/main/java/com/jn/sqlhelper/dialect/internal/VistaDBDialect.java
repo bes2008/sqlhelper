@@ -18,10 +18,11 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 
 public class VistaDBDialect extends AbstractDialect {
-    public VistaDBDialect(){
+    public VistaDBDialect() {
         super();
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
     }
+
     @Override
     public boolean isSupportsLimit() {
         return true;

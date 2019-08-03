@@ -14,14 +14,14 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
-import com.jn.sqlhelper.dialect.RowSelection;
 
 import java.util.Locale;
 
 public class MemSQLDialect extends AbstractDialect {
-    public MemSQLDialect(){
+    public MemSQLDialect() {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
@@ -65,7 +65,7 @@ public class MemSQLDialect extends AbstractDialect {
 
                 String intoClause = null;
                 boolean isInto = false;
-                if(!isIntoOutfile) {
+                if (!isIntoOutfile) {
                     int intoIndex = sql.toLowerCase(Locale.ROOT).lastIndexOf("into");
                     if (intoIndex > -1) {
                         intoClause = sql.substring(intoIndex);
@@ -76,7 +76,7 @@ public class MemSQLDialect extends AbstractDialect {
 
                 String forUpdateClause = null;
                 boolean isForUpdate = false;
-                if(!isInto){
+                if (!isInto) {
                     int forUpdateIndex = sql.toLowerCase(Locale.ROOT).lastIndexOf("for update");
                     if (forUpdateIndex > -1) {
                         forUpdateClause = sql.substring(forUpdateIndex);
@@ -92,17 +92,17 @@ public class MemSQLDialect extends AbstractDialect {
                 // 1) LIMIT $offset, $limit
                 // 2) LIMIT $limit, $offset
                 // we choice 1)
-                if(hasOffset){
+                if (hasOffset) {
                     sql2.append(" limit ?, ? ");
-                }else{
+                } else {
                     sql2.append(" limit ? ");
                 }
 
-                if(isIntoOutfile){
+                if (isIntoOutfile) {
                     sql2.append(intoOutfileClause);
-                }else if(isInto){
+                } else if (isInto) {
                     sql2.append(intoClause);
-                }else if (isForUpdate){
+                } else if (isForUpdate) {
                     sql2.append(forUpdateClause);
                 }
                 return sql2.toString();

@@ -18,10 +18,11 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 
 /**
  * https://www.kinetica.com/docs/concepts/sql.html#query
+ *
  * @author https://github.com/f1194361820
  */
 public class KineticaDialect extends AbstractDialect {
-    public KineticaDialect(){
+    public KineticaDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
     }

@@ -16,9 +16,9 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.internal.limit.TopLimitHandler;
 
-public class VirtuosoDialect extends AbstractDialect{
+public class VirtuosoDialect extends AbstractDialect {
 
-    public VirtuosoDialect(){
+    public VirtuosoDialect() {
         super();
         setLimitHandler(new TopLimitHandler());
     }

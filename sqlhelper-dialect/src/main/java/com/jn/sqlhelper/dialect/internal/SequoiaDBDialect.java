@@ -18,12 +18,12 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 
 /**
  * http://doc.sequoiadb.com/cn/sequoiadb-cat_id-1432190960-edition_id-0
- *
+ * <p>
  * support mysql sql syntax
  * support PostgreSQL sql syntax
  */
 public class SequoiaDBDialect extends AbstractDialect {
-    public SequoiaDBDialect(){
+    public SequoiaDBDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
     }

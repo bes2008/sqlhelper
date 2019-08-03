@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
 
 public class SnappyDataDialect extends AbstractDialect {
-    public SnappyDataDialect(){
+    public SnappyDataDialect() {
         super();
         setLimitHandler(new LimitOnlyLimitHandler());
     }

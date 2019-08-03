@@ -14,13 +14,13 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.RowSelection;
+import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 
 import java.util.Locale;
 
-public class IgniteDialect extends AbstractDialect{
-    public IgniteDialect(){
+public class IgniteDialect extends AbstractDialect {
+    public IgniteDialect() {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
@@ -33,16 +33,16 @@ public class IgniteDialect extends AbstractDialect{
                 /**
                  * https://apacheignite-sql.readme.io/docs/select
                  *
-                SELECT Syntax
-                        [TOP term] [DISTINCT | ALL] selectExpression [,...]
-                FROM tableExpression [,...] [WHERE expression]
-                [GROUP BY expression [,...]] [HAVING expression]
-                [{UNION [ALL] | MINUS | EXCEPT | INTERSECT} select]
-                [ORDER BY order [,...]]
-                [
-                    { LIMIT expression [OFFSET expression]  [SAMPLE_SIZE rowCountInt]} |
-                    {[OFFSET expression {ROW | ROWS}] [{FETCH {FIRST | NEXT} expression {ROW | ROWS} ONLY}]}
-                ]
+                 SELECT Syntax
+                 [TOP term] [DISTINCT | ALL] selectExpression [,...]
+                 FROM tableExpression [,...] [WHERE expression]
+                 [GROUP BY expression [,...]] [HAVING expression]
+                 [{UNION [ALL] | MINUS | EXCEPT | INTERSECT} select]
+                 [ORDER BY order [,...]]
+                 [
+                 { LIMIT expression [OFFSET expression]  [SAMPLE_SIZE rowCountInt]} |
+                 {[OFFSET expression {ROW | ROWS}] [{FETCH {FIRST | NEXT} expression {ROW | ROWS} ONLY}]}
+                 ]
                  */
 
                 sql = sql.trim();
@@ -56,12 +56,12 @@ public class IgniteDialect extends AbstractDialect{
                 }
                 StringBuilder sql2 = new StringBuilder(sql.length() + 100);
                 sql2.append(sql);
-                if(hasOffset){
+                if (hasOffset) {
                     sql2.append(" limit ? offset ? ");
-                }else {
+                } else {
                     sql2.append(" limit ? ");
                 }
-                if(isForSample){
+                if (isForSample) {
                     sql2.append(forSampleClause);
                 }
 

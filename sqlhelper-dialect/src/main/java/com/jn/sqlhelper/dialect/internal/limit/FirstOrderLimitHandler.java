@@ -26,11 +26,11 @@ public class FirstOrderLimitHandler extends AbstractLimitHandler {
 
     @Override
     protected String getLimitString(String sql, int offset, int limit) {
-        boolean hasOffset = offset>0;
+        boolean hasOffset = offset > 0;
         sql = sql.trim();
 
         boolean hasOrderByClause = false;
-        String orderByClause=null;
+        String orderByClause = null;
         String sqlLowercase = sql.toLowerCase(Locale.ROOT);
         int orderByIndex = sqlLowercase.lastIndexOf("order by");
         if (orderByIndex > -1) {
@@ -43,20 +43,20 @@ public class FirstOrderLimitHandler extends AbstractLimitHandler {
         sql2.append(sql);
 
         // you can look FIRST as limit
-        if(getDialect().isUseLimitInVariableMode()) {
+        if (getDialect().isUseLimitInVariableMode()) {
             if (hasOffset) {
                 sql2.append(" FIRST ? TO ? ");
             } else {
                 sql2.append(" FIRST ? ");
             }
-        }else{
+        } else {
             if (hasOffset) {
-                sql2.append(" FIRST "+offset+" TO "+limit+" ");
+                sql2.append(" FIRST " + offset + " TO " + limit + " ");
             } else {
-                sql2.append(" FIRST "+limit+" ");
+                sql2.append(" FIRST " + limit + " ");
             }
         }
-        if(hasOrderByClause){
+        if (hasOrderByClause) {
             sql2.append(orderByClause);
         }
         return sql2.toString();

@@ -19,8 +19,8 @@ import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 /**
  * Microsoft Azure Cloud Database
  */
-public class AzureDialect extends AbstractDialect{
-    public AzureDialect(){
+public class AzureDialect extends AbstractDialect {
+    public AzureDialect() {
         super();
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
     }

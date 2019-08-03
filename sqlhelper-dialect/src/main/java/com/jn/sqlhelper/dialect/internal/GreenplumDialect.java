@@ -14,14 +14,14 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
-import com.jn.sqlhelper.dialect.RowSelection;
 
 import java.util.Locale;
 
 public class GreenplumDialect extends AbstractDialect {
-    public GreenplumDialect(){
+    public GreenplumDialect() {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
@@ -63,7 +63,7 @@ public class GreenplumDialect extends AbstractDialect {
 
                 String forShareClause = null;
                 boolean isForShare = false;
-                if(!isForUpdate) {
+                if (!isForUpdate) {
                     int forShareIndex = sql.toLowerCase(Locale.ROOT).lastIndexOf("for share");
                     if (forShareIndex > -1) {
                         forShareClause = sql.substring(forShareIndex);
@@ -74,16 +74,16 @@ public class GreenplumDialect extends AbstractDialect {
 
                 StringBuilder sql2 = new StringBuilder(sql.length() + 100);
                 sql2.append(sql);
-                if(hasOffset){
+                if (hasOffset) {
                     sql2.append(" LIMIT ? OFFSET ? ");
-                }else{
+                } else {
                     sql2.append(" LIMIT ?  ");
                 }
 
-                if(isForUpdate){
+                if (isForUpdate) {
                     sql2.append(forUpdateClause);
                 }
-                if(isForShare){
+                if (isForShare) {
                     sql2.append(forShareClause);
                 }
                 return sql2.toString();

@@ -49,6 +49,7 @@ public class CacheDialect extends AbstractDialect {
     public boolean isSupportsLimitOffset() {
         return false;
     }
+
     @Override
     public boolean isSupportsVariableLimit() {
         return true;

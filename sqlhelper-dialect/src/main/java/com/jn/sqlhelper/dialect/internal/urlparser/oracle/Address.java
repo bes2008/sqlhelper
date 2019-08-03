@@ -15,42 +15,41 @@
 
 package com.jn.sqlhelper.dialect.internal.urlparser.oracle;
 
-public class Address
-{
+public class Address {
     private String protocol;
     private String host;
     private String port;
-    
+
     public Address(final String protocol, final String host, final String port) {
         this.protocol = protocol;
         this.host = host;
         this.port = port;
     }
-    
+
     public String getProtocol() {
         return this.protocol;
     }
-    
+
     public void setProtocol(final String protocol) {
         this.protocol = protocol;
     }
-    
+
     public String getHost() {
         return this.host;
     }
-    
+
     public void setHost(final String host) {
         this.host = host;
     }
-    
+
     public String getPort() {
         return this.port;
     }
-    
+
     public void setPort(final String port) {
         this.port = port;
     }
-    
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -59,25 +58,25 @@ public class Address
         if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
-        final Address address = (Address)o;
-        Label_0062: {
+        final Address address = (Address) o;
+        Label_0062:
+        {
             if (this.host != null) {
                 if (this.host.equals(address.host)) {
                     break Label_0062;
                 }
-            }
-            else if (address.host == null) {
+            } else if (address.host == null) {
                 break Label_0062;
             }
             return false;
         }
-        Label_0095: {
+        Label_0095:
+        {
             if (this.port != null) {
                 if (this.port.equals(address.port)) {
                     break Label_0095;
                 }
-            }
-            else if (address.port == null) {
+            } else if (address.port == null) {
                 break Label_0095;
             }
             return false;
@@ -86,13 +85,12 @@ public class Address
             if (this.protocol.equals(address.protocol)) {
                 return true;
             }
-        }
-        else if (address.protocol == null) {
+        } else if (address.protocol == null) {
             return true;
         }
         return false;
     }
-    
+
     @Override
     public int hashCode() {
         int result = (this.protocol != null) ? this.protocol.hashCode() : 0;
@@ -100,7 +98,7 @@ public class Address
         result = 31 * result + ((this.port != null) ? this.port.hashCode() : 0);
         return result;
     }
-    
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();

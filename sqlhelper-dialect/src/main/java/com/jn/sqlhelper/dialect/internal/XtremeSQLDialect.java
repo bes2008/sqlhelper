@@ -21,8 +21,8 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
  * https://www.mcobject.com/docs/eXtremeDB.htm#Users_Guides/SQL/SQL_Features/Limit.htm?Highlight=limit%20offset
  */
 @Name("xtreme")
-public class XtremeSQLDialect extends AbstractDialect{
-    public XtremeSQLDialect(){
+public class XtremeSQLDialect extends AbstractDialect {
+    public XtremeSQLDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
     }

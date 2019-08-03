@@ -20,7 +20,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
  * https://www.omnisci.com/docs/latest/5_dml.html#select
  */
 public class OmnisciDialect extends AbstractDialect {
-    public OmnisciDialect(){
+    public OmnisciDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler().setHasOffsetRowsSuffix(true));
     }

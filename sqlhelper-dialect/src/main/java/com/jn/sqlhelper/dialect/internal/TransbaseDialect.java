@@ -28,8 +28,8 @@ import com.jn.sqlhelper.dialect.internal.limit.FirstOrderLimitHandler;
  *     Order by $order by
  * </pre>
  */
-public class TransbaseDialect extends AbstractDialect{
-    public TransbaseDialect(){
+public class TransbaseDialect extends AbstractDialect {
+    public TransbaseDialect() {
         super();
         setLimitHandler(new FirstOrderLimitHandler());
     }

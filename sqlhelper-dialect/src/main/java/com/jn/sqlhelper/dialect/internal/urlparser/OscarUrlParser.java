@@ -30,7 +30,7 @@ public class OscarUrlParser extends CommonUrlParser {
     public List<String> getUrlSchemas() {
         return URL_SCHEMAS;
     }
-    
+
     public OscarUrlParser() {
 
     }

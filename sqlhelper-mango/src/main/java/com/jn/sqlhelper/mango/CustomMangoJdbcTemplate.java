@@ -17,7 +17,7 @@ import java.util.List;
 public class CustomMangoJdbcTemplate extends JdbcTemplate {
     private final static InternalLogger logger = InternalLoggerFactory.getInstance(JdbcTemplate.class);
 
-    protected  <T> T executeQuery(DataSource dataSource, BoundSql boundSql, ResultSetExtractor<T> rse)
+    protected <T> T executeQuery(DataSource dataSource, BoundSql boundSql, ResultSetExtractor<T> rse)
             throws DataAccessException {
         Connection conn = DataSourceUtils.getConnection(dataSource);
         PreparedStatement ps = null;
@@ -52,13 +52,13 @@ public class CustomMangoJdbcTemplate extends JdbcTemplate {
 
     private void setValues(PreparedStatement ps, BoundSql boundSql) throws SQLException {
         RowSelection rowSelection = MangoPagingContext.pagingRequest.get();
-        if(rowSelection!=null){
+        if (rowSelection != null) {
             MangoPagingContext.pagingRequest.remove();
             MangoQueryParameters queryParameters = new MangoQueryParameters();
             queryParameters.setRowSelection(rowSelection);
             queryParameters.setParameters(boundSql);
             MangoPagingContext.instrumentor.bindParameters(ps, new MangoPrepareStatementSetter(), queryParameters, true);
-        }else {
+        } else {
             setValues0(ps, boundSql);
         }
     }

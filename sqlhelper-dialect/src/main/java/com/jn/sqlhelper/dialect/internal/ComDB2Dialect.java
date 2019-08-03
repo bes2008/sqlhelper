@@ -14,16 +14,16 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
+import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
 
 /**
  * https://bloomberg.github.io/comdb2/sql.html#select-statement
- *
+ * <p>
  * supports 2 styles limit syntax:
  * 1) limit $limit offset $offset
  * 2) limit $offset, $limit
- *
+ * <p>
  * We use 1)
  */
 public class ComDB2Dialect extends AbstractDialect {

@@ -20,7 +20,7 @@ import com.jn.sqlhelper.dialect.internal.limit.TopLimitHandler;
  * https://irisdocs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_top
  */
 public class IrisDialect extends AbstractDialect {
-    public IrisDialect(){
+    public IrisDialect() {
         super();
         setLimitHandler(new TopLimitHandler());
     }

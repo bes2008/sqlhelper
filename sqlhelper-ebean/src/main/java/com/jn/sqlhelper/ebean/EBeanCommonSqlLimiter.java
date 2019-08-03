@@ -21,16 +21,16 @@ public class EBeanCommonSqlLimiter implements SqlLimiter {
         this.instrumentor = instrumentor;
     }
 
-    private String findDatabaseId(DatabasePlatform databasePlatform){
+    private String findDatabaseId(DatabasePlatform databasePlatform) {
         String databaseId = DialectRegistry.guessDatabaseId(databasePlatform.getPlatform().name());
-        if(databaseId!=null){
-            if(instrumentor.getConfig()==null){
+        if (databaseId != null) {
+            if (instrumentor.getConfig() == null) {
                 instrumentor.setConfig(new SQLInstrumentConfig());
             }
             instrumentor.getConfig().setDialect(databaseId);
         }
-        if(databaseId==null){
-            if(instrumentor.getConfig()!=null){
+        if (databaseId == null) {
+            if (instrumentor.getConfig() != null) {
                 return instrumentor.getConfig().getDialect();
             }
         }
@@ -40,7 +40,7 @@ public class EBeanCommonSqlLimiter implements SqlLimiter {
     @Override
     public SqlLimitResponse limit(SqlLimitRequest request) {
         String databaseId = findDatabaseId(request.getDbPlatform());
-        if(databaseId==null || !instrumentor.beginIfSupportsLimit(databaseId)){
+        if (databaseId == null || !instrumentor.beginIfSupportsLimit(databaseId)) {
             return ebeanDefaultSqlLimiter.limit(request);
         }
         Dialect dialect = DialectRegistry.getInstance().getDialectByName(databaseId);
@@ -61,8 +61,8 @@ public class EBeanCommonSqlLimiter implements SqlLimiter {
         sql = request.getDbPlatform().completeSql(sql, request.getOrmQuery());
 
         boolean needRowNo = false;
-        if(dialect instanceof AbstractDialect){
-            needRowNo = ((AbstractDialect)dialect).getLimitHandler() instanceof OracleXLimitHandler;
+        if (dialect instanceof AbstractDialect) {
+            needRowNo = ((AbstractDialect) dialect).getLimitHandler() instanceof OracleXLimitHandler;
         }
         return new SqlLimitResponse(sql, needRowNo);
     }

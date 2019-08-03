@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.List;
 
-public class DmUrlParser extends CommonUrlParser{
+public class DmUrlParser extends CommonUrlParser {
     public static final int DEFAULT_PORT = 12345;
     private static final String URL_PREFIX = "jdbc:dm:";
     private final Logger logger = LoggerFactory.getLogger(DmUrlParser.class);

@@ -19,8 +19,8 @@ import com.jn.sqlhelper.dialect.internal.limit.TopLimitHandler;
 /**
  * https://www.nexusdb.com/support/index.php?q=selectstatement.htm
  */
-public class NexusDBDialect extends AbstractDialect{
-    public NexusDBDialect(){
+public class NexusDBDialect extends AbstractDialect {
+    public NexusDBDialect() {
         super();
         setLimitHandler(new TopLimitHandler());
     }

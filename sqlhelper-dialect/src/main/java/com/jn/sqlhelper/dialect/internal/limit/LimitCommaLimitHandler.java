@@ -58,7 +58,7 @@ public class LimitCommaLimitHandler extends AbstractLimitHandler {
             sql2.append(hasOffset ? (" limit " + offset + ", " + limit) : (" limit " + limit));
         }
         if (isForUpdate) {
-            sql2.append(" "+forUpdateClause);
+            sql2.append(" " + forUpdateClause);
         }
         return sql2.toString();
     }

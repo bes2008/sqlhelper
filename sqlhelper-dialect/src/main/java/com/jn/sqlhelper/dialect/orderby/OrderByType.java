@@ -20,16 +20,16 @@ public enum OrderByType {
     ASC,
     DESC;
 
-    public static OrderByType fromString(String s){
-        if(Strings.isBlank(s)){
+    public static OrderByType fromString(String s) {
+        if (Strings.isBlank(s)) {
             return ASC;
         }
         s = s.trim().toLowerCase();
 
-        if(s.equals("desc")){
+        if (s.equals("desc")) {
             return DESC;
         }
-        if(s.equals("asc")){
+        if (s.equals("asc")) {
             return ASC;
         }
 

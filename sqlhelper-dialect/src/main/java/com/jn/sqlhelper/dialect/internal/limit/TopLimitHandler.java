@@ -20,10 +20,10 @@ import java.util.Locale;
 
 
 public class TopLimitHandler extends AbstractLimitHandler {
-    private static final String SELECT_LOWERCASE="select";
-    private static final String SELECT_DISTINCT_LOWERCASE="select distinct";
-    private static final String SELECT_ALL_LOWERCASE="select all";
-    private boolean useSkipTop=false;
+    private static final String SELECT_LOWERCASE = "select";
+    private static final String SELECT_DISTINCT_LOWERCASE = "select distinct";
+    private static final String SELECT_ALL_LOWERCASE = "select all";
+    private boolean useSkipTop = false;
 
     @Override
     public String processSql(String sql, RowSelection rowSelection) {
@@ -53,44 +53,44 @@ public class TopLimitHandler extends AbstractLimitHandler {
         int selectAllIndex = sqlLowercase.indexOf(SELECT_ALL_LOWERCASE);
 
         int insertionPoint = -1;
-        if(selectDistinctIndex!=-1){
+        if (selectDistinctIndex != -1) {
             insertionPoint = selectDistinctIndex + SELECT_DISTINCT_LOWERCASE.length();
-        }else if(selectAllIndex!=-1){
+        } else if (selectAllIndex != -1) {
             insertionPoint = selectAllIndex + SELECT_ALL_LOWERCASE.length();
-        }else if(selectIndex!=-1){
+        } else if (selectIndex != -1) {
             insertionPoint = selectIndex + SELECT_LOWERCASE.length();
-        }else{
+        } else {
             return sql;
         }
 
-        if(insertionPoint<0){
+        if (insertionPoint < 0) {
             return sql;
         }
         StringBuilder sql2 = new StringBuilder(sql.length() + 50).append(sql);
-        if(getDialect().isUseLimitInVariableMode()){
-            if(getDialect().isSupportsLimitOffset() && hasOffset){
-                if(!isUseSkipTop()) {
+        if (getDialect().isUseLimitInVariableMode()) {
+            if (getDialect().isSupportsLimitOffset() && hasOffset) {
+                if (!isUseSkipTop()) {
                     sql2.insert(insertionPoint, " TOP ?, ? ");
-                }else{
+                } else {
                     sql2.insert(insertionPoint, " SKIP ? TOP ? ");
                 }
-            }else{
+            } else {
                 sql2.insert(insertionPoint, " TOP ? ");
             }
-        }else {
-            if(getDialect().isSupportsLimitOffset() && hasOffset){
-                if(!isUseSkipTop()) {
+        } else {
+            if (getDialect().isSupportsLimitOffset() && hasOffset) {
+                if (!isUseSkipTop()) {
                     if (getDialect().isBindLimitParametersInReverseOrder()) {
                         sql2.insert(insertionPoint, " TOP " + limit + ", " + offset + " ");
                     } else {
                         sql2.insert(insertionPoint, " TOP " + offset + ", " + limit + " ");
                     }
-                }else{
+                } else {
                     sql2.insert(insertionPoint, " SKIP " + offset + " TOP " + limit + " ");
                 }
 
-            }else{
-                sql2.insert(insertionPoint, " TOP "+limit);
+            } else {
+                sql2.insert(insertionPoint, " TOP " + limit);
             }
         }
         return sql2.toString();

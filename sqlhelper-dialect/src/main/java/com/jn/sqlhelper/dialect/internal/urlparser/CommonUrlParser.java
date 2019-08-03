@@ -44,12 +44,12 @@ public class CommonUrlParser implements UrlParser {
         }
         List<String> urlPrefixes = getUrlSchemas();
         String matchedUrlPrefix = null;
-        for(String urlPrefix : urlPrefixes){
+        for (String urlPrefix : urlPrefixes) {
             if (jdbcUrl.startsWith(urlPrefix)) {
                 matchedUrlPrefix = urlPrefix;
             }
         }
-        if(matchedUrlPrefix==null) {
+        if (matchedUrlPrefix == null) {
             this.logger.info("jdbcUrl has invalid prefix.(url:{}, prefix:{})", (Object) jdbcUrl, urlPrefixes.toString());
             return UnKnownDatabaseInfo.INSTANCE;
         }
@@ -57,7 +57,7 @@ public class CommonUrlParser implements UrlParser {
         try {
             result = this.parse0(jdbcUrl, matchedUrlPrefix);
         } catch (Exception e) {
-            this.logger.info("{} parse error. url: {}, Caused: {}",  this.getClass().getSimpleName(),jdbcUrl, e.getMessage(), e);
+            this.logger.info("{} parse error. url: {}, Caused: {}", this.getClass().getSimpleName(), jdbcUrl, e.getMessage(), e);
             result = UnKnownDatabaseInfo.createUnknownDataBase("dm", jdbcUrl);
         }
         return result;

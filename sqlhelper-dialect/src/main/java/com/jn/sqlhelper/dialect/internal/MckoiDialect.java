@@ -18,7 +18,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
 
 public class MckoiDialect extends AbstractDialect {
-    public MckoiDialect(){
+    public MckoiDialect() {
         super();
         setLimitHandler(new LimitOnlyLimitHandler());
     }

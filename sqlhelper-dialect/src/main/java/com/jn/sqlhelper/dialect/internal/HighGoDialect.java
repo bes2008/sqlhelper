@@ -21,10 +21,11 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
  * based on PostgreSQL
  */
 public class HighGoDialect extends AbstractDialect {
-    public HighGoDialect(){
+    public HighGoDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
     }
+
     @Override
     public boolean isSupportsLimit() {
         return true;

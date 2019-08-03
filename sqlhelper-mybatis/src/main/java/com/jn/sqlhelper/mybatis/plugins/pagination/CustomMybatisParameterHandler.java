@@ -55,17 +55,17 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
         return true;
     }
 
-    private boolean isInPagingRequestScope(){
+    private boolean isInPagingRequestScope() {
         return PAGING_CONTEXT.getPagingRequest() != null;
     }
 
-    private boolean isInvalidPagingRequest(){
+    private boolean isInvalidPagingRequest() {
         return !PAGING_CONTEXT.getPagingRequest().isValidRequest();
     }
 
     @Override
     public void setParameters(final PreparedStatement ps) {
-        if ( !isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || isNestedStatement()) {
+        if (!isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || isNestedStatement()) {
             this.setOriginalParameters(ps, 1);
             return;
         }

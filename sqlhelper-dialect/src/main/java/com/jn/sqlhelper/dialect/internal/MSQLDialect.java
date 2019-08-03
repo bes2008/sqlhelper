@@ -19,8 +19,8 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 /**
  * https://hughes.com.au/products/msql/msql-4.0-manual.pdf
  */
-public class MSQLDialect extends AbstractDialect{
-    public MSQLDialect(){
+public class MSQLDialect extends AbstractDialect {
+    public MSQLDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
     }

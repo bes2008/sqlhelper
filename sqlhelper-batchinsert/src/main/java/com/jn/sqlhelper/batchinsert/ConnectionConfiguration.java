@@ -19,10 +19,10 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConnectionConfiguration {
-    public static final String URL="jdbc.url";
-    public static final String USER="jdbc.user";
-    public static final String PASSWORD="jdbc.password";
-    public static final String DRIVER="jdbc.driver";
+    public static final String URL = "jdbc.url";
+    public static final String USER = "jdbc.user";
+    public static final String PASSWORD = "jdbc.password";
+    public static final String DRIVER = "jdbc.driver";
 
     private String url;
     private String user;
@@ -30,8 +30,10 @@ public class ConnectionConfiguration {
     private String driver;
     private Properties driverProps;
 
-    public ConnectionConfiguration(){}
-    public ConnectionConfiguration(String driver, String url, String user, String password, Properties driverProps ){
+    public ConnectionConfiguration() {
+    }
+
+    public ConnectionConfiguration(String driver, String url, String user, String password, Properties driverProps) {
         this.driver = driver;
         this.url = url;
         this.user = user;
@@ -39,7 +41,7 @@ public class ConnectionConfiguration {
         this.driverProps = driverProps;
     }
 
-    public static ConnectionConfiguration loadConfig(InputStream input) throws IOException{
+    public static ConnectionConfiguration loadConfig(InputStream input) throws IOException {
         Properties props = new Properties();
         props.load(input);
         ConnectionConfiguration config = new ConnectionConfiguration();
@@ -47,7 +49,7 @@ public class ConnectionConfiguration {
         config.setDriver(props.getProperty(DRIVER));
 
         String user = props.getProperty(USER);
-        String password= props.getProperty(PASSWORD);
+        String password = props.getProperty(PASSWORD);
 
         config.setUser(user);
         config.setPassword(password);

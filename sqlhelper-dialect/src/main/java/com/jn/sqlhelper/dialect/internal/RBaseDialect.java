@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 
 public class RBaseDialect extends AbstractDialect {
-    public RBaseDialect(){
+    public RBaseDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
     }

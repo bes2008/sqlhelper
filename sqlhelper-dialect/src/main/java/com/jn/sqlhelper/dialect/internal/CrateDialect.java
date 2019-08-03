@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 public class CrateDialect extends AbstractDialect {
-    public CrateDialect(){
+    public CrateDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
     }

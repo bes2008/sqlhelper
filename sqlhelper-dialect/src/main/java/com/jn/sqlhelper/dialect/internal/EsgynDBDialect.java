@@ -19,7 +19,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
 
 @Name("esgyn")
 public class EsgynDBDialect extends AbstractDialect {
-    public EsgynDBDialect(){
+    public EsgynDBDialect() {
         super();
         setLimitHandler(new LimitOnlyLimitHandler());
     }

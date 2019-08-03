@@ -22,7 +22,7 @@ import com.jn.sqlhelper.dialect.RowSelection;
  * where xxx
  * limit ?
  */
-public class LimitOnlyLimitHandler extends AbstractLimitHandler{
+public class LimitOnlyLimitHandler extends AbstractLimitHandler {
     @Override
     public String processSql(String sql, RowSelection rowSelection) {
         return getLimitString(sql, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
@@ -30,11 +30,10 @@ public class LimitOnlyLimitHandler extends AbstractLimitHandler{
 
     @Override
     protected String getLimitString(String sql, int offset, int limit) {
-        if(getDialect().isUseLimitInVariableMode()) {
+        if (getDialect().isUseLimitInVariableMode()) {
             return sql + " limit ?";
-        }
-        else {
-            return sql + " limit "+ limit;
+        } else {
+            return sql + " limit " + limit;
         }
     }
 }

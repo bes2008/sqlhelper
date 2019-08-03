@@ -19,7 +19,7 @@ public class BatchInsertResult {
     private int realInsertNum;
     private int expectResult;
 
-    public BatchInsertResult(String time, int expectResult , int realInsertNum){
+    public BatchInsertResult(String time, int expectResult, int realInsertNum) {
         this.time = time;
         this.expectResult = expectResult;
         this.realInsertNum = realInsertNum;

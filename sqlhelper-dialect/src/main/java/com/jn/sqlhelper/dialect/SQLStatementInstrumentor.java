@@ -120,7 +120,7 @@ public class SQLStatementInstrumentor {
 
     public PreparedStatement bindParameters(final PreparedStatement statement, final PrepareParameterSetter parameterSetter, final QueryParameters queryParameters, final boolean setOriginalParameters) throws SQLException, SQLDialectException {
         final Dialect dialect = this.getDialect(statement);
-        return bindParameters(dialect,statement,parameterSetter,queryParameters,setOriginalParameters);
+        return bindParameters(dialect, statement, parameterSetter, queryParameters, setOriginalParameters);
     }
 
     public PreparedStatement bindParameters(Dialect dialect, final PreparedStatement statement, final PrepareParameterSetter parameterSetter, final QueryParameters queryParameters, final boolean setOriginalParameters) throws SQLException, SQLDialectException {

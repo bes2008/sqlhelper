@@ -20,7 +20,7 @@ import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
  * // https://fmhelp.filemaker.com/docs/16/en/fm16_sql_reference.pdf
  */
 public class FileMakerDialect extends AbstractDialect {
-    public FileMakerDialect(){
+    public FileMakerDialect() {
         super();
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
     }

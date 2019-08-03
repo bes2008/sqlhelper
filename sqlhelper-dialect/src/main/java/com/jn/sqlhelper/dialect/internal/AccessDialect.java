@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 
 public class AccessDialect extends AbstractDialect {
-    public AccessDialect(){
+    public AccessDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
     }

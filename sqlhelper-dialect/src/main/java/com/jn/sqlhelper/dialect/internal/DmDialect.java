@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 public class DmDialect extends AbstractDialect {
-    public DmDialect(){
+    public DmDialect() {
         setLimitHandler(new LimitOffsetLimitHandler());
     }
 

@@ -20,7 +20,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
  * https://www.alibabacloud.com/help/doc-detail/73777.htm?spm=a2c63.p38356.b99.86.72a82f4dUDIiYI
  */
 public class MaxComputeDialect extends AbstractDialect {
-    public MaxComputeDialect(){
+    public MaxComputeDialect() {
         super();
         setLimitHandler(new LimitOnlyLimitHandler());
     }

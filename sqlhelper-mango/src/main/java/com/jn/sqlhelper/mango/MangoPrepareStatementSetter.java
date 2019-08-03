@@ -18,7 +18,7 @@ public class MangoPrepareStatementSetter implements PrepareParameterSetter<Mango
             TypeHandler typeHandler;
             typeHandler = typeHandlers.get(i);
             Object value = args.get(i);
-            typeHandler.setParameter(statement, startIndex +i + 1, value);
+            typeHandler.setParameter(statement, startIndex + i + 1, value);
         }
         return boundSql.getArgs().size();
     }

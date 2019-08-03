@@ -16,8 +16,8 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 
-public class HiveDialect extends AbstractDialect{
-    public HiveDialect(){
+public class HiveDialect extends AbstractDialect {
+    public HiveDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
     }

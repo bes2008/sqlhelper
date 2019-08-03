@@ -20,7 +20,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
  * http://drill.apache.org/docs/select/
  */
 public class DrillDialect extends AbstractDialect {
-    public DrillDialect(){
+    public DrillDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
     }

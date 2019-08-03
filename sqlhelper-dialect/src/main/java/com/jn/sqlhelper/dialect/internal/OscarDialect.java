@@ -18,7 +18,7 @@ import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.OscarUrlParser;
 
 public class OscarDialect extends AbstractDialect {
-    public OscarDialect(){
+    public OscarDialect() {
         setUrlParser(new OscarUrlParser());
         setLimitHandler(new OracleXLimitHandler());
     }

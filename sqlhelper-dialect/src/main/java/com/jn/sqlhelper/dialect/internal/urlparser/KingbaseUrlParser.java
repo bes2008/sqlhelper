@@ -23,10 +23,11 @@ import java.util.List;
 
 public class KingbaseUrlParser extends CommonUrlParser {
     private static final String URL_PREFIX = "jdbc:kingbase:";
-    private static final Logger logger=LoggerFactory.getLogger(KingbaseUrlParser.class);
+    private static final Logger logger = LoggerFactory.getLogger(KingbaseUrlParser.class);
 
     public KingbaseUrlParser() {
     }
+
     private static final List<String> URL_SCHEMAS = Arrays.asList(new String[]{URL_PREFIX});
 
     @Override

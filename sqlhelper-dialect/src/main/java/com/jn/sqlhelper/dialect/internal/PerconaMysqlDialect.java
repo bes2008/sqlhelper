@@ -21,7 +21,7 @@ import com.jn.sqlhelper.dialect.annotation.Name;
  */
 @Name("perconamysql")
 public class PerconaMysqlDialect extends MySQLDialect {
-    public PerconaMysqlDialect(){
+    public PerconaMysqlDialect() {
         super();
     }
 }

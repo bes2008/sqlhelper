@@ -39,7 +39,7 @@ public class SqlServerUrlParser extends CommonUrlParser {
     public SqlServerUrlParser() {
 
     }
-    
+
     @Override
     protected DatabaseInfo parse0(final String url, String urlPrefix) {
         final StringMaker maker = new StringMaker(url);

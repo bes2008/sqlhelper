@@ -27,7 +27,6 @@ package com.github.pagehelper;
 import com.google.gson.GsonBuilder;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -316,7 +315,7 @@ public class PageInfo<T> extends PageSerializable<T> {
     }
 
     public void setNavigatepageNums(int[] navigatepageNums) {
-        if(navigatepageNums!=null) {
+        if (navigatepageNums != null) {
             this.navigatepageNums = navigatepageNums;
         }
     }

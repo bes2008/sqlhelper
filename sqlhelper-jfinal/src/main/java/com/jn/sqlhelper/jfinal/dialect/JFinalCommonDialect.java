@@ -1,13 +1,13 @@
 package com.jn.sqlhelper.jfinal.dialect;
 
+import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.Table;
+import com.jfinal.plugin.activerecord.dialect.Dialect;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.internal.OracleDialect;
 import com.jn.sqlhelper.dialect.parameter.ArrayBasedParameterSetter;
 import com.jn.sqlhelper.dialect.parameter.ArrayBasedQueryParameters;
-import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.activerecord.Table;
-import com.jfinal.plugin.activerecord.dialect.Dialect;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -41,7 +41,7 @@ public class JFinalCommonDialect extends Dialect {
     @Override
     public String forPaginate(int pageNumber, int pageSize, StringBuilder findSql) {
         RowSelection rowSelection = new RowSelection();
-        rowSelection.setOffset(pageNumber <=0 ? 0: (pageNumber - 1) * pageSize);
+        rowSelection.setOffset(pageNumber <= 0 ? 0 : (pageNumber - 1) * pageSize);
         rowSelection.setLimit(pageSize);
         if (instrumentor.beginIfSupportsLimit(databaseId)) {
             pagingRequestHolder.set(rowSelection);
@@ -68,6 +68,7 @@ public class JFinalCommonDialect extends Dialect {
             super.fillStatement(pst, paras);
         }
     }
+
     @Override
     public boolean isOracle() {
         return delegate == null ? databaseId.equals("oracle") : delegate instanceof OracleDialect;

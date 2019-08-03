@@ -22,11 +22,10 @@ import java.util.Locale;
  * select * from
  * where xxxx
  * limit $limit offset $Offset
- *
+ * <p>
  * every dialect use the limitHandler should set bindLimitParameterInReverseOrder = true
- *
  */
-public class LimitOffsetLimitHandler extends AbstractLimitHandler{
+public class LimitOffsetLimitHandler extends AbstractLimitHandler {
     // OFFSET $offset ROWS
     private boolean hasOffsetRowsSuffix = false;
     private boolean supportForUpdate;
@@ -39,12 +38,12 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
 
     @Override
     protected String getLimitString(String sql, int offset, int limit) {
-        boolean hasOffset = offset>0;
+        boolean hasOffset = offset > 0;
         sql = sql.trim();
         String forUpdateClause = "";
         boolean isForUpdate = false;
         String sqlLowercase = sql.toLowerCase(Locale.ROOT);
-        if(isSupportForUpdate()) {
+        if (isSupportForUpdate()) {
             int forUpdateIndex = sqlLowercase.lastIndexOf("for update");
             if (forUpdateIndex > -1) {
                 forUpdateClause = sql.substring(forUpdateIndex);
@@ -53,9 +52,9 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
             }
         }
 
-        String lockInClause="";
+        String lockInClause = "";
         boolean hasLockInClause = false;
-        if(!isForUpdate && isSupportLockInModeClause()){
+        if (!isForUpdate && isSupportLockInModeClause()) {
             int lockInIndex = sqlLowercase.lastIndexOf("lock in");
             if (lockInIndex > -1) {
                 lockInClause = sql.substring(lockInIndex);
@@ -67,23 +66,23 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler{
         StringBuilder sql2 = new StringBuilder(sql.length() + 100);
         sql2.append(sql);
 
-        if(getDialect().isUseLimitInVariableMode()) {
+        if (getDialect().isUseLimitInVariableMode()) {
             if (hasOffset) {
-                sql2.append(" limit ? offset ? " + (hasOffsetRowsSuffix ? "rows":""));
+                sql2.append(" limit ? offset ? " + (hasOffsetRowsSuffix ? "rows" : ""));
             } else {
                 sql2.append(" limit ?");
             }
-        }else{
+        } else {
             if (hasOffset) {
-                sql2.append(" limit "+limit+" offset "+offset+" " + (hasOffsetRowsSuffix ? "rows":""));
+                sql2.append(" limit " + limit + " offset " + offset + " " + (hasOffsetRowsSuffix ? "rows" : ""));
             } else {
-                sql2.append(" limit "+limit);
+                sql2.append(" limit " + limit);
             }
         }
-        if(isForUpdate){
+        if (isForUpdate) {
             sql2.append(" " + forUpdateClause);
         }
-        if(hasLockInClause){
+        if (hasLockInClause) {
             sql2.append(" " + lockInClause);
         }
         return sql2.toString();

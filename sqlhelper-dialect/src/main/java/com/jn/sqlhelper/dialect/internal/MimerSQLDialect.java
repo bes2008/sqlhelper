@@ -24,7 +24,7 @@ import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
  */
 @Name("mimer")
 public class MimerSQLDialect extends AbstractDialect {
-    public MimerSQLDialect(){
+    public MimerSQLDialect() {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override

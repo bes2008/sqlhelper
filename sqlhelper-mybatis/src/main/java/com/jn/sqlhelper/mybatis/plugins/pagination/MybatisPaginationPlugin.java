@@ -14,6 +14,8 @@
 
 package com.jn.sqlhelper.mybatis.plugins.pagination;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
@@ -24,8 +26,6 @@ import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.util.Initializable;
 import com.jn.sqlhelper.util.PropertiesAccessor;
 import com.jn.sqlhelper.util.Strings;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.*;
@@ -41,7 +41,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings({"unchecked","unused"})
+@SuppressWarnings({"unchecked", "unused"})
 @Intercepts({@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}), @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class})})
 public class MybatisPaginationPlugin implements Interceptor, Initializable {
     private static final Logger logger = LoggerFactory.getLogger(MybatisPaginationPlugin.class);
@@ -108,7 +108,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     @Override
     public Object plugin(final Object target) {
         if (target instanceof Executor) {
-            if(logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("wrap mybatis executor {}", target.getClass());
             }
             return Plugin.wrap(target, this);
@@ -209,7 +209,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                             }
                             result.setTotal(count);
                             int maxPageCount = result.getMaxPageCount();
-                            if(maxPageCount>=0){
+                            if (maxPageCount >= 0) {
                                 if (requestPageNo > maxPageCount) {
                                     request.setPageNo(maxPageCount);
                                     result.setPageNo(maxPageCount);
@@ -278,7 +278,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             return false;
         }
         if (PAGING_CONTEXT.get().getQuerySqlId() != null) {
-            if(isNestedQueryInPagingRequest(statement)){
+            if (isNestedQueryInPagingRequest(statement)) {
                 return false;
             }
         } else {

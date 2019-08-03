@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 public class AgensGraphDialect extends AbstractDialect {
-    public AgensGraphDialect(){
+    public AgensGraphDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
     }

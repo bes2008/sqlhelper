@@ -20,7 +20,7 @@ import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
  * https://www.cockroachlabs.com/docs/stable/limit-offset.html
  */
 public class CockroachDialect extends AbstractDialect {
-    public CockroachDialect(){
+    public CockroachDialect() {
         super();
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
     }

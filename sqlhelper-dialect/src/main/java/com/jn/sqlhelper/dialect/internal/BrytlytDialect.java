@@ -23,7 +23,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
  * 2) offset $offset ROWS fetch FIRST|NEXT $limit ROWS ONLY
  */
 public class BrytlytDialect extends AbstractDialect {
-    public BrytlytDialect(){
+    public BrytlytDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
     }

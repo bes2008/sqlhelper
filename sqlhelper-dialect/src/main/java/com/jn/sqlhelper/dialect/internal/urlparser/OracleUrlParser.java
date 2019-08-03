@@ -36,11 +36,11 @@ public class OracleUrlParser extends CommonUrlParser {
     public List<String> getUrlSchemas() {
         return URL_SCHEMAS;
     }
-    
+
     public OracleUrlParser() {
 
     }
-    
+
     @Override
     protected DatabaseInfo parse0(final String jdbcUrl, String urlPrefix) {
         final StringMaker maker = new StringMaker(jdbcUrl);
@@ -51,19 +51,19 @@ public class OracleUrlParser extends CommonUrlParser {
         }
         return this.parseSimpleUrl(jdbcUrl, maker);
     }
-    
+
     private DatabaseInfo parseNetConnectionUrl(final String url) {
         final OracleNetConnectionDescriptorParser parser = new OracleNetConnectionDescriptorParser(url);
         final KeyValue keyValue = parser.parse();
         return this.createOracleDatabaseInfo(keyValue, url);
     }
-    
+
     private DatabaseInfo createOracleDatabaseInfo(final KeyValue keyValue, final String url) {
         final Description description = new Description(keyValue);
         final List<String> jdbcHost = description.getJdbcHost();
         return new DefaultDatabaseInfo("oracle", url, url, jdbcHost, description.getDatabaseId());
     }
-    
+
     private DefaultDatabaseInfo parseSimpleUrl(final String url, final StringMaker maker) {
         final String host = maker.before(':').value();
         final String port = maker.next().after(':').before(':', '/').value();

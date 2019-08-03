@@ -20,7 +20,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
  * https://docs.voltdb.com/UsingVoltDB/sqlref_select.php
  */
 public class VoltDBDialect extends AbstractDialect {
-    public VoltDBDialect(){
+    public VoltDBDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
     }

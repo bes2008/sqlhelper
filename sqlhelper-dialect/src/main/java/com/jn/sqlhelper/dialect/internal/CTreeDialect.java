@@ -20,10 +20,11 @@ import com.jn.sqlhelper.dialect.internal.limit.TopLimitHandler;
  * https://docs.faircom.com/doc/sqlref/select.htm
  */
 public class CTreeDialect extends AbstractDialect {
-    public CTreeDialect(){
+    public CTreeDialect() {
         super();
         setLimitHandler(new TopLimitHandler().setUseSkipTop(true));
     }
+
     @Override
     public boolean isSupportsLimit() {
         return true;

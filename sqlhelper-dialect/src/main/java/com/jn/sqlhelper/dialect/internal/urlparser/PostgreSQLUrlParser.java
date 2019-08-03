@@ -38,7 +38,7 @@ public class PostgreSQLUrlParser extends CommonUrlParser {
 
     public PostgreSQLUrlParser() {
     }
-    
+
     @Override
     public DatabaseInfo parse(final String jdbcUrl) {
         if (jdbcUrl == null) {
@@ -46,27 +46,26 @@ public class PostgreSQLUrlParser extends CommonUrlParser {
             return UnKnownDatabaseInfo.INSTANCE;
         }
         if (!jdbcUrl.startsWith("jdbc:postgresql:")) {
-            logger.info("jdbcUrl has invalid prefix.(url:{}, prefix:{})", (Object)jdbcUrl, (Object)"jdbc:postgresql:");
+            logger.info("jdbcUrl has invalid prefix.(url:{}, prefix:{})", (Object) jdbcUrl, (Object) "jdbc:postgresql:");
             return UnKnownDatabaseInfo.INSTANCE;
         }
         DatabaseInfo result = null;
         try {
             result = this.parse0(jdbcUrl);
-        }
-        catch (Exception e) {
-            logger.info("PostgreJdbcUrl parse error. url: {}, Caused: {}", new Object[] { jdbcUrl, e.getMessage(), e });
+        } catch (Exception e) {
+            logger.info("PostgreJdbcUrl parse error. url: {}, Caused: {}", new Object[]{jdbcUrl, e.getMessage(), e});
             result = UnKnownDatabaseInfo.createUnknownDataBase("postgresql", jdbcUrl);
         }
         return result;
     }
-    
+
     private DatabaseInfo parse0(final String url) {
         if (this.isLoadbalanceUrl(url)) {
             return this.parseLoadbalancedUrl(url);
         }
         return this.parseNormal(url);
     }
-    
+
     private DatabaseInfo parseLoadbalancedUrl(final String url) {
         final StringMaker maker = new StringMaker(url);
         maker.after("jdbc:postgresql:");
@@ -77,11 +76,11 @@ public class PostgreSQLUrlParser extends CommonUrlParser {
         final String normalizedUrl = maker.clear().before('?').value();
         return new DefaultDatabaseInfo("postgresql", url, normalizedUrl, hostList, databaseId);
     }
-    
+
     private boolean isLoadbalanceUrl(final String url) {
         return url.regionMatches(true, 0, "jdbc:postgresql:loadbalance:", 0, "jdbc:postgresql:loadbalance:".length());
     }
-    
+
     private DatabaseInfo parseNormal(final String url) {
         final StringMaker maker = new StringMaker(url);
         maker.after("jdbc:postgresql:");

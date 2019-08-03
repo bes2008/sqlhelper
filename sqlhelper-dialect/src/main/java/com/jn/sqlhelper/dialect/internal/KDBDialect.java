@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;
 
 public class KDBDialect extends AbstractDialect {
-    public KDBDialect(){
+    public KDBDialect() {
         super();
         setLimitHandler(new OracleXLimitHandler());
     }

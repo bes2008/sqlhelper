@@ -18,16 +18,15 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 /**
  * http://valentina-db.com/docs/dokuwiki/v5/doku.php?id=valentina:vcomponents:vsql:reference:sqlgrammar:5.0#select_..._limit
- *
+ * <p>
  * supports 2 styles limit syntax:
  * 1) limit $limit offset $offset
  * 2) limit $offset, $limit
- *
+ * <p>
  * We use 2)
- *
  */
 public class ValentinaDialect extends AbstractDialect {
-    public ValentinaDialect(){
+    public ValentinaDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
     }

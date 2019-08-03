@@ -20,7 +20,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
  * http://altibase.com/resources/manuals/
  */
 public class AltibaseDialect extends AbstractDialect {
-    public AltibaseDialect(){
+    public AltibaseDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
     }

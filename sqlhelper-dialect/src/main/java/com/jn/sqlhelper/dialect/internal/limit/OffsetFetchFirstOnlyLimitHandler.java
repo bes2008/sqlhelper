@@ -26,8 +26,8 @@ import java.util.Locale;
  * group by ...
  * order by ...
  * offset ? rows fetch next ? rows only
- *
- *  every dialect use the limitHandler should set bindLimitParameterInReverseOrder = false
+ * <p>
+ * every dialect use the limitHandler should set bindLimitParameterInReverseOrder = false
  */
 public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
 
@@ -40,12 +40,12 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
     protected String getLimitString(String sql, int offset, int limit) {
         // https://fmhelp.filemaker.com/docs/16/en/fm16_sql_reference.pdf
         // https://documentation.progress.com/output/ua/OpenEdge_latest/#page/dmsrf%2Foffset-and-fetch-clauses.html%23wwID0E6CPQ
-        boolean hasOffset = offset>0;
+        boolean hasOffset = offset > 0;
         sql = sql.trim();
         String forUpdateClause = "";
         boolean isForUpdate = false;
         String sqlLowercase = sql.toLowerCase(Locale.ROOT);
-        if(isSupportForUpdate()) {
+        if (isSupportForUpdate()) {
             int forUpdateIndex = sqlLowercase.lastIndexOf("for update");
             if (forUpdateIndex > -1) {
                 forUpdateClause = sql.substring(forUpdateIndex);
@@ -57,8 +57,8 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
 
         boolean hasWithClause = false;
         String withClause = null;
-        if(isSupportWithInSelectEnd()) {
-            int withClauseIndex = sqlLowercase.lastIndexOf("with ",sqlLowercase.length()- (forUpdateClause.length()+7));
+        if (isSupportWithInSelectEnd()) {
+            int withClauseIndex = sqlLowercase.lastIndexOf("with ", sqlLowercase.length() - (forUpdateClause.length() + 7));
             if (withClauseIndex > 0) {
                 sql = sql.substring(0, withClauseIndex - 1);
                 hasWithClause = true;
@@ -66,13 +66,13 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
             }
         }
 
-        boolean hasUsingIndexClause=false;
-        String usingIndexClause= null;
-        if(isSupportUsingIndexClauseInSelectEnd()){
-            int usingIndexIndex=-1;
+        boolean hasUsingIndexClause = false;
+        String usingIndexClause = null;
+        if (isSupportUsingIndexClauseInSelectEnd()) {
+            int usingIndexIndex = -1;
             usingIndexIndex = sqlLowercase.lastIndexOf("using index", sqlLowercase.length() - 11);
-            if(usingIndexIndex>0){
-                sql = sql.substring(0, usingIndexIndex-1);
+            if (usingIndexIndex > 0) {
+                sql = sql.substring(0, usingIndexIndex - 1);
                 hasUsingIndexClause = true;
                 usingIndexClause = sqlLowercase.substring(usingIndexIndex);
             }
@@ -81,25 +81,24 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
         StringBuilder sql2 = new StringBuilder(sql.length() + 100);
         sql2.append(sql);
 
-        if(getDialect().isUseLimitInVariableMode()) {
+        if (getDialect().isUseLimitInVariableMode()) {
             if (hasOffset) {
                 sql2.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
             } else {
                 sql2.append(" FETCH FIRST ? ROWS ONLY");
             }
-        }else{
+        } else {
             if (hasOffset) {
-                sql2.append(" OFFSET "+offset+" ROWS FETCH NEXT "+limit+" ROWS ONLY");
+                sql2.append(" OFFSET " + offset + " ROWS FETCH NEXT " + limit + " ROWS ONLY");
             } else {
-                sql2.append(" FETCH FIRST "+limit+" ROWS ONLY");
+                sql2.append(" FETCH FIRST " + limit + " ROWS ONLY");
             }
         }
-        if(hasWithClause){
+        if (hasWithClause) {
             sql2.append(withClause);
-        }
-        else if(isForUpdate){
+        } else if (isForUpdate) {
             sql2.append(" " + forUpdateClause);
-        }else if(hasUsingIndexClause){
+        } else if (hasUsingIndexClause) {
             sql2.append(" " + usingIndexClause);
         }
         return sql2.toString();
@@ -108,6 +107,7 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
     private boolean isSupportUsingIndexClauseInSelectEnd = false;
     private boolean supportForUpdate = true;
     private boolean supportWithInSelectEnd = true;
+
     public boolean isSupportUsingIndexClauseInSelectEnd() {
         return isSupportUsingIndexClauseInSelectEnd;
     }

@@ -17,10 +17,10 @@ package com.jn.sqlhelper.dialect;
 
 public interface QueryParameters<P> {
     RowSelection getRowSelection();
-    
+
     boolean isCallable();
-    
+
     P getParameterValues();
-    
+
     int getParameterValuesSize();
 }

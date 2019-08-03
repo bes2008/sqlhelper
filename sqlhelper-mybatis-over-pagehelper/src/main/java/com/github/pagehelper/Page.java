@@ -33,7 +33,7 @@ import java.util.List;
  *
  * @author liuzh/abel533/isea533
  * @version 3.6.0
- *          项目地址 : http://git.oschina.net/free/Mybatis_PageHelper
+ * 项目地址 : http://git.oschina.net/free/Mybatis_PageHelper
  */
 public class Page<E> extends ArrayList<E> implements Closeable {
     private static final long serialVersionUID = 1L;
@@ -158,7 +158,7 @@ public class Page<E> extends ArrayList<E> implements Closeable {
     }
 
     public Page<E> setPageNum(int pageNum) {
-        if(pageNum > 0) {
+        if (pageNum > 0) {
             this.pageNum = pageNum;
         }
         return this;
@@ -199,7 +199,7 @@ public class Page<E> extends ArrayList<E> implements Closeable {
         }
         //分页合理化，针对不合理的页码自动处理
         if ((reasonable != null && reasonable) && pageNum > pages) {
-            if(pages!=0){
+            if (pages != 0) {
                 pageNum = pages;
             }
             calculateStartAndEndRow();
@@ -233,6 +233,7 @@ public class Page<E> extends ArrayList<E> implements Closeable {
         }
         return this;
     }
+
     public String getOrderBy() {
         return orderBy;
     }
@@ -254,15 +255,13 @@ public class Page<E> extends ArrayList<E> implements Closeable {
      * 计算起止行号
      */
     private void calculateStartAndEndRow() {
-        if(pageSize<0){
+        if (pageSize < 0) {
             this.startRow = 0;
             this.endRow = Integer.MAX_VALUE;
-        }
-        else if (pageSize ==0){
+        } else if (pageSize == 0) {
             this.startRow = -1;
             this.endRow = -1;
-        }
-        else if (pageSize>0){
+        } else if (pageSize > 0) {
             this.startRow = (pageNum - 1) * pageSize;
             this.endRow = startRow + pageSize;
         }

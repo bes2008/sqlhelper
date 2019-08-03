@@ -17,10 +17,10 @@ package com.jn.sqlhelper.util;
 import java.lang.annotation.Annotation;
 
 public class Reflects {
-    public static Annotation getDeclaredAnnotation(Class clazz, Class<? extends Annotation> annotationClazz){
+    public static Annotation getDeclaredAnnotation(Class clazz, Class<? extends Annotation> annotationClazz) {
         Annotation[] annotations = clazz.getDeclaredAnnotations();
-        for(Annotation anno : annotations){
-            if(annotationClazz.isInstance(anno)){
+        for (Annotation anno : annotations) {
+            if (annotationClazz.isInstance(anno)) {
                 return anno;
             }
         }

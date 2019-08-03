@@ -21,14 +21,14 @@ public class MangoCommonPagingInterceptor extends QueryInterceptor {
         DatabaseMetaData databaseMetaData = null;
         try {
             databaseMetaData = conn.getMetaData();
-        }catch (Throwable ex){
+        } catch (Throwable ex) {
             return;
         }
-        if(!MangoPagingContext.instrumentor.beginIfSupportsLimit(databaseMetaData)){
+        if (!MangoPagingContext.instrumentor.beginIfSupportsLimit(databaseMetaData)) {
             return;
         }
         Page page = findPageRequest(parameters);
-        if(page==null){
+        if (page == null) {
             return;
         }
         // 参数检测
@@ -41,7 +41,7 @@ public class MangoCommonPagingInterceptor extends QueryInterceptor {
             throw new PageException("pageSize need >= 0, but pageSize is " + pageSize);
         }
 
-        if(page.isFetchTotal()){
+        if (page.isFetchTotal()) {
             String countSql = MangoPagingContext.instrumentor.countSql(boundSql.getSql());
             BoundSql countBoundSql = boundSql.copy();
             countBoundSql.setSql(countSql);
@@ -50,7 +50,7 @@ public class MangoCommonPagingInterceptor extends QueryInterceptor {
             page.setTotal(total);
         }
 
-        int offset = pageNum<=0?0:(pageNum-1)*pageSize;
+        int offset = pageNum <= 0 ? 0 : (pageNum - 1) * pageSize;
         RowSelection rowSelection = new RowSelection();
         rowSelection.setLimit(pageSize);
         rowSelection.setOffset(offset);

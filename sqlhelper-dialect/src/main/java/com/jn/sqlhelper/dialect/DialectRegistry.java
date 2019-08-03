@@ -16,10 +16,10 @@ package com.jn.sqlhelper.dialect;
 
 import com.jn.sqlhelper.dialect.annotation.Driver;
 import com.jn.sqlhelper.dialect.annotation.Name;
+import com.jn.sqlhelper.dialect.internal.*;
 import com.jn.sqlhelper.util.Holder;
 import com.jn.sqlhelper.util.Reflects;
 import com.jn.sqlhelper.util.Strings;
-import com.jn.sqlhelper.dialect.internal.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +54,7 @@ public class DialectRegistry {
         return registry;
     }
 
-    public Collection<Dialect> getDialects(){
+    public Collection<Dialect> getDialects() {
         return nameToDialectMap.values();
     }
 
@@ -70,23 +70,23 @@ public class DialectRegistry {
         return DialectRegistry.nameToDialectMap.get(databaseId);
     }
 
-    private static String databaseIdStringLowerCase(DatabaseMetaData databaseMetaData){
+    private static String databaseIdStringLowerCase(DatabaseMetaData databaseMetaData) {
         return databaseIdString(databaseMetaData).toLowerCase();
     }
 
-    private static String databaseIdString(DatabaseMetaData databaseMetaData){
+    private static String databaseIdString(DatabaseMetaData databaseMetaData) {
         try {
             return databaseMetaData.getDatabaseProductName();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             try {
-                return databaseMetaData.getDriverName().toLowerCase() +" version: "+ databaseMetaData.getDriverVersion().toLowerCase();
-            }catch (SQLException ex1) {
+                return databaseMetaData.getDriverName().toLowerCase() + " version: " + databaseMetaData.getDriverVersion().toLowerCase();
+            } catch (SQLException ex1) {
                 // ignore it
             }
         }
         try {
             return databaseMetaData.getURL();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             logger.warn(ex.getMessage(), ex);
         }
         return databaseMetaData.getClass().getCanonicalName();
@@ -98,17 +98,17 @@ public class DialectRegistry {
             String databaseIdString = databaseIdStringLowerCase(databaseMetaData);
             try {
                 dialect = ((Holder<Dialect>) DialectRegistry.dbToDialectMap.get(databaseIdString)).get();
-            }catch (NullPointerException ex){
+            } catch (NullPointerException ex) {
                 // ignore
             }
-            if(dialect==null){
-                Enumeration<String> keys = ( Enumeration<String>)vendorDatabaseIdMappings.propertyNames();
-                while (keys.hasMoreElements()){
+            if (dialect == null) {
+                Enumeration<String> keys = (Enumeration<String>) vendorDatabaseIdMappings.propertyNames();
+                while (keys.hasMoreElements()) {
                     String key = keys.nextElement();
-                    if(databaseIdString.contains(key.toLowerCase())){
+                    if (databaseIdString.contains(key.toLowerCase())) {
                         dialect = getDialectByName(vendorDatabaseIdMappings.getProperty(key));
-                        if(dialect!=null){
-                            dbToDialectMap.put(databaseIdString,new Holder<Dialect>(dialect));
+                        if (dialect != null) {
+                            dbToDialectMap.put(databaseIdString, new Holder<Dialect>(dialect));
                             break;
                         }
                     }
@@ -118,14 +118,13 @@ public class DialectRegistry {
         return dialect;
     }
 
-    private static void loadCustomDialects(){
+    private static void loadCustomDialects() {
         loadCustomDialects(DialectRegistry.class.getClassLoader());
     }
-    public static void loadCustomDialects(ClassLoader classLoader){
+
+    public static void loadCustomDialects(ClassLoader classLoader) {
         ServiceLoader<AbstractDialect> serviceLoader = ServiceLoader.load(AbstractDialect.class, classLoader);
-        Iterator<AbstractDialect> iter = serviceLoader.iterator();
-        while (iter.hasNext()){
-            AbstractDialect dialect = iter.next();
+        for (AbstractDialect dialect : serviceLoader) {
             registerDialectByClass(dialect.getClass(), dialect);
         }
     }
@@ -243,10 +242,10 @@ public class DialectRegistry {
                 VoltDBDialect.class,
 
                 XtremeSQLDialect.class
-                };
+        };
 
         for (Class<? extends Dialect> clazz : Arrays.asList(dialects)) {
-            registerDialectByClass(clazz,null);
+            registerDialectByClass(clazz, null);
         }
     }
 
@@ -277,19 +276,20 @@ public class DialectRegistry {
     }
 
     /**
-     *  guess based productName, url, driver etc
+     * guess based productName, url, driver etc
+     *
      * @return database id
      */
-    public static String guessDatabaseId(String productName){
+    public static String guessDatabaseId(String productName) {
 
-        if(productName==null){
+        if (productName == null) {
             return null;
         }
-        Iterator<Object> iter =(vendorDatabaseIdMappings.keySet().iterator());
+        Iterator<Object> iter = (vendorDatabaseIdMappings.keySet().iterator());
         productName = productName.toLowerCase();
-        while (iter.hasNext()){
+        while (iter.hasNext()) {
             String databaseId = iter.next().toString().toLowerCase();
-            if(productName.contains(databaseId)){
+            if (productName.contains(databaseId)) {
                 return databaseId;
             }
         }
@@ -337,9 +337,10 @@ public class DialectRegistry {
         throw new ClassCastException(error);
     }
 
-    private static Dialect registerDialectByClass(final Class<? extends Dialect> clazz){
-        return registerDialectByClass(clazz,null);
+    private static Dialect registerDialectByClass(final Class<? extends Dialect> clazz) {
+        return registerDialectByClass(clazz, null);
     }
+
     private static Dialect registerDialectByClass(final Class<? extends Dialect> clazz, Dialect dialect) {
 
         final Name nameAnno = (Name) Reflects.getDeclaredAnnotation(clazz, Name.class);
@@ -353,7 +354,7 @@ public class DialectRegistry {
             final String simpleClassName = clazz.getSimpleName().toLowerCase();
             name = simpleClassName.replaceAll("dialect", "");
         }
-        if(dialect==null) {
+        if (dialect == null) {
             final Driver driverAnno = (Driver) Reflects.getDeclaredAnnotation(clazz, Driver.class);
             Class<? extends java.sql.Driver> driverClass = null;
             Constructor<? extends Dialect> driverConstructor = null;

@@ -23,25 +23,26 @@ import java.util.Collection;
 public class JdbcUrlParser {
     private static final Logger logger = LoggerFactory.getLogger(JdbcUrlParser.class);
     private DialectRegistry dialectRegistry = DialectRegistry.getInstance();
-    public DatabaseInfo parse(String url){
+
+    public DatabaseInfo parse(String url) {
         Collection<Dialect> dialects = dialectRegistry.getDialects();
         Dialect d = null;
-        for (Dialect dialect : dialects){
-            for(String schema: dialect.getUrlSchemas()){
-                if(url.startsWith(schema)){
+        for (Dialect dialect : dialects) {
+            for (String schema : dialect.getUrlSchemas()) {
+                if (url.startsWith(schema)) {
                     d = dialect;
                     break;
                 }
             }
         }
-        if(d!=null) {
+        if (d != null) {
             try {
                 return d.parse(url);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 return UnKnownDatabaseInfo.createUnknownDataBase(url);
             }
-        }else{
+        } else {
             return UnKnownDatabaseInfo.createUnknownDataBase(url);
         }
     }

@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;
 
 public class GBaseDialect extends AbstractDialect {
-    public GBaseDialect(){
+    public GBaseDialect() {
         super();
         setLimitHandler(new OracleXLimitHandler());
     }

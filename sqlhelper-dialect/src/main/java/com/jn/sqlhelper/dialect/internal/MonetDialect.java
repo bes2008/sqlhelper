@@ -14,19 +14,20 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.RowSelection;
+import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 
 import java.util.regex.Pattern;
 
-public class MonetDialect extends AbstractDialect{
-    private static final Pattern SAMPLE_SQL_PATTERN= Pattern.compile(".* sample\\w+(\\d+|\\?)$");
-    public MonetDialect(){
+public class MonetDialect extends AbstractDialect {
+    private static final Pattern SAMPLE_SQL_PATTERN = Pattern.compile(".* sample\\w+(\\d+|\\?)$");
+
+    public MonetDialect() {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
             public String processSql(String sql, RowSelection rowSelection) {
-                return getLimitString(sql, rowSelection.getOffset()>0);
+                return getLimitString(sql, rowSelection.getOffset() > 0);
             }
 
             /**
@@ -35,21 +36,21 @@ public class MonetDialect extends AbstractDialect{
             @Override
             protected String getLimitString(String sql, boolean hasOffset) {
                 sql = sql.trim();
-                while (sql.endsWith(";")){
-                    sql = sql.substring(0, sql.length() -1);
+                while (sql.endsWith(";")) {
+                    sql = sql.substring(0, sql.length() - 1);
                 }
                 String lowercaseSql = sql.toLowerCase();
                 boolean hasSampleClause = false;
                 String sampleSql = null;
 
-                if(SAMPLE_SQL_PATTERN.matcher(lowercaseSql).matches()){
+                if (SAMPLE_SQL_PATTERN.matcher(lowercaseSql).matches()) {
                     hasSampleClause = true;
                     int lastIndex = lowercaseSql.lastIndexOf("sample");
-                    sampleSql = " " +sql.substring(lastIndex);
+                    sampleSql = " " + sql.substring(lastIndex);
                     sql = sql.substring(0, lastIndex);
                 }
 
-                sql = sql + (hasOffset?" limit ? offset ? ":" limit ? ") + (hasSampleClause ? sampleSql : "");
+                sql = sql + (hasOffset ? " limit ? offset ? " : " limit ? ") + (hasSampleClause ? sampleSql : "");
                 return sql;
             }
         });

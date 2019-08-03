@@ -15,44 +15,45 @@
 
 package com.jn.sqlhelper.dialect.internal.urlparser.oracle;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class KeyValue
-{
+public class KeyValue {
     public String key;
     public String value;
     public List<KeyValue> keyValueList;
-    
+
     public String getKey() {
         return this.key;
     }
-    
+
     public void setKey(final String key) {
         this.key = key;
     }
-    
+
     public String getValue() {
         return this.value;
     }
-    
+
     public void setValue(final String value) {
         this.value = value;
     }
-    
+
     public List<KeyValue> getKeyValueList() {
         if (this.keyValueList == null) {
             return Collections.emptyList();
         }
         return this.keyValueList;
     }
-    
+
     public void addKeyValueList(final KeyValue keyValue) {
         if (this.keyValueList == null) {
             this.keyValueList = new ArrayList<KeyValue>();
         }
         this.keyValueList.add(keyValue);
     }
-    
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
@@ -66,7 +67,7 @@ public class KeyValue
         sb.append('}');
         return sb.toString();
     }
-    
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -75,25 +76,25 @@ public class KeyValue
         if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
-        final KeyValue keyValue = (KeyValue)o;
-        Label_0062: {
+        final KeyValue keyValue = (KeyValue) o;
+        Label_0062:
+        {
             if (this.key != null) {
                 if (this.key.equals(keyValue.key)) {
                     break Label_0062;
                 }
-            }
-            else if (keyValue.key == null) {
+            } else if (keyValue.key == null) {
                 break Label_0062;
             }
             return false;
         }
-        Label_0097: {
+        Label_0097:
+        {
             if (this.keyValueList != null) {
                 if (this.keyValueList.equals(keyValue.keyValueList)) {
                     break Label_0097;
                 }
-            }
-            else if (keyValue.keyValueList == null) {
+            } else if (keyValue.keyValueList == null) {
                 break Label_0097;
             }
             return false;
@@ -102,13 +103,12 @@ public class KeyValue
             if (this.value.equals(keyValue.value)) {
                 return true;
             }
-        }
-        else if (keyValue.value == null) {
+        } else if (keyValue.value == null) {
             return true;
         }
         return false;
     }
-    
+
     @Override
     public int hashCode() {
         int result = (this.key != null) ? this.key.hashCode() : 0;

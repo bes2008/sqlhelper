@@ -20,10 +20,11 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
  * https://clickhouse.yandex/docs/en/query_language/select/
  */
 public class ClickHouseDialect extends AbstractDialect {
-    public ClickHouseDialect(){
+    public ClickHouseDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
     }
+
     @Override
     public boolean isSupportsLimit() {
         return true;

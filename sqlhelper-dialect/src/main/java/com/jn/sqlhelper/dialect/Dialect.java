@@ -35,7 +35,8 @@ public interface Dialect extends UrlParser {
 
     /**
      * Generally if there is no, limit applied to a query we do not apply any limits
-     *  to the sql query. This option forces that the limit be written to the sql query.
+     * to the sql query. This option forces that the limit be written to the sql query.
+     *
      * @return True to force limit into soL query even if none specified in query, false otherwise
      */
     boolean isForceLimitUsage();
@@ -58,6 +59,7 @@ public interface Dialect extends UrlParser {
 
     /**
      * Whether set limit or offset with placeholder '?'
+     *
      * @return true if use '?' for limit or offset variable, else false
      */
     boolean isUseLimitInVariableMode();
@@ -77,15 +79,15 @@ public interface Dialect extends UrlParser {
 
     /**
      * Whether bind parameter in reverse or not.
-     *
+     * <p>
      * Here assume the normal order is: $offset, $limit
      * so the reverse order is: $limit, $offset
-     *
+     * <p>
      * Based on the assume,
      * case 1:
-     *  limit $offset, $limit  ==> reverse = false
+     * limit $offset, $limit  ==> reverse = false
      * case 2:
-     *  limit $limit offset $offset ==> reverse = true
+     * limit $limit offset $offset ==> reverse = true
      */
     boolean isBindLimitParametersInReverseOrder();
 
@@ -115,12 +117,14 @@ public interface Dialect extends UrlParser {
 
     /**
      * Get quote for symbol (e.g. table name, field name)
+     *
      * @return the quote
      */
     char getBeforeQuote();
 
     /**
      * Get quote for symbol (e.g. table name, field name)
+     *
      * @return the quote
      */
     char getAfterQuote();

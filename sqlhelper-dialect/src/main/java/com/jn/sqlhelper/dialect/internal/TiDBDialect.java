@@ -19,15 +19,15 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 /**
  * https://pingcap.com/docs/dev/reference/sql/statements/select/
  * https://www.pingcap.com/docs-cn/sql/dml/
- *
+ * <p>
  * supports two style：
  * 1) limit $offset, $limit
  * 2) limit $limit offset $offset
- *
+ * <p>
  * we use 2)
  */
 public class TiDBDialect extends AbstractDialect {
-    public TiDBDialect(){
+    public TiDBDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler().setSupportLockInModeClause(true));
     }

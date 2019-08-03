@@ -38,13 +38,13 @@ public class BatchInsertExecutor {
 
     private BatchInsertTaskFactory taskFactory;
 
-    public BatchInsertExecutor(long start, long end, int concurrency, ConnectionFactory connectionFactory){
+    public BatchInsertExecutor(long start, long end, int concurrency, ConnectionFactory connectionFactory) {
         this.start = Calendar.getInstance();
         this.start.setTimeInMillis(start);
         this.end = end;
-        this.connFactory  =connectionFactory;
-        concurrency = concurrency >0?concurrency:1;
-        executor= Executors.newFixedThreadPool(concurrency);
+        this.connFactory = connectionFactory;
+        concurrency = concurrency > 0 ? concurrency : 1;
+        executor = Executors.newFixedThreadPool(concurrency);
     }
 
     public void setConnectionFactory(ConnectionFactory connFactory) {
@@ -55,45 +55,45 @@ public class BatchInsertExecutor {
         this.taskFactory = taskFactory;
     }
 
-    public void setStartTimeAsZero(){
+    public void setStartTimeAsZero() {
         this.start.set(Calendar.HOUR, 0);
         this.start.set(Calendar.MINUTE, 0);
         this.start.set(Calendar.SECOND, 0);
     }
 
-    protected long nextTime(){
+    protected long nextTime() {
         start.add(Calendar.HOUR, 1);
         return start.getTimeInMillis();
     }
 
-    public void startup(){
+    public void startup() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         logger.info("startup() insert time: {}", df.format(new Date(System.currentTimeMillis())));
-        long time =end;
-        while ((time = nextTime())<= end){
+        long time = end;
+        while ((time = nextTime()) <= end) {
             logger.info(df.format(new Date(time)));
             BatchInsertTask task = taskFactory.createTask(df.format(new Date(time)), random.nextInt());
             submitTask(task);
         }
     }
 
-    private void submitTask(BatchInsertTask task){
+    private void submitTask(BatchInsertTask task) {
         task.setConnFactory(connFactory);
         futures.add(executor.submit(task));
     }
 
-    public void shutdown() throws InterruptedException, ExecutionException{
-        try{
-            for(int i= 0; i< futures.size(); i++){
+    public void shutdown() throws InterruptedException, ExecutionException {
+        try {
+            for (int i = 0; i < futures.size(); i++) {
                 BatchInsertResult result = futures.get(i).get();
-                if(result.getExpectResult()==result.getExpectResult()){
-                    logger.info(result.getTime()+": success");
-                }else{
-                    logger.warn(result.getTime()+": fail");
+                if (result.getExpectResult() == result.getExpectResult()) {
+                    logger.info(result.getTime() + ": success");
+                } else {
+                    logger.warn(result.getTime() + ": fail");
                 }
             }
-        }finally {
-            if (executor!=null && !executor.isShutdown() && !executor.isTerminated()){
+        } finally {
+            if (executor != null && !executor.isShutdown() && !executor.isTerminated()) {
                 executor.shutdownNow();
             }
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

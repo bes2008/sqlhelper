@@ -19,8 +19,8 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 /**
  * Amazon Redshift, based on PostgreSQL
  */
-public class RedshiftDialect extends AbstractDialect{
-    public RedshiftDialect(){
+public class RedshiftDialect extends AbstractDialect {
+    public RedshiftDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
     }

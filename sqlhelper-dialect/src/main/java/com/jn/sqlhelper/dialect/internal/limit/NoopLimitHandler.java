@@ -38,6 +38,7 @@ public class NoopLimitHandler
     public int bindLimitParametersAtEndOfQuery(RowSelection selection, PreparedStatement statement, int index) {
         return 0;
     }
+
     @Override
     public void setMaxRows(RowSelection selection, PreparedStatement statement) throws SQLException {
         if (LimitHelper.hasMaxRows(selection)) {

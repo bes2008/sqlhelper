@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
 
 public class ElasticsearchDialect extends AbstractDialect {
-    public ElasticsearchDialect(){
+    public ElasticsearchDialect() {
         super();
         setLimitHandler(new LimitOnlyLimitHandler());
     }

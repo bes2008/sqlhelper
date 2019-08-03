@@ -71,14 +71,14 @@ public abstract class PageObjectUtil {
         if (params == null) {
             throw new PageException("无法获取分页查询参数!");
         }
-        if(params instanceof IPage){
+        if (params instanceof IPage) {
             IPage pageParams = (IPage) params;
             Page page = null;
-            if(pageParams.getPageNum() != null && pageParams.getPageSize() != null){
+            if (pageParams.getPageNum() != null && pageParams.getPageSize() != null) {
                 page = new Page(pageParams.getPageNum(), pageParams.getPageSize());
             }
             if (StringUtil.isNotEmpty(pageParams.getOrderBy())) {
-                if(page != null){
+                if (page != null) {
                     page.setOrderBy(pageParams.getOrderBy());
                 } else {
                     page = new Page();
@@ -112,7 +112,7 @@ public abstract class PageObjectUtil {
             Object _pageNum = getParamValue(paramsObject, "pageNum", required);
             Object _pageSize = getParamValue(paramsObject, "pageSize", required);
             if (_pageNum == null || _pageSize == null) {
-                if(hasOrderBy){
+                if (hasOrderBy) {
                     Page page = new Page();
                     page.setOrderBy(orderBy.toString());
                     page.setOrderByOnly(true);

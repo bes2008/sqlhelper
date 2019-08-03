@@ -25,16 +25,17 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class MariaDBUrlParser extends CommonUrlParser{
+public class MariaDBUrlParser extends CommonUrlParser {
     private static final String URL_PREFIX = "jdbc:mariadb:";
     private static final String MYSQL_URL_PREFIX = "jdbc:mysql:";
-    private static final Logger logger =LoggerFactory.getLogger(MariaDBUrlParser.class) ;
+    private static final Logger logger = LoggerFactory.getLogger(MariaDBUrlParser.class);
     private static final List<String> URL_SCHEMAS = Arrays.asList(new String[]{URL_PREFIX});
 
     @Override
     public List<String> getUrlSchemas() {
         return URL_SCHEMAS;
     }
+
     public MariaDBUrlParser() {
     }
 
@@ -44,12 +45,12 @@ public class MariaDBUrlParser extends CommonUrlParser{
         }
         return this.parseNormal(url, type);
     }
-    
+
     private boolean isLoadbalanceUrl(final String url, final Type type) {
         final String loadbalanceUrlPrefix = type.getLoadbalanceUrlPrefix();
         return url.regionMatches(true, 0, loadbalanceUrlPrefix, 0, loadbalanceUrlPrefix.length());
     }
-    
+
     private DatabaseInfo parseLoadbalancedUrl(final String url, final Type type) {
         final StringMaker maker = new StringMaker(url);
         maker.after(type.getUrlPrefix());
@@ -60,7 +61,7 @@ public class MariaDBUrlParser extends CommonUrlParser{
         final String normalizedUrl = maker.clear().before('?').value();
         return new DefaultDatabaseInfo("mariadb", url, normalizedUrl, hostList, databaseId);
     }
-    
+
     private DatabaseInfo parseNormal(final String url, final Type type) {
         final StringMaker maker = new StringMaker(url);
         maker.after(type.getUrlPrefix());
@@ -71,28 +72,27 @@ public class MariaDBUrlParser extends CommonUrlParser{
         final String normalizedUrl = maker.clear().before('?').value();
         return new DefaultDatabaseInfo("mariadb", url, normalizedUrl, hostList, databaseId);
     }
-    
-    public enum Type
-    {
-        MARIA("jdbc:mariadb:"), 
+
+    public enum Type {
+        MARIA("jdbc:mariadb:"),
         MYSQL("jdbc:mysql:");
-        
+
         private final String urlPrefix;
         private final String loadbalanceUrlPrefix;
-        
+
         private Type(final String urlPrefix) {
             this.urlPrefix = urlPrefix;
             this.loadbalanceUrlPrefix = urlPrefix + "loadbalance:";
         }
-        
+
         private String getUrlPrefix() {
             return this.urlPrefix;
         }
-        
+
         private String getLoadbalanceUrlPrefix() {
             return this.urlPrefix + "loadbalance:";
         }
-        
+
         public static Type findType(final String jdbcUrl) {
             for (final Type type : values()) {
                 if (jdbcUrl.startsWith(type.urlPrefix)) {
@@ -111,15 +111,14 @@ public class MariaDBUrlParser extends CommonUrlParser{
         }
         final Type type = Type.findType(jdbcUrl);
         if (type == null) {
-            logger.info("jdbcUrl has invalid prefix.(url:{}, prefix:{}, {})", new Object[] { jdbcUrl, "jdbc:mariadb:", "jdbc:mysql:" });
+            logger.info("jdbcUrl has invalid prefix.(url:{}, prefix:{}, {})", new Object[]{jdbcUrl, "jdbc:mariadb:", "jdbc:mysql:"});
             return UnKnownDatabaseInfo.INSTANCE;
         }
         DatabaseInfo result = null;
         try {
             result = this.parse0(jdbcUrl, type);
-        }
-        catch (Exception e) {
-            logger.info("MaridDBJdbcUrl parse error. url: {}, Caused: {}", new Object[] { jdbcUrl, e.getMessage(), e });
+        } catch (Exception e) {
+            logger.info("MaridDBJdbcUrl parse error. url: {}, Caused: {}", new Object[]{jdbcUrl, e.getMessage(), e});
             result = UnKnownDatabaseInfo.createUnknownDataBase("mariadb", jdbcUrl);
         }
         return result;

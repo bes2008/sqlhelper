@@ -22,13 +22,13 @@ import java.util.Properties;
 public class ConnectionFactory {
     private ConnectionConfiguration connectionConfiguration;
 
-    public ConnectionFactory(String driver, String url, String user, String password, Properties driverProps){
-        this(new ConnectionConfiguration(driver,url, user, password, driverProps));
+    public ConnectionFactory(String driver, String url, String user, String password, Properties driverProps) {
+        this(new ConnectionConfiguration(driver, url, user, password, driverProps));
     }
 
-    public ConnectionFactory(ConnectionConfiguration connConfig){
+    public ConnectionFactory(ConnectionConfiguration connConfig) {
         this.connectionConfiguration = connConfig;
-        if(connConfig.getDriver()!=null){
+        if (connConfig.getDriver() != null) {
             try {
                 Class.forName(connConfig.getDriver(), false, Thread.currentThread().getContextClassLoader());
             } catch (ClassNotFoundException e) {
@@ -41,16 +41,16 @@ public class ConnectionFactory {
         this.connectionConfiguration = connectionConfiguration;
     }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
         try {
-            if(connectionConfiguration.getDriver()!=null){
+            if (connectionConfiguration.getDriver() != null) {
                 try {
                     Class.forName(connectionConfiguration.getDriver(), true, Thread.currentThread().getContextClassLoader());
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
             }
-            if(connectionConfiguration.getDriverProps()!=null && !connectionConfiguration.getDriverProps().isEmpty()){
+            if (connectionConfiguration.getDriverProps() != null && !connectionConfiguration.getDriverProps().isEmpty()) {
                 return DriverManager.getConnection(connectionConfiguration.getUrl(), connectionConfiguration.getDriverProps());
             }
             DriverManager.getConnection(connectionConfiguration.getUrl(), connectionConfiguration.getUser(), connectionConfiguration.getPassword());
