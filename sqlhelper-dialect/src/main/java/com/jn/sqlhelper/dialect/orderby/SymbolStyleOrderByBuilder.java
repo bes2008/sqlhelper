@@ -23,11 +23,25 @@ import java.util.StringTokenizer;
  * 2) expression1+, expression2-
  */
 public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
-    private String ascSymbol = "+";
-    private String descSymbol = "-";
+    private String ascSymbol;
+    private String descSymbol;
+
+    public static final SymbolStyleOrderByBuilder MATH_SYMBOL_ORDER_BY_BUILDER = new SymbolStyleOrderByBuilder("+", "-");
+
+    public SymbolStyleOrderByBuilder() {
+    }
+
+    public SymbolStyleOrderByBuilder(String ascSymbol, String descSymbol) {
+        ascSymbol(ascSymbol);
+        descSymbol(descSymbol);
+    }
 
     @Override
     public OrderBy build(String s) {
+        if (Strings.isBlank(ascSymbol) || Strings.isBlank(descSymbol)) {
+            throw new OrderBySymolException("OrderByBuilder symbol is illegal, ascSymbol:" + ascSymbol + ",descSymbol:" + descSymbol);
+        }
+
         if (Strings.isBlank(s)) {
             return EMPTY;
         }
