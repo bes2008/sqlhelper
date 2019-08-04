@@ -12,8 +12,7 @@
     <artifactId>sqlhelper-dialect</artifactId>
     <description>
         Database dialects ( supports pagination, UrlParser, SqlStatementParser, WallFilter, BatchExecutor for Test)
-        based Java,
-        you can use it in any ORM framework.
+        based Java, you can use it in any ORM framework.
     </description>
 
 </project>
