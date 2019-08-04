@@ -50,9 +50,13 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
         String currentSymbol = null;
         String currentExpression = null;
 
-        StringTokenizer tokenizer = new StringTokenizer(s);
+        StringTokenizer tokenizer = new StringTokenizer(s, " \t\n\r\f,", true);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
+            if(Strings.isBlank(token)){
+                continue;
+            }
+
             boolean isAscSymbol = ascSymbol.equals(token);
             boolean isDescSymbol = descSymbol.equals(token);
             boolean isDelimiter = ",".equals(token);
@@ -60,6 +64,28 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
             if (isAscSymbol || isDescSymbol) {
                 currentSymbol = token;
             } else if (!isDelimiter) {
+                String lastOrderBySymbolForCurrentExpression = null;
+                while (token.startsWith(ascSymbol) || token.startsWith(descSymbol)) {
+                    if (token.startsWith(ascSymbol)) {
+                        token = token.substring(ascSymbol.length());
+                        lastOrderBySymbolForCurrentExpression = ascSymbol;
+                    } else {
+                        token = token.substring(descSymbol.length());
+                        lastOrderBySymbolForCurrentExpression = descSymbol;
+                    }
+                }
+                while (token.endsWith(ascSymbol) || token.endsWith(descSymbol)) {
+                    if (token.endsWith(ascSymbol)) {
+                        token = token.substring(0, token.lastIndexOf(ascSymbol));
+                        lastOrderBySymbolForCurrentExpression = ascSymbol;
+                    } else {
+                        token = token.substring(0, token.lastIndexOf(descSymbol));
+                        lastOrderBySymbolForCurrentExpression = descSymbol;
+                    }
+                }
+                if (lastOrderBySymbolForCurrentExpression != null) {
+                    currentSymbol = lastOrderBySymbolForCurrentExpression;
+                }
                 currentExpression = token;
             } else {
                 if (currentExpression != null) {
@@ -80,8 +106,21 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
     }
 
     public SymbolStyleOrderByBuilder ascSymbol(String ascSymbol) {
-        this.ascSymbol = ascSymbol;
+        if(isValidSymbol(ascSymbol)) {
+            this.ascSymbol = ascSymbol;
+        }
         return this;
+    }
+
+    private boolean isValidSymbol(String symbol){
+        if(Strings.isBlank(symbol)){
+            return false;
+        }
+        symbol = symbol.trim();
+        if(symbol.equals("?")){
+            return false;
+        }
+        return true;
     }
 
     public String descSymbol() {
@@ -89,7 +128,9 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
     }
 
     public SymbolStyleOrderByBuilder descSymbol(String descSymbol) {
-        this.descSymbol = descSymbol;
+        if(isValidSymbol(descSymbol)) {
+            this.descSymbol = descSymbol;
+        }
         return this;
     }
 

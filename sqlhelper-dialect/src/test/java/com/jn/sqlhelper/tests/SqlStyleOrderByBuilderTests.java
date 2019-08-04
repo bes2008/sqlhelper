@@ -26,8 +26,11 @@ public class SqlStyleOrderByBuilderTests {
         System.out.println(builder.build("  \t  ").toString());
         System.out.println(builder.build(" a ").toString());
         System.out.println(builder.build(" a ,").toString());
+        System.out.println(builder.build(" a,").toString());
+        System.out.println(builder.build(",ad").toString());
         System.out.println(builder.build(" a   \t asc").toString());
         System.out.println(builder.build(" abc   \n  desc").toString());
         System.out.println(builder.build(" a , b ").toString());
+        System.out.println(builder.build(" a, b ").toString());
     }
 }

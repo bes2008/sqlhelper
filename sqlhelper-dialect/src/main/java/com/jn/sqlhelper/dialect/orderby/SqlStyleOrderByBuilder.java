@@ -56,9 +56,12 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
         String currentExpression = null;
         String currentOrderType = null;
 
-        StringTokenizer tokenizer = new StringTokenizer(s);
+        StringTokenizer tokenizer =  new StringTokenizer(s, " \t\n\r\f,", true);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
+            if(Strings.isBlank(token)){
+                continue;
+            }
             String tmp = token.toLowerCase();
 
             boolean isSqlDelimiter = ",".equals(tmp);
