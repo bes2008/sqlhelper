@@ -14,14 +14,24 @@
 
 package com.jn.sqlhelper.dialect.orderby;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.Serializable;
 
 public class OrderByItem implements Serializable {
+    @Nonnull
     private String expression;
+    @Nullable
     private OrderByType type;
 
     public OrderByItem() {
     }
+
+
+    public OrderByItem(String expression) {
+        this.expression = expression;
+    }
+
 
     public OrderByItem(String expression, OrderByType type) {
         this.expression = expression;
@@ -31,7 +41,6 @@ public class OrderByItem implements Serializable {
     public OrderByItem(String expression, boolean asc) {
         this(expression, asc ? OrderByType.ASC : OrderByType.DESC);
     }
-
 
     public String getExpression() {
         return expression;
@@ -51,6 +60,6 @@ public class OrderByItem implements Serializable {
 
     @Override
     public String toString() {
-        return " " + expression + " " + type.name();
+        return " " + expression + " " + (type != null ? type.name() : "");
     }
 }

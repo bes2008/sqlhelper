@@ -22,7 +22,7 @@ public enum OrderByType {
 
     public static OrderByType fromString(String s) {
         if (Strings.isBlank(s)) {
-            return ASC;
+            return null;
         }
         s = s.trim().toLowerCase();
 

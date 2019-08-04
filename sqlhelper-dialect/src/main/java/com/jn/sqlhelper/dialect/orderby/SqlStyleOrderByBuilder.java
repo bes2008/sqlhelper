@@ -56,10 +56,10 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
         String currentExpression = null;
         String currentOrderType = null;
 
-        StringTokenizer tokenizer =  new StringTokenizer(s, " \t\n\r\f,", true);
+        StringTokenizer tokenizer = new StringTokenizer(s, " \t\n\r\f,", true);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
-            if(Strings.isBlank(token)){
+            if (Strings.isBlank(token)) {
                 continue;
             }
             String tmp = token.toLowerCase();

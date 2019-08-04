@@ -16,6 +16,10 @@ package com.jn.sqlhelper.dialect.orderby;
 
 import com.jn.sqlhelper.util.Strings;
 
+import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
@@ -25,6 +29,8 @@ import java.util.StringTokenizer;
 public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
     private String ascSymbol;
     private String descSymbol;
+
+    private Map<String, String> symbolMap = new HashMap<String, String>();
 
     public static final SymbolStyleOrderByBuilder MATH_SYMBOL_ORDER_BY_BUILDER = new SymbolStyleOrderByBuilder("+", "-");
 
@@ -53,7 +59,7 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
         StringTokenizer tokenizer = new StringTokenizer(s, " \t\n\r\f,", true);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
-            if(Strings.isBlank(token)){
+            if (Strings.isBlank(token)) {
                 continue;
             }
 
@@ -89,14 +95,14 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
                 currentExpression = token;
             } else {
                 if (currentExpression != null) {
-                    orderBy.add(new OrderByItem(currentExpression, !descSymbol.equals(currentSymbol)));
+                    orderBy.add(new OrderByItem(currentExpression, OrderByType.fromString(symbolMap.get(currentSymbol))));
                 }
                 currentExpression = null;
                 currentSymbol = null;
             }
         }
         if (currentExpression != null) {
-            orderBy.add(new OrderByItem(currentExpression, !descSymbol.equals(currentSymbol)));
+            orderBy.add(new OrderByItem(currentExpression, OrderByType.fromString(symbolMap.get(currentSymbol))));
         }
         return orderBy;
     }
@@ -106,32 +112,42 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
     }
 
     public SymbolStyleOrderByBuilder ascSymbol(String ascSymbol) {
-        if(isValidSymbol(ascSymbol)) {
+        if (isValidSymbol(ascSymbol)) {
             this.ascSymbol = ascSymbol;
+            removeSymbolMapForValue("asc");
+            symbolMap.put(ascSymbol, "asc");
         }
         return this;
     }
 
-    private boolean isValidSymbol(String symbol){
-        if(Strings.isBlank(symbol)){
+
+    public SymbolStyleOrderByBuilder descSymbol(String descSymbol) {
+        if (isValidSymbol(descSymbol)) {
+            this.descSymbol = descSymbol;
+            removeSymbolMapForValue("desc");
+            symbolMap.put(descSymbol, "desc");
+        }
+        return this;
+    }
+
+
+    private void removeSymbolMapForValue(@Nonnull String value) {
+        Iterator<Map.Entry<String, String>> iter = symbolMap.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<String, String> entry = iter.next();
+            if (value.equals(entry.getValue())) ;
+        }
+    }
+
+    private boolean isValidSymbol(String symbol) {
+        if (Strings.isBlank(symbol)) {
             return false;
         }
         symbol = symbol.trim();
-        if(symbol.equals("?")){
+        if (symbol.equals("?")) {
             return false;
         }
         return true;
-    }
-
-    public String descSymbol() {
-        return descSymbol;
-    }
-
-    public SymbolStyleOrderByBuilder descSymbol(String descSymbol) {
-        if(isValidSymbol(descSymbol)) {
-            this.descSymbol = descSymbol;
-        }
-        return this;
     }
 
 }
