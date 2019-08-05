@@ -164,6 +164,11 @@ public class SQLStatementInstrumentor {
         return sql;
     }
 
+    public String instrumentOrderByLimitSql(String sql, OrderBy orderBy, final RowSelection selection) {
+        final Dialect dialect = this.getCurrentDialect();
+        return instrumentOrderByLimitSql(sql, orderBy, dialect, selection);
+    }
+
     public String instrumentOrderByLimitSql(String sql, OrderBy orderBy, Dialect dialect, final RowSelection selection) {
         String originalSql = sql;
         if (orderBy == null) {

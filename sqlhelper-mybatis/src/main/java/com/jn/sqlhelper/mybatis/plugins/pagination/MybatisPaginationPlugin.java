@@ -19,6 +19,7 @@ import com.google.common.cache.CacheBuilder;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestBasedRowSelectionBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
@@ -53,6 +54,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     private PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
     private Cache<String, MappedStatement> countStatementCache;
     private String countSuffix = "_COUNT";
+    private String orderBySuffix = "_orderBy";
     private boolean inited = false;
 
     static {
@@ -164,8 +166,13 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
 
         try {
             if (!isPagingRequest(ms)) {
-                // not a paging request
-                rs = invocation.proceed();
+                if (isQueryRequest(ms) && isPagingRequest() && isOrderByRequest() && !isNestedQueryInPagingRequest(ms)) {
+                    // do order by
+                    rs = executeOrderBy(PAGING_CONTEXT.getPagingRequest().getOrderBy(), ms, parameter, RowBounds.DEFAULT, resultHandler, executor, boundSql);
+                } else {
+                    // not a paging request, not a order by paging request
+                    rs = invocation.proceed();
+                }
                 if (rs == null) {
                     rs = new ArrayList();
                 }
@@ -191,8 +198,13 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                     return rs;
                 }
                 if (request.isGetAllRequest()) {
+                    if(isOrderByRequest()){
+                        rs = executeOrderBy(PAGING_CONTEXT.getPagingRequest().getOrderBy(), ms, parameter, RowBounds.DEFAULT, resultHandler, executor, boundSql);
+                    }else {
+                        invalidatePagingRequest(false);
+                        rs = invocation.proceed();
+                    }
                     invalidatePagingRequest(false);
-                    rs = invocation.proceed();
                     if (rs == null) {
                         rs = new ArrayList();
                     }
@@ -239,7 +251,6 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                         rs = new ArrayList();
                     }
                 }
-
             }
         } catch (Throwable ex2) {
             logger.error(ex2.getMessage(), ex2);
@@ -248,6 +259,20 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             instrumentor.finish();
         }
         return rs;
+    }
+
+    private boolean isOrderByRequest() {
+        if (isPagingRequest()) {
+            return false;
+        }
+        PagingRequest pagingRequest = PAGING_CONTEXT.getPagingRequest();
+        if (!pagingRequest.needOrderBy()) {
+            return false;
+        }
+        if (pagingRequest.getOrderByAsString().contains("?")) {
+            return false;
+        }
+        return true;
     }
 
     private void setPagingRequestBasedRowBounds(RowBounds rowBounds) {
@@ -268,8 +293,12 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         PAGING_CONTEXT.remove();
     }
 
+    private boolean isQueryRequest(final MappedStatement statement) {
+        return SqlCommandType.SELECT == statement.getSqlCommandType();
+    }
+
     private boolean isPagingRequest(final MappedStatement statement) {
-        return statement.getStatementType() == StatementType.PREPARED && SqlCommandType.SELECT == statement.getSqlCommandType() && isPagingRequest();
+        return statement.getStatementType() == StatementType.PREPARED && isQueryRequest(statement) && isPagingRequest();
     }
 
     private boolean isPagingRequest() {
@@ -321,7 +350,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
         final RowSelection rowSelection = rowSelectionBuilder.build(request);
         PAGING_CONTEXT.setRowSelection(rowSelection);
-        final String pageSql = instrumentor.instrumentLimitSql(boundSql.getSql(), rowSelection);
+        final String pageSql = isOrderByRequest() ? instrumentor.instrumentOrderByLimitSql(boundSql.getSql(), PAGING_CONTEXT.getPagingRequest().getOrderBy(), rowSelection) : instrumentor.instrumentLimitSql(boundSql.getSql(), rowSelection);
         final BoundSql pageBoundSql = new BoundSql(ms.getConfiguration(), pageSql, boundSql.getParameterMappings(), parameter);
         final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
         for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {
@@ -329,6 +358,74 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         }
         return executor.query(ms, parameter, RowBounds.DEFAULT, resultHandler, cacheKey, pageBoundSql);
     }
+
+    private String getOrderById(final MappedStatement ms, final OrderBy orderBy) {
+        String orderByString = orderBy.toString();
+        StringBuilder builder = new StringBuilder(ms.getId() + "_");
+        for (int i = 0; i < orderByString.length(); i++) {
+            char c = orderByString.charAt(i);
+            // 0-9
+            if (c >= 48 && c <= 57) {
+                builder.append(c);
+            }
+            // A-Z
+            if (c >= 65 && c <= 90) {
+                builder.append(c);
+            }
+            // a-z
+            if (c >= 97 && c <= 122) {
+                builder.append(c);
+            }
+            if (c == '_') {
+                builder.append(c);
+            }
+        }
+        return builder.append(this.orderBySuffix).toString();
+    }
+
+    private MappedStatement customOrderByStatement(final MappedStatement ms, final String orderByStatementId) {
+        MappedStatement orderBySqlStatement = null;
+        final MappedStatement.Builder builder = new MappedStatement.Builder(ms.getConfiguration(), orderByStatementId, ms.getSqlSource(), ms.getSqlCommandType());
+        builder.resource(ms.getResource());
+        builder.fetchSize(ms.getFetchSize());
+        builder.statementType(ms.getStatementType());
+        builder.keyGenerator(ms.getKeyGenerator());
+        if (ms.getKeyProperties() != null && ms.getKeyProperties().length != 0) {
+            final StringBuilder keyProperties = new StringBuilder();
+            for (final String keyProperty : ms.getKeyProperties()) {
+                keyProperties.append(keyProperty).append(",");
+            }
+            keyProperties.delete(keyProperties.length() - 1, keyProperties.length());
+            builder.keyProperty(keyProperties.toString());
+        }
+        builder.timeout(ms.getTimeout());
+        builder.parameterMap(ms.getParameterMap());
+        final List<ResultMap> resultMaps = new ArrayList<ResultMap>();
+        final ResultMap resultMap = new ResultMap.Builder(ms.getConfiguration(), ms.getId(), Long.class, new ArrayList<ResultMapping>()).build();
+        resultMaps.add(resultMap);
+        builder.resultMaps(resultMaps);
+        builder.resultSetType(ms.getResultSetType());
+        builder.cache(ms.getCache());
+        builder.flushCacheRequired(ms.isFlushCacheRequired());
+        builder.useCache(ms.isUseCache());
+        orderBySqlStatement = builder.build();
+        return orderBySqlStatement;
+    }
+
+    private Object executeOrderBy(OrderBy orderBy, final MappedStatement ms, final Object parameter, final RowBounds rowBounds, final ResultHandler resultHandler, final Executor executor, final BoundSql boundSql) throws Throwable {
+        String orderBySqlId = getOrderById(ms, orderBy);
+        BoundSql orderByBoundSql = null;
+        MappedStatement orderByStatement = this.customOrderByStatement(ms, orderBySqlId);
+        final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
+        final CacheKey orderByCacheKey = executor.createCacheKey(orderByStatement, parameter, RowBounds.DEFAULT, boundSql);
+        final String orderBySql = instrumentor.instrumentOrderBySql(boundSql.getSql(), orderBy);
+        orderByBoundSql = new BoundSql(orderByStatement.getConfiguration(), orderBySql, boundSql.getParameterMappings(), parameter);
+        for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {
+            orderByBoundSql.setAdditionalParameter(entry.getKey(), entry.getValue());
+        }
+        return executor.query(orderByStatement, parameter, RowBounds.DEFAULT, resultHandler, orderByCacheKey, orderByBoundSql);
+    }
+
 
     private int executeCount(final MappedStatement ms, final Object parameter, final RowBounds rowBounds, final ResultHandler resultHandler, final Executor executor, final BoundSql boundSql) throws Throwable {
         final MybatisPaginationRequestContext requestContext = PAGING_CONTEXT.get();

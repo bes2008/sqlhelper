@@ -25,6 +25,7 @@
 package com.github.pagehelper;
 
 import com.github.pagehelper.util.PageObjectUtil;
+import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 
@@ -55,7 +56,7 @@ public class PageHelper {
         PagingRequestAdapter setPage(Page page) {
             this.page = page;
             this.setCount(page.isCount());
-            this.setOrderBy(page.getOrderBy());
+            this.setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(page.getOrderBy()));
             this.setPageNo(page.getPageNum());
             int pageSize = page.getPageSize();
             if (pageSize == 0) {

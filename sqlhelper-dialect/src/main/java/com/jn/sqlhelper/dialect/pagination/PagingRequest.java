@@ -15,6 +15,8 @@
 
 package com.jn.sqlhelper.dialect.pagination;
 
+import com.jn.sqlhelper.dialect.orderby.OrderBy;
+
 import java.util.ArrayList;
 
 public class PagingRequest<E, R> {
@@ -29,7 +31,7 @@ public class PagingRequest<E, R> {
     private int pageSize;
     private Integer fetchSize;
     private int timeout;
-    private String orderBy;
+    private OrderBy orderBy;
     private E condition;
     private PagingResult<R> result;
 
@@ -111,17 +113,21 @@ public class PagingRequest<E, R> {
         return this;
     }
 
-    public String getOrderBy() {
-        return this.orderBy;
+    public String getOrderByAsString() {
+        return this.orderBy.toString();
     }
 
-    public PagingRequest<E, R> setOrderBy(String orderBy) {
+    public OrderBy getOrderBy() {
+        return orderBy;
+    }
+
+    public PagingRequest<E, R> setOrderBy(OrderBy orderBy) {
         this.orderBy = orderBy;
         return this;
     }
 
     public boolean needOrderBy() {
-        if ((this.orderBy == null) || (this.orderBy.trim().length() == 0)) {
+        if (this.orderBy == null || !this.orderBy.isValid()) {
             return false;
         }
         return true;

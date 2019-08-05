@@ -26,6 +26,8 @@ import java.util.StringTokenizer;
  */
 public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
 
+    public static final SqlStyleOrderByBuilder DEFAULT = new SqlStyleOrderByBuilder();
+
     private final List<String> keywordsAfterOrderBy = new ArrayList<String>(Arrays.asList(new String[]{
             "limit", "offset", "PROCEDURE"
     }));
