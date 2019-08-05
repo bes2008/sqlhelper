@@ -27,6 +27,7 @@ package com.github.pagehelper.util;
 import com.github.pagehelper.IPage;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageException;
+import com.jn.sqlhelper.util.Strings;
 import org.apache.ibatis.reflection.MetaObject;
 
 import java.lang.reflect.Method;
@@ -77,7 +78,7 @@ public abstract class PageObjectUtil {
             if (pageParams.getPageNum() != null && pageParams.getPageSize() != null) {
                 page = new Page(pageParams.getPageNum(), pageParams.getPageSize());
             }
-            if (StringUtil.isNotEmpty(pageParams.getOrderBy())) {
+            if (Strings.isNotEmpty(pageParams.getOrderBy())) {
                 if (page != null) {
                     page.setOrderBy(pageParams.getOrderBy());
                 } else {
@@ -176,7 +177,7 @@ public abstract class PageObjectUtil {
     }
 
     public static void setParams(String params) {
-        if (StringUtil.isNotEmpty(params)) {
+        if (Strings.isNotEmpty(params)) {
             String[] ps = params.split("[;|,|&]");
             for (String s : ps) {
                 String[] ss = s.split("[=|:]");

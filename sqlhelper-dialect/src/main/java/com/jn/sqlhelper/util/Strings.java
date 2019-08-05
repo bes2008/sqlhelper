@@ -20,6 +20,17 @@ import java.util.Iterator;
 public class Strings {
     private Strings(){}
 
+    public static boolean isEmpty(String str) {
+        if (str == null || str.length() == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isNotEmpty(String str) {
+        return !isEmpty(str);
+    }
+
     public static boolean isBlank(String str) {
         return str == null || str.trim().isEmpty();
     }
