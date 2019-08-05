@@ -16,7 +16,9 @@ package com.jn.sqlhelper.dialect;
 
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class InstrumentedSelectStatement {
@@ -26,9 +28,9 @@ public class InstrumentedSelectStatement {
      * key: dialect
      * value: limit sql
      */
-    private Map<String, String> dialectLimitSql = new HashMap<String, String>();
+    private Map<String, List<String>> dialectLimitSql = new HashMap<String, List<String>>();
     private Map<OrderBy, String> orderBySql = new HashMap<OrderBy, String>();
-    private Map<OrderBy, Map<String, String>> orderByLimitSql = new HashMap<OrderBy, Map<String, String>>();
+    private Map<OrderBy, Map<String, List<String>>> orderByLimitSql = new HashMap<OrderBy, Map<String, List<String>>>();
 
     public String getOriginalSql() {
         return originalSql;
@@ -46,35 +48,61 @@ public class InstrumentedSelectStatement {
         this.countSql = countSql;
     }
 
-    public String getLimitSql(String dialect) {
-        return dialectLimitSql.get(dialect);
+    public String getLimitSql(String dialect, boolean hasOffset) {
+        List<String> pageSqls = dialectLimitSql.get(dialect);
+        if (pageSqls == null) {
+            return null;
+        }
+        return pageSqls.get(hasOffset ? 1 : 0);
     }
 
     public String getOrderBySql(OrderBy orderBy) {
         return orderBySql.get(orderBy);
     }
 
-    public String getOrderByLimitSql(OrderBy orderBy, String dialect) {
-        Map<String, String> dialectLimitSql = orderByLimitSql.get(orderBy);
-        return dialectLimitSql == null ? null : dialectLimitSql.get(dialect);
+    public String getOrderByLimitSql(OrderBy orderBy, String dialect, boolean hasOffset) {
+        Map<String, List<String>> dialectLimitSql = orderByLimitSql.get(orderBy);
+        if (dialectLimitSql == null) {
+            return null;
+        }
+        List<String> pagingSqls = dialectLimitSql.get(dialect);
+        if (pagingSqls == null) {
+            return null;
+        }
+        return pagingSqls.get(hasOffset ? 1 : 0);
     }
 
-    public void setLimitSql(String dialect, String limitSql) {
-        dialectLimitSql.put(dialect, limitSql);
+    public void setLimitSql(String dialect, String limitSql, boolean hasOffset) {
+        List<String> pagerSqls = dialectLimitSql.get(dialect);
+        if (pagerSqls == null) {
+            pagerSqls = new ArrayList<String>(2);
+            pagerSqls.add(null);
+            pagerSqls.add(null);
+            dialectLimitSql.put(dialect, pagerSqls);
+        }
+        pagerSqls.set((hasOffset ? 1 : 0), limitSql);
     }
 
     public void setOrderBySql(OrderBy orderBy, String sql) {
         orderBySql.put(orderBy, sql);
     }
 
-    public void setOrderByLimitSql(OrderBy orderBy, String dialect, String sql) {
-        Map<String, String> dialectLimitSql = orderByLimitSql.get(orderBy);
+    public void setOrderByLimitSql(OrderBy orderBy, String dialect, String sql, boolean hasOffset) {
+        Map<String, List<String>> dialectLimitSql = orderByLimitSql.get(orderBy);
         if (dialectLimitSql == null) {
-            dialectLimitSql = new HashMap<String, String>();
+            dialectLimitSql = new HashMap<String, List<String>>();
             orderByLimitSql.put(orderBy, dialectLimitSql);
         }
 
-        dialectLimitSql.put(dialect, sql);
+        List<String> pagerSqls = dialectLimitSql.get(dialect);
+        if (pagerSqls == null) {
+            pagerSqls = new ArrayList<String>(2);
+            pagerSqls.add(null);
+            pagerSqls.add(null);
+            dialectLimitSql.put(dialect, pagerSqls);
+        }
+
+        pagerSqls.set((hasOffset ? 1 : 0), sql);
     }
 
 }

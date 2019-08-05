@@ -60,4 +60,8 @@ public final class RowSelection {
     public boolean definesLimits() {
         return this.limit != null || (this.offset != null && this.offset <= 0);
     }
+
+    public boolean hasOffset(){
+        return offset > 0;
+    }
 }

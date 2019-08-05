@@ -76,7 +76,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     @Override
     public void init() {
         if (!inited) {
-
+            instrumentor.init();
             rowSelectionBuilder.setDefaultPageSize(pluginConfig.getDefaultPageSize());
 
             if (pluginConfig.enableCountCache()) {
@@ -106,6 +106,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         String instrumentorConfigPrefix = "sqlhelper.mybatis.instrumentor.";
         instrumentConfig.setDialect(accessor.getString(instrumentorConfigPrefix + "dialect", instrumentConfig.getDialect()));
         instrumentConfig.setDialectClassName(accessor.getString(instrumentorConfigPrefix + "dialectClassName", instrumentConfig.getDialectClassName()));
+        instrumentConfig.setCacheInstrumentedSql(accessor.getBoolean(instrumentorConfigPrefix+ "cacheInstruemtedSql", false));
     }
 
     @Override
@@ -262,7 +263,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     }
 
     private boolean isOrderByRequest() {
-        if (isPagingRequest()) {
+        if (!isPagingRequest()) {
             return false;
         }
         PagingRequest pagingRequest = PAGING_CONTEXT.getPagingRequest();
@@ -400,10 +401,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         }
         builder.timeout(ms.getTimeout());
         builder.parameterMap(ms.getParameterMap());
-        final List<ResultMap> resultMaps = new ArrayList<ResultMap>();
-        final ResultMap resultMap = new ResultMap.Builder(ms.getConfiguration(), ms.getId(), Long.class, new ArrayList<ResultMapping>()).build();
-        resultMaps.add(resultMap);
-        builder.resultMaps(resultMaps);
+        builder.resultMaps(ms.getResultMaps());
         builder.resultSetType(ms.getResultSetType());
         builder.cache(ms.getCache());
         builder.flushCacheRequired(ms.isFlushCacheRequired());

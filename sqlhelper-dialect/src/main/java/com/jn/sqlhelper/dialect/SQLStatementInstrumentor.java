@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.sql.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class SQLStatementInstrumentor {
@@ -130,14 +131,14 @@ public class SQLStatementInstrumentor {
         if (LimitHelper.useLimit(dialect, selection)) {
             String originalSql = sql;
             if (this.config.isCacheInstrumentedSql()) {
-                sql = getInstrumentedSelectStatement(originalSql).getLimitSql(dialect.getDatabaseId());
+                sql = getInstrumentedSelectStatement(originalSql).getLimitSql(dialect.getDatabaseId(), selection.hasOffset());
                 if (sql != null) {
                     return sql;
                 }
             }
             sql = dialect.getLimitSql(originalSql, selection);
             if (this.config.isCacheInstrumentedSql()) {
-                getInstrumentedSelectStatement(originalSql).setLimitSql(dialect.getDatabaseId(), sql);
+                getInstrumentedSelectStatement(originalSql).setLimitSql(dialect.getDatabaseId(), sql, selection.hasOffset());
             }
         }
         return sql;
@@ -177,7 +178,7 @@ public class SQLStatementInstrumentor {
         sql = instrumentLimitSql(dialect, sql, selection);
         sql = instrumentOrderBySql(sql, orderBy);
         if (this.config.isCacheInstrumentedSql()) {
-            getInstrumentedSelectStatement(originalSql).setOrderByLimitSql(orderBy, dialect.getDatabaseId(), sql);
+            getInstrumentedSelectStatement(originalSql).setOrderByLimitSql(orderBy, dialect.getDatabaseId(), sql, selection.hasOffset());
         }
         return sql;
     }
@@ -220,11 +221,21 @@ public class SQLStatementInstrumentor {
 
     private InstrumentedSelectStatement getInstrumentedSelectStatement(String originalSql) {
         if (this.config.isCacheInstrumentedSql()) {
-            return this.instrumentSqlCache.getIfPresent(originalSql);
+            try {
+                return this.instrumentSqlCache.get(originalSql);
+            } catch (ExecutionException e) {
+                // ignore it
+            }
         }
         return null;
     }
 
+    private InstrumentedSelectStatement getInstrumentedSelectStatementIfPresent(String originalSql) {
+        if (this.config.isCacheInstrumentedSql()) {
+            return this.instrumentSqlCache.getIfPresent(originalSql);
+        }
+        return null;
+    }
 
     public PreparedStatement bindParameters(final PreparedStatement statement, final PrepareParameterSetter parameterSetter, final QueryParameters queryParameters, final boolean setOriginalParameters) throws SQLException, SQLDialectException {
         final Dialect dialect = this.getDialect(statement);
