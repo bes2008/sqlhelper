@@ -16,9 +16,10 @@ package com.jn.sqlhelper.dialect.orderby;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class OrderBy implements Serializable {
+public class OrderBy implements Serializable, Iterable<OrderByItem> {
 
     private List<OrderByItem> items = new ArrayList<OrderByItem>();
 
@@ -36,6 +37,11 @@ public class OrderBy implements Serializable {
 
     public void addDesc(String expression) {
         items.add(new OrderByItem(expression, false));
+    }
+
+    @Override
+    public Iterator<OrderByItem> iterator() {
+        return items.iterator();
     }
 
     @Override
