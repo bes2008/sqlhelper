@@ -15,8 +15,7 @@
 
 package com.jn.sqlhelper.dialect.conf;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.jn.easyjson.core.JSONBuilderProvider;
 
 public class SQLInstrumentConfig {
     private String dialect;
@@ -42,8 +41,7 @@ public class SQLInstrumentConfig {
 
     @Override
     public String toString() {
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        return gson.toJson(this);
+        return JSONBuilderProvider.create().serializeNulls(true).build().toJson(this);
     }
 
     public boolean isCacheInstrumentedSql() {

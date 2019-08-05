@@ -24,7 +24,8 @@
 
 package com.github.pagehelper;
 
-import com.google.gson.GsonBuilder;
+
+import com.jn.easyjson.core.JSONBuilderProvider;
 
 import java.util.Arrays;
 import java.util.List;
@@ -338,6 +339,6 @@ public class PageInfo<T> extends PageSerializable<T> {
 
     @Override
     public String toString() {
-        return new GsonBuilder().serializeNulls().create().toJson(this);
+        return JSONBuilderProvider.simplest().toJson(this);
     }
 }

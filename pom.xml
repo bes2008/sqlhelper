@@ -69,7 +69,7 @@
         <junit.version>4.12</junit.version>
         <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
         <jsqlparser.version>2.1</jsqlparser.version>
-
+        <easyjson.version>2.0.alpha1.0</easyjson.version>
 
     </properties>
 
@@ -89,6 +89,12 @@
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.fangjinuo.easyjson</groupId>
+                <artifactId>easyjson-core</artifactId>
+                <version>${easyjson.version}</version>
             </dependency>
 
 
@@ -135,8 +141,8 @@
             <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-core</artifactId>
         </dependency>
 
         <dependency>

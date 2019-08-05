@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.mybatis.plugins.pagination;
 
-import com.google.gson.GsonBuilder;
+import com.jn.easyjson.core.JSONBuilderProvider;
 
 public class PaginationPluginConfig {
     private boolean count = true;
@@ -19,7 +19,7 @@ public class PaginationPluginConfig {
 
     @Override
     public String toString() {
-        return new GsonBuilder().serializeNulls().create().toJson(this);
+        return JSONBuilderProvider.create().serializeNulls(true).build().toJson(this);
     }
 
     public boolean isCount() {
