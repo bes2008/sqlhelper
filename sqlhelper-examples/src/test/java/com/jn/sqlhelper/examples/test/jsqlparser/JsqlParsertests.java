@@ -1,8 +1,11 @@
 package com.jn.sqlhelper.examples.test.jsqlparser;
 
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
+import com.jn.sqlhelper.dialect.orderby.OrderByItem;
 import com.jn.sqlhelper.dialect.orderby.SymbolStyleOrderByBuilder;
+import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.OrderByElement;
 import net.sf.jsqlparser.statement.select.PlainSelect;
@@ -36,17 +39,45 @@ public class JsqlParsertests {
                 List<OrderByElement> orderByElements = plainSelect.getOrderByElements();
 
                 OrderBy orderBy = SymbolStyleOrderByBuilder.MATH_SYMBOL_ORDER_BY_BUILDER.build("id, name-");
-                if(orderBy.isValid()){
-                    if(orderByElements==null){
+                if (orderBy.isValid()) {
+                    if (orderByElements == null) {
                         orderByElements = new ArrayList<>();
                     }
-                    for (OrderByElement orderByElement : orderByElements) {
-                        orderByElement.getExpression().toString();
+
+                    for (OrderByItem item: orderBy) {
+                        Expression exprForAppend = CCJSqlParserUtil.parseExpression(item.getExpression());
+                        boolean needAppend = true;
+                        for (OrderByElement orderByElement : orderByElements) {
+                            Expression exprInSql = orderByElement.getExpression();
+                            if(exprForAppend.getClass() == exprInSql.getClass()){
+                                if(exprForAppend.getClass() == Column.class){
+                                    Column columnForAppend = (Column)exprForAppend;
+                                    Column columnInSql = (Column)exprForAppend;
+                                    if(columnEquals(columnForAppend, columnInSql)){
+                                        needAppend = false;
+                                        // do asc, desc change
+                                    }
+                                }
+                            }
+
+                        }
                     }
+
+
+
                     plainSelect.setOrderByElements(orderByElements);
                 }
             }
         }
     }
 
+    private static boolean columnEquals(Column column1, Column column2){
+        if(column1 == null && column2 == null){
+            return true;
+        }
+        if(column1 == null || column2 == null){
+            return false;
+        }
+        return column1.getFullyQualifiedName().equalsIgnoreCase(column2.getFullyQualifiedName());
+    }
 }
