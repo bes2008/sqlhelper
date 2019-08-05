@@ -20,11 +20,5 @@
             <groupId>com.github.jsqlparser</groupId>
             <artifactId>jsqlparser</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.fangjinuo.easyjson</groupId>
-            <artifactId>easyjson-jackson</artifactId>
-            <version>${easyjson.version}</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 </project>

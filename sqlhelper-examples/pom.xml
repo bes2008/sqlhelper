@@ -118,6 +118,12 @@
             <artifactId>netty-common</artifactId>
             <version>4.1.36.Final</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-jackson</artifactId>
+            <version>${easyjson.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

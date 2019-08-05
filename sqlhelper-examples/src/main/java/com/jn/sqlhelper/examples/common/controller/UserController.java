@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.examples.common.controller;
 
+import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
@@ -70,6 +71,8 @@ public class UserController {
         PagingRequestContextHolder.getContext().setPagingRequest(request);
         List<User> users = userDao.selectByLimit(queryCondtion);
         request.getResult().setItems(users);
+        String json = JSONBuilderProvider.simplest().toJson(request.getResult()) ;
+        System.out.println(json);
         return request.getResult();
     }
 
