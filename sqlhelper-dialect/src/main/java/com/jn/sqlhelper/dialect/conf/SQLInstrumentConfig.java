@@ -21,6 +21,8 @@ import com.google.gson.GsonBuilder;
 public class SQLInstrumentConfig {
     private String dialect;
     private String dialectClassName;
+    private boolean cacheInstrumentedSql = false;
+
 
     public String getDialect() {
         return this.dialect;
@@ -42,5 +44,13 @@ public class SQLInstrumentConfig {
     public String toString() {
         Gson gson = new GsonBuilder().serializeNulls().create();
         return gson.toJson(this);
+    }
+
+    public boolean isCacheInstrumentedSql() {
+        return cacheInstrumentedSql;
+    }
+
+    public void setCacheInstrumentedSql(boolean cacheInstrumentedSql) {
+        this.cacheInstrumentedSql = cacheInstrumentedSql;
     }
 }

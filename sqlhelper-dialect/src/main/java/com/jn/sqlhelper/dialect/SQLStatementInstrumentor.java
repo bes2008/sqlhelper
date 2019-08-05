@@ -15,21 +15,57 @@
 
 package com.jn.sqlhelper.dialect;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
+import com.jn.sqlhelper.dialect.orderby.OrderBy;
+import com.jn.sqlhelper.dialect.orderby.OrderByInstrumentor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.sql.*;
+import java.util.concurrent.TimeUnit;
 
 public class SQLStatementInstrumentor {
-    private static final Logger logger;
+    private static final Logger logger = LoggerFactory.getLogger((Class) SQLStatementInstrumentor.class);
+    @Nonnull
     private SQLInstrumentConfig config;
     private DialectRegistry dialectRegistry;
-    private static final ThreadLocal<Dialect> DIALECT_HOLDER;
+    private static final ThreadLocal<Dialect> DIALECT_HOLDER = new ThreadLocal<Dialect>();
+    private boolean inited = false;
+
+    private LoadingCache<String, InstrumentedSelectStatement> instrumentSqlCache;
 
     public SQLStatementInstrumentor() {
-        this.dialectRegistry = DialectRegistry.getInstance();
+
+    }
+
+    public void init() {
+        if (!inited) {
+            if (this.config == null) {
+                throw new IllegalStateException("the 'config' field is null");
+            }
+            this.dialectRegistry = DialectRegistry.getInstance();
+            inited = true;
+            if (this.config.isCacheInstrumentedSql()) {
+                instrumentSqlCache = CacheBuilder.newBuilder()
+                        .initialCapacity(1000)
+                        .maximumSize(Integer.MAX_VALUE)
+                        .concurrencyLevel(Runtime.getRuntime().availableProcessors())
+                        .expireAfterAccess(5, TimeUnit.MINUTES)
+                        .build(new CacheLoader<String, InstrumentedSelectStatement>() {
+                            @Override
+                            public InstrumentedSelectStatement load(String originalSql) throws Exception {
+                                InstrumentedSelectStatement s = new InstrumentedSelectStatement();
+                                s.setOriginalSql(originalSql);
+                                return s;
+                            }
+                        });
+            }
+        }
     }
 
     public boolean beginIfSupportsLimit(final Statement statement) {
@@ -85,14 +121,58 @@ public class SQLStatementInstrumentor {
         return dialect;
     }
 
-    public String instrumentSql(String sql, final RowSelection selection) {
+    public String instrumentLimitSql(String sql, final RowSelection selection) {
         final Dialect dialect = this.getCurrentDialect();
-        return instrumentSql(dialect, sql, selection);
+        return instrumentLimitSql(dialect, sql, selection);
     }
 
-    public String instrumentSql(Dialect dialect, String sql, final RowSelection selection) {
+    public String instrumentLimitSql(Dialect dialect, String sql, final RowSelection selection) {
         if (LimitHelper.useLimit(dialect, selection)) {
-            sql = dialect.getLimitSql(sql, selection);
+            String originalSql = sql;
+            if (this.config.isCacheInstrumentedSql()) {
+                sql = getInstrumentedSelectStatement(originalSql).getLimitSql(dialect.getDatabaseId());
+                if (sql != null) {
+                    return sql;
+                }
+            }
+            sql = dialect.getLimitSql(originalSql, selection);
+            if (this.config.isCacheInstrumentedSql()) {
+                getInstrumentedSelectStatement(originalSql).setLimitSql(dialect.getDatabaseId(), sql);
+            }
+        }
+        return sql;
+    }
+
+    public String instrumentOrderBySql(String sql, OrderBy orderBy) {
+        if (this.config.isCacheInstrumentedSql()) {
+            String orderBySql = getInstrumentedSelectStatement(sql).getOrderBySql(orderBy);
+            if (orderBySql != null) {
+                return orderBySql;
+            }
+        }
+        try {
+            String sql2 = OrderByInstrumentor.instrument(sql, orderBy);
+            if (sql2 != null) {
+                if (this.config.isCacheInstrumentedSql()) {
+                    getInstrumentedSelectStatement(sql).setOrderBySql(orderBy, sql2);
+                }
+                return sql2;
+            }
+        } catch (Throwable ex) {
+            logger.warn(ex.getMessage(), ex);
+        }
+        return sql;
+    }
+
+    public String instrumentOrderByLimitSql(String sql, OrderBy orderBy, Dialect dialect, final RowSelection selection) {
+        String originalSql = sql;
+        if (orderBy == null) {
+            throw new IllegalArgumentException("Illegal argument : orderBy");
+        }
+        sql = instrumentLimitSql(dialect, sql, selection);
+        sql = instrumentOrderBySql(sql, orderBy);
+        if (this.config.isCacheInstrumentedSql()) {
+            getInstrumentedSelectStatement(originalSql).setOrderByLimitSql(orderBy, dialect.getDatabaseId(), sql);
         }
         return sql;
     }
@@ -102,6 +182,14 @@ public class SQLStatementInstrumentor {
     }
 
     public String countSql(String originalSql) {
+        InstrumentedSelectStatement instrumentedSql = getInstrumentedSelectStatement(originalSql);
+        if (instrumentedSql != null) {
+            String countSql = instrumentedSql.getCountSql();
+            if (countSql != null) {
+                return countSql;
+            }
+        }
+        // do count
         boolean hasOrderBy = false;
         final String lowerSql = originalSql.toLowerCase().trim();
         final int orderIndex = originalSql.toLowerCase().lastIndexOf("order");
@@ -115,8 +203,23 @@ public class SQLStatementInstrumentor {
         if (hasOrderBy) {
             originalSql = originalSql.trim().substring(0, orderIndex).trim();
         }
-        return "select count(0) from (" + originalSql + ") tmp_count";
+        String countSql = "select count(0) from (" + originalSql + ") tmp_count";
+
+        // cache it
+        if (this.config.isCacheInstrumentedSql()) {
+            getInstrumentedSelectStatement(originalSql).setCountSql(countSql);
+        }
+        return countSql;
     }
+
+
+    private InstrumentedSelectStatement getInstrumentedSelectStatement(String originalSql) {
+        if (this.config.isCacheInstrumentedSql()) {
+            return this.instrumentSqlCache.getIfPresent(originalSql);
+        }
+        return null;
+    }
+
 
     public PreparedStatement bindParameters(final PreparedStatement statement, final PrepareParameterSetter parameterSetter, final QueryParameters queryParameters, final boolean setOriginalParameters) throws SQLException, SQLDialectException {
         final Dialect dialect = this.getDialect(statement);
@@ -155,16 +258,12 @@ public class SQLStatementInstrumentor {
         return this.config;
     }
 
+    @Nonnull
     public void setConfig(final SQLInstrumentConfig config) {
         this.config = config;
     }
 
     public void setDialectRegistry(final DialectRegistry dialectRegistry) {
         this.dialectRegistry = dialectRegistry;
-    }
-
-    static {
-        logger = LoggerFactory.getLogger((Class) SQLStatementInstrumentor.class);
-        DIALECT_HOLDER = new ThreadLocal<Dialect>();
     }
 }
