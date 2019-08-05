@@ -321,7 +321,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
         final RowSelection rowSelection = rowSelectionBuilder.build(request);
         PAGING_CONTEXT.setRowSelection(rowSelection);
-        final String pageSql = instrumentor.instrumentSql(boundSql.getSql(), rowSelection);
+        final String pageSql = instrumentor.instrumentLimitSql(boundSql.getSql(), rowSelection);
         final BoundSql pageBoundSql = new BoundSql(ms.getConfiguration(), pageSql, boundSql.getParameterMappings(), parameter);
         final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
         for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {

@@ -54,7 +54,7 @@ public class MangoCommonPagingInterceptor extends QueryInterceptor {
         RowSelection rowSelection = new RowSelection();
         rowSelection.setLimit(pageSize);
         rowSelection.setOffset(offset);
-        boundSql.setSql(MangoPagingContext.instrumentor.instrumentSql(boundSql.getSql(), rowSelection));
+        boundSql.setSql(MangoPagingContext.instrumentor.instrumentLimitSql(boundSql.getSql(), rowSelection));
         MangoPagingContext.pagingRequest.set(rowSelection);
     }
 

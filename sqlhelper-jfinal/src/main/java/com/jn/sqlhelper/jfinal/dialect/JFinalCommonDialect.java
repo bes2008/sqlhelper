@@ -45,7 +45,7 @@ public class JFinalCommonDialect extends Dialect {
         rowSelection.setLimit(pageSize);
         if (instrumentor.beginIfSupportsLimit(databaseId)) {
             pagingRequestHolder.set(rowSelection);
-            return instrumentor.instrumentSql(findSql.toString(), rowSelection);
+            return instrumentor.instrumentLimitSql(findSql.toString(), rowSelection);
         } else {
             return findSql.toString();
         }
