@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.examples.common.controller;
 
+import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
@@ -58,11 +59,14 @@ public class UserController {
     }
 
     @GetMapping
-    public PagingResult list(@RequestParam(name = "pageNo", required = false) int pageNo, @RequestParam(name = "pageSize", required = false) int pageSize) {
+    public PagingResult list(
+            @RequestParam(name = "pageNo", required = false) Integer pageNo,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name="sort",required = false) String sort ) {
         User queryCondtion = new User();
         queryCondtion.setAge(10);
-        PagingRequest request = new PagingRequest()
-                .limit(pageNo, pageSize);
+
+        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize==null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
         PagingRequestContextHolder.getContext().setPagingRequest(request);
         List<User> users = userDao.selectByLimit(queryCondtion);
         request.getResult().setItems(users);

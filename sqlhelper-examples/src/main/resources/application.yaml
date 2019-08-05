@@ -10,3 +10,7 @@ spring:
     url: jdbc:h2:~/test
     driver-class-name: org.h2.Driver
     username: sa
+sqlhelper:
+  mybatis:
+    instrumentor:
+      cache-instrumented-sql: true
