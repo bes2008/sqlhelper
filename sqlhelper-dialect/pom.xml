@@ -15,4 +15,10 @@
         based Java, you can use it in any ORM framework.
     </description>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+        </dependency>
+    </dependencies>
 </project>

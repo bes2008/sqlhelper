@@ -68,6 +68,7 @@
         <mybatis.springboot.version>2.0.1</mybatis.springboot.version>
         <junit.version>4.12</junit.version>
         <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
+        <jsqlparser.version>2.1</jsqlparser.version>
 
 
     </properties>
@@ -116,6 +117,12 @@
                 <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.github.jsqlparser</groupId>
+                <artifactId>jsqlparser</artifactId>
+                <version>${jsqlparser.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -138,6 +145,8 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+
+
     </dependencies>
 
     <build>
