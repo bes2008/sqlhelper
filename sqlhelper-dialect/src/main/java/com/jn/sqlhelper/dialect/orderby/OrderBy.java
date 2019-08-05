@@ -21,7 +21,7 @@ import java.util.List;
 
 public class OrderBy implements Serializable, Iterable<OrderByItem> {
 
-    private List<OrderByItem> items = new ArrayList<OrderByItem>();
+    private final List<OrderByItem> items = new ArrayList<OrderByItem>();
 
     public boolean isValid() {
         return !items.isEmpty();
@@ -58,4 +58,25 @@ public class OrderBy implements Serializable, Iterable<OrderByItem> {
         return builder.toString();
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+
+        OrderBy that = (OrderBy) object;
+        return this.toString().equalsIgnoreCase(that.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 0;
+        for (OrderByItem item : items) {
+            hashCode += item.hashCode();
+        }
+        return hashCode;
+    }
 }

@@ -27,14 +27,13 @@ public class OrderByItem implements Serializable {
     public OrderByItem() {
     }
 
-
     public OrderByItem(String expression) {
-        this.expression = expression;
+        this();
+        setExpression(expression);
     }
 
-
     public OrderByItem(String expression, OrderByType type) {
-        this.expression = expression;
+        this(expression);
         this.type = type;
     }
 
