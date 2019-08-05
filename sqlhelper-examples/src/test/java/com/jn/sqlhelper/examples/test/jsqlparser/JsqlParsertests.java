@@ -2,6 +2,7 @@ package com.jn.sqlhelper.examples.test.jsqlparser;
 
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.orderby.OrderByItem;
+import com.jn.sqlhelper.dialect.orderby.OrderByType;
 import com.jn.sqlhelper.dialect.orderby.SymbolStyleOrderByBuilder;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
@@ -20,7 +21,15 @@ import java.util.List;
 public class JsqlParsertests {
     @Test
     public void test() throws Throwable {
-        String sql = "select id, name, age from user where age > 10 order by age limit 10 offset 20";
+        instrmentOrderBy("select id, name, age from user where age > 10");
+        instrmentOrderBy("select id, name, age from user where age > 10 order by age");
+        instrmentOrderBy("select id, name, age from user where age > 10 limit ?");
+        instrmentOrderBy("select id, name, age from user where age > 10 limit ? offset ?");
+        instrmentOrderBy("select id, name, age from user where age > 10 order by age limit ? offset ?");
+    }
+
+
+    public void instrmentOrderBy(String sql) throws Throwable {
         Statement statement = CCJSqlParserUtil.parse(sql);
         if (statement instanceof Select) {
             Select select = (Select) statement;
@@ -44,40 +53,72 @@ public class JsqlParsertests {
                         orderByElements = new ArrayList<>();
                     }
 
-                    for (OrderByItem item: orderBy) {
+                    for (OrderByItem item : orderBy) {
                         Expression exprForAppend = CCJSqlParserUtil.parseExpression(item.getExpression());
                         boolean needAppend = true;
                         for (OrderByElement orderByElement : orderByElements) {
                             Expression exprInSql = orderByElement.getExpression();
-                            if(exprForAppend.getClass() == exprInSql.getClass()){
-                                if(exprForAppend.getClass() == Column.class){
-                                    Column columnForAppend = (Column)exprForAppend;
-                                    Column columnInSql = (Column)exprForAppend;
-                                    if(columnEquals(columnForAppend, columnInSql)){
-                                        needAppend = false;
-                                        // do asc, desc change
+                            if (exprForAppend.getClass() == exprInSql.getClass()) {
+                                if (expressionEquals(exprForAppend, exprInSql)) {
+                                    needAppend = false;
+                                    // do asc, desc change
+                                    if (item.getType() == null) {
+                                        orderByElement.setAscDescPresent(false);
+                                    } else {
+                                        orderByElement.setAsc(item.getType() == OrderByType.ASC);
                                     }
                                 }
                             }
 
                         }
+
+                        if (needAppend) {
+                            OrderByElement orderByElement = new OrderByElement();
+                            if (item.getType() == null) {
+                                orderByElement.setAscDescPresent(false);
+                            } else {
+                                orderByElement.setAsc(item.getType() == OrderByType.ASC);
+                            }
+                            orderByElement.setExpression(exprForAppend);
+
+                            orderByElements.add(orderByElement);
+                        }
                     }
 
-
-
-                    plainSelect.setOrderByElements(orderByElements);
+                    if (!orderByElements.isEmpty()) {
+                        plainSelect.setOrderByElements(orderByElements);
+                    }
                 }
             }
+
+            System.out.println("print instrumented sql:");
+            System.out.println(select.toString());
+
+            System.out.println("====================================");
         }
     }
 
-    private static boolean columnEquals(Column column1, Column column2){
-        if(column1 == null && column2 == null){
+    private static boolean columnEquals(Column column1, Column column2) {
+        if (column1 == null && column2 == null) {
             return true;
         }
-        if(column1 == null || column2 == null){
+        if (column1 == null || column2 == null) {
             return false;
         }
         return column1.getFullyQualifiedName().equalsIgnoreCase(column2.getFullyQualifiedName());
+    }
+
+    private static boolean expressionEquals(Expression expr1, Expression expr2) {
+        if (expr1 == null && expr2 == null) {
+            return true;
+        }
+        if (expr1 == null || expr2 == null) {
+            return false;
+        }
+
+        if (expr1 instanceof Column && expr2 instanceof Column) {
+            return columnEquals((Column) expr1, (Column) expr2);
+        }
+        return expr1.toString().equalsIgnoreCase(expr2.toString());
     }
 }
