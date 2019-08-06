@@ -15,12 +15,13 @@
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-1.x-green.svg)](https://spring.io/projects/spring-boot/)
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-2.x-green.svg)](https://spring.io/projects/spring-boot/)
 
-[![maven](https://img.shields.io/badge/maven-v1.2.3-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper)
-[![maven](https://img.shields.io/badge/maven-v1.2.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper)
-[![maven](https://img.shields.io/badge/maven-v1.2.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper)
-[![maven](https://img.shields.io/badge/maven-v1.1.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper)
-[![maven](https://img.shields.io/badge/maven-v1.1.RELEASE-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo)
-[![maven](https://img.shields.io/badge/maven-v1.0.RELEASE-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo)
+[![maven](https://img.shields.io/badge/maven-v2.0.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.0)
+[![maven](https://img.shields.io/badge/maven-v1.2.3-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:1.2.3)
+[![maven](https://img.shields.io/badge/maven-v1.2.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:1.2.1)
+[![maven](https://img.shields.io/badge/maven-v1.2.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:1.2.0)
+[![maven](https://img.shields.io/badge/maven-v1.1.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:1.1.1)
+[![maven](https://img.shields.io/badge/maven-v1.1.RELEASE-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo%20AND%20v:1.1-RELEASE)
+[![maven](https://img.shields.io/badge/maven-v1.0.RELEASE-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo%20AND%20v:1.0-RELEASE)
 
 
 # sqlhelper
