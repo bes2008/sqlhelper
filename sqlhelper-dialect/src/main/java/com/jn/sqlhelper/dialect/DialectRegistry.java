@@ -247,6 +247,8 @@ public class DialectRegistry {
         for (Class<? extends Dialect> clazz : Arrays.asList(dialects)) {
             registerDialectByClass(clazz, null);
         }
+
+        logger.info("Registered dialects: {}", nameToDialectMap.keySet());
     }
 
     private static void loadDatabaseIdMappings() {
