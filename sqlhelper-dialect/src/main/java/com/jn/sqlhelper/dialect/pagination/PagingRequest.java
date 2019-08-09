@@ -19,7 +19,7 @@ import com.jn.sqlhelper.dialect.orderby.OrderBy;
 
 import java.util.ArrayList;
 
-public class PagingRequest<E, R> {
+public class PagingRequest<C, E> {
     private Boolean count = null;
     private String countSqlId;
     private String dialect;
@@ -32,14 +32,14 @@ public class PagingRequest<E, R> {
     private Integer fetchSize;
     private int timeout;
     private OrderBy orderBy;
-    private E condition;
-    private PagingResult<R> result;
+    private C condition;
+    private PagingResult<E> result;
 
     public String getCountSqlId() {
         return this.countSqlId;
     }
 
-    public PagingRequest<E, R> setCountSqlId(String countSqlId) {
+    public PagingRequest<C, E> setCountSqlId(String countSqlId) {
         this.countSqlId = countSqlId;
         return this;
     }
@@ -66,7 +66,7 @@ public class PagingRequest<E, R> {
         return this.pageSize > 0 || isGetAllFromNonZeroOffsetRequest();
     }
 
-    public PagingRequest<E, R> limit(int pageNo, int pageSize) {
+    public PagingRequest<C, E> limit(int pageNo, int pageSize) {
         return this.setPageNo(pageNo).setPageSize(pageSize);
     }
 
@@ -74,7 +74,7 @@ public class PagingRequest<E, R> {
         return this.pageNo;
     }
 
-    public PagingRequest<E, R> setPageNo(int pageNo) {
+    public PagingRequest<C, E> setPageNo(int pageNo) {
         if (pageNo <= 0) {
             return this;
         }
@@ -86,7 +86,7 @@ public class PagingRequest<E, R> {
         return this.pageSize;
     }
 
-    public PagingRequest<E, R> setPageSize(int pageSize) {
+    public PagingRequest<C, E> setPageSize(int pageSize) {
         if (pageSize < 0) {
             this.pageSize = -1;
             return this;
@@ -108,7 +108,7 @@ public class PagingRequest<E, R> {
         return this.timeout;
     }
 
-    public PagingRequest<E, R> setTimeout(int timeout) {
+    public PagingRequest<C, E> setTimeout(int timeout) {
         this.timeout = timeout;
         return this;
     }
@@ -121,7 +121,7 @@ public class PagingRequest<E, R> {
         return orderBy;
     }
 
-    public PagingRequest<E, R> setOrderBy(OrderBy orderBy) {
+    public PagingRequest<C, E> setOrderBy(OrderBy orderBy) {
         this.orderBy = orderBy;
         return this;
     }
@@ -133,11 +133,11 @@ public class PagingRequest<E, R> {
         return true;
     }
 
-    public E getCondition() {
-        return (E) this.condition;
+    public C getCondition() {
+        return (C) this.condition;
     }
 
-    public PagingRequest<E, R> setCondition(E condition) {
+    public PagingRequest<C, E> setCondition(C condition) {
         this.condition = condition;
         return this;
     }
@@ -146,16 +146,16 @@ public class PagingRequest<E, R> {
         return this.count;
     }
 
-    public PagingRequest<E, R> setCount(Boolean count) {
+    public PagingRequest<C, E> setCount(Boolean count) {
         this.count = count;
         return this;
     }
 
-    public PagingResult<R> getResult() {
+    public PagingResult<E> getResult() {
         return this.result;
     }
 
-    public PagingRequest<E, R> setResult(PagingResult result) {
+    public PagingRequest<C, E> setResult(PagingResult result) {
         this.result = result;
         return this;
     }
@@ -164,7 +164,7 @@ public class PagingRequest<E, R> {
         return dialect;
     }
 
-    public PagingRequest<E, R> setDialect(String dialect) {
+    public PagingRequest<C, E> setDialect(String dialect) {
         this.dialect = dialect;
         return this;
     }
