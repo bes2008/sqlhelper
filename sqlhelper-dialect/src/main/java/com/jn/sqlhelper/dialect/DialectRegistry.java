@@ -166,6 +166,7 @@ public class DialectRegistry {
                 FirebirdDialect.class,
                 FileMakerDialect.class,
 
+                GaussDbDialect.class,
                 GBaseDialect.class,
                 GreenplumDialect.class,
 
