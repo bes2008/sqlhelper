@@ -14,6 +14,8 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.langx.util.Strings;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.DatabaseInfo;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.RowSelection;
@@ -23,8 +25,6 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.CommonUrlParser;
 import com.jn.sqlhelper.dialect.internal.urlparser.NoopUrlParser;
 import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
-import com.jn.sqlhelper.util.Reflects;
-import com.jn.sqlhelper.util.Strings;
 
 import java.sql.CallableStatement;
 import java.sql.Driver;
@@ -54,7 +54,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     @Override
     public String getDatabaseId() {
-        final Name nameAnno = (Name) Reflects.getDeclaredAnnotation(this.getClass(), Name.class);
+        final Name nameAnno = (Name) Reflects.getAnnotation(this.getClass(), Name.class);
         String name;
         if (nameAnno != null) {
             name = nameAnno.value();
@@ -224,10 +224,12 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         return delegate.getQuotedIdentifier(identifier);
     }
 
+    @Override
     public char getBeforeQuote() {
         return delegate == null ? '"' : delegate.getBeforeQuote();
     }
 
+    @Override
     public char getAfterQuote() {
         return delegate == null ? '"' : delegate.getAfterQuote();
     }

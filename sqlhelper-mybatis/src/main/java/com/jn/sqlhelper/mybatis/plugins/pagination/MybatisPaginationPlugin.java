@@ -16,6 +16,11 @@ package com.jn.sqlhelper.mybatis.plugins.pagination;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.jn.langx.lifecycle.Initializable;
+import com.jn.langx.util.Chars;
+import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.PropertiesAccessor;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
@@ -25,9 +30,6 @@ import com.jn.sqlhelper.dialect.pagination.PagingRequestBasedRowSelectionBuilder
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
-import com.jn.sqlhelper.util.Initializable;
-import com.jn.sqlhelper.util.PropertiesAccessor;
-import com.jn.sqlhelper.util.Strings;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.*;
@@ -106,7 +108,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         String instrumentorConfigPrefix = "sqlhelper.mybatis.instrumentor.";
         instrumentConfig.setDialect(accessor.getString(instrumentorConfigPrefix + "dialect", instrumentConfig.getDialect()));
         instrumentConfig.setDialectClassName(accessor.getString(instrumentorConfigPrefix + "dialectClassName", instrumentConfig.getDialectClassName()));
-        instrumentConfig.setCacheInstrumentedSql(accessor.getBoolean(instrumentorConfigPrefix+ "cacheInstruemtedSql", false));
+        instrumentConfig.setCacheInstrumentedSql(accessor.getBoolean(instrumentorConfigPrefix + "cacheInstruemtedSql", false));
     }
 
     @Override
@@ -175,13 +177,13 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                     rs = invocation.proceed();
                 }
                 if (rs == null) {
-                    rs = new ArrayList();
+                    rs = Collects.emptyArrayList();
                 }
                 invalidatePagingRequest(true);
             } else if (isNestedQueryInPagingRequest(ms)) {
                 rs = invocation.proceed();
                 if (rs == null) {
-                    rs = new ArrayList();
+                    rs = Collects.emptyArrayList();
                 }
             } else {
                 final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
@@ -199,15 +201,15 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                     return rs;
                 }
                 if (request.isGetAllRequest()) {
-                    if(isOrderByRequest()){
+                    if (isOrderByRequest()) {
                         rs = executeOrderBy(PAGING_CONTEXT.getPagingRequest().getOrderBy(), ms, parameter, RowBounds.DEFAULT, resultHandler, executor, boundSql);
-                    }else {
+                    } else {
                         invalidatePagingRequest(false);
                         rs = invocation.proceed();
                     }
                     invalidatePagingRequest(false);
                     if (rs == null) {
-                        rs = new ArrayList();
+                        rs = Collects.emptyArrayList();
                     }
                     if (rs instanceof Collection) {
                         items.addAll((Collection) rs);
@@ -249,7 +251,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                 } else {
                     rs = invocation.proceed();
                     if (rs == null) {
-                        rs = new ArrayList();
+                        rs = Collects.emptyArrayList();
                     }
                 }
             }
@@ -370,11 +372,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                 builder.append(c);
             }
             // A-Z
-            if (c >= 65 && c <= 90) {
-                builder.append(c);
-            }
-            // a-z
-            if (c >= 97 && c <= 122) {
+            if (Chars.isLowerCase(c) || Chars.isUpperCase(c)) {
                 builder.append(c);
             }
             if (c == '_') {

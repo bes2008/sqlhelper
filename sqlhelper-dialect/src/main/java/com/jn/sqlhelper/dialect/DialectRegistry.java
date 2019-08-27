@@ -14,12 +14,12 @@
 
 package com.jn.sqlhelper.dialect;
 
+import com.jn.langx.util.Strings;
+import com.jn.langx.util.reflect.Reflects;
+import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.dialect.annotation.Driver;
 import com.jn.sqlhelper.dialect.annotation.Name;
 import com.jn.sqlhelper.dialect.internal.*;
-import com.jn.sqlhelper.util.Holder;
-import com.jn.sqlhelper.util.Reflects;
-import com.jn.sqlhelper.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -346,7 +346,7 @@ public class DialectRegistry {
 
     private static Dialect registerDialectByClass(final Class<? extends Dialect> clazz, Dialect dialect) {
 
-        final Name nameAnno = (Name) Reflects.getDeclaredAnnotation(clazz, Name.class);
+        final Name nameAnno = (Name) Reflects.getAnnotation(clazz, Name.class);
         String name;
         if (nameAnno != null) {
             name = nameAnno.value();
@@ -358,7 +358,7 @@ public class DialectRegistry {
             name = simpleClassName.replaceAll("dialect", "");
         }
         if (dialect == null) {
-            final Driver driverAnno = (Driver) Reflects.getDeclaredAnnotation(clazz, Driver.class);
+            final Driver driverAnno = (Driver) Reflects.getAnnotation(clazz, Driver.class);
             Class<? extends java.sql.Driver> driverClass = null;
             Constructor<? extends Dialect> driverConstructor = null;
             if (driverAnno != null) {

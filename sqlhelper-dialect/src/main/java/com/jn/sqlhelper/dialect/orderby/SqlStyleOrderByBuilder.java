@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.dialect.orderby;
 
-import com.jn.sqlhelper.util.Strings;
+import com.jn.langx.util.Strings;
 
 import java.util.ArrayList;
 import java.util.Arrays;

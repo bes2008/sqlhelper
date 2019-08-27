@@ -14,8 +14,8 @@
 
 package com.jn.sqlhelper.dialect.internal.limit;
 
+import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.dialect.RowSelection;
-import com.jn.sqlhelper.util.Strings;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

@@ -27,7 +27,7 @@ package com.github.pagehelper.util;
 import com.github.pagehelper.IPage;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageException;
-import com.jn.sqlhelper.util.Strings;
+import com.jn.langx.util.Strings;
 import org.apache.ibatis.reflection.MetaObject;
 
 import java.lang.reflect.Method;

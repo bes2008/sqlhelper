@@ -70,7 +70,7 @@
         <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>2.0.alpha1.0</easyjson.version>
-
+        <langx-java.version>0.0.1</langx-java.version>
     </properties>
 
     <dependencyManagement>
@@ -128,6 +128,12 @@
                 <artifactId>jsqlparser</artifactId>
                 <version>${jsqlparser.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.github.fangjinuo.langx</groupId>
+                <artifactId>langx-java</artifactId>
+                <version>${langx-java.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -142,6 +148,11 @@
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
             <artifactId>easyjson-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.langx</groupId>
+            <artifactId>langx-java</artifactId>
         </dependency>
 
         <dependency>
