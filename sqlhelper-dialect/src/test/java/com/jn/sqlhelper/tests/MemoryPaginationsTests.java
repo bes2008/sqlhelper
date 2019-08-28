@@ -1,24 +1,24 @@
 package com.jn.sqlhelper.tests;
 
 import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.comparator.ParallelingComparator;
-import com.jn.langx.util.comparator.ReverseComparator;
-import com.jn.langx.util.comparator.StringComparator;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
-import com.jn.langx.util.reflect.FieldComparator;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.orderby.SymbolStyleOrderByBuilder;
-import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.MemoryPaginations;
+import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+import java.util.TreeSet;
 
 public class MemoryPaginationsTests {
 
     @Test
     public void test0() {
+        System.out.println("===================test1==================");
         List<Person> persons = new LinkedList<Person>();
         Random random = new Random(10000);
 
@@ -60,7 +60,7 @@ public class MemoryPaginationsTests {
         });
     }
 
-    //@Test
+    @Test
     public void test2() {
         System.out.println("===================test2==================");
         List<Person> persons;
@@ -75,23 +75,38 @@ public class MemoryPaginationsTests {
             persons.add(person);
         }
 
-        ParallelingComparator comparator = new ParallelingComparator();
-        comparator.addComparator(new FieldComparator(Person.class, "id", null));
-        comparator.addComparator(new FieldComparator(Person.class, "name", null));
-        comparator.addComparator(new FieldComparator(Person.class, "age", null));
-        Set<Person> pset = new TreeSet<Person>(comparator);
+        PagingRequest pagingRequest = new PagingRequest();
+        pagingRequest.limit(2, 10);
 
-        pset.addAll(persons);
+        SymbolStyleOrderByBuilder builder = SymbolStyleOrderByBuilder.MATH_SYMBOL_ORDER_BY_BUILDER;
+        OrderBy orderBy = builder.build("id-, +name, -age");
+        System.out.println(orderBy.hashCode());
+        pagingRequest.setOrderBy(orderBy);
 
-        Collects.forEach(pset, new Consumer<Person>() {
+
+        final List<Person> paged = MemoryPaginations.paging(persons, pagingRequest, new Predicate<Person>() {
+            @Override
+            public boolean test(Person person) {
+                return person.getAge() > 30;
+            }
+        }, new Predicate<Person>() {
+            @Override
+            public boolean test(Person person) {
+                return person.getAge() < 100;
+            }
+        });
+
+
+        Collects.forEach(paged, new Consumer<Person>() {
             @Override
             public void accept(Person person) {
                 System.out.println(person);
             }
         });
+
     }
 
-    //@Test
+    @Test
     public void test3() {
         System.out.println("===================test3==================");
         List<Person> persons;
@@ -106,23 +121,40 @@ public class MemoryPaginationsTests {
             persons.add(person);
         }
 
-        ParallelingComparator comparator = new ParallelingComparator();
-        comparator.addComparator(new FieldComparator(Person.class, "id", null));
-        comparator.addComparator(new FieldComparator(Person.class, "name", null));
-        comparator.addComparator(new FieldComparator(Person.class, "age", null));
-        Set<Person> pset = new TreeSet<Person>(comparator);
+        // TreeSet<Person> p = new TreeSet<Person>(persons);
 
-        pset.addAll(persons);
+        PagingRequest pagingRequest = new PagingRequest();
+        pagingRequest.limit(2, 10);
 
-        Collects.forEach(pset, new Consumer<Person>() {
+        SymbolStyleOrderByBuilder builder = SymbolStyleOrderByBuilder.MATH_SYMBOL_ORDER_BY_BUILDER;
+        OrderBy orderBy = builder.build("id-, +name, -age");
+        System.out.println(orderBy.hashCode());
+        pagingRequest.setOrderBy(orderBy);
+
+
+        final List<Person> paged = MemoryPaginations.paging(persons, pagingRequest, new Predicate<Person>() {
+            @Override
+            public boolean test(Person person) {
+                return person.getAge() > 30;
+            }
+        }, new Predicate<Person>() {
+            @Override
+            public boolean test(Person person) {
+                return person.getAge() < 100;
+            }
+        });
+
+
+        Collects.forEach(paged, new Consumer<Person>() {
             @Override
             public void accept(Person person) {
                 System.out.println(person);
             }
         });
+
     }
 
-    //@Test
+    @Test
     public void test4() {
         System.out.println("===================test4==================");
         List<Person> persons;
@@ -137,19 +169,39 @@ public class MemoryPaginationsTests {
             persons.add(person);
         }
 
-        ParallelingComparator comparator = new ParallelingComparator();
-        comparator.addComparator(new FieldComparator(Person.class, "id", null));
-        comparator.addComparator(new FieldComparator(Person.class, "name", new ReverseComparator(new StringComparator())));
-        comparator.addComparator(new FieldComparator(Person.class, "age", null));
-        Set<Person> pset = new TreeSet<Person>(comparator);
+        PagingRequest pagingRequest = new PagingRequest();
+        pagingRequest.limit(2, 10);
 
-        pset.addAll(persons);
+        SymbolStyleOrderByBuilder builder = SymbolStyleOrderByBuilder.MATH_SYMBOL_ORDER_BY_BUILDER;
+        OrderBy orderBy = builder.build("id-, +name, -age");
+        System.out.println(orderBy.hashCode());
+        pagingRequest.setOrderBy(orderBy);
 
-        Collects.forEach(pset, new Consumer<Person>() {
+
+        final List<Person> paged = MemoryPaginations.paging(persons, pagingRequest, new Predicate<Person>() {
+            @Override
+            public boolean test(Person person) {
+                return person.getAge() > 30;
+            }
+        }, new Predicate<Person>() {
+            @Override
+            public boolean test(Person person) {
+                return person.getAge() < 100;
+            }
+        });
+
+
+        Collects.forEach(paged, new Consumer<Person>() {
             @Override
             public void accept(Person person) {
                 System.out.println(person);
             }
         });
+
+    }
+
+
+    public void test(){
+
     }
 }
