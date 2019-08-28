@@ -11,9 +11,11 @@ import com.jn.langx.util.comparator.ReverseComparator;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.FieldComparator;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.orderby.OrderByItem;
 import com.jn.sqlhelper.dialect.orderby.OrderByType;
+import com.jn.sqlhelper.dialect.util.NonDistinctTreeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,7 +110,7 @@ public class MemoryPaginations {
                 Comparator comparator = orderByItem.getComparator();
                 if (comparator == null) {
                     Class fieldClass = field.getType();
-                    if (Comparable.class.isAssignableFrom(fieldClass)) {
+                    if (Comparable.class.isAssignableFrom(Primitives.wrap(fieldClass))) {
                         comparator = new ComparableComparator();
                     }
                 }
@@ -126,10 +128,11 @@ public class MemoryPaginations {
 
         }
         if (i > 0) {
-            Set<E> rs = new TreeSet<E>(parallelingComparator);
+            Set<E> rs = new NonDistinctTreeSet<E>(parallelingComparator);
             rs.addAll(list);
             return Collects.asList(rs);
         }
         return list;
     }
+
 }
