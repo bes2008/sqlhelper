@@ -14,48 +14,54 @@
 
 package com.jn.sqlhelper.dialect.orderby;
 
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.function.Function;
+
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+/**
+ * @author jinuo.fang
+ */
 public class OrderBy implements Serializable, Iterable<OrderByItem> {
-
-    private final List<OrderByItem> items = new ArrayList<OrderByItem>();
+    public static final OrderBy EMPTY = new OrderBy();
+    private final Map<String, OrderByItem> items = new LinkedHashMap<String, OrderByItem>();
 
     public boolean isValid() {
         return !items.isEmpty();
     }
 
     public void add(OrderByItem item) {
-        items.add(item);
+        items.put(item.getExpression(), item);
     }
 
     public void addAsc(String expression) {
-        items.add(new OrderByItem(expression, true));
+        add(new OrderByItem(expression, true));
     }
 
     public void addDesc(String expression) {
-        items.add(new OrderByItem(expression, false));
+        add(new OrderByItem(expression, false));
     }
 
+    @NonNull
     @Override
     public Iterator<OrderByItem> iterator() {
-        return items.iterator();
+        return items.values().iterator();
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(256);
-        for (int i = 0; i < items.size(); i++) {
-            OrderByItem item = items.get(i);
-            if (i == 0) {
-                builder.append(item.toString());
-            } else {
-                builder.append(",").append(item.toString());
+        return Strings.join(",", Pipeline.<OrderByItem>of(items.values()).map(new Function<OrderByItem, String>() {
+            @Override
+            public String apply(OrderByItem item) {
+                return item.toString();
             }
-        }
-        return builder.toString();
+        }).getAll());
     }
 
     @Override
@@ -73,10 +79,18 @@ public class OrderBy implements Serializable, Iterable<OrderByItem> {
 
     @Override
     public int hashCode() {
-        int hashCode = 0;
-        for (OrderByItem item : items) {
-            hashCode += item.hashCode();
+        return Pipeline.<OrderByItem>of(items.values()).map(new Function<OrderByItem, Integer>() {
+            @Override
+            public Integer apply(OrderByItem item) {
+                return item.hashCode();
+            }
+        }).sum().intValue();
+    }
+
+    public void setComparator(String itemExpression, Comparator comparator) {
+        OrderByItem item = items.get(itemExpression);
+        if (item != null) {
+            item.setComparator(comparator);
         }
-        return hashCode;
     }
 }

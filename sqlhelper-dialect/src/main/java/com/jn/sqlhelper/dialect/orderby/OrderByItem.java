@@ -14,15 +14,23 @@
 
 package com.jn.sqlhelper.dialect.orderby;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
+
 import java.io.Serializable;
+import java.util.Comparator;
 
 public class OrderByItem implements Serializable {
-    @Nonnull
+    @NonNull
     private String expression;
     @Nullable
     private OrderByType type;
+
+    /**
+     * just for memory pagination
+     */
+    @Nullable
+    private Comparator comparator;
 
     public OrderByItem() {
     }
@@ -55,6 +63,14 @@ public class OrderByItem implements Serializable {
 
     public void setType(OrderByType type) {
         this.type = type;
+    }
+
+    public Comparator getComparator() {
+        return comparator;
+    }
+
+    public void setComparator(Comparator comparator) {
+        this.comparator = comparator;
     }
 
     @Override

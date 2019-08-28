@@ -51,7 +51,7 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
     @Override
     public OrderBy build(String s) {
         if (Strings.isBlank(s)) {
-            return EMPTY;
+            return OrderBy.EMPTY;
         }
         OrderBy orderBy = new OrderBy();
 

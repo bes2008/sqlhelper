@@ -15,7 +15,5 @@
 package com.jn.sqlhelper.dialect.orderby;
 
 public interface OrderByBuilder<ORDERBY> {
-    public static final OrderBy EMPTY = new OrderBy();
-
     OrderBy build(ORDERBY orderby);
 }
