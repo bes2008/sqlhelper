@@ -27,7 +27,7 @@ import java.util.*;
 public class MemoryPaginations {
     private static final Logger logger = LoggerFactory.getLogger(MemoryPaginations.class);
 
-    public static <C, E> List<E> pseudoPaging(Collection<E> list, PagingRequest<C, E> pagingRequest, Predicate<E>... filters) {
+    public static <C, E> List<E> paging(Collection<E> list, PagingRequest<C, E> pagingRequest, Predicate<E>... filters) {
         Preconditions.checkNotNull(list);
         Preconditions.checkNotNull(pagingRequest);
 
