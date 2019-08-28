@@ -1,44 +1,55 @@
 package com.jn.sqlhelper.dialect.pagination;
 
+import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.comparator.ComparableComparator;
+import com.jn.langx.util.comparator.ParallelingComparator;
+import com.jn.langx.util.comparator.ReverseComparator;
+import com.jn.langx.util.function.Predicate;
+import com.jn.langx.util.reflect.FieldComparator;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.orderby.OrderByItem;
+import com.jn.sqlhelper.dialect.orderby.OrderByType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
+/**
+ * @author jinuo.fang
+ */
+@SuppressWarnings({"unchecked"})
 public class PseudoPaginations {
+    private static final Logger logger = LoggerFactory.getLogger(PseudoPaginations.class);
 
-    public static interface Filter<E> {
-        boolean doFilter(E e);
-    }
+    public static <C, E> List<E> pseudoPaging(Collection<E> list, PagingRequest<C, E> pagingRequest, Predicate<E> filter) {
+        Preconditions.checkNotNull(list);
+        Preconditions.checkNotNull(pagingRequest);
 
-    public <C, E> List<E> pseudoPaging(List<E> list, PagingRequest<C, E> pagingRequest, Filter<E> filter) {
-        if (pagingRequest == null) {
-            throw new IllegalArgumentException("paging request is illegal");
-        }
+        // step 1: do filter
+        List<E> filtered = Collects.asList(filter != null ? Collects.filter(list, filter) : list);
 
-        if (list == null) {
-            list = Collections.emptyList();
-        }
-
-        List<E> filtered = filter != null ? doFilter(list, filter) : list;
-
+        // step 2: build paging result
         PagingResult<E> result = new PagingResult<E>();
         pagingRequest.setResult(result);
         result.setPageNo(pagingRequest.getPageNo());
         result.setPageSize(pagingRequest.getPageSize());
         result.setTotal(filtered.size());
+
         if (list.isEmpty() || pagingRequest.isEmptyRequest()) {
             List<E> rs = new ArrayList<E>();
             result.setItems(rs);
             return rs;
         }
 
+        // step 3: sort
         List<E> sorted = pagingRequest.needOrderBy() ? doSort(filtered, pagingRequest.getOrderBy()) : filtered;
 
+
+        // step 4: do paging
         if (pagingRequest.isGetAllRequest()) {
             result.setItems(sorted);
             return sorted;
@@ -47,100 +58,53 @@ public class PseudoPaginations {
         if (pagingRequest.isGetAllFromNonZeroOffsetRequest()) {
             int pageSize = 10;
             int offset = (pagingRequest.getPageNo() - 1) * pageSize;
-            if (offset >= sorted.size()) {
-                List<E> rs = new ArrayList<E>();
-                result.setItems(rs);
-                return rs;
-            } else {
-                List<E> rs = sorted.subList(offset, sorted.size());
-                result.setItems(rs);
-                return rs;
-            }
-        }
-
-        int maxPageCount = pagingRequest.getResult().getMaxPageCount();
-        if (pagingRequest.getPageNo() > maxPageCount) {
-            List<E> rs = new ArrayList<E>();
-            result.setItems(rs);
-            return rs;
-        } else {
-            int offset = (pagingRequest.getPageNo() - 1) * pagingRequest.getPageSize();
-            int toOffset = maxPageCount == pagingRequest.getPageNo() ? sorted.size() : (offset + pagingRequest.getPageSize());
-            List<E> rs = sorted.subList(offset, toOffset);
+            List<E> rs = Collects.emptyArrayList();
+            Pipeline.of(sorted).skip(offset).addTo(rs);
             result.setItems(rs);
             return rs;
         }
 
-    }
-
-    private <E> List<E> doFilter(List<E> list, Filter<E> filter) {
-        List<E> rs = new ArrayList<E>();
-        for (E e : list) {
-            if (e != null) {
-                if (filter.doFilter(e)) {
-                    rs.add(e);
-                }
-            }
-        }
+        int offset = (pagingRequest.getPageNo() - 1) * pagingRequest.getPageSize();
+        int limit = pagingRequest.getPageSize();
+        List<E> rs = Collects.emptyArrayList();
+        Pipeline.of(sorted).skip(offset).limit(limit).addTo(rs);
+        result.setItems(rs);
         return rs;
     }
 
-    private <E> List<E> doSort(List<E> list, OrderBy orderBy) {
-        if (list.isEmpty()) {
-            return list;
+
+    public static <E> List<E> doSort(Collection<E> collection, OrderBy orderBy) {
+        if (collection.isEmpty() || !orderBy.isValid()) {
+            return Collects.asList(collection);
         }
-        Class elementClass = list.get(0).getClass();
-        List<E> rs = new ArrayList<E>();
+        List<E> list = Collects.asList(collection);
+        Class modelClass = list.get(0).getClass();
+        ParallelingComparator parallelingComparator = new ParallelingComparator();
+
+        int i = 0;
         for (OrderByItem orderByItem : orderBy) {
-            String expression = orderByItem.getExpression();
-            Field field = null;
-            try {
-                elementClass.getDeclaredField(expression);
-            } catch (NoSuchFieldException ex) {
-                // ignore it
-            }
+            String fieldName = orderByItem.getExpression();
+            Field field = Reflects.getDeclaredField(modelClass, fieldName);
             if (field != null) {
-
+                Class fieldClass = field.getType();
+                if (Comparable.class.isAssignableFrom(fieldClass)) {
+                    Comparator comparator = new ComparableComparator();
+                    comparator = new FieldComparator(field, comparator);
+                    if (orderByItem.getType() == OrderByType.DESC) {
+                        comparator = new ReverseComparator(comparator);
+                    }
+                    parallelingComparator.addComparator(comparator);
+                    i++;
+                }
+            } else {
+                logger.warn("can't find a field [{}] in class [{}]", fieldName, Reflects.getFQNClassName(modelClass));
             }
         }
-        return rs;
-    }
-
-    private class FieldComparator<E> implements Comparator<E> {
-        private Field field;
-        private boolean asc;
-
-        FieldComparator(Field field) {
-            this.field = field;
+        if (i > 0) {
+            Set<E> rs = new TreeSet<E>(parallelingComparator);
+            rs.addAll(list);
+            return Collects.asList(rs);
         }
-
-        @Override
-        public int compare(E o1, E o2) {
-            if(o1 == o2) {
-                return 0;
-            }
-
-            Class fieldType = field.getType();
-            // TODO build-in comparator
-            return 0;
-        }
-
-    }
-
-    private static boolean isComparable(Class clazz){
-        if(Comparable.class.isAssignableFrom(clazz)){
-            return true;
-        }
-        if(Number.class.isAssignableFrom(clazz)){
-            return true;
-        }
-        if(String.class==clazz || StringBuffer.class == clazz || StringBuilder.class == clazz){
-            return true;
-        }
-
-        // TODO judge primitive type
-
-        return false;
-
+        return list;
     }
 }
