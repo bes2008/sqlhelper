@@ -15,6 +15,7 @@
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-1.x-green.svg)](https://spring.io/projects/spring-boot/)
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-2.x-green.svg)](https://spring.io/projects/spring-boot/)
 
+[![maven](https://img.shields.io/badge/maven-v2.0.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.1)
 [![maven](https://img.shields.io/badge/maven-v2.0.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.0)
 [![maven](https://img.shields.io/badge/maven-v1.2.3-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:1.2.3)
 [![maven](https://img.shields.io/badge/maven-v1.2.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:1.2.1)
@@ -64,6 +65,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 7. Supports spring boot 1.x , 2.x
 8. Supports mybatis 3.x 
 9. Supports JDK6+
+10. Supports Memory Pagination
 
 #### sqlhelper vs mybatis-pagehelper
 |  metric                  | mybatis-pagehelper |      sqlhelper    |
