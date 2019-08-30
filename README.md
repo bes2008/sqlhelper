@@ -55,6 +55,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + KingBase (金仓)
     + OpenBase (东软)
     + SequoiaDB (巨杉)
+    + GaussDB (华为 高斯)
     
     If you want know all RDMBS ranking, you can find them in [DB Engines](https://db-engines.com/en/ranking/relational+dbms).
     
