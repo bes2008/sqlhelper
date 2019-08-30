@@ -1,6 +1,5 @@
 package com.jn.sqlhelper.dialect.pagination;
 
-import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
@@ -9,6 +8,7 @@ import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.comparator.ComparableComparator;
 import com.jn.langx.util.comparator.ParallelingComparator;
 import com.jn.langx.util.comparator.ReverseComparator;
+import com.jn.langx.util.function.Functions;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.FieldComparator;
 import com.jn.langx.util.reflect.Reflects;
@@ -34,7 +34,7 @@ public class MemoryPaginations {
         Preconditions.checkNotNull(pagingRequest);
 
         // step 1: do filter
-        Predicate<E> filter = Emptys.isNotEmpty(filters) ? allPredicate(filters) : null;
+        Predicate<E> filter = Emptys.isNotEmpty(filters) ? Functions.allPredicate(filters) : null;
         List<E> filtered = Collects.asList(filter != null ? Collects.filter(list, filter) : list);
 
         // step 2: build paging result
@@ -75,22 +75,6 @@ public class MemoryPaginations {
         Pipeline.of(sorted).skip(offset).limit(limit).addTo(rs);
         result.setItems(rs);
         return rs;
-    }
-
-    private static <E> Predicate<E> allPredicate(@NonNull Predicate<E>... predicates) {
-        Preconditions.checkTrue(Emptys.isNotEmpty(predicates));
-        final Pipeline<Predicate<E>> pipeline = Pipeline.<Predicate<E>>of(predicates);
-        return new Predicate<E>() {
-            @Override
-            public boolean test(final E value) {
-                return pipeline.allMatch(new Predicate<Predicate<E>>() {
-                    @Override
-                    public boolean test(Predicate<E> filter) {
-                        return filter.test(value);
-                    }
-                });
-            }
-        };
     }
 
 

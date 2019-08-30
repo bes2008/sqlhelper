@@ -124,7 +124,7 @@ public class MemoryPaginationsTests {
 
 
         SymbolStyleOrderByBuilder builder = SymbolStyleOrderByBuilder.MATH_SYMBOL_ORDER_BY_BUILDER;
-        OrderBy orderBy = builder.build("-id, +name, -age");
+        OrderBy orderBy = builder.build("-id, name-, +age");
         System.out.println(orderBy.hashCode());
 
 
