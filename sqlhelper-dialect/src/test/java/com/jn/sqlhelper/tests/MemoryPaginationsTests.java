@@ -12,7 +12,6 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.TreeSet;
 
 public class MemoryPaginationsTests {
 
@@ -123,34 +122,40 @@ public class MemoryPaginationsTests {
 
         // TreeSet<Person> p = new TreeSet<Person>(persons);
 
-        PagingRequest pagingRequest = new PagingRequest();
-        pagingRequest.limit(2, 10);
 
         SymbolStyleOrderByBuilder builder = SymbolStyleOrderByBuilder.MATH_SYMBOL_ORDER_BY_BUILDER;
-        OrderBy orderBy = builder.build("id-, +name, -age");
+        OrderBy orderBy = builder.build("-id, +name, -age");
         System.out.println(orderBy.hashCode());
-        pagingRequest.setOrderBy(orderBy);
 
 
-        final List<Person> paged = MemoryPaginations.paging(persons, pagingRequest, new Predicate<Person>() {
-            @Override
-            public boolean test(Person person) {
-                return person.getAge() > 30;
-            }
-        }, new Predicate<Person>() {
-            @Override
-            public boolean test(Person person) {
-                return person.getAge() < 100;
-            }
-        });
+        for (int i = 0; i < 8; i++) {
+            PagingRequest pagingRequest = new PagingRequest();
+            pagingRequest.limit(i + 1, 10);
+            pagingRequest.setOrderBy(orderBy);
 
+            final List<Person> paged = MemoryPaginations.paging(persons, pagingRequest, new Predicate<Person>() {
+                @Override
+                public boolean test(Person person) {
+                    return person.getAge() > 30;
+                }
+            }, new Predicate<Person>() {
+                @Override
+                public boolean test(Person person) {
+                    return person.getAge() < 100;
+                }
+            });
 
-        Collects.forEach(paged, new Consumer<Person>() {
-            @Override
-            public void accept(Person person) {
-                System.out.println(person);
-            }
-        });
+            System.out.println("page : " + (i + 1));
+
+            Collects.forEach(paged, new Consumer<Person>() {
+                @Override
+                public void accept(Person person) {
+                    System.out.println(person);
+                }
+            });
+
+        }
+
 
     }
 
@@ -201,7 +206,7 @@ public class MemoryPaginationsTests {
     }
 
 
-    public void test(){
+    public void test() {
 
     }
 }

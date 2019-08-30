@@ -367,15 +367,8 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         StringBuilder builder = new StringBuilder(ms.getId() + "_");
         for (int i = 0; i < orderByString.length(); i++) {
             char c = orderByString.charAt(i);
-            // 0-9
-            if (c >= 48 && c <= 57) {
-                builder.append(c);
-            }
-            // A-Z
-            if (Chars.isLowerCase(c) || Chars.isUpperCase(c)) {
-                builder.append(c);
-            }
-            if (c == '_') {
+            // 0-9, a-z, _
+            if (Chars.isNumber(c) || Chars.isLowerCase(c) || Chars.isUpperCase(c) || c == '_') {
                 builder.append(c);
             }
         }

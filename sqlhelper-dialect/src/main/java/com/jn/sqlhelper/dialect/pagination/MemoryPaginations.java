@@ -4,6 +4,7 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.NonDistinctTreeSet;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.comparator.ComparableComparator;
 import com.jn.langx.util.comparator.ParallelingComparator;
@@ -15,7 +16,6 @@ import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.orderby.OrderByItem;
 import com.jn.sqlhelper.dialect.orderby.OrderByType;
-import com.jn.sqlhelper.dialect.util.NonDistinctTreeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
