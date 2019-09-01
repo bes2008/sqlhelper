@@ -26,6 +26,7 @@
         <module>sqlhelper-ebean</module>
         <module>sqlhelper-batchinsert</module>
         <module>sqlhelper-ormlite</module>
+        <module>sqlhelper-springjdbc</module>
     </modules>
     <developers>
         <developer>
@@ -68,6 +69,7 @@
         <mybatis.springboot.version>2.0.1</mybatis.springboot.version>
         <junit.version>4.12</junit.version>
         <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
+        <spring.version>5.1.7.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>2.0.alpha2.0</easyjson.version>
         <langx-java.version>0.0.3</langx-java.version>
@@ -79,6 +81,11 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>

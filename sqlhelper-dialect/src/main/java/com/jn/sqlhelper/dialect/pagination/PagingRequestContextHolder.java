@@ -101,4 +101,22 @@ public class PagingRequestContextHolder<E extends PagingRequestContext> {
     public void remove() {
         this.variables.remove();
     }
+
+    public boolean isPagingRequest() {
+        return getPagingRequest() == null;
+    }
+
+    public boolean isOrderByRequest() {
+        if (!isPagingRequest()) {
+            return false;
+        }
+        PagingRequest request = getPagingRequest();
+        if (!request.needOrderBy()) {
+            return false;
+        }
+        if (request.getOrderByAsString().contains("?")) {
+            return false;
+        }
+        return true;
+    }
 }
