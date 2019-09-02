@@ -62,76 +62,136 @@ class PaginationPreparedStatement implements PreparedStatement {
 
     @Override
     public void setByte(int parameterIndex, byte x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setByte(parameterIndex, x);
     }
 
     @Override
     public void setShort(int parameterIndex, short x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setShort(parameterIndex, x);
     }
 
     @Override
     public void setInt(int parameterIndex, int x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setInt(parameterIndex, x);
     }
 
     @Override
     public void setLong(int parameterIndex, long x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setLong(parameterIndex, x);
     }
 
     @Override
     public void setFloat(int parameterIndex, float x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setFloat(parameterIndex, x);
     }
 
     @Override
     public void setDouble(int parameterIndex, double x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setDouble(parameterIndex, x);
     }
 
     @Override
     public void setBigDecimal(int parameterIndex, BigDecimal x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setBigDecimal(parameterIndex, x);
     }
 
     @Override
     public void setString(int parameterIndex, String x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setString(parameterIndex, x);
     }
 
     @Override
     public void setBytes(int parameterIndex, byte[] x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setBytes(parameterIndex, x);
     }
 
     @Override
     public void setDate(int parameterIndex, Date x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setDate(parameterIndex, x);
     }
 
     @Override
     public void setTime(int parameterIndex, Time x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setTime(parameterIndex, x);
     }
 
     @Override
     public void setTimestamp(int parameterIndex, Timestamp x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setTimestamp(parameterIndex, x);
     }
 
     @Override
     public void setAsciiStream(int parameterIndex, InputStream x, int length) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setAsciiStream(parameterIndex, x, length);
     }
 
     @Override
     public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setUnicodeStream(parameterIndex, x, length);
     }
 
     @Override
     public void setBinaryStream(int parameterIndex, InputStream x, int length) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setBinaryStream(parameterIndex, x, length);
     }
 
@@ -142,11 +202,19 @@ class PaginationPreparedStatement implements PreparedStatement {
 
     @Override
     public void setObject(int parameterIndex, Object x, int targetSqlType) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setObject(parameterIndex, x, targetSqlType);
     }
 
     @Override
     public void setObject(int parameterIndex, Object x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setObject(parameterIndex, x);
     }
 
@@ -162,26 +230,46 @@ class PaginationPreparedStatement implements PreparedStatement {
 
     @Override
     public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setCharacterStream(parameterIndex, reader, length);
     }
 
     @Override
     public void setRef(int parameterIndex, Ref x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setRef(parameterIndex, x);
     }
 
     @Override
     public void setBlob(int parameterIndex, Blob x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setBlob(parameterIndex, x);
     }
 
     @Override
     public void setClob(int parameterIndex, Clob x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setClob(parameterIndex, x);
     }
 
     @Override
     public void setArray(int parameterIndex, Array x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setArray(parameterIndex, x);
     }
 
@@ -192,26 +280,46 @@ class PaginationPreparedStatement implements PreparedStatement {
 
     @Override
     public void setDate(int parameterIndex, Date x, Calendar cal) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setDate(parameterIndex, x, cal);
     }
 
     @Override
     public void setTime(int parameterIndex, Time x, Calendar cal) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setTime(parameterIndex, x, cal);
     }
 
     @Override
     public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setTimestamp(parameterIndex, x, cal);
     }
 
     @Override
     public void setNull(int parameterIndex, int sqlType, String typeName) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setNull(parameterIndex, sqlType, typeName);
     }
 
     @Override
     public void setURL(int parameterIndex, URL x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setURL(parameterIndex, x);
     }
 
@@ -222,96 +330,172 @@ class PaginationPreparedStatement implements PreparedStatement {
 
     @Override
     public void setRowId(int parameterIndex, RowId x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setRowId(parameterIndex, x);
     }
 
     @Override
     public void setNString(int parameterIndex, String value) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setNString(parameterIndex, value);
     }
 
     @Override
     public void setNCharacterStream(int parameterIndex, Reader value, long length) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setNCharacterStream(parameterIndex, value, length);
     }
 
     @Override
     public void setNClob(int parameterIndex, NClob value) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setNClob(parameterIndex, value);
     }
 
     @Override
     public void setClob(int parameterIndex, Reader reader, long length) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setClob(parameterIndex, reader, length);
     }
 
     @Override
     public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setBlob(parameterIndex, inputStream, length);
     }
 
     @Override
     public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setNClob(parameterIndex, reader, length);
     }
 
     @Override
     public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setSQLXML(parameterIndex, xmlObject);
     }
 
     @Override
     public void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setObject(parameterIndex, x, targetSqlType, scaleOrLength);
     }
 
     @Override
     public void setAsciiStream(int parameterIndex, InputStream x, long length) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setAsciiStream(parameterIndex, x, length);
     }
 
     @Override
     public void setBinaryStream(int parameterIndex, InputStream x, long length) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setBinaryStream(parameterIndex, x, length);
     }
 
     @Override
     public void setCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setCharacterStream(parameterIndex, reader, length);
     }
 
     @Override
     public void setAsciiStream(int parameterIndex, InputStream x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setAsciiStream(parameterIndex, x);
     }
 
     @Override
     public void setBinaryStream(int parameterIndex, InputStream x) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setBinaryStream(parameterIndex, x);
     }
 
     @Override
     public void setCharacterStream(int parameterIndex, Reader reader) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setCharacterStream(parameterIndex, reader);
     }
 
     @Override
     public void setNCharacterStream(int parameterIndex, Reader value) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setNCharacterStream(parameterIndex, value);
     }
 
     @Override
     public void setClob(int parameterIndex, Reader reader) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setClob(parameterIndex, reader);
     }
 
     @Override
     public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setBlob(parameterIndex, inputStream);
     }
 
     @Override
     public void setNClob(int parameterIndex, Reader reader) throws SQLException {
+        if (indexOffset >= 0) {
+            parameterIndex = parameterIndex + indexOffset;
+            recordParameterSet(parameterIndex);
+        }
         delegate.setNClob(parameterIndex, reader);
     }
 
