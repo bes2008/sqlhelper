@@ -15,6 +15,7 @@
 
 package com.jn.sqlhelper.dialect.parameter;
 
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.dialect.QueryParameters;
 import com.jn.sqlhelper.dialect.RowSelection;
@@ -40,20 +41,7 @@ public class BaseQueryParameters<P> implements QueryParameters<P> {
         if (parameters instanceof Map) {
             return ((Map) parameters).size();
         }
-        if (parameters instanceof Collection) {
-            return ((Collection) parameters).size();
-        }
-        if (parameters.getClass().isArray()) {
-            return ((Object[]) parameters).length;
-        }
-        if (parameters instanceof Iterable) {
-            Holder<Integer> count = new Holder<Integer>();
-            for (Object parameter : ((Iterable) parameters)) {
-                count.set(count.get() + 1);
-            }
-            return count.get();
-        }
-        return 1;
+        return Collects.count(parameters);
     }
 
     @Override

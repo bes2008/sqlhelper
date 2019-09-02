@@ -214,8 +214,8 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                     if (rs instanceof Collection) {
                         items.addAll((Collection) rs);
                         result.setTotal(items.size());
-                        return rs;
                     }
+                    return rs;
                 }
 
                 if (this.beginIfSupportsLimit(ms)) {
