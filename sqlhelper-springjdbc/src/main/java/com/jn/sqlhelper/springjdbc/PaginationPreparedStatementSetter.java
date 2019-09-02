@@ -18,6 +18,7 @@ public class PaginationPreparedStatementSetter implements PrepareParameterSetter
             PaginationPreparedStatement pps = (PaginationPreparedStatement) statement;
             pps.setIndexOffset(startIndex >= 1 ? (startIndex - 1) : -1);
             delegate.setValues(statement);
+            pps.setIndexOffset(-1);
             return pps.getSotParameterIndexes().size();
         }
         delegate.setValues(statement);

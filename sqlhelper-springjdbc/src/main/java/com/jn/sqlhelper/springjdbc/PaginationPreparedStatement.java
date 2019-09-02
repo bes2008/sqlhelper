@@ -12,7 +12,7 @@ import java.util.Set;
 class PaginationPreparedStatement implements PreparedStatement {
     private PreparedStatement delegate;
 
-    private int indexOffset = -1; // -1 disable offset, 0
+    private int indexOffset = -1; // -1 disable offset
     private final Set<Integer> sotParameterIndexes = new LinkedHashSet<Integer>();
     public Set<Integer> getSotParameterIndexes(){
         return this.sotParameterIndexes;
