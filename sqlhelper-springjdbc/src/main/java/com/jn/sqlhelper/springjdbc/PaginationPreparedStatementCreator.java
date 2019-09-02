@@ -6,6 +6,7 @@ import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
+import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.SqlProvider;
 
@@ -48,7 +49,7 @@ public class PaginationPreparedStatementCreator implements PreparedStatementCrea
 
     @Override
     public String getSql() {
-        return this.preparedSql;
+        return preparedSql == null ? this.originalSql : this.preparedSql;
     }
 
     @Override
