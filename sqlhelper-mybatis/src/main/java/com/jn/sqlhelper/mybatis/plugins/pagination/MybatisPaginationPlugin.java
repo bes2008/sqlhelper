@@ -52,7 +52,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     private static final int NON_CACHE_QUERY_METHOD_PARAMS = 4;
     private static final PagingRequestContextHolder<MybatisPaginationRequestContext> PAGING_CONTEXT = (PagingRequestContextHolder<MybatisPaginationRequestContext>) PagingRequestContextHolder.getContext();
     private static final SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
-    private static PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
+    private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
     private PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
     private Cache<String, MappedStatement> countStatementCache;
     private String countSuffix = "_COUNT";

@@ -6,10 +6,7 @@ import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SQLs;
-import com.jn.sqlhelper.dialect.pagination.PagingRequest;
-import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
-import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
-import com.jn.sqlhelper.dialect.pagination.PagingResult;
+import com.jn.sqlhelper.dialect.pagination.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -18,16 +15,13 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.List;
 
 public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
     private static final PagingRequestContextHolder<PagingRequestContext> PAGING_CONTEXT = (PagingRequestContextHolder<PagingRequestContext>) PagingRequestContextHolder.getContext();
-
+    private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
     /**
      * supports for under 5.0
      *
@@ -112,10 +106,10 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                     }
 
                     if (needQuery) {
-                        RowSelection rowSelection = null;
+                        applyStatementSettingsInPaginationRequest(request);
+                        RowSelection rowSelection = rowSelectionBuilder.build(request);
                         String paginationSql = PAGING_CONTEXT.isOrderByRequest() ? instrumentor.instrumentOrderByLimitSql(sql, request.getOrderBy(), rowSelection) : instrumentor.instrumentLimitSql(sql, rowSelection);
-                        PreparedStatement ps = null;
-                        ps = new PaginationPreparedStatement(new SimplePreparedStatementCreator(paginationSql).createPreparedStatement(conn));
+                        PreparedStatement ps = new PaginationPreparedStatement(new SimplePreparedStatementCreator(paginationSql).createPreparedStatement(conn));
 
                         SpringJdbcQueryParameters queryParameters = new SpringJdbcQueryParameters();
                         queryParameters.setCallable(false);
@@ -123,12 +117,23 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
 
                         instrumentor.bindParameters(ps, new PaginationPreparedStatementSetter(pss0), queryParameters, true);
                         // DO execute
+                        ResultSet resultSet = null;
+                        try {
+                            resultSet = ps.executeQuery();
+                            rs = rse.extractData(resultSet);
+                        } finally {
+                            JdbcUtils.closeResultSet(resultSet);
+                            if (pss0 instanceof ParameterDisposer) {
+                                ((ParameterDisposer) pss0).cleanupParameters();
+                            }
+                        }
+                        handleWarnings(ps);
                     }
                 } else {
                     return originalQuery(sql, pss0, rse);
                 }
             } catch (SQLException ex) {
-
+                throw translateException("PreparedStatementCallback", sql, ex);
             } finally {
                 instrumentor.finish();
             }
@@ -155,6 +160,18 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                 }
             });
         }
+    }
+
+    protected void applyStatementSettingsInPaginationRequest(PagingRequest pagingRequest) throws SQLException {
+        int fetchSize = getFetchSize();
+        if (fetchSize != -1) {
+            pagingRequest.setFetchSize(fetchSize);
+        }
+        int maxRows = getMaxRows();
+        if (maxRows != -1) {
+            // DO  stmt.setMaxRows(maxRows);
+        }
+        pagingRequest.setTimeout(getQueryTimeout());
     }
 
     private void invalidatePagingRequest(boolean force) {

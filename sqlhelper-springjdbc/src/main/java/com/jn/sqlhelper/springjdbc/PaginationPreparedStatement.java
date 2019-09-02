@@ -13,9 +13,9 @@ class PaginationPreparedStatement implements PreparedStatement {
     private PreparedStatement delegate;
 
     private int indexOffset = -1; // -1 disable offset
-    private final Set<Integer> sotParameterIndexes = new LinkedHashSet<Integer>();
-    public Set<Integer> getSotParameterIndexes(){
-        return this.sotParameterIndexes;
+    private final Set<Integer> setParameterIndexes = new LinkedHashSet<Integer>();
+    public Set<Integer> getSetParameterIndexes(){
+        return this.setParameterIndexes;
     }
 
     public void setIndexOffset(int indexOffset) {
@@ -28,7 +28,7 @@ class PaginationPreparedStatement implements PreparedStatement {
 
     private void recordParameterSet(int index) {
         if (indexOffset >= 0) {
-            sotParameterIndexes.add(index);
+            setParameterIndexes.add(index);
         }
     }
 
