@@ -29,12 +29,22 @@
 SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
 
 ## modules
-**sqlhelper-dialect** : the core<br/>
-**sqlhelper-mybatis** : the mybatis tools (MyBatis Pagination Plugin)<br/> 
-**sqlhelper-mybatis-spring-boot**: spring boot autoconfigure, starter for sqlhelper in mybatis environment<br/>
-**sqlhelper-mybatis-over-pagehelper**: migrate your application from ***mybatis-pagehelper*** <br/> 
-**sqlhelper-jfinal**: use it in jFinal application environment<br/>
-**sqlhelper-ebean**: use it in Ebean application environment<br/>
+|   module         | sqlhelper version | JDK |  Description      |
+|------------------|-------------------|-----|-------------------|
+|sqlhelper-dialect | 1.0+              |1.6+ |  the core         |
+|sqlhelper-mybatis | 1.0+              |1.6+ |  the mybatis tools (MyBatis Pagination Plugin) |
+|sqlhelper-mybatis-spring-boot | 1.0+  |1.6+ |  spring boot autoconfigure, starter for sqlhelper-mybatis|
+|sqlhelper-mybatis-over-pagehelper|1.0+|1.6+ |  migrate your application from ***mybatis-pagehelper*** |
+|sqlhelper-jfinal  | 1.2+              |1.6+ |  supports jfinal  |
+|sqlhelper-ebean   | 1.2+              |1.6+ |  supports ebean   |
+|sqlhelper-hibernate| 1.2+             |1.6+ |  supports hibernate|
+|sqlhelper-mango   | 1.2+              |1.6+ |  supports mango   |
+|sqlhelper-ormlite | 1.2+              |1.6+ |  supports ormlite |
+|sqlhelper-springjdbc | 2.0.2+         |1.6+ |  supports spring-jdbc |
+|sqlhelper-springjdbc-spring-jdbc| 2.0.2+|1.8+| spring boot autoconfigure, starter for sqlhelper-springjdbc |
+
+
+
 **sqlhelper-examples**: some examples for there tools<br/>
  
 
