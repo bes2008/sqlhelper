@@ -24,7 +24,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
     private static final PagingRequestContextHolder<PagingRequestContext> PAGING_CONTEXT = (PagingRequestContextHolder<PagingRequestContext>) PagingRequestContextHolder.getContext();
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
 
-    private JdbcTemplatePaginationConfig paginationConfig = new JdbcTemplatePaginationConfig();
+    private JdbcTemplatePaginationProperties paginationConfig = new JdbcTemplatePaginationProperties();
 
     public JdbcTemplate() {
         super();
@@ -52,7 +52,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
         super(dataSource, lazyInit);
     }
 
-    public void setPaginationConfig(JdbcTemplatePaginationConfig paginationConfig) {
+    public void setPaginationConfig(JdbcTemplatePaginationProperties paginationConfig) {
         this.paginationConfig = paginationConfig;
     }
 

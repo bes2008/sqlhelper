@@ -14,14 +14,22 @@
 
 package com.jn.sqlhelper.springjdbc;
 
-public class JdbcTemplatePaginationConfig {
+public class JdbcTemplatePaginationProperties {
     private boolean count = true;
-
+    private int defaultPageSize = 10;
     public boolean isCount() {
         return count;
     }
 
     public void setCount(boolean count) {
         this.count = count;
+    }
+
+    public int getDefaultPageSize() {
+        return defaultPageSize;
+    }
+
+    public void setDefaultPageSize(int defaultPageSize) {
+        this.defaultPageSize = defaultPageSize;
     }
 }
