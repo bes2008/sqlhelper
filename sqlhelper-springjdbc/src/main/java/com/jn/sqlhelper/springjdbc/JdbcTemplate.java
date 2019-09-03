@@ -11,33 +11,69 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.support.JdbcUtils;
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
 public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
     private static final PagingRequestContextHolder<PagingRequestContext> PAGING_CONTEXT = (PagingRequestContextHolder<PagingRequestContext>) PagingRequestContextHolder.getContext();
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
+
+    private JdbcTemplatePaginationConfig paginationConfig = new JdbcTemplatePaginationConfig();
+
+    public JdbcTemplate() {
+        super();
+    }
+
+    /**
+     * Construct a new JdbcTemplate, given a DataSource to obtain connections from.
+     * <p>Note: This will not trigger initialization of the exception translator.
+     *
+     * @param dataSource the JDBC DataSource to obtain connections from
+     */
+    public JdbcTemplate(DataSource dataSource) {
+        super(dataSource);
+    }
+
+    /**
+     * Construct a new JdbcTemplate, given a DataSource to obtain connections from.
+     * <p>Note: Depending on the "lazyInit" flag, initialization of the exception translator
+     * will be triggered.
+     *
+     * @param dataSource the JDBC DataSource to obtain connections from
+     * @param lazyInit   whether to lazily initialize the SQLExceptionTranslator
+     */
+    public JdbcTemplate(DataSource dataSource, boolean lazyInit) {
+        super(dataSource, lazyInit);
+    }
+
+    public void setPaginationConfig(JdbcTemplatePaginationConfig paginationConfig) {
+        this.paginationConfig = paginationConfig;
+    }
+
     /**
      * supports for under 5.0
      *
      * @return DataSource
      */
-    protected DataSource obtainDataSource() {
+    protected DataSource dataSource() {
         DataSource dataSource = getDataSource();
         Preconditions.checkNotNull(dataSource, "No DataSource set");
         return dataSource;
     }
 
-    public <T> T query(String sql, PreparedStatementSetter pss0, final ResultSetExtractor<T> rse) throws DataAccessException {
+
+    @Override
+    public <T> T query(final String sql, final ResultSetExtractor<T> rse) throws DataAccessException {
         if (!PAGING_CONTEXT.isPagingRequest() || !SQLs.isSelectStatement(sql)) {
-            return originalQuery(sql, pss0, rse);
+            return super.query(sql, rse);
         } else {
-            Assert.notNull(rse, "ResultSetExtractor must not be null");
+            Preconditions.checkNotNull(rse, "ResultSetExtractor must not be null");
             logger.debug("Executing prepared SQL query");
 
             final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
@@ -60,7 +96,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                 if (PAGING_CONTEXT.isOrderByRequest()) {
                     sql0 = instrumentor.instrumentOrderBySql(sql, PAGING_CONTEXT.getPagingRequest().getOrderBy());
                 }
-                rs = originalQuery(sql0, pss0, rse);
+                rs = super.query(sql0, rse);
                 invalidatePagingRequest(false);
                 if (rs == null) {
                     rs = Collects.emptyArrayList();
@@ -73,20 +109,19 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
             }
 
 
-            Connection conn = DataSourceUtils.getConnection(obtainDataSource());
-
+            Connection conn = DataSourceUtils.getConnection(dataSource());
 
             Preconditions.checkNotNull(instrumentor);
             try {
                 if (instrumentor.beginIfSupportsLimit(conn.getMetaData())) {
                     boolean needQuery = true;
-                    if (request.needCount() == Boolean.TRUE) {
+                    if (needCountInPagingRequest(request)) {
                         String countSql = instrumentor.countSql(sql);
-                        int count = originalQuery(countSql, pss0, new ResultSetExtractor<Integer>() {
+                        int count = super.query(countSql, new ResultSetExtractor<Integer>() {
                             @Override
-                            public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
-                                if (rs.first()) {
-                                    return rs.getInt(1);
+                            public Integer extractData(ResultSet rs0) throws SQLException, DataAccessException {
+                                if (rs0.first()) {
+                                    return rs0.getInt(1);
                                 } else {
                                     return 0;
                                 }
@@ -115,63 +150,164 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         queryParameters.setCallable(false);
                         queryParameters.setRowSelection(rowSelection);
 
-                        instrumentor.bindParameters(ps, new PaginationPreparedStatementSetter(pss0), queryParameters, true);
+                        instrumentor.bindParameters(ps, new PaginationPreparedStatementSetter(null), queryParameters, true);
                         // DO execute
                         ResultSet resultSet = null;
                         try {
                             resultSet = ps.executeQuery();
-                            rs = rse.extractData(resultSet);
+                            List rows = (List) rse.extractData(resultSet);
+                            items.addAll(rows);
                         } finally {
                             JdbcUtils.closeResultSet(resultSet);
-                            if (pss0 instanceof ParameterDisposer) {
-                                ((ParameterDisposer) pss0).cleanupParameters();
-                            }
                         }
                         handleWarnings(ps);
                     }
+
+                    request.setPageNo(requestPageNo);
+                    result.setPageNo(request.getPageNo());
+                    rs = items;
                 } else {
-                    return originalQuery(sql, pss0, rse);
+                    return super.query(sql, rse);
                 }
             } catch (SQLException ex) {
                 throw translateException("PreparedStatementCallback", sql, ex);
             } finally {
                 instrumentor.finish();
             }
-            PreparedStatementCreator psc = null;//new PaginationPreparedStatementCreator(this, sql);
-            final PreparedStatementSetter pss = null;//new PaginationPreparedStatementSetter(pss0);
-
-            return execute(psc, new PreparedStatementCallback<T>() {
-                @Override
-                @Nullable
-                public T doInPreparedStatement(PreparedStatement ps) throws SQLException {
-                    ResultSet rs = null;
-                    try {
-                        if (pss != null) {
-                            pss.setValues(ps);
-                        }
-                        rs = ps.executeQuery();
-                        return rse.extractData(rs);
-                    } finally {
-                        JdbcUtils.closeResultSet(rs);
-                        if (pss instanceof ParameterDisposer) {
-                            ((ParameterDisposer) pss).cleanupParameters();
-                        }
-                    }
-                }
-            });
+            return (T) rs;
         }
     }
 
-    protected void applyStatementSettingsInPaginationRequest(PagingRequest pagingRequest) throws SQLException {
+
+    @Override
+    public <T> T query(PreparedStatementCreator psc, PreparedStatementSetter pss, final ResultSetExtractor<T> rse) throws DataAccessException {
+        if (!(psc instanceof SqlProvider)) {
+            return super.query(psc, pss, rse);
+        }
+
+        final String sql = ((SqlProvider) psc).getSql();
+
+        if (!PAGING_CONTEXT.isPagingRequest() || !SQLs.isSelectStatement(sql)) {
+            return super.query(psc, pss, rse);
+        } else {
+            Preconditions.checkNotNull(rse, "ResultSetExtractor must not be null");
+            logger.debug("Executing prepared SQL query");
+
+            final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
+            final PagingResult result = new PagingResult();
+            request.setResult(result);
+            result.setPageSize(request.getPageSize());
+            List items = Collects.emptyArrayList();
+            result.setPageNo(request.getPageNo());
+            result.setItems(items);
+            int requestPageNo = request.getPageNo();
+            Object rs = null;
+            if (request.isEmptyRequest()) {
+                result.setTotal(0);
+                rs = items;
+                return (T) rs;
+            }
+            SQLStatementInstrumentor instrumentor = SQLInstrumentorProvider.getInstance().get();
+            if (request.isGetAllRequest()) {
+                String sql0 = sql;
+                if (PAGING_CONTEXT.isOrderByRequest()) {
+                    sql0 = instrumentor.instrumentOrderBySql(sql, PAGING_CONTEXT.getPagingRequest().getOrderBy());
+                }
+                rs = super.query(new SimplePreparedStatementCreator(sql0), pss, rse);
+                invalidatePagingRequest(false);
+                if (rs == null) {
+                    rs = Collects.emptyArrayList();
+                }
+                if (rs instanceof Collection) {
+                    items.addAll((Collection) rs);
+                    result.setTotal(items.size());
+                }
+                return (T) rs;
+            }
+
+            Connection conn = DataSourceUtils.getConnection(dataSource());
+            Preconditions.checkNotNull(instrumentor);
+            try {
+                if (instrumentor.beginIfSupportsLimit(conn.getMetaData())) {
+                    boolean needQuery = true;
+                    if (needCountInPagingRequest(request)) {
+                        String countSql = instrumentor.countSql(sql);
+                        int count = super.query(new SimplePreparedStatementCreator(countSql), pss, new ResultSetExtractor<Integer>() {
+                            @Override
+                            public Integer extractData(ResultSet rs0) throws SQLException, DataAccessException {
+                                if (rs0.first()) {
+                                    return rs0.getInt(1);
+                                } else {
+                                    return 0;
+                                }
+                            }
+                        });
+                        if (count <= 0) {
+                            needQuery = false;
+                        }
+                        result.setTotal(count);
+                        int maxPageCount = result.getMaxPageCount();
+                        if (maxPageCount >= 0) {
+                            if (requestPageNo > maxPageCount) {
+                                request.setPageNo(maxPageCount);
+                                result.setPageNo(maxPageCount);
+                            }
+                        }
+                    }
+
+                    if (needQuery) {
+                        applyStatementSettingsInPaginationRequest(request);
+                        RowSelection rowSelection = rowSelectionBuilder.build(request);
+                        String paginationSql = PAGING_CONTEXT.isOrderByRequest() ? instrumentor.instrumentOrderByLimitSql(sql, request.getOrderBy(), rowSelection) : instrumentor.instrumentLimitSql(sql, rowSelection);
+                        PreparedStatement ps = new PaginationPreparedStatement(new SimplePreparedStatementCreator(paginationSql).createPreparedStatement(conn));
+
+                        SpringJdbcQueryParameters queryParameters = new SpringJdbcQueryParameters();
+                        queryParameters.setCallable(false);
+                        queryParameters.setRowSelection(rowSelection);
+
+                        instrumentor.bindParameters(ps, new PaginationPreparedStatementSetter(pss), queryParameters, true);
+                        // DO execute
+                        ResultSet resultSet = null;
+                        try {
+                            resultSet = ps.executeQuery();
+                            List rows = (List) rse.extractData(resultSet);
+                            items.addAll(rows);
+                        } finally {
+                            JdbcUtils.closeResultSet(resultSet);
+                            if (pss instanceof ParameterDisposer) {
+                                ((ParameterDisposer) pss).cleanupParameters();
+                            }
+                        }
+                        handleWarnings(ps);
+                    }
+
+                    request.setPageNo(requestPageNo);
+                    result.setPageNo(request.getPageNo());
+                    rs = items;
+                } else {
+                    return super.query(new SimplePreparedStatementCreator(sql), pss, rse);
+                }
+            } catch (SQLException ex) {
+                throw translateException("PreparedStatementCallback", sql, ex);
+            } finally {
+                instrumentor.finish();
+            }
+            return (T) rs;
+        }
+    }
+
+    private void applyStatementSettingsInPaginationRequest(PagingRequest pagingRequest) throws SQLException {
         int fetchSize = getFetchSize();
-        if (fetchSize != -1) {
+        if (fetchSize > -1) {
             pagingRequest.setFetchSize(fetchSize);
         }
         int maxRows = getMaxRows();
-        if (maxRows != -1) {
-            // DO  stmt.setMaxRows(maxRows);
+        if (maxRows > -1) {
+            pagingRequest.setMaxRows(maxRows);
         }
-        pagingRequest.setTimeout(getQueryTimeout());
+        if (getQueryTimeout() > -1) {
+            pagingRequest.setTimeout(getQueryTimeout());
+        }
     }
 
     private void invalidatePagingRequest(boolean force) {
@@ -182,7 +318,11 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
         PAGING_CONTEXT.remove();
     }
 
-    private <T> T originalQuery(String sql, PreparedStatementSetter pss, final ResultSetExtractor<T> rse) throws DataAccessException {
-        return query(new SimplePreparedStatementCreator(sql), pss, rse);
+
+    private boolean needCountInPagingRequest(PagingRequest request) {
+        if (request.needCount() == null) {
+            return paginationConfig.isCount();
+        }
+        return Boolean.TRUE.equals(request.needCount());
     }
 }

@@ -14,7 +14,7 @@ public class PaginationPreparedStatementSetter implements PrepareParameterSetter
     }
     @Override
     public int setParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
-        if (statement instanceof PaginationPreparedStatement) {
+        if (delegate!=null && (statement instanceof PaginationPreparedStatement)) {
             PaginationPreparedStatement pps = (PaginationPreparedStatement) statement;
             pps.setIndexOffset(startIndex >= 1 ? (startIndex - 1) : -1);
             delegate.setValues(statement);

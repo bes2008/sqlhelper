@@ -103,7 +103,7 @@ public class PagingRequestContextHolder<E extends PagingRequestContext> {
     }
 
     public boolean isPagingRequest() {
-        return getPagingRequest() == null;
+        return getPagingRequest() != null;
     }
 
     public boolean isOrderByRequest() {

@@ -21,10 +21,19 @@ import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.examples.common.dao.UserDao;
 import com.jn.sqlhelper.examples.common.model.User;
+import com.jn.sqlhelper.springjdbc.JdbcTemplate;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Api
@@ -32,6 +41,9 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
     private UserDao userDao;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     public void setUserDao(UserDao userDao) {
@@ -59,19 +71,81 @@ public class UserController {
         userDao.deleteById(id);
     }
 
-    @GetMapping
-    public PagingResult list(
+    @GetMapping("/_useMyBatis")
+    public PagingResult list_useMyBatis(
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name="sort",required = false) String sort ) {
+            @RequestParam(name = "sort", required = false) String sort) {
         User queryCondtion = new User();
         queryCondtion.setAge(10);
 
-        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize==null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
+        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
         PagingRequestContextHolder.getContext().setPagingRequest(request);
         List<User> users = userDao.selectByLimit(queryCondtion);
-        request.getResult().setItems(users);
-        String json = JSONBuilderProvider.simplest().toJson(request.getResult()) ;
+        String json = JSONBuilderProvider.simplest().toJson(request.getResult());
+        System.out.println(json);
+        json = JSONBuilderProvider.simplest().toJson(users);
+        System.out.println(json);
+        return request.getResult();
+    }
+
+    @GetMapping("/_useSpringJdbc_rowMapper")
+    public PagingResult list_useSpringJdbc_rowMapper(
+            @RequestParam(name = "pageNo", required = false) Integer pageNo,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name = "sort", required = false) String sort) {
+        User queryCondtion = new User();
+        queryCondtion.setAge(10);
+
+        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
+        PagingRequestContextHolder.getContext().setPagingRequest(request);
+        StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > 10");
+        List<User> users = jdbcTemplate.query(sqlBuilder.toString(), new RowMapper<User>() {
+            @Override
+            public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+                User u = new User();
+                u.setId(rs.getString("ID"));
+                u.setName(rs.getString("NAME"));
+                u.setAge(rs.getInt("AGE"));
+                return u;
+            }
+        });
+        String json = JSONBuilderProvider.simplest().toJson(users);
+        System.out.println(json);
+        return request.getResult();
+    }
+
+    @GetMapping("/_useSpringJdbc_pSetter_rExecutor")
+    public PagingResult list__useSpringJdbc_pSetter_rExecutor(
+            @RequestParam(name = "pageNo", required = false) Integer pageNo,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name = "sort", required = false) String sort) {
+        User queryCondtion = new User();
+        queryCondtion.setAge(10);
+
+        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
+        PagingRequestContextHolder.getContext().setPagingRequest(request);
+        StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
+        List<User> users = jdbcTemplate.query(sqlBuilder.toString(), new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setInt(1, 10);
+            }
+        }, new ResultSetExtractor<List<User>>() {
+            @Override
+            public List<User> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                List<User> users = new ArrayList<>();
+                while (rs.next()) {
+                    User u = new User();
+                    u.setId(rs.getString("ID"));
+                    u.setName(rs.getString("NAME"));
+                    u.setAge(rs.getInt("AGE"));
+                    users.add(u);
+                }
+                return users;
+            }
+        });
+        String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
         return request.getResult();
     }
