@@ -16,7 +16,7 @@ public class JdbcTemplateNativeProperties {
      * Query timeout. Default is to use the JDBC driver's default configuration. If a
      * duration suffix is not specified, seconds will be used.
      */
-    private int queryTimeout;
+    private int queryTimeout = -1;
 
     public int getFetchSize() {
         return this.fetchSize;

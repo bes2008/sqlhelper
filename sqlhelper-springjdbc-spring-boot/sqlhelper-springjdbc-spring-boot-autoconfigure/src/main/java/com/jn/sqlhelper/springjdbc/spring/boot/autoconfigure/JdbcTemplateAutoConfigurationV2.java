@@ -16,6 +16,7 @@ package com.jn.sqlhelper.springjdbc.spring.boot.autoconfigure;
 
 import com.jn.langx.util.Platform;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
+import com.jn.sqlhelper.springjdbc.JdbcTemplatePaginationProperties;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -58,14 +59,16 @@ public class JdbcTemplateAutoConfigurationV2 {
         @ConditionalOnMissingBean(JdbcOperations.class)
         public JdbcTemplate jdbcTemplate() {
             JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
-            JdbcProperties.Template template = this.properties.getTemplate();
-            jdbcTemplate.setFetchSize(template.getFetchSize());
-            jdbcTemplate.setMaxRows(template.getMaxRows());
-            if (Platform.JAVA_VERSION_INT >= 8) {
-                if (template.getQueryTimeout() != null) {
-                    jdbcTemplate.setQueryTimeout((int) template.getQueryTimeout().getSeconds());
-                }
-            }
+
+            JdbcTemplateNativeProperties templateConfig = properties.getTemplate();
+            jdbcTemplate.setFetchSize(templateConfig.getFetchSize());
+            jdbcTemplate.setMaxRows(templateConfig.getMaxRows());
+            jdbcTemplate.setQueryTimeout(templateConfig.getQueryTimeout());
+
+            JdbcTemplatePaginationProperties paginationProperties = properties.getPagination();
+            jdbcTemplate.setPaginationConfig(paginationProperties);
+
+
             return jdbcTemplate;
         }
 
