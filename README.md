@@ -42,11 +42,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 |sqlhelper-ormlite | 1.2+              |1.6+ |  supports ormlite |
 |sqlhelper-springjdbc | 2.0.2+         |1.6+ |  supports spring-jdbc |
 |sqlhelper-springjdbc-spring-jdbc| 2.0.2+|1.8+| spring boot autoconfigure, starter for sqlhelper-springjdbc |
-
-
-
-**sqlhelper-examples**: some examples for there tools<br/>
- 
+|sqlhelper-examples|1.0+               |1.8+ |  some examples for there tools |
 
 
 ## tools usage
