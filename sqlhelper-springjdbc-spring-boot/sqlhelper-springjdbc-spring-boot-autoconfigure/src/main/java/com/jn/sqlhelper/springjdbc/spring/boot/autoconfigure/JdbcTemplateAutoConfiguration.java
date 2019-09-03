@@ -12,8 +12,9 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.examples.common.config;
+package com.jn.sqlhelper.springjdbc.spring.boot.autoconfigure;
 
+import com.jn.langx.util.Platform;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -60,9 +61,10 @@ public class JdbcTemplateAutoConfiguration {
             JdbcProperties.Template template = this.properties.getTemplate();
             jdbcTemplate.setFetchSize(template.getFetchSize());
             jdbcTemplate.setMaxRows(template.getMaxRows());
-            if (template.getQueryTimeout() != null) {
-                jdbcTemplate
-                        .setQueryTimeout((int) template.getQueryTimeout().getSeconds());
+            if (Platform.JAVA_VERSION_INT >= 8) {
+                if (template.getQueryTimeout() != null) {
+                    jdbcTemplate.setQueryTimeout((int) template.getQueryTimeout().getSeconds());
+                }
             }
             return jdbcTemplate;
         }

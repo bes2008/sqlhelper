@@ -1,0 +1,1 @@
+provides: sqlhelper-springjdbc-spring-boot-autoconfigure,sqlhelper-springjdbc,spring-jdbc
