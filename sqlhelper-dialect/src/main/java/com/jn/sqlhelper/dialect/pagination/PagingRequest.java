@@ -30,6 +30,7 @@ public class PagingRequest<C, E> {
     // pageSize > 0, the limit is pageSize
     private int pageSize;
     private Integer fetchSize;
+    private int maxRows = -1;
     private int timeout;
     private OrderBy orderBy;
     private C condition;
@@ -180,5 +181,13 @@ public class PagingRequest<C, E> {
             }
         }
         setCondition(null);
+    }
+
+    public int getMaxRows() {
+        return maxRows;
+    }
+
+    public void setMaxRows(int maxRows) {
+        this.maxRows = maxRows;
     }
 }

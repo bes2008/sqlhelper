@@ -40,10 +40,12 @@ public class PagingRequestBasedRowSelectionBuilder implements RowSelectionBuilde
                 offset = pageNo > 0 ? (pageNo - 1) * request.getPageSize() : 0;
             }
             rowSelection.setLimit(limit);
-            if (new Long(offset) - 1L + new Long(rowSelection.getLimit()) > Integer.MAX_VALUE) {
+            if (offset - 1 + rowSelection.getLimit() > Integer.MAX_VALUE) {
                 rowSelection.setFetchSize(Integer.MAX_VALUE - offset);
             }
             rowSelection.setOffset(offset);
+
+            rowSelection.setMaxRows(request.getMaxRows());
             return rowSelection;
         }
         throw new IllegalArgumentException("PagingRequest is illegal");

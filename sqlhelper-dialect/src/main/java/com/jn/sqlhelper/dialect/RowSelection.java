@@ -20,6 +20,7 @@ public final class RowSelection {
     private Integer limit;
     private Integer timeout;
     private Integer fetchSize;
+    private Integer maxRows = -1;
 
     public Integer getOffset() {
         return this.offset;
@@ -61,7 +62,15 @@ public final class RowSelection {
         return this.limit != null || (this.offset != null && this.offset <= 0);
     }
 
-    public boolean hasOffset(){
+    public boolean hasOffset() {
         return offset > 0;
+    }
+
+    public Integer getMaxRows() {
+        return maxRows;
+    }
+
+    public void setMaxRows(Integer maxRows) {
+        this.maxRows = maxRows;
     }
 }
