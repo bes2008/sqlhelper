@@ -14,8 +14,11 @@
 
 package com.jn.sqlhelper.springjdbc.spring.boot.autoconfigure;
 
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
 import com.jn.sqlhelper.springjdbc.JdbcTemplatePaginationProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -37,6 +40,7 @@ import javax.sql.DataSource;
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 @EnableConfigurationProperties(SpringJdbcTemplateProperties.class)
 public class JdbcTemplateAutoConfiguration {
+    private static final Logger logger = LoggerFactory.getLogger(JdbcTemplateAutoConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean
@@ -53,6 +57,9 @@ public class JdbcTemplateAutoConfiguration {
         jdbcTemplate.setPaginationConfig(paginationProperties);
 
         jdbcTemplate.setInstrumentConfig(properties.getInstrumentor());
+        if (logger.isInfoEnabled()) {
+            logger.info("Initial Spring JdbcTemplate [{}] with configuration: {}", Reflects.getFQNClassName(JdbcTemplate.class), properties);
+        }
         return jdbcTemplate;
     }
 

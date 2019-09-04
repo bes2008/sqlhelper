@@ -18,6 +18,8 @@ package com.jn.sqlhelper.dialect.conf;
 import com.jn.easyjson.core.JSONBuilderProvider;
 
 public class SQLInstrumentConfig {
+    public static final SQLInstrumentConfig DEFAULT = new SQLInstrumentConfig();
+
     private String dialect;
     private String dialectClassName;
     private boolean cacheInstrumentedSql = false;

@@ -42,4 +42,12 @@ public class SqlHelperMybatisProperties {
     public void setPagination(PaginationPluginConfig pagination) {
         this.pagination = pagination;
     }
+
+    @Override
+    public String toString() {
+        return "SqlHelperMybatisProperties{" +
+                "instrumentor=" + instrumentor +
+                ", pagination=" + pagination +
+                '}';
+    }
 }

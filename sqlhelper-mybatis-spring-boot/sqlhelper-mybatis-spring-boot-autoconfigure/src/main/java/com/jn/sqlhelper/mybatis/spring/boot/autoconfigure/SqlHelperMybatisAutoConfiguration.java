@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.mybatis.spring.boot.autoconfigure;
 
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.pagination.CustomScriptLanguageDriver;
 import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin;
@@ -57,6 +58,7 @@ public class SqlHelperMybatisAutoConfiguration implements ConfigurationCustomize
         plugin.init();
 
         logger.info("Add interceptor {} to mybatis configuration", plugin);
+        logger.info("The properties of the mybatis plugin [{}] is: {}", Reflects.getFQNClassName(MybatisPaginationPlugin.class), sqlHelperMybatisProperties);
         configuration.addInterceptor(plugin);
     }
 

@@ -41,4 +41,13 @@ public class JdbcTemplateNativeProperties {
     public void setQueryTimeout(int queryTimeout) {
         this.queryTimeout = queryTimeout;
     }
+
+    @Override
+    public String toString() {
+        return "JdbcTemplateNativeProperties{" +
+                "fetchSize=" + fetchSize +
+                ", maxRows=" + maxRows +
+                ", queryTimeout=" + queryTimeout +
+                '}';
+    }
 }

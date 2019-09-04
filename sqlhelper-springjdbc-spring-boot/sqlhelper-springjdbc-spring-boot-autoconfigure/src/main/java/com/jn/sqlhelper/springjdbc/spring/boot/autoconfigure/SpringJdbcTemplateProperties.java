@@ -37,4 +37,13 @@ public class SpringJdbcTemplateProperties {
     public void setTemplate(JdbcTemplateNativeProperties template) {
         this.template = template;
     }
+
+    @Override
+    public String toString() {
+        return "SpringJdbcTemplateProperties{" +
+                "instrumentor=" + instrumentor +
+                ", pagination=" + pagination +
+                ", template=" + template +
+                '}';
+    }
 }

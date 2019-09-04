@@ -59,6 +59,9 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
     }
 
     public void setInstrumentConfig(SQLInstrumentConfig instrumentConfig) {
+        if (instrumentConfig == null) {
+            instrumentConfig = SQLInstrumentConfig.DEFAULT;
+        }
         this.instrumentConfig = instrumentConfig;
     }
 
@@ -80,7 +83,9 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
             return super.query(sql, rse);
         } else {
             Preconditions.checkNotNull(rse, "ResultSetExtractor must not be null");
-            logger.debug("Executing prepared SQL query");
+            if (logger.isDebugEnabled()) {
+                logger.debug("Executing prepared SQL query");
+            }
 
             final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
             final PagingResult result = new PagingResult();
@@ -197,7 +202,9 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
             return super.query(psc, pss, rse);
         } else {
             Preconditions.checkNotNull(rse, "ResultSetExtractor must not be null");
-            logger.debug("Executing prepared SQL query");
+            if (logger.isDebugEnabled()) {
+                logger.debug("Executing prepared SQL query");
+            }
 
             final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
             final PagingResult result = new PagingResult();
