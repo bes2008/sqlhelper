@@ -19,6 +19,7 @@ import com.google.common.cache.CacheBuilder;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.util.Chars;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PropertiesAccessor;
 import com.jn.sqlhelper.dialect.RowSelection;
@@ -257,6 +258,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             }
         } catch (Throwable ex2) {
             logger.error(ex2.getMessage(), ex2);
+            throw Throwables.wrapAsRuntimeException(ex2);
         } finally {
             invalidatePagingRequest(false);
             instrumentor.finish();
