@@ -169,7 +169,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
 
         try {
             if (!isPagingRequest(ms)) {
-                if (isQueryRequest(ms) && isPagingRequest() && isOrderByRequest() && !isNestedQueryInPagingRequest(ms)) {
+                if (isQueryRequest(ms) && PAGING_CONTEXT.isPagingRequest() && PAGING_CONTEXT.isOrderByRequest() && !isNestedQueryInPagingRequest(ms)) {
                     // do order by
                     rs = executeOrderBy(PAGING_CONTEXT.getPagingRequest().getOrderBy(), ms, parameter, RowBounds.DEFAULT, resultHandler, executor, boundSql);
                 } else {
@@ -201,7 +201,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                     return rs;
                 }
                 if (request.isGetAllRequest()) {
-                    if (isOrderByRequest()) {
+                    if (PAGING_CONTEXT.isOrderByRequest()) {
                         rs = executeOrderBy(PAGING_CONTEXT.getPagingRequest().getOrderBy(), ms, parameter, RowBounds.DEFAULT, resultHandler, executor, boundSql);
                     } else {
                         invalidatePagingRequest(false);
@@ -264,20 +264,6 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         return rs;
     }
 
-    private boolean isOrderByRequest() {
-        if (!isPagingRequest()) {
-            return false;
-        }
-        PagingRequest pagingRequest = PAGING_CONTEXT.getPagingRequest();
-        if (!pagingRequest.needOrderBy()) {
-            return false;
-        }
-        if (pagingRequest.getOrderByAsString().contains("?")) {
-            return false;
-        }
-        return true;
-    }
-
     private void setPagingRequestBasedRowBounds(RowBounds rowBounds) {
         if (MybatisUtils.isPagingRowBounds(rowBounds)) {
             PagingRequest request = new PagingRequest();
@@ -301,11 +287,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     }
 
     private boolean isPagingRequest(final MappedStatement statement) {
-        return statement.getStatementType() == StatementType.PREPARED && isQueryRequest(statement) && isPagingRequest();
-    }
-
-    private boolean isPagingRequest() {
-        return PAGING_CONTEXT.getPagingRequest() != null;
+        return statement.getStatementType() == StatementType.PREPARED && isQueryRequest(statement) && PAGING_CONTEXT.isPagingRequest();
     }
 
     private boolean isNestedQueryInPagingRequest(final MappedStatement statement) {
@@ -353,7 +335,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
         final RowSelection rowSelection = rowSelectionBuilder.build(request);
         PAGING_CONTEXT.setRowSelection(rowSelection);
-        final String pageSql = isOrderByRequest() ? instrumentor.instrumentOrderByLimitSql(boundSql.getSql(), PAGING_CONTEXT.getPagingRequest().getOrderBy(), rowSelection) : instrumentor.instrumentLimitSql(boundSql.getSql(), rowSelection);
+        final String pageSql = PAGING_CONTEXT.isOrderByRequest() ? instrumentor.instrumentOrderByLimitSql(boundSql.getSql(), PAGING_CONTEXT.getPagingRequest().getOrderBy(), rowSelection) : instrumentor.instrumentLimitSql(boundSql.getSql(), rowSelection);
         final BoundSql pageBoundSql = new BoundSql(ms.getConfiguration(), pageSql, boundSql.getParameterMappings(), parameter);
         final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
         for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {
