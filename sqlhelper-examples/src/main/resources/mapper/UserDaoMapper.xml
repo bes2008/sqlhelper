@@ -26,8 +26,8 @@
     <update id="updateById" parameterType="com.jn.sqlhelper.examples.common.model.User">
         UPDATE USER
         SET
-            NAME = #{name},
-            AGE  = #{age}
+        NAME = #{name},
+        AGE = #{age}
         WHERE ID = #{id}
     </update>
 

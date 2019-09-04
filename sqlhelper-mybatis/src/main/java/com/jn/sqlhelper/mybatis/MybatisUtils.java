@@ -30,7 +30,7 @@ public class MybatisUtils {
     }
 
     public static boolean isPagingRowBounds(RowBounds rowBounds) {
-        if(rowBounds == null || rowBounds == RowBounds.DEFAULT){
+        if (rowBounds == null || rowBounds == RowBounds.DEFAULT) {
             return false;
         }
         return rowBounds.getOffset() != RowBounds.NO_ROW_OFFSET || rowBounds.getLimit() != RowBounds.NO_ROW_LIMIT;

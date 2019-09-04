@@ -42,7 +42,7 @@ public abstract class AbstractLimitHandler extends LimitHandler {
     @Override
     public void setMaxRows(RowSelection selection, PreparedStatement statement)
             throws SQLException {
-        if(selection.getMaxRows()>=0){
+        if (selection.getMaxRows() >= 0) {
             statement.setMaxRows(selection.getMaxRows());
         }
     }

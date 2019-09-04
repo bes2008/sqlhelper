@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class SymbolStyleOrderByBuilderTests {
     @Test
-    public void test(){
+    public void test() {
         SymbolStyleOrderByBuilder builder = SymbolStyleOrderByBuilder.MATH_SYMBOL_ORDER_BY_BUILDER;
         System.out.println(builder.build(null).toString());
         System.out.println(builder.build(" ").toString());

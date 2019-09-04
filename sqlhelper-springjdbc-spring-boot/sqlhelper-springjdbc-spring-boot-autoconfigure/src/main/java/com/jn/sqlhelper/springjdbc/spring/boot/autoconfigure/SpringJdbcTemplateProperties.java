@@ -8,9 +8,9 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties(prefix = "sqlhelper.springjdbc")
 public class SpringJdbcTemplateProperties {
     @NestedConfigurationProperty
-    private SQLInstrumentConfig instrumentor = new SQLInstrumentConfig();
+    private SQLInstrumentConfig instrumentor = SQLInstrumentConfig.DEFAULT;
     @NestedConfigurationProperty
-    private JdbcTemplatePaginationProperties pagination= new JdbcTemplatePaginationProperties();
+    private JdbcTemplatePaginationProperties pagination = new JdbcTemplatePaginationProperties();
     @NestedConfigurationProperty
     private JdbcTemplateNativeProperties template = new JdbcTemplateNativeProperties();
 

@@ -16,7 +16,7 @@ package com.jn.sqlhelper.tests;
 
 import com.jn.langx.text.StringTemplates;
 
-public class Person implements Comparable<Person>{
+public class Person implements Comparable<Person> {
     private String id;
     private int age;
     private String name;
@@ -69,7 +69,7 @@ public class Person implements Comparable<Person>{
 
     @Override
     public String toString() {
-        return StringTemplates.format( "id: {0}, name: {1}, age: {2}", this.id, this.name, this.age);
+        return StringTemplates.format("id: {0}, name: {1}, age: {2}", this.id, this.name, this.age);
     }
 
     @Override

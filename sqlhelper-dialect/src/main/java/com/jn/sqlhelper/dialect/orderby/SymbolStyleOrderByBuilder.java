@@ -15,7 +15,6 @@
 package com.jn.sqlhelper.dialect.orderby;
 
 import com.jn.langx.util.Strings;
-import com.sun.org.apache.xpath.internal.operations.Or;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;

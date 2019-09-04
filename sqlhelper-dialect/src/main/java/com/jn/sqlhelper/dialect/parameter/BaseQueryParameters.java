@@ -16,11 +16,9 @@
 package com.jn.sqlhelper.dialect.parameter;
 
 import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.dialect.QueryParameters;
 import com.jn.sqlhelper.dialect.RowSelection;
 
-import java.util.Collection;
 import java.util.Map;
 
 public class BaseQueryParameters<P> implements QueryParameters<P> {
