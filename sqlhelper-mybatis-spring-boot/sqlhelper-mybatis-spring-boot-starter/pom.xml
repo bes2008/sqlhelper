@@ -12,5 +12,14 @@
 
     <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-mybatis-spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-mybatis</artifactId>
+        </dependency>
+    </dependencies>
 </project>

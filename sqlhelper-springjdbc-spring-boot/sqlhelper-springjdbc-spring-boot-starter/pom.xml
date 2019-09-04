@@ -12,5 +12,14 @@
 
     <artifactId>sqlhelper-springjdbc-spring-boot-starter</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-springjdbc-spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-springjdbc</artifactId>
+        </dependency>
+    </dependencies>
 </project>
