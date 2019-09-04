@@ -73,7 +73,7 @@
         <spring.version>5.1.7.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>2.0.alpha2.0</easyjson.version>
-        <langx-java.version>0.0.3</langx-java.version>
+        <langx-java.version>0.0.4</langx-java.version>
 
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
@@ -107,6 +107,12 @@
                 <groupId>com.github.fangjinuo.easyjson</groupId>
                 <artifactId>easyjson-core</artifactId>
                 <version>${easyjson.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.github.fangjinuo.langx</groupId>
+                        <artifactId>langx-java</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
