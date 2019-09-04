@@ -15,6 +15,7 @@
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-1.x-green.svg)](https://spring.io/projects/spring-boot/)
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-2.x-green.svg)](https://spring.io/projects/spring-boot/)
 
+[![maven](https://img.shields.io/badge/maven-v2.0.2-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.2)
 [![maven](https://img.shields.io/badge/maven-v2.0.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.1)
 [![maven](https://img.shields.io/badge/maven-v2.0.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.0)
 [![maven](https://img.shields.io/badge/maven-v1.2.3-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:1.2.3)
@@ -39,7 +40,6 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 |sqlhelper-ebean   | 1.2+              |1.6+ |  supports ebean   |
 |sqlhelper-hibernate| 1.2+             |1.6+ |  supports hibernate|
 |sqlhelper-mango   | 1.2+              |1.6+ |  supports mango   |
-|sqlhelper-ormlite | 1.2+              |1.6+ |  supports ormlite |
 |sqlhelper-batchinsert|1.2+            |1.6+ |  Batch insert data to database, use it for performance |
 |sqlhelper-springjdbc | 2.0.2+         |1.6+ |  supports spring-jdbc |
 |sqlhelper-springjdbc-spring-jdbc| 2.0.2+|1.8+| spring boot autoconfigure, starter for sqlhelper-springjdbc |
@@ -49,7 +49,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 ## tools usage
 ### pagination plugin
 #### Key Features
-1. Supports MyBatis, JFinal, EBean, Mango
+1. Supports MyBatis, JFinal, EBean, Mango, Hibernate, SpringJdbc
 2. Supported 90+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
     + TiDB (北京平凯星辰科技))
     + Doris (Apache Doris，百度研发)
@@ -79,17 +79,18 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 |  metric                  | mybatis-pagehelper |      sqlhelper    |
 |--------------------------|:------------------:|:-----------------:|
 |  databases               |         13         |         90+       |
-|  multiple databases in runtime |   √         |         √        |
-|  auto detect dialect     |         √         |         √        |
-|  plugin                  |         √         |         √        |
-|  PrepareStatement with '?'|         X         |         √        |                             
+|  multiple databases in runtime |   √          |         √         |
+|  auto detect dialect     |         √          |         √         |
+|  plugin                  |         √          |         √         |
+|  PrepareStatement with '?'|         X         |         √         |                             
 |  mybatis                 |         3.x        |         3.x       |
 |  spring boot             |         1.x, 2.x   |         1.x, 2.x  |
 |  JDK                     |         1.6+       |         1.6+      |
-|  jFinal                  |         X          |         √        |
-|  Mango                   |         X          |         √        |
-|  EBean                   |         X          |         √        | 
-|  国产数据库               |         X          | √ （参见上述列表）|
+|  jFinal                  |         X          |         √         |
+|  Mango                   |         X          |         √         |
+|  EBean                   |         X          |         √         | 
+|  国产数据库               |         X          | √ （参见上述列表）  |
+|  Spring JDBC             |         X          |         1.6+      |  
                      
 
 
