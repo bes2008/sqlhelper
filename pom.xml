@@ -25,7 +25,6 @@
         <module>sqlhelper-mango</module>
         <module>sqlhelper-ebean</module>
         <module>sqlhelper-batchinsert</module>
-        <module>sqlhelper-ormlite</module>
         <module>sqlhelper-springjdbc</module>
         <module>sqlhelper-springjdbc-spring-boot</module>
     </modules>
