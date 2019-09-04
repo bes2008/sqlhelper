@@ -6,6 +6,7 @@ import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SQLs;
+import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.pagination.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
@@ -25,6 +26,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
 
     private JdbcTemplatePaginationProperties paginationConfig = new JdbcTemplatePaginationProperties();
+    private SQLInstrumentConfig instrumentConfig;
 
     public JdbcTemplate() {
         super();
@@ -54,6 +56,10 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
 
     public void setPaginationConfig(JdbcTemplatePaginationProperties paginationConfig) {
         this.paginationConfig = paginationConfig;
+    }
+
+    public void setInstrumentConfig(SQLInstrumentConfig instrumentConfig) {
+        this.instrumentConfig = instrumentConfig;
     }
 
     /**
@@ -90,7 +96,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                 rs = items;
                 return (T) rs;
             }
-            SQLStatementInstrumentor instrumentor = SQLInstrumentorProvider.getInstance().get();
+            SQLStatementInstrumentor instrumentor = SQLInstrumentorProvider.getInstance().get(instrumentConfig);
             if (request.isGetAllRequest()) {
                 String sql0 = sql;
                 if (PAGING_CONTEXT.isOrderByRequest()) {

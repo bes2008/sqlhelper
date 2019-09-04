@@ -14,20 +14,17 @@
 
 package com.jn.sqlhelper.springjdbc.spring.boot.autoconfigure;
 
-import com.jn.langx.util.Platform;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
+import com.jn.sqlhelper.springjdbc.JdbcTemplatePaginationProperties;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.JdbcProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
@@ -38,51 +35,33 @@ import javax.sql.DataSource;
 @ConditionalOnClass({DataSource.class, JdbcTemplate.class})
 @ConditionalOnSingleCandidate(DataSource.class)
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
-@EnableConfigurationProperties(JdbcProperties.class)
+@EnableConfigurationProperties(SpringJdbcTemplateProperties.class)
 public class JdbcTemplateAutoConfiguration {
 
-    @Configuration
-    static class JdbcTemplateConfiguration {
+    @Bean
+    @ConditionalOnMissingBean
+    @Primary
+    public JdbcTemplate jdbcTemplate(DataSource dataSource, SpringJdbcTemplateProperties properties) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-        private final DataSource dataSource;
+        JdbcTemplateNativeProperties templateConfig = properties.getTemplate();
+        jdbcTemplate.setFetchSize(templateConfig.getFetchSize());
+        jdbcTemplate.setMaxRows(templateConfig.getMaxRows());
+        jdbcTemplate.setQueryTimeout(templateConfig.getQueryTimeout());
 
-        private final JdbcProperties properties;
+        JdbcTemplatePaginationProperties paginationProperties = properties.getPagination();
+        jdbcTemplate.setPaginationConfig(paginationProperties);
 
-        JdbcTemplateConfiguration(DataSource dataSource, JdbcProperties properties) {
-            this.dataSource = dataSource;
-            this.properties = properties;
-        }
-
-        @Bean
-        @Primary
-        @ConditionalOnMissingBean(JdbcOperations.class)
-        public JdbcTemplate jdbcTemplate() {
-            JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
-            JdbcProperties.Template template = this.properties.getTemplate();
-            jdbcTemplate.setFetchSize(template.getFetchSize());
-            jdbcTemplate.setMaxRows(template.getMaxRows());
-            if (Platform.JAVA_VERSION_INT >= 8) {
-                if (template.getQueryTimeout() != null) {
-                    jdbcTemplate.setQueryTimeout((int) template.getQueryTimeout().getSeconds());
-                }
-            }
-            return jdbcTemplate;
-        }
-
+        jdbcTemplate.setInstrumentConfig(properties.getInstrumentor());
+        return jdbcTemplate;
     }
 
-    @Configuration
-    @Import(JdbcTemplateConfiguration.class)
-    static class NamedParameterJdbcTemplateConfiguration {
-
-        @Bean
-        @Primary
-        @ConditionalOnSingleCandidate(JdbcTemplate.class)
-        @ConditionalOnMissingBean(NamedParameterJdbcOperations.class)
-        public NamedParameterJdbcTemplate namedParameterJdbcTemplate(JdbcTemplate jdbcTemplate) {
-            return new NamedParameterJdbcTemplate(jdbcTemplate);
-        }
-
+    @Bean
+    @Primary
+    @ConditionalOnSingleCandidate(JdbcTemplate.class)
+    @ConditionalOnMissingBean(NamedParameterJdbcOperations.class)
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        return new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 
 }
