@@ -5,7 +5,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
-import com.jn.sqlhelper.dialect.SQLs;
+import com.jn.sqlhelper.dialect.utils.SQLs;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.pagination.*;
 import org.springframework.dao.DataAccessException;
