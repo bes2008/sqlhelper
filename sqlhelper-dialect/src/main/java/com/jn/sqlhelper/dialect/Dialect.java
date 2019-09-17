@@ -91,6 +91,11 @@ public interface Dialect extends UrlParser {
      */
     boolean isBindLimitParametersInReverseOrder();
 
+    /**
+     * limit parameter will be bind in the first or not,
+     * if first ,the {@link #bindLimitParametersAtStartOfQuery(RowSelection, PreparedStatement, int)} will be execute
+     * else the {@link #bindLimitParametersAtEndOfQuery(RowSelection, PreparedStatement, int)} will be execute
+     */
     boolean isBindLimitParametersFirst();
 
     int bindLimitParametersAtStartOfQuery(RowSelection paramRowSelection, PreparedStatement paramPreparedStatement, int paramInt)

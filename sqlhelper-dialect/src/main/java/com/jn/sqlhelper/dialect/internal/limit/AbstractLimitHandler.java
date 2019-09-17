@@ -67,7 +67,7 @@ public abstract class AbstractLimitHandler extends LimitHandler {
 
     protected final int getMaxOrLimit(RowSelection selection) {
         int firstRow = convertToFirstRowValue(LimitHelper.getFirstRow(selection));
-        int lastRow = selection.getLimit();
-        return getDialect().isUseMaxForLimit() ? lastRow + firstRow : lastRow;
+        int limit = selection.getLimit();
+        return getDialect().isUseMaxForLimit() ? limit + firstRow : limit;
     }
 }
