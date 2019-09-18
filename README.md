@@ -92,7 +92,8 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 |  Mango                   |         X          |         √         |
 |  EBean                   |         X          |         √         | 
 |  国产数据库               |         X          | √ （参见上述列表）  |
-|  Spring JDBC             |         X          |         1.6+      |  
+|  Spring JDBC             |         X          |         1.6+      | 
+|  SqlSymbol Mapping       |        X           |         √         |   
                      
 
 
