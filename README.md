@@ -63,6 +63,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + OpenBase (东软)
     + SequoiaDB (巨杉)
     + GaussDB (华为 高斯)
+    + CirroDB (东方国信 行云)
     
     If you want know all RDMBS ranking, you can find them in [DB Engines](https://db-engines.com/en/ranking/relational+dbms).
     
@@ -74,6 +75,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 8. Supports mybatis 3.x 
 9. Supports JDK6+
 10. Supports Memory Pagination
+11. Supports SqlSymbolMapper, use it you can mapping any symbol to SQL symbol
 
 #### sqlhelper vs mybatis-pagehelper
 |  metric                  | mybatis-pagehelper |      sqlhelper    |
