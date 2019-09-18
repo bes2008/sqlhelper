@@ -15,12 +15,15 @@
 package com.jn.sqlhelper.tests;
 
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
+import com.jn.sqlhelper.dialect.symbolmapper.CamelToUnderlineSymbolMapper;
 import org.junit.Test;
 
 public class SqlStyleOrderByBuilderTests {
     @Test
     public void test() {
         SqlStyleOrderByBuilder builder = new SqlStyleOrderByBuilder();
+        builder.setSqlSymbolMapper(new CamelToUnderlineSymbolMapper("C_", true));
+
         System.out.println(builder.build(null).toString());
         System.out.println(builder.build(" ").toString());
         System.out.println(builder.build("  \t  ").toString());

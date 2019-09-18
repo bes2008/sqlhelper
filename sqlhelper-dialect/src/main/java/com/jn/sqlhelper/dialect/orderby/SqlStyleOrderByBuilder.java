@@ -15,6 +15,8 @@
 package com.jn.sqlhelper.dialect.orderby;
 
 import com.jn.langx.util.Strings;
+import com.jn.sqlhelper.dialect.SqlSymbolMapper;
+import com.jn.sqlhelper.dialect.symbolmapper.NoopSymbolMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +34,8 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
             "limit", "offset", "PROCEDURE"
     }));
 
+    private SqlSymbolMapper sqlSymbolMapper = NoopSymbolMapper.DEFAULT;
+
     public SqlStyleOrderByBuilder addKeywords(List<String> keywords) {
         if (keywords != null) {
             for (String keyword : keywords) {
@@ -46,6 +50,10 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
             keywordsAfterOrderBy.add(keyword.toLowerCase());
         }
         return this;
+    }
+
+    public void setSqlSymbolMapper(SqlSymbolMapper symbolMapper) {
+        this.sqlSymbolMapper = symbolMapper;
     }
 
     @Override
@@ -103,14 +111,14 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
             if (currentExpression == null) {
                 currentOrderType = null;
             } else {
-                orderBy.add(new OrderByItem(currentExpression, OrderByType.fromString(currentOrderType)));
+                orderBy.add(new OrderByItem(sqlSymbolMapper.apply(currentExpression), OrderByType.fromString(currentOrderType)));
                 currentExpression = null;
                 currentOrderType = null;
             }
         }
 
         if (currentExpression != null) {
-            orderBy.add(new OrderByItem(currentExpression, OrderByType.fromString(currentOrderType)));
+            orderBy.add(new OrderByItem(sqlSymbolMapper.apply(currentExpression), OrderByType.fromString(currentOrderType)));
             currentExpression = null;
             currentOrderType = null;
         }

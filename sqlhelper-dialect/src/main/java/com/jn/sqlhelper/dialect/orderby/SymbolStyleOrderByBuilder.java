@@ -15,6 +15,8 @@
 package com.jn.sqlhelper.dialect.orderby;
 
 import com.jn.langx.util.Strings;
+import com.jn.sqlhelper.dialect.SqlSymbolMapper;
+import com.jn.sqlhelper.dialect.symbolmapper.NoopSymbolMapper;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -31,6 +33,7 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
     private String descSymbol;
 
     private Map<String, String> symbolMap = new HashMap<String, String>();
+    private SqlSymbolMapper sqlSymbolMapper = NoopSymbolMapper.DEFAULT;
 
     public static final SymbolStyleOrderByBuilder MATH_SYMBOL_ORDER_BY_BUILDER = new SymbolStyleOrderByBuilder("+", "-");
 
@@ -40,6 +43,10 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
     public SymbolStyleOrderByBuilder(String ascSymbol, String descSymbol) {
         ascSymbol(ascSymbol);
         descSymbol(descSymbol);
+    }
+
+    public void setSqlSymbolMapper(SqlSymbolMapper sqlSymbolMapper) {
+        this.sqlSymbolMapper = sqlSymbolMapper;
     }
 
     @Override
@@ -95,14 +102,14 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
                 currentExpression = token;
             } else {
                 if (currentExpression != null) {
-                    orderBy.add(new OrderByItem(currentExpression, OrderByType.fromString(symbolMap.get(currentSymbol))));
+                    orderBy.add(new OrderByItem(sqlSymbolMapper.apply(currentExpression), OrderByType.fromString(symbolMap.get(currentSymbol))));
                 }
                 currentExpression = null;
                 currentSymbol = null;
             }
         }
         if (currentExpression != null) {
-            orderBy.add(new OrderByItem(currentExpression, OrderByType.fromString(symbolMap.get(currentSymbol))));
+            orderBy.add(new OrderByItem(sqlSymbolMapper.apply(currentExpression), OrderByType.fromString(symbolMap.get(currentSymbol))));
         }
         return orderBy;
     }
