@@ -52,8 +52,11 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
         return this;
     }
 
-    public void setSqlSymbolMapper(SqlSymbolMapper symbolMapper) {
-        this.sqlSymbolMapper = symbolMapper;
+    public SqlStyleOrderByBuilder sqlSymbolMapper(SqlSymbolMapper symbolMapper) {
+        if (symbolMapper != null) {
+            this.sqlSymbolMapper = symbolMapper;
+        }
+        return this;
     }
 
     @Override

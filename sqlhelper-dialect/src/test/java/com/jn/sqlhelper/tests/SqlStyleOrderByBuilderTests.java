@@ -22,7 +22,7 @@ public class SqlStyleOrderByBuilderTests {
     @Test
     public void test() {
         SqlStyleOrderByBuilder builder = new SqlStyleOrderByBuilder();
-        builder.setSqlSymbolMapper(new CamelToUnderlineSymbolMapper("C_", true));
+        builder.sqlSymbolMapper(new CamelToUnderlineSymbolMapper("C_", true));
 
         System.out.println(builder.build(null).toString());
         System.out.println(builder.build(" ").toString());
