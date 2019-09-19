@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * Usage:
  * <pre>
- *  OrderBy orderBy = new ProgramStyleOrderByBuilder().upperCase(true)
+ *  OrderBy orderBy = new ProgramStyleOrderByBuilder()
  *      .column("timeline")
  *      .asc("userXXX")
  *      .desc("userYYY")
