@@ -4,6 +4,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
+import com.jn.sqlhelper.dialect.orderby.ProgramStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.orderby.SymbolStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.MemoryPaginations;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
@@ -77,8 +78,7 @@ public class MemoryPaginationsTests {
         PagingRequest pagingRequest = new PagingRequest();
         pagingRequest.limit(2, 10);
 
-        SymbolStyleOrderByBuilder builder = SymbolStyleOrderByBuilder.MATH_SYMBOL_ORDER_BY_BUILDER;
-        OrderBy orderBy = builder.build("id-, +name, -age");
+        OrderBy orderBy = new ProgramStyleOrderByBuilder().desc("id").asc("name").desc("age").build(null);
         System.out.println(orderBy.hashCode());
         pagingRequest.setOrderBy(orderBy);
 

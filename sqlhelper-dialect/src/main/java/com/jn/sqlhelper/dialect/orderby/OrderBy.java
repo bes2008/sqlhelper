@@ -20,10 +20,7 @@ import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Function;
 
 import java.io.Serializable;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author jinuo.fang
@@ -39,6 +36,13 @@ public class OrderBy implements Serializable, Iterable<OrderByItem> {
     public void add(OrderByItem item) {
         items.put(item.getExpression(), item);
     }
+
+    public void addAll(Collection<OrderByItem> items) {
+        for (OrderByItem item : items){
+            add(item);
+        }
+    }
+
 
     public void addAsc(String expression) {
         add(new OrderByItem(expression, true));
