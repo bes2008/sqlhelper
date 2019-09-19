@@ -93,6 +93,9 @@ public class ProgramStyleOrderByBuilder implements OrderByBuilder<Object> {
         return column(column, OrderByType.DESC);
     }
 
+    public OrderBy build(){
+        return build(null);
+    }
 
     @Override
     public OrderBy build(Object object) {
