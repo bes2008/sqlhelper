@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.dialect.utils;
 
-import com.jn.langx.util.Strings;
+import com.jn.langx.Formatter;
 import com.jn.langx.util.io.LineDelimiter;
 
 import java.util.*;
