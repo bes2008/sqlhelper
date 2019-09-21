@@ -133,6 +133,10 @@
             <artifactId>easyjson-jackson</artifactId>
             <version>${easyjson.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

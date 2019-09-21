@@ -14,6 +14,9 @@
 
 package com.jn.sqlhelper.examples.common.controller;
 
+import com.github.pagehelper.IPage;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
@@ -71,17 +74,62 @@ public class UserController {
         userDao.deleteById(id);
     }
 
+    @GetMapping("/_useSqlhelper_over_pageHelper")
+    public Page list_sqlhelper_over_pageHelper(
+            @RequestParam(name = "pageNo", required = false) Integer pageNo,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name = "sort", required = false) String sort) {
+
+        Page page = PageHelper.startPage(pageNo, pageSize, sort);
+        User queryCondition = new User();
+        queryCondition.setAge(10);
+        List<User> users = userDao.selectByLimit(queryCondition);
+        String json = JSONBuilderProvider.simplest().toJson(users);
+        System.out.println(json);
+        json = JSONBuilderProvider.simplest().toJson(users);
+        System.out.println(json);
+        return page;
+    }
+
+    public static class PageImpl implements IPage {
+        private int pageNum;
+        private int pageSize;
+        private String orderBy;
+
+        public PageImpl(int pageNo, int pageSize, String orderBy) {
+            this.pageNum = pageNo;
+            this.pageSize = pageSize;
+            this.orderBy = orderBy;
+        }
+
+        @Override
+        public Integer getPageNum() {
+            return null;
+        }
+
+        @Override
+        public Integer getPageSize() {
+            return null;
+        }
+
+        @Override
+        public String getOrderBy() {
+            return null;
+        }
+    }
+
+
     @GetMapping("/_useMyBatis")
     public PagingResult list_useMyBatis(
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort) {
-        User queryCondtion = new User();
-        queryCondtion.setAge(10);
+        User queryCondition = new User();
+        queryCondition.setAge(10);
 
         PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
         PagingRequestContextHolder.getContext().setPagingRequest(request);
-        List<User> users = userDao.selectByLimit(queryCondtion);
+        List<User> users = userDao.selectByLimit(queryCondition);
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
         json = JSONBuilderProvider.simplest().toJson(users);
@@ -94,9 +142,6 @@ public class UserController {
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort) {
-        User queryCondtion = new User();
-        queryCondtion.setAge(10);
-
         PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
         PagingRequestContextHolder.getContext().setPagingRequest(request);
         StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > 10");
@@ -120,9 +165,6 @@ public class UserController {
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort) {
-        User queryCondtion = new User();
-        queryCondtion.setAge(10);
-
         PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
         PagingRequestContextHolder.getContext().setPagingRequest(request);
         StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");

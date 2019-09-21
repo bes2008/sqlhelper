@@ -68,6 +68,12 @@ public class PageHelper {
 
         @Override
         public void clear(boolean clearResult) {
+            this.page.setPageSize(this.getResult().getPageSize());
+            this.page.setPageNum(this.getResult().getPageNo());
+            this.page.setPages(this.getResult().getMaxPageCount());
+            this.page.setTotal(this.getResult().getTotal());
+            this.page.addAll(this.getResult().getItems());
+
             page.close();
             super.clear(clearResult);
         }
