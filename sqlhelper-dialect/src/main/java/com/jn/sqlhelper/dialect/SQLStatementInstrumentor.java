@@ -18,6 +18,7 @@ package com.jn.sqlhelper.dialect;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
@@ -188,6 +189,13 @@ public class SQLStatementInstrumentor {
     }
 
     public String countSql(String originalSql) {
+        return countSql(originalSql, null);
+    }
+
+    public String countSql(String originalSql, String countColumn) {
+        if(Strings.isBlank(countColumn)){
+            countColumn = "1";
+        }
         InstrumentedSelectStatement instrumentedSql = getInstrumentedSelectStatement(originalSql);
         if (instrumentedSql != null) {
             String countSql = instrumentedSql.getCountSql();
@@ -209,7 +217,7 @@ public class SQLStatementInstrumentor {
         if (hasOrderBy) {
             originalSql = originalSql.trim().substring(0, orderIndex).trim();
         }
-        String countSql = "select count(0) from (" + originalSql + ") tmp_count";
+        String countSql = "select count(" + countColumn + ") from (" + originalSql + ") tmp_count";
 
         // cache it
         if (this.config.isCacheInstrumentedSql()) {
