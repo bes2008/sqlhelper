@@ -112,7 +112,6 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     - [How To](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_jFinal)
   + [EBean application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_ebean)
 * Advanced Usage
-
 # UrlParser
 Parse jdbc url.
 ## usage:
@@ -124,3 +123,5 @@ DatabaseInfo dbinfo = new JdbcUrlParser().parse(url)
 
 # Batch Insert Tool
  If you want to optimize SQL performance, it is essential to create a large amount of sample data. This tool can meet your needs.
+
+# [FAQ](https://github.com/fangjinuo/sqlhelper/wiki/FAQ)
