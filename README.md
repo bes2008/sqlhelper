@@ -127,4 +127,5 @@ DatabaseInfo dbinfo = new JdbcUrlParser().parse(url)
 # [FAQ](https://github.com/fangjinuo/sqlhelper/wiki/FAQ)
 
 # Contact
-QQ Group: 750929088   ![image](https://github.com/fangjinuo/sqlhelper/tree/master/_images/qq_group.png)
+QQ Group: 750929088   
+![QQ Group](https://github.com/fangjinuo/sqlhelper/tree/master/_images/qq_group.png)
