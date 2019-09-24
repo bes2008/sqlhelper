@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class PagingRequest<C, E> {
     private Boolean count = null;
     private String countSqlId;
+    private String countColumn;
     private String dialect;
     // begin 1
     private int pageNo = 1;
@@ -189,5 +190,13 @@ public class PagingRequest<C, E> {
 
     public void setMaxRows(int maxRows) {
         this.maxRows = maxRows;
+    }
+
+    public String getCountColumn() {
+        return countColumn;
+    }
+
+    public void setCountColumn(String countColumn) {
+        this.countColumn = countColumn;
     }
 }

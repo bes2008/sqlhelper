@@ -127,7 +127,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                 if (instrumentor.beginIfSupportsLimit(conn.getMetaData())) {
                     boolean needQuery = true;
                     if (needCountInPagingRequest(request)) {
-                        String countSql = instrumentor.countSql(sql);
+                        String countSql = instrumentor.countSql(sql, request.getCountColumn());
                         int count = super.query(countSql, new ResultSetExtractor<Integer>() {
                             @Override
                             public Integer extractData(ResultSet rs0) throws SQLException, DataAccessException {
@@ -244,7 +244,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                 if (instrumentor.beginIfSupportsLimit(conn.getMetaData())) {
                     boolean needQuery = true;
                     if (needCountInPagingRequest(request)) {
-                        String countSql = instrumentor.countSql(sql);
+                        String countSql = instrumentor.countSql(sql, request.getCountColumn());
                         int count = super.query(new SimplePreparedStatementCreator(countSql), pss, new ResultSetExtractor<Integer>() {
                             @Override
                             public Integer extractData(ResultSet rs0) throws SQLException, DataAccessException {
