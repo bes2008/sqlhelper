@@ -148,6 +148,7 @@ public class DialectRegistry {
                 ClickHouseDialect.class,
                 ClustrixDialect.class,
                 CirroDBDialect.class,
+                CitusDialect.class,
                 CrateDialect.class,
                 CTreeDialect.class,
                 CubridDialect.class,
