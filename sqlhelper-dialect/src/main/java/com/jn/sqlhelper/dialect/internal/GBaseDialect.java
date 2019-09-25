@@ -14,12 +14,15 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;
+import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 
+/**
+ * MySQL Syntax Compatible
+ */
 public class GBaseDialect extends AbstractDialect {
     public GBaseDialect() {
         super();
-        setLimitHandler(new OracleXLimitHandler());
+        setLimitHandler(new LimitCommaLimitHandler());
     }
 
     @Override
@@ -28,7 +31,7 @@ public class GBaseDialect extends AbstractDialect {
     }
 
     @Override
-    public boolean isBindLimitParametersInReverseOrder() {
+    public boolean isSupportsLimitOffset() {
         return true;
     }
 

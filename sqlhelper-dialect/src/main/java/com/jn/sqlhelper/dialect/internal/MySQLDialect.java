@@ -40,8 +40,7 @@ public class MySQLDialect extends AbstractDialect {
     }
 
     @Override
-    public int registerResultSetOutParameter(CallableStatement statement, int col)
-            throws SQLException {
+    public int registerResultSetOutParameter(CallableStatement statement, int col) throws SQLException {
         return col;
     }
 
