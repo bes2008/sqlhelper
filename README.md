@@ -52,19 +52,22 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 #### Key Features
 1. Supports MyBatis, JFinal, EBean, Mango, Hibernate, SpringJdbc
 2. Supported 90+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
-    + TiDB (北京平凯星辰科技))
+    + AiSQL (阿里 MySQL)
+    + CirroDB (东方国信 行云)
+    + CynosDB (腾讯云数据库)
     + Doris (Apache Doris，百度研发)
-    + MaxCompute (阿里巴巴)
-    + K-DB (浪潮)
-    + GBase (南大通用)
     + DM (达梦)
-    + OSCAR (神州通用)
+    + GaussDB (华为 高斯)
+    + GBase (南大通用)
     + HighGo (瀚高)
+    + K-DB (浪潮)
     + KingBase (金仓)
+    + MaxCompute (阿里巴巴)
+    + OSCAR (神州通用)
     + OpenBase (东软)
     + SequoiaDB (巨杉)
-    + GaussDB (华为 高斯)
-    + CirroDB (东方国信 行云)
+    + TiDB (北京平凯星辰科技))
+    + TDSQL (腾讯 分布式MySQL)
     
     If you want know all RDMBS ranking, you can find them in [DB Engines](https://db-engines.com/en/ranking/relational+dbms).
     
