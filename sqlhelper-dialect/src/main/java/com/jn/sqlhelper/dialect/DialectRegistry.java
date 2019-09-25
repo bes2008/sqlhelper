@@ -215,10 +215,11 @@ public class DialectRegistry {
                 OscarDialect.class,
 
                 ParadoxDialect.class,
+                PerconaMysqlDialect.class,
+                PhoenixDialect.class,
                 PointbaseDialect.class,
                 PostgreSQLDialect.class,
-                PhoenixDialect.class,
-                PerconaMysqlDialect.class,
+                PrestoDialect.class,
 
                 RDMSOS2200Dialect.class,
                 RedshiftDialect.class,
