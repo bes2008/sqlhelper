@@ -154,6 +154,7 @@ public class DialectRegistry {
                 CubridDialect.class,
                 CockroachDialect.class,
                 ComDB2Dialect.class,
+                CovenantSQLDialect.class,
 
                 DbfDialect.class,
                 DB2Dialect.class,
@@ -227,7 +228,9 @@ public class DialectRegistry {
                 RedshiftDialect.class,
                 RBaseDialect.class,
 
+                SadasDialect.class,
                 SequoiaDBDialect.class,
+                SmallDialect.class,
                 SnappyDataDialect.class,
                 SnowflakeDialect.class,
                 SpliceMachineDialect.class,
@@ -250,6 +253,7 @@ public class DialectRegistry {
 
                 XtremeSQLDialect.class,
 
+                YaacomoDialect.class,
                 YugabyteDBDialect.class
         };
 

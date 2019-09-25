@@ -60,6 +60,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + GaussDB (华为 高斯)
     + GBase (南大通用)
     + HighGo (瀚高)
+    + HybridDB (阿里巴巴 分布式PostgreSQL)
     + K-DB (浪潮)
     + KingBase (金仓)
     + MaxCompute (阿里巴巴)
