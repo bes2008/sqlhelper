@@ -15,8 +15,8 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.dialect.RowSelection;
-import com.jn.sqlhelper.dialect.annotation.Name;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 

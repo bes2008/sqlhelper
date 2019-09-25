@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.sqlhelper.dialect.annotation.Name;
+import com.jn.langx.annotation.Name;
 
 /**
  *

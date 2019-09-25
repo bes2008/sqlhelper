@@ -14,15 +14,14 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.langx.annotation.Name;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.DatabaseInfo;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.RowSelection;
-import com.jn.sqlhelper.dialect.annotation.Name;
 import com.jn.sqlhelper.dialect.internal.limit.DefaultLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
-import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.internal.urlparser.CommonUrlParser;
 import com.jn.sqlhelper.dialect.internal.urlparser.NoopUrlParser;
 import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;

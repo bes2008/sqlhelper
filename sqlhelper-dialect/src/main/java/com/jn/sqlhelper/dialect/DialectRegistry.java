@@ -14,11 +14,11 @@
 
 package com.jn.sqlhelper.dialect;
 
+import com.jn.langx.annotation.Name;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.dialect.annotation.Driver;
-import com.jn.sqlhelper.dialect.annotation.Name;
 import com.jn.sqlhelper.dialect.internal.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
