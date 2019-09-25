@@ -36,7 +36,12 @@ public class GBaseDialect extends AbstractDialect {
     }
 
     @Override
-    public boolean isUseMaxForLimit() {
-        return true;
+    public char getBeforeQuote() {
+        return '`';
+    }
+
+    @Override
+    public char getAfterQuote() {
+        return '`';
     }
 }
