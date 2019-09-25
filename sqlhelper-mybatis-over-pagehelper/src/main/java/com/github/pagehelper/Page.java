@@ -240,6 +240,10 @@ public class Page<E> extends ArrayList<E> implements Closeable {
 
     public <E> Page<E> setOrderBy(String orderBy) {
         this.orderBy = orderBy;
+        PageHelper.PagingRequestAdapter requestAdapter = PageHelper.getLocalPagingRequest();
+        if(requestAdapter!=null && requestAdapter.page == this){
+            requestAdapter.setOrderBy();
+        }
         return (Page<E>) this;
     }
 

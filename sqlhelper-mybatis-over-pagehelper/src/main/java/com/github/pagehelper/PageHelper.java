@@ -41,22 +41,40 @@ public class PageHelper {
      * @param page
      */
     protected static void setLocalPage(Page page) {
+        setLocalPage0(page);
+    }
+
+    protected static PagingRequest setLocalPage0(Page page) {
         LOCAL_PAGE.set(page);
         PagingRequest pagingRequest = new PagingRequestAdapter().setPage(page);
         PagingRequestContextHolder.getContext().setPagingRequest(pagingRequest);
+        return pagingRequest;
+    }
+
+    static PagingRequestAdapter getLocalPagingRequest(){
+        return (PagingRequestAdapter)PagingRequestContextHolder.getContext().getPagingRequest();
     }
 
     public static class PagingRequestAdapter extends PagingRequest {
-        private Page page;
+        Page page;
 
         PagingRequestAdapter() {
 
         }
 
+        void setOrderBy(String orderBy){
+            page.setOrderBy(orderBy);
+            setOrderBy();
+        }
+
+        void setOrderBy(){
+            this.setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(page.getOrderBy()));
+        }
+
         PagingRequestAdapter setPage(Page page) {
             this.page = page;
             this.setCount(page.isCount());
-            this.setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(page.getOrderBy()));
+            setOrderBy();
             this.setPageNo(page.getPageNum());
             int pageSize = page.getPageSize();
             if (pageSize == 0) {

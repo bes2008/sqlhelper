@@ -78,7 +78,7 @@ public class UserController {
     public Page list_sqlhelper_over_pageHelper(
             @RequestParam(name = "pageNo") Integer pageNo,
             @RequestParam(name = "pageSize") Integer pageSize,
-            @RequestParam(name = "sort") String sort) {
+            @RequestParam(name = "sort", required = false) String sort) {
 
         Page page = PageHelper.startPage(pageNo, pageSize, sort);
         User queryCondition = new User();
