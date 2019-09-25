@@ -14,11 +14,13 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.annotation.Name;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 
 /**
  * MySQL Syntax Compatible
  */
+@Name("gbase")
 public class GBaseDialect extends AbstractDialect {
     public GBaseDialect() {
         super();

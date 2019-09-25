@@ -14,12 +14,14 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.annotation.Name;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 /**
  * http://www.highgo.com/content.php?catid=75
  * based on PostgreSQL
  */
+@Name("highgo")
 public class HighGoDialect extends AbstractDialect {
     public HighGoDialect() {
         super();
