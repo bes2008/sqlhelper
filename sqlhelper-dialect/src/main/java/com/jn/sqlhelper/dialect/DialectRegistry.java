@@ -222,6 +222,7 @@ public class DialectRegistry {
                 PostgreSQLDialect.class,
                 PrestoDialect.class,
 
+                RaimaDialect.class,
                 RDMSOS2200Dialect.class,
                 RedshiftDialect.class,
                 RBaseDialect.class,
@@ -234,9 +235,11 @@ public class DialectRegistry {
                 SQLServerDialect.class,
                 SQReamDialect.class,
 
+                TajoDialect.class,
                 TeradataDialect.class,
                 TiDBDialect.class,
                 TimesTenDialect.class,
+                TrafodionDialect.class,
                 TransbaseDialect.class,
 
                 ValentinaDialect.class,
@@ -245,7 +248,9 @@ public class DialectRegistry {
                 VistaDBDialect.class,
                 VoltDBDialect.class,
 
-                XtremeSQLDialect.class
+                XtremeSQLDialect.class,
+
+                YugabyteDBDialect.class
         };
 
         for (Class<? extends Dialect> clazz : Arrays.asList(dialects)) {
