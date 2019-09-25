@@ -76,9 +76,9 @@ public class UserController {
 
     @GetMapping("/_useSqlhelper_over_pageHelper")
     public Page list_sqlhelper_over_pageHelper(
-            @RequestParam(name = "pageNo", required = false) Integer pageNo,
-            @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name = "sort", required = false) String sort) {
+            @RequestParam(name = "pageNo") Integer pageNo,
+            @RequestParam(name = "pageSize") Integer pageSize,
+            @RequestParam(name = "sort") String sort) {
 
         Page page = PageHelper.startPage(pageNo, pageSize, sort);
         User queryCondition = new User();
@@ -90,34 +90,6 @@ public class UserController {
         System.out.println(json);
         return page;
     }
-
-    public static class PageImpl implements IPage {
-        private int pageNum;
-        private int pageSize;
-        private String orderBy;
-
-        public PageImpl(int pageNo, int pageSize, String orderBy) {
-            this.pageNum = pageNo;
-            this.pageSize = pageSize;
-            this.orderBy = orderBy;
-        }
-
-        @Override
-        public Integer getPageNum() {
-            return null;
-        }
-
-        @Override
-        public Integer getPageSize() {
-            return null;
-        }
-
-        @Override
-        public String getOrderBy() {
-            return null;
-        }
-    }
-
 
     @GetMapping("/_useMyBatis")
     public PagingResult list_useMyBatis(
