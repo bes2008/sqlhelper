@@ -195,6 +195,7 @@ public class DialectRegistry {
                 KognitioDialect.class,
 
                 LeanXcaleDialect.class,
+                LinterDialect.class,
 
                 MariaDBDialect.class,
                 MaxComputeDialect.class,
