@@ -15,13 +15,11 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
-import com.jn.sqlhelper.dialect.internal.urlparser.PostgreSQLUrlParser;
 
 public class CitusDialect extends AbstractDialect {
 
     public CitusDialect() {
         super();
-        setUrlParser(new PostgreSQLUrlParser());
         setLimitHandler(new LimitOffsetLimitHandler());
     }
 
