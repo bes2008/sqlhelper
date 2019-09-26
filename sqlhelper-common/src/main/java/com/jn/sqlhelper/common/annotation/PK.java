@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.annotation;
+package com.jn.sqlhelper.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
