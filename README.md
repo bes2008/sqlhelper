@@ -51,7 +51,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 ### pagination plugin
 #### Key Features
 1. Supports MyBatis, JFinal, EBean, Mango, Hibernate, SpringJdbc
-2. Supported 90+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
+2. Supported 100+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
     + AiSQL (阿里 MySQL)
     + CirroDB (东方国信 行云)
     + CynosDB (腾讯云数据库)
