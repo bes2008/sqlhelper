@@ -78,9 +78,11 @@ public class UserController {
     public Page list_sqlhelper_over_pageHelper(
             @RequestParam(name = "pageNo") Integer pageNo,
             @RequestParam(name = "pageSize") Integer pageSize,
-            @RequestParam(name = "sort", required = false) String sort) {
+            @RequestParam(name = "sort", required = false) String sort,
+            @RequestParam("countColumn") String countColumn) {
 
         Page page = PageHelper.startPage(pageNo, pageSize, sort);
+        page.setCountColumn(countColumn);
         User queryCondition = new User();
         queryCondition.setAge(10);
         List<User> users = userDao.selectByLimit(queryCondition);

@@ -241,7 +241,7 @@ public class Page<E> extends ArrayList<E> implements Closeable {
     public <E> Page<E> setOrderBy(String orderBy) {
         this.orderBy = orderBy;
         PageHelper.PagingRequestAdapter requestAdapter = PageHelper.getLocalPagingRequest();
-        if(requestAdapter!=null && requestAdapter.page == this){
+        if (requestAdapter != null && requestAdapter.page == this) {
             requestAdapter.setOrderBy();
         }
         return (Page<E>) this;
@@ -277,6 +277,10 @@ public class Page<E> extends ArrayList<E> implements Closeable {
 
     public Page<E> setCount(boolean count) {
         this.count = count;
+        PageHelper.PagingRequestAdapter requestAdapter = PageHelper.getLocalPagingRequest();
+        if (requestAdapter != null && requestAdapter.page == this) {
+            requestAdapter.setCount(this.count);
+        }
         return this;
     }
 
@@ -289,6 +293,10 @@ public class Page<E> extends ArrayList<E> implements Closeable {
     public Page<E> pageNum(int pageNum) {
         //分页合理化，针对不合理的页码自动处理
         this.pageNum = ((reasonable != null && reasonable) && pageNum <= 0) ? 1 : pageNum;
+        PageHelper.PagingRequestAdapter requestAdapter = PageHelper.getLocalPagingRequest();
+        if (requestAdapter != null && requestAdapter.page == this) {
+            requestAdapter.setPageNo(this.pageNum);
+        }
         return this;
     }
 
@@ -301,6 +309,10 @@ public class Page<E> extends ArrayList<E> implements Closeable {
     public Page<E> pageSize(int pageSize) {
         this.pageSize = pageSize;
         calculateStartAndEndRow();
+        PageHelper.PagingRequestAdapter requestAdapter = PageHelper.getLocalPagingRequest();
+        if (requestAdapter != null && requestAdapter.page == this) {
+            requestAdapter.setPageSize(pageSize);
+        }
         return this;
     }
 
@@ -344,7 +356,7 @@ public class Page<E> extends ArrayList<E> implements Closeable {
      * @return
      */
     public Page<E> countColumn(String columnName) {
-        this.countColumn = columnName;
+        setCountColumn(columnName);
         return this;
     }
 
@@ -386,6 +398,10 @@ public class Page<E> extends ArrayList<E> implements Closeable {
 
     public void setCountColumn(String countColumn) {
         this.countColumn = countColumn;
+        PageHelper.PagingRequestAdapter requestAdapter = PageHelper.getLocalPagingRequest();
+        if (requestAdapter != null && requestAdapter.page == this) {
+            requestAdapter.setCountColumn(countColumn);
+        }
     }
 
     @Override
