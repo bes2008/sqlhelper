@@ -180,7 +180,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                 if (rs == null) {
                     rs = Collects.emptyArrayList();
                 }
-                invalidatePagingRequest(true);
+                invalidatePagingRequest(false);
             } else if (isNestedQueryInPagingRequest(ms)) {
                 rs = invocation.proceed();
                 if (rs == null) {
@@ -205,10 +205,8 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                     if (PAGING_CONTEXT.isOrderByRequest()) {
                         rs = executeOrderBy(PAGING_CONTEXT.getPagingRequest().getOrderBy(), ms, parameter, RowBounds.DEFAULT, resultHandler, executor, boundSql);
                     } else {
-                        invalidatePagingRequest(false);
                         rs = invocation.proceed();
                     }
-                    invalidatePagingRequest(false);
                     if (rs == null) {
                         rs = Collects.emptyArrayList();
                     }
@@ -216,6 +214,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                         items.addAll((Collection) rs);
                         result.setTotal(items.size());
                     }
+                    invalidatePagingRequest(false);
                     return rs;
                 }
 

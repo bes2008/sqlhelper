@@ -79,7 +79,7 @@ public class UserController {
             @RequestParam(name = "pageNo") Integer pageNo,
             @RequestParam(name = "pageSize") Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort,
-            @RequestParam("countColumn") String countColumn) {
+            @RequestParam(value = "countColumn", required = false) String countColumn) {
 
         Page page = PageHelper.startPage(pageNo, pageSize, sort);
         page.setCountColumn(countColumn);
