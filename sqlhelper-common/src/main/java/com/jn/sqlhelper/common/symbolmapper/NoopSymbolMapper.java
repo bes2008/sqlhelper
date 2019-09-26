@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect;
+package com.jn.sqlhelper.common.symbolmapper;
 
-import com.jn.langx.util.function.Function;
-
-/**
- * map an name to sql column
- */
-public interface SqlSymbolMapper extends Function<String, String> {
+public class NoopSymbolMapper implements SqlSymbolMapper {
+    public static final NoopSymbolMapper DEFAULT = new NoopSymbolMapper();
+    @Override
+    public String apply(String name) {
+        return name;
+    }
 }

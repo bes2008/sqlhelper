@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.utils;
+package com.jn.sqlhelper.common.utils;
 
 
 import java.util.Collections;

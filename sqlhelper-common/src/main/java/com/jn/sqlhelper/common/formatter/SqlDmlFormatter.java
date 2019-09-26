@@ -12,10 +12,11 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.utils;
+package com.jn.sqlhelper.common.formatter;
 
 import com.jn.langx.Formatter;
 import com.jn.langx.util.io.LineDelimiter;
+import com.jn.sqlhelper.common.utils.SQLs;
 
 import java.util.*;
 

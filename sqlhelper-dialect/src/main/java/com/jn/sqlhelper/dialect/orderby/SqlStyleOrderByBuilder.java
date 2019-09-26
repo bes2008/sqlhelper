@@ -15,8 +15,8 @@
 package com.jn.sqlhelper.dialect.orderby;
 
 import com.jn.langx.util.Strings;
-import com.jn.sqlhelper.dialect.SqlSymbolMapper;
-import com.jn.sqlhelper.dialect.symbolmapper.NoopSymbolMapper;
+import com.jn.sqlhelper.common.symbolmapper.SqlSymbolMapper;
+import com.jn.sqlhelper.common.symbolmapper.NoopSymbolMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;

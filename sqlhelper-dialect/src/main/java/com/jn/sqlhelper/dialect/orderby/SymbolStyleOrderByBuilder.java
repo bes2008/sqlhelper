@@ -14,11 +14,11 @@
 
 package com.jn.sqlhelper.dialect.orderby;
 
+import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Strings;
-import com.jn.sqlhelper.dialect.SqlSymbolMapper;
-import com.jn.sqlhelper.dialect.symbolmapper.NoopSymbolMapper;
+import com.jn.sqlhelper.common.symbolmapper.SqlSymbolMapper;
+import com.jn.sqlhelper.common.symbolmapper.NoopSymbolMapper;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -55,7 +55,7 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
     @Override
     public OrderBy build(String s) {
         if (Strings.isBlank(ascSymbol) || Strings.isBlank(descSymbol)) {
-            throw new OrderBySymolException("OrderByBuilder symbol is illegal, ascSymbol:" + ascSymbol + ",descSymbol:" + descSymbol);
+            throw new OrderBySymbolException("OrderByBuilder symbol is illegal, ascSymbol:" + ascSymbol + ",descSymbol:" + descSymbol);
         }
 
         if (Strings.isBlank(s)) {
@@ -141,7 +141,7 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
     }
 
 
-    private void removeSymbolMapForValue(@Nonnull String value) {
+    private void removeSymbolMapForValue(@NonNull String value) {
         Iterator<Map.Entry<String, String>> iter = symbolMap.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry<String, String> entry = iter.next();

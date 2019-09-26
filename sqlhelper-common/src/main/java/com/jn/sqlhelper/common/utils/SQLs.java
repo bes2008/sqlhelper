@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.utils;
+package com.jn.sqlhelper.common.utils;
 
 import com.jn.langx.util.Strings;
 
@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 
 public class SQLs {
-    static final String WHITESPACE = " \n\r\f\t";
+    public static final String WHITESPACE = " \n\r\f\t";
 
     //DML
     public static boolean isSelectStatement(String sql) {

@@ -14,8 +14,8 @@
 
 package com.jn.sqlhelper.tests;
 
-import com.jn.sqlhelper.dialect.SqlSymbolMapper;
-import com.jn.sqlhelper.dialect.symbolmapper.CamelToUnderlineSymbolMapper;
+import com.jn.sqlhelper.common.symbolmapper.SqlSymbolMapper;
+import com.jn.sqlhelper.common.symbolmapper.CamelToUnderlineSymbolMapper;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -18,8 +18,8 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Function;
-import com.jn.sqlhelper.dialect.SqlSymbolMapper;
-import com.jn.sqlhelper.dialect.symbolmapper.NoopSymbolMapper;
+import com.jn.sqlhelper.common.symbolmapper.SqlSymbolMapper;
+import com.jn.sqlhelper.common.symbolmapper.NoopSymbolMapper;
 
 import java.util.Comparator;
 import java.util.List;

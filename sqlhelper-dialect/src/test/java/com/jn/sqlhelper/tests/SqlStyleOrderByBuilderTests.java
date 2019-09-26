@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.tests;
 
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
-import com.jn.sqlhelper.dialect.symbolmapper.CamelToUnderlineSymbolMapper;
+import com.jn.sqlhelper.common.symbolmapper.CamelToUnderlineSymbolMapper;
 import org.junit.Test;
 
 public class SqlStyleOrderByBuilderTests {

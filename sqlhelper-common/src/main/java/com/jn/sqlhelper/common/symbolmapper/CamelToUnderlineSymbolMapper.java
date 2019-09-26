@@ -12,13 +12,12 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.symbolmapper;
+package com.jn.sqlhelper.common.symbolmapper;
 
 import com.jn.langx.util.Chars;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
-import com.jn.sqlhelper.dialect.SqlSymbolMapper;
 
 import java.util.List;
 
