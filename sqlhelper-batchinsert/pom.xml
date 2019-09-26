@@ -15,5 +15,11 @@
         Supports batch insert for performance test
     </description>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-common</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

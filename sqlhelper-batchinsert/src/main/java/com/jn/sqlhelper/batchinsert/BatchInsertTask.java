@@ -14,6 +14,8 @@
 
 package com.jn.sqlhelper.batchinsert;
 
+import com.jn.sqlhelper.common.connection.ConnectionFactory;
+
 import java.sql.SQLException;
 import java.util.Random;
 import java.util.concurrent.Callable;

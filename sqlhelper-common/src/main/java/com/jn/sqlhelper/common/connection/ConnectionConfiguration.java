@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.batchinsert;
+package com.jn.sqlhelper.common.connection;
 
 import java.io.IOException;
 import java.io.InputStream;

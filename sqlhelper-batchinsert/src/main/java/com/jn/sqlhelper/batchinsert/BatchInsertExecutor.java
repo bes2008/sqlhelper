@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.batchinsert;
 
+import com.jn.sqlhelper.common.connection.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
