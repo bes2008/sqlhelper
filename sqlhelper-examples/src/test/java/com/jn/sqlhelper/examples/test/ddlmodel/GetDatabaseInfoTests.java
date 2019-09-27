@@ -111,4 +111,22 @@ public class GetDatabaseInfoTests {
         }
 
     }
+
+    private void showColumn(DatabaseMetaData dbMetaData, String catalog, String schema, String tableName)  throws SQLException{
+        ResultSet columnsRs = dbMetaData.getColumns(catalog, schema, tableName, null);
+        while (columnsRs.next()){
+            @Nullable
+            String tableCatalog = columnsRs.getString("TABLE_CAT");
+
+            @Nullable
+            String tableSchema = columnsRs.getString("TABLE_SCHEM");
+
+            @NonNull
+            String _tableName = columnsRs.getString("TABLE_NAME");
+            @NonNull
+            String columnName= columnsRs.getString("COLUMN_NAME");
+
+        }
+
+    }
 }
