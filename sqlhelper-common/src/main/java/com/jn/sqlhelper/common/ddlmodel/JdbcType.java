@@ -1,6 +1,10 @@
 package com.jn.sqlhelper.common.ddlmodel;
 
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Predicate;
+
 import java.sql.Types;
+import java.util.EnumSet;
 
 public enum JdbcType {
     BIT(Types.BIT),
@@ -44,14 +48,26 @@ public enum JdbcType {
     TIMESTAMP_WITH_TIMEZONE(2014),
 
 
-    UNKNOWN
-    ;
-    JdbcType(){}
-    JdbcType(int code){
-        this.code= code;
+    UNKNOWN(Integer.MIN_VALUE);
+
+    JdbcType() {
+    }
+
+    JdbcType(int code) {
+        this.code = code;
     }
 
 
     private int code;
+
+    public static final JdbcType ofCode(final int code) {
+        JdbcType jdbcType = Collects.findFirst(EnumSet.allOf(JdbcType.class), new Predicate<JdbcType>() {
+            @Override
+            public boolean test(JdbcType jdbcType) {
+                return jdbcType.code == code;
+            }
+        });
+        return jdbcType == null ? UNKNOWN : jdbcType;
+    }
 
 }
