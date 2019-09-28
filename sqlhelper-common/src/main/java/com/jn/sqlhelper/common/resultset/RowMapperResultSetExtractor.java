@@ -1,8 +1,10 @@
 package com.jn.sqlhelper.common.resultset;
 
 import com.jn.langx.util.Preconditions;
+import com.jn.sqlhelper.common.ddlmodel.ResultSetDescription;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +38,21 @@ public class RowMapperResultSetExtractor<T> implements ResultSetExtractor<List<T
     public List<T> extract(ResultSet rs) throws SQLException {
         List<T> results = (this.expectedMaxRows > 0 ? new ArrayList<T>(this.expectedMaxRows) : new ArrayList<T>());
         int rowNo = 0;
-        while (rs.next() && results.size() < expectedMaxRows) {
-            if (rowNo < offset) {
-                rowNo++;
-                continue;
+
+        if (expectedMaxRows > 0) {
+            if (rs.first()) {
+                ResultSetMetaData rsMetaData = rs.getMetaData();
+                ResultSetDescription resultSetDescription = new ResultSetDescription(rsMetaData);
+                rs.beforeFirst();
+
+                while (rs.next() && results.size() < expectedMaxRows) {
+                    if (rowNo < offset) {
+                        rowNo++;
+                        continue;
+                    }
+                    results.add(this.mapper.mapping(rs, rowNo++, resultSetDescription));
+                }
             }
-            results.add(this.mapper.mapping(rs, rowNo++));
         }
         return results;
     }
