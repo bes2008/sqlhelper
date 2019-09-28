@@ -15,13 +15,18 @@
 
 package com.jn.sqlhelper.common.annotation;
 
+import com.jn.sqlhelper.common.ddlmodel.JdbcType;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
+import static com.jn.sqlhelper.common.ddlmodel.JdbcType.UNKNOWN;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE, ElementType.METHOD})
 public @interface Column {
     String value() default "";
+    JdbcType jdbcType() default UNKNOWN ;
 }
