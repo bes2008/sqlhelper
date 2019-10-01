@@ -138,6 +138,7 @@ public class DialectRegistry {
                 ActorDBDialect.class,
                 AgensGraphDialect.class,
                 AltibaseDialect.class,
+                AntDBDialect.class,
                 AuroraDialect.class,
                 AzureDialect.class,
 

@@ -54,6 +54,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 1. Supports MyBatis, JFinal, EBean, Mango, Hibernate, SpringJdbc
 2. Supported 100+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
     + AiSQL (阿里 MySQL)
+    + AntDB (亚信)
     + CirroDB (东方国信 行云)
     + CynosDB (腾讯云数据库)
     + Doris (Apache Doris，百度研发)
@@ -65,6 +66,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + K-DB (浪潮)
     + KingBase (金仓)
     + MaxCompute (阿里巴巴)
+    + OceanBase (阿里巴巴 分布式数据库 兼容mysql)
     + OSCAR (神州通用)
     + OpenBase (东软)
     + SequoiaDB (巨杉)
