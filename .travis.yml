@@ -3,8 +3,18 @@ language: java
 
 matrix:
   include:
-    - jdk: oraclejdk8
-      env: compilejdk=oraclejdk8
+    - jdk: oraclejdk9
+      env: compilejdk=oraclejdk9
+    - jdk: oraclejdk10
+      env: compilejdk=oraclejdk10
+    - jdk: oraclejdk11
+      env: compilejdk=oraclejdk11
+    - jdk: oraclejdk12
+      env: compilejdk=oraclejdk12
+    - jdk: oraclejdk13
+      env: compilejdk=oraclejdk13
+    - jdk: oraclejdk14
+      env: compilejdk=oraclejdk14
     - jdk: openjdk8
       env: compilejdk=openjdk8
     - jdk: openjdk10
