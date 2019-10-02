@@ -8,6 +8,13 @@ public class FieldInfo {
     private Method getter;
     private Method setter;
 
+    public String getFieldName(){
+        return field.getName();
+    }
+
+    public Class getFieldType(){
+        return field.getType();
+    }
 
     public Field getField() {
         return field;

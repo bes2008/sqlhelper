@@ -426,6 +426,9 @@ public class ResultSetDescription {
      */
     public String getColumnName(int column){return columnNames.get(column-1);};
 
+    public List<String> getColumnNames(){
+        return columnNames;
+    }
 
     private List<String> schemaNames;
     /**
