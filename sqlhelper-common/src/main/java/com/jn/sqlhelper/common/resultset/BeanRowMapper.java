@@ -15,13 +15,13 @@ public class BeanRowMapper<T> implements RowMapper<T> {
     public BeanRowMapper(Class<T> beanClass) {
         Preconditions.checkNotNull(beanClass);
         this.targetClass = beanClass;
-        FieldSetterAndGetterClassParser classParser = new FieldSetterAndGetterClassParser();
+        EntityBeanClassParser classParser = new EntityBeanClassParser();
         classParser.setHierachial(true);
         classParser.setZeroParameterConstructor(true);
         this.fieldMap = classParser.parse(targetClass);
     }
 
-    private Map<String, FieldInfo> fieldMap;
+    private Map<String, EntityFieldInfo> fieldMap;
 
     @Override
     public T mapping(ResultSet row, int currentRowIndex, ResultSetDescription resultSetDescription) {

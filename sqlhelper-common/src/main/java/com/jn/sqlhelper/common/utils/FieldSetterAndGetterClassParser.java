@@ -60,7 +60,9 @@ public class FieldSetterAndGetterClassParser<F extends FieldInfo> implements Cla
             @Override
             public void accept(Field field) {
                 F fieldInfo = parseField(clazz, field);
-                fieldInfoMap.put(field.getName(), fieldInfo);
+                if(fieldInfo!=null) {
+                    fieldInfoMap.put(field.getName(), fieldInfo);
+                }
             }
         });
 

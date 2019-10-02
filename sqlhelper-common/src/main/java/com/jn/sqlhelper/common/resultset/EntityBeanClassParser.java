@@ -7,7 +7,6 @@ import com.jn.sqlhelper.common.utils.FieldSetterAndGetterClassParser;
 import java.lang.reflect.Field;
 
 public class EntityBeanClassParser extends FieldSetterAndGetterClassParser<EntityFieldInfo> {
-    public static final String COLUMN_NAME = "COLUMN_NAME";
 
     public EntityBeanClassParser() {
         setHierachial(true);
