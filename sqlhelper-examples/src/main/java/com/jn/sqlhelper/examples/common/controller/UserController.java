@@ -27,6 +27,7 @@ import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.examples.common.dao.UserDao;
 import com.jn.sqlhelper.examples.common.model.User;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
+import com.jn.sqlhelper.springjdbc.resultset.SqlHelperRowMapperResultSetExtractor;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -177,30 +178,18 @@ public class UserController {
         PagingRequestContextHolder.getContext().setPagingRequest(request);
         StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
 
-        BeanRowMapper beanRowMapper = new BeanRowMapper(User.class);
-        RowMapperResultSetExtractor rowMapperResultSetExtractor  = new RowMapperResultSetExtractor(beanRowMapper);
+        BeanRowMapper<User> beanRowMapper = new BeanRowMapper(User.class);
         List<User> users = jdbcTemplate.query(sqlBuilder.toString(), new PreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps) throws SQLException {
                 ps.setInt(1, 10);
             }
-        }, new SqlhelperResultSetExtractorAdapter(rowMapperResultSetExtractor));
+        }, new SqlHelperRowMapperResultSetExtractor<User>(beanRowMapper));
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
         return request.getResult();
     }
 
-    class SqlhelperResultSetExtractorAdapter implements ResultSetExtractor<List<User>>{
-        private RowMapperResultSetExtractor sqlhelperRSExtractor;
-        public SqlhelperResultSetExtractorAdapter(RowMapperResultSetExtractor delegate){
-            this.sqlhelperRSExtractor = delegate;
-        }
-
-        @Override
-        public List<User> extractData(ResultSet rs) throws SQLException, DataAccessException {
-            return this.sqlhelperRSExtractor.extract(rs);
-        }
-    }
 
     @GetMapping("/{id}")
     public User getById(@RequestParam("id") String id) {

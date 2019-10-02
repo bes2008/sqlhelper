@@ -126,4 +126,8 @@ public class BeanRowMapper<T> implements RowMapper<T> {
     public void setConverterService(ConverterService converterService) {
         this.converterService = converterService;
     }
+
+    public void setSqlSymbolMapper(SqlSymbolMapper sqlSymbolMapper) {
+        this.sqlSymbolMapper = sqlSymbolMapper;
+    }
 }
