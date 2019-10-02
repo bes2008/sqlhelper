@@ -18,6 +18,8 @@ import com.github.pagehelper.IPage;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.sqlhelper.common.resultset.BeanRowMapper;
+import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
@@ -164,6 +166,40 @@ public class UserController {
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
         return request.getResult();
+    }
+
+    @GetMapping("/custom_BeanRowMapperTests")
+    public PagingResult custom_BeanRowMapperTests(
+            @RequestParam(name = "pageNo", required = false) Integer pageNo,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name = "sort", required = false) String sort) {
+        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
+        PagingRequestContextHolder.getContext().setPagingRequest(request);
+        StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
+
+        BeanRowMapper beanRowMapper = new BeanRowMapper(User.class);
+        RowMapperResultSetExtractor rowMapperResultSetExtractor  = new RowMapperResultSetExtractor(beanRowMapper);
+        List<User> users = jdbcTemplate.query(sqlBuilder.toString(), new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setInt(1, 10);
+            }
+        }, new SqlhelperResultSetExtractorAdapter(rowMapperResultSetExtractor));
+        String json = JSONBuilderProvider.simplest().toJson(request.getResult());
+        System.out.println(json);
+        return request.getResult();
+    }
+
+    class SqlhelperResultSetExtractorAdapter implements ResultSetExtractor<List<User>>{
+        private RowMapperResultSetExtractor sqlhelperRSExtractor;
+        public SqlhelperResultSetExtractorAdapter(RowMapperResultSetExtractor delegate){
+            this.sqlhelperRSExtractor = delegate;
+        }
+
+        @Override
+        public List<User> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            return this.sqlhelperRSExtractor.extract(rs);
+        }
     }
 
     @GetMapping("/{id}")

@@ -8,19 +8,26 @@ import java.lang.reflect.Field;
 public class EntityFieldInfo extends FieldInfo {
     private String columnName;
 
+    public void setField(Field field) {
+        super.setField(field);
+        if (columnName == null) {
+            columnName = field.getName();
+        }
+    }
+
     public String getColumnName() {
         return columnName;
     }
 
     public void setColumnName(String columnName) {
         this.columnName = columnName;
-        if(Strings.isEmpty(columnName)){
+        if (Strings.isEmpty(columnName)) {
             this.columnName = getField().getName();
         }
     }
 
-    public static EntityFieldInfo of(FieldInfo fieldInfo){
-        if(fieldInfo==null){
+    public static EntityFieldInfo of(FieldInfo fieldInfo) {
+        if (fieldInfo == null) {
             return null;
         }
         EntityFieldInfo f = new EntityFieldInfo();
@@ -29,8 +36,8 @@ public class EntityFieldInfo extends FieldInfo {
         f.setSetter(fieldInfo.getSetter());
         f.setGetter(fieldInfo.getGetter());
 
-        if(fieldInfo instanceof EntityFieldInfo){
-            EntityFieldInfo f0 = (EntityFieldInfo)fieldInfo;
+        if (fieldInfo instanceof EntityFieldInfo) {
+            EntityFieldInfo f0 = (EntityFieldInfo) fieldInfo;
             f.setColumnName(f0.getColumnName());
         }
         return f;

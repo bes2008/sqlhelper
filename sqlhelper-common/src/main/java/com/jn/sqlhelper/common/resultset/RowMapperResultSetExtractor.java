@@ -36,22 +36,18 @@ public class RowMapperResultSetExtractor<T> implements ResultSetExtractor<List<T
 
     @Override
     public List<T> extract(ResultSet rs) throws SQLException {
-        List<T> results = (this.expectedMaxRows > 0 ? new ArrayList<T>(this.expectedMaxRows) : new ArrayList<T>());
+        List<T> results = (this.expectedMaxRows > 0 ? new ArrayList<T>(16) : new ArrayList<T>());
         int rowIndex = 0;
 
         if (expectedMaxRows > 0) {
-            if (rs.first()) {
-                ResultSetMetaData rsMetaData = rs.getMetaData();
-                ResultSetDescription resultSetDescription = new ResultSetDescription(rsMetaData);
-                rs.beforeFirst();
-
-                while (rs.next() && results.size() < expectedMaxRows) {
-                    if (rowIndex < offset) {
-                        rowIndex++;
-                        continue;
-                    }
-                    results.add(this.mapper.mapping(rs, rowIndex++, resultSetDescription));
+            ResultSetMetaData rsMetaData = rs.getMetaData();
+            ResultSetDescription resultSetDescription = new ResultSetDescription(rsMetaData);
+            while (rs.next() && results.size() < expectedMaxRows) {
+                if (rowIndex < offset) {
+                    rowIndex++;
+                    continue;
                 }
+                results.add(this.mapper.mapping(rs, rowIndex++, resultSetDescription));
             }
         }
         return results;

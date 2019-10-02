@@ -137,6 +137,11 @@
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-common</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

@@ -5,11 +5,15 @@ import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Predicate;
+import com.jn.langx.util.reflect.Modifiers;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.sqlhelper.common.ddlmodel.ResultSetDescription;
 import com.jn.sqlhelper.common.exception.NoMappedFieldException;
 import com.jn.sqlhelper.common.utils.ConverterService;
+import com.jn.sqlhelper.common.utils.FieldInfo;
 
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.util.Map;
 
@@ -52,14 +56,21 @@ public class BeanRowMapper<T> implements RowMapper<T> {
             }
 
             // convert value
-            if (!fieldInfo.getFieldType().isAssignableFrom(value.getClass())) {
+            if (!Primitives.wrap(fieldInfo.getFieldType()).isAssignableFrom(value.getClass())) {
                 if (converterService != null) {
                     value = converterService.convert(value, fieldInfo.getFieldType());
                 }
             }
 
-            if (!fieldInfo.getFieldType().isAssignableFrom(value.getClass())) {
+            if (!Primitives.wrap(fieldInfo.getFieldType()).isAssignableFrom(value.getClass())) {
                 throw new ClassCastException(StringTemplates.formatWithPlaceholder("Can't convert {} to {}", value.getClass(), fieldInfo.getFieldType()));
+            }
+
+            // set value
+            try {
+                setValue(fieldInfo, instance, value);
+            } catch (Throwable ex) {
+                throw Throwables.wrapAsRuntimeException(ex);
             }
 
         }
@@ -80,13 +91,24 @@ public class BeanRowMapper<T> implements RowMapper<T> {
         fieldInfo = Collects.findFirst(fieldMap.values(), new Predicate<EntityFieldInfo>() {
             @Override
             public boolean test(EntityFieldInfo field) {
-                return field.getFieldName().equals(columnName) || field.getColumnName().equals(columnName);
+                return field.getFieldName().equalsIgnoreCase(columnName) || field.getColumnName().equalsIgnoreCase(columnName);
             }
         });
         if (fieldInfo != null) {
             fieldMap.put(columnName, fieldInfo);
         }
         return fieldInfo;
+    }
+
+    private void setValue(FieldInfo fieldInfo, Object target, Object fieldValue) throws Throwable {
+        Method method = fieldInfo.getSetter();
+        if (method != null && Modifiers.isPublic(method)) {
+            method.setAccessible(true);
+            method.invoke(target, fieldValue);
+        } else {
+            fieldInfo.getField().setAccessible(true);
+            fieldInfo.getField().set(target, fieldValue);
+        }
     }
 
     public ConverterService getConverterService() {
