@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.springjdbc;
+package com.jn.sqlhelper.springjdbc.statement;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Preconditions;
