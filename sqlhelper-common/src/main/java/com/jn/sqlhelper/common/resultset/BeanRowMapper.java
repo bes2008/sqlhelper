@@ -10,6 +10,7 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.sqlhelper.common.ddlmodel.ResultSetDescription;
 import com.jn.sqlhelper.common.exception.NoMappedFieldException;
+import com.jn.sqlhelper.common.symbolmapper.SqlSymbolMapper;
 import com.jn.sqlhelper.common.utils.ConverterService;
 import com.jn.sqlhelper.common.utils.FieldInfo;
 
@@ -19,8 +20,9 @@ import java.util.Map;
 
 public class BeanRowMapper<T> implements RowMapper<T> {
 
-    private Class<T> targetClass;
-    private ConverterService converterService;
+    private Class<T> targetClass; // map an row to an instance of the class
+    private ConverterService converterService; // value converter
+    private SqlSymbolMapper sqlSymbolMapper; // for guess field by column name
 
     public BeanRowMapper(Class<T> beanClass) {
         Preconditions.checkNotNull(beanClass);
@@ -91,7 +93,13 @@ public class BeanRowMapper<T> implements RowMapper<T> {
         fieldInfo = Collects.findFirst(fieldMap.values(), new Predicate<EntityFieldInfo>() {
             @Override
             public boolean test(EntityFieldInfo field) {
-                return field.getFieldName().equalsIgnoreCase(columnName) || field.getColumnName().equalsIgnoreCase(columnName);
+                if (field.getFieldName().equalsIgnoreCase(columnName) || field.getColumnName().equalsIgnoreCase(columnName)) {
+                    return true;
+                }
+                if (sqlSymbolMapper != null) {
+                    return sqlSymbolMapper.apply(field.getFieldName()).equalsIgnoreCase(columnName);
+                }
+                return false;
             }
         });
         if (fieldInfo != null) {
