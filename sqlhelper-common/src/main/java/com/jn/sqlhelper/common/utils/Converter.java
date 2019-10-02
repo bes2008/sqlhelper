@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.common.utils;
 
-public interface Converter<I, O> {
-    O convert(I input, Class<O> type);
+import com.jn.langx.util.function.Function;
+
+public interface Converter<I, O> extends Function<I, O> {
 }
