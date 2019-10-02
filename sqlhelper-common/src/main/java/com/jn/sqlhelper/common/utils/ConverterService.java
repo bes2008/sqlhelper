@@ -26,16 +26,12 @@ public class ConverterService {
 
     private final Map<Class, Converter> registry = new ConcurrentHashMap<Class, Converter>(BUILTIN);
 
-    public Converter getConverter(Class clazz) {
-        return registry.get(clazz);
-    }
-
     public void register(Class clazz, Converter converter) {
         registry.put(clazz, converter);
     }
 
     public <T> T convert(Object obj, Class<T> targetClass) {
-        Converter converter = getConverter(targetClass);
+        Converter converter = registry.get(targetClass);
         if (converter == null) {
             throw new ClassCastException(StringTemplates.formatWithPlaceholder("Can't cast {} to {}", obj, targetClass));
         }

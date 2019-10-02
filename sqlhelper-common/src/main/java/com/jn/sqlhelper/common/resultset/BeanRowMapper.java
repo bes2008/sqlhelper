@@ -8,6 +8,7 @@ import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.ddlmodel.ResultSetDescription;
 import com.jn.sqlhelper.common.exception.NoMappedFieldException;
+import com.jn.sqlhelper.common.utils.ConverterService;
 
 import java.sql.ResultSet;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.Map;
 public class BeanRowMapper<T> implements RowMapper<T> {
 
     private Class<T> targetClass;
+    private ConverterService converterService;
 
     public BeanRowMapper(Class<T> beanClass) {
         Preconditions.checkNotNull(beanClass);
@@ -44,17 +46,19 @@ public class BeanRowMapper<T> implements RowMapper<T> {
             } catch (Throwable ex) {
                 try {
                     value = ResultSets.getResultSetValue(row, i);
-                }catch (Throwable ex2){
+                } catch (Throwable ex2) {
                     throw Throwables.wrapAsRuntimeException(ex2);
                 }
             }
 
             // convert value
-            if(!fieldInfo.getFieldType().isAssignableFrom(value.getClass())){
-
+            if (!fieldInfo.getFieldType().isAssignableFrom(value.getClass())) {
+                if (converterService != null) {
+                    value = converterService.convert(value, fieldInfo.getFieldType());
+                }
             }
 
-            if(!fieldInfo.getFieldType().isAssignableFrom(value.getClass())){
+            if (!fieldInfo.getFieldType().isAssignableFrom(value.getClass())) {
                 throw new ClassCastException(StringTemplates.formatWithPlaceholder("Can't convert {} to {}", value.getClass(), fieldInfo.getFieldType()));
             }
 
@@ -83,5 +87,13 @@ public class BeanRowMapper<T> implements RowMapper<T> {
             fieldMap.put(columnName, fieldInfo);
         }
         return fieldInfo;
+    }
+
+    public ConverterService getConverterService() {
+        return converterService;
+    }
+
+    public void setConverterService(ConverterService converterService) {
+        this.converterService = converterService;
     }
 }
