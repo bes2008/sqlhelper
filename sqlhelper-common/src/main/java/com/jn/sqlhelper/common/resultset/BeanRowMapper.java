@@ -15,7 +15,10 @@ public class BeanRowMapper<T> implements RowMapper<T> {
     public BeanRowMapper(Class<T> beanClass) {
         Preconditions.checkNotNull(beanClass);
         this.targetClass = beanClass;
-        this.fieldMap = new FieldSetterAndGetterClassParser().parse(targetClass);
+        FieldSetterAndGetterClassParser classParser = new FieldSetterAndGetterClassParser();
+        classParser.setHierachial(true);
+        classParser.setZeroParameterConstructor(true);
+        this.fieldMap = classParser.parse(targetClass);
     }
 
     private Map<String, FieldInfo> fieldMap;
