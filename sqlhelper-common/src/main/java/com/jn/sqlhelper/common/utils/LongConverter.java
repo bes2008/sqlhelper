@@ -6,6 +6,7 @@ import com.jn.langx.util.Numbers;
 import java.util.Date;
 
 public class LongConverter implements Converter<Object, Long> {
+    public static final LongConverter INSTANCE = new LongConverter();
     @Override
     public Long apply(Object input) {
         if (input == null) {
@@ -22,7 +23,7 @@ public class LongConverter implements Converter<Object, Long> {
             return Numbers.convertNumberToTargetClass(number, Long.class);
         }
 
-        if(input instanceof Date){
+        if (input instanceof Date) {
             return ((Date) input).getTime();
         }
         throw new ClassCastException(StringTemplates.formatWithPlaceholder("Can't cast {} to java.lang.Long", input));

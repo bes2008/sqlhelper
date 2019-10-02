@@ -3,6 +3,7 @@ package com.jn.sqlhelper.common.utils;
 import com.jn.langx.util.Numbers;
 
 public class ShortConverter implements Converter<Object, Short> {
+    public static final ShortConverter INSTANCE = new ShortConverter();
     private IntegerConverter integerConverter = IntegerConverter.INSTANCE;
 
     @Override

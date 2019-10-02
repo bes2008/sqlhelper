@@ -3,6 +3,7 @@ package com.jn.sqlhelper.common.utils;
 import com.jn.langx.util.Numbers;
 
 public class FloatConverter implements Converter<Object, Float> {
+    public static final FloatConverter INSTANCE = new FloatConverter();
     private static final DoubleConverter doubleConverter = DoubleConverter.INSTANCE;
 
     @Override
