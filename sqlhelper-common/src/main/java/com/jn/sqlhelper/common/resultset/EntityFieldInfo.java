@@ -1,12 +1,14 @@
 package com.jn.sqlhelper.common.resultset;
 
 import com.jn.langx.util.Strings;
+import com.jn.sqlhelper.common.utils.Converter;
 import com.jn.sqlhelper.common.utils.FieldInfo;
 
 import java.lang.reflect.Field;
 
 public class EntityFieldInfo extends FieldInfo {
     private String columnName;
+    private Converter converter;
 
     public void setField(Field field) {
         super.setField(field);
@@ -24,6 +26,14 @@ public class EntityFieldInfo extends FieldInfo {
         if (Strings.isEmpty(columnName)) {
             this.columnName = getField().getName();
         }
+    }
+
+    public Converter getConverter() {
+        return converter;
+    }
+
+    public void setConverter(Converter converter) {
+        this.converter = converter;
     }
 
     public static EntityFieldInfo of(FieldInfo fieldInfo) {

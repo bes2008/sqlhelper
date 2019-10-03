@@ -11,19 +11,22 @@ import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.sqlhelper.common.exception.NoMappedFieldException;
 import com.jn.sqlhelper.common.exception.ValueConvertException;
 import com.jn.sqlhelper.common.symbolmapper.SqlSymbolMapper;
+import com.jn.sqlhelper.common.utils.Converter;
 import com.jn.sqlhelper.common.utils.ConverterService;
 import com.jn.sqlhelper.common.utils.FieldInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.util.Map;
 
 public class BeanRowMapper<T> implements RowMapper<T> {
+    private static final Logger logger = LoggerFactory.getLogger(BeanRowMapper.class);
 
     private Class<T> targetClass; // map an row to an instance of the class
     private ConverterService converterService = ConverterService.DEFAULT; // value converter
     private SqlSymbolMapper sqlSymbolMapper; // for guess field by column name
-    private CachedEntityBeanClassParser entityBeanClassParser = CachedEntityBeanClassParser.getInstance();
 
     public BeanRowMapper(Class<T> beanClass) {
         this(beanClass, true);
@@ -32,7 +35,7 @@ public class BeanRowMapper<T> implements RowMapper<T> {
     public BeanRowMapper(Class<T> beanClass, boolean useCache) {
         Preconditions.checkNotNull(beanClass);
         this.targetClass = beanClass;
-        this.fieldMap = (useCache ? entityBeanClassParser : new EntityBeanClassParser()).parse(targetClass);
+        this.fieldMap = (useCache ? CachedEntityBeanClassParser.getInstance() : new EntityBeanClassParser()).parse(targetClass);
     }
 
     private Map<String, EntityFieldInfo> fieldMap;
@@ -59,17 +62,35 @@ public class BeanRowMapper<T> implements RowMapper<T> {
                 }
             }
 
+
             // convert value
-            if (!Primitives.wrap(fieldInfo.getFieldType()).isAssignableFrom(value.getClass())) {
+            if (value != null && !Primitives.wrap(fieldInfo.getFieldType()).isAssignableFrom(value.getClass())) {
+                Converter converter = fieldInfo.getConverter();
+                if (converter != null) {
+                    try {
+                        value = converter.apply(value);
+                    } catch (Exception ex) {
+                        logger.warn(ex.getMessage(), ex);
+                        throw new ValueConvertException(StringTemplates.formatWithPlaceholder("Can't convert {} to {} for {}#{}", value.getClass(), fieldInfo.getFieldType(), Reflects.getFQNClassName(targetClass), fieldInfo.getFieldName()));
+                    }
+                }
+
+            }
+            if (value != null && !Primitives.wrap(fieldInfo.getFieldType()).isAssignableFrom(value.getClass())) {
+
                 if (converterService != null) {
-                    value = converterService.convert(value, fieldInfo.getFieldType());
+                    try {
+                        value = converterService.convert(value, fieldInfo.getFieldType());
+                    } catch (Throwable ex) {
+                        logger.warn(ex.getMessage(), ex);
+                        throw new ValueConvertException(StringTemplates.formatWithPlaceholder("Can't convert {} to {} for {}#{}", value.getClass(), fieldInfo.getFieldType(), Reflects.getFQNClassName(targetClass), fieldInfo.getFieldName()));
+                    }
                 }
             }
 
-            if (!Primitives.wrap(fieldInfo.getFieldType()).isAssignableFrom(value.getClass())) {
-                throw new ValueConvertException(StringTemplates.formatWithPlaceholder("Can't convert {} to {}", value.getClass(), fieldInfo.getFieldType()));
+            if (value != null && !Primitives.wrap(fieldInfo.getFieldType()).isAssignableFrom(value.getClass())) {
+                throw new ValueConvertException(StringTemplates.formatWithPlaceholder("Can't convert {} to {} for {}#{}", value.getClass(), fieldInfo.getFieldType(), Reflects.getFQNClassName(targetClass), fieldInfo.getFieldName()));
             }
-
             // set value
             try {
                 setValue(fieldInfo, instance, value);

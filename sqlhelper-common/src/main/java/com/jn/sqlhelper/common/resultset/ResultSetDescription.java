@@ -3,7 +3,7 @@ package com.jn.sqlhelper.common.resultset;
 import com.jn.langx.util.collection.Arrs;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
-import com.jn.sqlhelper.common.ddlmodel.JdbcType;
+import com.jn.sqlhelper.common.utils.JdbcType;
 import com.jn.sqlhelper.common.utils.ThrowableFunction;
 import com.jn.sqlhelper.common.utils.Throwables;
 import org.slf4j.Logger;

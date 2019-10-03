@@ -15,7 +15,7 @@
 
 package com.jn.sqlhelper.common.annotation;
 
-import com.jn.sqlhelper.common.ddlmodel.JdbcType;
+import com.jn.sqlhelper.common.utils.JdbcType;
 import com.jn.sqlhelper.common.utils.NoopConverter;
 
 import java.lang.annotation.ElementType;
@@ -23,7 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static com.jn.sqlhelper.common.ddlmodel.JdbcType.UNKNOWN;
+import static com.jn.sqlhelper.common.utils.JdbcType.UNKNOWN;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE, ElementType.METHOD})

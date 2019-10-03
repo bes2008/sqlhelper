@@ -1,8 +1,12 @@
 package com.jn.sqlhelper.common.ddlmodel;
 
+import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.sqlhelper.common.utils.BooleanFlag;
+import com.jn.sqlhelper.common.utils.BooleanFlagConverter;
+import com.jn.sqlhelper.common.utils.JdbcType;
+import com.jn.sqlhelper.common.utils.JdbcTypeConverter;
 
 public class Column {
     @Nullable
@@ -22,7 +26,7 @@ public class Column {
     private String name;
 
     @NonNull
-    @com.jn.sqlhelper.common.annotation.Column("DATA_TYPE")
+    @com.jn.sqlhelper.common.annotation.Column(value = "DATA_TYPE", converter = JdbcTypeConverter.class)
     private JdbcType jdbcType;
 
     @com.jn.sqlhelper.common.annotation.Column("TYPE_NAME")
@@ -36,6 +40,9 @@ public class Column {
 
     @com.jn.sqlhelper.common.annotation.Column("DECIMAL_DIGITS")
     private int decimalDigits;
+
+    @com.jn.sqlhelper.common.annotation.Column("NUM_PREC_RADIX")
+    private int numPrecRadix;
 
     @com.jn.sqlhelper.common.annotation.Column("NULLABLE")
     private int nullable;
@@ -58,7 +65,7 @@ public class Column {
     @com.jn.sqlhelper.common.annotation.Column("ORDINAL_POSITION")
     private int ordinalPosition;
 
-    @com.jn.sqlhelper.common.annotation.Column("IS_NULLABLE")
+    @com.jn.sqlhelper.common.annotation.Column(value = "IS_NULLABLE", converter = BooleanFlagConverter.class)
     private BooleanFlag isNullable;
 
     @com.jn.sqlhelper.common.annotation.Column("SCOPE_CATALOG")
@@ -70,13 +77,13 @@ public class Column {
     @com.jn.sqlhelper.common.annotation.Column("SCOPE_TABLE")
     private String scopeTable;
 
-    @com.jn.sqlhelper.common.annotation.Column("SOURCE_DATA_TYPE")
-    private JdbcType sourceDataType;
+    @com.jn.sqlhelper.common.annotation.Column(value = "SOURCE_DATA_TYPE")
+    private Short sourceDataType;
 
-    @com.jn.sqlhelper.common.annotation.Column("IS_AUTOINCREMENT")
+    @com.jn.sqlhelper.common.annotation.Column(value = "IS_AUTOINCREMENT", converter = BooleanFlagConverter.class)
     private BooleanFlag isAutoincrement;
 
-    @com.jn.sqlhelper.common.annotation.Column("IS_GENERATEDCOLUMN")
+    @com.jn.sqlhelper.common.annotation.Column(value = "IS_GENERATEDCOLUMN", converter = BooleanFlagConverter.class)
     private BooleanFlag isGeneratedColumn;
 
     public String getCatalog() {
@@ -239,11 +246,11 @@ public class Column {
         this.scopeTable = scopeTable;
     }
 
-    public JdbcType getSourceDataType() {
+    public Short getSourceDataType() {
         return sourceDataType;
     }
 
-    public void setSourceDataType(JdbcType sourceDataType) {
+    public void setSourceDataType(Short sourceDataType) {
         this.sourceDataType = sourceDataType;
     }
 
@@ -261,5 +268,18 @@ public class Column {
 
     public void setIsGeneratedColumn(BooleanFlag isGeneratedColumn) {
         this.isGeneratedColumn = isGeneratedColumn;
+    }
+
+    public int getNumPrecRadix() {
+        return numPrecRadix;
+    }
+
+    public void setNumPrecRadix(int numPrecRadix) {
+        this.numPrecRadix = numPrecRadix;
+    }
+
+    @Override
+    public String toString() {
+        return JSONBuilderProvider.simplest().toJson(this);
     }
 }
