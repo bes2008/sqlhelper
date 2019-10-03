@@ -2,6 +2,7 @@ package com.jn.sqlhelper.common.utils;
 
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Numbers;
+import com.jn.sqlhelper.common.exception.ValueConvertException;
 
 import java.util.Date;
 
@@ -26,6 +27,6 @@ public class LongConverter implements Converter<Object, Long> {
         if (input instanceof Date) {
             return ((Date) input).getTime();
         }
-        throw new ClassCastException(StringTemplates.formatWithPlaceholder("Can't cast {} to java.lang.Long", input));
+        throw new ValueConvertException(StringTemplates.formatWithPlaceholder("Can't cast {} to java.lang.Long", input));
     }
 }

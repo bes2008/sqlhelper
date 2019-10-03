@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.common.utils;
 
 import com.jn.langx.text.StringTemplates;
+import com.jn.sqlhelper.common.exception.ValueConvertException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class ConverterService {
     public <T> T convert(Object obj, Class<T> targetClass) {
         Converter converter = registry.get(targetClass);
         if (converter == null) {
-            throw new ClassCastException(StringTemplates.formatWithPlaceholder("Can't cast {} to {}", obj, targetClass));
+            throw new ValueConvertException(StringTemplates.formatWithPlaceholder("Can't cast {} to {}", obj, targetClass));
         }
         return (T) converter.apply(obj);
     }

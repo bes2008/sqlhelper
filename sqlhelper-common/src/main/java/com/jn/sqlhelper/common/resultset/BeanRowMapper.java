@@ -9,6 +9,7 @@ import com.jn.langx.util.reflect.Modifiers;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.sqlhelper.common.exception.NoMappedFieldException;
+import com.jn.sqlhelper.common.exception.ValueConvertException;
 import com.jn.sqlhelper.common.symbolmapper.SqlSymbolMapper;
 import com.jn.sqlhelper.common.utils.ConverterService;
 import com.jn.sqlhelper.common.utils.FieldInfo;
@@ -66,7 +67,7 @@ public class BeanRowMapper<T> implements RowMapper<T> {
             }
 
             if (!Primitives.wrap(fieldInfo.getFieldType()).isAssignableFrom(value.getClass())) {
-                throw new ClassCastException(StringTemplates.formatWithPlaceholder("Can't convert {} to {}", value.getClass(), fieldInfo.getFieldType()));
+                throw new ValueConvertException(StringTemplates.formatWithPlaceholder("Can't convert {} to {}", value.getClass(), fieldInfo.getFieldType()));
             }
 
             // set value

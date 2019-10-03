@@ -2,6 +2,7 @@ package com.jn.sqlhelper.common.utils;
 
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Numbers;
+import com.jn.sqlhelper.common.exception.ValueConvertException;
 
 public class IntegerConverter implements Converter<Object, Integer> {
     public static final IntegerConverter INSTANCE = new IntegerConverter();
@@ -21,6 +22,6 @@ public class IntegerConverter implements Converter<Object, Integer> {
             Number number = Numbers.createNumber(input.toString());
             return Numbers.convertNumberToTargetClass(number, Integer.class);
         }
-        throw new ClassCastException(StringTemplates.formatWithPlaceholder("Can't cast {} to java.lang.Integer", input));
+        throw new ValueConvertException(StringTemplates.formatWithPlaceholder("Can't cast {} to java.lang.Integer", input));
     }
 }
