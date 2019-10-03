@@ -3,9 +3,13 @@ package com.jn.sqlhelper.examples.test.ddlmodel;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.io.IOs;
 import com.jn.sqlhelper.common.connection.ConnectionConfiguration;
 import com.jn.sqlhelper.common.connection.ConnectionFactory;
+import com.jn.sqlhelper.common.ddlmodel.Column;
+import com.jn.sqlhelper.common.resultset.BeanRowMapper;
+import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -81,8 +85,8 @@ public class GetDatabaseInfoTests {
         int maxTableNameLength = dbMetaData.getMaxTableNameLength();
         System.out.println("maxTableNameLength: " + maxTableNameLength);
 
-        ResultSet tablesRs = dbMetaData.getTables("TEST","PUBLIC", null, null);
-        while (tablesRs.next()){
+        ResultSet tablesRs = dbMetaData.getTables("TEST", "PUBLIC", null, null);
+        while (tablesRs.next()) {
             @Nullable
             String catalog = tablesRs.getString("TABLE_CAT");
             @Nullable
@@ -108,25 +112,22 @@ public class GetDatabaseInfoTests {
             String REF_GENERATION = tablesRs.getString("SELF_REFERENCING_COL_NAME");
 
             System.out.println(catalog);
+
+            System.out.println("Columns:");
+            showColumn(dbMetaData, catalog, schema, tableName);
         }
 
     }
 
-    private void showColumn(DatabaseMetaData dbMetaData, String catalog, String schema, String tableName)  throws SQLException{
+    private void showColumn(DatabaseMetaData dbMetaData, String catalog, String schema, String tableName) throws SQLException {
         ResultSet columnsRs = dbMetaData.getColumns(catalog, schema, tableName, null);
-        while (columnsRs.next()){
-            @Nullable
-            String tableCatalog = columnsRs.getString("TABLE_CAT");
-
-            @Nullable
-            String tableSchema = columnsRs.getString("TABLE_SCHEM");
-
-            @NonNull
-            String _tableName = columnsRs.getString("TABLE_NAME");
-            @NonNull
-            String columnName= columnsRs.getString("COLUMN_NAME");
-
-        }
+        List<Column> columns = new RowMapperResultSetExtractor<Column>(new BeanRowMapper<Column>(Column.class)).extract(columnsRs);
+        Collects.forEach(columns, new Consumer<Column>() {
+            @Override
+            public void accept(Column column) {
+                System.out.println(column);
+            }
+        });
 
     }
 }
