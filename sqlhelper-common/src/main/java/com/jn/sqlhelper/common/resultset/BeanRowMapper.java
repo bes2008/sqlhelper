@@ -25,9 +25,13 @@ public class BeanRowMapper<T> implements RowMapper<T> {
     private CachedEntityBeanClassParser entityBeanClassParser = CachedEntityBeanClassParser.getInstance();
 
     public BeanRowMapper(Class<T> beanClass) {
+        this(beanClass, true);
+    }
+
+    public BeanRowMapper(Class<T> beanClass, boolean useCache) {
         Preconditions.checkNotNull(beanClass);
         this.targetClass = beanClass;
-        this.fieldMap = entityBeanClassParser.parse(targetClass);
+        this.fieldMap = (useCache ? entityBeanClassParser : new EntityBeanClassParser()).parse(targetClass);
     }
 
     private Map<String, EntityFieldInfo> fieldMap;
