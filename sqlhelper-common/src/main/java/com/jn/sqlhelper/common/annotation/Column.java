@@ -16,6 +16,8 @@
 package com.jn.sqlhelper.common.annotation;
 
 import com.jn.sqlhelper.common.ddlmodel.JdbcType;
+import com.jn.sqlhelper.common.utils.Converter;
+import com.jn.sqlhelper.common.utils.NoopConverter;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -29,4 +31,5 @@ import static com.jn.sqlhelper.common.ddlmodel.JdbcType.UNKNOWN;
 public @interface Column {
     String value() default "";
     JdbcType jdbcType() default UNKNOWN ;
+    Class converter() default NoopConverter.class;
 }
