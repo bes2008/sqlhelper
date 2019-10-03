@@ -8,6 +8,7 @@ import com.jn.langx.util.io.IOs;
 import com.jn.sqlhelper.common.connection.ConnectionConfiguration;
 import com.jn.sqlhelper.common.connection.ConnectionFactory;
 import com.jn.sqlhelper.common.ddlmodel.Column;
+import com.jn.sqlhelper.common.ddlmodel.Index;
 import com.jn.sqlhelper.common.ddlmodel.Table;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
 import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
@@ -101,6 +102,18 @@ public class GetDatabaseInfoTests {
             showColumn(dbMetaData, catalog, schema, tableName);
         }
 
+    }
+
+    private void showTableIndexes(DatabaseMetaData dbMetaData,  String catalog, String schema, String tableName, boolean unique, boolean approximate)  throws SQLException {
+        ResultSet indexesRs = dbMetaData.getIndexInfo(catalog, schema, tableName, unique, true);
+
+        List<Index> indexes = new RowMapperResultSetExtractor<Index>(new BeanRowMapper<Index>(Index.class)).extract(indexesRs);
+        Collects.forEach(indexes, new Consumer<Index>() {
+            @Override
+            public void accept(Index index) {
+                System.out.println(index);
+            }
+        });
     }
 
     private void showColumn(DatabaseMetaData dbMetaData, String catalog, String schema, String tableName) throws SQLException {
