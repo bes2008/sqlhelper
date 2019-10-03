@@ -22,14 +22,12 @@ public class BeanRowMapper<T> implements RowMapper<T> {
     private Class<T> targetClass; // map an row to an instance of the class
     private ConverterService converterService = ConverterService.DEFAULT; // value converter
     private SqlSymbolMapper sqlSymbolMapper; // for guess field by column name
+    private CachedEntityBeanClassParser entityBeanClassParser = CachedEntityBeanClassParser.getInstance();
 
     public BeanRowMapper(Class<T> beanClass) {
         Preconditions.checkNotNull(beanClass);
         this.targetClass = beanClass;
-        EntityBeanClassParser classParser = new EntityBeanClassParser();
-        classParser.setHierachial(true);
-        classParser.setZeroParameterConstructor(true);
-        this.fieldMap = classParser.parse(targetClass);
+        this.fieldMap = entityBeanClassParser.parse(targetClass);
     }
 
     private Map<String, EntityFieldInfo> fieldMap;
