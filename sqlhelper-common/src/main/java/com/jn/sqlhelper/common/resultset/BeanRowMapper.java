@@ -20,7 +20,7 @@ import java.util.Map;
 public class BeanRowMapper<T> implements RowMapper<T> {
 
     private Class<T> targetClass; // map an row to an instance of the class
-    private ConverterService converterService; // value converter
+    private ConverterService converterService = ConverterService.DEFAULT; // value converter
     private SqlSymbolMapper sqlSymbolMapper; // for guess field by column name
 
     public BeanRowMapper(Class<T> beanClass) {

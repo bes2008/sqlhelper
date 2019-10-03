@@ -24,7 +24,10 @@ public class ConverterService {
         BUILTIN.put(double.class, DoubleConverter.INSTANCE);
     }
 
+
     private final Map<Class, Converter> registry = new ConcurrentHashMap<Class, Converter>(BUILTIN);
+
+    public static final ConverterService DEFAULT = new ConverterService();
 
     public void register(Class clazz, Converter converter) {
         registry.put(clazz, converter);
