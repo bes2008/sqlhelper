@@ -8,6 +8,7 @@ import com.jn.langx.util.io.IOs;
 import com.jn.sqlhelper.common.connection.ConnectionConfiguration;
 import com.jn.sqlhelper.common.connection.ConnectionFactory;
 import com.jn.sqlhelper.common.ddlmodel.Column;
+import com.jn.sqlhelper.common.ddlmodel.Table;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
 import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
 import org.junit.Test;
@@ -86,33 +87,16 @@ public class GetDatabaseInfoTests {
         System.out.println("maxTableNameLength: " + maxTableNameLength);
 
         ResultSet tablesRs = dbMetaData.getTables("TEST", "PUBLIC", null, null);
-        while (tablesRs.next()) {
-            @Nullable
-            String catalog = tablesRs.getString("TABLE_CAT");
-            @Nullable
-            String schema = tablesRs.getString("TABLE_SCHEM");
+        List<Table> tables = new RowMapperResultSetExtractor<Table>(new BeanRowMapper<>(Table.class)).extract(tablesRs);
 
+        for (Table table : tables) {
+            System.out.println(table);
+            @Nullable
+            String catalog = table.getCatalog();
+            @Nullable
+            String schema = table.getSchema();
             @NonNull
-            String tableName = tablesRs.getString("TABLE_NAME");
-            @NonNull
-            String tableType = tablesRs.getString("TABLE_TYPE");
-
-            @NonNull
-            String comment = tablesRs.getString("REMARKS");
-
-            @Nullable
-            String typeCatalog = tablesRs.getString("TYPE_CAT");
-            @Nullable
-            String typeSchema = tablesRs.getString("TYPE_SCHEM");
-            @Nullable
-            String typeName = tablesRs.getString("TYPE_NAME");
-            @Nullable
-            String SELF_REFERENCING_COL_NAME = tablesRs.getString("SELF_REFERENCING_COL_NAME");
-            @Nullable
-            String REF_GENERATION = tablesRs.getString("SELF_REFERENCING_COL_NAME");
-
-            System.out.println(catalog);
-
+            String tableName = table.getName();
             System.out.println("Columns:");
             showColumn(dbMetaData, catalog, schema, tableName);
         }
