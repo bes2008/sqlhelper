@@ -8,7 +8,6 @@ import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Modifiers;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.type.Primitives;
-import com.jn.sqlhelper.common.ddlmodel.ResultSetDescription;
 import com.jn.sqlhelper.common.exception.NoMappedFieldException;
 import com.jn.sqlhelper.common.symbolmapper.SqlSymbolMapper;
 import com.jn.sqlhelper.common.utils.ConverterService;
