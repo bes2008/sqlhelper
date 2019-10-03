@@ -44,10 +44,8 @@ public class Column {
     @com.jn.sqlhelper.common.annotation.Column("NUM_PREC_RADIX")
     private int numPrecRadix;
 
-    @com.jn.sqlhelper.common.annotation.Column("NULLABLE")
     private int nullable;
 
-    @com.jn.sqlhelper.common.annotation.Column("REMARKS")
     private String remarks;
 
     @com.jn.sqlhelper.common.annotation.Column("COLUMN_DEF")
@@ -280,6 +278,6 @@ public class Column {
 
     @Override
     public String toString() {
-        return JSONBuilderProvider.simplest().toJson(this);
+        return JSONBuilderProvider.create().prettyFormat(true).build().toJson(this);
     }
 }
