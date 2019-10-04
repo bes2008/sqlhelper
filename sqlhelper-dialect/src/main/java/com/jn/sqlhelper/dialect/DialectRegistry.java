@@ -212,6 +212,7 @@ public class DialectRegistry {
                 NexusDBDialect.class,
                 NuodbDialect.class,
 
+                OBaseDialect.class,
                 OmnisciDialect.class,
                 OpenbaseDialect.class,
                 OpenEdgeDialect.class,
