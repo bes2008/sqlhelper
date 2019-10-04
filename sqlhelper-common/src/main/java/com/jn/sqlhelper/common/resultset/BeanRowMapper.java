@@ -11,6 +11,7 @@ import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.sqlhelper.common.exception.NoMappedFieldException;
 import com.jn.sqlhelper.common.exception.ValueConvertException;
 import com.jn.sqlhelper.common.symbolmapper.SqlSymbolMapper;
+import com.jn.sqlhelper.common.symbolmapper.UnderlineToCamelSymbolMapper;
 import com.jn.sqlhelper.common.utils.Converter;
 import com.jn.sqlhelper.common.utils.ConverterService;
 import com.jn.sqlhelper.common.utils.FieldInfo;
@@ -42,6 +43,9 @@ public class BeanRowMapper<T> implements RowMapper<T> {
 
     @Override
     public T mapping(ResultSet row, int currentRowIndex, ResultSetDescription resultSetDescription) {
+        if (sqlSymbolMapper == null) {
+            sqlSymbolMapper = new UnderlineToCamelSymbolMapper();
+        }
         int columnCount = resultSetDescription.getColumnCount();
         T instance = Reflects.newInstance(targetClass);
         for (int i = 1; i <= columnCount; i++) {
