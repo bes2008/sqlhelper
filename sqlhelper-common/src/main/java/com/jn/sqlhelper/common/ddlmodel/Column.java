@@ -18,7 +18,6 @@ public class Column {
     private String schema;
 
     @NonNull
-    @com.jn.sqlhelper.common.annotation.Column("TABLE_NAME")
     private String tableName;
 
     @NonNull
@@ -29,19 +28,15 @@ public class Column {
     @com.jn.sqlhelper.common.annotation.Column(value = "DATA_TYPE", converter = JdbcTypeConverter.class)
     private JdbcType jdbcType;
 
-    @com.jn.sqlhelper.common.annotation.Column("TYPE_NAME")
     private String typeName;
 
     @com.jn.sqlhelper.common.annotation.Column("COLUMN_SIZE")
     private int size;
 
-    @com.jn.sqlhelper.common.annotation.Column("BUFFER_LENGTH")
     private int bufferLength;
 
-    @com.jn.sqlhelper.common.annotation.Column("DECIMAL_DIGITS")
     private int decimalDigits;
 
-    @com.jn.sqlhelper.common.annotation.Column("NUM_PREC_RADIX")
     private int numPrecRadix;
 
     private int nullable;
@@ -51,31 +46,23 @@ public class Column {
     @com.jn.sqlhelper.common.annotation.Column("COLUMN_DEF")
     private String defaultValue;
 
-    @com.jn.sqlhelper.common.annotation.Column("SQL_DATA_TYPE")
     private int sqlDataType;
 
-    @com.jn.sqlhelper.common.annotation.Column("SQL_DATETIME_SUB")
     private int sqlDatetimeSub;
 
-    @com.jn.sqlhelper.common.annotation.Column("CHAR_OCTET_LENGTH")
     private int charOctetLength;
 
-    @com.jn.sqlhelper.common.annotation.Column("ORDINAL_POSITION")
     private int ordinalPosition;
 
     @com.jn.sqlhelper.common.annotation.Column(value = "IS_NULLABLE", converter = BooleanFlagConverter.class)
     private BooleanFlag isNullable;
 
-    @com.jn.sqlhelper.common.annotation.Column("SCOPE_CATALOG")
     private String scopeCatalog;
 
-    @com.jn.sqlhelper.common.annotation.Column("SCOPE_SCHEMA")
     private String scopeSchema;
 
-    @com.jn.sqlhelper.common.annotation.Column("SCOPE_TABLE")
     private String scopeTable;
 
-    @com.jn.sqlhelper.common.annotation.Column(value = "SOURCE_DATA_TYPE")
     private Short sourceDataType;
 
     @com.jn.sqlhelper.common.annotation.Column(value = "IS_AUTOINCREMENT", converter = BooleanFlagConverter.class)

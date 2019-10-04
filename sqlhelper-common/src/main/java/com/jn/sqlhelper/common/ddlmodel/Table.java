@@ -26,13 +26,11 @@ public class Table {
     @Column("TYPE_SCHEM")
     private String typeSchema;
 
-    @Column("TYPE_NAME")
     private String typeName;
 
     @Column("SELF_REFERENCING_COL_NAME")
     private String selfReferencingColumnName;
 
-    @Column("REF_GENERATION")
     private String refGeneration;
 
     private String sql;

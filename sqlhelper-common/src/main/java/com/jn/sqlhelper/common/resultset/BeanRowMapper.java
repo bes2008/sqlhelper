@@ -124,7 +124,7 @@ public class BeanRowMapper<T> implements RowMapper<T> {
                     return true;
                 }
                 if (sqlSymbolMapper != null) {
-                    return sqlSymbolMapper.apply(field.getFieldName()).equalsIgnoreCase(columnName);
+                    return sqlSymbolMapper.apply(columnName).equalsIgnoreCase(sqlSymbolMapper.apply(field.getFieldName()));
                 }
                 return false;
             }
