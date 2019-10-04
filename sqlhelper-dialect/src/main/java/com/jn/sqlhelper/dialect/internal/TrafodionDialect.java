@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.internal.limit.FirstLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
 
 /**
@@ -8,7 +9,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
 public class TrafodionDialect extends AbstractDialect {
     public TrafodionDialect() {
         super();
-        setLimitHandler(new LimitOnlyLimitHandler());
+        setLimitHandler(new FirstLimitHandler());
     }
 
     @Override

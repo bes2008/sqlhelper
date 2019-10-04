@@ -59,6 +59,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + CynosDB (腾讯云数据库)
     + Doris (Apache Doris，百度研发)
     + DM (达梦)
+    + EsgynDB (易鲸捷)
     + GaussDB (华为 高斯)
     + GBase (南大通用)
     + HighGo (瀚高)
