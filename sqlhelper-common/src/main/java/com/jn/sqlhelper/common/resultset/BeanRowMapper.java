@@ -25,7 +25,7 @@ import java.util.Map;
 public class BeanRowMapper<T> implements RowMapper<T> {
     private static final Logger logger = LoggerFactory.getLogger(BeanRowMapper.class);
 
-    private boolean ignoreUnrecognizableColumn = false;
+    private boolean ignoreUnrecognizableColumn = Boolean.parseBoolean(System.getProperty("beanrowmapper.ignoreUnrecognizableColumn", "false"));
     private Class<T> targetClass; // map an row to an instance of the class
     private ConverterService converterService = ConverterService.DEFAULT; // value converter
     private SqlSymbolMapper sqlSymbolMapper; // for guess field by column name
