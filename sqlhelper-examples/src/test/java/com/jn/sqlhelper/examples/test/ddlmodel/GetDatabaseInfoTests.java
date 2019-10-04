@@ -100,12 +100,15 @@ public class GetDatabaseInfoTests {
             String tableName = table.getName();
             System.out.println("Columns:");
             showColumn(dbMetaData, catalog, schema, tableName);
+
+            System.out.println("Indexes:");
+            showTableIndexes(dbMetaData, catalog, schema, tableName);
         }
 
     }
 
-    private void showTableIndexes(DatabaseMetaData dbMetaData,  String catalog, String schema, String tableName, boolean unique, boolean approximate)  throws SQLException {
-        ResultSet indexesRs = dbMetaData.getIndexInfo(catalog, schema, tableName, unique, true);
+    private void showTableIndexes(DatabaseMetaData dbMetaData,  String catalog, String schema, String tableName)  throws SQLException {
+        ResultSet indexesRs = dbMetaData.getIndexInfo(catalog, schema, tableName, false, true);
 
         List<Index> indexes = new RowMapperResultSetExtractor<Index>(new BeanRowMapper<Index>(Index.class)).extract(indexesRs);
         Collects.forEach(indexes, new Consumer<Index>() {
@@ -125,6 +128,6 @@ public class GetDatabaseInfoTests {
                 System.out.println(column);
             }
         });
-
     }
+
 }
