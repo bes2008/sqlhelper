@@ -25,6 +25,7 @@ import java.util.Map;
 public class BeanRowMapper<T> implements RowMapper<T> {
     private static final Logger logger = LoggerFactory.getLogger(BeanRowMapper.class);
 
+    private boolean ignoreUnrecognizableColumn = false;
     private Class<T> targetClass; // map an row to an instance of the class
     private ConverterService converterService = ConverterService.DEFAULT; // value converter
     private SqlSymbolMapper sqlSymbolMapper; // for guess field by column name
@@ -52,6 +53,9 @@ public class BeanRowMapper<T> implements RowMapper<T> {
             String columnName = resultSetDescription.getColumnName(i);
             EntityFieldInfo fieldInfo = findFieldForColumn(columnName);
             if (fieldInfo == null) {
+                if (ignoreUnrecognizableColumn) {
+                    continue;
+                }
                 String errorMessage = StringTemplates.formatWithPlaceholder("Can't find a field link to a column: {} in the class: {}", columnName, targetClass);
                 throw new NoMappedFieldException(errorMessage);
             }
@@ -120,13 +124,18 @@ public class BeanRowMapper<T> implements RowMapper<T> {
         fieldInfo = Collects.findFirst(fieldMap.values(), new Predicate<EntityFieldInfo>() {
             @Override
             public boolean test(EntityFieldInfo field) {
-                if (field.getFieldName().equalsIgnoreCase(columnName) || field.getColumnName().equalsIgnoreCase(columnName)) {
-                    return true;
-                }
-                if (sqlSymbolMapper != null) {
-                    return sqlSymbolMapper.apply(columnName).equalsIgnoreCase(sqlSymbolMapper.apply(field.getFieldName()));
-                }
-                return false;
+                return Collects.anyMatch(field.getColumnNames(), new Predicate<String>() {
+                    @Override
+                    public boolean test(String value) {
+                        if (value.equalsIgnoreCase(columnName)) {
+                            return true;
+                        }
+                        if (sqlSymbolMapper != null) {
+                            return sqlSymbolMapper.apply(columnName).equalsIgnoreCase(sqlSymbolMapper.apply(value));
+                        }
+                        return false;
+                    }
+                });
             }
         });
         if (fieldInfo != null) {
@@ -144,6 +153,14 @@ public class BeanRowMapper<T> implements RowMapper<T> {
             fieldInfo.getField().setAccessible(true);
             fieldInfo.getField().set(target, fieldValue);
         }
+    }
+
+    public boolean isIgnoreUnrecognizableColumn() {
+        return ignoreUnrecognizableColumn;
+    }
+
+    public void setIgnoreUnrecognizableColumn(boolean ignoreUnrecognizableColumn) {
+        this.ignoreUnrecognizableColumn = ignoreUnrecognizableColumn;
     }
 
     public ConverterService getConverterService() {
