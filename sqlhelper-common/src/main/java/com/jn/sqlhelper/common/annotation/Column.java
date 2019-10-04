@@ -28,7 +28,7 @@ import static com.jn.sqlhelper.common.utils.JdbcType.UNKNOWN;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE, ElementType.METHOD})
 public @interface Column {
-    String value() default "";
+    String[] value() default {};
 
     JdbcType jdbcType() default UNKNOWN;
 

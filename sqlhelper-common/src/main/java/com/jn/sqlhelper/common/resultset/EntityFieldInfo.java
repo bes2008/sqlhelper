@@ -5,27 +5,31 @@ import com.jn.sqlhelper.common.utils.Converter;
 import com.jn.sqlhelper.common.utils.FieldInfo;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class EntityFieldInfo extends FieldInfo {
-    private String columnName;
+    private final Set<String> columnNames = new LinkedHashSet<String>(); // one of columnNames
     private Converter converter;
 
     public void setField(Field field) {
         super.setField(field);
-        if (columnName == null) {
-            columnName = field.getName();
-        }
+        columnNames.add(field.getName());
     }
 
-    public String getColumnName() {
-        return columnName;
+    public Collection<String> getColumnNames() {
+        return columnNames;
     }
 
     public void setColumnName(String columnName) {
-        this.columnName = columnName;
-        if (Strings.isEmpty(columnName)) {
-            this.columnName = getField().getName();
+        if (Strings.isNotEmpty(columnName)) {
+            this.columnNames.add(columnName);
         }
+    }
+
+    public void setColumnNames(Collection<String> columnNames) {
+        this.columnNames.addAll(columnNames);
     }
 
     public Converter getConverter() {
@@ -48,7 +52,7 @@ public class EntityFieldInfo extends FieldInfo {
 
         if (fieldInfo instanceof EntityFieldInfo) {
             EntityFieldInfo f0 = (EntityFieldInfo) fieldInfo;
-            f.setColumnName(f0.getColumnName());
+            f.columnNames.addAll(f0.getColumnNames());
         }
         return f;
     }

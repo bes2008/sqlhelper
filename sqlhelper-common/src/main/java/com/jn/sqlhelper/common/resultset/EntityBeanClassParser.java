@@ -1,5 +1,7 @@
 package com.jn.sqlhelper.common.resultset;
 
+import com.jn.langx.util.Emptys;
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.annotation.Column;
 import com.jn.sqlhelper.common.utils.Converter;
@@ -20,12 +22,12 @@ public class EntityBeanClassParser extends FieldSetterAndGetterClassParser<Entit
         EntityFieldInfo fieldInfo = EntityFieldInfo.of(super.parseField(clazz, field));
         if (fieldInfo != null) {
             Column column = Reflects.getDeclaredAnnotation(field, Column.class);
-            if (column != null) {
-                fieldInfo.setColumnName(column.value());
+            if (column != null && Emptys.isNotEmpty(column.value())) {
+                fieldInfo.setColumnNames(Collects.asList(column.value()));
                 Class converterClass = column.converter();
-                if(converterClass != null && converterClass != NoopConverter.class){
-                    Converter converter  = Reflects.<Converter>newInstance(converterClass);
-                    fieldInfo.setConverter(converter) ;
+                if (converterClass != null && converterClass != NoopConverter.class) {
+                    Converter converter = Reflects.<Converter>newInstance(converterClass);
+                    fieldInfo.setConverter(converter);
                 }
             }
         }

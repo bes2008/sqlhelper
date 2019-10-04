@@ -3,13 +3,15 @@ package com.jn.sqlhelper.common.ddlmodel;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.sqlhelper.common.annotation.Column;
 import com.jn.sqlhelper.common.utils.IndexType;
-import com.jn.sqlhelper.common.utils.IntegerConverter;
+import com.jn.sqlhelper.common.utils.IndexTypeConverter;
+import com.jn.sqlhelper.common.utils.SortType;
+import com.jn.sqlhelper.common.utils.SortTypeConverter;
 
 public class Index {
-    @Column("TABLE_CAT")
+    @Column({"TABLE_CAT", "TABLE_CATALOG"})
     private String catalog;
 
-    @Column("TABLE_SCHEM")
+    @Column({"TABLE_SCHEM", "TABLE_SCHEMA"})
     private String schema;
 
     @Column("TABLE_NAME")
@@ -24,7 +26,7 @@ public class Index {
     @Column("INDEX_NAME")
     private String name;
 
-    @Column(value = "TYPE", converter = IntegerConverter.class)
+    @Column(value = {"TYPE", "INDEX_TYPE"}, converter = IndexTypeConverter.class)
     private IndexType type;
 
     @Column("ORDINAL_POSITION")
@@ -33,8 +35,10 @@ public class Index {
     @Column("COLUMN_NAME")
     private String columnName;
 
-    @Column("ASC_OR_DESC")
-    private String ascOrDesc;
+    @Column(value = {"ASC_OR_DESC"}, converter = SortTypeConverter.class)
+    private SortType ascOrDesc;
+
+    private int sortType;
 
     private long cardinality;
 
@@ -115,11 +119,11 @@ public class Index {
         this.columnName = columnName;
     }
 
-    public String getAscOrDesc() {
+    public SortType getAscOrDesc() {
         return ascOrDesc;
     }
 
-    public void setAscOrDesc(String ascOrDesc) {
+    public void setAscOrDesc(SortType ascOrDesc) {
         this.ascOrDesc = ascOrDesc;
     }
 
@@ -145,6 +149,14 @@ public class Index {
 
     public void setFilterCondition(String filterCondition) {
         this.filterCondition = filterCondition;
+    }
+
+    public int getSortType() {
+        return sortType;
+    }
+
+    public void setSortType(int sortType) {
+        this.sortType = sortType;
     }
 
     @Override
