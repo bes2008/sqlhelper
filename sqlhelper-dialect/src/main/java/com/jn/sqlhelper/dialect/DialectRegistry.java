@@ -172,12 +172,14 @@ public class DialectRegistry {
 
                 GaussDbDialect.class,
                 GBaseDialect.class,
+                GoldenDBDialect.class,
                 GreenplumDialect.class,
 
                 H2Dialect.class,
                 HANADialect.class,
                 HawqDialect.class,
                 HSQLDialect.class,
+                HhDbDialect.class,
                 HiveDialect.class,
                 HighGoDialect.class,
 

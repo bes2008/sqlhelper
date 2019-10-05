@@ -62,6 +62,8 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + EsgynDB (易鲸捷)
     + GaussDB (华为 高斯)
     + GBase (南大通用)
+    + GoldenDB (中兴)
+    + HHDB (恒辉数据库)
     + HighGo (瀚高)
     + HybridDB (阿里巴巴 分布式PostgreSQL)
     + K-DB (浪潮)
