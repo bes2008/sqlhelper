@@ -226,6 +226,7 @@ public class DialectRegistry {
                 PostgreSQLDialect.class,
                 PrestoDialect.class,
 
+                RadonDBDialect.class,
                 RaimaDialect.class,
                 RDMSOS2200Dialect.class,
                 RedshiftDialect.class,
