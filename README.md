@@ -75,6 +75,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
     + OpenBase (东软)
     + RadonDB (青云)
     + SequoiaDB (巨杉)
+    + SinoDB (星瑞格)
     + TDSQL (腾讯 分布式MySQL)
     + TiDB (北京平凯星辰科技))
     + Trafodion (易鲸捷 EsgynDB的开源版)

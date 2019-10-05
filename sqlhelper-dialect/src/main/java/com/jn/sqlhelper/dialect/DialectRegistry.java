@@ -236,6 +236,7 @@ public class DialectRegistry {
 
                 SadasDialect.class,
                 SequoiaDBDialect.class,
+                SinoDBDialect.class,
                 SmallDialect.class,
                 SnappyDataDialect.class,
                 SnowflakeDialect.class,
@@ -338,7 +339,7 @@ public class DialectRegistry {
     }
 
     private static Class<? extends java.sql.Driver> loadDriverClass(final String className) throws ClassNotFoundException {
-        return (Class<? extends java.sql.Driver>) loadImplClass(className, Driver.class);
+        return (Class<? extends java.sql.Driver>) loadImplClass(className, java.sql.Driver.class);
     }
 
     private static Class loadImplClass(final String className, final Class superClass) throws ClassNotFoundException {
@@ -354,7 +355,7 @@ public class DialectRegistry {
         if (superClass.isAssignableFrom(clazz)) {
             return clazz;
         }
-        final String error = "Class " + clazz.getCanonicalName() + " is not cast to " + superClass.getCanonicalName();
+        final String error = "Class " + Reflects.getFQNClassName(clazz) + " is not cast to " + Reflects.getFQNClassName(superClass);
         throw new ClassCastException(error);
     }
 
@@ -369,7 +370,7 @@ public class DialectRegistry {
         if (nameAnno != null) {
             name = nameAnno.value();
             if (Strings.isBlank(name)) {
-                throw new RuntimeException("@Name is empty in class" + clazz.getClass());
+                throw new RuntimeException("@Name is empty in class" + Reflects.getFQNClassName(clazz));
             }
         } else {
             final String simpleClassName = clazz.getSimpleName().toLowerCase();
@@ -382,40 +383,40 @@ public class DialectRegistry {
             if (driverAnno != null) {
                 final String driverClassName = driverAnno.value();
                 if (Strings.isBlank(driverClassName)) {
-                    throw new RuntimeException("@Driver is empty in class" + clazz.getClass());
+                    throw new RuntimeException("@Driver is empty in class" + Reflects.getFQNClassName(clazz));
                 }
                 try {
                     driverClass = loadDriverClass(driverClassName);
                     try {
                         driverConstructor = clazz.getDeclaredConstructor(java.sql.Driver.class);
                     } catch (Throwable ex) {
-                        DialectRegistry.logger.info("Can't find the driver based constructor for dialect {}", (Object) name);
+                        logger.info("Can't find the driver based constructor for dialect {}", (Object) name);
                     }
                 } catch (Throwable ex) {
-                    DialectRegistry.logger.info("Can't find driver class {} for {} dialect", (Object) driverClassName, (Object) name);
+                    logger.info("Can't find driver class {} for {} dialect", (Object) driverClassName, (Object) name);
                 }
             }
             if (driverClass == null || driverConstructor == null) {
                 try {
                     dialect = (Dialect) clazz.newInstance();
                 } catch (InstantiationException e2) {
-                    final String error = "Class " + clazz.getCanonicalName() + "need a <init>() ";
+                    final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a <init>() ";
                     throw new ClassFormatError(error);
                 } catch (IllegalAccessException e3) {
-                    final String error = "Class " + clazz.getCanonicalName() + "need a public <init>() ";
+                    final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a public <init>() ";
                     throw new ClassFormatError(error);
                 }
             } else {
                 try {
                     dialect = (AbstractDialect) driverConstructor.newInstance(driverClass);
                 } catch (InstantiationException e2) {
-                    final String error = "Class " + clazz.getCanonicalName() + "need a <init>(Driver) ";
+                    final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a <init>(Driver) ";
                     throw new ClassFormatError(error);
                 } catch (IllegalAccessException e3) {
-                    final String error = "Class " + clazz.getCanonicalName() + "need a public <init>(Driver) ";
+                    final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a public <init>(Driver) ";
                     throw new ClassFormatError(error);
                 } catch (InvocationTargetException e) {
-                    DialectRegistry.logger.error("Register dialect {} fail: {}", new Object[]{name, e.getMessage(), e});
+                    logger.error("Register dialect {} fail: {}", new Object[]{name, e.getMessage(), e});
                 }
             }
         }
