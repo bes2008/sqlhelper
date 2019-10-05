@@ -9,6 +9,7 @@ import com.jn.sqlhelper.common.connection.ConnectionConfiguration;
 import com.jn.sqlhelper.common.connection.ConnectionFactory;
 import com.jn.sqlhelper.common.ddlmodel.Column;
 import com.jn.sqlhelper.common.ddlmodel.Index;
+import com.jn.sqlhelper.common.ddlmodel.IndexColumn;
 import com.jn.sqlhelper.common.ddlmodel.Table;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
 import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
@@ -91,7 +92,7 @@ public class GetDatabaseInfoTests {
         List<Table> tables = new RowMapperResultSetExtractor<Table>(new BeanRowMapper<>(Table.class)).extract(tablesRs);
 
         for (Table table : tables) {
-            System.out.println(table);
+
             @Nullable
             String catalog = table.getCatalog();
             @Nullable
@@ -99,33 +100,50 @@ public class GetDatabaseInfoTests {
             @NonNull
             String tableName = table.getName();
             System.out.println("Columns:");
-            showColumn(dbMetaData, catalog, schema, tableName);
+            findColumns(dbMetaData, table);
 
             System.out.println("Indexes:");
-            showTableIndexes(dbMetaData, catalog, schema, tableName);
+            findTableIndexes(dbMetaData, table);
+
+            System.out.println(table);
+
+            System.out.println(table.showAsDDL(true));
+
         }
 
     }
 
-    private void showTableIndexes(DatabaseMetaData dbMetaData,  String catalog, String schema, String tableName)  throws SQLException {
-        ResultSet indexesRs = dbMetaData.getIndexInfo(catalog, schema, tableName, false, true);
+    private void findTableIndexes(DatabaseMetaData dbMetaData, Table table) throws SQLException {
+        ResultSet indexesRs = dbMetaData.getIndexInfo(table.getCatalog(), table.getSchema(), table.getName(), false, false);
 
-        List<Index> indexes = new RowMapperResultSetExtractor<Index>(new BeanRowMapper<Index>(Index.class)).extract(indexesRs);
-        Collects.forEach(indexes, new Consumer<Index>() {
+        List<IndexColumn> indexes = new RowMapperResultSetExtractor<IndexColumn>(new BeanRowMapper<IndexColumn>(IndexColumn.class)).extract(indexesRs);
+        Collects.forEach(indexes, new Consumer<IndexColumn>() {
             @Override
-            public void accept(Index index) {
-                System.out.println(index);
+            public void accept(IndexColumn indexColumn) {
+                System.out.println(indexColumn);
+
+                String indexName = indexColumn.getIndexName();
+                Index index = table.getIndex(indexName);
+                if (index == null) {
+                    index = new Index(table.getCatalog(), table.getSchema(), table.getName(), indexName);
+                    table.addIndex(index);
+                }
+
+                index.addColumn(indexColumn);
             }
         });
     }
 
-    private void showColumn(DatabaseMetaData dbMetaData, String catalog, String schema, String tableName) throws SQLException {
-        ResultSet columnsRs = dbMetaData.getColumns(catalog, schema, tableName, null);
+    private void findColumns(DatabaseMetaData dbMetaData, Table table) throws SQLException {
+        ResultSet columnsRs = dbMetaData.getColumns(table.getCatalog(), table.getSchema(), table.getName(), null);
         List<Column> columns = new RowMapperResultSetExtractor<Column>(new BeanRowMapper<Column>(Column.class)).extract(columnsRs);
         Collects.forEach(columns, new Consumer<Column>() {
             @Override
             public void accept(Column column) {
                 System.out.println(column);
+
+                table.addColumn(column);
+
             }
         });
     }

@@ -28,4 +28,8 @@ public enum TableType {
             }
         });
     }
+
+    public String getCode(){
+        return code;
+    }
 }

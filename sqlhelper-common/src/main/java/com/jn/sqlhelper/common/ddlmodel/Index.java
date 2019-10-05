@@ -1,51 +1,49 @@
 package com.jn.sqlhelper.common.ddlmodel;
 
-import com.jn.easyjson.core.JSONBuilderProvider;
-import com.jn.sqlhelper.common.annotation.Column;
-import com.jn.sqlhelper.common.utils.IndexType;
-import com.jn.sqlhelper.common.utils.IndexTypeConverter;
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
+import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer;
+import com.jn.langx.util.function.Consumer2;
+import com.jn.langx.util.io.LineDelimiter;
+import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.common.utils.SortType;
-import com.jn.sqlhelper.common.utils.SortTypeConverter;
+
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Index {
-    @Column({"TABLE_CAT", "TABLE_CATALOG"})
     private String catalog;
-
-    @Column({"TABLE_SCHEM", "TABLE_SCHEMA"})
     private String schema;
-
-    @Column("TABLE_NAME")
-    private String tableName;
-
-    @Column("NON_UNIQUE")
-    private boolean nonUnique;
-
-    @Column("INDEX_QUALIFIER")
-    private String indexQualifier;
-
-    @Column("INDEX_NAME")
+    private String table;
     private String name;
 
-    @Column(value = {"TYPE", "INDEX_TYPE"}, converter = IndexTypeConverter.class)
-    private IndexType type;
+    private final Set<IndexColumn> indexColumns = new TreeSet<IndexColumn>(new Comparator<IndexColumn>() {
+        @Override
+        public int compare(IndexColumn c1, IndexColumn c2) {
+            return c1.getOrdinalPosition() - c2.getOrdinalPosition();
+        }
+    });
 
-    @Column("ORDINAL_POSITION")
-    private int ordinalPosition;
+    public Index() {
+    }
 
-    @Column("COLUMN_NAME")
-    private String columnName;
+    public Index(String table, String name) {
+        this(null, null, table, name);
+    }
 
-    @Column(value = {"ASC_OR_DESC"}, converter = SortTypeConverter.class)
-    private SortType ascOrDesc;
+    public Index(String catalog, String schema, String table, String name) {
+        setCatalog(catalog);
+        setSchema(schema);
+        setTable(table);
+        setName(name);
+    }
 
-    private int sortType;
-
-    private long cardinality;
-
-    private long pages;
-
-    @Column("FILTER_CONDITION")
-    private String filterCondition;
+    private Set<IndexColumn> columns;
 
     public String getCatalog() {
         return catalog;
@@ -63,28 +61,13 @@ public class Index {
         this.schema = schema;
     }
 
-    public String getTableName() {
-        return tableName;
+    public String getTable() {
+        return table;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-
-    public boolean isNonUnique() {
-        return nonUnique;
-    }
-
-    public void setNonUnique(boolean nonUnique) {
-        this.nonUnique = nonUnique;
-    }
-
-    public String getIndexQualifier() {
-        return indexQualifier;
-    }
-
-    public void setIndexQualifier(String indexQualifier) {
-        this.indexQualifier = indexQualifier;
+    public void setTable(String table) {
+        Preconditions.checkNotNull(table);
+        this.table = table;
     }
 
     public String getName() {
@@ -92,75 +75,76 @@ public class Index {
     }
 
     public void setName(String name) {
+        Preconditions.checkNotNull(name);
         this.name = name;
     }
 
-    public IndexType getType() {
-        return type;
+    public Set<IndexColumn> getColumns() {
+        return columns;
     }
 
-    public void setType(IndexType type) {
-        this.type = type;
-    }
 
-    public int getOrdinalPosition() {
-        return ordinalPosition;
-    }
-
-    public void setOrdinalPosition(int ordinalPosition) {
-        this.ordinalPosition = ordinalPosition;
-    }
-
-    public String getColumnName() {
-        return columnName;
-    }
-
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
-    }
-
-    public SortType getAscOrDesc() {
-        return ascOrDesc;
-    }
-
-    public void setAscOrDesc(SortType ascOrDesc) {
-        this.ascOrDesc = ascOrDesc;
-    }
-
-    public long getCardinality() {
-        return cardinality;
-    }
-
-    public void setCardinality(long cardinality) {
-        this.cardinality = cardinality;
-    }
-
-    public long getPages() {
-        return pages;
-    }
-
-    public void setPages(long pages) {
-        this.pages = pages;
-    }
-
-    public String getFilterCondition() {
-        return filterCondition;
-    }
-
-    public void setFilterCondition(String filterCondition) {
-        this.filterCondition = filterCondition;
-    }
-
-    public int getSortType() {
-        return sortType;
-    }
-
-    public void setSortType(int sortType) {
-        this.sortType = sortType;
+    public void addColumn(IndexColumn indexColumn) {
+        indexColumns.add(indexColumn);
     }
 
     @Override
-    public String toString() {
-        return JSONBuilderProvider.create().prettyFormat(true).build().toJson(this);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Index index = (Index) o;
+
+        if (catalog != null ? !catalog.equals(index.catalog) : index.catalog != null) return false;
+        if (schema != null ? !schema.equals(index.schema) : index.schema != null) return false;
+        if (!table.equals(index.table)) return false;
+        return name.equals(index.name);
     }
+
+    @Override
+    public int hashCode() {
+        int result = catalog != null ? catalog.hashCode() : 0;
+        result = 31 * result + (schema != null ? schema.hashCode() : 0);
+        result = 31 * result + table.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
+    }
+
+    public String showAsDDL() {
+        final StringBuilder builder = new StringBuilder(256);
+        builder.append("CREATE INDEX ").append(name).append(" ON ").append(table).append(" (");
+        forEach(indexColumns, new Consumer2<Integer, IndexColumn>() {
+            @Override
+            public void accept(Integer i, IndexColumn indexColumn) {
+                if (i > 0) {
+                    builder.append(", ");
+                }
+
+                builder.append(indexColumn.getColumnName());
+                if (indexColumn.getAscOrDesc() != SortType.UNSUPPORTED) {
+                    builder.append(" ").append(indexColumn.getAscOrDesc().name());
+                }
+            }
+        });
+        builder.append(");").append(LineDelimiter.DEFAULT.getValue());
+        return builder.toString();
+    }
+
+    /**
+     * Iterate every element
+     */
+    public static <E> void forEach(@Nullable Collection<E> collection, @NonNull final Consumer2<Integer, E> consumer) {
+        Preconditions.checkNotNull(consumer);
+        if (Emptys.isNotEmpty(collection)) {
+            final Holder<Integer> indexHolder = new Holder<Integer>(-1);
+            Collects.forEach(collection, new Consumer<E>() {
+                @Override
+                public void accept(E e) {
+                    indexHolder.set(indexHolder.get() + 1);
+                    consumer.accept(indexHolder.get(), e);
+                }
+            });
+        }
+    }
+
 }
