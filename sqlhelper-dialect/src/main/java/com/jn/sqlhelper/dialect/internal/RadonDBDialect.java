@@ -2,7 +2,6 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
-import com.jn.sqlhelper.dialect.internal.urlparser.MySqlUrlParser;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
@@ -15,7 +14,6 @@ public class RadonDBDialect extends AbstractDialect {
 
     public RadonDBDialect() {
         super();
-        setUrlParser(new MySqlUrlParser());
         setLimitHandler(new LimitCommaLimitHandler());
     }
 
