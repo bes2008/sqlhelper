@@ -12,298 +12,32 @@ import org.slf4j.LoggerFactory;
 import java.sql.ResultSetMetaData;
 import java.sql.Types;
 import java.util.List;
-
+@SuppressWarnings({"unused"})
 public class ResultSetDescription {
     private static final Logger logger = LoggerFactory.getLogger(ResultSetDescription.class);
 
     public ResultSetDescription(final ResultSetMetaData resultSetMetaData) {
-        this.columnCount = Throwables.ignoreThrowable(logger, 0, new ThrowableFunction<Object, Integer>() {
-            @Override
-            public Integer doFun(Object o) throws Throwable {
-                return resultSetMetaData.getColumnCount();
-            }
-        }, resultSetMetaData);
-
-        final List<Boolean> isAutoIncrement = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                isAutoIncrement.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
-                    @Override
-                    public Boolean doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.isAutoIncrement(column);
-                    }
-                }, column));
-            }
-        });
-        this.isAutoIncrement = isAutoIncrement;
-
-        final List<Boolean> isCaseSensitive = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                isCaseSensitive.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
-                    @Override
-                    public Boolean doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.isCaseSensitive(column);
-                    }
-                }, column));
-            }
-        });
-        this.isCaseSensitive = isCaseSensitive;
-
-        final List<Boolean> isSearchable = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                isSearchable.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
-                    @Override
-                    public Boolean doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.isSearchable(column);
-                    }
-                }, column));
-            }
-        });
-        this.isSearchable = isSearchable;
-
-        final List<Boolean> isCurrency = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                isCurrency.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
-                    @Override
-                    public Boolean doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.isSearchable(column);
-                    }
-                }, column));
-            }
-        });
-        this.isCurrency = isCurrency;
-
-        final List<Integer> isNullable = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                isNullable.add(Throwables.ignoreThrowable(logger, columnNullableUnknown, new ThrowableFunction<Integer, Integer>() {
-                    @Override
-                    public Integer doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.isNullable(column);
-                    }
-                }, column));
-            }
-        });
-        this.isNullable = isNullable;
-
-        final List<Boolean> isSigned = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                isSigned.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
-                    @Override
-                    public Boolean doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.isSigned(column);
-                    }
-                }, column));
-            }
-        });
-        this.isSigned = isSigned;
-
-        final List<Integer> columnDisplaySizes = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                columnDisplaySizes.add(Throwables.ignoreThrowable(logger, columnNullableUnknown, new ThrowableFunction<Integer, Integer>() {
-                    @Override
-                    public Integer doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.getColumnDisplaySize(column);
-                    }
-                }, column));
-            }
-        });
-        this.columnDisplaySizes = columnDisplaySizes;
-
-        final List<String> columnNames = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                columnNames.add(Throwables.ignoreThrowable(logger, "_UNKnown_", new ThrowableFunction<Integer, String>() {
-                    @Override
-                    public String doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.getColumnName(column);
-                    }
-                }, column));
-            }
-        });
-        this.columnNames = columnNames;
-
-        final List<String> columnLabels = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                columnLabels.add(Throwables.ignoreThrowable(logger, getColumnName(column), new ThrowableFunction<Integer, String>() {
-                    @Override
-                    public String doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.getColumnLabel(column);
-                    }
-                }, column));
-            }
-        });
-        this.columnLabels = columnLabels;
-
-        final List<Integer> precisions = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                precisions.add(Throwables.ignoreThrowable(logger, 0, new ThrowableFunction<Integer, Integer>() {
-                    @Override
-                    public Integer doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.getPrecision(column);
-                    }
-                }, column));
-            }
-        });
-        this.precisions = precisions;
-
-        final List<Integer> scales = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                scales.add(Throwables.ignoreThrowable(logger, 0, new ThrowableFunction<Integer, Integer>() {
-                    @Override
-                    public Integer doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.getScale(column);
-                    }
-                }, column));
-            }
-        });
-        this.scales = scales;
-
-        final List<String> schemaNames = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                schemaNames.add(Throwables.ignoreThrowable(logger, "", new ThrowableFunction<Integer, String>() {
-                    @Override
-                    public String doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.getSchemaName(column);
-                    }
-                }, column));
-            }
-        });
-        this.schemaNames = schemaNames;
-
-        final List<String> tableNames = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                tableNames.add(Throwables.ignoreThrowable(logger, "", new ThrowableFunction<Integer, String>() {
-                    @Override
-                    public String doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.getTableName(column);
-                    }
-                }, column));
-            }
-        });
-        this.tableNames = tableNames;
-
-        final List<String> catalogNames = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                catalogNames.add(Throwables.ignoreThrowable(logger, "", new ThrowableFunction<Integer, String>() {
-                    @Override
-                    public String doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.getCatalogName(column);
-                    }
-                }, column));
-            }
-        });
-        this.catalogNames = catalogNames;
-
-        final List<JdbcType> jdbcTypes = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                jdbcTypes.add(Throwables.ignoreThrowable(logger, JdbcType.UNKNOWN, new ThrowableFunction<Integer, JdbcType>() {
-                    @Override
-                    public JdbcType doFun(Integer column) throws Throwable {
-                        return JdbcType.ofCode(resultSetMetaData.getColumnType(column));
-                    }
-                }, column));
-            }
-        });
-        this.jdbcTypes = jdbcTypes;
-
-        final List<String> columnJdbcTypeNames = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                columnJdbcTypeNames.add(Throwables.ignoreThrowable(logger, "", new ThrowableFunction<Integer, String>() {
-                    @Override
-                    public String doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.getColumnTypeName(column);
-                    }
-                }, column));
-            }
-        });
-        this.columnJdbcTypeNames = columnJdbcTypeNames;
-
-        final List<String> columnClassNames = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                columnClassNames.add(Throwables.ignoreThrowable(logger, "", new ThrowableFunction<Integer, String>() {
-                    @Override
-                    public String doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.getColumnClassName(column);
-                    }
-                }, column));
-            }
-        });
-        this.columnClassNames = columnClassNames;
-
-
-        final List<Boolean> isReadOnly = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                isReadOnly.add(Throwables.ignoreThrowable(logger, true, new ThrowableFunction<Integer, Boolean>() {
-                    @Override
-                    public Boolean doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.isReadOnly(column);
-                    }
-                }, column));
-            }
-        });
-        this.isReadOnly = isReadOnly;
-
-        final List<Boolean> isWritable = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                isWritable.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
-                    @Override
-                    public Boolean doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.isWritable(column);
-                    }
-                }, column));
-            }
-        });
-        this.isWritable = isWritable;
-
-        final List<Boolean> isDefinitelyWritable = Collects.emptyArrayList();
-        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
-            @Override
-            public void accept(Integer column) {
-                isDefinitelyWritable.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
-                    @Override
-                    public Boolean doFun(Integer column) throws Throwable {
-                        return resultSetMetaData.isDefinitelyWritable(column);
-                    }
-                }, column));
-            }
-        });
-        this.isDefinitelyWritable = isDefinitelyWritable;
+        parseColumnCount(resultSetMetaData);
+        parseIsAutoIncrement(resultSetMetaData);
+        parseIsCaseSensitive(resultSetMetaData);
+        parseIsSearchable(resultSetMetaData);
+        parseIsCurrency(resultSetMetaData);
+        parseIsNullable(resultSetMetaData);
+        parseIsSigned(resultSetMetaData);
+        parseColumnDisplaySizes(resultSetMetaData);
+        parseColumnNames(resultSetMetaData);
+        parseColumnLabels(resultSetMetaData);
+        parsePrecisions(resultSetMetaData);
+        parseScales(resultSetMetaData);
+        parseSchemaNames(resultSetMetaData);
+        parseTableNames(resultSetMetaData);
+        parseCatalogNames(resultSetMetaData);
+        parseColumnTypes(resultSetMetaData);
+        parseColumnJdbcTypeNames(resultSetMetaData);
+        parseColumnClassNames(resultSetMetaData);
+        parseIsReadOnly(resultSetMetaData);
+        parseIsWritable(resultSetMetaData);
+        parseIsDefinitelyWritable(resultSetMetaData);
     }
 
     private int columnCount;
@@ -312,6 +46,15 @@ public class ResultSetDescription {
         return columnCount;
     }
 
+    private void parseColumnCount(final ResultSetMetaData resultSetMetaData) {
+        this.columnCount = Throwables.ignoreThrowable(logger, 0, new ThrowableFunction<Object, Integer>() {
+            @Override
+            public Integer doFun(Object o) throws Throwable {
+                return resultSetMetaData.getColumnCount();
+            }
+        }, resultSetMetaData);
+
+    }
 
     private List<Boolean> isAutoIncrement;
 
@@ -325,6 +68,21 @@ public class ResultSetDescription {
         return isAutoIncrement.get(column - 1);
     }
 
+    private void parseIsAutoIncrement(final ResultSetMetaData resultSetMetaData) {
+        final List<Boolean> isAutoIncrement = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                isAutoIncrement.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
+                    @Override
+                    public Boolean doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.isAutoIncrement(column);
+                    }
+                }, column));
+            }
+        });
+        this.isAutoIncrement = isAutoIncrement;
+    }
 
     private List<Boolean> isCaseSensitive;
 
@@ -338,6 +96,21 @@ public class ResultSetDescription {
         return isCaseSensitive.get(column - 1);
     }
 
+    private void parseIsCaseSensitive(final ResultSetMetaData resultSetMetaData) {
+        final List<Boolean> isCaseSensitive = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                isCaseSensitive.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
+                    @Override
+                    public Boolean doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.isCaseSensitive(column);
+                    }
+                }, column));
+            }
+        });
+        this.isCaseSensitive = isCaseSensitive;
+    }
 
     private List<Boolean> isSearchable;
 
@@ -351,7 +124,21 @@ public class ResultSetDescription {
         return isSearchable.get(column - 1);
     }
 
-    ;
+    private void parseIsSearchable(final ResultSetMetaData resultSetMetaData) {
+        final List<Boolean> isSearchable = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                isSearchable.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
+                    @Override
+                    public Boolean doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.isSearchable(column);
+                    }
+                }, column));
+            }
+        });
+        this.isSearchable = isSearchable;
+    }
 
 
     private List<Boolean> isCurrency;
@@ -366,7 +153,21 @@ public class ResultSetDescription {
         return isCurrency.get(column - 1);
     }
 
-    ;
+    private void parseIsCurrency(final ResultSetMetaData resultSetMetaData) {
+        final List<Boolean> isCurrency = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                isCurrency.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
+                    @Override
+                    public Boolean doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.isSearchable(column);
+                    }
+                }, column));
+            }
+        });
+        this.isCurrency = isCurrency;
+    }
 
 
     private List<Integer> isNullable;
@@ -382,7 +183,21 @@ public class ResultSetDescription {
         return isNullable.get(column - 1);
     }
 
-    ;
+    private void parseIsNullable(final ResultSetMetaData resultSetMetaData) {
+        final List<Integer> isNullable = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                isNullable.add(Throwables.ignoreThrowable(logger, columnNullableUnknown, new ThrowableFunction<Integer, Integer>() {
+                    @Override
+                    public Integer doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.isNullable(column);
+                    }
+                }, column));
+            }
+        });
+        this.isNullable = isNullable;
+    }
 
     /**
      * The constant indicating that a
@@ -415,7 +230,21 @@ public class ResultSetDescription {
         return isSigned.get(column - 1);
     }
 
-    ;
+    private void parseIsSigned(final ResultSetMetaData resultSetMetaData) {
+        final List<Boolean> isSigned = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                isSigned.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
+                    @Override
+                    public Boolean doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.isSigned(column);
+                    }
+                }, column));
+            }
+        });
+        this.isSigned = isSigned;
+    }
 
 
     private List<Integer> columnDisplaySizes;
@@ -431,7 +260,21 @@ public class ResultSetDescription {
         return columnDisplaySizes.get(column - 1);
     }
 
-    ;
+    private void parseColumnDisplaySizes(final ResultSetMetaData resultSetMetaData) {
+        final List<Integer> columnDisplaySizes = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                columnDisplaySizes.add(Throwables.ignoreThrowable(logger, columnNullableUnknown, new ThrowableFunction<Integer, Integer>() {
+                    @Override
+                    public Integer doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.getColumnDisplaySize(column);
+                    }
+                }, column));
+            }
+        });
+        this.columnDisplaySizes = columnDisplaySizes;
+    }
 
 
     private List<String> columnLabels;
@@ -450,7 +293,21 @@ public class ResultSetDescription {
         return columnLabels.get(column - 1);
     }
 
-    ;
+    private void parseColumnLabels(final ResultSetMetaData resultSetMetaData) {
+        final List<String> columnLabels = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                columnLabels.add(Throwables.ignoreThrowable(logger, getColumnName(column), new ThrowableFunction<Integer, String>() {
+                    @Override
+                    public String doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.getColumnLabel(column);
+                    }
+                }, column));
+            }
+        });
+        this.columnLabels = columnLabels;
+    }
 
 
     private List<String> columnNames;
@@ -465,7 +322,21 @@ public class ResultSetDescription {
         return columnNames.get(column - 1);
     }
 
-    ;
+    private void parseColumnNames(final ResultSetMetaData resultSetMetaData) {
+        final List<String> columnNames = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                columnNames.add(Throwables.ignoreThrowable(logger, "_UNKnown_", new ThrowableFunction<Integer, String>() {
+                    @Override
+                    public String doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.getColumnName(column);
+                    }
+                }, column));
+            }
+        });
+        this.columnNames = columnNames;
+    }
 
     public List<String> getColumnNames() {
         return columnNames;
@@ -483,7 +354,21 @@ public class ResultSetDescription {
         return schemaNames.get(column - 1);
     }
 
-    ;
+    private void parseSchemaNames(final ResultSetMetaData resultSetMetaData) {
+        final List<String> schemaNames = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                schemaNames.add(Throwables.ignoreThrowable(logger, "", new ThrowableFunction<Integer, String>() {
+                    @Override
+                    public String doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.getSchemaName(column);
+                    }
+                }, column));
+            }
+        });
+        this.schemaNames = schemaNames;
+    }
 
 
     private List<Integer> precisions;
@@ -503,7 +388,21 @@ public class ResultSetDescription {
         return precisions.get(column - 1);
     }
 
-    ;
+    private void parsePrecisions(final ResultSetMetaData resultSetMetaData) {
+        final List<Integer> precisions = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                precisions.add(Throwables.ignoreThrowable(logger, 0, new ThrowableFunction<Integer, Integer>() {
+                    @Override
+                    public Integer doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.getPrecision(column);
+                    }
+                }, column));
+            }
+        });
+        this.precisions = precisions;
+    }
 
 
     private List<Integer> scales;
@@ -519,7 +418,21 @@ public class ResultSetDescription {
         return scales.get(column - 1);
     }
 
-    ;
+    private void parseScales(final ResultSetMetaData resultSetMetaData) {
+        final List<Integer> scales = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                scales.add(Throwables.ignoreThrowable(logger, 0, new ThrowableFunction<Integer, Integer>() {
+                    @Override
+                    public Integer doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.getScale(column);
+                    }
+                }, column));
+            }
+        });
+        this.scales = scales;
+    }
 
 
     private List<String> tableNames;
@@ -534,6 +447,21 @@ public class ResultSetDescription {
         return tableNames.get(column - 1);
     }
 
+    private void parseTableNames(final ResultSetMetaData resultSetMetaData) {
+        final List<String> tableNames = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                tableNames.add(Throwables.ignoreThrowable(logger, "", new ThrowableFunction<Integer, String>() {
+                    @Override
+                    public String doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.getTableName(column);
+                    }
+                }, column));
+            }
+        });
+        this.tableNames = tableNames;
+    }
 
     private List<String> catalogNames;
 
@@ -548,7 +476,40 @@ public class ResultSetDescription {
         return catalogNames.get(column - 1);
     }
 
+    private void parseCatalogNames(final ResultSetMetaData resultSetMetaData) {
+        final List<String> catalogNames = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                catalogNames.add(Throwables.ignoreThrowable(logger, "", new ThrowableFunction<Integer, String>() {
+                    @Override
+                    public String doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.getCatalogName(column);
+                    }
+                }, column));
+            }
+        });
+        this.catalogNames = catalogNames;
+    }
+
     private List<JdbcType> jdbcTypes;
+
+    private void parseColumnTypes(final ResultSetMetaData resultSetMetaData) {
+        final List<JdbcType> jdbcTypes = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                jdbcTypes.add(Throwables.ignoreThrowable(logger, JdbcType.UNKNOWN, new ThrowableFunction<Integer, JdbcType>() {
+                    @Override
+                    public JdbcType doFun(Integer column) throws Throwable {
+                        return JdbcType.ofCode(resultSetMetaData.getColumnType(column));
+                    }
+                }, column));
+            }
+        });
+        this.jdbcTypes = jdbcTypes;
+
+    }
 
     /**
      * Retrieves the designated column's SQL type.
@@ -575,6 +536,21 @@ public class ResultSetDescription {
         return columnJdbcTypeNames.get(column - 1);
     }
 
+    private void parseColumnJdbcTypeNames(final ResultSetMetaData resultSetMetaData) {
+        final List<String> columnJdbcTypeNames = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                columnJdbcTypeNames.add(Throwables.ignoreThrowable(logger, "", new ThrowableFunction<Integer, String>() {
+                    @Override
+                    public String doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.getColumnTypeName(column);
+                    }
+                }, column));
+            }
+        });
+        this.columnJdbcTypeNames = columnJdbcTypeNames;
+    }
 
     private List<Boolean> isReadOnly;
 
@@ -588,6 +564,21 @@ public class ResultSetDescription {
         return isReadOnly.get(column - 1);
     }
 
+    private void parseIsReadOnly(final ResultSetMetaData resultSetMetaData) {
+        final List<Boolean> isReadOnly = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                isReadOnly.add(Throwables.ignoreThrowable(logger, true, new ThrowableFunction<Integer, Boolean>() {
+                    @Override
+                    public Boolean doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.isReadOnly(column);
+                    }
+                }, column));
+            }
+        });
+        this.isReadOnly = isReadOnly;
+    }
 
     private List<Boolean> isWritable;
 
@@ -601,6 +592,21 @@ public class ResultSetDescription {
         return isWritable.get(column - 1);
     }
 
+    private void parseIsWritable(final ResultSetMetaData resultSetMetaData) {
+        final List<Boolean> isWritable = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                isWritable.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
+                    @Override
+                    public Boolean doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.isWritable(column);
+                    }
+                }, column));
+            }
+        });
+        this.isWritable = isWritable;
+    }
 
     private List<Boolean> isDefinitelyWritable;
 
@@ -614,6 +620,21 @@ public class ResultSetDescription {
         return isDefinitelyWritable.get(column - 1);
     }
 
+    private void parseIsDefinitelyWritable(final ResultSetMetaData resultSetMetaData) {
+        final List<Boolean> isDefinitelyWritable = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                isDefinitelyWritable.add(Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Integer, Boolean>() {
+                    @Override
+                    public Boolean doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.isDefinitelyWritable(column);
+                    }
+                }, column));
+            }
+        });
+        this.isDefinitelyWritable = isDefinitelyWritable;
+    }
 
     private List<String> columnClassNames;
 
@@ -632,5 +653,21 @@ public class ResultSetDescription {
      */
     public String getColumnClassName(int column) {
         return columnClassNames.get(column - 1);
+    }
+
+    private void parseColumnClassNames(final ResultSetMetaData resultSetMetaData) {
+        final List<String> columnClassNames = Collects.emptyArrayList();
+        Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
+            @Override
+            public void accept(Integer column) {
+                columnClassNames.add(Throwables.ignoreThrowable(logger, "", new ThrowableFunction<Integer, String>() {
+                    @Override
+                    public String doFun(Integer column) throws Throwable {
+                        return resultSetMetaData.getColumnClassName(column);
+                    }
+                }, column));
+            }
+        });
+        this.columnClassNames = columnClassNames;
     }
 }
