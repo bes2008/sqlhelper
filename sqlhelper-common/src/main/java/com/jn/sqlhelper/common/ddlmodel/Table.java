@@ -3,15 +3,11 @@ package com.jn.sqlhelper.common.ddlmodel;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
-import com.jn.langx.util.Emptys;
-import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.io.LineDelimiter;
-import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.common.annotation.Column;
 import com.jn.sqlhelper.common.utils.TableType;
 import com.jn.sqlhelper.common.utils.TableTypeConverter;
@@ -199,15 +195,15 @@ public class Table {
             return showAsTableDDL(showIndexes);
         }
         if (tableType == TableType.ALIAS) {
-            return null;
+            return "CREATE ALIAS " + name;
         }
 
         if (tableType == TableType.SYNONYM) {
-            return null;
+            return "CREATE SYNONYM " + name;
         }
 
         if (tableType == TableType.VIEW) {
-            return null;
+            return "CREATE VIEW " + name;
         }
         return null;
 
