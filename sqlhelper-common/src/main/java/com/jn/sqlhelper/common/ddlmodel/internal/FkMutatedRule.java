@@ -7,16 +7,18 @@ import java.sql.DatabaseMetaData;
 import java.util.EnumSet;
 
 public enum FkMutatedRule {
-    importedKeyCascade(DatabaseMetaData.importedKeyCascade),
-    importedKeyRestrict(DatabaseMetaData.importedKeyRestrict),
-    importedKeySetNull(DatabaseMetaData.importedKeySetNull),
-    importedKeyNoAction(DatabaseMetaData.importedKeyNoAction),
-    importedKeySetDefault(DatabaseMetaData.importedKeySetDefault);
+    importedKeyCascade(DatabaseMetaData.importedKeyCascade, "CASCADE"),
+    importedKeyRestrict(DatabaseMetaData.importedKeyRestrict, "RESTRICT"),
+    importedKeySetNull(DatabaseMetaData.importedKeySetNull, "SET NULL"),
+    importedKeyNoAction(DatabaseMetaData.importedKeyNoAction, "NO ACTION"),
+    importedKeySetDefault(DatabaseMetaData.importedKeySetDefault, "SET DEFAULT");
 
     private int code;
+    private String keywords;
 
-    FkMutatedRule(int code) {
+    FkMutatedRule(int code, String keywords) {
         this.code = code;
+        this.keywords = keywords;
     }
 
     public int getCode() {
@@ -30,5 +32,13 @@ public enum FkMutatedRule {
                 return r.code == code;
             }
         });
+    }
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
     }
 }
