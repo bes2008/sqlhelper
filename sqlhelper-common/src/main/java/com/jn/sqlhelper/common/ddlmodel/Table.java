@@ -3,18 +3,11 @@ package com.jn.sqlhelper.common.ddlmodel;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
-import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Predicate;
-import com.jn.langx.util.io.LineDelimiter;
 import com.jn.sqlhelper.common.annotation.Column;
-import com.jn.sqlhelper.common.ddlmodel.internal.BooleanFlag;
-import com.jn.sqlhelper.common.ddlmodel.internal.JdbcType;
 import com.jn.sqlhelper.common.ddlmodel.internal.TableType;
 import com.jn.sqlhelper.common.ddlmodel.internal.TableTypeConverter;
-import com.jn.sqlhelper.common.utils.SQLs;
-import com.jn.sqlhelper.common.utils.Utils;
 
 import java.util.*;
 
@@ -205,151 +198,12 @@ public class Table {
         pkColumns.add(primaryKeyColumn);
     }
 
-    public Map<String, ImportedColumn> getFkColumnMap(){
+    public Map<String, ImportedColumn> getFkColumnMap() {
         return fkColumnMap;
     }
 
-    public void addFKColumn(ImportedColumn fkColumn){
+    public void addFKColumn(ImportedColumn fkColumn) {
         fkColumnMap.put(fkColumn.getFkColumnName(), fkColumn);
-    }
-
-    public String showAsDDL() {
-        return showAsDDL(true);
-    }
-
-    public String showAsDDL(boolean showIndexes) {
-        if (tableType == TableType.SYSTEM_TABLE || tableType == TableType.TABLE || tableType == TableType.GLOBAL_TEMPORARY || tableType == TableType.LOCAL_TEMPORARY) {
-            return showAsTableDDL(showIndexes);
-        } else {
-            final String lineDelimiter = LineDelimiter.DEFAULT.getValue();
-            final StringBuilder builder = new StringBuilder(256);
-
-            if (Strings.isNotEmpty(sql)) {
-                builder.append(sql);
-                if (!sql.endsWith(";")) {
-                    builder.append(";");
-                }
-                builder.append(lineDelimiter);
-            } else {
-                if (tableType == TableType.ALIAS) {
-                    builder.append("CREATE ALIAS ");
-                } else if (tableType == TableType.SYNONYM) {
-                    builder.append("CREATE SYNONYM ");
-                } else {
-                    builder.append("CREATE VIEW ");
-                }
-                builder.append(name).append(";").append(lineDelimiter);
-            }
-            return builder.toString();
-        }
-    }
-
-    private String showAsTableDDL(boolean showIndexes) {
-        final String lineDelimiter = LineDelimiter.DEFAULT.getValue();
-        final StringBuilder builder = new StringBuilder(256);
-        if (Strings.isEmpty(sql)) {
-            builder.append("CREATE");
-            if (tableType == TableType.GLOBAL_TEMPORARY || tableType == TableType.LOCAL_TEMPORARY) {
-                builder.append(" ").append(tableType.getCode());
-            }
-            builder.append(" TABLE ").append(name).append(lineDelimiter);
-
-            builder.append("(").append(lineDelimiter);
-            Utils.forEach(columns, new Consumer2<Integer, com.jn.sqlhelper.common.ddlmodel.Column>() {
-                @Override
-                public void accept(Integer i, com.jn.sqlhelper.common.ddlmodel.Column column) {
-                    if (i > 0) {
-                        builder.append(",").append(lineDelimiter);
-                    }
-                    builder.append("\t").append(showAsDDLColumn(column));
-                }
-            });
-            builder.append(lineDelimiter);
-
-            builder.append(");").append(lineDelimiter);
-
-            // primary key
-            builder.append("ALTER TABLE ").append(name).append(" ADD PRIMARY KEY (");
-            Utils.forEach(pkColumns, new Consumer2<Integer, PrimaryKeyColumn>() {
-                @Override
-                public void accept(Integer i, PrimaryKeyColumn pkColumn) {
-                    if (i > 0) {
-                        builder.append(", ");
-                    }
-                    builder.append(pkColumn.getColumnName());
-                }
-            });
-            builder.append(");").append(lineDelimiter);
-
-        } else {
-            builder.append(sql);
-            if (!sql.endsWith(";")) {
-                builder.append(";");
-            }
-            builder.append(lineDelimiter);
-        }
-        if (showIndexes) {
-            Collects.forEach(indexMap, new Consumer2<String, Index>() {
-                @Override
-                public void accept(String key, Index index) {
-                    builder.append(index.showAsDDL());
-                }
-            });
-        }
-        return builder.toString();
-    }
-
-    private String showAsDDLColumn(com.jn.sqlhelper.common.ddlmodel.Column column) {
-        StringBuilder builder = new StringBuilder(256);
-        builder.append(column.getName()).append(" ").append(column.getTypeName());
-
-        // size
-        JdbcType jdbcType = column.getJdbcType();
-        if (jdbcType == JdbcType.VARCHAR || jdbcType == JdbcType.LONGVARCHAR || jdbcType == JdbcType.NVARCHAR || jdbcType == JdbcType.LONGNVARCHAR) {
-            builder.append("(").append(column.getCharOctetLength()).append(")");
-        } else {
-            if (jdbcType == JdbcType.CHAR) {
-                builder.append("(").append(column.getSize()).append(")");
-            }
-            // others types
-            // ...
-        }
-
-        if (column.getIsNullable() == BooleanFlag.NO) {
-            builder.append(" NOT NULL");
-        }
-
-        if (column.getDefaultValue() != null) {
-            builder.append(" DEFAULT '").append(column.getDefaultValue()).append("'");
-        }
-
-        if (column.getIsAutoincrement() == BooleanFlag.YES) {
-            builder.append(" AUTO_INCREMENT");
-        }
-
-        if (Strings.isNotEmpty(column.getRemarks())) {
-            builder.append(" COMMENT '").append(column.getRemarks()).append("'");
-        }
-
-        if (jdbcType == JdbcType.REF) {
-            ImportedColumn importedColumn = fkColumnMap.get(column.getName());
-            if (importedColumn != null) {
-                String tableFQN = SQLs.getTableFQN(importedColumn.getPkTableCatalog(), importedColumn.getPkTableSchema(), importedColumn.getPkTableName());
-                builder.append(" REFERENCES ").append(tableFQN);
-                // referenced columns ???
-                builder.append(" (");
-                builder.append(importedColumn.getPkColumnName());
-                builder.append(")");
-
-                if (importedColumn.getDeleteRule() != null) {
-                    builder.append(" ON DELETE ").append(importedColumn.getDeleteRule().getKeywords());
-                }
-                if (importedColumn.getUpdateRule() != null) {
-                    builder.append(" ON UPDATE ").append(importedColumn.getUpdateRule().getKeywords());
-                }
-            }
-        }
-        return builder.toString();
     }
 
 }

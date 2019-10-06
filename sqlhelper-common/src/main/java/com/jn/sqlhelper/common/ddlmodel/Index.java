@@ -1,10 +1,6 @@
 package com.jn.sqlhelper.common.ddlmodel;
 
 import com.jn.langx.util.Preconditions;
-import com.jn.langx.util.function.Consumer2;
-import com.jn.langx.util.io.LineDelimiter;
-import com.jn.sqlhelper.common.ddlmodel.internal.SortType;
-import com.jn.sqlhelper.common.utils.Utils;
 
 import java.util.Comparator;
 import java.util.Set;
@@ -13,7 +9,7 @@ import java.util.TreeSet;
 public class Index {
     private String catalog;
     private String schema;
-    private String table;
+    private String tableName;
     private String name;
 
     private final Set<IndexColumn> indexColumns = new TreeSet<IndexColumn>(new Comparator<IndexColumn>() {
@@ -33,7 +29,7 @@ public class Index {
     public Index(String catalog, String schema, String table, String name) {
         setCatalog(catalog);
         setSchema(schema);
-        setTable(table);
+        setTableName(table);
         setName(name);
     }
 
@@ -55,13 +51,13 @@ public class Index {
         this.schema = schema;
     }
 
-    public String getTable() {
-        return table;
+    public String getTableName() {
+        return tableName;
     }
 
-    public void setTable(String table) {
+    public void setTableName(String table) {
         Preconditions.checkNotNull(table);
-        this.table = table;
+        this.tableName = table;
     }
 
     public String getName() {
@@ -91,7 +87,7 @@ public class Index {
 
         if (catalog != null ? !catalog.equals(index.catalog) : index.catalog != null) return false;
         if (schema != null ? !schema.equals(index.schema) : index.schema != null) return false;
-        if (!table.equals(index.table)) return false;
+        if (!tableName.equals(index.tableName)) return false;
         return name.equals(index.name);
     }
 
@@ -99,30 +95,9 @@ public class Index {
     public int hashCode() {
         int result = catalog != null ? catalog.hashCode() : 0;
         result = 31 * result + (schema != null ? schema.hashCode() : 0);
-        result = 31 * result + table.hashCode();
+        result = 31 * result + tableName.hashCode();
         result = 31 * result + name.hashCode();
         return result;
     }
-
-    public String showAsDDL() {
-        final StringBuilder builder = new StringBuilder(256);
-        builder.append("CREATE INDEX ").append(name).append(" ON ").append(table).append(" (");
-        Utils.forEach(indexColumns, new Consumer2<Integer, IndexColumn>() {
-            @Override
-            public void accept(Integer i, IndexColumn indexColumn) {
-                if (i > 0) {
-                    builder.append(", ");
-                }
-
-                builder.append(indexColumn.getColumnName());
-                if (indexColumn.getAscOrDesc() != SortType.UNSUPPORTED) {
-                    builder.append(" ").append(indexColumn.getAscOrDesc().name());
-                }
-            }
-        });
-        builder.append(");").append(LineDelimiter.DEFAULT.getValue());
-        return builder.toString();
-    }
-
 
 }
