@@ -1,7 +1,5 @@
 package com.jn.sqlhelper.examples.test.ddlmodel;
 
-import com.jn.langx.annotation.NonNull;
-import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.io.IOs;
@@ -13,6 +11,7 @@ import com.jn.sqlhelper.common.ddlmodel.IndexColumn;
 import com.jn.sqlhelper.common.ddlmodel.Table;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
 import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
+import com.jn.sqlhelper.common.utils.TableType;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -88,17 +87,16 @@ public class GetDatabaseInfoTests {
         int maxTableNameLength = dbMetaData.getMaxTableNameLength();
         System.out.println("maxTableNameLength: " + maxTableNameLength);
 
-        ResultSet tablesRs = dbMetaData.getTables("TEST", "PUBLIC", null, null);
+        String[] tableTypes = new String[]{
+                TableType.GLOBAL_TEMPORARY.getCode(),
+                TableType.LOCAL_TEMPORARY.getCode(),
+                TableType.TABLE.getCode()
+        };
+
+        ResultSet tablesRs = dbMetaData.getTables("TEST", "PUBLIC", null, tableTypes);
         List<Table> tables = new RowMapperResultSetExtractor<Table>(new BeanRowMapper<>(Table.class)).extract(tablesRs);
 
         for (Table table : tables) {
-
-            @Nullable
-            String catalog = table.getCatalog();
-            @Nullable
-            String schema = table.getSchema();
-            @NonNull
-            String tableName = table.getName();
             System.out.println("Columns:");
             findColumns(dbMetaData, table);
 

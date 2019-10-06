@@ -17,11 +17,11 @@ import java.util.*;
 
 public class Table {
     @Nullable
-    @Column("TABLE_CAT")
+    @Column({"TABLE_CAT", "TABLE_CATALOG"})
     private String catalog;
 
     @Nullable
-    @Column("TABLE_SCHEM")
+    @Column({"TABLE_SCHEM", "TABLE_SCHEMA"})
     private String schema;
 
     @NonNull
@@ -193,20 +193,28 @@ public class Table {
     public String showAsDDL(boolean showIndexes) {
         if (tableType == TableType.SYSTEM_TABLE || tableType == TableType.TABLE || tableType == TableType.GLOBAL_TEMPORARY || tableType == TableType.LOCAL_TEMPORARY) {
             return showAsTableDDL(showIndexes);
-        }
-        if (tableType == TableType.ALIAS) {
-            return "CREATE ALIAS " + name;
-        }
+        } else {
+            final String lineDelimiter = LineDelimiter.DEFAULT.getValue();
+            final StringBuilder builder = new StringBuilder(256);
 
-        if (tableType == TableType.SYNONYM) {
-            return "CREATE SYNONYM " + name;
+            if (Strings.isNotEmpty(sql)) {
+                builder.append(sql);
+                if (!sql.endsWith(";")) {
+                    builder.append(";");
+                }
+                builder.append(lineDelimiter);
+            } else {
+                if (tableType == TableType.ALIAS) {
+                    builder.append("CREATE ALIAS ");
+                } else if (tableType == TableType.SYNONYM) {
+                    builder.append("CREATE SYNONYM ");
+                } else {
+                    builder.append("CREATE VIEW ");
+                }
+                builder.append(name).append(";").append(lineDelimiter);
+            }
+            return builder.toString();
         }
-
-        if (tableType == TableType.VIEW) {
-            return "CREATE VIEW " + name;
-        }
-        return null;
-
     }
 
     private String showAsTableDDL(boolean showIndexes) {
@@ -233,7 +241,11 @@ public class Table {
 
             builder.append(");").append(lineDelimiter);
         } else {
-            builder.append(sql).append(lineDelimiter);
+            builder.append(sql);
+            if (!sql.endsWith(";")) {
+                builder.append(";");
+            }
+            builder.append(lineDelimiter);
         }
         if (showIndexes) {
             Collects.forEach(indexMap, new Consumer2<String, Index>() {

@@ -44,7 +44,8 @@ public class Column {
     @com.jn.sqlhelper.common.annotation.Column("COLUMN_DEF")
     private String defaultValue;
 
-    private int sqlDataType;
+    @com.jn.sqlhelper.common.annotation.Column(value = "SQL_DATA_TYPE", converter = JdbcTypeConverter.class)
+    private JdbcType sqlDataType;
 
     private int sqlDatetimeSub;
 
@@ -165,11 +166,11 @@ public class Column {
         this.defaultValue = defaultValue;
     }
 
-    public int getSqlDataType() {
+    public JdbcType getSqlDataType() {
         return sqlDataType;
     }
 
-    public void setSqlDataType(int sqlDataType) {
+    public void setSqlDataType(JdbcType sqlDataType) {
         this.sqlDataType = sqlDataType;
     }
 
