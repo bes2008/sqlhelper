@@ -10,6 +10,7 @@ import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.io.LineDelimiter;
 import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.common.utils.SortType;
+import com.jn.sqlhelper.common.utils.Utils;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -113,7 +114,7 @@ public class Index {
     public String showAsDDL() {
         final StringBuilder builder = new StringBuilder(256);
         builder.append("CREATE INDEX ").append(name).append(" ON ").append(table).append(" (");
-        forEach(indexColumns, new Consumer2<Integer, IndexColumn>() {
+        Utils.forEach(indexColumns, new Consumer2<Integer, IndexColumn>() {
             @Override
             public void accept(Integer i, IndexColumn indexColumn) {
                 if (i > 0) {
@@ -130,21 +131,5 @@ public class Index {
         return builder.toString();
     }
 
-    /**
-     * Iterate every element
-     */
-    public static <E> void forEach(@Nullable Collection<E> collection, @NonNull final Consumer2<Integer, E> consumer) {
-        Preconditions.checkNotNull(consumer);
-        if (Emptys.isNotEmpty(collection)) {
-            final Holder<Integer> indexHolder = new Holder<Integer>(-1);
-            Collects.forEach(collection, new Consumer<E>() {
-                @Override
-                public void accept(E e) {
-                    indexHolder.set(indexHolder.get() + 1);
-                    consumer.accept(indexHolder.get(), e);
-                }
-            });
-        }
-    }
 
 }
