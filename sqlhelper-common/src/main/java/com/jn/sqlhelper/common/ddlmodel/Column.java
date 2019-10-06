@@ -270,43 +270,4 @@ public class Column {
     public String toString() {
         return JSONBuilderProvider.create().prettyFormat(true).build().toJson(this);
     }
-
-    String showAsDDLColumn() {
-        StringBuilder builder = new StringBuilder(256);
-        builder.append(name).append(" ").append(typeName);
-
-        // size
-        if (jdbcType == JdbcType.VARCHAR || jdbcType == JdbcType.LONGVARCHAR || jdbcType == JdbcType.NVARCHAR || jdbcType == JdbcType.LONGNVARCHAR) {
-            builder.append("(").append(charOctetLength).append(")");
-        } else {
-            if (jdbcType == JdbcType.CHAR) {
-                builder.append("(").append(size).append(")");
-            }
-            // others types
-            // ...
-        }
-
-        if (isNullable == BooleanFlag.NO) {
-            builder.append(" NOT NULL");
-        }
-
-        if (defaultValue != null) {
-            builder.append(" DEFAULT '").append(defaultValue).append("'");
-        }
-
-        if (isAutoincrement == BooleanFlag.YES) {
-            builder.append(" AUTO_INCREMENT");
-        }
-
-        if (Strings.isNotEmpty(remarks)) {
-            builder.append(" COMMENT '").append(remarks).append("'");
-        }
-
-        if (jdbcType == JdbcType.REF) {
-            String tableFQN = SQLs.getTableFQN(scopeCatalog, scopeSchema, scopeTable);
-            builder.append(" REFERENCES ").append(tableFQN);
-            // referenced columns ???
-        }
-        return builder.toString();
-    }
 }

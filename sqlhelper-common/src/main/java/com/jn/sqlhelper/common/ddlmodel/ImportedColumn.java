@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.common.ddlmodel;
 
+import com.jn.langx.annotation.Nullable;
 import com.jn.sqlhelper.common.annotation.Column;
 import com.jn.sqlhelper.common.ddlmodel.internal.FkInitiallyRule;
 import com.jn.sqlhelper.common.ddlmodel.internal.FkInitiallyRuleConverter;
@@ -35,8 +36,10 @@ public class ImportedColumn {
     @Column(value = {"DELETE_RULE"}, converter = FkMutatedRuleConverter.class)
     private FkMutatedRule deleteRule;
 
+    @Nullable
     private String fkName;
 
+    @Nullable
     private String pkName;
 
     @Column(value = {"DEFERRABILITY"}, converter = FkInitiallyRuleConverter.class)

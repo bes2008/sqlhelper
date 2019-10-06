@@ -6,9 +6,9 @@ import com.jn.langx.util.io.IOs;
 import com.jn.sqlhelper.common.connection.ConnectionConfiguration;
 import com.jn.sqlhelper.common.connection.ConnectionFactory;
 import com.jn.sqlhelper.common.ddlmodel.*;
+import com.jn.sqlhelper.common.ddlmodel.internal.TableType;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
 import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
-import com.jn.sqlhelper.common.ddlmodel.internal.TableType;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -91,7 +91,7 @@ public class GetDatabaseInfoTests {
         };
 
         ResultSet tablesRs = dbMetaData.getTables("TEST", "PUBLIC", null, tableTypes);
-        List<Table> tables = new RowMapperResultSetExtractor<Table>(new BeanRowMapper<>(Table.class)).extract(tablesRs);
+        List<Table> tables = new RowMapperResultSetExtractor<Table>(new BeanRowMapper<Table>(Table.class)).extract(tablesRs);
 
         for (Table table : tables) {
             System.out.println("Columns:");
@@ -99,6 +99,10 @@ public class GetDatabaseInfoTests {
 
             System.out.println("Indexes:");
             findTableIndexes(dbMetaData, table);
+
+            findTablePKs(dbMetaData, table);
+
+            findTableFKs(dbMetaData, table);
 
             System.out.println(table);
 
@@ -108,9 +112,17 @@ public class GetDatabaseInfoTests {
 
     private void findTablePKs(DatabaseMetaData dbMetaData, Table table) throws SQLException {
         ResultSet pkRs = dbMetaData.getPrimaryKeys(table.getCatalog(), table.getSchema(), table.getName());
-        List<PrimaryKeyColumn> pkColumns = new RowMapperResultSetExtractor<PrimaryKeyColumn>(new BeanRowMapper<>(PrimaryKeyColumn.class)).extract(pkRs);
+        List<PrimaryKeyColumn> pkColumns = new RowMapperResultSetExtractor<PrimaryKeyColumn>(new BeanRowMapper<PrimaryKeyColumn>(PrimaryKeyColumn.class)).extract(pkRs);
         for (PrimaryKeyColumn pk : pkColumns) {
             table.addPrimaryKeyColumn(pk);
+        }
+    }
+
+    private void findTableFKs(DatabaseMetaData dbMetaData, Table table) throws SQLException {
+        ResultSet fkRs = dbMetaData.getImportedKeys(table.getCatalog(), table.getSchema(), table.getName());
+        List<ImportedColumn> fkColumns = new RowMapperResultSetExtractor<ImportedColumn>(new BeanRowMapper<ImportedColumn>(ImportedColumn.class)).extract(fkRs);
+        for (ImportedColumn fk : fkColumns) {
+            table.addFkColumn(fk);
         }
     }
 
@@ -148,5 +160,6 @@ public class GetDatabaseInfoTests {
             }
         });
     }
+
 
 }
