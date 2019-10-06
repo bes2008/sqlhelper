@@ -1,4 +1,6 @@
-package com.jn.sqlhelper.common.utils;
+package com.jn.sqlhelper.common.ddlmodel.internal;
+
+import com.jn.sqlhelper.common.utils.Converter;
 
 public class JdbcTypeConverter implements Converter<Integer, JdbcType> {
     public static final JdbcTypeConverter INSTANCE = new JdbcTypeConverter();

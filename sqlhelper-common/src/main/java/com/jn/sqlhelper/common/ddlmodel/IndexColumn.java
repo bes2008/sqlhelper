@@ -4,10 +4,10 @@ import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.sqlhelper.common.annotation.Column;
-import com.jn.sqlhelper.common.utils.IndexType;
-import com.jn.sqlhelper.common.utils.IndexTypeConverter;
-import com.jn.sqlhelper.common.utils.SortType;
-import com.jn.sqlhelper.common.utils.SortTypeConverter;
+import com.jn.sqlhelper.common.ddlmodel.internal.IndexType;
+import com.jn.sqlhelper.common.ddlmodel.internal.IndexTypeConverter;
+import com.jn.sqlhelper.common.ddlmodel.internal.SortType;
+import com.jn.sqlhelper.common.ddlmodel.internal.SortTypeConverter;
 
 public class IndexColumn {
     @Nullable

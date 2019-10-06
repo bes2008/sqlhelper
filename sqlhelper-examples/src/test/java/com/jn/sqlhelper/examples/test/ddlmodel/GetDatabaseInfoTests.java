@@ -8,7 +8,7 @@ import com.jn.sqlhelper.common.connection.ConnectionFactory;
 import com.jn.sqlhelper.common.ddlmodel.*;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
 import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
-import com.jn.sqlhelper.common.utils.TableType;
+import com.jn.sqlhelper.common.ddlmodel.internal.TableType;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -103,9 +103,7 @@ public class GetDatabaseInfoTests {
             System.out.println(table);
 
             System.out.println(table.showAsDDL(true));
-
         }
-
     }
 
     private void findTablePKs(DatabaseMetaData dbMetaData, Table table) throws SQLException {

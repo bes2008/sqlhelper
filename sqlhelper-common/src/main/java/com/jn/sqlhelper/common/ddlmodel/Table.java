@@ -9,8 +9,8 @@ import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.io.LineDelimiter;
 import com.jn.sqlhelper.common.annotation.Column;
-import com.jn.sqlhelper.common.utils.TableType;
-import com.jn.sqlhelper.common.utils.TableTypeConverter;
+import com.jn.sqlhelper.common.ddlmodel.internal.TableType;
+import com.jn.sqlhelper.common.ddlmodel.internal.TableTypeConverter;
 import com.jn.sqlhelper.common.utils.Utils;
 
 import java.util.*;

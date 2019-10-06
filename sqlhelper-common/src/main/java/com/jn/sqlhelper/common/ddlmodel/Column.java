@@ -4,6 +4,10 @@ import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Strings;
+import com.jn.sqlhelper.common.ddlmodel.internal.BooleanFlag;
+import com.jn.sqlhelper.common.ddlmodel.internal.BooleanFlagConverter;
+import com.jn.sqlhelper.common.ddlmodel.internal.JdbcType;
+import com.jn.sqlhelper.common.ddlmodel.internal.JdbcTypeConverter;
 import com.jn.sqlhelper.common.utils.*;
 
 public class Column {

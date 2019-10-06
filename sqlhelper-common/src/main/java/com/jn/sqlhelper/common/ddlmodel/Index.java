@@ -1,18 +1,11 @@
 package com.jn.sqlhelper.common.ddlmodel;
 
-import com.jn.langx.annotation.NonNull;
-import com.jn.langx.annotation.Nullable;
-import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
-import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.io.LineDelimiter;
-import com.jn.langx.util.struct.Holder;
-import com.jn.sqlhelper.common.utils.SortType;
+import com.jn.sqlhelper.common.ddlmodel.internal.SortType;
 import com.jn.sqlhelper.common.utils.Utils;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
