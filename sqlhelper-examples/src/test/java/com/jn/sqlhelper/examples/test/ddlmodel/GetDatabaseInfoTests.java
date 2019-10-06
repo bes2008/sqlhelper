@@ -5,10 +5,7 @@ import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.io.IOs;
 import com.jn.sqlhelper.common.connection.ConnectionConfiguration;
 import com.jn.sqlhelper.common.connection.ConnectionFactory;
-import com.jn.sqlhelper.common.ddlmodel.Column;
-import com.jn.sqlhelper.common.ddlmodel.Index;
-import com.jn.sqlhelper.common.ddlmodel.IndexColumn;
-import com.jn.sqlhelper.common.ddlmodel.Table;
+import com.jn.sqlhelper.common.ddlmodel.*;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
 import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
 import com.jn.sqlhelper.common.utils.TableType;
@@ -109,6 +106,14 @@ public class GetDatabaseInfoTests {
 
         }
 
+    }
+
+    private void findTablePKs(DatabaseMetaData dbMetaData, Table table) throws SQLException {
+        ResultSet pkRs = dbMetaData.getPrimaryKeys(table.getCatalog(), table.getSchema(), table.getName());
+        List<PrimaryKeyColumn> pkColumns = new RowMapperResultSetExtractor<PrimaryKeyColumn>(new BeanRowMapper<>(PrimaryKeyColumn.class)).extract(pkRs);
+        for (PrimaryKeyColumn pk : pkColumns) {
+            table.addPrimaryKeyColumn(pk);
+        }
     }
 
     private void findTableIndexes(DatabaseMetaData dbMetaData, Table table) throws SQLException {

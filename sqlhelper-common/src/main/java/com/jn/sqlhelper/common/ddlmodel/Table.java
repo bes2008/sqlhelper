@@ -63,6 +63,12 @@ public class Table {
             return o1.getOrdinalPosition() - o2.getOrdinalPosition();
         }
     });
+    private final Set<PrimaryKeyColumn> pkColumns = new TreeSet<PrimaryKeyColumn>(new Comparator<PrimaryKeyColumn>() {
+        @Override
+        public int compare(PrimaryKeyColumn o1, PrimaryKeyColumn o2) {
+            return o1.getKeySeq() - o2.getKeySeq();
+        }
+    });
 
     public String getCatalog() {
         return catalog;
@@ -186,6 +192,14 @@ public class Table {
         });
     }
 
+    public Set<PrimaryKeyColumn> getPkColumns() {
+        return pkColumns;
+    }
+
+    public void addPrimaryKeyColumn(PrimaryKeyColumn primaryKeyColumn) {
+        pkColumns.add(primaryKeyColumn);
+    }
+
     public String showAsDDL() {
         return showAsDDL(true);
     }
@@ -240,6 +254,20 @@ public class Table {
             builder.append(lineDelimiter);
 
             builder.append(");").append(lineDelimiter);
+
+            // primary key
+            builder.append("ALTER TABLE ").append(name).append(" ADD PRIMARY KEY (");
+            Utils.forEach(pkColumns, new Consumer2<Integer, PrimaryKeyColumn>() {
+                @Override
+                public void accept(Integer i, PrimaryKeyColumn pkColumn) {
+                    if (i > 0) {
+                        builder.append(", ");
+                    }
+                    builder.append(pkColumn.getColumnName());
+                }
+            });
+            builder.append(");").append(lineDelimiter);
+
         } else {
             builder.append(sql);
             if (!sql.endsWith(";")) {
