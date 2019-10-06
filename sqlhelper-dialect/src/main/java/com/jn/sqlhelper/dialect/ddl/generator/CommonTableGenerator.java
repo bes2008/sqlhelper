@@ -11,22 +11,26 @@ import com.jn.sqlhelper.common.ddlmodel.internal.SortType;
 import com.jn.sqlhelper.common.ddlmodel.internal.TableType;
 import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.common.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 
 public class CommonTableGenerator implements TableGenerator {
     private DatabaseMetaData databaseMetaData;
+    private static final Logger logger = LoggerFactory.getLogger(CommonTableGenerator.class);
 
     public CommonTableGenerator(DatabaseMetaData databaseMetaData) {
         this.databaseMetaData = databaseMetaData;
     }
 
     @Override
-    public String generate(Table table) {
+    public String generate(Table table) throws SQLException {
         return generateAnyTableDDL(table);
     }
 
-    private String generateAnyTableDDL(Table table) {
+    private String generateAnyTableDDL(Table table) throws SQLException {
         TableType tableType = table.getTableType();
         if (tableType == TableType.SYSTEM_TABLE || tableType == TableType.TABLE || tableType == TableType.GLOBAL_TEMPORARY || tableType == TableType.LOCAL_TEMPORARY) {
             return generateTableDDL(table);
@@ -55,7 +59,7 @@ public class CommonTableGenerator implements TableGenerator {
         }
     }
 
-    protected String generateTableDDL(final Table table) {
+    protected String generateTableDDL(final Table table) throws SQLException {
         final String lineDelimiter = LineDelimiter.DEFAULT.getValue();
         final StringBuilder builder = new StringBuilder(256);
         if (Strings.isEmpty(table.getSql())) {
@@ -99,7 +103,7 @@ public class CommonTableGenerator implements TableGenerator {
         return builder.toString();
     }
 
-    protected String generateCreateTableClause(final Table table) {
+    protected String generateCreateTableClause(final Table table) throws SQLException {
         final StringBuilder builder = new StringBuilder(256);
         builder.append("CREATE");
         TableType tableType = table.getTableType();
@@ -163,9 +167,9 @@ public class CommonTableGenerator implements TableGenerator {
         return builder.toString();
     }
 
-    protected String generateAddPrimaryKeyClause(final Table table) {
+    protected String generateAddPrimaryKeyClause(final Table table) throws SQLException {
         final StringBuilder builder = new StringBuilder(256);
-        builder.append("ALTER TABLE ").append(table.getName()).append(" ADD PRIMARY KEY (");
+        builder.append("ALTER TABLE ").append(getTableFQN(table.getCatalog(), table.getSchema(), table.getName(), true)).append(" ADD PRIMARY KEY (");
         Utils.forEach(table.getPkColumns(), new Consumer2<Integer, PrimaryKeyColumn>() {
             @Override
             public void accept(Integer i, PrimaryKeyColumn pkColumn) {
@@ -199,4 +203,17 @@ public class CommonTableGenerator implements TableGenerator {
         return builder.toString();
     }
 
+    protected String getTableFQN(String catalog, String schema, String tableName, boolean catalogSupportedInClause) {
+        if (catalogSupportedInClause) {
+            String catalogSeparator = null;
+            try {
+                catalogSeparator = databaseMetaData.getCatalogSeparator();
+            } catch (SQLException ex) {
+
+                catalogSeparator = ".";
+            }
+            return SQLs.getTableFQN(catalog, schema, tableName, catalogSeparator);
+        }
+        return tableName;
+    }
 }
