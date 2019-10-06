@@ -114,7 +114,7 @@ public class GetDatabaseInfoTests {
         ResultSet pkRs = dbMetaData.getPrimaryKeys(table.getCatalog(), table.getSchema(), table.getName());
         List<PrimaryKeyColumn> pkColumns = new RowMapperResultSetExtractor<PrimaryKeyColumn>(new BeanRowMapper<PrimaryKeyColumn>(PrimaryKeyColumn.class)).extract(pkRs);
         for (PrimaryKeyColumn pk : pkColumns) {
-            table.addPrimaryKeyColumn(pk);
+            table.addPKColumn(pk);
         }
     }
 
@@ -122,7 +122,7 @@ public class GetDatabaseInfoTests {
         ResultSet fkRs = dbMetaData.getImportedKeys(table.getCatalog(), table.getSchema(), table.getName());
         List<ImportedColumn> fkColumns = new RowMapperResultSetExtractor<ImportedColumn>(new BeanRowMapper<ImportedColumn>(ImportedColumn.class)).extract(fkRs);
         for (ImportedColumn fk : fkColumns) {
-            table.addFkColumn(fk);
+            table.addFKColumn(fk);
         }
     }
 

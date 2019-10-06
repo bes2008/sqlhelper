@@ -201,7 +201,7 @@ public class Table {
         return pkColumns;
     }
 
-    public void addPrimaryKeyColumn(PrimaryKeyColumn primaryKeyColumn) {
+    public void addPKColumn(PrimaryKeyColumn primaryKeyColumn) {
         pkColumns.add(primaryKeyColumn);
     }
 
@@ -209,7 +209,7 @@ public class Table {
         return fkColumnMap;
     }
 
-    public void addFkColumn(ImportedColumn fkColumn){
+    public void addFKColumn(ImportedColumn fkColumn){
         fkColumnMap.put(fkColumn.getFkColumnName(), fkColumn);
     }
 
