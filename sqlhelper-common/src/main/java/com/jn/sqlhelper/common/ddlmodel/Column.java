@@ -8,7 +8,7 @@ import com.jn.sqlhelper.common.ddlmodel.internal.BooleanFlag;
 import com.jn.sqlhelper.common.ddlmodel.internal.BooleanFlagConverter;
 import com.jn.sqlhelper.common.ddlmodel.internal.JdbcType;
 import com.jn.sqlhelper.common.ddlmodel.internal.JdbcTypeConverter;
-import com.jn.sqlhelper.common.utils.*;
+import com.jn.sqlhelper.common.utils.SQLs;
 
 public class Column {
     @Nullable
@@ -303,7 +303,7 @@ public class Column {
         }
 
         if (jdbcType == JdbcType.REF) {
-            String tableFQN = Tables.getTableFQN(scopeCatalog, scopeSchema, scopeTable);
+            String tableFQN = SQLs.getTableFQN(scopeCatalog, scopeSchema, scopeTable);
             builder.append(" REFERENCES ").append(tableFQN);
             // referenced columns ???
         }
