@@ -11,13 +11,11 @@ public class Tables {
         if (Strings.isEmpty(separator)) {
             separator = ".";
         }
-        boolean hasCatalog = Strings.isEmpty(catalog);
-        boolean hasSchema = Strings.isEmpty(schema);
         String fqn = tableName;
-        if (hasSchema) {
+        if (Strings.isNotEmpty(schema)) {
             fqn = schema + separator + fqn;
         }
-        if (hasCatalog) {
+        if (Strings.isNotEmpty(catalog)) {
             fqn = catalog + separator + fqn;
         }
         return fqn;
