@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.common.ddlmodel.internal;
+package com.jn.sqlhelper.common.ddl.model.internal;
 
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Predicate;

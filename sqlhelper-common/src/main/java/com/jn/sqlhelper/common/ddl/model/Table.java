@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.common.ddlmodel;
+package com.jn.sqlhelper.common.ddl.model;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.annotation.NonNull;
@@ -6,8 +6,8 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Predicate;
 import com.jn.sqlhelper.common.annotation.Column;
-import com.jn.sqlhelper.common.ddlmodel.internal.TableType;
-import com.jn.sqlhelper.common.ddlmodel.internal.TableTypeConverter;
+import com.jn.sqlhelper.common.ddl.model.internal.TableType;
+import com.jn.sqlhelper.common.ddl.model.internal.TableTypeConverter;
 
 import java.util.*;
 
@@ -53,9 +53,9 @@ public class Table {
             return key1.compareToIgnoreCase(key2);
         }
     });
-    private final Set<com.jn.sqlhelper.common.ddlmodel.Column> columns = new TreeSet<com.jn.sqlhelper.common.ddlmodel.Column>(new Comparator<com.jn.sqlhelper.common.ddlmodel.Column>() {
+    private final Set<com.jn.sqlhelper.common.ddl.model.Column> columns = new TreeSet<com.jn.sqlhelper.common.ddl.model.Column>(new Comparator<com.jn.sqlhelper.common.ddl.model.Column>() {
         @Override
-        public int compare(com.jn.sqlhelper.common.ddlmodel.Column o1, com.jn.sqlhelper.common.ddlmodel.Column o2) {
+        public int compare(com.jn.sqlhelper.common.ddl.model.Column o1, com.jn.sqlhelper.common.ddl.model.Column o2) {
             return o1.getOrdinalPosition() - o2.getOrdinalPosition();
         }
     });
@@ -165,7 +165,7 @@ public class Table {
         return indexMap;
     }
 
-    public Set<com.jn.sqlhelper.common.ddlmodel.Column> getColumns() {
+    public Set<com.jn.sqlhelper.common.ddl.model.Column> getColumns() {
         return columns;
     }
 
@@ -177,14 +177,14 @@ public class Table {
         return indexMap.get(indexName);
     }
 
-    public void addColumn(com.jn.sqlhelper.common.ddlmodel.Column column) {
+    public void addColumn(com.jn.sqlhelper.common.ddl.model.Column column) {
         columns.add(column);
     }
 
-    public com.jn.sqlhelper.common.ddlmodel.Column getColumn(final String columnName) {
-        return Collects.findFirst(columns, new Predicate<com.jn.sqlhelper.common.ddlmodel.Column>() {
+    public com.jn.sqlhelper.common.ddl.model.Column getColumn(final String columnName) {
+        return Collects.findFirst(columns, new Predicate<com.jn.sqlhelper.common.ddl.model.Column>() {
             @Override
-            public boolean test(com.jn.sqlhelper.common.ddlmodel.Column column) {
+            public boolean test(com.jn.sqlhelper.common.ddl.model.Column column) {
                 return column.getName().equals(columnName);
             }
         });

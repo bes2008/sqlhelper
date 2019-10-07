@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.common.ddlmodel.internal;
+package com.jn.sqlhelper.common.ddl.model.internal;
 
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.reflect.Reflects;

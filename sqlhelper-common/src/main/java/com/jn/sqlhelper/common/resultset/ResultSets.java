@@ -4,7 +4,7 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Numbers;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.common.ddlmodel.internal.JdbcType;
+import com.jn.sqlhelper.common.ddl.model.internal.JdbcType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

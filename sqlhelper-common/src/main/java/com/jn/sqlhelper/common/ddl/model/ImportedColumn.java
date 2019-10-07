@@ -1,11 +1,11 @@
-package com.jn.sqlhelper.common.ddlmodel;
+package com.jn.sqlhelper.common.ddl.model;
 
 import com.jn.langx.annotation.Nullable;
 import com.jn.sqlhelper.common.annotation.Column;
-import com.jn.sqlhelper.common.ddlmodel.internal.FkInitiallyRule;
-import com.jn.sqlhelper.common.ddlmodel.internal.FkInitiallyRuleConverter;
-import com.jn.sqlhelper.common.ddlmodel.internal.FkMutatedRule;
-import com.jn.sqlhelper.common.ddlmodel.internal.FkMutatedRuleConverter;
+import com.jn.sqlhelper.common.ddl.model.internal.FkInitiallyRule;
+import com.jn.sqlhelper.common.ddl.model.internal.FkInitiallyRuleConverter;
+import com.jn.sqlhelper.common.ddl.model.internal.FkMutatedRule;
+import com.jn.sqlhelper.common.ddl.model.internal.FkMutatedRuleConverter;
 
 public class ImportedColumn {
     @Column({"PKTABLE_CAT","PKTABLE_CATALOG"})

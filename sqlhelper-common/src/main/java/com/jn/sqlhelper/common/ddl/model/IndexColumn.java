@@ -1,13 +1,13 @@
-package com.jn.sqlhelper.common.ddlmodel;
+package com.jn.sqlhelper.common.ddl.model;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.sqlhelper.common.annotation.Column;
-import com.jn.sqlhelper.common.ddlmodel.internal.IndexType;
-import com.jn.sqlhelper.common.ddlmodel.internal.IndexTypeConverter;
-import com.jn.sqlhelper.common.ddlmodel.internal.SortType;
-import com.jn.sqlhelper.common.ddlmodel.internal.SortTypeConverter;
+import com.jn.sqlhelper.common.ddl.model.internal.IndexType;
+import com.jn.sqlhelper.common.ddl.model.internal.IndexTypeConverter;
+import com.jn.sqlhelper.common.ddl.model.internal.SortType;
+import com.jn.sqlhelper.common.ddl.model.internal.SortTypeConverter;
 
 public class IndexColumn {
     @Nullable

@@ -1,14 +1,14 @@
-package com.jn.sqlhelper.dialect.ddl.generator;
+package com.jn.sqlhelper.common.ddl.dump;
 
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.io.LineDelimiter;
-import com.jn.sqlhelper.common.ddlmodel.*;
-import com.jn.sqlhelper.common.ddlmodel.internal.BooleanFlag;
-import com.jn.sqlhelper.common.ddlmodel.internal.JdbcType;
-import com.jn.sqlhelper.common.ddlmodel.internal.SortType;
-import com.jn.sqlhelper.common.ddlmodel.internal.TableType;
+import com.jn.sqlhelper.common.ddl.model.*;
+import com.jn.sqlhelper.common.ddl.model.internal.BooleanFlag;
+import com.jn.sqlhelper.common.ddl.model.internal.JdbcType;
+import com.jn.sqlhelper.common.ddl.model.internal.SortType;
+import com.jn.sqlhelper.common.ddl.model.internal.TableType;
 import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.common.utils.Utils;
 import org.slf4j.Logger;

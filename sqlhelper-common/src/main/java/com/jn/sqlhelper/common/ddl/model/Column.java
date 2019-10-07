@@ -1,14 +1,12 @@
-package com.jn.sqlhelper.common.ddlmodel;
+package com.jn.sqlhelper.common.ddl.model;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
-import com.jn.langx.util.Strings;
-import com.jn.sqlhelper.common.ddlmodel.internal.BooleanFlag;
-import com.jn.sqlhelper.common.ddlmodel.internal.BooleanFlagConverter;
-import com.jn.sqlhelper.common.ddlmodel.internal.JdbcType;
-import com.jn.sqlhelper.common.ddlmodel.internal.JdbcTypeConverter;
-import com.jn.sqlhelper.common.utils.SQLs;
+import com.jn.sqlhelper.common.ddl.model.internal.BooleanFlag;
+import com.jn.sqlhelper.common.ddl.model.internal.BooleanFlagConverter;
+import com.jn.sqlhelper.common.ddl.model.internal.JdbcType;
+import com.jn.sqlhelper.common.ddl.model.internal.JdbcTypeConverter;
 
 public class Column {
     @Nullable

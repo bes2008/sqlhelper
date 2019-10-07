@@ -5,8 +5,9 @@ import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.io.IOs;
 import com.jn.sqlhelper.common.connection.ConnectionConfiguration;
 import com.jn.sqlhelper.common.connection.ConnectionFactory;
-import com.jn.sqlhelper.common.ddlmodel.*;
-import com.jn.sqlhelper.common.ddlmodel.internal.TableType;
+import com.jn.sqlhelper.common.ddl.dump.CommonTableGenerator;
+import com.jn.sqlhelper.common.ddl.model.*;
+import com.jn.sqlhelper.common.ddl.model.internal.TableType;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
 import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
 import org.junit.Test;
@@ -106,7 +107,7 @@ public class GetDatabaseInfoTests {
 
             System.out.println(table);
 
-            System.out.println(table.showAsDDL(true));
+            System.out.println(new CommonTableGenerator(dbMetaData).generate(table));
         }
     }
 

@@ -1,6 +1,6 @@
-package com.jn.sqlhelper.dialect.ddl.generator;
+package com.jn.sqlhelper.common.ddl.dump;
 
-import com.jn.sqlhelper.common.ddlmodel.Table;
+import com.jn.sqlhelper.common.ddl.model.Table;
 
 import java.sql.SQLException;
 

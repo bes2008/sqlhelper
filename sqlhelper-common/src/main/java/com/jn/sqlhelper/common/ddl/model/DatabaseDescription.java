@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.common.ddlmodel;
+package com.jn.sqlhelper.common.ddl.model;
 
 import com.jn.sqlhelper.common.utils.ThrowableFunction;
 import com.jn.sqlhelper.common.utils.Throwables;
@@ -18,6 +18,12 @@ public class DatabaseDescription {
 
     private void init() {
         parseAllProceduresAreCallable();
+        parseSupportsMixedCaseIdentifiers();
+        parseSupportsMixedCaseQuotedIdentifiers();
+        parseSupportsSchemasInTableDefinitions();
+        parseSupportsSchemasInIndexDefinitions();
+        parseSupportsCatalogsInTableDefinitions();
+        parseSupportsCatalogsInIndexDefinitions();
     }
 
     private boolean allProceduresAreCallable = false;

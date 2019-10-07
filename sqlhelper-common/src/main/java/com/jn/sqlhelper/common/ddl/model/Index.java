@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.common.ddlmodel;
+package com.jn.sqlhelper.common.ddl.model;
 
 import com.jn.langx.util.Preconditions;
 
