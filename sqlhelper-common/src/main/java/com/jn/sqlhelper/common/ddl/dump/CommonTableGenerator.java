@@ -84,7 +84,7 @@ public class CommonTableGenerator implements TableGenerator {
             builder.append(lineDelimiter);
 
             String afterAllColumnString = afterAllColumn(table);
-            if(Strings.isNotEmpty(afterAllColumnString)){
+            if (Strings.isNotEmpty(afterAllColumnString)) {
                 builder.append(",").append(afterAllColumnString);
             }
 
@@ -177,7 +177,7 @@ public class CommonTableGenerator implements TableGenerator {
         return builder.toString();
     }
 
-    protected String afterAllColumn(Table table){
+    protected String afterAllColumn(Table table) {
         return "";
     }
 
@@ -227,7 +227,7 @@ public class CommonTableGenerator implements TableGenerator {
      */
     protected String getTableFQN(String catalog, String schema, String tableName) {
         String catalogSeparator = databaseDesc.getCatalogSeparator();
-        return SQLs.getTableFQN(catalog, schema, tableName, catalogSeparator);
+        return SQLs.getTableFQN(catalog, schema, tableName, catalogSeparator, databaseDesc.isCatalogAtStart());
     }
 
 

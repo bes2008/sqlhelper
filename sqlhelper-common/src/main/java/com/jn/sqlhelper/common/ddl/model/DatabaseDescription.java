@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 
 public class DatabaseDescription {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseDescription.class);
@@ -185,7 +186,34 @@ public class DatabaseDescription {
         }, null);
     }
 
+    /**
+     * Retrieves the <code>String</code> that this database uses as the
+     * separator between a catalog and table name.
+     *
+     * @return the separator string
+     */
     public String getCatalogSeparator() {
         return this.catalogSeparator;
+    }
+
+    private boolean isCatalogAtStart = true;
+    private void parseIsCatalogAtStart(){
+        this.isCatalogAtStart = Throwables.ignoreThrowable(logger, true, new ThrowableFunction<Object, Boolean>() {
+            @Override
+            public Boolean doFun(Object o) throws Throwable {
+                return dbMetaData.isCatalogAtStart();
+            }
+        }, null);
+    }
+
+    /**
+     * Retrieves whether a catalog appears at the start of a fully qualified
+     * table name.  If not, the catalog appears at the end.
+     *
+     * @return <code>true</code> if the catalog name appears at the beginning
+     *         of a fully qualified table name; <code>false</code> otherwise
+     */
+    public boolean isCatalogAtStart(){
+        return this.isCatalogAtStart;
     }
 }
