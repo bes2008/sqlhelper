@@ -29,7 +29,7 @@
 
 
 # sqlhelper
-SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
+SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
 
 ## modules
 |   module         | sqlhelper version | JDK |  Description      |
