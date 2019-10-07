@@ -168,4 +168,9 @@ public class DatabaseDescription {
     public boolean supportsCatalogsInIndexDefinitions() {
         return supportsCatalogsInIndexDefinitions;
     }
+
+    public DatabaseMetaData getDbMetaData() {
+        return dbMetaData;
+    }
+
 }
