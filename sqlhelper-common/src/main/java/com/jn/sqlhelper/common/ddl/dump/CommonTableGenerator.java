@@ -18,11 +18,15 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
 public class CommonTableGenerator implements TableGenerator {
-    private DatabaseMetaData databaseMetaData;
+    private DatabaseDescription databaseDesc;
     private static final Logger logger = LoggerFactory.getLogger(CommonTableGenerator.class);
 
-    public CommonTableGenerator(DatabaseMetaData databaseMetaData) {
-        this.databaseMetaData = databaseMetaData;
+    public CommonTableGenerator(DatabaseDescription databaseDesc) {
+        this.databaseDesc = databaseDesc;
+    }
+
+    public CommonTableGenerator(DatabaseMetaData dbMetaData) {
+        this(new DatabaseDescription(dbMetaData));
     }
 
     @Override
@@ -79,6 +83,11 @@ public class CommonTableGenerator implements TableGenerator {
             });
             builder.append(lineDelimiter);
 
+            String afterAllColumnString = afterAllColumn(table);
+            if(Strings.isNotEmpty(afterAllColumnString)){
+                builder.append(",").append(afterAllColumnString);
+            }
+
             builder.append(");").append(lineDelimiter);
 
             // primary key
@@ -110,7 +119,8 @@ public class CommonTableGenerator implements TableGenerator {
         if (tableType == TableType.GLOBAL_TEMPORARY || tableType == TableType.LOCAL_TEMPORARY) {
             builder.append(" ").append(tableType.getCode());
         }
-        builder.append(" TABLE ").append(table.getName()).append(LineDelimiter.DEFAULT.getValue());
+        String tableFQN = getTableFQN(databaseDesc.supportsCatalogsInTableDefinitions() ? table.getCatalog() : null, databaseDesc.supportsSchemasInTableDefinitions() ? table.getSchema() : null, table.getName());
+        builder.append(" TABLE ").append(tableFQN).append(LineDelimiter.DEFAULT.getValue());
         return builder.toString();
     }
 
@@ -146,12 +156,12 @@ public class CommonTableGenerator implements TableGenerator {
             builder.append(" COMMENT '").append(column.getRemarks()).append("'");
         }
 
+        // foreign key references
         if (jdbcType == JdbcType.REF) {
             ImportedColumn importedColumn = table.getFkColumnMap().get(column.getName());
             if (importedColumn != null) {
-                String tableFQN = SQLs.getTableFQN(importedColumn.getPkTableCatalog(), importedColumn.getPkTableSchema(), importedColumn.getPkTableName());
+                String tableFQN = getTableFQN(databaseDesc.supportsCatalogsInTableDefinitions() ? importedColumn.getPkTableCatalog() : null, databaseDesc.supportsSchemasInTableDefinitions() ? importedColumn.getPkTableSchema() : null, importedColumn.getPkTableName());
                 builder.append(" REFERENCES ").append(tableFQN);
-                // referenced columns ???
                 builder.append(" (");
                 builder.append(importedColumn.getPkColumnName());
                 builder.append(")");
@@ -167,9 +177,14 @@ public class CommonTableGenerator implements TableGenerator {
         return builder.toString();
     }
 
+    protected String afterAllColumn(Table table){
+        return "";
+    }
+
     protected String generateAddPrimaryKeyClause(final Table table) throws SQLException {
         final StringBuilder builder = new StringBuilder(256);
-        builder.append("ALTER TABLE ").append(getTableFQN(table.getCatalog(), table.getSchema(), table.getName(), true)).append(" ADD PRIMARY KEY (");
+        String tableFQN = getTableFQN(databaseDesc.supportsCatalogsInTableDefinitions() ? table.getCatalog() : null, databaseDesc.supportsSchemasInTableDefinitions() ? table.getSchema() : null, table.getName());
+        builder.append("ALTER TABLE ").append(tableFQN).append(" ADD PRIMARY KEY (");
         Utils.forEach(table.getPkColumns(), new Consumer2<Integer, PrimaryKeyColumn>() {
             @Override
             public void accept(Integer i, PrimaryKeyColumn pkColumn) {
@@ -185,7 +200,8 @@ public class CommonTableGenerator implements TableGenerator {
 
     protected String generateCreateIndexDDLClause(Table table, Index index) {
         final StringBuilder builder = new StringBuilder(256);
-        builder.append("CREATE INDEX ").append(index.getName()).append(" ON ").append(table).append(" (");
+        String tableFQN = getTableFQN(databaseDesc.supportsCatalogsInIndexDefinitions() ? table.getCatalog() : null, databaseDesc.supportsSchemasInIndexDefinitions() ? table.getSchema() : null, table.getName());
+        builder.append("CREATE INDEX ").append(index.getName()).append(" ON ").append(tableFQN).append(" (");
         Utils.forEach(index.getColumns(), new Consumer2<Integer, IndexColumn>() {
             @Override
             public void accept(Integer i, IndexColumn indexColumn) {
@@ -203,17 +219,16 @@ public class CommonTableGenerator implements TableGenerator {
         return builder.toString();
     }
 
-    protected String getTableFQN(String catalog, String schema, String tableName, boolean catalogSupportedInClause) {
-        if (catalogSupportedInClause) {
-            String catalogSeparator = null;
-            try {
-                catalogSeparator = databaseMetaData.getCatalogSeparator();
-            } catch (SQLException ex) {
-
-                catalogSeparator = ".";
-            }
-            return SQLs.getTableFQN(catalog, schema, tableName, catalogSeparator);
-        }
-        return tableName;
+    /**
+     * @param catalog   null if catalog is not supported
+     * @param schema    null if schema is not supported
+     * @param tableName the table name
+     * @return table full qualified name
+     */
+    protected String getTableFQN(String catalog, String schema, String tableName) {
+        String catalogSeparator = databaseDesc.getCatalogSeparator();
+        return SQLs.getTableFQN(catalog, schema, tableName, catalogSeparator);
     }
+
+
 }

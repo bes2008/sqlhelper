@@ -24,6 +24,7 @@ public class DatabaseDescription {
         parseSupportsSchemasInIndexDefinitions();
         parseSupportsCatalogsInTableDefinitions();
         parseSupportsCatalogsInIndexDefinitions();
+        parseCatalogSeparator();
     }
 
     private boolean allProceduresAreCallable = false;
@@ -173,4 +174,18 @@ public class DatabaseDescription {
         return dbMetaData;
     }
 
+    private String catalogSeparator;
+
+    private void parseCatalogSeparator() {
+        this.catalogSeparator = Throwables.ignoreThrowable(logger, ".", new ThrowableFunction<Object, String>() {
+            @Override
+            public String doFun(Object o) throws Throwable {
+                return dbMetaData.getCatalogSeparator();
+            }
+        }, null);
+    }
+
+    public String getCatalogSeparator() {
+        return this.catalogSeparator;
+    }
 }
