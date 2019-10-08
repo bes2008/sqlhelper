@@ -20,7 +20,7 @@ public class LinkedCaseInsensitiveMap<V> implements Map<String, V>, Serializable
      * Create a new LinkedCaseInsensitiveMap that stores case-insensitive keys
      * according to the default Locale (by default in lower case).
      *
-     * @see #converterKey(String)
+     * @see #convertKey(String)
      */
     public LinkedCaseInsensitiveMap() {
         this((Locale) null);
@@ -31,7 +31,7 @@ public class LinkedCaseInsensitiveMap<V> implements Map<String, V>, Serializable
      * according to the given Locale (by default in lower case).
      *
      * @param locale the Locale to use for case-insensitive key conversion
-     * @see #converterKey(String)
+     * @see #convertKey(String)
      */
     public LinkedCaseInsensitiveMap(@Nullable Locale locale) {
         this(16, locale);
@@ -43,7 +43,7 @@ public class LinkedCaseInsensitiveMap<V> implements Map<String, V>, Serializable
      * according to the default Locale (by default in lower case).
      *
      * @param initialCapacity the initial capacity
-     * @see #converterKey(String)
+     * @see #convertKey(String)
      */
     public LinkedCaseInsensitiveMap(int initialCapacity) {
         this(initialCapacity, null);
@@ -56,7 +56,7 @@ public class LinkedCaseInsensitiveMap<V> implements Map<String, V>, Serializable
      *
      * @param initialCapacity the initial capacity
      * @param locale          the Locale to use for case-insensitive key conversion
-     * @see #converterKey(String)
+     * @see #convertKey(String)
      */
     public LinkedCaseInsensitiveMap(int initialCapacity, @Nullable Locale locale) {
         this.targetMap = new LinkedHashMap<String, V>(initialCapacity);
@@ -87,7 +87,7 @@ public class LinkedCaseInsensitiveMap<V> implements Map<String, V>, Serializable
 
     @Override
     public boolean containsKey(Object key) {
-        return (key instanceof String && this.targetMap.containsKey(converterKey((String) key)));
+        return (key instanceof String && this.targetMap.containsKey(convertKey((String) key)));
     }
 
     @Override
@@ -99,7 +99,7 @@ public class LinkedCaseInsensitiveMap<V> implements Map<String, V>, Serializable
     @Nullable
     public V get(Object key) {
         if (key instanceof String) {
-            String caseInsensitiveKey = converterKey((String) key);
+            String caseInsensitiveKey = convertKey((String) key);
             if (caseInsensitiveKey != null) {
                 return this.targetMap.get(caseInsensitiveKey);
             }
@@ -119,7 +119,7 @@ public class LinkedCaseInsensitiveMap<V> implements Map<String, V>, Serializable
     @Override
     @Nullable
     public V put(String key, @Nullable V value) {
-        String internalKey = converterKey((String) key);
+        String internalKey = convertKey((String) key);
         return this.targetMap.put(internalKey, value);
     }
 
@@ -140,7 +140,7 @@ public class LinkedCaseInsensitiveMap<V> implements Map<String, V>, Serializable
     @Nullable
     public V remove(Object key) {
         if (key instanceof String) {
-            String caseInsensitiveKey = converterKey((String) key);
+            String caseInsensitiveKey = convertKey((String) key);
             if (caseInsensitiveKey != null) {
                 return this.targetMap.remove(caseInsensitiveKey);
             }
@@ -155,7 +155,7 @@ public class LinkedCaseInsensitiveMap<V> implements Map<String, V>, Serializable
 
     @Nullable
     public V putIfAbsent(String key, @Nullable V value) {
-        String internalKey = converterKey(key);
+        String internalKey = convertKey(key);
         V oldValue = targetMap.get(internalKey);
         if (oldValue == null) {
             targetMap.put(internalKey, value);
@@ -165,7 +165,7 @@ public class LinkedCaseInsensitiveMap<V> implements Map<String, V>, Serializable
 
     @Nullable
     public V supplyIfAbsent(String key, @NonNull Supplier<? super String, ? extends V> supplier) {
-        String internalKey = converterKey(key);
+        String internalKey = convertKey(key);
         V oldValue = targetMap.get(internalKey);
         if (oldValue == null) {
             targetMap.put(internalKey, supplier.get(key));
@@ -217,7 +217,7 @@ public class LinkedCaseInsensitiveMap<V> implements Map<String, V>, Serializable
      * Used for case-insensitive key conversion.
      *
      * @see #LinkedCaseInsensitiveMap(Locale)
-     * @see #converterKey(String)
+     * @see #convertKey(String)
      * @since 4.3.10
      */
     public Locale getLocale() {
@@ -233,7 +233,7 @@ public class LinkedCaseInsensitiveMap<V> implements Map<String, V>, Serializable
      * @return the key to use for storing
      * @see String#toLowerCase(Locale)
      */
-    protected String converterKey(String key) {
+    protected String convertKey(String key) {
         return key.toLowerCase(getLocale());
     }
 
