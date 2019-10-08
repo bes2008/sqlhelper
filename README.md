@@ -92,7 +92,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 9. Supports JDK6+
 10. Supports Memory Pagination
 11. Supports SqlSymbolMapper, use it you can mapping any symbol to SQL symbol
-12. DDL dumper
+12. Supports Dump DDL
 
 #### sqlhelper vs mybatis-pagehelper
 |  metric                  | mybatis-pagehelper |      sqlhelper    |
