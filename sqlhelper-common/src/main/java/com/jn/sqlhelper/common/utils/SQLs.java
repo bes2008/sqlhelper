@@ -22,6 +22,37 @@ import java.util.StringTokenizer;
 public class SQLs {
     public static final String WHITESPACE = " \n\r\f\t";
 
+    public static String getTableFQN(String catalog, String schema, String tableName) {
+        return getTableFQN(catalog, schema, tableName, true);
+    }
+
+    public static String getTableFQN(String catalog, String schema, String tableName, boolean catalogAtStart) {
+        return getTableFQN(catalog, schema, tableName, null, catalogAtStart);
+    }
+
+    public static String getTableFQN(String catalog, String schema, String tableName, String separator, boolean catalogAtStart) {
+        if (Strings.isEmpty(separator)) {
+            separator = ".";
+        }
+        String fqn = tableName;
+        if (catalogAtStart) {
+            if (Strings.isNotEmpty(schema)) {
+                fqn = schema + separator + fqn;
+            }
+            if (Strings.isNotEmpty(catalog)) {
+                fqn = catalog + separator + fqn;
+            }
+        } else {
+            if (Strings.isNotEmpty(schema)) {
+                fqn = fqn + separator + schema;
+            }
+            if (Strings.isNotEmpty(catalog)) {
+                fqn = fqn + separator + catalog;
+            }
+        }
+        return fqn;
+    }
+
     //DML
     public static boolean isSelectStatement(String sql) {
         String sql0 = sql.trim();

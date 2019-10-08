@@ -29,7 +29,7 @@
 
 
 # sqlhelper
-SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
+SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
 
 ## modules
 |   module         | sqlhelper version | JDK |  Description      |
@@ -53,23 +53,33 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 #### Key Features
 1. Supports MyBatis, JFinal, EBean, Mango, Hibernate, SpringJdbc
 2. Supported 100+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
-    + AiSQL (阿里 MySQL)
+    + AliSQL (阿里 MySQL)
+    + AntDB (亚信)
     + CirroDB (东方国信 行云)
     + CynosDB (腾讯云数据库)
     + Doris (Apache Doris，百度研发)
     + DM (达梦)
+    + EsgynDB (易鲸捷)
     + GaussDB (华为 高斯)
     + GBase (南大通用)
+    + GoldenDB (中兴)
+    + HHDB (恒辉数据库)
     + HighGo (瀚高)
     + HybridDB (阿里巴巴 分布式PostgreSQL)
     + K-DB (浪潮)
     + KingBase (金仓)
     + MaxCompute (阿里巴巴)
+    + OBase (上海丛云信息科技)
+    + OceanBase (阿里巴巴/蚂蚁金服 兼容mysql)
     + OSCAR (神州通用)
     + OpenBase (东软)
+    + RadonDB (青云)
     + SequoiaDB (巨杉)
-    + TiDB (北京平凯星辰科技))
+    + SinoDB (星瑞格)
     + TDSQL (腾讯 分布式MySQL)
+    + TiDB (北京平凯星辰科技))
+    + Trafodion (易鲸捷 EsgynDB的开源版)
+    
     
     If you want know all RDMBS ranking, you can find them in [DB Engines](https://db-engines.com/en/ranking/relational+dbms).
     
@@ -82,6 +92,7 @@ SQL Tools ( **Dialect**, **Pagination**, **UrlParser**, **SqlStatementParser**, 
 9. Supports JDK6+
 10. Supports Memory Pagination
 11. Supports SqlSymbolMapper, use it you can mapping any symbol to SQL symbol
+12. DDL dumper
 
 #### sqlhelper vs mybatis-pagehelper
 |  metric                  | mybatis-pagehelper |      sqlhelper    |

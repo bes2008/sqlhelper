@@ -129,7 +129,7 @@ public class SQLStatementInstrumentor {
     }
 
     public String instrumentLimitSql(Dialect dialect, String sql, final RowSelection selection) {
-        if (LimitHelper.useLimit(dialect, selection)) {
+        if (LimitHelper.useLimit(dialect, selection) && dialect.isSupportsVariableLimit()) {
             String originalSql = sql;
             if (this.config.isCacheInstrumentedSql()) {
                 sql = getInstrumentedSelectStatement(originalSql).getLimitSql(dialect.getDatabaseId(), selection.hasOffset());

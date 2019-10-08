@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.springjdbc;
+package com.jn.sqlhelper.springjdbc.statement;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-class PaginationPreparedStatement implements PreparedStatement {
+public class PaginationPreparedStatement implements PreparedStatement {
     private PreparedStatement delegate;
 
     private int indexOffset = -1; // -1 disable offset
@@ -23,7 +23,7 @@ class PaginationPreparedStatement implements PreparedStatement {
         this.indexOffset = indexOffset;
     }
 
-    PaginationPreparedStatement(PreparedStatement delegate) {
+    public PaginationPreparedStatement(PreparedStatement delegate) {
         this.delegate = delegate;
     }
 

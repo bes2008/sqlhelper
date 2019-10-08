@@ -18,6 +18,8 @@ import com.github.pagehelper.IPage;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.sqlhelper.common.resultset.BeanRowMapper;
+import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
@@ -25,6 +27,7 @@ import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.examples.common.dao.UserDao;
 import com.jn.sqlhelper.examples.common.model.User;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
+import com.jn.sqlhelper.springjdbc.resultset.SqlHelperRowMapperResultSetExtractor;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -165,6 +168,28 @@ public class UserController {
         System.out.println(json);
         return request.getResult();
     }
+
+    @GetMapping("/custom_BeanRowMapperTests")
+    public PagingResult custom_BeanRowMapperTests(
+            @RequestParam(name = "pageNo", required = false) Integer pageNo,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name = "sort", required = false) String sort) {
+        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
+        PagingRequestContextHolder.getContext().setPagingRequest(request);
+        StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
+
+        BeanRowMapper<User> beanRowMapper = new BeanRowMapper(User.class);
+        List<User> users = jdbcTemplate.query(sqlBuilder.toString(), new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setInt(1, 10);
+            }
+        }, new SqlHelperRowMapperResultSetExtractor<User>(beanRowMapper));
+        String json = JSONBuilderProvider.simplest().toJson(request.getResult());
+        System.out.println(json);
+        return request.getResult();
+    }
+
 
     @GetMapping("/{id}")
     public User getById(@RequestParam("id") String id) {

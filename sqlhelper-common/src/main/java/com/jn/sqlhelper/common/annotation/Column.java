@@ -15,13 +15,22 @@
 
 package com.jn.sqlhelper.common.annotation;
 
+import com.jn.sqlhelper.common.ddl.model.internal.JdbcType;
+import com.jn.sqlhelper.common.utils.NoopConverter;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
+import static com.jn.sqlhelper.common.ddl.model.internal.JdbcType.UNKNOWN;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE, ElementType.METHOD})
 public @interface Column {
-    String value() default "";
+    String[] value() default {};
+
+    JdbcType jdbcType() default UNKNOWN;
+
+    Class converter() default NoopConverter.class;
 }
