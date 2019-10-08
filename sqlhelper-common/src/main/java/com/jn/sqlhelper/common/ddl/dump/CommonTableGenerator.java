@@ -10,7 +10,6 @@ import com.jn.sqlhelper.common.ddl.model.internal.JdbcType;
 import com.jn.sqlhelper.common.ddl.model.internal.SortType;
 import com.jn.sqlhelper.common.ddl.model.internal.TableType;
 import com.jn.sqlhelper.common.utils.SQLs;
-import com.jn.sqlhelper.common.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +71,7 @@ public class CommonTableGenerator implements TableGenerator {
 
             builder.append("(").append(lineDelimiter);
             // columns
-            Utils.forEach(table.getColumns(), new Consumer2<Integer, Column>() {
+            Collects.forEach(table.getColumns(), new Consumer2<Integer, Column>() {
                 @Override
                 public void accept(Integer i, Column column) {
                     if (i > 0) {
@@ -185,7 +184,7 @@ public class CommonTableGenerator implements TableGenerator {
         final StringBuilder builder = new StringBuilder(256);
         String tableFQN = getTableFQN(databaseDesc.supportsCatalogsInTableDefinitions() ? table.getCatalog() : null, databaseDesc.supportsSchemasInTableDefinitions() ? table.getSchema() : null, table.getName());
         builder.append("ALTER TABLE ").append(tableFQN).append(" ADD PRIMARY KEY (");
-        Utils.forEach(table.getPkColumns(), new Consumer2<Integer, PrimaryKeyColumn>() {
+        Collects.forEach(table.getPkColumns(), new Consumer2<Integer, PrimaryKeyColumn>() {
             @Override
             public void accept(Integer i, PrimaryKeyColumn pkColumn) {
                 if (i > 0) {
@@ -202,7 +201,7 @@ public class CommonTableGenerator implements TableGenerator {
         final StringBuilder builder = new StringBuilder(256);
         String tableFQN = getTableFQN(databaseDesc.supportsCatalogsInIndexDefinitions() ? table.getCatalog() : null, databaseDesc.supportsSchemasInIndexDefinitions() ? table.getSchema() : null, table.getName());
         builder.append("CREATE INDEX ").append(index.getName()).append(" ON ").append(tableFQN).append(" (");
-        Utils.forEach(index.getColumns(), new Consumer2<Integer, IndexColumn>() {
+        Collects.forEach(index.getColumns(), new Consumer2<Integer, IndexColumn>() {
             @Override
             public void accept(Integer i, IndexColumn indexColumn) {
                 if (i > 0) {

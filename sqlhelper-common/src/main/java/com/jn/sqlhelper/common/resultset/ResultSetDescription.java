@@ -1,17 +1,18 @@
 package com.jn.sqlhelper.common.resultset;
 
+import com.jn.langx.util.ThrowableFunction;
+import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Arrs;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.common.ddl.model.internal.JdbcType;
-import com.jn.sqlhelper.common.utils.ThrowableFunction;
-import com.jn.sqlhelper.common.utils.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSetMetaData;
 import java.sql.Types;
 import java.util.List;
+
 @SuppressWarnings({"unused"})
 public class ResultSetDescription {
     private static final Logger logger = LoggerFactory.getLogger(ResultSetDescription.class);

@@ -1,7 +1,7 @@
 package com.jn.sqlhelper.common.ddl.model;
 
-import com.jn.sqlhelper.common.utils.ThrowableFunction;
-import com.jn.sqlhelper.common.utils.Throwables;
+import com.jn.langx.util.ThrowableFunction;
+import com.jn.langx.util.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

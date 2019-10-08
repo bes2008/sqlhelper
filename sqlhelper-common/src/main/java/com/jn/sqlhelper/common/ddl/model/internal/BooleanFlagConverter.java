@@ -1,9 +1,9 @@
 package com.jn.sqlhelper.common.ddl.model.internal;
 
+import com.jn.langx.Converter;
+import com.jn.langx.exception.ValueConvertException;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.common.exception.ValueConvertException;
-import com.jn.sqlhelper.common.utils.Converter;
 
 public class BooleanFlagConverter implements Converter<String, BooleanFlag> {
     @Override

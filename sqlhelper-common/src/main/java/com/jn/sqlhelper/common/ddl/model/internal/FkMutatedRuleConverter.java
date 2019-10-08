@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.common.ddl.model.internal;
 
-import com.jn.sqlhelper.common.utils.Converter;
+import com.jn.langx.Converter;
 
 public class FkMutatedRuleConverter implements Converter<Integer, FkMutatedRule> {
     @Override

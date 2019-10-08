@@ -1,12 +1,12 @@
 package com.jn.sqlhelper.common.resultset;
 
+import com.jn.langx.Converter;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.converter.NoopConverter;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.langx.util.reflect.classparse.FieldSetterAndGetterClassParser;
 import com.jn.sqlhelper.common.annotation.Column;
-import com.jn.sqlhelper.common.utils.Converter;
-import com.jn.sqlhelper.common.utils.FieldSetterAndGetterClassParser;
-import com.jn.sqlhelper.common.utils.NoopConverter;
 
 import java.lang.reflect.Field;
 

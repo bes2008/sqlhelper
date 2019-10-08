@@ -1,7 +1,7 @@
 package com.jn.sqlhelper.common.resultset;
 
 import com.jn.langx.annotation.Nullable;
-import com.jn.sqlhelper.common.utils.LinkedCaseInsensitiveMap;
+import com.jn.langx.util.collection.LinkedCaseInsensitiveMap;
 
 import java.sql.ResultSet;
 import java.util.Map;

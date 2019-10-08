@@ -15,8 +15,8 @@
 
 package com.jn.sqlhelper.common.annotation;
 
+import com.jn.langx.util.converter.NoopConverter;
 import com.jn.sqlhelper.common.ddl.model.internal.JdbcType;
-import com.jn.sqlhelper.common.utils.NoopConverter;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

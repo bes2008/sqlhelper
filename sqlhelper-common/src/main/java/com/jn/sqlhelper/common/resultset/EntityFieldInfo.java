@@ -1,8 +1,8 @@
 package com.jn.sqlhelper.common.resultset;
 
+import com.jn.langx.Converter;
 import com.jn.langx.util.Strings;
-import com.jn.sqlhelper.common.utils.Converter;
-import com.jn.sqlhelper.common.utils.FieldInfo;
+import com.jn.langx.util.reflect.classparse.FieldInfo;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
