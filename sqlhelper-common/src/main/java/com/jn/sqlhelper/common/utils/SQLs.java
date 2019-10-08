@@ -15,7 +15,9 @@
 package com.jn.sqlhelper.common.utils;
 
 import com.jn.langx.util.Strings;
+import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 
+import java.sql.DatabaseMetaData;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -51,6 +53,15 @@ public class SQLs {
             }
         }
         return fqn;
+    }
+
+    public static String getTableFQN(DatabaseMetaData metaData, String catalog, String schema, String tableName) {
+        return getTableFQN(new DatabaseDescription(metaData), catalog, schema, tableName);
+    }
+
+    public static String getTableFQN(DatabaseDescription databaseDesc, String catalog, String schema, String tableName) {
+        String catalogSeparator = databaseDesc.getCatalogSeparator();
+        return SQLs.getTableFQN(catalog, schema, tableName, catalogSeparator, databaseDesc.isCatalogAtStart());
     }
 
     //DML

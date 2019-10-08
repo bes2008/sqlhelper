@@ -15,8 +15,16 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
+import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.sqlhelper.common.ddl.dump.CommonTableGenerator;
+import com.jn.sqlhelper.common.ddl.dump.DatabaseLoader;
+import com.jn.sqlhelper.common.ddl.dump.TableGenerator;
+import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
+import com.jn.sqlhelper.common.ddl.model.Table;
+import com.jn.sqlhelper.common.exception.TableNonExistsException;
+import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.DatabaseInfo;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.RowSelection;
@@ -37,6 +45,7 @@ import java.util.Properties;
 public abstract class AbstractDialect<T extends AbstractDialect> implements Dialect {
     private AbstractDialect delegate = null;
     private UrlParser urlParser;
+    private TableGenerator tableGenerator;
     private LimitHandler limitHandler;
     private Boolean isUseLimitInVariableMode = null;
 
@@ -200,6 +209,18 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     @Override
     public List<String> getUrlSchemas() {
         return getUrlParser().getUrlSchemas();
+    }
+
+    protected TableGenerator createTableGenerator(DatabaseDescription databaseDescription) {
+        return new CommonTableGenerator(databaseDescription);
+    }
+
+    public final String generate(DatabaseDescription database, String catalog, String schema, String tableName) throws SQLException {
+        Table table = new DatabaseLoader().loadTable(database, catalog, schema, tableName);
+        if (table != null) {
+            return createTableGenerator(database).generate(table);
+        }
+        throw new TableNonExistsException(StringTemplates.formatWithPlaceholder("Table {} is not exists", SQLs.getTableFQN(database, catalog, schema, tableName)));
     }
 
     @Override
