@@ -291,6 +291,10 @@
                             <serverId>sonatype_oss</serverId>
                             <nexusUrl>https://oss.sonatype.org</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <sslAllowAll>true</sslAllowAll>
+                            <stagingProgressPauseDurationSeconds>20</stagingProgressPauseDurationSeconds>
+                            <stagingProgressTimeoutMinutes>30</stagingProgressTimeoutMinutes>
+                            <detectBuildFailures>false</detectBuildFailures>
                         </configuration>
                     </plugin>
                     <plugin>
