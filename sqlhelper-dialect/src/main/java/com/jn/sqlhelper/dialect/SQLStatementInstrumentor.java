@@ -18,6 +18,7 @@ package com.jn.sqlhelper.dialect;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
@@ -81,7 +82,7 @@ public class SQLStatementInstrumentor {
     }
 
     public boolean beginIfSupportsLimit(final DatabaseMetaData databaseMetaData) {
-        final Dialect dialect = this.dialectRegistry.getDialectByDatabaseMetadata(databaseMetaData);
+        final Dialect dialect = this.getDialect(databaseMetaData);
         return this.beginIfSupportsLimit(dialect);
     }
 
@@ -101,6 +102,19 @@ public class SQLStatementInstrumentor {
     }
 
     private Dialect getDialect(final Statement statement) {
+        Dialect dialect = null;
+        if (statement != null) {
+            try {
+                final Connection connection = statement.getConnection();
+                dialect = getDialect(connection.getMetaData());
+            } catch (SQLException e) {
+                logger.error("sql error code: {}, message: {}", e.getErrorCode(), e.getMessage(), e);
+            }
+        }
+        return dialect;
+    }
+
+    private Dialect getDialect(@Nullable DatabaseMetaData databaseMetaData) {
         Dialect dialect = this.getCurrentDialect();
         if (dialect != null) {
             return dialect;
@@ -112,13 +126,8 @@ public class SQLStatementInstrumentor {
         if (dialect == null && this.config.getDialectClassName() != null) {
             dialect = this.dialectRegistry.getDialectByClassName(this.config.getDialectClassName());
         }
-        if (dialect == null && statement != null) {
-            try {
-                final Connection connection = statement.getConnection();
-                dialect = this.dialectRegistry.getDialectByDatabaseMetadata(connection.getMetaData());
-            } catch (SQLException e) {
-                SQLStatementInstrumentor.logger.error("sql error code: {}, message: {}", new Object[]{Integer.valueOf(e.getErrorCode()), e.getMessage(), e});
-            }
+        if (dialect == null && databaseMetaData != null) {
+            dialect = this.dialectRegistry.getDialectByDatabaseMetadata(databaseMetaData);
         }
         return dialect;
     }
@@ -193,7 +202,7 @@ public class SQLStatementInstrumentor {
     }
 
     public String countSql(String originalSql, String countColumn) {
-        if(Strings.isBlank(countColumn)){
+        if (Strings.isBlank(countColumn)) {
             countColumn = "1";
         }
         InstrumentedSelectStatement instrumentedSql = getInstrumentedSelectStatement(originalSql);
