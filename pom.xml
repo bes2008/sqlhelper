@@ -28,6 +28,7 @@
         <module>sqlhelper-springjdbc</module>
         <module>sqlhelper-springjdbc-spring-boot</module>
         <module>sqlhelper-common</module>
+        <module>sqlhelper-cli</module>
     </modules>
     <developers>
         <developer>
