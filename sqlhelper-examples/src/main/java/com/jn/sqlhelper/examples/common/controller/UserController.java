@@ -14,12 +14,10 @@
 
 package com.jn.sqlhelper.examples.common.controller;
 
-import com.github.pagehelper.IPage;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
-import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
@@ -34,13 +32,16 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Api
 @RestController
@@ -190,6 +191,33 @@ public class UserController {
         return request.getResult();
     }
 
+    @GetMapping("/_useSpringJdbcNamedTemplate")
+    public PagingResult list_useSpringJdbcNamedTemplate(
+            @RequestParam(name = "pageNo", required = false) Integer pageNo,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name = "sort", required = false) String sort) {
+        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
+        PagingRequestContextHolder.getContext().setPagingRequest(request);
+        StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > :age");
+
+        NamedParameterJdbcTemplate jdbcTemplate2 = new NamedParameterJdbcTemplate(jdbcTemplate);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("age", 10);
+
+        List<User> users = jdbcTemplate2.query(sqlBuilder.toString(), paramMap, new RowMapper<User>() {
+            @Override
+            public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+                User u = new User();
+                u.setId(rs.getString("ID"));
+                u.setName(rs.getString("NAME"));
+                u.setAge(rs.getInt("AGE"));
+                return u;
+            }
+        });
+        String json = JSONBuilderProvider.simplest().toJson(users);
+        System.out.println(json);
+        return request.getResult();
+    }
 
     @GetMapping("/{id}")
     public User getById(@RequestParam("id") String id) {
