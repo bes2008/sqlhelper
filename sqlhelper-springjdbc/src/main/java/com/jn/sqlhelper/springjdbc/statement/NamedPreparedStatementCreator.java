@@ -37,13 +37,21 @@ public class NamedPreparedStatementCreator implements PreparedStatementCreator, 
         this.parameters = parameters;
         this.factory = factory;
         // Account for named parameters being used multiple times
-        Set<String> names = new HashSet<String>();
-        for (int i = 0; i < parameters.size(); i++) {
-            Object param = parameters.get(i);
-            if (param instanceof SqlParameterValue) {
-                names.add(((SqlParameterValue) param).getName());
-            } else {
-                names.add("Parameter #" + i);
+
+        if (this.parameters.size() != factory.getDeclaredParameters().size()) {
+            Set<String> names = new HashSet<String>();
+            for (int i = 0; i < parameters.size(); i++) {
+                Object param = parameters.get(i);
+                if (param instanceof SqlParameterValue) {
+                    names.add(((SqlParameterValue) param).getName());
+                } else {
+                    names.add("Parameter #" + i);
+                }
+            }
+            if (names.size() != factory.getDeclaredParameters().size()) {
+                throw new InvalidDataAccessApiUsageException(
+                        "SQL [" + getSql() + "]: given " + names.size() +
+                                " parameters but expected " + factory.getDeclaredParameters().size());
             }
         }
     }
@@ -74,7 +82,7 @@ public class NamedPreparedStatementCreator implements PreparedStatementCreator, 
 
     @Override
     public void setValues(PreparedStatement ps) throws SQLException {
-// Set arguments: Does nothing if there are no parameters.
+        // Set arguments: Does nothing if there are no parameters.
         int sqlColIndx = 1;
         for (int i = 0; i < this.parameters.size(); i++) {
             Object in = this.parameters.get(i);
@@ -112,8 +120,21 @@ public class NamedPreparedStatementCreator implements PreparedStatementCreator, 
         }
     }
 
+
     @Override
     public String getSql() {
         return actualSql;
+    }
+
+    public List getParameters() {
+        return parameters;
+    }
+
+    public NamedPreparedStatementCreatorFactory getFactory() {
+        return factory;
+    }
+
+    public void setFactory(NamedPreparedStatementCreatorFactory factory) {
+        this.factory = factory;
     }
 }

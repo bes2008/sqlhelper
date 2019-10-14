@@ -2,17 +2,15 @@ package com.jn.sqlhelper.springjdbc;
 
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
+import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
-import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.pagination.*;
-import com.jn.sqlhelper.springjdbc.statement.PaginationPreparedStatement;
-import com.jn.sqlhelper.springjdbc.statement.PaginationPreparedStatementSetter;
-import com.jn.sqlhelper.springjdbc.statement.SimplePreparedStatementCreator;
-import com.jn.sqlhelper.springjdbc.statement.SpringJdbcQueryParameters;
+import com.jn.sqlhelper.springjdbc.statement.*;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.support.JdbcUtils;
@@ -249,7 +247,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                     boolean needQuery = true;
                     if (needCountInPagingRequest(request)) {
                         String countSql = instrumentor.countSql(sql, request.getCountColumn());
-                        int count = super.query(new SimplePreparedStatementCreator(countSql), pss, new ResultSetExtractor<Integer>() {
+                        int count = super.query(new SimplePreparedStatementCreator(countSql), pss == null && (psc instanceof NamedPreparedStatementCreator) ? (NamedPreparedStatementCreator) psc : pss, new ResultSetExtractor<Integer>() {
                             @Override
                             public Integer extractData(ResultSet rs0) throws SQLException, DataAccessException {
                                 if (rs0.first()) {
@@ -276,13 +274,21 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         applyStatementSettingsInPaginationRequest(request);
                         RowSelection rowSelection = rowSelectionBuilder.build(request);
                         String paginationSql = PAGING_CONTEXT.isOrderByRequest() ? instrumentor.instrumentOrderByLimitSql(sql, request.getOrderBy(), rowSelection) : instrumentor.instrumentLimitSql(sql, rowSelection);
-                        PreparedStatement ps = new PaginationPreparedStatement(new SimplePreparedStatementCreator(paginationSql).createPreparedStatement(conn));
+
+                        if (psc != null && psc instanceof NamedPreparedStatementCreator) {
+                            NamedPreparedStatementCreator oldCreator = (NamedPreparedStatementCreator) psc;
+                            psc = new NamedPreparedStatementCreator(paginationSql, oldCreator.getParameters(), oldCreator.getFactory());
+                        } else {
+                            psc = new SimplePreparedStatementCreator(paginationSql);
+                        }
+                        PreparedStatement ps = new PaginationPreparedStatement(psc.createPreparedStatement(conn));
 
                         SpringJdbcQueryParameters queryParameters = new SpringJdbcQueryParameters();
                         queryParameters.setCallable(false);
                         queryParameters.setRowSelection(rowSelection);
 
-                        instrumentor.bindParameters(ps, new PaginationPreparedStatementSetter(pss), queryParameters, true);
+                        PaginationPreparedStatementSetter parameterSetter = (pss == null && psc instanceof NamedPreparedStatementCreator) ? new PaginationPreparedStatementSetter((NamedPreparedStatementCreator) psc) : new PaginationPreparedStatementSetter(pss);
+                        instrumentor.bindParameters(ps, parameterSetter, queryParameters, true);
                         // DO execute
                         ResultSet resultSet = null;
                         try {
@@ -311,6 +317,14 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
             }
             return (T) rs;
         }
+    }
+
+    /**
+     * for Spring 4.x
+     */
+    protected DataAccessException translateException(String task, String sql, SQLException ex) {
+        DataAccessException dae = getExceptionTranslator().translate(task, sql, ex);
+        return (dae != null ? dae : new UncategorizedSQLException(task, sql, ex));
     }
 
     private void applyStatementSettingsInPaginationRequest(PagingRequest pagingRequest) throws SQLException {

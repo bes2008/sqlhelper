@@ -25,6 +25,7 @@ import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.examples.common.dao.UserDao;
 import com.jn.sqlhelper.examples.common.model.User;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
+import com.jn.sqlhelper.springjdbc.NamedParameterJdbcTemplate;
 import com.jn.sqlhelper.springjdbc.resultset.SqlHelperRowMapperResultSetExtractor;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.PreparedStatement;

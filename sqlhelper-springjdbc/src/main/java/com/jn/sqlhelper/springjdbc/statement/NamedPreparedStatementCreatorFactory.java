@@ -14,11 +14,12 @@
 
 package com.jn.sqlhelper.springjdbc.statement;
 
+import com.jn.langx.annotation.Nullable;
+import com.jn.langx.util.collection.Collects;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.lang.Nullable;
 
 import java.sql.ResultSet;
 import java.util.Arrays;
@@ -46,7 +47,6 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
     private String[] generatedKeysColumnNames;
 
 
-
     /**
      * Create a new factory. Will need to add parameters via the
      * {@link #addParameter} method or have no parameters.
@@ -54,7 +54,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      * @param sql the SQL statement to execute
      */
     public NamedPreparedStatementCreatorFactory(String sql) {
-        super(sql);
+        this(sql, Collects.<SqlParameter>emptyLinkedList());
     }
 
     /**
@@ -64,7 +64,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      * @param types int array of JDBC types
      */
     public NamedPreparedStatementCreatorFactory(String sql, int... types) {
-        super(sql, types);
+        this(sql, SqlParameter.sqlTypesToAnonymousParameterList(types));
     }
 
     /**
@@ -74,7 +74,9 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      * @param declaredParameters list of {@link SqlParameter} objects
      */
     public NamedPreparedStatementCreatorFactory(String sql, List<SqlParameter> declaredParameters) {
-        super(sql, declaredParameters);
+        super(sql, (List<SqlParameter>) null);
+        this.sql = sql;
+        this.declaredParameters = declaredParameters;
     }
 
     /**
@@ -83,7 +85,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      * @param params list of parameters (may be {@code null})
      */
     @Override
-    public PreparedStatementSetter newPreparedStatementSetter(@Nullable List<?> params) {
+    public PreparedStatementSetter newPreparedStatementSetter(List<?> params) {
         return new NamedPreparedStatementCreator(sql, params != null ? params : Collections.emptyList(), this);
     }
 
@@ -93,7 +95,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      * @param params the parameter array (may be {@code null})
      */
     @Override
-    public PreparedStatementSetter newPreparedStatementSetter(@Nullable Object[] params) {
+    public PreparedStatementSetter newPreparedStatementSetter(Object[] params) {
         return new NamedPreparedStatementCreator(sql, params != null ? Arrays.asList(params) : Collections.emptyList(), this);
     }
 
@@ -103,7 +105,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      * @param params list of parameters (may be {@code null})
      */
     @Override
-    public PreparedStatementCreator newPreparedStatementCreator(@Nullable List<?> params) {
+    public PreparedStatementCreator newPreparedStatementCreator(List<?> params) {
         return new NamedPreparedStatementCreator(sql, params != null ? params : Collections.emptyList(), this);
     }
 
@@ -113,7 +115,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      * @param params the parameter array (may be {@code null})
      */
     @Override
-    public PreparedStatementCreator newPreparedStatementCreator(@Nullable Object[] params) {
+    public PreparedStatementCreator newPreparedStatementCreator(Object[] params) {
         return new NamedPreparedStatementCreator(sql, params != null ? Arrays.asList(params) : Collections.emptyList(), this);
     }
 
@@ -125,7 +127,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      * @param params   the parameter array (may be {@code null})
      */
     @Override
-    public PreparedStatementCreator newPreparedStatementCreator(String sqlToUse, @Nullable Object[] params) {
+    public PreparedStatementCreator newPreparedStatementCreator(String sqlToUse, Object[] params) {
         return new NamedPreparedStatementCreator(
                 sqlToUse, params != null ? Arrays.asList(params) : Collections.emptyList(), this);
     }
@@ -170,13 +172,12 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
         this.returnGeneratedKeys = returnGeneratedKeys;
     }
 
-    @Nullable
     public String[] getGeneratedKeysColumnNames() {
         return generatedKeysColumnNames;
     }
 
     @Override
-    public void setGeneratedKeysColumnNames(@Nullable String[] generatedKeysColumnNames) {
+    public void setGeneratedKeysColumnNames(String[] generatedKeysColumnNames) {
         this.generatedKeysColumnNames = generatedKeysColumnNames;
     }
 }
