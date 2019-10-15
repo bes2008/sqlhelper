@@ -18,10 +18,9 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
-import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
-import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
+import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
 import com.jn.sqlhelper.examples.common.dao.UserDao;
 import com.jn.sqlhelper.examples.common.model.User;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
@@ -51,6 +50,9 @@ public class UserController {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private NamedParameterJdbcTemplate namedJdbcTemplate;
 
     @Autowired
     public void setUserDao(UserDao userDao) {
@@ -105,8 +107,7 @@ public class UserController {
         User queryCondition = new User();
         queryCondition.setAge(10);
 
-        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
-        PagingRequestContextHolder.getContext().setPagingRequest(request);
+        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         List<User> users = userDao.selectByLimit(queryCondition);
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
@@ -120,8 +121,7 @@ public class UserController {
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort) {
-        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
-        PagingRequestContextHolder.getContext().setPagingRequest(request);
+        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > 10");
         List<User> users = jdbcTemplate.query(sqlBuilder.toString(), new RowMapper<User>() {
             @Override
@@ -143,8 +143,7 @@ public class UserController {
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort) {
-        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
-        PagingRequestContextHolder.getContext().setPagingRequest(request);
+        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
         List<User> users = jdbcTemplate.query(sqlBuilder.toString(), new PreparedStatementSetter() {
             @Override
@@ -175,8 +174,7 @@ public class UserController {
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort) {
-        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
-        PagingRequestContextHolder.getContext().setPagingRequest(request);
+        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
 
         BeanRowMapper<User> beanRowMapper = new BeanRowMapper(User.class);
@@ -196,15 +194,13 @@ public class UserController {
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort) {
-        PagingRequest request = new PagingRequest().limit(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize).setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(sort));
-        PagingRequestContextHolder.getContext().setPagingRequest(request);
+        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > :age");
 
-        NamedParameterJdbcTemplate jdbcTemplate2 = new NamedParameterJdbcTemplate(jdbcTemplate);
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("age", 10);
 
-        List<User> users = jdbcTemplate2.query(sqlBuilder.toString(), paramMap, new RowMapper<User>() {
+        List<User> users = namedJdbcTemplate.query(sqlBuilder.toString(), paramMap, new RowMapper<User>() {
             @Override
             public User mapRow(ResultSet rs, int rowNum) throws SQLException {
                 User u = new User();
