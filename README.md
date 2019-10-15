@@ -98,7 +98,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 #### sqlhelper vs mybatis-pagehelper
 |  metric                  | mybatis-pagehelper |      sqlhelper    |
 |--------------------------|:------------------:|:-----------------:|
-|  databases               |         13         |         90+       |
+|  databases               |         13         |         100+      |
 |  multiple databases in runtime |   √          |         √         |
 |  auto detect dialect     |         √          |         √         |
 |  plugin                  |         √          |         √         |
