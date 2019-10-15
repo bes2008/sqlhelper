@@ -24,14 +24,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class NamedPreparedStatementCreator implements PreparedStatementCreator, PreparedStatementSetter, SqlProvider, ParameterDisposer {
+public class NamedParameterPreparedStatementCreator implements PreparedStatementCreator, PreparedStatementSetter, SqlProvider, ParameterDisposer {
     private final String actualSql;
 
     private final List parameters;
 
-    private NamedPreparedStatementCreatorFactory factory;
+    private NamedParameterPreparedStatementCreatorFactory factory;
 
-    public NamedPreparedStatementCreator(String actualSql, List<?> parameters, NamedPreparedStatementCreatorFactory factory) {
+    public NamedParameterPreparedStatementCreator(String actualSql, List<?> parameters, NamedParameterPreparedStatementCreatorFactory factory) {
         this.actualSql = actualSql;
         Assert.notNull(parameters, "Parameters List must not be null");
         this.parameters = parameters;
@@ -130,11 +130,11 @@ public class NamedPreparedStatementCreator implements PreparedStatementCreator, 
         return parameters;
     }
 
-    public NamedPreparedStatementCreatorFactory getFactory() {
+    public NamedParameterPreparedStatementCreatorFactory getFactory() {
         return factory;
     }
 
-    public void setFactory(NamedPreparedStatementCreatorFactory factory) {
+    public void setFactory(NamedParameterPreparedStatementCreatorFactory factory) {
         this.factory = factory;
     }
 }

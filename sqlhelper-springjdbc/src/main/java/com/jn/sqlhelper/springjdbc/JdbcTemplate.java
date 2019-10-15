@@ -247,7 +247,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                     boolean needQuery = true;
                     if (needCountInPagingRequest(request)) {
                         String countSql = instrumentor.countSql(sql, request.getCountColumn());
-                        int count = super.query(new SimplePreparedStatementCreator(countSql), pss == null && (psc instanceof NamedPreparedStatementCreator) ? (NamedPreparedStatementCreator) psc : pss, new ResultSetExtractor<Integer>() {
+                        int count = super.query(new SimplePreparedStatementCreator(countSql), pss == null && (psc instanceof NamedParameterPreparedStatementCreator) ? (NamedParameterPreparedStatementCreator) psc : pss, new ResultSetExtractor<Integer>() {
                             @Override
                             public Integer extractData(ResultSet rs0) throws SQLException, DataAccessException {
                                 if (rs0.first()) {
@@ -275,9 +275,9 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         RowSelection rowSelection = rowSelectionBuilder.build(request);
                         String paginationSql = PAGING_CONTEXT.isOrderByRequest() ? instrumentor.instrumentOrderByLimitSql(sql, request.getOrderBy(), rowSelection) : instrumentor.instrumentLimitSql(sql, rowSelection);
 
-                        if (psc != null && psc instanceof NamedPreparedStatementCreator) {
-                            NamedPreparedStatementCreator oldCreator = (NamedPreparedStatementCreator) psc;
-                            psc = new NamedPreparedStatementCreator(paginationSql, oldCreator.getParameters(), oldCreator.getFactory());
+                        if (psc != null && psc instanceof NamedParameterPreparedStatementCreator) {
+                            NamedParameterPreparedStatementCreator oldCreator = (NamedParameterPreparedStatementCreator) psc;
+                            psc = new NamedParameterPreparedStatementCreator(paginationSql, oldCreator.getParameters(), oldCreator.getFactory());
                         } else {
                             psc = new SimplePreparedStatementCreator(paginationSql);
                         }
@@ -287,7 +287,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         queryParameters.setCallable(false);
                         queryParameters.setRowSelection(rowSelection);
 
-                        PaginationPreparedStatementSetter parameterSetter = (pss == null && psc instanceof NamedPreparedStatementCreator) ? new PaginationPreparedStatementSetter((NamedPreparedStatementCreator) psc) : new PaginationPreparedStatementSetter(pss);
+                        PaginationPreparedStatementSetter parameterSetter = (pss == null && psc instanceof NamedParameterPreparedStatementCreator) ? new PaginationPreparedStatementSetter((NamedParameterPreparedStatementCreator) psc) : new PaginationPreparedStatementSetter(pss);
                         instrumentor.bindParameters(ps, parameterSetter, queryParameters, true);
                         // DO execute
                         ResultSet resultSet = null;

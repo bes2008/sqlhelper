@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreatorFactory {
+public class NamedParameterPreparedStatementCreatorFactory extends PreparedStatementCreatorFactory {
     /**
      * The SQL, which won't change when the parameters change.
      */
@@ -53,7 +53,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      *
      * @param sql the SQL statement to execute
      */
-    public NamedPreparedStatementCreatorFactory(String sql) {
+    public NamedParameterPreparedStatementCreatorFactory(String sql) {
         this(sql, Collects.<SqlParameter>emptyLinkedList());
     }
 
@@ -63,7 +63,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      * @param sql   the SQL statement to execute
      * @param types int array of JDBC types
      */
-    public NamedPreparedStatementCreatorFactory(String sql, int... types) {
+    public NamedParameterPreparedStatementCreatorFactory(String sql, int... types) {
         this(sql, SqlParameter.sqlTypesToAnonymousParameterList(types));
     }
 
@@ -73,7 +73,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      * @param sql                the SQL statement to execute
      * @param declaredParameters list of {@link SqlParameter} objects
      */
-    public NamedPreparedStatementCreatorFactory(String sql, List<SqlParameter> declaredParameters) {
+    public NamedParameterPreparedStatementCreatorFactory(String sql, List<SqlParameter> declaredParameters) {
         super(sql, (List<SqlParameter>) null);
         this.sql = sql;
         this.declaredParameters = declaredParameters;
@@ -86,7 +86,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      */
     @Override
     public PreparedStatementSetter newPreparedStatementSetter(List<?> params) {
-        return new NamedPreparedStatementCreator(sql, params != null ? params : Collections.emptyList(), this);
+        return new NamedParameterPreparedStatementCreator(sql, params != null ? params : Collections.emptyList(), this);
     }
 
     /**
@@ -96,7 +96,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      */
     @Override
     public PreparedStatementSetter newPreparedStatementSetter(Object[] params) {
-        return new NamedPreparedStatementCreator(sql, params != null ? Arrays.asList(params) : Collections.emptyList(), this);
+        return new NamedParameterPreparedStatementCreator(sql, params != null ? Arrays.asList(params) : Collections.emptyList(), this);
     }
 
     /**
@@ -106,7 +106,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      */
     @Override
     public PreparedStatementCreator newPreparedStatementCreator(List<?> params) {
-        return new NamedPreparedStatementCreator(sql, params != null ? params : Collections.emptyList(), this);
+        return new NamedParameterPreparedStatementCreator(sql, params != null ? params : Collections.emptyList(), this);
     }
 
     /**
@@ -116,7 +116,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      */
     @Override
     public PreparedStatementCreator newPreparedStatementCreator(Object[] params) {
-        return new NamedPreparedStatementCreator(sql, params != null ? Arrays.asList(params) : Collections.emptyList(), this);
+        return new NamedParameterPreparedStatementCreator(sql, params != null ? Arrays.asList(params) : Collections.emptyList(), this);
     }
 
     /**
@@ -128,7 +128,7 @@ public class NamedPreparedStatementCreatorFactory extends PreparedStatementCreat
      */
     @Override
     public PreparedStatementCreator newPreparedStatementCreator(String sqlToUse, Object[] params) {
-        return new NamedPreparedStatementCreator(
+        return new NamedParameterPreparedStatementCreator(
                 sqlToUse, params != null ? Arrays.asList(params) : Collections.emptyList(), this);
     }
 

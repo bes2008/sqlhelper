@@ -17,6 +17,7 @@ package com.jn.sqlhelper.springjdbc.spring.boot.autoconfigure;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
 import com.jn.sqlhelper.springjdbc.JdbcTemplatePaginationProperties;
+import com.jn.sqlhelper.springjdbc.NamedParameterJdbcTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -29,7 +30,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 

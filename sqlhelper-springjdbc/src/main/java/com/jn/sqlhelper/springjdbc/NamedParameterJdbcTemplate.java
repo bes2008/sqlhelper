@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.springjdbc;
 
-import com.jn.sqlhelper.springjdbc.statement.NamedPreparedStatementCreatorFactory;
+import com.jn.sqlhelper.springjdbc.statement.NamedParameterPreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
@@ -36,6 +36,7 @@ public class NamedParameterJdbcTemplate extends org.springframework.jdbc.core.na
      * @param paramSource container of arguments to bind
      * @return the corresponding {@link PreparedStatementCreator}
      */
+    @Override
     protected PreparedStatementCreator getPreparedStatementCreator(String sql, SqlParameterSource paramSource) {
         ParsedSql parsedSql = getParsedSql(sql);
         PreparedStatementCreatorFactory pscf = getPreparedStatementCreatorFactory(parsedSql, paramSource);
@@ -56,6 +57,6 @@ public class NamedParameterJdbcTemplate extends org.springframework.jdbc.core.na
             ParsedSql parsedSql, SqlParameterSource paramSource) {
         String sqlToUse = NamedParameterUtils.substituteNamedParameters(parsedSql, paramSource);
         List<SqlParameter> declaredParameters = NamedParameterUtils.buildSqlParameterList(parsedSql, paramSource);
-        return new NamedPreparedStatementCreatorFactory(sqlToUse, declaredParameters);
+        return new NamedParameterPreparedStatementCreatorFactory(sqlToUse, declaredParameters);
     }
 }
