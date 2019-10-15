@@ -26,10 +26,7 @@ import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
-import com.jn.sqlhelper.dialect.pagination.PagingRequest;
-import com.jn.sqlhelper.dialect.pagination.PagingRequestBasedRowSelectionBuilder;
-import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
-import com.jn.sqlhelper.dialect.pagination.PagingResult;
+import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
@@ -51,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 public class MybatisPaginationPlugin implements Interceptor, Initializable {
     private static final Logger logger = LoggerFactory.getLogger(MybatisPaginationPlugin.class);
     private static final int NON_CACHE_QUERY_METHOD_PARAMS = 4;
-    private static final PagingRequestContextHolder<MybatisPaginationRequestContext> PAGING_CONTEXT = (PagingRequestContextHolder<MybatisPaginationRequestContext>) PagingRequestContextHolder.getContext();
+    private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
     private static final SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
     private PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
@@ -60,9 +57,6 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     private String orderBySuffix = "_orderBy";
     private boolean inited = false;
 
-    static {
-        PAGING_CONTEXT.setContextClass(MybatisPaginationRequestContext.class);
-    }
 
     public MybatisPaginationPlugin() {
     }
@@ -292,8 +286,8 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     }
 
     private boolean isNestedQueryInPagingRequest(final MappedStatement statement) {
-        if (PAGING_CONTEXT.get().getQuerySqlId() != null) {
-            if (!PAGING_CONTEXT.get().getQuerySqlId().equals(statement.getId())) {
+        if (PAGING_CONTEXT.get().getString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID) != null) {
+            if (!PAGING_CONTEXT.get().getString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID).equals(statement.getId())) {
                 // the statement is a nested statement
                 return true;
             }
@@ -306,12 +300,12 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             invalidatePagingRequest(false);
             return false;
         }
-        if (PAGING_CONTEXT.get().getQuerySqlId() != null) {
+        if (PAGING_CONTEXT.get().getString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID) != null) {
             if (isNestedQueryInPagingRequest(statement)) {
                 return false;
             }
         } else {
-            PAGING_CONTEXT.get().setQuerySqlId(statement.getId());
+            PAGING_CONTEXT.get().setString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID, statement.getId());
         }
         final String databaseId = getDatabaseId(statement);
         return instrumentor.beginIfSupportsLimit(databaseId);
@@ -400,7 +394,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
 
 
     private int executeCount(final MappedStatement ms, final Object parameter, final RowBounds rowBounds, final ResultHandler resultHandler, final Executor executor, final BoundSql boundSql) throws Throwable {
-        final MybatisPaginationRequestContext requestContext = PAGING_CONTEXT.get();
+        final PagingRequestContext requestContext = PAGING_CONTEXT.get();
         final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
         final String countStatementId = this.getCountStatementId(request, ms.getId());
         int count;
@@ -410,7 +404,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             if (countStatement != null) {
                 final CacheKey countKey = executor.createCacheKey(countStatement, parameter, RowBounds.DEFAULT, boundSql);
                 countBoundSql = countStatement.getBoundSql(parameter);
-                requestContext.setCountSql(countBoundSql);
+                requestContext.set(MybatisPaginationRequestContextKeys.COUNT_SQL, countBoundSql);
                 final Object countResultList = executor.query(countStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey, countBoundSql);
                 count = ((Number) ((List) countResultList).get(0)).intValue();
             } else {
@@ -419,7 +413,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                 final CacheKey countKey2 = executor.createCacheKey(countStatement, parameter, RowBounds.DEFAULT, boundSql);
                 final String countSql = instrumentor.countSql(boundSql.getSql(), request.getCountColumn());
                 countBoundSql = new BoundSql(countStatement.getConfiguration(), countSql, boundSql.getParameterMappings(), parameter);
-                requestContext.setCountSql(countBoundSql);
+                requestContext.set(MybatisPaginationRequestContextKeys.COUNT_SQL, countBoundSql);
                 for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {
                     countBoundSql.setAdditionalParameter(entry.getKey(), entry.getValue());
                 }
@@ -432,7 +426,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             }
             throw ex;
         } finally {
-            requestContext.setCountSql(null);
+            requestContext.set(MybatisPaginationRequestContextKeys.COUNT_SQL, null);
         }
         return count;
     }

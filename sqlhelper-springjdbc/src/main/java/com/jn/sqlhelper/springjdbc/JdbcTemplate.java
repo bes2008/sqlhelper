@@ -7,7 +7,10 @@ import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
-import com.jn.sqlhelper.dialect.pagination.*;
+import com.jn.sqlhelper.dialect.pagination.PagingRequest;
+import com.jn.sqlhelper.dialect.pagination.PagingRequestBasedRowSelectionBuilder;
+import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
+import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.springjdbc.statement.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.UncategorizedSQLException;
@@ -24,7 +27,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
-    private static final PagingRequestContextHolder<PagingRequestContext> PAGING_CONTEXT = (PagingRequestContextHolder<PagingRequestContext>) PagingRequestContextHolder.getContext();
+    private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
 
     private JdbcTemplatePaginationProperties paginationConfig = new JdbcTemplatePaginationProperties();

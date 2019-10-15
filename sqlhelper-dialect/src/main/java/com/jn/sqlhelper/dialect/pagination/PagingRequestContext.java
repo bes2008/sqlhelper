@@ -15,11 +15,19 @@
 
 package com.jn.sqlhelper.dialect.pagination;
 
+import com.jn.langx.util.BasedStringAccessor;
 import com.jn.sqlhelper.dialect.RowSelection;
 
-public class PagingRequestContext<E, R> {
+import java.util.HashMap;
+import java.util.Map;
+
+public class PagingRequestContext<E, R> extends BasedStringAccessor<String, Map<String, Object>> {
     private PagingRequest<E, R> request;
     private RowSelection rowSelection;
+
+    public PagingRequestContext() {
+        setTarget(new HashMap<String, Object>());
+    }
 
     public PagingRequest<E, R> getRequest() {
         return this.request;
@@ -35,5 +43,21 @@ public class PagingRequestContext<E, R> {
 
     public void setRowSelection(RowSelection rowSelection) {
         this.rowSelection = rowSelection;
+    }
+
+    @Override
+    public Object get(String key) {
+        return getTarget().get(key);
+    }
+
+    @Override
+    public String getString(String key, String defaultValue) {
+        Object value = getTarget().get(key);
+        return value == null ? defaultValue : value.toString();
+    }
+
+    @Override
+    public void set(String key, Object value) {
+        getTarget().put(key, value);
     }
 }

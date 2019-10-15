@@ -2,6 +2,7 @@ package com.jn.sqlhelper.mybatis.plugins.pagination;
 
 import com.jn.sqlhelper.dialect.PrepareParameterSetter;
 import com.jn.sqlhelper.dialect.QueryParameters;
+import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
@@ -22,7 +23,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class CustomMybatisParameterHandler implements ParameterHandler, PrepareParameterSetter {
     private static final Logger logger = LoggerFactory.getLogger(CustomMybatisParameterHandler.class);
-    private static final PagingRequestContextHolder<MybatisPaginationRequestContext> PAGING_CONTEXT = (PagingRequestContextHolder<MybatisPaginationRequestContext>) PagingRequestContextHolder.getContext();
+    private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
 
     private final TypeHandlerRegistry typeHandlerRegistry;
     private final MappedStatement mappedStatement;
@@ -44,12 +45,12 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
     }
 
     private boolean isPagingCountStatement() {
-        final MybatisPaginationRequestContext requestContext = PAGING_CONTEXT.get();
-        return requestContext.getCountSql() == this.boundSql;
+        final PagingRequestContext requestContext = PAGING_CONTEXT.get();
+        return requestContext.get(MybatisPaginationRequestContextKeys.COUNT_SQL) == this.boundSql;
     }
 
     private boolean isNestedStatement() {
-        if (PAGING_CONTEXT.get().getQuerySqlId() != null && PAGING_CONTEXT.get().getQuerySqlId().equals(mappedStatement.getId())) {
+        if (PAGING_CONTEXT.get().getString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID) != null && PAGING_CONTEXT.get().getString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID).equals(mappedStatement.getId())) {
             return false;
         }
         return true;

@@ -19,26 +19,20 @@ import com.jn.sqlhelper.dialect.RowSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PagingRequestContextHolder<E extends PagingRequestContext> {
+public class PagingRequestContextHolder {
     private static final Logger logger = LoggerFactory.getLogger(PagingRequestContextHolder.class);
 
-    private final ThreadLocal<E> variables = new ThreadLocal<E>();
+    private final ThreadLocal<PagingRequestContext> variables = new ThreadLocal<PagingRequestContext>();
 
     private static final PagingRequestContextHolder INSTANCE = new PagingRequestContextHolder();
-    private Class<E> clazz = (Class)PagingRequestContext.class;
 
     public static PagingRequestContextHolder getContext() {
         return INSTANCE;
     }
 
-
-    public void setContextClass(Class<E> clazz) {
-        this.clazz = clazz;
-    }
-
-    private E newOne() {
+    private PagingRequestContext newOne() {
         try {
-            return (E) this.clazz.newInstance();
+            return PagingRequestContext.class.newInstance();
         } catch (Throwable ex) {
             logger.error(ex.getMessage(), ex);
         }
@@ -46,7 +40,7 @@ public class PagingRequestContextHolder<E extends PagingRequestContext> {
     }
 
     public void setPagingRequest(PagingRequest request) {
-        E context = get();
+        PagingRequestContext context = get();
         if (context == null) {
             context = newOne();
             if (context == null) {
@@ -61,7 +55,7 @@ public class PagingRequestContextHolder<E extends PagingRequestContext> {
     }
 
     public void setRowSelection(RowSelection rowSelection) {
-        E context = get();
+        PagingRequestContext context = get();
         if (context == null) {
             context = newOne();
             if (context == null) {
@@ -74,16 +68,16 @@ public class PagingRequestContextHolder<E extends PagingRequestContext> {
         }
     }
 
-    public E get() {
-        return (E) this.variables.get();
+    public PagingRequestContext get() {
+        return this.variables.get();
     }
 
-    public void set(E ctx) {
+    public void set(PagingRequestContext ctx) {
         this.variables.set(ctx);
     }
 
     public PagingRequest getPagingRequest() {
-        E context = get();
+        PagingRequestContext context = get();
         if (context != null) {
             return context.getRequest();
         }
