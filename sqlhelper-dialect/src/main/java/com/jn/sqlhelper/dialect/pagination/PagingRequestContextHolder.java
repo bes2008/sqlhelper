@@ -25,7 +25,7 @@ public class PagingRequestContextHolder<E extends PagingRequestContext> {
     private final ThreadLocal<E> variables = new ThreadLocal<E>();
 
     private static final PagingRequestContextHolder INSTANCE = new PagingRequestContextHolder();
-    private Class<E> clazz;
+    private Class<E> clazz = (Class)PagingRequestContext.class;
 
     public static PagingRequestContextHolder getContext() {
         return INSTANCE;
