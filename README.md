@@ -110,7 +110,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |  Mango                   |         X          |         √         |
 |  EBean                   |         X          |         √         | 
 |  国产数据库               |         X          | √ （参见上述列表）  |
-|  Spring JDBC             |         X          |         1.6+      | 
+|  Spring JDBC             |         X          | 2.x,3.x,4.x,5.x   | 
 |  SqlSymbol Mapping       |         X          |         √         |   
                      
 
