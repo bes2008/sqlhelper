@@ -133,7 +133,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         int count = super.query(countSql, new ResultSetExtractor<Integer>() {
                             @Override
                             public Integer extractData(ResultSet rs0) throws SQLException, DataAccessException {
-                                if (rs0.first()) {
+                                if (rs0.next() && rs0.getMetaData().getColumnCount() > 0) {
                                     return rs0.getInt(1);
                                 } else {
                                     return 0;
@@ -250,7 +250,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         int count = super.query(new SimplePreparedStatementCreator(countSql), pss == null && (psc instanceof NamedParameterPreparedStatementCreator) ? (NamedParameterPreparedStatementCreator) psc : pss, new ResultSetExtractor<Integer>() {
                             @Override
                             public Integer extractData(ResultSet rs0) throws SQLException, DataAccessException {
-                                if (rs0.first()) {
+                                if (rs0.next() && rs0.getMetaData().getColumnCount() > 0) {
                                     return rs0.getInt(1);
                                 } else {
                                     return 0;
