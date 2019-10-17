@@ -25,11 +25,11 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
     private static final Logger logger = LoggerFactory.getLogger(CustomMybatisParameterHandler.class);
     private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
 
-    private final TypeHandlerRegistry typeHandlerRegistry;
-    private final MappedStatement mappedStatement;
-    private final Object parameterObject;
-    private final BoundSql boundSql;
-    private final Configuration configuration;
+    protected final TypeHandlerRegistry typeHandlerRegistry;
+    protected final MappedStatement mappedStatement;
+    protected final Object parameterObject;
+    protected final BoundSql boundSql;
+    protected final Configuration configuration;
 
     public CustomMybatisParameterHandler(final MappedStatement mappedStatement, final Object parameterObject, final BoundSql boundSql) {
         this.mappedStatement = mappedStatement;

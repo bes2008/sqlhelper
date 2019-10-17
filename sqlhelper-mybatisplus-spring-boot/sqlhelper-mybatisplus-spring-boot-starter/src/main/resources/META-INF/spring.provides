@@ -1,0 +1,1 @@
+provides: sqlhelper-mybatisplus-spring-boot-autoconfigure,mybatis-plus-boot-starter,sqlhelper-mybatisplus

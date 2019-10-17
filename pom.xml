@@ -30,6 +30,8 @@
         <module>sqlhelper-common</module>
         <module>sqlhelper-cli</module>
         <module>sqlhelper-dbutils</module>
+        <module>sqlhelper-mybatisplus-spring-boot</module>
+        <module>sqlhelper-mybatisplus</module>
     </modules>
     <developers>
         <developer>
@@ -70,6 +72,8 @@
         <mybatis.version>3.5.2</mybatis.version>
         <mybatis.spring.version>2.0.1</mybatis.spring.version>
         <mybatis.springboot.version>2.0.1</mybatis.springboot.version>
+
+        <mybatis.plus.version>3.2.0</mybatis.plus.version>
         <junit.version>4.12</junit.version>
         <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
         <spring.version>5.1.7.RELEASE</spring.version>
@@ -168,6 +172,25 @@
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-mybatisplus</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-mybatisplus-spring-boot-autoconfigure</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>com.github.jsqlparser</groupId>

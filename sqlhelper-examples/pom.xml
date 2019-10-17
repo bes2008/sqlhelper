@@ -85,18 +85,7 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatis-spring-boot-autoconfigure</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatis</artifactId>
-        </dependency>
+
 
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
@@ -114,6 +103,9 @@
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
         </dependency>
+
+        <!-- startup mybatis -->
+        <!--
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
@@ -122,6 +114,18 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-autoconfigure</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
+        </dependency>
+        -->
+        <!-- startup mybatis-plus -->
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-common</artifactId>
