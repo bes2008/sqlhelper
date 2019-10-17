@@ -439,8 +439,9 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     }
 
     private String getCountStatementId(final PagingRequest request, final String currentSqlId) {
-        if (!Strings.isBlank(request.getCountSqlId())) {
-            return request.getCountSqlId();
+        String customCountSqlId = PAGING_CONTEXT.get().getString(MybatisPaginationRequestContextKeys.COUNT_SQL_ID);
+        if (!Strings.isBlank(customCountSqlId)) {
+            return customCountSqlId;
         }
         return currentSqlId + this.countSuffix;
     }
