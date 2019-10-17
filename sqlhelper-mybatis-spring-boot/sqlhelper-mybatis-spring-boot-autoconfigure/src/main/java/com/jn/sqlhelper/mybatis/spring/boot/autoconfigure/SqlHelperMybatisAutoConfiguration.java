@@ -18,6 +18,7 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.pagination.CustomScriptLanguageDriver;
 import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin;
+import com.jn.sqlhelper.mybatis.plugins.pagination.SqlHelperMybatisProperties;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.session.Configuration;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
@@ -26,11 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 @org.springframework.context.annotation.Configuration
-@EnableConfigurationProperties(SqlHelperMybatisProperties.class)
 @AutoConfigureBefore(MybatisAutoConfiguration.class)
 public class SqlHelperMybatisAutoConfiguration implements ConfigurationCustomizer {
     private static final Logger logger = LoggerFactory.getLogger(SqlHelperMybatisAutoConfiguration.class);
@@ -38,6 +38,12 @@ public class SqlHelperMybatisAutoConfiguration implements ConfigurationCustomize
     @Bean
     public DatabaseIdProvider databaseIdProvider() {
         return MybatisUtils.vendorDatabaseIdProvider();
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "sqlhelper.mybatis")
+    public SqlHelperMybatisProperties sqlHelperMybatisProperties() {
+        return new SqlHelperMybatisProperties();
     }
 
     private SqlHelperMybatisProperties sqlHelperMybatisProperties;

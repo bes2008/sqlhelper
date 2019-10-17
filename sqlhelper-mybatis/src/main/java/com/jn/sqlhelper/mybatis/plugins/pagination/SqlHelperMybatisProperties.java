@@ -12,19 +12,13 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatisplus.spring.boot.autoconfigure;
+package com.jn.sqlhelper.mybatis.plugins.pagination;
 
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
-import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationPluginConfig;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
-@ConfigurationProperties(prefix = "sqlhelper.mybatisplus")
-public class SqlHelperMybatisPlusProperties {
+public class SqlHelperMybatisProperties {
 
-    @NestedConfigurationProperty
     private SQLInstrumentConfig instrumentor = new SQLInstrumentConfig();
-    @NestedConfigurationProperty
     private PaginationPluginConfig pagination = new PaginationPluginConfig();
 
     public SQLInstrumentConfig getInstrumentor() {
@@ -45,7 +39,7 @@ public class SqlHelperMybatisPlusProperties {
 
     @Override
     public String toString() {
-        return "SqlHelperMybatisPlusProperties{" +
+        return "SqlHelperMybatisProperties{" +
                 "instrumentor=" + instrumentor +
                 ", pagination=" + pagination +
                 '}';

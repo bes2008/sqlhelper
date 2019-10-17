@@ -20,17 +20,17 @@ import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin;
+import com.jn.sqlhelper.mybatis.plugins.pagination.SqlHelperMybatisProperties;
 import com.jn.sqlhelper.mybatisplus.plugins.pagination.CustomMybatisPlusScriptLanguageDriver;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 @org.springframework.context.annotation.Configuration
-@EnableConfigurationProperties(SqlHelperMybatisPlusProperties.class)
 @AutoConfigureBefore(MybatisPlusAutoConfiguration.class)
 public class SqlHelperMybatisPlusAutoConfiguration implements ConfigurationCustomizer {
     private static final Logger logger = LoggerFactory.getLogger(SqlHelperMybatisPlusAutoConfiguration.class);
@@ -40,11 +40,17 @@ public class SqlHelperMybatisPlusAutoConfiguration implements ConfigurationCusto
         return MybatisUtils.vendorDatabaseIdProvider();
     }
 
-    private SqlHelperMybatisPlusProperties sqlHelperMybatisPlusProperties;
+    @Bean
+    @ConfigurationProperties(prefix = "sqlhelper.mybatis")
+    public SqlHelperMybatisProperties sqlHelperMybatisProperties() {
+        return new SqlHelperMybatisProperties();
+    }
+
+    private SqlHelperMybatisProperties sqlHelperMybatisProperties;
 
     @Autowired
-    public void setSqlHelperMybatisPlusProperties(SqlHelperMybatisPlusProperties sqlHelperMybatisPlusProperties) {
-        this.sqlHelperMybatisPlusProperties = sqlHelperMybatisPlusProperties;
+    public void setSqlHelperMybatisPlusProperties(SqlHelperMybatisProperties sqlHelperMybatisProperties) {
+        this.sqlHelperMybatisProperties = sqlHelperMybatisProperties;
     }
 
     @Override
@@ -53,12 +59,12 @@ public class SqlHelperMybatisPlusAutoConfiguration implements ConfigurationCusto
         configuration.setDefaultScriptingLanguage(CustomMybatisPlusScriptLanguageDriver.class);
 
         MybatisPaginationPlugin plugin = new MybatisPaginationPlugin();
-        plugin.setPaginationPluginConfig(sqlHelperMybatisPlusProperties.getPagination());
-        plugin.setInstrumentorConfig(sqlHelperMybatisPlusProperties.getInstrumentor());
+        plugin.setPaginationPluginConfig(sqlHelperMybatisProperties.getPagination());
+        plugin.setInstrumentorConfig(sqlHelperMybatisProperties.getInstrumentor());
         plugin.init();
 
         logger.info("Add interceptor {} to mybatis-plus configuration", plugin);
-        logger.info("The properties of the mybatis-plus plugin [{}] is: {}", Reflects.getFQNClassName(MybatisPaginationPlugin.class), sqlHelperMybatisPlusProperties);
+        logger.info("The properties of the mybatis-plus plugin [{}] is: {}", Reflects.getFQNClassName(MybatisPaginationPlugin.class), sqlHelperMybatisProperties);
         configuration.addInterceptor(plugin);
     }
 
