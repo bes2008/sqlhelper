@@ -40,11 +40,11 @@ public class Swagger2Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Spring Boot中使用Swagger2构建RESTful APIs")
-                .description("更多请关注http://www.baidu.com")
-                .termsOfServiceUrl("http://www.baidu.com")
-                .contact("jinuo.fang")
-                .version("1.0")
+                .title("SqlHelper Examples")
+                .description("https://github.com/fangjinuo  http://www.cnblogs.com/f1194361820")
+                .termsOfServiceUrl("https://github.com/fangjinuo")
+                .contact("fs1194361820@163.com")
+                .version("2.0")
                 .build();
 
     }
