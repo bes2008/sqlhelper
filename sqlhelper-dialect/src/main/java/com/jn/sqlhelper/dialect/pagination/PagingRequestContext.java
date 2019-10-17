@@ -35,6 +35,7 @@ public class PagingRequestContext<E, R> extends BasedStringAccessor<String, Map<
 
     public void setRequest(PagingRequest<E, R> request) {
         this.request = request;
+        this.request.setCtx(this);
     }
 
     public RowSelection getRowSelection() {

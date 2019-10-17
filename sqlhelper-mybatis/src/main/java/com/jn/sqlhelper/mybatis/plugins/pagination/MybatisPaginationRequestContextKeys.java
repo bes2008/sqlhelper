@@ -19,4 +19,7 @@ public class MybatisPaginationRequestContextKeys {
     public static final String QUERY_SQL_ID = "querySqlId";
     // value: BoundSql
     public static final String COUNT_SQL = "countSql";
+
+    // value: String
+    public static final String COUNT_SQL_ID = "countSqlId";
 }

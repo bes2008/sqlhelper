@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 public class PagingRequest<C, E> {
     private Boolean count = null;
-    private String countSqlId;
     private String countColumn;
     private String dialect;
     // begin 1
@@ -37,14 +36,7 @@ public class PagingRequest<C, E> {
     private C condition;
     private PagingResult<E> result;
 
-    public String getCountSqlId() {
-        return this.countSqlId;
-    }
-
-    public PagingRequest<C, E> setCountSqlId(String countSqlId) {
-        this.countSqlId = countSqlId;
-        return this;
-    }
+    private PagingRequestContext ctx;
 
     /**
      * Nothing to do, will not do query, the result is empty list
@@ -198,5 +190,14 @@ public class PagingRequest<C, E> {
 
     public void setCountColumn(String countColumn) {
         this.countColumn = countColumn;
+    }
+
+    public PagingRequestContext getContext() {
+        return ctx;
+    }
+
+    public PagingRequest setCtx(PagingRequestContext<C,E> ctx) {
+        this.ctx = ctx;
+        return this;
     }
 }
