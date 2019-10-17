@@ -192,6 +192,7 @@ public class DialectRegistry {
 
                 JDataStoreDialect.class,
 
+                KarelDBDialect.class,
                 KDBDialect.class,
                 KingbaseDialect.class,
                 KineticaDialect.class,
@@ -210,6 +211,7 @@ public class DialectRegistry {
                 MonetDialect.class,
                 MaxDBDialect.class,
 
+                Neo4jDialect.class,
                 NetezzaDialect.class,
                 NexusDBDialect.class,
                 NuodbDialect.class,
@@ -219,6 +221,7 @@ public class DialectRegistry {
                 OpenbaseDialect.class,
                 OpenEdgeDialect.class,
                 OracleDialect.class,
+                OrientDBDialect.class,
                 OscarDialect.class,
 
                 ParadoxDialect.class,
