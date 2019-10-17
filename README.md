@@ -52,7 +52,9 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |sqlhelper-mango   | 1.2+              |1.6+ |  supports mango   |
 |sqlhelper-batchinsert|1.2+            |1.6+ |  Batch insert data to database, use it for performance |
 |sqlhelper-springjdbc | 2.0.2+         |1.6+ |  supports spring-jdbc |
-|sqlhelper-springjdbc-spring-jdbc| 2.0.2+|1.8+| spring boot autoconfigure, starter for sqlhelper-springjdbc |
+|sqlhelper-springjdbc-spring-boot| 2.0.2+|1.8+| spring boot autoconfigure, starter for sqlhelper-springjdbc |
+|sqlhelper-mybatisplus|2.0.7+         |1.6+ |  supports mybatis-plus |
+|sqlhelper-mybatisplus-spring-boot|2.0.7+         |1.8+ |  supports mybatis-plus in spring boot application |
 |sqlhelper-examples|1.0+               |1.8+ |  some examples for there tools |
 
 
@@ -118,7 +120,8 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |  EBean                   |         X          |         √         | 
 |  国产数据库               |         X          | √ （参见上述列表）  |
 |  Spring JDBC             |         X          | 2.x,3.x,4.x,5.x   | 
-|  SqlSymbol Mapping       |         X          |         √         |   
+|  SqlSymbol Mapping       |         X          |         √         |
+|  mybatis-plus            |         X          |         √         |   
                      
 
 
