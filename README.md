@@ -62,7 +62,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 ## tools usage
 ### pagination plugin
 #### Key Features
-1. Supports MyBatis, JFinal, EBean, Mango, Hibernate, SpringJdbc
+1. Supports MyBatis, MyBatis-Plus, SpringJdbc, JFinal, EBean, Mango, Hibernate
 2. Supported 100+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
     + AliSQL (阿里 MySQL)
     + AntDB (亚信)
@@ -100,10 +100,11 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 6. Supports plugin use Java SPI
 7. Supports spring boot 1.x , 2.x
 8. Supports mybatis 3.x 
-9. Supports JDK6+
-10. Supports Memory Pagination
-11. Supports SqlSymbolMapper, use it you can mapping any symbol to SQL symbol
-12. Supports Dump DDL
+9. Supports mybatis-plus 
+10. Supports JDK6+
+11. Supports Memory Pagination
+12. Supports SqlSymbolMapper, use it you can mapping any symbol to SQL symbol
+13. Supports Dump DDL
 
 #### sqlhelper vs mybatis-pagehelper
 |  metric                  | mybatis-pagehelper |      sqlhelper    |
