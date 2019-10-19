@@ -146,19 +146,20 @@ public class DialectRegistry {
                 BrytlytDialect.class,
 
                 CacheDialect.class,
-                ClickHouseDialect.class,
-                ClustrixDialect.class,
                 CirroDBDialect.class,
                 CitusDialect.class,
-                CrateDialect.class,
-                CTreeDialect.class,
-                CubridDialect.class,
+                ClickHouseDialect.class,
+                ClustrixDialect.class,
+                CobolDialect.class,
                 CockroachDialect.class,
                 ComDB2Dialect.class,
                 CovenantSQLDialect.class,
+                CrateDialect.class,
+                CTreeDialect.class,
+                CubridDialect.class,
 
-                DbfDialect.class,
                 DB2Dialect.class,
+                DbfDialect.class,
                 DerbyDialect.class,
                 DmDialect.class,
                 DorisDialect.class,
@@ -167,8 +168,8 @@ public class DialectRegistry {
                 ElasticsearchDialect.class,
                 EsgynDBDialect.class,
 
-                FirebirdDialect.class,
                 FileMakerDialect.class,
+                FirebirdDialect.class,
 
                 GaussDbDialect.class,
                 GBaseDialect.class,
@@ -180,8 +181,8 @@ public class DialectRegistry {
                 HawqDialect.class,
                 HerdDBDialect.class,
                 HhDbDialect.class,
-                HiveDialect.class,
                 HighGoDialect.class,
+                HiveDialect.class,
                 HSQLDialect.class,
 
                 IgniteDialect.class,
@@ -204,13 +205,13 @@ public class DialectRegistry {
 
                 MariaDBDialect.class,
                 MaxComputeDialect.class,
+                MaxDBDialect.class,
                 MckoiDialect.class,
                 MemSQLDialect.class,
                 MimerSQLDialect.class,
+                MonetDialect.class,
                 MSQLDialect.class,
                 MySQLDialect.class,
-                MonetDialect.class,
-                MaxDBDialect.class,
 
                 Neo4jDialect.class,
                 NetezzaDialect.class,
@@ -234,9 +235,9 @@ public class DialectRegistry {
 
                 RadonDBDialect.class,
                 RaimaDialect.class,
+                RBaseDialect.class,
                 RDMSOS2200Dialect.class,
                 RedshiftDialect.class,
-                RBaseDialect.class,
 
                 SadasDialect.class,
                 SequoiaDBDialect.class,
