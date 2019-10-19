@@ -178,10 +178,11 @@ public class DialectRegistry {
                 H2Dialect.class,
                 HANADialect.class,
                 HawqDialect.class,
-                HSQLDialect.class,
+                HerdDBDialect.class,
                 HhDbDialect.class,
                 HiveDialect.class,
                 HighGoDialect.class,
+                HSQLDialect.class,
 
                 IgniteDialect.class,
                 ImpalaDialect.class,
