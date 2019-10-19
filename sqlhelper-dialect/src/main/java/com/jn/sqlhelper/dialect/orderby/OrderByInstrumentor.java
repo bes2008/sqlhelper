@@ -14,8 +14,11 @@
 
 package com.jn.sqlhelper.dialect.orderby;
 
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.dialect.SQLInstrumentException;
 import com.jn.sqlhelper.dialect.jsqlparser.Selects;
+import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.OrderByElement;
@@ -28,10 +31,7 @@ import java.util.List;
 
 public class OrderByInstrumentor {
 
-    public static String instrument(String sql, OrderBy orderBy) throws Throwable {
-        if (orderBy == null || !orderBy.isValid()) {
-            throw new IllegalArgumentException("Illegal order by");
-        }
+    private static String instrumentOrderByUsingJSqlParser(String sql, OrderBy orderBy) throws JSQLParserException {
         Select select = (Select) CCJSqlParserUtil.parse(sql);
 
         SelectBody selectBody = select.getSelectBody();
@@ -92,6 +92,32 @@ public class OrderByInstrumentor {
         }
 
         return select.toString();
+    }
+
+    private static String instrumentOrderByUsingStringAppend(String sql, final OrderBy orderBy) {
+        final StringBuilder builder = new StringBuilder(sql);
+        builder.append(" ORDER BY ");
+        Collects.forEach(Collects.asList(orderBy), new Consumer2<Integer, OrderByItem>() {
+            @Override
+            public void accept(Integer index, OrderByItem orderByItem) {
+                if (index > 0) {
+                    builder.append(",");
+                }
+                builder.append(" ").append(orderByItem.getExpression()).append(" ").append(orderByItem.getType().name());
+            }
+        });
+        return builder.toString();
+    }
+
+    public static String instrument(String sql, OrderBy orderBy) throws Throwable {
+        if (orderBy == null || !orderBy.isValid()) {
+            throw new IllegalArgumentException("Illegal order by");
+        }
+        try {
+            return instrumentOrderByUsingJSqlParser(sql, orderBy);
+        } catch (Throwable ex) {
+            return instrumentOrderByUsingStringAppend(sql, orderBy);
+        }
 
     }
 
