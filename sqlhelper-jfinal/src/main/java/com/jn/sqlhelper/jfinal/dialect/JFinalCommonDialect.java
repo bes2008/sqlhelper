@@ -3,6 +3,8 @@ package com.jn.sqlhelper.jfinal.dialect;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.dialect.Dialect;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.internal.OracleDialect;
@@ -85,12 +87,7 @@ public class JFinalCommonDialect extends Dialect {
         sql.append(getQuotedIdentifier(table.getName()));
         sql.append(" where ");
         String[] pKeys = table.getPrimaryKey();
-        for (int i = 0; i < pKeys.length; i++) {
-            if (i > 0) {
-                sql.append(" and ");
-            }
-            sql.append(getQuotedIdentifier(pKeys[i])).append(" = ?");
-        }
+        appendWhereParamters(sql, pKeys);
         return sql.toString();
     }
 
@@ -101,12 +98,7 @@ public class JFinalCommonDialect extends Dialect {
         sql.append("delete from ");
         sql.append(getQuotedIdentifier(table.getName()));
         sql.append(" where ");
-        for (int i = 0; i < pKeys.length; i++) {
-            if (i > 0) {
-                sql.append(" and ");
-            }
-            sql.append(getQuotedIdentifier(pKeys[i])).append(" = ?");
-        }
+        appendWhereParamters(sql, pKeys);
         return sql.toString();
     }
 
@@ -159,12 +151,7 @@ public class JFinalCommonDialect extends Dialect {
         trimPrimaryKeys(pKeys);
 
         StringBuilder sql = new StringBuilder("select * from ").append(getQuotedIdentifier(tableName)).append(" where ");
-        for (int i = 0; i < pKeys.length; i++) {
-            if (i > 0) {
-                sql.append(" and ");
-            }
-            sql.append(getQuotedIdentifier(pKeys[i])).append(" = ?");
-        }
+        appendWhereParamters(sql, pKeys);
         return sql.toString();
     }
 
@@ -173,13 +160,8 @@ public class JFinalCommonDialect extends Dialect {
         tableName = tableName.trim();
         trimPrimaryKeys(pKeys);
 
-        StringBuilder sql = new StringBuilder("delete from ").append(getQuotedIdentifier(tableName)).append(" where ");
-        for (int i = 0; i < pKeys.length; i++) {
-            if (i > 0) {
-                sql.append(" and ");
-            }
-            sql.append(getQuotedIdentifier(pKeys[i])).append(" = ?");
-        }
+        final StringBuilder sql = new StringBuilder("delete from ").append(getQuotedIdentifier(tableName)).append(" where ");
+        appendWhereParamters(sql, pKeys);
         return sql.toString();
     }
 
@@ -214,7 +196,7 @@ public class JFinalCommonDialect extends Dialect {
     }
 
     @Override
-    public void forDbUpdate(String tableName, String[] pKeys, Object[] ids, Record record, StringBuilder sql, List<Object> paras) {
+    public void forDbUpdate(String tableName, String[] pKeys, Object[] ids, Record record, final StringBuilder sql, List<Object> paras) {
         tableName = tableName.trim();
         trimPrimaryKeys(pKeys);
 
@@ -230,12 +212,18 @@ public class JFinalCommonDialect extends Dialect {
             }
         }
         sql.append(" where ");
-        for (int i = 0; i < pKeys.length; i++) {
-            if (i > 0) {
-                sql.append(" and ");
+        appendWhereParamters(sql, pKeys);
+    }
+
+    private void appendWhereParamters(final StringBuilder sql, String[] pKeys) {
+        Collects.forEach(pKeys, new Consumer2<Integer, String>() {
+            @Override
+            public void accept(Integer i, String s) {
+                if (i > 0) {
+                    sql.append(" and ");
+                }
+                sql.append(getQuotedIdentifier(s)).append(" = ?");
             }
-            sql.append(getQuotedIdentifier(pKeys[i])).append(" = ?");
-            paras.add(ids[i]);
-        }
+        });
     }
 }
