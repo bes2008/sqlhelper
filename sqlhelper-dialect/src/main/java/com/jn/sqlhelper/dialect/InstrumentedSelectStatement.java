@@ -49,11 +49,15 @@ public class InstrumentedSelectStatement {
     }
 
     public String getLimitSql(String dialect, boolean hasOffset) {
-        List<String> pageSqls = dialectLimitSql.get(dialect);
-        if (pageSqls == null) {
+        return getLimitSql(dialectLimitSql, dialect, hasOffset);
+    }
+
+    private static String getLimitSql(Map<String, List<String>> dialectLimitSql, String dialect, boolean hasOffset) {
+        List<String> pagingSqls = dialectLimitSql.get(dialect);
+        if (pagingSqls == null) {
             return null;
         }
-        return pageSqls.get(hasOffset ? 1 : 0);
+        return pagingSqls.get(hasOffset ? 1 : 0);
     }
 
     public String getOrderBySql(OrderBy orderBy) {
@@ -65,14 +69,14 @@ public class InstrumentedSelectStatement {
         if (dialectLimitSql == null) {
             return null;
         }
-        List<String> pagingSqls = dialectLimitSql.get(dialect);
-        if (pagingSqls == null) {
-            return null;
-        }
-        return pagingSqls.get(hasOffset ? 1 : 0);
+        return getLimitSql(dialectLimitSql, dialect, hasOffset);
     }
 
     public void setLimitSql(String dialect, String limitSql, boolean hasOffset) {
+        setLimitSql(dialectLimitSql, dialect, limitSql, hasOffset);
+    }
+
+    private static void setLimitSql(Map<String, List<String>> dialectLimitSql, String dialect, String limitSql, boolean hasOffset){
         List<String> pagerSqls = dialectLimitSql.get(dialect);
         if (pagerSqls == null) {
             pagerSqls = new ArrayList<String>(2);
@@ -94,15 +98,7 @@ public class InstrumentedSelectStatement {
             orderByLimitSql.put(orderBy, dialectLimitSql);
         }
 
-        List<String> pagerSqls = dialectLimitSql.get(dialect);
-        if (pagerSqls == null) {
-            pagerSqls = new ArrayList<String>(2);
-            pagerSqls.add(null);
-            pagerSqls.add(null);
-            dialectLimitSql.put(dialect, pagerSqls);
-        }
-
-        pagerSqls.set((hasOffset ? 1 : 0), sql);
+        setLimitSql(dialectLimitSql, dialect, sql, hasOffset);
     }
 
 }

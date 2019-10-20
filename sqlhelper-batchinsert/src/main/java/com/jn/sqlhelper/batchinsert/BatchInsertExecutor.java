@@ -19,7 +19,6 @@ import com.jn.sqlhelper.common.connection.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -70,12 +69,11 @@ public class BatchInsertExecutor {
 
     public void startup() {
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        logger.info("startup() insert time: {}", df.format(new Date(System.currentTimeMillis())));
+        logger.info("startup() insert time: {}", Dates.format(new Date(), Dates.yyyy_MM_dd_HH_mm_ss));
         long time = end;
         while ((time = nextTime()) <= end) {
             logger.info(Dates.format(new Date(time), Dates.yyyy_MM_dd_HH_mm_ss));
-            BatchInsertTask task = taskFactory.createTask(df.format(new Date(time)), random.nextInt());
+            BatchInsertTask task = taskFactory.createTask(Dates.format(new Date(time), Dates.yyyy_MM_dd_HH_mm_ss), random.nextInt());
             submitTask(task);
         }
     }

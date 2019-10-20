@@ -7,15 +7,15 @@ import com.jn.langx.util.function.Predicate;
 import java.util.EnumSet;
 
 public enum SortType {
-    ASC(new String[]{"A"}),
-    DESC(new String[]{"D"}),
+    ASC("A"),
+    DESC("D"),
     UNSUPPORTED;
     private String[] maybeValues = {};
 
     SortType() {
     }
 
-    SortType(String[] maybeValues) {
+    SortType(String... maybeValues) {
         this.maybeValues = maybeValues;
     }
 

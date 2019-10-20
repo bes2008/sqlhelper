@@ -124,7 +124,7 @@ public class PageInfo<T> extends PageSerializable<T> {
             this.pages = this.pageSize > 0 ? 1 : 0;
             this.size = list.size();
             this.startRow = 0;
-            this.endRow = list.size() > 0 ? list.size() - 1 : 0;
+            this.endRow = list.isEmpty() ? 0: list.size() - 1 ;
         }
 
         this.navigatePages = navigatePages;
@@ -315,7 +315,7 @@ public class PageInfo<T> extends PageSerializable<T> {
         return Arrays.copyOf(navigatepageNums, navigatepageNums.length);
     }
 
-    public void setNavigatepageNums(int[] navigatepageNums) {
+    public void setNavigatepageNums(int... navigatepageNums) {
         if (navigatepageNums != null) {
             this.navigatepageNums = navigatepageNums;
         }
