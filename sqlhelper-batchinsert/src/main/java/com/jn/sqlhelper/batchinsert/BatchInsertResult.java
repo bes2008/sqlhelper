@@ -15,9 +15,9 @@
 package com.jn.sqlhelper.batchinsert;
 
 public class BatchInsertResult {
-    private String time;
-    private int realInsertNum;
-    private int expectResult;
+    private final String time;
+    private final int realInsertNum;
+    private final int expectResult;
 
     public BatchInsertResult(String time, int expectResult, int realInsertNum) {
         this.time = time;

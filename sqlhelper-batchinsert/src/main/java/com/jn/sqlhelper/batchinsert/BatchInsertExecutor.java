@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.batchinsert;
 
+import com.jn.langx.util.Dates;
 import com.jn.sqlhelper.common.connection.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +31,12 @@ public class BatchInsertExecutor {
 
     private ConnectionFactory connFactory = null;
 
-    private Random random = new Random(1000);
+    private final Random random = new Random(1000);
     protected Calendar start;
-    private long end;
-    private ExecutorService executor;
+    private final long end;
+    private final ExecutorService executor;
 
-    private List<Future<BatchInsertResult>> futures = new LinkedList<Future<BatchInsertResult>>();
+    private final List<Future<BatchInsertResult>> futures = new LinkedList<Future<BatchInsertResult>>();
 
     private BatchInsertTaskFactory taskFactory;
 
@@ -68,11 +69,12 @@ public class BatchInsertExecutor {
     }
 
     public void startup() {
+
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         logger.info("startup() insert time: {}", df.format(new Date(System.currentTimeMillis())));
         long time = end;
         while ((time = nextTime()) <= end) {
-            logger.info(df.format(new Date(time)));
+            logger.info(Dates.format(new Date(time), Dates.yyyy_MM_dd_HH_mm_ss));
             BatchInsertTask task = taskFactory.createTask(df.format(new Date(time)), random.nextInt());
             submitTask(task);
         }
@@ -97,8 +99,7 @@ public class BatchInsertExecutor {
             if (executor != null && !executor.isShutdown() && !executor.isTerminated()) {
                 executor.shutdownNow();
             }
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            logger.info("shutdown() insert time: {}", df.format(new Date(System.currentTimeMillis())));
+            logger.info("shutdown() insert time: {}", Dates.format(new Date(), Dates.yyyy_MM_dd_HH_mm_ss));
         }
     }
 

@@ -16,6 +16,7 @@ package com.jn.sqlhelper.common.ddl.dump;
 
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
+import com.jn.langx.util.io.IOs;
 import com.jn.sqlhelper.common.ddl.model.*;
 import com.jn.sqlhelper.common.ddl.model.internal.TableType;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
@@ -43,64 +44,92 @@ public class DatabaseLoader {
     }
 
     public List<Table> loadTables(DatabaseDescription databaseDescription, String catalogNamePattern, String schemaNamePattern, String tableNamePattern) throws SQLException {
-        ResultSet tablesRs = databaseDescription.getDbMetaData().getTables(catalogNamePattern, schemaNamePattern, tableNamePattern, tableTypes);
-        List<Table> tables = new RowMapperResultSetExtractor<Table>(new BeanRowMapper<Table>(Table.class)).extract(tablesRs);
-        DatabaseMetaData dbMetaData = databaseDescription.getDbMetaData();
-        for (Table table : tables) {
-            findColumns(dbMetaData, table);
+        List<Table> tables = null;
+        ResultSet tablesRs = null;
+        try {
+            tablesRs = databaseDescription.getDbMetaData().getTables(catalogNamePattern, schemaNamePattern, tableNamePattern, tableTypes);
+            tables = new RowMapperResultSetExtractor<Table>(new BeanRowMapper<Table>(Table.class)).extract(tablesRs);
+            DatabaseMetaData dbMetaData = databaseDescription.getDbMetaData();
+            for (Table table : tables) {
+                findColumns(dbMetaData, table);
 
-            findTablePKs(dbMetaData, table);
+                findTablePKs(dbMetaData, table);
 
-            findTableIndexes(dbMetaData, table);
+                findTableIndexes(dbMetaData, table);
 
-            findTableFKs(dbMetaData, table);
+                findTableFKs(dbMetaData, table);
+            }
+        } finally {
+            IOs.close(tablesRs);
         }
         return tables;
     }
 
     private void findColumns(DatabaseMetaData dbMetaData, final Table table) throws SQLException {
-        ResultSet columnsRs = dbMetaData.getColumns(table.getCatalog(), table.getSchema(), table.getName(), null);
-        List<Column> columns = new RowMapperResultSetExtractor<Column>(new BeanRowMapper<Column>(Column.class)).extract(columnsRs);
-        Collects.forEach(columns, new Consumer<Column>() {
-            @Override
-            public void accept(Column column) {
-                table.addColumn(column);
-            }
-        });
+        ResultSet columnsRs = null;
+        try {
+            columnsRs = dbMetaData.getColumns(table.getCatalog(), table.getSchema(), table.getName(), null);
+            List<Column> columns = new RowMapperResultSetExtractor<Column>(new BeanRowMapper<Column>(Column.class)).extract(columnsRs);
+            Collects.forEach(columns, new Consumer<Column>() {
+                @Override
+                public void accept(Column column) {
+                    table.addColumn(column);
+                }
+            });
+        } finally {
+            IOs.close(columnsRs);
+        }
     }
 
     private void findTableIndexes(DatabaseMetaData dbMetaData, final Table table) throws SQLException {
-        ResultSet indexesRs = dbMetaData.getIndexInfo(table.getCatalog(), table.getSchema(), table.getName(), false, false);
+        ResultSet indexesRs = null;
+        try {
 
-        List<IndexColumn> indexes = new RowMapperResultSetExtractor<IndexColumn>(new BeanRowMapper<IndexColumn>(IndexColumn.class)).extract(indexesRs);
-        Collects.forEach(indexes, new Consumer<IndexColumn>() {
-            @Override
-            public void accept(IndexColumn indexColumn) {
-                String indexName = indexColumn.getIndexName();
-                Index index = table.getIndex(indexName);
-                if (index == null) {
-                    index = new Index(table.getCatalog(), table.getSchema(), table.getName(), indexName);
-                    table.addIndex(index);
+
+            indexesRs = dbMetaData.getIndexInfo(table.getCatalog(), table.getSchema(), table.getName(), false, false);
+
+            List<IndexColumn> indexes = new RowMapperResultSetExtractor<IndexColumn>(new BeanRowMapper<IndexColumn>(IndexColumn.class)).extract(indexesRs);
+            Collects.forEach(indexes, new Consumer<IndexColumn>() {
+                @Override
+                public void accept(IndexColumn indexColumn) {
+                    String indexName = indexColumn.getIndexName();
+                    Index index = table.getIndex(indexName);
+                    if (index == null) {
+                        index = new Index(table.getCatalog(), table.getSchema(), table.getName(), indexName);
+                        table.addIndex(index);
+                    }
+
+                    index.addColumn(indexColumn);
                 }
-
-                index.addColumn(indexColumn);
-            }
-        });
+            });
+        } finally {
+            IOs.close(indexesRs);
+        }
     }
 
     private void findTablePKs(DatabaseMetaData dbMetaData, Table table) throws SQLException {
-        ResultSet pkRs = dbMetaData.getPrimaryKeys(table.getCatalog(), table.getSchema(), table.getName());
-        List<PrimaryKeyColumn> pkColumns = new RowMapperResultSetExtractor<PrimaryKeyColumn>(new BeanRowMapper<PrimaryKeyColumn>(PrimaryKeyColumn.class)).extract(pkRs);
-        for (PrimaryKeyColumn pk : pkColumns) {
-            table.addPKColumn(pk);
+        ResultSet pkRs = null;
+        try {
+            pkRs = dbMetaData.getPrimaryKeys(table.getCatalog(), table.getSchema(), table.getName());
+            List<PrimaryKeyColumn> pkColumns = new RowMapperResultSetExtractor<PrimaryKeyColumn>(new BeanRowMapper<PrimaryKeyColumn>(PrimaryKeyColumn.class)).extract(pkRs);
+            for (PrimaryKeyColumn pk : pkColumns) {
+                table.addPKColumn(pk);
+            }
+        } finally {
+            IOs.close(pkRs);
         }
     }
 
     private void findTableFKs(DatabaseMetaData dbMetaData, Table table) throws SQLException {
-        ResultSet fkRs = dbMetaData.getImportedKeys(table.getCatalog(), table.getSchema(), table.getName());
-        List<ImportedColumn> fkColumns = new RowMapperResultSetExtractor<ImportedColumn>(new BeanRowMapper<ImportedColumn>(ImportedColumn.class)).extract(fkRs);
-        for (ImportedColumn fk : fkColumns) {
-            table.addFKColumn(fk);
+        ResultSet fkRs = null;
+        try {
+            fkRs = dbMetaData.getImportedKeys(table.getCatalog(), table.getSchema(), table.getName());
+            List<ImportedColumn> fkColumns = new RowMapperResultSetExtractor<ImportedColumn>(new BeanRowMapper<ImportedColumn>(ImportedColumn.class)).extract(fkRs);
+            for (ImportedColumn fk : fkColumns) {
+                table.addFKColumn(fk);
+            }
+        } finally {
+            IOs.close(fkRs);
         }
     }
 
