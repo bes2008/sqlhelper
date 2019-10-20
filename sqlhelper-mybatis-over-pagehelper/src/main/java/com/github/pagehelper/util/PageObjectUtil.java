@@ -39,7 +39,7 @@ import java.util.Map;
  *
  * @author liuzh
  */
-public abstract class PageObjectUtil {
+public class PageObjectUtil {
     //request获取方法
     protected static Boolean hasRequest;
     protected static Class<?> requestClass;

@@ -79,6 +79,7 @@ public class AuroraDialect extends AbstractDialect {
                 break;
             default:
                 reverse = false;
+                break;
         }
         return reverse;
     }

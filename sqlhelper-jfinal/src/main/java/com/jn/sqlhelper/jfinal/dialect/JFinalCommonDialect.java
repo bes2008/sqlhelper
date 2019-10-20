@@ -109,7 +109,7 @@ public class JFinalCommonDialect extends Dialect {
         for (Map.Entry<String, Object> e : attrs.entrySet()) {
             String colName = e.getKey();
             if (table.hasColumnLabel(colName)) {
-                if (paras.size() > 0) {
+                if (!paras.isEmpty()) {
                     sql.append(", ");
                     temp.append(", ");
                 }
@@ -128,7 +128,7 @@ public class JFinalCommonDialect extends Dialect {
         for (Map.Entry<String, Object> e : attrs.entrySet()) {
             String colName = e.getKey();
             if (modifyFlag.contains(colName) && !isPrimaryKey(colName, pKeys) && table.hasColumnLabel(colName)) {
-                if (paras.size() > 0) {
+                if (!paras.isEmpty()) {
                     sql.append(", ");
                 }
                 sql.append(getQuotedIdentifier(colName)).append(" = ? ");
@@ -204,7 +204,7 @@ public class JFinalCommonDialect extends Dialect {
         for (Map.Entry<String, Object> e : record.getColumns().entrySet()) {
             String colName = e.getKey();
             if (!isPrimaryKey(colName, pKeys)) {
-                if (paras.size() > 0) {
+                if (!paras.isEmpty()) {
                     sql.append(", ");
                 }
                 sql.append(getQuotedIdentifier(colName)).append(" = ? ");
