@@ -22,50 +22,10 @@ public class UnderlineToCamelSymbolMapper implements SqlSymbolMapper {
         }).forEach(new Consumer<String>() {
             @Override
             public void accept(String s) {
-                builder.append(upperCase(s, 0, 1));
+                builder.append(Strings.upperCase(s, 0, 1));
             }
         });
-        return lowerCase(builder.toString(), 0, 1);
-    }
-
-    public static String upperCase(String str, int offset, int limit) {
-        Pipeline<String> pipeline = Pipeline.<String>of(split(str, null));
-        final StringBuilder builder = new StringBuilder();
-        Consumer<String> appendConsumer = new Consumer<String>() {
-            @Override
-            public void accept(String str) {
-                builder.append(str);
-            }
-        };
-        pipeline.skip(0).limit(offset).forEach(appendConsumer);
-        pipeline.skip(offset).limit(limit).map(new Function<String, String>() {
-            @Override
-            public String apply(String input) {
-                return input.toUpperCase();
-            }
-        }).forEach(appendConsumer);
-        pipeline.skip(limit).forEach(appendConsumer);
-        return builder.toString();
-    }
-
-    public static String lowerCase(String str, int offset, int limit) {
-        Pipeline<String> pipeline = Pipeline.<String>of(split(str, null));
-        final StringBuilder builder = new StringBuilder();
-        Consumer<String> appendConsumer = new Consumer<String>() {
-            @Override
-            public void accept(String str) {
-                builder.append(str);
-            }
-        };
-        pipeline.skip(0).limit(offset).forEach(appendConsumer);
-        pipeline.skip(offset).limit(limit).map(new Function<String, String>() {
-            @Override
-            public String apply(String input) {
-                return input.toLowerCase();
-            }
-        }).forEach(appendConsumer);
-        pipeline.skip(limit).forEach(appendConsumer);
-        return builder.toString();
+        return Strings.lowerCase(builder.toString(), 0, 1);
     }
 
     public static String[] split(@Nullable String string, @Nullable String separator) {
