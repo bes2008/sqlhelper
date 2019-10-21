@@ -17,8 +17,6 @@ package com.jn.sqlhelper.dialect.internal.urlparser;
 
 import com.jn.langx.util.StringMaker;
 import com.jn.sqlhelper.dialect.DatabaseInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +25,6 @@ import java.util.List;
 public class JtdsUrlParser extends CommonUrlParser {
     public static final int DEFAULT_PORT = 1433;
     static final String URL_PREFIX = "jdbc:jtds:sqlserver:";
-    private static final Logger logger = LoggerFactory.getLogger(JtdsUrlParser.class);
     private static final List<String> URL_SCHEMAS = Arrays.asList(new String[]{URL_PREFIX});
 
     public JtdsUrlParser() {

@@ -26,10 +26,10 @@ public enum OrderByType {
         }
         s = s.trim().toLowerCase();
 
-        if (s.equals("desc")) {
+        if (ASC.name().equalsIgnoreCase(s)) {
             return DESC;
         }
-        if (s.equals("asc")) {
+        if (DESC.name().equalsIgnoreCase(s)) {
             return ASC;
         }
 

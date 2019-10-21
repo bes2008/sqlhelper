@@ -15,8 +15,8 @@
 package com.jn.sqlhelper.dialect.orderby;
 
 import com.jn.langx.util.Strings;
-import com.jn.sqlhelper.common.symbolmapper.SqlSymbolMapper;
 import com.jn.sqlhelper.common.symbolmapper.NoopSymbolMapper;
+import com.jn.sqlhelper.common.symbolmapper.SqlSymbolMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,7 +78,7 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
             String tmp = token.toLowerCase();
 
             boolean isSqlDelimiter = ",".equals(tmp);
-            boolean isSqlSortSymbol = tmp.equals("asc") || tmp.equals("desc");
+            boolean isSqlSortSymbol = "asc".equals(tmp) || "desc".equals(tmp);
 
             if (!isSqlDelimiter && !isSqlSortSymbol) {
                 if (keywordsAfterOrderBy.contains(tmp)) {
@@ -87,16 +87,16 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
 
                 if (currentExpression != null) {
                     // for update
-                    if (tmp.equals("update")) {
-                        if (currentExpression.equalsIgnoreCase("for")) {
+                    if ("update".equals(tmp)) {
+                        if ("for".equalsIgnoreCase(currentExpression)) {
                             currentExpression = null;
                             currentOrderType = null;
                             break;
                         }
                     }
                     // into outfile
-                    if (tmp.equals("outfile")) {
-                        if (currentExpression.equalsIgnoreCase("into")) {
+                    if ("outfile".equals(tmp)) {
+                        if ("into".equalsIgnoreCase(currentExpression)) {
                             currentExpression = null;
                             currentOrderType = null;
                             break;
@@ -122,8 +122,6 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
 
         if (currentExpression != null) {
             orderBy.add(new OrderByItem(sqlSymbolMapper.apply(currentExpression), OrderByType.fromString(currentOrderType)));
-            currentExpression = null;
-            currentOrderType = null;
         }
 
         return orderBy;

@@ -186,6 +186,7 @@ public class UserController {
         }, new SqlHelperRowMapperResultSetExtractor<User>(beanRowMapper));
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
+        System.out.println(JSONBuilderProvider.simplest().toJson(users));
         return request.getResult();
     }
 

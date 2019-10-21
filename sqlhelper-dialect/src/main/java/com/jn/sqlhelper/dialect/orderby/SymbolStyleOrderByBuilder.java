@@ -145,7 +145,9 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
         Iterator<Map.Entry<String, String>> iter = symbolMap.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry<String, String> entry = iter.next();
-            if (value.equals(entry.getValue())) ;
+            if (value.equals(entry.getValue())) {
+                iter.remove();
+            }
         }
     }
 
@@ -154,7 +156,7 @@ public class SymbolStyleOrderByBuilder implements OrderByBuilder<String> {
             return false;
         }
         symbol = symbol.trim();
-        if (symbol.equals("?")) {
+        if ("?".equals(symbol)) {
             return false;
         }
         return true;
