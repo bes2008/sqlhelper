@@ -15,6 +15,8 @@
 
 package com.jn.sqlhelper.dialect.internal.urlparser.oracle;
 
+import com.jn.langx.exception.IllegalValueException;
+
 public class OracleNetConnectionDescriptorParser {
     private static String THIN;
     private static String OCI;
@@ -51,10 +53,10 @@ public class OracleNetConnectionDescriptorParser {
     private void checkEof() {
         final Token eof = this.tokenizer.nextToken();
         if (eof == null) {
-            throw new RuntimeException("parsing error. expected token:'EOF' token:null");
+            throw new IllegalValueException("parsing error. expected token:'EOF' token:null");
         }
         if (eof != OracleNetConnectionDescriptorTokenizer.TOKEN_EOF_OBJECT) {
-            throw new RuntimeException("parsing error. expected token:'EOF' token:" + eof);
+            throw new IllegalValueException("parsing error. expected token:'EOF' token:" + eof);
         }
     }
 

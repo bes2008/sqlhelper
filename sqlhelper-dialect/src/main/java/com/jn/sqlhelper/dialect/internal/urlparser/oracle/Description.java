@@ -15,6 +15,9 @@
 
 package com.jn.sqlhelper.dialect.internal.urlparser.oracle;
 
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.util.Preconditions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,17 +30,15 @@ public class Description {
         this.addressList = new ArrayList<Address>();
     }
 
-    public Description(final KeyValue keyValue) {
+    public Description(@NonNull final KeyValue keyValue) {
         this.addressList = new ArrayList<Address>();
-        if (keyValue == null) {
-            throw new NullPointerException("keyValue");
-        }
+        Preconditions.checkNotNull(keyValue );
         this.mapping(keyValue);
     }
 
     private void mapping(final KeyValue keyValue) {
         if (!this.compare("description", keyValue)) {
-            throw new RuntimeException("description node not found");
+            throw new IllegalArgumentException("description node not found");
         }
         for (final KeyValue kv : keyValue.getKeyValueList()) {
             if (this.compare("address", kv)) {

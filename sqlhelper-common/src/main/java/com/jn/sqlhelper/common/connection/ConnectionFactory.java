@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.common.connection;
 
+import com.jn.langx.util.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ public class ConnectionFactory {
             try {
                 Class.forName(connConfig.getDriver(), false, Thread.currentThread().getContextClassLoader());
             } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
+                throw Throwables.wrapAsRuntimeException(e);
             }
         }
     }
@@ -59,7 +60,7 @@ public class ConnectionFactory {
             }
             DriverManager.getConnection(connectionConfiguration.getUrl(), connectionConfiguration.getUser(), connectionConfiguration.getPassword());
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.warn("Error occur when get connection with configuration: {}, error message : {}, stack:", connectionConfiguration.toString(), e.getMessage(), e);
         }
         return null;
     }

@@ -17,6 +17,6 @@ public enum BooleanFlag {
         if (Strings.isEmpty(str)) {
             return UNKNOWN;
         }
-        return str.toUpperCase().equals(YES.str) ? YES : NO;
+        return str.equalsIgnoreCase(YES.str) ? YES : NO;
     }
 }

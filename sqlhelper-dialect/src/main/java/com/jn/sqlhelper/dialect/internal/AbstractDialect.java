@@ -68,7 +68,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         if (nameAnno != null) {
             name = nameAnno.value();
             if (Strings.isBlank(name)) {
-                throw new RuntimeException("@Name is empty in class" + this.getClass().getClass());
+                throw new IllegalStateException("@Name is empty in class" + this.getClass().getClass());
             }
         } else {
             final String simpleClassName = this.getClass().getSimpleName().toLowerCase();

@@ -88,7 +88,7 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
                 if (currentExpression != null) {
                     // for update
                     if (tmp.equals("update")) {
-                        if (currentExpression.toLowerCase().equals("for")) {
+                        if (currentExpression.equalsIgnoreCase("for")) {
                             currentExpression = null;
                             currentOrderType = null;
                             break;
@@ -96,7 +96,7 @@ public class SqlStyleOrderByBuilder implements OrderByBuilder<String> {
                     }
                     // into outfile
                     if (tmp.equals("outfile")) {
-                        if (currentExpression.toLowerCase().equals("into")) {
+                        if (currentExpression.equalsIgnoreCase("into")) {
                             currentExpression = null;
                             currentOrderType = null;
                             break;

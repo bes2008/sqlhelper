@@ -375,7 +375,7 @@ public class DialectRegistry {
         if (nameAnno != null) {
             name = nameAnno.value();
             if (Strings.isBlank(name)) {
-                throw new RuntimeException("@Name is empty in class" + Reflects.getFQNClassName(clazz));
+                throw new IllegalStateException("@Name is empty in class" + Reflects.getFQNClassName(clazz));
             }
         } else {
             final String simpleClassName = clazz.getSimpleName().toLowerCase();
@@ -388,7 +388,7 @@ public class DialectRegistry {
             if (driverAnno != null) {
                 final String driverClassName = driverAnno.value();
                 if (Strings.isBlank(driverClassName)) {
-                    throw new RuntimeException("@Driver is empty in class" + Reflects.getFQNClassName(clazz));
+                    throw new IllegalStateException("@Driver is empty in class" + Reflects.getFQNClassName(clazz));
                 }
                 try {
                     driverClass = loadDriverClass(driverClassName);
