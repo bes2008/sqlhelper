@@ -16,7 +16,6 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.dialect.internal.limit.FirstLimitHandler;
-import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
 
 @Name("esgyn")
 public class EsgynDBDialect extends AbstractDialect {

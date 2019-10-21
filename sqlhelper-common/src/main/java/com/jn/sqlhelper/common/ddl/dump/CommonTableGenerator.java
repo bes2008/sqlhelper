@@ -10,15 +10,12 @@ import com.jn.sqlhelper.common.ddl.model.internal.JdbcType;
 import com.jn.sqlhelper.common.ddl.model.internal.SortType;
 import com.jn.sqlhelper.common.ddl.model.internal.TableType;
 import com.jn.sqlhelper.common.utils.SQLs;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
 public class CommonTableGenerator implements TableGenerator {
     private DatabaseDescription databaseDesc;
-    private static final Logger logger = LoggerFactory.getLogger(CommonTableGenerator.class);
 
     public CommonTableGenerator(DatabaseDescription databaseDesc) {
         this.databaseDesc = databaseDesc;

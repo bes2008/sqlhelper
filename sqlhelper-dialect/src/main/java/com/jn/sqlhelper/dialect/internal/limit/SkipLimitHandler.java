@@ -2,8 +2,6 @@ package com.jn.sqlhelper.dialect.internal.limit;
 
 import com.jn.sqlhelper.dialect.RowSelection;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Locale;
 
 public class SkipLimitHandler extends AbstractLimitHandler {

@@ -20,8 +20,6 @@ import com.jn.sqlhelper.dialect.DatabaseInfo;
 import com.jn.sqlhelper.dialect.internal.urlparser.oracle.Description;
 import com.jn.sqlhelper.dialect.internal.urlparser.oracle.KeyValue;
 import com.jn.sqlhelper.dialect.internal.urlparser.oracle.OracleNetConnectionDescriptorParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +27,6 @@ import java.util.List;
 
 public class OracleUrlParser extends CommonUrlParser {
     private static final String URL_PREFIX = "jdbc:oracle:";
-    private static final Logger logger = LoggerFactory.getLogger(OracleUrlParser.class);
     private static final List<String> URL_SCHEMAS = Arrays.asList(new String[]{URL_PREFIX});
 
     @Override

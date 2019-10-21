@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 
 public class DatabaseDescription {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseDescription.class);
@@ -197,7 +196,8 @@ public class DatabaseDescription {
     }
 
     private boolean isCatalogAtStart = true;
-    private void parseIsCatalogAtStart(){
+
+    private void parseIsCatalogAtStart() {
         this.isCatalogAtStart = Throwables.ignoreThrowable(logger, true, new ThrowableFunction<Object, Boolean>() {
             @Override
             public Boolean doFun(Object o) throws Throwable {
@@ -211,9 +211,9 @@ public class DatabaseDescription {
      * table name.  If not, the catalog appears at the end.
      *
      * @return <code>true</code> if the catalog name appears at the beginning
-     *         of a fully qualified table name; <code>false</code> otherwise
+     * of a fully qualified table name; <code>false</code> otherwise
      */
-    public boolean isCatalogAtStart(){
+    public boolean isCatalogAtStart() {
         return this.isCatalogAtStart;
     }
 }

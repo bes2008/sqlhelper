@@ -43,7 +43,7 @@ public class AuroraDialect extends AbstractDialect {
         super();
         if (findMySQLDriver()) {
             workingWith = WorkingWith.MySQL;
-        } else {
+        } else if (findPostgreSQLDriver()) {
             workingWith = WorkingWith.PostgreSQL;
         }
         setLimitHandler(limitHandlerMap.get(workingWith));

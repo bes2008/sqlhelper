@@ -1,7 +1,6 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.internal.limit.FirstLimitHandler;
-import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
 
 /**
  * http://trafodion.apache.org/docs/sql_reference/index.html#select_syntax
