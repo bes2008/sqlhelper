@@ -166,7 +166,7 @@ public class SqlDmlFormatter implements Formatter<String, String> {
                     values();
                 } else if ("on".equals(lcToken)) {
                     on();
-                } else if (afterBetween && lcToken.equals("and")) {
+                } else if (afterBetween && "and".equals(lcToken)) {
                     misc();
                     afterBetween = false;
                 } else if (LOGICAL.contains(lcToken)) {

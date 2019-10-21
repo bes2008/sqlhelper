@@ -15,15 +15,11 @@
 
 package com.jn.sqlhelper.dialect.internal.urlparser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Arrays;
 import java.util.List;
 
 public class KingbaseUrlParser extends CommonUrlParser {
     private static final String URL_PREFIX = "jdbc:kingbase:";
-    private static final Logger logger = LoggerFactory.getLogger(KingbaseUrlParser.class);
 
     public KingbaseUrlParser() {
     }

@@ -73,7 +73,7 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public boolean isOracle() {
-        return delegate == null ? databaseId.equals("oracle") : delegate instanceof OracleDialect;
+        return delegate == null ? "oracle".equals(databaseId) : delegate instanceof OracleDialect;
     }
 
     @Override

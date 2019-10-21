@@ -15,6 +15,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.langx.util.ClassLoaders;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 
 public class DerbyDialect extends AbstractDialect {
@@ -29,8 +30,7 @@ public class DerbyDialect extends AbstractDialect {
 
     private void determineDriverVersion() {
         try {
-            Class localClass = Class.forName("org.apache.derby.tools.sysinfo");
-            // TODO extract driver version for derby jdbc driver
+            ClassLoaders.loadClass("org.apache.derby.tools.sysinfo", DerbyDialect.class.getClassLoader());
         } catch (Exception e) {
             this.driverVersionMajor = -1;
             this.driverVersionMinor = -1;

@@ -17,8 +17,6 @@ package com.jn.sqlhelper.dialect.internal.urlparser;
 
 import com.jn.langx.util.StringMaker;
 import com.jn.sqlhelper.dialect.DatabaseInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +24,6 @@ import java.util.List;
 
 public class InformixUrlParser extends CommonUrlParser {
     private static final String URL_PREFIX = "jdbc:informix-sqli:";
-    private static final Logger logger = LoggerFactory.getLogger(InformixUrlParser.class);
 
     public InformixUrlParser() {
 
