@@ -16,12 +16,9 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class H2Dialect extends AbstractDialect {
-    private static final Logger LOG = LoggerFactory.getLogger(H2Dialect.class);
 
     public H2Dialect() {
         super();

@@ -45,7 +45,6 @@ import java.util.Properties;
 public abstract class AbstractDialect<T extends AbstractDialect> implements Dialect {
     private AbstractDialect delegate = null;
     private UrlParser urlParser;
-    private TableGenerator tableGenerator;
     private LimitHandler limitHandler;
     private Boolean isUseLimitInVariableMode = null;
 

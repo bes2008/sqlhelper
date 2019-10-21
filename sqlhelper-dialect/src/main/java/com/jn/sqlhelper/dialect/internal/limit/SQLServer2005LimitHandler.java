@@ -29,13 +29,6 @@ import java.util.regex.Pattern;
 
 public class SQLServer2005LimitHandler
         extends AbstractLimitHandler {
-    private static final String SELECT = "select";
-    private static final String FROM = "from";
-    private static final String DISTINCT = "distinct";
-    private static final String ORDER_BY = "order by";
-    private static final String SELECT_DISTINCT = "select distinct";
-    private static final String SELECT_DISTINCT_SPACE = "select distinct ";
-    private static final String SELECT_SPACE = "select ";
 
     private static final Pattern SELECT_DISTINCT_PATTERN = buildShallowIndexPattern("select distinct ", true);
     private static final Pattern SELECT_PATTERN = buildShallowIndexPattern("select(.*)", true);

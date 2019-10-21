@@ -169,7 +169,7 @@ public class ResultSets {
         return obj;
     }
 
-    private static final List<JdbcType> intTypes = Collects.asList(new JdbcType[]{
+    public static final List<JdbcType> intTypes = Collects.asList(new JdbcType[]{
             JdbcType.BIT, // 0,1
             JdbcType.TINYINT, // byte
             JdbcType.SMALLINT, // short

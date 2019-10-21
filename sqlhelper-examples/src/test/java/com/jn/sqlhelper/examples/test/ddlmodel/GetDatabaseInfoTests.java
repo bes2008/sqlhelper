@@ -43,7 +43,7 @@ public class GetDatabaseInfoTests {
      * @param dbMetaData
      * @throws SQLException
      */
-    private void showCatalogs(DatabaseMetaData dbMetaData) throws SQLException {
+    void showCatalogs(DatabaseMetaData dbMetaData) throws SQLException {
         ResultSet catalogRs = dbMetaData.getCatalogs();
         List<String> catalogs = Collects.emptyArrayList();
         while (catalogRs.next()) {
@@ -63,7 +63,7 @@ public class GetDatabaseInfoTests {
         System.out.println("catalog at start ? :" + catalogAtStart);
     }
 
-    private void showSchemas(DatabaseMetaData dbMetaData) throws SQLException {
+    void showSchemas(DatabaseMetaData dbMetaData) throws SQLException {
 
         ResultSet schemasRs = dbMetaData.getSchemas();
         while (schemasRs.next()) {
