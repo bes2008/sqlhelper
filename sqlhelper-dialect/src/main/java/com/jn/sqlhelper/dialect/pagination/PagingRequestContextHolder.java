@@ -15,6 +15,8 @@
 
 package com.jn.sqlhelper.dialect.pagination;
 
+import com.jn.langx.util.function.Consumer;
+import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.dialect.RowSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,22 +41,25 @@ public class PagingRequestContextHolder {
         return null;
     }
 
-    public void setPagingRequest(PagingRequest request) {
-        PagingRequestContext context = get();
-        if (context == null) {
-            context = newOne();
-            if (context == null) {
-                this.variables.remove();
+    public void setPagingRequest(final PagingRequest request) {
+        setContextContent(new Consumer<PagingRequestContext>() {
+            @Override
+            public void accept(PagingRequestContext context) {
+                context.setRequest(request);
             }
-        }
-
-        if (context != null) {
-            this.variables.set(context);
-            context.setRequest(request);
-        }
+        });
     }
 
-    public void setRowSelection(RowSelection rowSelection) {
+    public void setRowSelection(final RowSelection rowSelection) {
+        setContextContent(new Consumer<PagingRequestContext>() {
+            @Override
+            public void accept(PagingRequestContext context) {
+                context.setRowSelection(rowSelection);
+            }
+        });
+    }
+
+    private <X>void setContextContent(Consumer<PagingRequestContext> consumer){
         PagingRequestContext context = get();
         if (context == null) {
             context = newOne();
@@ -64,7 +69,7 @@ public class PagingRequestContextHolder {
         }
         if (context != null) {
             this.variables.set(context);
-            context.setRowSelection(rowSelection);
+            consumer.accept(context);
         }
     }
 
