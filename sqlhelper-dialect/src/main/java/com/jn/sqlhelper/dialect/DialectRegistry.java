@@ -16,6 +16,8 @@ package com.jn.sqlhelper.dialect;
 
 import com.jn.langx.annotation.Name;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.dialect.annotation.Driver;
@@ -27,6 +29,7 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -403,31 +406,51 @@ public class DialectRegistry {
             }
             if (driverClass == null || driverConstructor == null) {
                 try {
-                    dialect = (Dialect) clazz.newInstance();
-                } catch (InstantiationException e2) {
-                    final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a <init>() ";
-                    throw new ClassFormatError(error);
-                } catch (IllegalAccessException e3) {
-                    final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a public <init>() ";
-                    throw new ClassFormatError(error);
+                    try {
+                        dialect = clazz.newInstance();
+                    } catch (InstantiationException e2) {
+                        final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a <init>() ";
+                        throw new ClassFormatError(error);
+                    } catch (IllegalAccessException e3) {
+                        final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a public <init>() ";
+                        throw new ClassFormatError(error);
+                    }
+                } catch (Throwable ex) {
+                    logger.error("Register dialect {} fail: {}", name, ex.getMessage(), ex);
                 }
             } else {
                 try {
-                    dialect = (AbstractDialect) driverConstructor.newInstance(driverClass);
-                } catch (InstantiationException e2) {
-                    final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a <init>(Driver) ";
-                    throw new ClassFormatError(error);
-                } catch (IllegalAccessException e3) {
-                    final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a public <init>(Driver) ";
-                    throw new ClassFormatError(error);
-                } catch (InvocationTargetException e) {
-                    logger.error("Register dialect {} fail: {}", new Object[]{name, e.getMessage(), e});
+                    try {
+                        final Class<? extends java.sql.Driver> expectDriverClass = driverClass;
+                        java.sql.Driver driver = Pipeline.<java.sql.Driver>of(DriverManager.getDrivers()).findFirst(new Predicate<java.sql.Driver>() {
+                            @Override
+                            public boolean test(java.sql.Driver d) {
+                                return expectDriverClass.isInstance(d);
+                            }
+                        });
+                        if (driver != null) {
+                            driverConstructor.setAccessible(true);
+                            dialect = driverConstructor.newInstance();
+                        }
+                    } catch (InstantiationException e2) {
+                        final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a <init>(Driver) ";
+                        throw new ClassFormatError(error);
+                    } catch (IllegalAccessException e3) {
+                        final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a public <init>(Driver) ";
+                        throw new ClassFormatError(error);
+                    } catch (InvocationTargetException e) {
+                        logger.error("Register dialect {} fail: {}", name, e.getMessage(), e);
+                    }
+                } catch (Throwable ex) {
+                    logger.error("Register dialect {} fail: {}", name, ex.getMessage(), ex);
                 }
             }
         }
-        DialectRegistry.nameToDialectMap.put(name, dialect);
-        DialectRegistry.classNameToNameMap.put(clazz.getCanonicalName(), name);
-        setDatabaseId(name, name);
+        if (dialect != null) {
+            DialectRegistry.nameToDialectMap.put(name, dialect);
+            DialectRegistry.classNameToNameMap.put(clazz.getCanonicalName(), name);
+            setDatabaseId(name, name);
+        }
         return dialect;
     }
 
