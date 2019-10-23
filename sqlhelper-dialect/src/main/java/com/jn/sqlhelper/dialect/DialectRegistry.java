@@ -430,7 +430,7 @@ public class DialectRegistry {
                         });
                         if (driver != null) {
                             driverConstructor.setAccessible(true);
-                            dialect = driverConstructor.newInstance();
+                            dialect = driverConstructor.newInstance(driver);
                         }
                     } catch (InstantiationException e2) {
                         final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a <init>(Driver) ";
