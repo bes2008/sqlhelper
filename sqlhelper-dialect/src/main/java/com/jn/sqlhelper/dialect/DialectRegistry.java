@@ -37,8 +37,8 @@ import java.util.*;
 public class DialectRegistry {
 
     private static final Logger logger = LoggerFactory.getLogger((Class) DialectRegistry.class);
-    private static final Map<String, Dialect> nameToDialectMap = new HashMap<String, Dialect>();
-    private static final Map<String, String> classNameToNameMap = new HashMap<String, String>();
+    private static final Map<String, Dialect> nameToDialectMap = new TreeMap<String, Dialect>();
+    private static final Map<String, String> classNameToNameMap = new TreeMap<String, String>();
     // key:DatabaseMetaData.getProduceName() + getDriver();
     private static final Map<String, Holder<Dialect>> dbToDialectMap = new HashMap<String, Holder<Dialect>>();
     private static final Properties vendorDatabaseIdMappings = new Properties();
