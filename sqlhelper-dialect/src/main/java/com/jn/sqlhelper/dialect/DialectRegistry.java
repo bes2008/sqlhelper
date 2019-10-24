@@ -15,6 +15,7 @@
 package com.jn.sqlhelper.dialect;
 
 import com.jn.langx.annotation.Name;
+import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Predicate;
@@ -409,10 +410,10 @@ public class DialectRegistry {
                     try {
                         dialect = clazz.newInstance();
                     } catch (InstantiationException e2) {
-                        final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a <init>() ";
+                        final String error = StringTemplates.formatWithPlaceholder("Class {}  need a <init>()", Reflects.getFQNClassName(clazz));
                         throw new ClassFormatError(error);
                     } catch (IllegalAccessException e3) {
-                        final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a public <init>() ";
+                        final String error = StringTemplates.formatWithPlaceholder("Class {}  need a <init>()", Reflects.getFQNClassName(clazz));
                         throw new ClassFormatError(error);
                     }
                 } catch (Throwable ex) {
@@ -433,10 +434,10 @@ public class DialectRegistry {
                             dialect = driverConstructor.newInstance(driver);
                         }
                     } catch (InstantiationException e2) {
-                        final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a <init>(Driver) ";
+                        final String error = StringTemplates.formatWithPlaceholder("Class {}  need a <init>(Driver)", Reflects.getFQNClassName(clazz));
                         throw new ClassFormatError(error);
                     } catch (IllegalAccessException e3) {
-                        final String error = "Class " + Reflects.getFQNClassName(clazz) + "need a public <init>(Driver) ";
+                        final String error = StringTemplates.formatWithPlaceholder("Class {} need a public <init>(Driver", Reflects.getFQNClassName(clazz));
                         throw new ClassFormatError(error);
                     } catch (InvocationTargetException e) {
                         logger.error("Register dialect {} fail: {}", name, e.getMessage(), e);
