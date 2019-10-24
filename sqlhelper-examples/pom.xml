@@ -147,6 +147,15 @@
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-common</artifactId>
         </dependency>
+
+
+        <!-- databases -->
+        <dependency>
+            <groupId>com.hynnet</groupId>
+            <artifactId>oracle-driver-ojdbc6</artifactId>
+            <version>12.1.0.1</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
