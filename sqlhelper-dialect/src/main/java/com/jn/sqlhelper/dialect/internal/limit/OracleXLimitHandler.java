@@ -39,7 +39,7 @@ public class OracleXLimitHandler extends AbstractLimitHandler {
 
         StringBuilder pagingSelect = new StringBuilder(sql.length() + 100);
         if (hasOffset) {
-            pagingSelect.append("select * from ( select row_.*, rownum rownum_ from ( ");
+            pagingSelect.append("select * from ( select sqlhelper_rowtabel_.*, rownum rownum_ from ( ");
         } else {
             pagingSelect.append("select * from ( ");
         }
