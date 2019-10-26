@@ -3,6 +3,7 @@ package com.jn.sqlhelper.common.ddl.model;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Predicate;
 import com.jn.sqlhelper.common.annotation.Column;
@@ -192,6 +193,10 @@ public class Table {
 
     public Set<PrimaryKeyColumn> getPkColumns() {
         return pkColumns;
+    }
+
+    public boolean hasPrimaryKeys(){
+        return Emptys.isNotEmpty(pkColumns);
     }
 
     public void addPKColumn(PrimaryKeyColumn primaryKeyColumn) {

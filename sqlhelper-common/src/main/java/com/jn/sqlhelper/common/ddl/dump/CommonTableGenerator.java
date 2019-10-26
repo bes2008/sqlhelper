@@ -4,6 +4,7 @@ import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.io.LineDelimiter;
+import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.common.ddl.model.*;
 import com.jn.sqlhelper.common.ddl.model.internal.BooleanFlag;
 import com.jn.sqlhelper.common.ddl.model.internal.JdbcType;
@@ -30,10 +31,18 @@ public class CommonTableGenerator implements TableGenerator {
         return generateAnyTableDDL(table);
     }
 
+    protected boolean isSupportsSetPrimaryKeyInTableDDL() {
+        return false;
+    }
+
+    protected boolean isSupportsSetPrimaryKeyUsingAlter() {
+        return !isSupportsSetPrimaryKeyInTableDDL();
+    }
+
     private String generateAnyTableDDL(Table table) throws SQLException {
         TableType tableType = table.getTableType();
         if (tableType == TableType.SYSTEM_TABLE || tableType == TableType.TABLE || tableType == TableType.GLOBAL_TEMPORARY || tableType == TableType.LOCAL_TEMPORARY) {
-            return generateTableDDL(table);
+            return buildTableDDL(table);
         } else {
             final String lineDelimiter = LineDelimiter.DEFAULT.getValue();
             final StringBuilder builder = new StringBuilder(256);
@@ -59,12 +68,12 @@ public class CommonTableGenerator implements TableGenerator {
         }
     }
 
-    protected String generateTableDDL(final Table table) throws SQLException {
+    protected String buildTableDDL(final Table table) throws SQLException {
         final String lineDelimiter = LineDelimiter.DEFAULT.getValue();
         final StringBuilder builder = new StringBuilder(256);
         if (Strings.isEmpty(table.getSql())) {
             // create table clause:
-            builder.append(generateCreateTableClause(table));
+            builder.append(buildCreateTableClause(table));
 
             builder.append("(").append(lineDelimiter);
             // columns
@@ -74,12 +83,14 @@ public class CommonTableGenerator implements TableGenerator {
                     if (i > 0) {
                         builder.append(",").append(lineDelimiter);
                     }
-                    builder.append("\t").append(generateDefineColumnClause(table, column));
+                    builder.append("\t").append(buildDefineColumnClause(table, column));
                 }
             });
             builder.append(lineDelimiter);
 
-            String afterAllColumnString = afterAllColumn(table);
+            Holder<Boolean> hasSetPrimaryKeys = new Holder<Boolean>(false);
+            Holder<Boolean> hasSetReferenceKeys = new Holder<Boolean>(false);
+            String afterAllColumnString = buildClausesAfterAllColumns(table, hasSetPrimaryKeys, hasSetReferenceKeys);
             if (Strings.isNotEmpty(afterAllColumnString)) {
                 builder.append(",").append(afterAllColumnString);
             }
@@ -87,7 +98,9 @@ public class CommonTableGenerator implements TableGenerator {
             builder.append(");").append(lineDelimiter);
 
             // primary key
-            builder.append(generateAddPrimaryKeyClause(table));
+            if (table.hasPrimaryKeys() && !hasSetPrimaryKeys.get() && isSupportsSetPrimaryKeyUsingAlter()) {
+                builder.append(buildAlterAddPrimaryKeyClause(table));
+            }
 
         } else {
             String sql = table.getSql();
@@ -102,13 +115,13 @@ public class CommonTableGenerator implements TableGenerator {
         Collects.forEach(table.getIndexMap(), new Consumer2<String, Index>() {
             @Override
             public void accept(String key, Index index) {
-                builder.append(generateCreateIndexDDLClause(table, index));
+                builder.append(buildCreateIndexDDLClause(table, index));
             }
         });
         return builder.toString();
     }
 
-    protected String generateCreateTableClause(final Table table) throws SQLException {
+    protected String buildCreateTableClause(final Table table) throws SQLException {
         final StringBuilder builder = new StringBuilder(256);
         builder.append("CREATE");
         TableType tableType = table.getTableType();
@@ -120,7 +133,7 @@ public class CommonTableGenerator implements TableGenerator {
         return builder.toString();
     }
 
-    protected String generateDefineColumnClause(final Table table, Column column) {
+    protected String buildDefineColumnClause(final Table table, Column column) {
         StringBuilder builder = new StringBuilder(256);
         builder.append(column.getName()).append(" ").append(column.getTypeName());
 
@@ -173,11 +186,11 @@ public class CommonTableGenerator implements TableGenerator {
         return builder.toString();
     }
 
-    protected String afterAllColumn(Table table) {
+    protected String buildClausesAfterAllColumns(Table table, Holder<Boolean> hasSetPrimaryKeys, Holder<Boolean> hasSetReferenceKeys) {
         return "";
     }
 
-    protected String generateAddPrimaryKeyClause(final Table table) throws SQLException {
+    protected String buildAlterAddPrimaryKeyClause(final Table table) throws SQLException {
         final StringBuilder builder = new StringBuilder(256);
         String tableFQN = getTableFQN(databaseDesc.supportsCatalogsInTableDefinitions() ? table.getCatalog() : null, databaseDesc.supportsSchemasInTableDefinitions() ? table.getSchema() : null, table.getName());
         builder.append("ALTER TABLE ").append(tableFQN).append(" ADD PRIMARY KEY (");
@@ -194,7 +207,7 @@ public class CommonTableGenerator implements TableGenerator {
         return builder.toString();
     }
 
-    protected String generateCreateIndexDDLClause(Table table, Index index) {
+    protected String buildCreateIndexDDLClause(Table table, Index index) {
         final StringBuilder builder = new StringBuilder(256);
         String tableFQN = getTableFQN(databaseDesc.supportsCatalogsInIndexDefinitions() ? table.getCatalog() : null, databaseDesc.supportsSchemasInIndexDefinitions() ? table.getSchema() : null, table.getName());
         builder.append("CREATE INDEX ").append(index.getName()).append(" ON ").append(tableFQN).append(" (");
