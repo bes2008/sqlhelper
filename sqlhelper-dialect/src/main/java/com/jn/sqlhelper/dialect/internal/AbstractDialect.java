@@ -29,7 +29,7 @@ import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.DatabaseInfo;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.RowSelection;
-import com.jn.sqlhelper.dialect.ddl.generator.TableDDLGenerator;
+import com.jn.sqlhelper.dialect.ddl.generator.CommonTableGenerator;
 import com.jn.sqlhelper.dialect.internal.limit.DefaultLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.CommonUrlParser;
@@ -213,7 +213,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     }
 
     protected TableGenerator createTableGenerator(DatabaseDescription databaseDescription) {
-        return new TableDDLGenerator(databaseDescription, this);
+        return new CommonTableGenerator(databaseDescription, this);
     }
 
     public final String generate(@NonNull DatabaseDescription database, String catalog, String schema, @NonNull String tableName) throws SQLException {
