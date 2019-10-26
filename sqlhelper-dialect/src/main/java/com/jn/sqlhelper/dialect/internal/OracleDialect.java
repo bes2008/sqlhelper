@@ -113,15 +113,15 @@ public class OracleDialect extends AbstractDialect {
 
             StringBuilder pagingSelect = new StringBuilder(sql.length() + 100);
             if (hasOffset) {
-                pagingSelect.append("select * from ( select sqlhelper_rowtabel_.*, rownum rownum_ from ( ");
+                pagingSelect.append("select * from ( select sqlhelper_rowtable_.*, rownum rownum_ from ( ");
             } else {
                 pagingSelect.append("select * from ( ");
             }
             pagingSelect.append(sql);
             if (hasOffset) {
-                pagingSelect.append(" ) sqlhelper_rowtabel_ ) where rownum_ <= ? and rownum_ > ?");
+                pagingSelect.append(" ) sqlhelper_rowtable_ ) where rownum_ <= ? and rownum_ > ?");
             } else {
-                pagingSelect.append(" ) sqlhelper_rowtabel_ where rownum <= ?");
+                pagingSelect.append(" ) sqlhelper_rowtable_ where rownum <= ?");
             }
 
             if (isForUpdate) {
