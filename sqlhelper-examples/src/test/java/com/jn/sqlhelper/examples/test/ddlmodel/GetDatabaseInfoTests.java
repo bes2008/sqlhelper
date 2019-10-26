@@ -8,6 +8,7 @@ import com.jn.sqlhelper.common.ddl.dump.CommonTableGenerator;
 import com.jn.sqlhelper.common.ddl.dump.DatabaseLoader;
 import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 import com.jn.sqlhelper.common.ddl.model.Table;
+import com.jn.sqlhelper.dialect.ddl.generator.TableDDLGenerator;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -85,7 +86,7 @@ public class GetDatabaseInfoTests {
 
         List<Table> tables = new DatabaseLoader().loadTables(new DatabaseDescription(dbMetaData), "TEST", "PUBLIC", null);
         for (Table table : tables) {
-            System.out.println(new CommonTableGenerator(dbMetaData).generate(table));
+            System.out.println(new TableDDLGenerator(dbMetaData).generate(table));
         }
     }
 
