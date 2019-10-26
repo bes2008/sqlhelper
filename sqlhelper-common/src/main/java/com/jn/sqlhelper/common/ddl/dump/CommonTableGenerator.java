@@ -16,7 +16,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
 public class CommonTableGenerator implements TableGenerator {
-    private DatabaseDescription databaseDesc;
+    protected DatabaseDescription databaseDesc;
 
     public CommonTableGenerator(DatabaseDescription databaseDesc) {
         this.databaseDesc = databaseDesc;
