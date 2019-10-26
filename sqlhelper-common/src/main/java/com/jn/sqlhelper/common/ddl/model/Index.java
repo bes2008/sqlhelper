@@ -33,8 +33,6 @@ public class Index {
         setName(name);
     }
 
-    private Set<IndexColumn> columns;
-
     public String getCatalog() {
         return catalog;
     }
@@ -70,7 +68,7 @@ public class Index {
     }
 
     public Set<IndexColumn> getColumns() {
-        return columns;
+        return indexColumns;
     }
 
 

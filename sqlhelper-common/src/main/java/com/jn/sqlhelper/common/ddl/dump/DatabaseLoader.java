@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.common.ddl.dump;
 
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.io.IOs;
@@ -37,7 +38,7 @@ public class DatabaseLoader {
 
     public Table loadTable(DatabaseDescription databaseDescription, String catalog, String schema, String tableName) throws SQLException {
         List<Table> tables = loadTables(databaseDescription, catalog, schema, tableName);
-        if (!tables.isEmpty()) {
+        if (Emptys.isNotEmpty(tables)) {
             return tables.get(0);
         }
         return null;
