@@ -15,14 +15,14 @@ import com.jn.sqlhelper.common.utils.SQLs;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
-public class CommonTableGenerator implements TableGenerator {
+public abstract class AbstractTableGenerator implements TableGenerator {
     protected DatabaseDescription databaseDesc;
 
-    public CommonTableGenerator(DatabaseDescription databaseDesc) {
+    public AbstractTableGenerator(DatabaseDescription databaseDesc) {
         this.databaseDesc = databaseDesc;
     }
 
-    public CommonTableGenerator(DatabaseMetaData dbMetaData) {
+    public AbstractTableGenerator(DatabaseMetaData dbMetaData) {
         this(new DatabaseDescription(dbMetaData));
     }
 
