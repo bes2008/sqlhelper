@@ -4,10 +4,10 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 @ShellComponent
-public class MyCommands {
+public class DDLDump {
 
     @ShellMethod("Add two integers together.")
-    public int add(int a, int b) {
+    public int ddldump(String url, String driver, String username, String password, int a, int b) {
         return a + b;
     }
 }
