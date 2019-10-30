@@ -17,7 +17,9 @@ package com.jn.sqlhelper.examples.common.controller;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.sqlhelper.apachedbutils.QueryRunner;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
+import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
@@ -27,6 +29,7 @@ import com.jn.sqlhelper.springjdbc.JdbcTemplate;
 import com.jn.sqlhelper.springjdbc.NamedParameterJdbcTemplate;
 import com.jn.sqlhelper.springjdbc.resultset.SqlHelperRowMapperResultSetExtractor;
 import io.swagger.annotations.Api;
+import org.apache.commons.dbutils.ResultSetHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -34,6 +37,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.*;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -223,6 +227,33 @@ public class UserController {
         System.out.println(json);
         return request.getResult();
     }
+
+    @GetMapping("/list_useApacheDBUtils")
+    public PagingResult list_useApacheDBUtils(
+            @RequestParam(name = "pageNo", required = false) Integer pageNo,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name = "sort", required = false) String sort) throws SQLException {
+        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
+        StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
+
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("age", 10);
+        DataSource ds = namedJdbcTemplate.getJdbcTemplate().getDataSource();
+        QueryRunner queryRunner = new QueryRunner(ds);
+
+        List<User> users = queryRunner.query(sqlBuilder.toString(), new ResultSetHandler<List<User>>() {
+            RowMapperResultSetExtractor extractor = new RowMapperResultSetExtractor<User>(new BeanRowMapper<User>(User.class));
+
+            @Override
+            public List<User> handle(ResultSet rs) throws SQLException {
+                return extractor.extract(rs);
+            }
+        }, 10);
+        String json = JSONBuilderProvider.simplest().toJson(users);
+        System.out.println(json);
+        return request.getResult();
+    }
+
 
     @GetMapping("/{id}")
     public User getById(@RequestParam("id") String id) {
