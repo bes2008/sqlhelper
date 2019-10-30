@@ -20,6 +20,7 @@ import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 import java.sql.DatabaseMetaData;
 import java.util.Locale;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 public class SQLs {
     public static final String WHITESPACE = " \n\r\f\t";
@@ -81,6 +82,36 @@ public class SQLs {
             return false;
         } else {
             return Strings.startsWithIgnoreCase(sql0, "select");
+        }
+    }
+
+    private static final Pattern SELECT_COUNT_PATTERN = Pattern.compile("select\\s+count.*");
+    private static final Pattern COUNT_FUNCTION_PATTERN = Pattern.compile("count(\\s*\\(.*(\\s*\\))?)?");
+
+    public static boolean isSelectCountStatement(String sql) {
+        String sql0 = sql.trim();
+        // with xx as ( select x ...
+        if (Strings.startsWithIgnoreCase(sql0, "with")) {
+            StringTokenizer stringTokenizer = new StringTokenizer(sql0);
+            int i = 0;
+            boolean hasSelectKeyword = false;
+            boolean hasCountKeyword = false;
+
+            while (i < 7 && stringTokenizer.hasMoreTokens()) {
+                String token = stringTokenizer.nextToken();
+                if ("select".equals(token.toLowerCase())) {
+                    hasSelectKeyword = true;
+                    continue;
+                }
+                if (COUNT_FUNCTION_PATTERN.matcher(token.toLowerCase()).matches()) {
+                    hasCountKeyword = true;
+                }
+                i++;
+            }
+            return hasSelectKeyword && hasCountKeyword;
+        } else {
+            String lowerSql = sql0.toLowerCase();
+            return SELECT_COUNT_PATTERN.matcher(lowerSql).matches();
         }
     }
 
