@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.springjdbc;
 
+import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.common.utils.SQLs;
@@ -150,10 +151,16 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         int maxPageCount = result.getMaxPageCount();
                         if (maxPageCount >= 0) {
                             if (requestPageNo > maxPageCount) {
-                                request.setPageNo(maxPageCount);
-                                result.setPageNo(maxPageCount);
+                                if (isUseLastPageIfPageNoOut(request)) {
+                                    request.setPageNo(maxPageCount);
+                                    result.setPageNo(maxPageCount);
+                                } else {
+                                    needQuery = false;
+                                }
                             }
                         }
+                    } else {
+                        result.setTotal(-1);
                     }
 
                     if (needQuery) {
@@ -267,10 +274,16 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         int maxPageCount = result.getMaxPageCount();
                         if (maxPageCount >= 0) {
                             if (requestPageNo > maxPageCount) {
-                                request.setPageNo(maxPageCount);
-                                result.setPageNo(maxPageCount);
+                                if (isUseLastPageIfPageNoOut(request)) {
+                                    request.setPageNo(maxPageCount);
+                                    result.setPageNo(maxPageCount);
+                                } else {
+                                    needQuery = false;
+                                }
                             }
                         }
+                    } else {
+                        result.setTotal(-1);
                     }
 
                     if (needQuery) {
@@ -358,5 +371,13 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
             return paginationConfig.isCount();
         }
         return Boolean.TRUE.equals(request.needCount());
+    }
+
+    private boolean isUseLastPageIfPageNoOut(@NonNull PagingRequest request) {
+        Preconditions.checkNotNull(request);
+        if (request.isUseLastPageIfPageNoOut() == null) {
+            return paginationConfig.isUseLastPageIfPageNoOut();
+        }
+        return request.isUseLastPageIfPageNoOut();
     }
 }

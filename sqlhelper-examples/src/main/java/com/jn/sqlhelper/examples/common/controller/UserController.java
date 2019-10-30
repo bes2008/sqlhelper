@@ -103,11 +103,15 @@ public class UserController {
     public PagingResult list_useMyBatis(
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name = "sort", required = false) String sort) {
+            @RequestParam(name = "sort", required = false) String sort,
+            @RequestParam(value = "count", required = false) boolean count,
+            @RequestParam(value = "useLastPageIfPageNoOut", required = false) boolean useLastPageIfPageNoOut) {
         User queryCondition = new User();
         queryCondition.setAge(10);
 
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
+        request.setCount(count);
+        request.setUseLastPageIfPageNoOut(useLastPageIfPageNoOut);
         List<User> users = userDao.selectByLimit(queryCondition);
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
@@ -120,8 +124,12 @@ public class UserController {
     public PagingResult list_useSpringJdbc_rowMapper(
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name = "sort", required = false) String sort) {
+            @RequestParam(name = "sort", required = false) String sort,
+            @RequestParam(value = "count", required = false) boolean count,
+            @RequestParam(value = "useLastPageIfPageNoOut", required = false) boolean useLastPageIfPageNoOut) {
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
+        request.setCount(count);
+        request.setUseLastPageIfPageNoOut(useLastPageIfPageNoOut);
         StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > 10");
         List<User> users = jdbcTemplate.query(sqlBuilder.toString(), new RowMapper<User>() {
             @Override

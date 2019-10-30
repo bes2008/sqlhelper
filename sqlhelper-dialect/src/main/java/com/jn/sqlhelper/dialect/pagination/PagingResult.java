@@ -17,7 +17,6 @@ package com.jn.sqlhelper.dialect.pagination;
 
 import java.util.List;
 
-
 public class PagingResult<E> {
     private int pageNo;
     private int pageSize;
@@ -65,7 +64,11 @@ public class PagingResult<E> {
     }
 
     public int getMaxPageCount(int pageSize) {
-        if ((this.total <= 0) || (this.pageSize == 0)) {
+        // unknown
+        if (this.total < 0) {
+            return -1;
+        }
+        if ((this.total == 0) || (this.pageSize == 0)) {
             return 0;
         }
         if (pageSize < 0) {

@@ -33,6 +33,7 @@ public class PagingRequest<C, E> {
     private int maxRows = -1;
     private int timeout;
     private OrderBy orderBy;
+    private Boolean useLastPageIfPageNoOut;
     private C condition;
     private PagingResult<E> result;
 
@@ -168,6 +169,8 @@ public class PagingRequest<C, E> {
     }
 
     public void clear(boolean clearResult) {
+        count = null;
+        useLastPageIfPageNoOut = null;
         if (clearResult) {
             if (result != null) {
                 result.setItems(new ArrayList());
@@ -196,8 +199,16 @@ public class PagingRequest<C, E> {
         return ctx;
     }
 
-    public PagingRequest setCtx(PagingRequestContext<C,E> ctx) {
+    public PagingRequest setCtx(PagingRequestContext<C, E> ctx) {
         this.ctx = ctx;
         return this;
+    }
+
+    public Boolean isUseLastPageIfPageNoOut() {
+        return useLastPageIfPageNoOut;
+    }
+
+    public void setUseLastPageIfPageNoOut(Boolean useLastPageIfPageNoOut) {
+        this.useLastPageIfPageNoOut = useLastPageIfPageNoOut;
     }
 }

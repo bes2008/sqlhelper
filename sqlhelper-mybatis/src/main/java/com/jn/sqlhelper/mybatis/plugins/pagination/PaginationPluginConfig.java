@@ -9,9 +9,7 @@ public class PaginationPluginConfig {
     private String countSuffix = "_COUNT";
     private int countCacheExpireInSeconds = 5;
     private int defaultPageSize = 10;
-
-    public PaginationPluginConfig() {
-    }
+    private boolean useLastPageIfPageNoOut = false;
 
     public boolean enableCountCache() {
         return this.countCacheMaxCapacity > 0;
@@ -68,5 +66,13 @@ public class PaginationPluginConfig {
 
     public void setDefaultPageSize(int defaultPageSize) {
         this.defaultPageSize = defaultPageSize;
+    }
+
+    public boolean isUseLastPageIfPageNoOut() {
+        return useLastPageIfPageNoOut;
+    }
+
+    public void setUseLastPageIfPageNoOut(boolean useLastPageIfPageNoOut) {
+        this.useLastPageIfPageNoOut = useLastPageIfPageNoOut;
     }
 }

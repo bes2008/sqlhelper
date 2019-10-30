@@ -14,9 +14,12 @@
 
 package com.jn.sqlhelper.springjdbc;
 
+import com.jn.easyjson.core.JSONBuilderProvider;
+
 public class JdbcTemplatePaginationProperties {
     private boolean count = true;
     private int defaultPageSize = 10;
+    private boolean useLastPageIfPageNoOut = false;
 
     public boolean isCount() {
         return count;
@@ -34,11 +37,16 @@ public class JdbcTemplatePaginationProperties {
         this.defaultPageSize = defaultPageSize;
     }
 
+    public boolean isUseLastPageIfPageNoOut() {
+        return useLastPageIfPageNoOut;
+    }
+
+    public void setUseLastPageIfPageNoOut(boolean useLastPageIfPageNoOut) {
+        this.useLastPageIfPageNoOut = useLastPageIfPageNoOut;
+    }
+
     @Override
     public String toString() {
-        return "JdbcTemplatePaginationProperties{" +
-                "count=" + count +
-                ", defaultPageSize=" + defaultPageSize +
-                '}';
+        return JSONBuilderProvider.create().serializeNulls(true).build().toJson(this);
     }
 }

@@ -16,8 +16,10 @@ package com.jn.sqlhelper.mybatis.plugins.pagination;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.jn.langx.annotation.NonNull;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.util.Chars;
+import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Collects;
@@ -54,7 +56,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     private PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
     private Cache<String, MappedStatement> countStatementCache;
     private String countSuffix = "_COUNT";
-    private String orderBySuffix = "_orderBy";
+    private static final String orderBySuffix = "_orderBy";
     private boolean inited = false;
 
 
@@ -99,6 +101,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         pluginConfig.setCountCacheMaxCapacity(accessor.getInteger(paginationPluginConfigPrefix + "countCacheMaxCapacity", pluginConfig.getCountCacheMaxCapacity()));
         pluginConfig.setCountSuffix(accessor.getString(paginationPluginConfigPrefix + "countSuffix", pluginConfig.getCountSuffix()));
         pluginConfig.setDefaultPageSize(accessor.getInteger(paginationPluginConfigPrefix + "defaultPageSize", pluginConfig.getDefaultPageSize()));
+        pluginConfig.setUseLastPageIfPageNoOut(accessor.getBoolean(paginationPluginConfigPrefix + "useLastPageIfPageNoOut", pluginConfig.isUseLastPageIfPageNoOut()));
 
         String instrumentorConfigPrefix = "sqlhelper.mybatis.instrumentor.";
         instrumentConfig.setDialect(accessor.getString(instrumentorConfigPrefix + "dialect", instrumentConfig.getDialect()));
@@ -136,6 +139,14 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
 
     public void setInstrumentorConfig(SQLInstrumentConfig config) {
         instrumentor.setConfig(config);
+    }
+
+    private boolean isUseLastPageIfPageNoOut(@NonNull PagingRequest request) {
+        Preconditions.checkNotNull(request);
+        if (request.isUseLastPageIfPageNoOut() == null) {
+            return pluginConfig.isUseLastPageIfPageNoOut();
+        }
+        return request.isUseLastPageIfPageNoOut();
     }
 
     @Override
@@ -224,10 +235,16 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                             int maxPageCount = result.getMaxPageCount();
                             if (maxPageCount >= 0) {
                                 if (requestPageNo > maxPageCount) {
-                                    request.setPageNo(maxPageCount);
-                                    result.setPageNo(maxPageCount);
+                                    if (isUseLastPageIfPageNoOut(request)) {
+                                        request.setPageNo(maxPageCount);
+                                        result.setPageNo(maxPageCount);
+                                    } else {
+                                        needQuery = false;
+                                    }
                                 }
                             }
+                        }else{
+                            result.setTotal(-1);
                         }
                     } catch (Throwable ex) {
                         logger.error(ex.getMessage(), ex);
