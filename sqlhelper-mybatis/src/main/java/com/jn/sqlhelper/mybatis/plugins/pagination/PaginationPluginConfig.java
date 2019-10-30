@@ -1,15 +1,13 @@
 package com.jn.sqlhelper.mybatis.plugins.pagination;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.sqlhelper.dialect.pagination.PaginationProperties;
 
-public class PaginationPluginConfig {
-    private boolean count = true;
+public class PaginationPluginConfig extends PaginationProperties {
     private int countCacheInitCapacity = 10;
     private int countCacheMaxCapacity = 1000;
     private String countSuffix = "_COUNT";
     private int countCacheExpireInSeconds = 5;
-    private int defaultPageSize = 10;
-    private boolean useLastPageIfPageNoOut = false;
 
     public boolean enableCountCache() {
         return this.countCacheMaxCapacity > 0;
@@ -18,14 +16,6 @@ public class PaginationPluginConfig {
     @Override
     public String toString() {
         return JSONBuilderProvider.create().serializeNulls(true).build().toJson(this);
-    }
-
-    public boolean isCount() {
-        return count;
-    }
-
-    public void setCount(boolean count) {
-        this.count = count;
     }
 
     public int getCountCacheInitCapacity() {
@@ -60,19 +50,4 @@ public class PaginationPluginConfig {
         this.countCacheExpireInSeconds = countCacheExpireInSeconds;
     }
 
-    public int getDefaultPageSize() {
-        return defaultPageSize;
-    }
-
-    public void setDefaultPageSize(int defaultPageSize) {
-        this.defaultPageSize = defaultPageSize;
-    }
-
-    public boolean isUseLastPageIfPageNoOut() {
-        return useLastPageIfPageNoOut;
-    }
-
-    public void setUseLastPageIfPageNoOut(boolean useLastPageIfPageNoOut) {
-        this.useLastPageIfPageNoOut = useLastPageIfPageNoOut;
-    }
 }

@@ -14,39 +14,8 @@
 
 package com.jn.sqlhelper.apachedbutils;
 
-import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.sqlhelper.dialect.pagination.PaginationProperties;
 
-public class DbutilsPaginationProperties {
-    private boolean count = true;
-    private int defaultPageSize = 10;
-    private boolean useLastPageIfPageNoOut = false;
+public class DbutilsPaginationProperties extends PaginationProperties {
 
-    public boolean isCount() {
-        return count;
-    }
-
-    public void setCount(boolean count) {
-        this.count = count;
-    }
-
-    public int getDefaultPageSize() {
-        return defaultPageSize;
-    }
-
-    public void setDefaultPageSize(int defaultPageSize) {
-        this.defaultPageSize = defaultPageSize;
-    }
-
-    public boolean isUseLastPageIfPageNoOut() {
-        return useLastPageIfPageNoOut;
-    }
-
-    public void setUseLastPageIfPageNoOut(boolean useLastPageIfPageNoOut) {
-        this.useLastPageIfPageNoOut = useLastPageIfPageNoOut;
-    }
-
-    @Override
-    public String toString() {
-        return JSONBuilderProvider.create().serializeNulls(true).build().toJson(this);
-    }
 }
