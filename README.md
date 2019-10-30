@@ -57,7 +57,8 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |sqlhelper-springjdbc | 2.0.2+         |1.6+ |  supports spring-jdbc |
 |sqlhelper-springjdbc-spring-boot| 2.0.2+|1.8+| spring boot autoconfigure, starter for sqlhelper-springjdbc |
 |sqlhelper-mybatisplus|2.0.7+         |1.6+ |  supports mybatis-plus |
-|sqlhelper-mybatisplus-spring-boot|2.0.7+         |1.8+ |  supports mybatis-plus in spring boot application |
+|sqlhelper-mybatisplus-spring-boot|2.0.7+ |1.8+ |  supports mybatis-plus in spring boot application |
+|sqlhelper-dbutils | 2.2.0            |1.6+| supports Apache Commons-DBUtils |
 |sqlhelper-examples|1.0+               |1.8+ |  some examples for there tools |
 
 
