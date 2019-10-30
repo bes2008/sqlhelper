@@ -291,7 +291,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         RowSelection rowSelection = rowSelectionBuilder.build(request);
                         String paginationSql = PAGING_CONTEXT.isOrderByRequest() ? instrumentor.instrumentOrderByLimitSql(sql, request.getOrderBy(), rowSelection) : instrumentor.instrumentLimitSql(sql, rowSelection);
 
-                        if (psc != null && psc instanceof NamedParameterPreparedStatementCreator) {
+                        if (psc instanceof NamedParameterPreparedStatementCreator) {
                             NamedParameterPreparedStatementCreator oldCreator = (NamedParameterPreparedStatementCreator) psc;
                             psc = new NamedParameterPreparedStatementCreator(paginationSql, oldCreator.getParameters(), oldCreator.getFactory());
                         } else {
