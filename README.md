@@ -64,7 +64,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 ## tools usage
 ### pagination plugin
 #### Key Features
-1. Supports MyBatis, MyBatis-Plus, SpringJdbc, JFinal, EBean, Mango, Hibernate
+1. Supports MyBatis, MyBatis-Plus, SpringJdbc, Apache Commons-DBUtils, JFinal, EBean, Mango, Hibernate
 2. Supported 110+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
   + AliSQL (阿里 MySQL)
   + AntDB (亚信)
@@ -125,7 +125,8 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |  国产数据库               |         X          | √ （参见上述列表）  |
 |  Spring JDBC             |         X          | 2.x,3.x,4.x,5.x   | 
 |  SqlSymbol Mapping       |         X          |         √         |
-|  mybatis-plus            |         X          |         √         |   
+|  MyBatis-Plus            |         X          |         √         |   
+|  Apache Commons-DBUtils  |         X          |         √         | 
                      
 
 
