@@ -24,7 +24,7 @@ public class BaseLikeEscaper implements LikeEscaper {
     public static final BaseLikeEscaper INSTANCE = new BaseLikeEscaper();
 
     protected static final List<Character> STANDARD_LIKE_KEY_CHARS = Collects.asList(new Character[]{
-            '_', '%', '\\'
+            '\'', '_', '%', '\\'
     });
 
     @Override
