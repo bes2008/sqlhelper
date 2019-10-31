@@ -95,11 +95,6 @@ public class OracleDialect extends AbstractDialect {
             col++;
             return col;
         }
-
-        @Override
-        public String escapeLikeKeyChars(String pattern) {
-            return super.escapeLikeKeyChars(pattern);
-        }
     }
 
     private static class Oracle8i9LimitHandler extends AbstractLimitHandler {
