@@ -15,6 +15,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.internal.likeescaper.CStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.MySqlUrlParser;
 
@@ -27,6 +28,7 @@ public class MySQLDialect extends AbstractDialect {
         super();
         setUrlParser(new MySqlUrlParser());
         setLimitHandler(new LimitCommaLimitHandler());
+        setLikeEscaper(new CStyleEscaper());
     }
 
     @Override

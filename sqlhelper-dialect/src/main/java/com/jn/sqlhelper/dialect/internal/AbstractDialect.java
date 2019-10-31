@@ -16,6 +16,7 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
@@ -26,9 +27,7 @@ import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 import com.jn.sqlhelper.common.ddl.model.Table;
 import com.jn.sqlhelper.common.exception.TableNonExistsException;
 import com.jn.sqlhelper.common.utils.SQLs;
-import com.jn.sqlhelper.dialect.DatabaseInfo;
-import com.jn.sqlhelper.dialect.Dialect;
-import com.jn.sqlhelper.dialect.RowSelection;
+import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.dialect.ddl.generator.CommonTableGenerator;
 import com.jn.sqlhelper.dialect.internal.limit.DefaultLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
@@ -48,6 +47,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     private AbstractDialect delegate = null;
     private UrlParser urlParser;
     private LimitHandler limitHandler;
+    private LikeEscaper likeEscaper;
     private Boolean isUseLimitInVariableMode = null;
 
     private final Properties properties = new Properties();
@@ -97,15 +97,21 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         getRealDialect().limitHandler = limitHandler;
     }
 
-    protected void setDelegate(T delegate) {
+    protected void setDelegate(@Nullable T delegate) {
         this.delegate = delegate;
     }
 
-    protected void setUrlParser(UrlParser urlParser) {
+    protected void setUrlParser(@NonNull UrlParser urlParser) {
+        Preconditions.checkNotNull(urlParser);
         if (urlParser instanceof CommonUrlParser) {
             ((CommonUrlParser) urlParser).setDialect(this);
         }
         getRealDialect().urlParser = urlParser;
+    }
+
+    protected void setLikeEscaper(@NonNull LikeEscaper likeEscaper) {
+        likeEscaper = likeEscaper == null ? BaseLikeEscaper.INSTANCE : likeEscaper;
+        getRealDialect().likeEscaper = likeEscaper;
     }
 
 
@@ -261,5 +267,20 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     @Override
     public boolean isSupportsDistinct() {
         return delegate == null ? true : delegate.isSupportsDistinct();
+    }
+
+    @Override
+    public List<Character> getLikeKeyChars() {
+        return getRealDialect().likeEscaper.getLikeKeyChars();
+    }
+
+    @Override
+    public String escapeLikeKeyChars(String pattern) {
+        return getRealDialect().likeEscaper.escapeLikeKeyChars(pattern);
+    }
+
+    @Override
+    public String appentmentAfterLike() {
+        return getRealDialect().likeEscaper.appentmentAfterLike();
     }
 }

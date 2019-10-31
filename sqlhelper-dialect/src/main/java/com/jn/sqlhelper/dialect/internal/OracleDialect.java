@@ -18,6 +18,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLDialectException;
 import com.jn.sqlhelper.dialect.annotation.Driver;
+import com.jn.sqlhelper.dialect.internal.likeescaper.OracleStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;
@@ -36,8 +37,9 @@ public class OracleDialect extends AbstractDialect {
 
     public OracleDialect() {
         super();
-        setUrlParser(new OracleUrlParser());
         setDelegate(new Oracle9iDialect());
+        setUrlParser(new OracleUrlParser());
+        setLikeEscaper(new OracleStyleEscaper());
     }
 
     public OracleDialect(java.sql.Driver driver) {
@@ -92,6 +94,11 @@ public class OracleDialect extends AbstractDialect {
             statement.registerOutParameter(col, OracleTypesHelper.INSTANCE.getOracleCursorTypeSqlType());
             col++;
             return col;
+        }
+
+        @Override
+        public String escapeLikeKeyChars(String pattern) {
+            return super.escapeLikeKeyChars(pattern);
         }
     }
 
@@ -153,8 +160,7 @@ public class OracleDialect extends AbstractDialect {
         }
     }
 
-    private class Oracle10gDialect
-            extends Oracle9iDialect {
+    private class Oracle10gDialect extends Oracle9iDialect {
         private Oracle10gDialect() {
             super();
         }
