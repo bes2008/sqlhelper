@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.common.resultset;
 
 import com.jn.langx.annotation.Nullable;
+import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.LinkedCaseInsensitiveMap;
 
 import java.sql.ResultSet;
@@ -44,7 +45,7 @@ public class MapRowMapper implements RowMapper<Map<String, Object>> {
         try {
             return ResultSets.getResultSetValue(rs, index);
         } catch (Throwable ex) {
-            throw com.jn.langx.util.Throwables.wrapAsRuntimeException(ex);
+            throw Throwables.wrapAsRuntimeException(ex);
         }
     }
 
