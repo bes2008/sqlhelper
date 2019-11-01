@@ -15,11 +15,14 @@
 
 package com.jn.sqlhelper.dialect;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
+import com.jn.langx.cache.Cache;
+import com.jn.langx.cache.CacheBuilder;
+import com.jn.langx.cache.Loader;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
@@ -27,20 +30,19 @@ import com.jn.sqlhelper.dialect.orderby.OrderByInstrumentor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import java.sql.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SQLStatementInstrumentor {
     private static final Logger logger = LoggerFactory.getLogger((Class) SQLStatementInstrumentor.class);
-    @Nonnull
+    @NonNull
     private SQLInstrumentConfig config;
     private DialectRegistry dialectRegistry;
     private static final ThreadLocal<Dialect> DIALECT_HOLDER = new ThreadLocal<Dialect>();
     private boolean inited = false;
 
-    private LoadingCache<String, InstrumentedSelectStatement> instrumentSqlCache;
+    private Cache<String, InstrumentedSelectStatement> instrumentSqlCache;
 
     public SQLStatementInstrumentor() {
 
@@ -54,19 +56,32 @@ public class SQLStatementInstrumentor {
             this.dialectRegistry = DialectRegistry.getInstance();
             inited = true;
             if (this.config.isCacheInstrumentedSql()) {
-                instrumentSqlCache = CacheBuilder.newBuilder()
+                instrumentSqlCache = CacheBuilder.<String, InstrumentedSelectStatement>newBuilder()
                         .initialCapacity(1000)
-                        .maximumSize(Integer.MAX_VALUE)
+                        .maxCapacity(Integer.MAX_VALUE)
                         .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-                        .expireAfterAccess(5, TimeUnit.MINUTES)
-                        .build(new CacheLoader<String, InstrumentedSelectStatement>() {
+                        .expireAfterRead(5 * 60)
+                        .loader(new Loader<String, InstrumentedSelectStatement>() {
                             @Override
-                            public InstrumentedSelectStatement load(String originalSql) throws Exception {
+                            public InstrumentedSelectStatement load(String originalSql) {
                                 InstrumentedSelectStatement s = new InstrumentedSelectStatement();
                                 s.setOriginalSql(originalSql);
                                 return s;
                             }
-                        });
+
+                            @Override
+                            public Map<String, InstrumentedSelectStatement> getAll(Iterable<String> keys) {
+                                final Map<String, InstrumentedSelectStatement> map = new HashMap<String, InstrumentedSelectStatement>();
+                                Collects.forEach(keys, new Consumer<String>() {
+                                    @Override
+                                    public void accept(String k) {
+                                        map.put(k, load(k));
+                                    }
+                                });
+                                return map;
+                            }
+                        })
+                        .build();
             }
         }
     }
@@ -240,7 +255,7 @@ public class SQLStatementInstrumentor {
         if (this.config.isCacheInstrumentedSql()) {
             try {
                 return this.instrumentSqlCache.get(originalSql);
-            } catch (ExecutionException e) {
+            } catch (Throwable e) {
                 // ignore it
             }
         }
@@ -291,7 +306,7 @@ public class SQLStatementInstrumentor {
         return this.config;
     }
 
-    @Nonnull
+    @NonNull
     public void setConfig(final SQLInstrumentConfig config) {
         this.config = config;
     }

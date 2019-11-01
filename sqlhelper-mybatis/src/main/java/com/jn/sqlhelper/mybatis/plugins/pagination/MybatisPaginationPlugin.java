@@ -14,9 +14,9 @@
 
 package com.jn.sqlhelper.mybatis.plugins.pagination;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.cache.Cache;
+import com.jn.langx.cache.CacheBuilder;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.util.Chars;
 import com.jn.langx.util.Preconditions;
@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings({"unchecked", "unused"})
 @Intercepts({@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}), @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class})})
@@ -79,11 +78,11 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             rowSelectionBuilder.setDefaultPageSize(pluginConfig.getDefaultPageSize());
 
             if (pluginConfig.enableCountCache()) {
-                this.countStatementCache = CacheBuilder.newBuilder()
+                this.countStatementCache = CacheBuilder.<String, MappedStatement>newBuilder()
                         .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-                        .expireAfterWrite(pluginConfig.getCountCacheExpireInSeconds(), TimeUnit.SECONDS)
+                        .expireAfterWrite(pluginConfig.getCountCacheExpireInSeconds())
                         .initialCapacity(pluginConfig.getCountCacheInitCapacity())
-                        .maximumSize(pluginConfig.getCountCacheMaxCapacity()).build();
+                        .maxCapacity(pluginConfig.getCountCacheMaxCapacity()).build();
                 this.countSuffix = (Strings.isBlank(pluginConfig.getCountSuffix()) ? "_COUNT" : pluginConfig.getCountSuffix().trim());
             }
         }
@@ -243,7 +242,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                                     }
                                 }
                             }
-                        }else{
+                        } else {
                             result.setTotal(-1);
                         }
                     } catch (Throwable ex) {
@@ -508,7 +507,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
 
             countStatement = builder.build();
             if (pluginConfig.enableCountCache()) {
-                this.countStatementCache.put(countStatementId, countStatement);
+                this.countStatementCache.set(countStatementId, countStatement);
             }
         }
         return countStatement;
