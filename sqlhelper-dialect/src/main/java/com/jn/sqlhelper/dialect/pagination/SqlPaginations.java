@@ -19,29 +19,29 @@ import com.jn.sqlhelper.dialect.orderby.OrderByBuilder;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 
 public class SqlPaginations {
-    public static PagingRequest preparePagination(int pageNo, int pageSize) {
+    public static <C,E> PagingRequest<C,E> preparePagination(int pageNo, int pageSize) {
         return preparePagination(pageNo, pageSize, null);
     }
 
-    public static PagingRequest preparePagination(int pageNo, int pageSize, String sort) {
+    public static <C,E> PagingRequest<C,E> preparePagination(int pageNo, int pageSize, String sort) {
         return preparePagination(pageNo, pageSize, sort, null);
     }
 
-    public static PagingRequest preparePagination(int pageNo, int pageSize, String sort, OrderByBuilder<String> orderByBuilder) {
+    public static <C,E> PagingRequest<C,E> preparePagination(int pageNo, int pageSize, String sort, OrderByBuilder<String> orderByBuilder) {
         return preparePagination(pageNo, pageSize, sort, orderByBuilder, true);
     }
 
-    public static PagingRequest preparePagination(int pageNo, int pageSize, String sort, OrderByBuilder<String> orderByBuilder, String dialect) {
+    public static <C,E> PagingRequest<C,E> preparePagination(int pageNo, int pageSize, String sort, OrderByBuilder<String> orderByBuilder, String dialect) {
         return preparePagination(pageNo, pageSize, sort, orderByBuilder, dialect, true, null);
     }
 
 
-    public static PagingRequest preparePagination(int pageNo, int pageSize, String sort, OrderByBuilder<String> orderByBuilder, boolean count) {
+    public static <C,E> PagingRequest<C,E> preparePagination(int pageNo, int pageSize, String sort, OrderByBuilder<String> orderByBuilder, boolean count) {
         return preparePagination(pageNo, pageSize, sort, orderByBuilder, null, count, null);
     }
 
-    public static PagingRequest preparePagination(int pageNo, int pageSize, String sort, OrderByBuilder<String> orderByBuilder, String dialect, boolean count, String countColumn) {
-        PagingRequest pagingRequest = new PagingRequest().limit(pageNo, pageSize);
+    public static <C,E> PagingRequest<C,E> preparePagination(int pageNo, int pageSize, String sort, OrderByBuilder<String> orderByBuilder, String dialect, boolean count, String countColumn) {
+        PagingRequest<C,E> pagingRequest = new PagingRequest<C,E>().limit(pageNo, pageSize);
         if (Strings.isNotEmpty(sort)) {
             if (orderByBuilder == null) {
                 orderByBuilder = SqlStyleOrderByBuilder.DEFAULT;
