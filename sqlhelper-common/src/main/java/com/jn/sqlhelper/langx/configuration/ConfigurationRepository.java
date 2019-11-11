@@ -47,7 +47,6 @@ public interface ConfigurationRepository<T extends Configuration, Loader extends
      * it equals: <code>removeById(T configuration, true)</code>
      *
      * @param id the configuration id
-     * @return the removed configuration
      */
     void removeById(String id);
 
@@ -56,7 +55,6 @@ public interface ConfigurationRepository<T extends Configuration, Loader extends
      *
      * @param id   the configuration id
      * @param sync whether sync to the real storage or not
-     * @return the removed configuration
      */
     void removeById(String id, boolean sync);
 
@@ -65,14 +63,12 @@ public interface ConfigurationRepository<T extends Configuration, Loader extends
      * it equals: <code>add(T configuration, true)</code>
      *
      * @param configuration the configuration bean
-     * @return true if add success
      */
     void add(T configuration);
 
     /**
      * @param configuration the configuration
      * @param sync          whether sync to the real storage or not
-     * @return true if add success, else false
      */
     void add(T configuration, boolean sync);
 

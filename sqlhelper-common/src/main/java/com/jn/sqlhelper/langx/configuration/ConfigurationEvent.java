@@ -14,23 +14,20 @@
 
 package com.jn.sqlhelper.langx.configuration;
 
-import com.jn.langx.util.Preconditions;
+import com.jn.langx.event.DomainEvent;
 
-public class ConfigurationEventFactory<T extends Configuration> {
-    private String domain;
+public class ConfigurationEvent<T extends Configuration> extends DomainEvent<T> {
+    private ConfigurationEventType eventType;
 
-    public ConfigurationEventFactory(String domain) {
-        Preconditions.checkNotNull(domain);
-        this.domain = domain;
+    public ConfigurationEvent(String eventDomain, T t) {
+        super(eventDomain, t);
     }
 
-    public String getDomain() {
-        return domain;
+    public ConfigurationEventType getEventType() {
+        return eventType;
     }
 
-    public ConfigurationEvent<T> createEvent(ConfigurationEventType type, T configuration) {
-        ConfigurationEvent<T> event = new ConfigurationEvent<T>(domain, configuration);
-        event.setEventType(type);
-        return event;
+    public void setEventType(ConfigurationEventType eventType) {
+        this.eventType = eventType;
     }
 }

@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.Map;
 
+@SuppressWarnings({"unchecked"})
 public abstract class AbstractConfigurationRepository<T extends Configuration, Loader extends ConfigurationLoader<T>, Writer extends ConfigurationWriter<T>> implements ConfigurationRepository<T, Loader, Writer> {
     private static final Logger logger = LoggerFactory.getLogger(AbstractConfigurationRepository.class);
     @NonNull
@@ -38,6 +39,10 @@ public abstract class AbstractConfigurationRepository<T extends Configuration, L
     protected volatile boolean running = false;
     @Nullable
     private EventPublisher eventPublisher;
+
+    @Nullable
+    private ConfigurationEventFactory<T> eventFactory;
+
     @NonNull
     private Cache<String, T> cache;
 
@@ -47,6 +52,10 @@ public abstract class AbstractConfigurationRepository<T extends Configuration, L
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setEventFactory(ConfigurationEventFactory<T> eventFactory) {
+        this.eventFactory = eventFactory;
     }
 
     @Override
@@ -99,9 +108,15 @@ public abstract class AbstractConfigurationRepository<T extends Configuration, L
 
     @Override
     public void removeById(String id, boolean sync) {
-        cache.remove(id);
-        if (sync && writer != null && writer.isSupportsRemove()) {
-            writer.remove(id);
+        T configuration = cache.getIfPresent(id);
+        if (configuration != null) {
+            if (sync && writer != null && writer.isSupportsRemove()) {
+                writer.remove(id);
+            }
+            cache.remove(id);
+            if (eventPublisher != null && eventFactory != null) {
+                eventPublisher.publish(eventFactory.createEvent(ConfigurationEventType.ADD, configuration));
+            }
         }
     }
 
@@ -117,6 +132,9 @@ public abstract class AbstractConfigurationRepository<T extends Configuration, L
                 writer.write(configuration);
             }
             cache.set(configuration.getId(), configuration);
+            if (eventPublisher != null && eventFactory != null) {
+                eventPublisher.publish(eventFactory.createEvent(ConfigurationEventType.ADD, configuration));
+            }
         }
     }
 
@@ -128,9 +146,12 @@ public abstract class AbstractConfigurationRepository<T extends Configuration, L
     @Override
     public void update(T configuration, boolean sync) {
         if (running) {
-            cache.set(configuration.getId(), configuration);
             if (sync && writer != null && writer.isSupportsRewrite()) {
                 writer.rewrite(configuration);
+            }
+            cache.set(configuration.getId(), configuration);
+            if (eventPublisher != null && eventFactory != null) {
+                eventPublisher.publish(eventFactory.createEvent(ConfigurationEventType.UPDATE, configuration));
             }
         }
     }

@@ -14,23 +14,28 @@
 
 package com.jn.sqlhelper.langx.configuration;
 
-import com.jn.langx.util.Preconditions;
+import com.jn.langx.Delegatable;
+import com.jn.langx.util.enums.base.EnumDelegate;
 
-public class ConfigurationEventFactory<T extends Configuration> {
-    private String domain;
+public enum ConfigurationEventType implements Delegatable<EnumDelegate> {
+    ADD(0, "ADD", "add a configuration"),
+    REMOVE(1, "REMOVE", "remove a configuration"),
+    UPDATE(2, "UPDATE", "update a configuration");
 
-    public ConfigurationEventFactory(String domain) {
-        Preconditions.checkNotNull(domain);
-        this.domain = domain;
+    private EnumDelegate delegate;
+
+    private ConfigurationEventType(int code, String name, String displayText) {
+        this.delegate = new EnumDelegate(code, name, displayText);
     }
 
-    public String getDomain() {
-        return domain;
+
+    @Override
+    public EnumDelegate getDelegate() {
+        return delegate;
     }
 
-    public ConfigurationEvent<T> createEvent(ConfigurationEventType type, T configuration) {
-        ConfigurationEvent<T> event = new ConfigurationEvent<T>(domain, configuration);
-        event.setEventType(type);
-        return event;
+    @Override
+    public void setDelegate(EnumDelegate delegate) {
+        this.delegate = delegate;
     }
 }

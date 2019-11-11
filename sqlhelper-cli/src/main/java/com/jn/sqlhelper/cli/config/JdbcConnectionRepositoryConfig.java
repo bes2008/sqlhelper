@@ -20,6 +20,7 @@ import com.jn.langx.util.timing.timer.HashedWheelTimer;
 import com.jn.sqlhelper.common.connection.NamedConnectionConfiguration;
 import com.jn.sqlhelper.common.connection.PropertiesNamedConnectionConfigurationParser;
 import com.jn.sqlhelper.common.connection.PropertiesNamedConnectionConfigurationSerializer;
+import com.jn.sqlhelper.langx.configuration.ConfigurationEventFactory;
 import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationCacheLoaderAdapter;
 import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationLoader;
 import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
@@ -66,6 +67,11 @@ public class JdbcConnectionRepositoryConfig {
         writer.setConfigurationSerializer(serializer);
         writer.setEncoding("iso-8859-1");
         return writer;
+    }
+
+    @Bean("configurationEventFactory")
+    public ConfigurationEventFactory<NamedConnectionConfiguration> configurationEventFactory() {
+        return new ConfigurationEventFactory<NamedConnectionConfiguration>("JdbcConnectionConfiguration");
     }
 
     @Bean
