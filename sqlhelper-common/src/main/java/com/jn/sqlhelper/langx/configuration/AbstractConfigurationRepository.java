@@ -14,9 +14,12 @@
 
 package com.jn.sqlhelper.langx.configuration;
 
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.cache.Cache;
 import com.jn.langx.event.EventPublisher;
 import com.jn.langx.lifecycle.InitializationException;
+import com.jn.langx.util.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,12 +28,17 @@ import java.util.Map;
 
 public abstract class AbstractConfigurationRepository<T extends Configuration, Loader extends ConfigurationLoader<T>, Writer extends ConfigurationWriter<T>> implements ConfigurationRepository<T, Loader, Writer> {
     private static final Logger logger = LoggerFactory.getLogger(AbstractConfigurationRepository.class);
+    @NonNull
     protected String name;
-    protected EventPublisher eventPublisher;
+    @NonNull
     protected Loader loader;
+    @Nullable
     protected Writer writer;
+    protected volatile boolean inited = false;
     protected volatile boolean running = false;
-
+    @Nullable
+    private EventPublisher eventPublisher;
+    @NonNull
     private Cache<String, T> cache;
 
     public void setCache(Cache<String, T> cache) {
@@ -53,6 +61,11 @@ public abstract class AbstractConfigurationRepository<T extends Configuration, L
 
     @Override
     public void startup() {
+        if (!inited) {
+            init();
+        }
+        Preconditions.checkNotNull(name);
+        Preconditions.checkNotNull(cache);
         running = true;
         logger.info("Startup configuration repository: {}", name);
     }
@@ -76,27 +89,49 @@ public abstract class AbstractConfigurationRepository<T extends Configuration, L
 
     @Override
     public T getById(String id) {
-        return cache.getIfPresent(id);
+        return cache.get(id);
     }
 
     @Override
-    public T removeById(String id) {
-        return cache.remove(id);
+    public void removeById(String id) {
+        removeById(id, true);
     }
 
     @Override
-    public boolean add(T configuration) {
-        if (running) {
-            cache.set(configuration.getId(), configuration);
-            return true;
+    public void removeById(String id, boolean sync) {
+        cache.remove(id);
+        if (sync && writer != null && writer.isSupportsRemove()) {
+            writer.remove(id);
         }
-        return false;
+    }
+
+    @Override
+    public void add(T configuration) {
+        add(configuration, true);
+    }
+
+    @Override
+    public void add(T configuration, boolean sync) {
+        if (running) {
+            if (sync && writer != null && writer.isSupportsWrite()) {
+                writer.write(configuration);
+            }
+            cache.set(configuration.getId(), configuration);
+        }
     }
 
     @Override
     public void update(T configuration) {
+        update(configuration, true);
+    }
+
+    @Override
+    public void update(T configuration, boolean sync) {
         if (running) {
             cache.set(configuration.getId(), configuration);
+            if (sync && writer != null && writer.isSupportsRewrite()) {
+                writer.rewrite(configuration);
+            }
         }
     }
 

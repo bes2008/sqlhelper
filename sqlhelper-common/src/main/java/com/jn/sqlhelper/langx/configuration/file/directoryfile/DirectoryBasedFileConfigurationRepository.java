@@ -15,14 +15,12 @@
 package com.jn.sqlhelper.langx.configuration.file.directoryfile;
 
 import com.jn.langx.lifecycle.InitializationException;
-import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.diff.MapDiffResult;
 import com.jn.langx.util.concurrent.CommonThreadFactory;
 import com.jn.langx.util.function.Consumer2;
-import com.jn.langx.util.io.file.FileFilter;
 import com.jn.langx.util.io.file.Files;
 import com.jn.langx.util.timing.timer.HashedWheelTimer;
 import com.jn.langx.util.timing.timer.Timeout;
@@ -34,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -45,22 +42,16 @@ import java.util.concurrent.TimeUnit;
  */
 public class DirectoryBasedFileConfigurationRepository<T extends Configuration> extends AbstractConfigurationRepository<T, DirectoryBasedFileConfigurationLoader<T>, DirectoryBasedFileConfigurationWriter<T>> {
     private static final Logger logger = LoggerFactory.getLogger(DirectoryBasedFileConfigurationRepository.class);
-    /**
-     * configuration file filter
-     */
-    private List<FileFilter> fileFilters;
 
     /**
      * units: seconds
      * scan interval, if <=0, will not refresh
      */
-    private int refreshIntervalInSeconds = -1;
+    private int reloadIntervalInSeconds = -1;
 
     private String directory;
 
     private Map<String, Long> lastModifiedTimeMap = Collects.emptyHashMap();
-
-    private volatile boolean inited;
 
     private Timer timer;
 
@@ -69,8 +60,8 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
     }
 
 
-    public void setRefreshIntervalInSeconds(int refreshIntervalInSeconds) {
-        this.refreshIntervalInSeconds = refreshIntervalInSeconds;
+    public void setReloadIntervalInSeconds(int reloadIntervalInSeconds) {
+        this.reloadIntervalInSeconds = reloadIntervalInSeconds;
     }
 
 
@@ -90,7 +81,7 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
                 logger.warn("The writer is not specified for the repository ({}), will disable write configuration to storage", name);
             }
             // enable refresh
-            if (refreshIntervalInSeconds > 0) {
+            if (reloadIntervalInSeconds > 0) {
                 if (timer == null) {
                     logger.warn("The timer is not specified for the repository ({}) , will use a simple timer", name);
                     timer = new HashedWheelTimer(new CommonThreadFactory("Configuration", true), 50, TimeUnit.MILLISECONDS);
@@ -110,7 +101,7 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
         }
         if (!running) {
             super.startup();
-            if (refreshIntervalInSeconds > 0) {
+            if (reloadIntervalInSeconds > 0) {
                 timer.newTimeout(new TimerTask() {
                     @Override
                     public void run(Timeout timeout) throws Exception {
@@ -120,11 +111,11 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
                             logger.error(ex.getMessage(), ex);
                         } finally {
                             if (running) {
-                                timer.newTimeout(this, refreshIntervalInSeconds, TimeUnit.SECONDS);
+                                timer.newTimeout(this, reloadIntervalInSeconds, TimeUnit.SECONDS);
                             }
                         }
                     }
-                }, refreshIntervalInSeconds, TimeUnit.SECONDS);
+                }, reloadIntervalInSeconds, TimeUnit.SECONDS);
             } else {
                 reload();
             }
@@ -146,10 +137,7 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
             Collects.forEach(lastModifiedDiffResult.getRemoves(), new Consumer2<String, Long>() {
                 @Override
                 public void accept(String id, Long lastModified) {
-                    T configuration = removeById(id);
-                    if (Emptys.isNotNull(configuration)) {
-                        // TODO publish event
-                    }
+                    removeById(id);
                 }
             });
             Collects.forEach(lastModifiedDiffResult.getUpdates(), new Consumer2<String, Long>() {
@@ -157,7 +145,6 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
                 public void accept(String id, Long lastModified) {
                     T configuration = loader.load(id);
                     update(configuration);
-                    // TODO publish event
                 }
             });
             Collects.forEach(lastModifiedDiffResult.getAdds(), new Consumer2<String, Long>() {
@@ -165,7 +152,6 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
                 public void accept(String id, Long lastModified) {
                     T configuration = loader.load(id);
                     add(configuration);
-                    // TODO publish event
                 }
             });
         } finally {

@@ -20,6 +20,7 @@ import com.jn.langx.util.timing.timer.HashedWheelTimer;
 import com.jn.sqlhelper.common.connection.NamedConnectionConfiguration;
 import com.jn.sqlhelper.common.connection.PropertiesNamedConnectionConfigurationParser;
 import com.jn.sqlhelper.common.connection.PropertiesNamedConnectionConfigurationSerializer;
+import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationCacheLoaderAdapter;
 import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationLoader;
 import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
 import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationWriter;
@@ -37,11 +38,6 @@ public class JdbcConnectionRepositoryConfig {
     private JdbcConnectionRepositoryProperties jdbcProperties;
 
     @Bean
-    public Cache<String, NamedConnectionConfiguration> jdbcConnectionConfigurationCache() {
-        return CacheBuilder.<String, NamedConnectionConfiguration>newBuilder().build();
-    }
-
-    @Bean
     public PropertiesNamedConnectionConfigurationParser propertiesNamedConnectionConfigurationParser() {
         return new PropertiesNamedConnectionConfigurationParser();
     }
@@ -52,6 +48,12 @@ public class JdbcConnectionRepositoryConfig {
         loader.setConfigurationParser(propertiesConfigurationParser);
         return loader;
     }
+
+    @Bean
+    public Cache<String, NamedConnectionConfiguration> jdbcConnectionConfigurationCache(DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> loader) {
+        return CacheBuilder.<String, NamedConnectionConfiguration>newBuilder().loader(new DirectoryBasedFileConfigurationCacheLoaderAdapter<NamedConnectionConfiguration>(loader)).build();
+    }
+
 
     @Bean
     public PropertiesNamedConnectionConfigurationSerializer propertiesNamedConnectionConfigurationSerializer() {
@@ -79,7 +81,7 @@ public class JdbcConnectionRepositoryConfig {
         repository.setConfigurationLoader(loader);
         repository.setConfigurationWriter(writer);
         repository.setTimer(timer);
-        repository.setRefreshIntervalInSeconds(jdbcProperties.getRefreshIntervalInSeconds());
+        repository.setReloadIntervalInSeconds(jdbcProperties.getReloadIntervalInSeconds());
         repository.startup();
         return repository;
     }

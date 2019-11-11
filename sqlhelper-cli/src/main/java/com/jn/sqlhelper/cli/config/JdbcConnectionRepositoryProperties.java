@@ -19,7 +19,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "jdbc-connection-repository")
 public class JdbcConnectionRepositoryProperties {
     private String directory;
-    private int refreshIntervalInSeconds = -1;
+    private int reloadIntervalInSeconds = -1;
 
     public String getDirectory() {
         return directory;
@@ -29,11 +29,11 @@ public class JdbcConnectionRepositoryProperties {
         this.directory = directory;
     }
 
-    public int getRefreshIntervalInSeconds() {
-        return refreshIntervalInSeconds;
+    public int getReloadIntervalInSeconds() {
+        return reloadIntervalInSeconds;
     }
 
-    public void setRefreshIntervalInSeconds(int refreshIntervalInSeconds) {
-        this.refreshIntervalInSeconds = refreshIntervalInSeconds;
+    public void setReloadIntervalInSeconds(int reloadIntervalInSeconds) {
+        this.reloadIntervalInSeconds = reloadIntervalInSeconds;
     }
 }

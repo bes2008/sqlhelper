@@ -37,10 +37,21 @@ import java.nio.charset.Charset;
 
 public class DirectoryBasedFileConfigurationWriter<T extends Configuration> implements ConfigurationWriter<T> {
     private static final Logger logger = LoggerFactory.getLogger(DirectoryBasedFileConfigurationWriter.class);
+
     private String directory;
+
+    /**
+     * serialize a configurition to string
+     */
     private ConfigurationSerializer<T, String> configurationSerializer;
 
+    /**
+     * Get a filename by configuration id
+     */
     private Supplier<String, String> filenameSupplier;
+    /**
+     * the configuration file's encoding
+     */
     private Charset encoding = Charsets.getCharset("utf-8");
 
     @Override
@@ -50,14 +61,14 @@ public class DirectoryBasedFileConfigurationWriter<T extends Configuration> impl
         if (Strings.isEmpty(configString)) {
             return;
         }
-        String filepath = directory + File.separator + filenameSupplier.get(configuration.getId());
+        String filePath = getConfigurationFilePath(configuration.getId());
         BufferedOutputStream outputStream = null;
         try {
-            if (Files.makeFile(filepath)) {
-                outputStream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+            if (Files.makeFile(filePath)) {
+                outputStream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
                 IOs.write(configString, outputStream, encoding);
             } else {
-                logger.warn("write configuration to file fail, file: {}, configuration: {}", filepath, configuration);
+                logger.warn("write configuration to file fail, file: {}, configuration: {}", filePath, configuration);
             }
         } catch (IOException ex) {
             throw Throwables.wrapAsRuntimeException(ex);
@@ -85,5 +96,34 @@ public class DirectoryBasedFileConfigurationWriter<T extends Configuration> impl
         this.filenameSupplier = filenameSupplier;
     }
 
+    @Override
+    public boolean isSupportsWrite() {
+        return true;
+    }
 
+    @Override
+    public boolean isSupportsRewrite() {
+        return true;
+    }
+
+    @Override
+    public void rewrite(T configuration) {
+        remove(configuration.getId());
+        write(configuration);
+    }
+
+    @Override
+    public boolean isSupportsRemove() {
+        return true;
+    }
+
+    @Override
+    public void remove(String id) {
+        String filePath = getConfigurationFilePath(id);
+        new File(filePath).delete();
+    }
+
+    private String getConfigurationFilePath(String configurationId) {
+        return directory + File.separator + filenameSupplier.get(configurationId);
+    }
 }
