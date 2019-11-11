@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 
-public class PropertiesConfigurationParser implements InputStreamConfigurationParser<NamedConnectionConfiguration> {
-    private static final Logger logger = LoggerFactory.getLogger(PropertiesConfigurationParser.class);
+public class PropertiesNamedConnfigurationConfigurationParser implements InputStreamConfigurationParser<NamedConnectionConfiguration> {
+    private static final Logger logger = LoggerFactory.getLogger(PropertiesNamedConnfigurationConfigurationParser.class);
 
     @Override
     public NamedConnectionConfiguration parse(InputStream input) {
