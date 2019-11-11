@@ -22,7 +22,6 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.diff.MapDiffResult;
 import com.jn.langx.util.concurrent.CommonThreadFactory;
 import com.jn.langx.util.function.Consumer2;
-import com.jn.langx.util.function.Supplier;
 import com.jn.langx.util.io.file.FileFilter;
 import com.jn.langx.util.io.file.Files;
 import com.jn.langx.util.timing.timer.HashedWheelTimer;
@@ -69,30 +68,11 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
         this.directory = directory;
     }
 
-    private Supplier<String, String> configurationIdSupplier = new Supplier<String, String>() {
-        @Override
-        public String get(String filename) {
-            return filename;
-        }
-    };
-    private Supplier<String, String> filenameSupplier = new Supplier<String, String>() {
-        @Override
-        public String get(String configurationId) {
-            return configurationId;
-        }
-    };
 
     public void setRefreshIntervalInSeconds(int refreshIntervalInSeconds) {
         this.refreshIntervalInSeconds = refreshIntervalInSeconds;
     }
 
-    public void setConfigurationIdSupplier(Supplier<String, String> configurationIdSupplier) {
-        this.configurationIdSupplier = configurationIdSupplier;
-    }
-
-    public void setFilenameSupplier(Supplier<String, String> filenameSupplier) {
-        this.filenameSupplier = filenameSupplier;
-    }
 
     @Override
     public void init() throws InitializationException {
@@ -106,7 +86,7 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
             }
             loader.setDirectory(directory);
 
-            if (this.writer == null) {
+            if (writer == null) {
                 logger.warn("The writer is not specified for the repository ({}), will disable write configuration to storage", name);
             }
             // enable refresh

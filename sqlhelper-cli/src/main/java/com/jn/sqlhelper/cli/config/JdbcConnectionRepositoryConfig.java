@@ -16,10 +16,13 @@ package com.jn.sqlhelper.cli.config;
 
 import com.jn.langx.cache.Cache;
 import com.jn.langx.cache.CacheBuilder;
+import com.jn.langx.util.timing.timer.HashedWheelTimer;
 import com.jn.sqlhelper.common.connection.NamedConnectionConfiguration;
 import com.jn.sqlhelper.common.connection.PropertiesNamedConnectionConfigurationParser;
+import com.jn.sqlhelper.common.connection.PropertiesNamedConnectionConfigurationSerializer;
 import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationLoader;
 import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
+import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -27,11 +30,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties(JdbcProperties.class)
-public class JdbcConfig {
+@EnableConfigurationProperties(JdbcConnectionRepositoryProperties.class)
+public class JdbcConnectionRepositoryConfig {
 
     @Autowired
-    private JdbcProperties jdbcProperties;
+    private JdbcConnectionRepositoryProperties jdbcProperties;
 
     @Bean
     public Cache<String, NamedConnectionConfiguration> jdbcConnectionConfigurationCache() {
@@ -39,7 +42,7 @@ public class JdbcConfig {
     }
 
     @Bean
-    public PropertiesNamedConnectionConfigurationParser propertiesConfigurationParser() {
+    public PropertiesNamedConnectionConfigurationParser propertiesNamedConnectionConfigurationParser() {
         return new PropertiesNamedConnectionConfigurationParser();
     }
 
@@ -51,14 +54,32 @@ public class JdbcConfig {
     }
 
     @Bean
+    public PropertiesNamedConnectionConfigurationSerializer propertiesNamedConnectionConfigurationSerializer() {
+        return new PropertiesNamedConnectionConfigurationSerializer();
+    }
+
+    @Bean("jdbcDirectoryBasedFileConfigurationWriter")
+    public DirectoryBasedFileConfigurationWriter<NamedConnectionConfiguration> directoryBasedFileConfigurationWriter(@Autowired PropertiesNamedConnectionConfigurationSerializer serializer) {
+        DirectoryBasedFileConfigurationWriter<NamedConnectionConfiguration> writer = new DirectoryBasedFileConfigurationWriter<NamedConnectionConfiguration>();
+        writer.setConfigurationSerializer(serializer);
+        writer.setEncoding("iso-8859-1");
+        return writer;
+    }
+
+    @Bean
     public DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration> directoryPropertiesFileConfigurationRepository(
             @Autowired @Qualifier("jdbcConnectionConfigurationCache") Cache<String, NamedConnectionConfiguration> cache,
-            @Autowired @Qualifier("jdbcDirectoryBasedFileConfigurationLoader") DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> loader) {
+            @Autowired @Qualifier("jdbcDirectoryBasedFileConfigurationLoader") DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> loader,
+            @Autowired @Qualifier("jdbcDirectoryBasedFileConfigurationWriter") DirectoryBasedFileConfigurationWriter<NamedConnectionConfiguration> writer,
+            @Autowired HashedWheelTimer timer) {
         DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration> repository = new DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration>();
         repository.setCache(cache);
         repository.setName("JdbcConnectionConfigurationRepository");
         repository.setDirectory(jdbcProperties.getDirectory());
         repository.setConfigurationLoader(loader);
+        repository.setConfigurationWriter(writer);
+        repository.setTimer(timer);
+        repository.setRefreshIntervalInSeconds(jdbcProperties.getRefreshIntervalInSeconds());
         repository.init();
         repository.startup();
         return repository;

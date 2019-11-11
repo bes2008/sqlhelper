@@ -16,9 +16,10 @@ package com.jn.sqlhelper.cli.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "jdbcconnconfig")
-public class JdbcProperties {
+@ConfigurationProperties(prefix = "jdbc-connection-repository")
+public class JdbcConnectionRepositoryProperties {
     private String directory;
+    private int refreshIntervalInSeconds = -1;
 
     public String getDirectory() {
         return directory;
@@ -26,5 +27,13 @@ public class JdbcProperties {
 
     public void setDirectory(String directory) {
         this.directory = directory;
+    }
+
+    public int getRefreshIntervalInSeconds() {
+        return refreshIntervalInSeconds;
+    }
+
+    public void setRefreshIntervalInSeconds(int refreshIntervalInSeconds) {
+        this.refreshIntervalInSeconds = refreshIntervalInSeconds;
     }
 }

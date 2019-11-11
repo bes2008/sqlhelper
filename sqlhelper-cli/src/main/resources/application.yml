@@ -1,2 +1,2 @@
-jdbcconnconfig:
+jdbc-connection-repository:
   directory: ./conf
