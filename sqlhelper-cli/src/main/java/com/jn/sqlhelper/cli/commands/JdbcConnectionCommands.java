@@ -5,9 +5,8 @@ import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.StringMap;
 import com.jn.langx.util.function.Consumer2;
-import com.jn.sqlhelper.common.connection.ConnectionConfiguration;
-import com.jn.sqlhelper.common.connection.DirectoryPropertiesFileConfigurationRepository;
 import com.jn.sqlhelper.common.connection.NamedConnectionConfiguration;
+import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -20,7 +19,7 @@ import java.util.Properties;
 public class JdbcConnectionCommands {
 
     @Autowired
-    DirectoryPropertiesFileConfigurationRepository repository;
+    DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration> repository;
 
     @ShellMethod(key = "jdbc list", value = "list all connection configuration names")
     public List<String> getConnectionNames() {
@@ -28,7 +27,7 @@ public class JdbcConnectionCommands {
     }
 
     @ShellMethod(key = "jdbc create", value = "create an new connection configuration")
-    public ConnectionConfiguration addConnection(
+    public NamedConnectionConfiguration addConnection(
             @ShellOption() String name,
             @ShellOption() String driver,
             @ShellOption() String url,
@@ -61,6 +60,11 @@ public class JdbcConnectionCommands {
 
         repository.add(configuration);
         return configuration;
+    }
+
+    @ShellMethod(key = "jdbc get", value = "get a connection configuration by name")
+    public NamedConnectionConfiguration getConnection(String name) {
+        return repository.getById(name);
     }
 
 

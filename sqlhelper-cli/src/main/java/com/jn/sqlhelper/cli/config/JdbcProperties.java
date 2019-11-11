@@ -12,10 +12,19 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.connection;
+package com.jn.sqlhelper.cli.config;
 
-import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-public class DirectoryPropertiesFileConfigurationRepository extends DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration> {
+@ConfigurationProperties(prefix = "jdbcconnconfig")
+public class JdbcProperties {
+    private String directory;
 
+    public String getDirectory() {
+        return directory;
+    }
+
+    public void setDirectory(String directory) {
+        this.directory = directory;
+    }
 }

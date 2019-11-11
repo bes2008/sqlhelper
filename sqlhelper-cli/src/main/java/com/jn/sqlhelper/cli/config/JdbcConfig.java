@@ -16,24 +16,49 @@ package com.jn.sqlhelper.cli.config;
 
 import com.jn.langx.cache.Cache;
 import com.jn.langx.cache.CacheBuilder;
-import com.jn.sqlhelper.common.connection.DirectoryPropertiesFileConfigurationRepository;
 import com.jn.sqlhelper.common.connection.NamedConnectionConfiguration;
+import com.jn.sqlhelper.common.connection.PropertiesConfigurationParser;
+import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationLoader;
+import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@EnableConfigurationProperties(JdbcProperties.class)
 public class JdbcConfig {
+
+    @Autowired
+    private JdbcProperties jdbcProperties;
+
     @Bean
-    public Cache<String, NamedConnectionConfiguration> jdbcConnectionConfigurationCache(){
+    public Cache<String, NamedConnectionConfiguration> jdbcConnectionConfigurationCache() {
         return CacheBuilder.<String, NamedConnectionConfiguration>newBuilder().build();
     }
 
     @Bean
-    public DirectoryPropertiesFileConfigurationRepository directoryPropertiesFileConfigurationRepository(@Qualifier("jdbcConnectionConfigurationCache") Cache<String, NamedConnectionConfiguration> cache){
-        DirectoryPropertiesFileConfigurationRepository repository = new DirectoryPropertiesFileConfigurationRepository();
-        repository.setName("JdbcConnectionConfigurationRepository");
+    public PropertiesConfigurationParser propertiesConfigurationParser() {
+        return new PropertiesConfigurationParser();
+    }
+
+    @Bean("jdbcDirectoryBasedFileConfigurationLoader")
+    public DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> jdbcDirectoryBasedFileConfigurationLoader(@Autowired PropertiesConfigurationParser propertiesConfigurationParser) {
+        DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> loader = new DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration>();
+        loader.setConfigurationParser(propertiesConfigurationParser);
+        return loader;
+    }
+
+    @Bean
+    public DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration> directoryPropertiesFileConfigurationRepository(
+            @Autowired @Qualifier("jdbcConnectionConfigurationCache") Cache<String, NamedConnectionConfiguration> cache,
+            @Autowired @Qualifier("jdbcDirectoryBasedFileConfigurationLoader") DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> loader) {
+        DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration> repository = new DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration>();
         repository.setCache(cache);
+        repository.setName("JdbcConnectionConfigurationRepository");
+        repository.setDirectory(jdbcProperties.getDirectory());
+        repository.setConfigurationLoader(loader);
         repository.init();
         repository.startup();
         return repository;
