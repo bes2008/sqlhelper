@@ -19,7 +19,8 @@ import com.jn.langx.io.resource.FileResource;
 import com.jn.langx.io.resource.ResourceLoader;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Preconditions;
-import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.function.Function;
 import com.jn.langx.util.io.file.FileFilter;
 import com.jn.langx.util.io.file.filter.ExistsFileFilter;
 import com.jn.langx.util.io.file.filter.IsDirectoryFileFilter;
@@ -53,7 +54,7 @@ public class DirectoryBasedFileResourceLoader implements ResourceLoader {
 
     @Override
     public FileResource loadResource(String filename) {
-        return delegate.<FileResource>loadResource(directory + File.separator + filename);
+        return delegate.<FileResource>loadResource(FileResource.PREFIX + directory + File.separator + filename);
     }
 
     @Override
@@ -63,11 +64,21 @@ public class DirectoryBasedFileResourceLoader implements ResourceLoader {
 
     public List<File> listFiles() {
         File dir = new File(directory);
-        return Collects.asList(dir.listFiles());
+        return Pipeline.of(dir.listFiles()).map(new Function<File, File>() {
+            @Override
+            public File apply(File file) {
+                return file.getAbsoluteFile();
+            }
+        }).asList();
     }
 
     public List<File> listFiles(FileFilter fileFilter) {
         File dir = new File(directory);
-        return Collects.asList(dir.listFiles((java.io.FileFilter) fileFilter));
+        return Pipeline.of(dir.listFiles((java.io.FileFilter) fileFilter)).map(new Function<File, File>() {
+            @Override
+            public File apply(File file) {
+                return file.getAbsoluteFile();
+            }
+        }).asList();
     }
 }

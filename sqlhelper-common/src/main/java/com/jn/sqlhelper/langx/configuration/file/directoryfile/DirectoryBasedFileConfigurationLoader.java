@@ -84,16 +84,17 @@ public class DirectoryBasedFileConfigurationLoader<T extends Configuration> impl
     public T load(String id) {
         FileResource fileResource = resourceLoader.loadResource(filenameSupplier.get(id));
         InputStream inputStream = null;
+        T configuration = null;
         try {
             inputStream = fileResource.getInputStream();
-            T configuration = configurationParser.parse(inputStream);
+            configuration = configurationParser.parse(inputStream);
             configuration.setId(id);
         } catch (Throwable ex) {
             logger.info("Error occur when load configuration: {}", id);
         } finally {
             IOs.close(inputStream);
         }
-        return null;
+        return configuration;
     }
 
     public Map<String, Long> scanConfigurationFileModifiedTimes() {

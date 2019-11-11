@@ -79,7 +79,7 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
 
             if (writer == null) {
                 logger.warn("The writer is not specified for the repository ({}), will disable write configuration to storage", name);
-            }else {
+            } else {
                 writer.setDirectory(directory);
             }
             // enable refresh

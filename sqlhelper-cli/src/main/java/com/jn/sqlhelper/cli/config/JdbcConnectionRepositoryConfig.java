@@ -16,6 +16,7 @@ package com.jn.sqlhelper.cli.config;
 
 import com.jn.langx.cache.Cache;
 import com.jn.langx.cache.CacheBuilder;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.function.Supplier;
 import com.jn.langx.util.io.file.FileFilter;
 import com.jn.langx.util.io.file.filter.PatternFilenameFilter;
@@ -51,7 +52,7 @@ public class JdbcConnectionRepositoryConfig {
         return new Supplier<String, String>() {
             @Override
             public String get(String filename) {
-                return null;
+                return Strings.replace(filename, "jdbcConn-","");
             }
         };
     }
