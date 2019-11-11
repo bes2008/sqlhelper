@@ -14,8 +14,8 @@
 
 package com.jn.sqlhelper.langx.configuration;
 
-import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.event.DomainEvent;
+import com.jn.langx.text.StringTemplates;
 
 public class ConfigurationEvent<T extends Configuration> extends DomainEvent<T> {
     private ConfigurationEventType eventType;
@@ -34,6 +34,6 @@ public class ConfigurationEvent<T extends Configuration> extends DomainEvent<T> 
 
     @Override
     public String toString() {
-        return JSONBuilderProvider.simplest().toJson(this);
+        return StringTemplates.format("{domain: {0}, eventType:{1}, source: {2}}", getDomain(), eventType.name(), getSource().toString());
     }
 }
