@@ -16,11 +16,14 @@ package com.jn.sqlhelper.langx.configuration.file.directoryfile;
 
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.diff.MapDiffResult;
 import com.jn.langx.util.concurrent.CommonThreadFactory;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.io.file.FileFilter;
+import com.jn.langx.util.io.file.Files;
 import com.jn.langx.util.timing.timer.HashedWheelTimer;
 import com.jn.langx.util.timing.timer.Timeout;
 import com.jn.langx.util.timing.timer.Timer;
@@ -30,6 +33,7 @@ import com.jn.sqlhelper.langx.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -73,6 +77,12 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
     public void init() throws InitializationException {
         if (!inited) {
             super.init();
+            Preconditions.checkNotNull(loader, "the configuration load is null");
+            Preconditions.checkTrue(Strings.isNotBlank(directory), "directory is null");
+            if (!Files.exists(new File(directory))) {
+                logger.warn("Can't find a directory : {}, will create it", new File(directory).getAbsoluteFile());
+                Files.makeDirs(directory);
+            }
             loader.setDirectory(directory);
             inited = true;
             // enable refresh

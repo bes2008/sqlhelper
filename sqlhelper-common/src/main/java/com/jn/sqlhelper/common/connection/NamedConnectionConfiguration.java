@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.common.connection;
 
+import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.sqlhelper.langx.configuration.Configuration;
 
 public class NamedConnectionConfiguration extends ConnectionConfiguration implements Configuration {
@@ -33,5 +34,10 @@ public class NamedConnectionConfiguration extends ConnectionConfiguration implem
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return JSONBuilderProvider.simplest().toJson(this);
     }
 }

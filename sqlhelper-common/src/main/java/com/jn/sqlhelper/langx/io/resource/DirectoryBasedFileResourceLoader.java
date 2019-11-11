@@ -17,6 +17,7 @@ package com.jn.sqlhelper.langx.io.resource;
 import com.jn.langx.io.resource.DefaultResourceLoader;
 import com.jn.langx.io.resource.FileResource;
 import com.jn.langx.io.resource.ResourceLoader;
+import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.io.file.FileFilter;
@@ -38,9 +39,9 @@ public class DirectoryBasedFileResourceLoader implements ResourceLoader {
 
     public DirectoryBasedFileResourceLoader(String directory, ClassLoader classLoader) {
         Preconditions.checkNotNull(directory, "directory is null");
-        Preconditions.checkTrue(new ExistsFileFilter().test(new File(directory)), "directory {} is not exists");
-        Preconditions.checkTrue(new IsDirectoryFileFilter().test(new File(directory)), "directory {} is not a directory");
-        Preconditions.checkTrue(new ReadableFileFilter().test(new File(directory)), "directory {} is not readable");
+        Preconditions.checkTrue(new ExistsFileFilter().test(new File(directory)), StringTemplates.formatWithPlaceholder("directory {} is not exists", directory));
+        Preconditions.checkTrue(new IsDirectoryFileFilter().test(new File(directory)), StringTemplates.formatWithPlaceholder("directory {} is not a directory", directory));
+        Preconditions.checkTrue(new ReadableFileFilter().test(new File(directory)), StringTemplates.formatWithPlaceholder("directory {} is not readable", directory));
         this.directory = directory;
 
         this.delegate = new DefaultResourceLoader(classLoader);
@@ -52,7 +53,7 @@ public class DirectoryBasedFileResourceLoader implements ResourceLoader {
 
     @Override
     public FileResource loadResource(String filename) {
-        return delegate.loadResource(directory + File.separator + filename);
+        return delegate.<FileResource>loadResource(directory + File.separator + filename);
     }
 
     @Override
