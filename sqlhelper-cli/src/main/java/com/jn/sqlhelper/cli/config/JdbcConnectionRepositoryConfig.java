@@ -16,6 +16,8 @@ package com.jn.sqlhelper.cli.config;
 
 import com.jn.langx.cache.Cache;
 import com.jn.langx.cache.CacheBuilder;
+import com.jn.langx.event.EventPublisher;
+import com.jn.langx.event.local.SimpleEventPublisher;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.function.Supplier;
 import com.jn.langx.util.io.file.FileFilter;
@@ -52,7 +54,7 @@ public class JdbcConnectionRepositoryConfig {
         return new Supplier<String, String>() {
             @Override
             public String get(String filename) {
-                return Strings.replace(filename, "jdbcConn-","");
+                return Strings.replace(filename, "jdbcConn-", "");
             }
         };
     }
@@ -113,12 +115,21 @@ public class JdbcConnectionRepositoryConfig {
     }
 
     @Bean
+    public EventPublisher eventPublisher() {
+        EventPublisher eventPublisher = new SimpleEventPublisher();
+        eventPublisher.addEventListener("JdbcConnectionConfiguration", new LogConfigurationMutationEventListener());
+        return eventPublisher;
+    }
+
+    @Bean
     public DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration> directoryPropertiesFileConfigurationRepository(
             @Autowired @Qualifier("jdbcConnectionConfigurationCache") Cache<String, NamedConnectionConfiguration> cache,
             @Autowired @Qualifier("jdbcDirectoryBasedFileConfigurationLoader") DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> loader,
             @Autowired @Qualifier("jdbcDirectoryBasedFileConfigurationWriter") DirectoryBasedFileConfigurationWriter<NamedConnectionConfiguration> writer,
+
             @Autowired @Qualifier("jdbcConfigurationEventFactory") ConfigurationEventFactory<NamedConnectionConfiguration> eventFactory,
             @Autowired @Qualifier("jdbcConnectionConfigPatternFilter") FileFilter jdbcConnectionConfigPatternFilter,
+            @Autowired EventPublisher eventPublisher,
             @Autowired HashedWheelTimer timer) {
         DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration> repository = new DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration>();
         repository.setCache(cache);
@@ -127,6 +138,7 @@ public class JdbcConnectionRepositoryConfig {
         repository.setConfigurationLoader(loader);
         repository.setConfigurationWriter(writer);
         repository.setTimer(timer);
+        repository.setEventPublisher(eventPublisher);
         repository.setEventFactory(eventFactory);
         repository.setReloadIntervalInSeconds(jdbcProperties.getReloadIntervalInSeconds());
         repository.startup();
