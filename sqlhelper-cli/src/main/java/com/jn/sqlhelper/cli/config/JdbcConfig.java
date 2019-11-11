@@ -32,7 +32,10 @@ public class JdbcConfig {
     @Bean
     public DirectoryPropertiesFileConfigurationRepository directoryPropertiesFileConfigurationRepository(@Qualifier("jdbcConnectionConfigurationCache") Cache<String, NamedConnectionConfiguration> cache){
         DirectoryPropertiesFileConfigurationRepository repository = new DirectoryPropertiesFileConfigurationRepository();
+        repository.setName("JdbcConnectionConfigurationRepository");
         repository.setCache(cache);
+        repository.init();
+        repository.startup();
         return repository;
     }
 

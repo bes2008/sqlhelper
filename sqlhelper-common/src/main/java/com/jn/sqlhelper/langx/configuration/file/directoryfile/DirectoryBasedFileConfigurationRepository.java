@@ -18,8 +18,13 @@ import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.diff.MapDiffResult;
+import com.jn.langx.util.concurrent.CommonThreadFactory;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.io.file.FileFilter;
+import com.jn.langx.util.timing.timer.HashedWheelTimer;
+import com.jn.langx.util.timing.timer.Timeout;
+import com.jn.langx.util.timing.timer.Timer;
+import com.jn.langx.util.timing.timer.TimerTask;
 import com.jn.sqlhelper.langx.configuration.AbstractConfigurationRepository;
 import com.jn.sqlhelper.langx.configuration.Configuration;
 import org.slf4j.Logger;
@@ -27,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * multiple configuration file in one directory, every configuration will be load as a configuration
@@ -44,13 +50,16 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
      * units: seconds
      * scan interval, if <=0, will not refresh
      */
-    private int refreshIntervalInSeconds = 60;
-    private long nextRefreshTime = System.currentTimeMillis();
+    private int refreshIntervalInSeconds = -1;
 
     private String directory;
 
 
     private Map<String, Long> lastModifiedTimeMap = Collects.emptyHashMap();
+
+    private volatile boolean inited;
+
+    private Timer timer;
 
     public void setDirectory(String directory) {
         this.directory = directory;
@@ -62,17 +71,50 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
 
     @Override
     public void init() throws InitializationException {
-        super.init();
-        loader.setDirectory(directory);
-    }
-
-    private void computeNextRefreshTime() {
-        nextRefreshTime = System.currentTimeMillis() + refreshIntervalInSeconds * 1000;
+        if (!inited) {
+            super.init();
+            loader.setDirectory(directory);
+            inited = true;
+            // enable refresh
+            if (refreshIntervalInSeconds > 0) {
+                if (timer == null) {
+                    timer = new HashedWheelTimer(new CommonThreadFactory("Configuration", true), 50, TimeUnit.MILLISECONDS);
+                }
+            }
+        }
     }
 
     @Override
     public void startup() {
-        super.startup();
+        if (!running) {
+            super.startup();
+            if (refreshIntervalInSeconds > 0) {
+                timer.newTimeout(new TimerTask() {
+                    @Override
+                    public void run(Timeout timeout) throws Exception {
+                        try {
+                            reload();
+                        } catch (Throwable ex) {
+                            logger.error(ex.getMessage(), ex);
+                        } finally {
+                            if (running) {
+                                timer.newTimeout(this, refreshIntervalInSeconds, TimeUnit.SECONDS);
+                            }
+                        }
+                    }
+                }, refreshIntervalInSeconds, TimeUnit.SECONDS);
+            } else {
+                reload();
+            }
+        }
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
     }
 
     private void reload() {

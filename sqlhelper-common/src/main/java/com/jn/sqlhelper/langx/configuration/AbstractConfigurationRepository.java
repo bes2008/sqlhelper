@@ -29,7 +29,7 @@ public abstract class AbstractConfigurationRepository<T extends Configuration, L
     protected EventPublisher eventPublisher;
     protected Loader loader;
     protected Writer writer;
-    private volatile boolean running = false;
+    protected volatile boolean running = false;
 
     private Cache<String, T> cache;
 
