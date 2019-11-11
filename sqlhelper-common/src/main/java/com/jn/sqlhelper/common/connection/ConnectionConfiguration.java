@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class ConnectionConfiguration{
+public class ConnectionConfiguration {
     public static final String URL = "jdbc.url";
     public static final String USER = "jdbc.user";
     public static final String PASSWORD = "jdbc.password";
