@@ -84,13 +84,21 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
                 Files.makeDirs(directory);
             }
             loader.setDirectory(directory);
-            inited = true;
+
+            if (this.writer == null) {
+                logger.warn("The writer is not specified for the repository ({}), will disable write configuration to storage", name);
+            }
             // enable refresh
             if (refreshIntervalInSeconds > 0) {
                 if (timer == null) {
+                    logger.warn("The timer is not specified for the repository ({}) , will use a simple timer", name);
                     timer = new HashedWheelTimer(new CommonThreadFactory("Configuration", true), 50, TimeUnit.MILLISECONDS);
                 }
+            } else {
+                logger.info("The configuration refresh task is disabled for repository: {}", name);
             }
+            inited = true;
+
         }
     }
 

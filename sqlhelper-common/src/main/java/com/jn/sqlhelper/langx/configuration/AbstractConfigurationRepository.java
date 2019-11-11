@@ -25,7 +25,7 @@ import java.util.Map;
 
 public abstract class AbstractConfigurationRepository<T extends Configuration, Loader extends ConfigurationLoader<T>, Writer extends ConfigurationWriter<T>> implements ConfigurationRepository<T, Loader, Writer> {
     private static final Logger logger = LoggerFactory.getLogger(AbstractConfigurationRepository.class);
-    private String name;
+    protected String name;
     protected EventPublisher eventPublisher;
     protected Loader loader;
     protected Writer writer;
@@ -102,7 +102,7 @@ public abstract class AbstractConfigurationRepository<T extends Configuration, L
 
     @Override
     public void init() throws InitializationException {
-        logger.info("init configuration repository: {}", name);
+        logger.info("Initial configuration repository: {}", name);
     }
 
     public final Map<String, T> getAll() {
