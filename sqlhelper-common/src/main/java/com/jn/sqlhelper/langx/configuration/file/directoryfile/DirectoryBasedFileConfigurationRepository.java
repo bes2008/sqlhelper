@@ -22,6 +22,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.diff.MapDiffResult;
 import com.jn.langx.util.concurrent.CommonThreadFactory;
 import com.jn.langx.util.function.Consumer2;
+import com.jn.langx.util.function.Supplier;
 import com.jn.langx.util.io.file.FileFilter;
 import com.jn.langx.util.io.file.Files;
 import com.jn.langx.util.timing.timer.HashedWheelTimer;
@@ -68,6 +69,19 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
     public void setDirectory(String directory) {
         this.directory = directory;
     }
+
+    private Supplier<String, String> configurationIdSupplier = new Supplier<String, String>() {
+        @Override
+        public String get(String filename) {
+            return filename;
+        }
+    };
+    private Supplier<String, String> filenameSupplier = new Supplier<String, String>() {
+        @Override
+        public String get(String configurationId) {
+            return configurationId;
+        }
+    };
 
     public void setRefreshIntervalInSeconds(int refreshIntervalInSeconds) {
         this.refreshIntervalInSeconds = refreshIntervalInSeconds;

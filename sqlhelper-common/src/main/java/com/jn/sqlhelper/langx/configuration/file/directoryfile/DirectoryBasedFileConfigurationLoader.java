@@ -40,23 +40,20 @@ import java.util.Map;
 public class DirectoryBasedFileConfigurationLoader<T extends Configuration> implements ConfigurationLoader<T> {
     private static final Logger logger = LoggerFactory.getLogger(DirectoryBasedFileConfigurationLoader.class);
     private DirectoryBasedFileResourceLoader resourceLoader;
-    private Supplier<String, String> filenameSupplier = new Supplier<String, String>() {
-        @Override
-        public String get(String input) {
-            return input;
-        }
-    };
     private InputStreamConfigurationParser<T> configurationParser;
+
     private List<? extends FileFilter> filters = Collects.asList(new ReadableFileFilter(), new IsFileFilter());
-    private Supplier<String, String> configurationIdSupplier = new Supplier<String, String>() {
-        @Override
-        public String get(String input) {
-            return input;
-        }
-    };
+
+    private Supplier<String, String> configurationIdSupplier;
+    private Supplier<String, String> filenameSupplier;
+
 
     public void setDirectory(String directory) {
         resourceLoader = new DirectoryBasedFileResourceLoader(directory);
+    }
+
+    public void setConfigurationIdSupplier(Supplier<String, String> configurationIdSupplier) {
+        this.configurationIdSupplier = configurationIdSupplier;
     }
 
     public void setFilenameSupplier(Supplier<String, String> filenameSupplier) {
