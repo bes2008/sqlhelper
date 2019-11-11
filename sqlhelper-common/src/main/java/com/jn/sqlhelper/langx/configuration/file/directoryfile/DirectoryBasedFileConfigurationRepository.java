@@ -105,6 +105,9 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
 
     @Override
     public void startup() {
+        if (!inited) {
+            init();
+        }
         if (!running) {
             super.startup();
             if (refreshIntervalInSeconds > 0) {

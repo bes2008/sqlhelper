@@ -80,7 +80,6 @@ public class JdbcConnectionRepositoryConfig {
         repository.setConfigurationWriter(writer);
         repository.setTimer(timer);
         repository.setRefreshIntervalInSeconds(jdbcProperties.getRefreshIntervalInSeconds());
-        repository.init();
         repository.startup();
         return repository;
     }
