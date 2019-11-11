@@ -1,7 +1,11 @@
 package com.jn.sqlhelper.common.connection;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.diff.MapDiffResult;
 import com.jn.sqlhelper.langx.configuration.Configuration;
+
+import java.util.Map;
 
 public class NamedConnectionConfiguration extends ConnectionConfiguration implements Configuration {
     private String name;
@@ -39,5 +43,31 @@ public class NamedConnectionConfiguration extends ConnectionConfiguration implem
     @Override
     public String toString() {
         return JSONBuilderProvider.simplest().toJson(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof NamedConnectionConfiguration)) {
+            return false;
+        }
+        NamedConnectionConfiguration o2 = (NamedConnectionConfiguration) obj;
+        if (!name.equals(o2) || !getDriver().equals(o2.getDriver()) || !getId().equals(o2.getId()) || !getUrl().equals(o2.getUrl()) || !getUser().equals(o2.getUser())) {
+            return false;
+        }
+
+        if (getPassword() != null) {
+            if (!getPassword().equals(o2.getPassword())) {
+                return false;
+            }
+        } else {
+            if (o2.getPassword() != null) {
+                return false;
+            }
+        }
+
+        Map<String, String> map1 = Collects.propertiesToStringMap(getDriverProps(), true);
+        Map<String, String> map2 = Collects.propertiesToStringMap(o2.getDriverProps(), true);
+        MapDiffResult<String, String> diffResult = Collects.diff(map1, map2);
+        return diffResult.getAdds().isEmpty() && diffResult.getRemoves().isEmpty() && diffResult.getUpdates().isEmpty();
     }
 }

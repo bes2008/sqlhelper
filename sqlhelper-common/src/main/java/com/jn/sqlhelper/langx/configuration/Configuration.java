@@ -14,7 +14,12 @@
 
 package com.jn.sqlhelper.langx.configuration;
 
+/**
+ * the configuration,
+ * if use it, you must override the equals method, the hashcode method
+ */
 public interface Configuration {
     String getId();
+
     void setId(String id);
 }
