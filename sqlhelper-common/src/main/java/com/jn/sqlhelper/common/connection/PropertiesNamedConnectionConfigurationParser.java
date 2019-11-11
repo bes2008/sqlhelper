@@ -21,7 +21,7 @@ import com.jn.sqlhelper.langx.configuration.InputStreamConfigurationParser;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-public class PropertiesNamedConnfigurationConfigurationParser implements InputStreamConfigurationParser<NamedConnectionConfiguration> {
+public class PropertiesNamedConnectionConfigurationParser implements InputStreamConfigurationParser<NamedConnectionConfiguration> {
     private Charset encoding = Charsets.ISO_8859_1;
 
     @Override

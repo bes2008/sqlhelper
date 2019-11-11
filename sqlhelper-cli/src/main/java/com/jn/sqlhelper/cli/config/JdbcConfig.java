@@ -17,7 +17,7 @@ package com.jn.sqlhelper.cli.config;
 import com.jn.langx.cache.Cache;
 import com.jn.langx.cache.CacheBuilder;
 import com.jn.sqlhelper.common.connection.NamedConnectionConfiguration;
-import com.jn.sqlhelper.common.connection.PropertiesNamedConnfigurationConfigurationParser;
+import com.jn.sqlhelper.common.connection.PropertiesNamedConnectionConfigurationParser;
 import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationLoader;
 import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +39,12 @@ public class JdbcConfig {
     }
 
     @Bean
-    public PropertiesNamedConnfigurationConfigurationParser propertiesConfigurationParser() {
-        return new PropertiesNamedConnfigurationConfigurationParser();
+    public PropertiesNamedConnectionConfigurationParser propertiesConfigurationParser() {
+        return new PropertiesNamedConnectionConfigurationParser();
     }
 
     @Bean("jdbcDirectoryBasedFileConfigurationLoader")
-    public DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> jdbcDirectoryBasedFileConfigurationLoader(@Autowired PropertiesNamedConnfigurationConfigurationParser propertiesConfigurationParser) {
+    public DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> jdbcDirectoryBasedFileConfigurationLoader(@Autowired PropertiesNamedConnectionConfigurationParser propertiesConfigurationParser) {
         DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> loader = new DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration>();
         loader.setConfigurationParser(propertiesConfigurationParser);
         return loader;
