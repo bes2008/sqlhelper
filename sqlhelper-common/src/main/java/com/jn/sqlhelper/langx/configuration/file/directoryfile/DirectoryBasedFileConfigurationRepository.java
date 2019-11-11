@@ -145,15 +145,25 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
             Collects.forEach(lastModifiedDiffResult.getUpdates(), new Consumer2<String, Long>() {
                 @Override
                 public void accept(String id, Long lastModified) {
-                    T configuration = loader.load(id);
-                    update(configuration, false);
+                    T configurationInStorage = loader.load(id);
+                    T configurationInCache = getById(id);
+                    if (configurationInCache == null) {
+                        add(configurationInStorage, false);
+                    } else if (!configurationInCache.equals(configurationInStorage)) {
+                        update(configurationInStorage, false);
+                    }
                 }
             });
             Collects.forEach(lastModifiedDiffResult.getAdds(), new Consumer2<String, Long>() {
                 @Override
                 public void accept(String id, Long lastModified) {
-                    T configuration = loader.load(id);
-                    add(configuration, false);
+                    T configurationInStorage = loader.load(id);
+                    T configurationInCache = getById(id);
+                    if (configurationInCache == null) {
+                        add(configurationInStorage, false);
+                    } else if (!configurationInCache.equals(configurationInStorage)) {
+                        update(configurationInStorage, false);
+                    }
                 }
             });
         } finally {

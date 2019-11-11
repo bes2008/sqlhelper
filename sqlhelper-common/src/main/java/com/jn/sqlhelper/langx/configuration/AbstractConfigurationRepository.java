@@ -20,6 +20,8 @@ import com.jn.langx.cache.Cache;
 import com.jn.langx.event.EventPublisher;
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Strings;
+import com.jn.sqlhelper.langx.util.Stringxx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,6 +112,7 @@ public abstract class AbstractConfigurationRepository<T extends Configuration, L
     public void removeById(String id, boolean sync) {
         T configuration = cache.getIfPresent(id);
         if (configuration != null) {
+            logMutation(ConfigurationEventType.REMOVE, configuration);
             if (sync && writer != null && writer.isSupportsRemove()) {
                 writer.remove(id);
             }
@@ -128,6 +131,7 @@ public abstract class AbstractConfigurationRepository<T extends Configuration, L
     @Override
     public void add(T configuration, boolean sync) {
         if (running) {
+            logMutation(ConfigurationEventType.ADD, configuration);
             if (sync && writer != null && writer.isSupportsWrite()) {
                 writer.write(configuration);
             }
@@ -146,12 +150,25 @@ public abstract class AbstractConfigurationRepository<T extends Configuration, L
     @Override
     public void update(T configuration, boolean sync) {
         if (running) {
+            logMutation(ConfigurationEventType.UPDATE, configuration);
             if (sync && writer != null && writer.isSupportsRewrite()) {
                 writer.rewrite(configuration);
             }
             cache.set(configuration.getId(), configuration);
             if (eventPublisher != null && eventFactory != null) {
                 eventPublisher.publish(eventFactory.createEvent(ConfigurationEventType.UPDATE, configuration));
+            }
+        }
+    }
+
+    private void logMutation(ConfigurationEventType eventType, T configuration) {
+        if (logger.isInfoEnabled()) {
+            String template = eventFactory == null ? " a configuration: {}" : (Stringxx.startsWithVowelLetter(eventFactory.getDomain()) ? " an {} configuration: {}" : " a {} configuration: {}");
+            template = Strings.upperCase(eventType.name().toLowerCase(), 0, 1) + template;
+            if (eventFactory != null) {
+                logger.info(template, eventFactory.getDomain(), configuration);
+            } else {
+                logger.info(template, configuration);
             }
         }
     }
