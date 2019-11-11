@@ -17,4 +17,5 @@ package com.jn.sqlhelper.langx.configuration;
 import java.io.InputStream;
 
 public interface InputStreamConfigurationParser<T extends Configuration> extends ConfigurationParser<InputStream, T> {
+    void setEncoding(String encoding);
 }

@@ -59,7 +59,6 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
 
     private String directory;
 
-
     private Map<String, Long> lastModifiedTimeMap = Collects.emptyHashMap();
 
     private volatile boolean inited;
@@ -85,6 +84,14 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
 
     public void setRefreshIntervalInSeconds(int refreshIntervalInSeconds) {
         this.refreshIntervalInSeconds = refreshIntervalInSeconds;
+    }
+
+    public void setConfigurationIdSupplier(Supplier<String, String> configurationIdSupplier) {
+        this.configurationIdSupplier = configurationIdSupplier;
+    }
+
+    public void setFilenameSupplier(Supplier<String, String> filenameSupplier) {
+        this.filenameSupplier = filenameSupplier;
     }
 
     @Override

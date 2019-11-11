@@ -15,14 +15,14 @@
 package com.jn.sqlhelper.common.connection;
 
 import com.jn.langx.util.Throwables;
+import com.jn.langx.util.io.Charsets;
 import com.jn.sqlhelper.langx.configuration.InputStreamConfigurationParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 public class PropertiesNamedConnfigurationConfigurationParser implements InputStreamConfigurationParser<NamedConnectionConfiguration> {
-    private static final Logger logger = LoggerFactory.getLogger(PropertiesNamedConnfigurationConfigurationParser.class);
+    private Charset encoding = Charsets.ISO_8859_1;
 
     @Override
     public NamedConnectionConfiguration parse(InputStream input) {
@@ -31,5 +31,10 @@ public class PropertiesNamedConnfigurationConfigurationParser implements InputSt
         } catch (Throwable ex) {
             throw Throwables.wrapAsRuntimeException(ex);
         }
+    }
+
+    @Override
+    public void setEncoding(String encoding) {
+        this.encoding = Charsets.getCharset(encoding, "ISO-8859-1");
     }
 }
