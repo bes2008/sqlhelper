@@ -23,7 +23,7 @@ import com.jn.langx.util.function.Predicate;
 public class Preconditions2 {
 
     public static <T> T test(@NonNull Predicate<T> predicate, @Nullable T argument) {
-        return test(predicate, argument);
+        return test(predicate, argument, null);
     }
 
     public static <T> T test(@NonNull Predicate<T> predicate, @Nullable T argument, String message) {

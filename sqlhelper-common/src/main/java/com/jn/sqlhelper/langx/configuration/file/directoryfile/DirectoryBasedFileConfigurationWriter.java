@@ -57,6 +57,7 @@ public class DirectoryBasedFileConfigurationWriter<T extends Configuration> impl
     @Override
     public void write(T configuration) {
         Preconditions.checkNotNull(configuration);
+        Preconditions.checkNotNull(directory);
         String configString = configurationSerializer.serialize(configuration);
         if (Strings.isEmpty(configString)) {
             return;

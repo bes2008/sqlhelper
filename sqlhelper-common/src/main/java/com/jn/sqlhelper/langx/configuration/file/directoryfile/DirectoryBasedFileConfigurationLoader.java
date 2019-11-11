@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,11 +43,22 @@ public class DirectoryBasedFileConfigurationLoader<T extends Configuration> impl
     private DirectoryBasedFileResourceLoader resourceLoader;
     private InputStreamConfigurationParser<T> configurationParser;
 
-    private List<? extends FileFilter> filters = Collects.asList(new ReadableFileFilter(), new IsFileFilter());
+    private final List<FileFilter> filters = new ArrayList<FileFilter>();
 
+    /**
+     * Get a configuration id by the filename
+     */
     private Supplier<String, String> configurationIdSupplier;
+    /**
+     * Get a filename configuration id
+     */
     private Supplier<String, String> filenameSupplier;
 
+
+    public DirectoryBasedFileConfigurationLoader() {
+        this.filters.add(new ReadableFileFilter());
+        this.filters.add(new IsFileFilter());
+    }
 
     public void setDirectory(String directory) {
         resourceLoader = new DirectoryBasedFileResourceLoader(directory);
@@ -62,6 +74,10 @@ public class DirectoryBasedFileConfigurationLoader<T extends Configuration> impl
 
     public void setConfigurationParser(InputStreamConfigurationParser<T> configurationParser) {
         this.configurationParser = configurationParser;
+    }
+
+    public void addFilters(FileFilter... f) {
+        Collects.addAll(this.filters, f);
     }
 
     @Override

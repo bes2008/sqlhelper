@@ -16,6 +16,9 @@ package com.jn.sqlhelper.cli.config;
 
 import com.jn.langx.cache.Cache;
 import com.jn.langx.cache.CacheBuilder;
+import com.jn.langx.util.function.Supplier;
+import com.jn.langx.util.io.file.FileFilter;
+import com.jn.langx.util.io.file.filter.PatternFilenameFilter;
 import com.jn.langx.util.timing.timer.HashedWheelTimer;
 import com.jn.sqlhelper.common.connection.NamedConnectionConfiguration;
 import com.jn.sqlhelper.common.connection.PropertiesNamedConnectionConfigurationParser;
@@ -43,9 +46,40 @@ public class JdbcConnectionRepositoryConfig {
         return new PropertiesNamedConnectionConfigurationParser();
     }
 
+    @Bean("configurationIdSupplier")
+    public Supplier<String, String> configurationIdSupplier() {
+        return new Supplier<String, String>() {
+            @Override
+            public String get(String filename) {
+                return null;
+            }
+        };
+    }
+
+    @Bean
+    public Supplier<String, String> filenameSupplier() {
+        return new Supplier<String, String>() {
+            @Override
+            public String get(String configurationId) {
+                return "jdbcConn-" + configurationId + ".properties";
+            }
+        };
+    }
+
+    @Bean
+    public FileFilter jdbcConnectionConfigPatternFilter() {
+        return new PatternFilenameFilter("jdbcConn-.*\\.properties");
+    }
+
+
     @Bean("jdbcDirectoryBasedFileConfigurationLoader")
-    public DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> jdbcDirectoryBasedFileConfigurationLoader(@Autowired PropertiesNamedConnectionConfigurationParser propertiesConfigurationParser) {
+    public DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> jdbcDirectoryBasedFileConfigurationLoader(
+            @Autowired PropertiesNamedConnectionConfigurationParser propertiesConfigurationParser,
+            @Autowired @Qualifier("filenameSupplier") Supplier<String, String> filenameSupplier,
+            @Autowired @Qualifier("configurationIdSupplier") Supplier<String, String> configurationIdSupplier) {
         DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> loader = new DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration>();
+        loader.setFilenameSupplier(filenameSupplier);
+        loader.setConfigurationIdSupplier(configurationIdSupplier);
         loader.setConfigurationParser(propertiesConfigurationParser);
         return loader;
     }
@@ -62,14 +96,17 @@ public class JdbcConnectionRepositoryConfig {
     }
 
     @Bean("jdbcDirectoryBasedFileConfigurationWriter")
-    public DirectoryBasedFileConfigurationWriter<NamedConnectionConfiguration> directoryBasedFileConfigurationWriter(@Autowired PropertiesNamedConnectionConfigurationSerializer serializer) {
+    public DirectoryBasedFileConfigurationWriter<NamedConnectionConfiguration> directoryBasedFileConfigurationWriter(
+            @Autowired PropertiesNamedConnectionConfigurationSerializer serializer,
+            @Autowired @Qualifier("filenameSupplier") Supplier<String, String> filenameSupplier) {
         DirectoryBasedFileConfigurationWriter<NamedConnectionConfiguration> writer = new DirectoryBasedFileConfigurationWriter<NamedConnectionConfiguration>();
+        writer.setFilenameSupplier(filenameSupplier);
         writer.setConfigurationSerializer(serializer);
         writer.setEncoding("iso-8859-1");
         return writer;
     }
 
-    @Bean("configurationEventFactory")
+    @Bean("jdbcConfigurationEventFactory")
     public ConfigurationEventFactory<NamedConnectionConfiguration> configurationEventFactory() {
         return new ConfigurationEventFactory<NamedConnectionConfiguration>("JdbcConnectionConfiguration");
     }
@@ -79,6 +116,8 @@ public class JdbcConnectionRepositoryConfig {
             @Autowired @Qualifier("jdbcConnectionConfigurationCache") Cache<String, NamedConnectionConfiguration> cache,
             @Autowired @Qualifier("jdbcDirectoryBasedFileConfigurationLoader") DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> loader,
             @Autowired @Qualifier("jdbcDirectoryBasedFileConfigurationWriter") DirectoryBasedFileConfigurationWriter<NamedConnectionConfiguration> writer,
+            @Autowired @Qualifier("jdbcConfigurationEventFactory") ConfigurationEventFactory<NamedConnectionConfiguration> eventFactory,
+            @Autowired @Qualifier("jdbcConnectionConfigPatternFilter") FileFilter jdbcConnectionConfigPatternFilter,
             @Autowired HashedWheelTimer timer) {
         DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration> repository = new DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration>();
         repository.setCache(cache);
@@ -87,6 +126,7 @@ public class JdbcConnectionRepositoryConfig {
         repository.setConfigurationLoader(loader);
         repository.setConfigurationWriter(writer);
         repository.setTimer(timer);
+        repository.setEventFactory(eventFactory);
         repository.setReloadIntervalInSeconds(jdbcProperties.getReloadIntervalInSeconds());
         repository.startup();
         return repository;

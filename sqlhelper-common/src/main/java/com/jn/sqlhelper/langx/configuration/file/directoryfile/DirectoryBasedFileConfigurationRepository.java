@@ -79,6 +79,8 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
 
             if (writer == null) {
                 logger.warn("The writer is not specified for the repository ({}), will disable write configuration to storage", name);
+            }else {
+                writer.setDirectory(directory);
             }
             // enable refresh
             if (reloadIntervalInSeconds > 0) {
@@ -137,21 +139,21 @@ public class DirectoryBasedFileConfigurationRepository<T extends Configuration> 
             Collects.forEach(lastModifiedDiffResult.getRemoves(), new Consumer2<String, Long>() {
                 @Override
                 public void accept(String id, Long lastModified) {
-                    removeById(id);
+                    removeById(id, false);
                 }
             });
             Collects.forEach(lastModifiedDiffResult.getUpdates(), new Consumer2<String, Long>() {
                 @Override
                 public void accept(String id, Long lastModified) {
                     T configuration = loader.load(id);
-                    update(configuration);
+                    update(configuration, false);
                 }
             });
             Collects.forEach(lastModifiedDiffResult.getAdds(), new Consumer2<String, Long>() {
                 @Override
                 public void accept(String id, Long lastModified) {
                     T configuration = loader.load(id);
-                    add(configuration);
+                    add(configuration, false);
                 }
             });
         } finally {
