@@ -2,6 +2,7 @@ package com.jn.sqlhelper.cli.commands;
 
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Function;
@@ -147,7 +148,7 @@ public class ShowDatabaseCommands {
             Table t = new DatabaseLoader().loadTable(databaseDescription, "TEST", "PUBLIC", null);
             Preconditions.checkNotNull(t, StringTemplates.formatWithPlaceholder("table {} is not exists", table));
 
-            if (!filename.equalsIgnoreCase("sql")) {
+            if (!Strings.endsWithIgnoreCase(filename,"sql")) {
                 filename = filename + ".sql";
             }
             Files.makeDirs(directory);
