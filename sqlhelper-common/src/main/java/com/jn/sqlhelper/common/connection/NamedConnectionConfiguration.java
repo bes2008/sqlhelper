@@ -3,11 +3,13 @@ package com.jn.sqlhelper.common.connection;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.diff.MapDiffResult;
+import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.langx.configuration.Configuration;
 
 import java.util.Map;
+import java.util.Properties;
 
-public class NamedConnectionConfiguration extends ConnectionConfiguration implements Configuration {
+public class NamedConnectionConfiguration extends ConnectionConfiguration implements Configuration, Cloneable {
     private String name;
 
     public NamedConnectionConfiguration() {
@@ -19,7 +21,15 @@ public class NamedConnectionConfiguration extends ConnectionConfiguration implem
         setUser(configuration.getUser());
         setPassword(configuration.getPassword());
         setUrl(configuration.getUrl());
-        setDriverProps(configuration.getDriverProps());
+        final Properties props = new Properties();
+        Collects.forEach(configuration.getDriverProps(), new Consumer2<Object, Object>() {
+            @Override
+            public void accept(Object key, Object value) {
+                props.setProperty(key.toString(), value.toString());
+            }
+        });
+
+        setDriverProps(props);
     }
 
     @Override
@@ -51,7 +61,7 @@ public class NamedConnectionConfiguration extends ConnectionConfiguration implem
             return false;
         }
         NamedConnectionConfiguration o2 = (NamedConnectionConfiguration) obj;
-        if (!name.equals(o2) || !getDriver().equals(o2.getDriver()) || !getId().equals(o2.getId()) || !getUrl().equals(o2.getUrl()) || !getUser().equals(o2.getUser())) {
+        if (!name.equals(o2.getName()) || !getDriver().equals(o2.getDriver()) || !getId().equals(o2.getId()) || !getUrl().equals(o2.getUrl()) || !getUser().equals(o2.getUser())) {
             return false;
         }
 
@@ -69,5 +79,13 @@ public class NamedConnectionConfiguration extends ConnectionConfiguration implem
         Map<String, String> map2 = Collects.propertiesToStringMap(o2.getDriverProps(), true);
         MapDiffResult<String, String> diffResult = Collects.diff(map1, map2);
         return diffResult.getAdds().isEmpty() && diffResult.getRemoves().isEmpty() && diffResult.getUpdates().isEmpty();
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        NamedConnectionConfiguration conn = new NamedConnectionConfiguration(this);
+        conn.setName(name);
+        conn.setId(name);
+        return conn;
     }
 }
