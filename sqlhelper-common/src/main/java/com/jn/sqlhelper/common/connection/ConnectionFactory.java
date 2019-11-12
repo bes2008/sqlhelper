@@ -65,4 +65,8 @@ public class ConnectionFactory {
         return null;
     }
 
+
+    public ConnectionConfiguration getConnectionConfiguration() {
+        return connectionConfiguration;
+    }
 }

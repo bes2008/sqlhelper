@@ -14,11 +14,14 @@
 
 package com.jn.sqlhelper.common.connection;
 
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer2;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class ConnectionConfiguration {
+public class ConnectionConfiguration implements Cloneable {
     public static final String URL = "jdbc.url";
     public static final String USER = "jdbc.user";
     public static final String PASSWORD = "jdbc.password";
@@ -28,23 +31,27 @@ public class ConnectionConfiguration {
     private String user;
     private String password;
     private String driver;
-    private Properties driverProps;
+    private Properties driverProps = new Properties();
 
     public ConnectionConfiguration() {
     }
 
     public ConnectionConfiguration(String driver, String url, String user, String password, Properties driverProps) {
-        this.driver = driver;
-        this.url = url;
-        this.user = user;
-        this.password = password;
-        this.driverProps = driverProps;
+        if (driverProps != null) {
+            setDriverProps(driverProps);
+        }
+        setDriver(driver);
+        setUrl(url);
+        setUser(user);
+        setPassword(password);
     }
 
     public static ConnectionConfiguration loadConfig(InputStream input) throws IOException {
         Properties props = new Properties();
         props.load(input);
         ConnectionConfiguration config = new ConnectionConfiguration();
+        config.setDriverProps(props);
+
         config.setUrl(props.getProperty(URL));
         config.setDriver(props.getProperty(DRIVER));
 
@@ -59,11 +66,31 @@ public class ConnectionConfiguration {
 
         props.remove(URL);
         props.remove(DRIVER);
-        props.remove(PASSWORD);
-        props.remove(USER);
 
-        config.setDriverProps(props);
+
         return config;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        ConnectionConfiguration conn = new ConnectionConfiguration();
+
+
+        final Properties props = new Properties();
+        Collects.forEach(this.driverProps, new Consumer2<Object, Object>() {
+            @Override
+            public void accept(Object key, Object value) {
+                props.setProperty(key.toString(), value.toString());
+            }
+        });
+
+        conn.setDriverProps(props);
+
+        conn.setDriver(driver);
+        conn.setUrl(url);
+        conn.setUser(user);
+        conn.setPassword(password);
+        return conn;
     }
 
     public String getUrl() {
@@ -80,6 +107,7 @@ public class ConnectionConfiguration {
 
     public void setUser(String user) {
         this.user = user;
+        driverProps.setProperty(USER, user);
     }
 
     public String getPassword() {
@@ -88,6 +116,7 @@ public class ConnectionConfiguration {
 
     public void setPassword(String password) {
         this.password = password;
+        driverProps.setProperty(PASSWORD, password);
     }
 
     public String getDriver() {
