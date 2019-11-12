@@ -36,15 +36,25 @@ public class DatabaseLoader {
             TableType.TABLE.getCode()
     };
 
+
     public Table loadTable(DatabaseDescription databaseDescription, String catalog, String schema, String tableName) throws SQLException {
-        List<Table> tables = loadTables(databaseDescription, catalog, schema, tableName);
+        return loadTable(databaseDescription, catalog, schema, tableName, false, false, false, false);
+    }
+
+    public Table loadTable(DatabaseDescription databaseDescription, String catalog, String schema, String tableName, boolean isLoadColumns, boolean isLoadPks, boolean isLoadIndexes, boolean isLoadFks) throws SQLException {
+        List<Table> tables = loadTables(databaseDescription, catalog, schema, tableName, isLoadColumns, isLoadPks, isLoadIndexes, isLoadFks);
         if (Emptys.isNotEmpty(tables)) {
             return tables.get(0);
         }
         return null;
     }
 
+
     public List<Table> loadTables(DatabaseDescription databaseDescription, String catalogNamePattern, String schemaNamePattern, String tableNamePattern) throws SQLException {
+        return loadTables(databaseDescription, catalogNamePattern, schemaNamePattern, tableNamePattern, false, false, false, false);
+    }
+
+    public List<Table> loadTables(DatabaseDescription databaseDescription, String catalogNamePattern, String schemaNamePattern, String tableNamePattern, boolean isLoadColumns, boolean isLoadPks, boolean isLoadIndexes, boolean isLoadFks) throws SQLException {
         List<Table> tables = null;
         ResultSet tablesRs = null;
         try {
@@ -52,13 +62,21 @@ public class DatabaseLoader {
             tables = new RowMapperResultSetExtractor<Table>(new BeanRowMapper<Table>(Table.class)).extract(tablesRs);
             DatabaseMetaData dbMetaData = databaseDescription.getDbMetaData();
             for (Table table : tables) {
-                findColumns(dbMetaData, table);
+                if (isLoadColumns) {
+                    findColumns(dbMetaData, table);
+                }
 
-                findTablePKs(dbMetaData, table);
+                if (isLoadPks) {
+                    findTablePKs(dbMetaData, table);
+                }
 
-                findTableIndexes(dbMetaData, table);
+                if (isLoadIndexes) {
+                    findTableIndexes(dbMetaData, table);
+                }
 
-                findTableFKs(dbMetaData, table);
+                if (isLoadFks) {
+                    findTableFKs(dbMetaData, table);
+                }
             }
         } finally {
             IOs.close(tablesRs);
@@ -82,11 +100,17 @@ public class DatabaseLoader {
         }
     }
 
+    public List<Index> findTableIndexes(DatabaseDescription databaseDescription, final String catalog, final String schema, final String tableNamePattern) throws SQLException {
+        Table table = loadTable(databaseDescription, catalog, schema, tableNamePattern, false, false, true, false);
+        if (table != null) {
+            return Collects.asList(table.getIndexMap().values());
+        }
+        return null;
+    }
+
     private void findTableIndexes(DatabaseMetaData dbMetaData, final Table table) throws SQLException {
         ResultSet indexesRs = null;
         try {
-
-
             indexesRs = dbMetaData.getIndexInfo(table.getCatalog(), table.getSchema(), table.getName(), false, false);
 
             List<IndexColumn> indexes = new RowMapperResultSetExtractor<IndexColumn>(new BeanRowMapper<IndexColumn>(IndexColumn.class)).extract(indexesRs);
