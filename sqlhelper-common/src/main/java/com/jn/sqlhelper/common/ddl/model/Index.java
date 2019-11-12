@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.common.ddl.model;
 
+import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.Preconditions;
 
 import java.util.Comparator;
@@ -78,14 +79,24 @@ public class Index {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Index index = (Index) o;
 
-        if (catalog != null ? !catalog.equals(index.catalog) : index.catalog != null) return false;
-        if (schema != null ? !schema.equals(index.schema) : index.schema != null) return false;
-        if (!tableName.equals(index.tableName)) return false;
+        if (catalog != null ? !catalog.equals(index.catalog) : index.catalog != null) {
+            return false;
+        }
+        if (schema != null ? !schema.equals(index.schema) : index.schema != null) {
+            return false;
+        }
+        if (!tableName.equals(index.tableName)) {
+            return false;
+        }
         return name.equals(index.name);
     }
 
@@ -98,4 +109,8 @@ public class Index {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return JSONBuilderProvider.create().serializeNulls(true).prettyFormat(true).build().toJson(this);
+    }
 }

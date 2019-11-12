@@ -53,6 +53,12 @@
             <artifactId>easyjson-gson</artifactId>
             <version>${easyjson.version}</version>
         </dependency>
-        
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.199</version>
+        </dependency>
+
     </dependencies>
 </project>
