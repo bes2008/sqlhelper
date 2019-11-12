@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 public class SQLs {
     public static final String WHITESPACE = " \n\r\f\t";
+    public static final String SQL_FILE_SUFFIX = ".sql";
 
     public static String getTableFQN(String catalog, String schema, String tableName) {
         return getTableFQN(catalog, schema, tableName, true);

@@ -15,6 +15,7 @@ import com.jn.sqlhelper.common.ddl.dump.DatabaseLoader;
 import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 import com.jn.sqlhelper.common.ddl.model.Index;
 import com.jn.sqlhelper.common.ddl.model.Table;
+import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.ddl.generator.CommonTableGenerator;
 import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.List;
 
+import static com.jn.sqlhelper.common.utils.SQLs.SQL_FILE_SUFFIX;
+
 @ShellComponent
 public class ShowDatabaseCommands {
 
@@ -44,16 +47,19 @@ public class ShowDatabaseCommands {
     }
 
     @ShellMethod(key = "show tables", value = "Show table names")
-    public List<String> getTableNames(@ShellOption(help = "the connection configuration name") String connectionName) {
+    public List<String> getTableNames(
+            @ShellOption(help = "the connection configuration name") String connectionName
+    ) {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
 
         try {
             DatabaseMetaData dbMetaData = connection.getMetaData();
-            List<Table> tables = new DatabaseLoader().loadTables(new DatabaseDescription(dbMetaData), "TEST", "PUBLIC", null);
+            final DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
+            List<Table> tables = new DatabaseLoader().loadTables(databaseDescription, null, null, null);
             return Pipeline.of(tables).map(new Function<Table, String>() {
                 @Override
                 public String apply(Table table) {
-                    return table.getName();
+                    return SQLs.getTableFQN(databaseDescription, table.getCatalog(), table.getSchema(), table.getName());
                 }
             }).asList();
         } catch (Throwable ex) {
@@ -70,7 +76,7 @@ public class ShowDatabaseCommands {
 
         try {
             DatabaseMetaData dbMetaData = connection.getMetaData();
-            return new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), "TEST", "PUBLIC", table);
+            return new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), null, null, table);
         } catch (Throwable ex) {
             throw Throwables.wrapAsRuntimeException(ex);
         } finally {
@@ -86,11 +92,12 @@ public class ShowDatabaseCommands {
 
         try {
             DatabaseMetaData dbMetaData = connection.getMetaData();
-            List<Index> indexes = new DatabaseLoader().findTableIndexes(new DatabaseDescription(dbMetaData), "TEST", "PUBLIC", table);
+            DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
+            List<Index> indexes = new DatabaseLoader().findTableIndexes(databaseDescription, null, null, table);
             return Pipeline.of(indexes).map(new Function<Index, String>() {
                 @Override
                 public String apply(Index index) {
-                    return index.getName();
+                    return index.getName() + "\t" + SQLs.getTableFQN(index.getCatalog(), index.getSchema(), index.getTableName());
                 }
             }).asList();
         } catch (Throwable ex) {
@@ -108,7 +115,7 @@ public class ShowDatabaseCommands {
 
         try {
             DatabaseMetaData dbMetaData = connection.getMetaData();
-            Table t = new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), "TEST", "PUBLIC", null);
+            Table t = new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), null, null, table);
             return t.getIndex(index);
         } catch (Throwable ex) {
             throw Throwables.wrapAsRuntimeException(ex);
@@ -124,7 +131,7 @@ public class ShowDatabaseCommands {
         try {
             DatabaseMetaData dbMetaData = connection.getMetaData();
             DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
-            Table t = new DatabaseLoader().loadTable(databaseDescription, "TEST", "PUBLIC", table);
+            Table t = new DatabaseLoader().loadTable(databaseDescription, null, null, table);
             Preconditions.checkNotNull(t, StringTemplates.formatWithPlaceholder("table {} is not exists", table));
             CommonTableGenerator generator = new CommonTableGenerator(databaseDescription);
             return generator.generate(t);
@@ -136,19 +143,19 @@ public class ShowDatabaseCommands {
     }
 
     @ShellMethod(key = "dump ddl", value = "Show table DDL")
-    public String getTableDDL(@ShellOption(help = "the connection configuration name") String connectionName,
-                              @ShellOption(help = "the table name") String table,
-                              @ShellOption(help = "the dump directory") String directory,
-                              @ShellOption(help = "the dump filename") String filename) {
+    public String dumpTableDDL(@ShellOption(help = "the connection configuration name") String connectionName,
+                               @ShellOption(help = "the table name") String table,
+                               @ShellOption(help = "the dump directory") String directory,
+                               @ShellOption(help = "the dump filename") String filename) {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
         BufferedWriter bf = null;
         try {
             DatabaseMetaData dbMetaData = connection.getMetaData();
             DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
-            Table t = new DatabaseLoader().loadTable(databaseDescription, "TEST", "PUBLIC", null);
+            Table t = new DatabaseLoader().loadTable(databaseDescription, null, null, table);
             Preconditions.checkNotNull(t, StringTemplates.formatWithPlaceholder("table {} is not exists", table));
 
-            if (!Strings.endsWithIgnoreCase(filename,"sql")) {
+            if (!Strings.endsWithIgnoreCase(filename, SQL_FILE_SUFFIX)) {
                 filename = filename + ".sql";
             }
             Files.makeDirs(directory);
