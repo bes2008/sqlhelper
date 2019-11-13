@@ -6,7 +6,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.StringMap;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.common.connection.NamedConnectionConfiguration;
-import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
+import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;

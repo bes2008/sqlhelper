@@ -4,7 +4,7 @@ import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.diff.MapDiffResult;
 import com.jn.langx.util.function.Consumer2;
-import com.jn.sqlhelper.langx.configuration.Configuration;
+import com.jn.langx.configuration.Configuration;
 
 import java.util.Map;
 import java.util.Properties;

@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.common.connection;
 
 import com.jn.langx.util.Throwables;
-import com.jn.sqlhelper.langx.configuration.InputStreamConfigurationParser;
+import com.jn.langx.configuration.InputStreamConfigurationParser;
 
 import java.io.InputStream;
 

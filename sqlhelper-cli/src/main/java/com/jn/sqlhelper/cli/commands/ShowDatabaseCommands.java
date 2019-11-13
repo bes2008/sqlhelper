@@ -17,7 +17,7 @@ import com.jn.sqlhelper.common.ddl.model.Index;
 import com.jn.sqlhelper.common.ddl.model.Table;
 import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.ddl.generator.CommonTableGenerator;
-import com.jn.sqlhelper.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
+import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;

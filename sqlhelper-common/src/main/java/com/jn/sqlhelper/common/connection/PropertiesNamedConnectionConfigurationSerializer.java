@@ -14,10 +14,10 @@
 
 package com.jn.sqlhelper.common.connection;
 
+import com.jn.langx.configuration.ConfigurationSerializer;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
-import com.jn.sqlhelper.langx.configuration.ConfigurationSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

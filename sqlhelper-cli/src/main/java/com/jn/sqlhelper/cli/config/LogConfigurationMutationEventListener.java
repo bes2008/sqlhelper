@@ -15,8 +15,8 @@
 package com.jn.sqlhelper.cli.config;
 
 import com.jn.langx.event.EventListener;
-import com.jn.sqlhelper.langx.configuration.Configuration;
-import com.jn.sqlhelper.langx.configuration.ConfigurationEvent;
+import com.jn.langx.configuration.Configuration;
+import com.jn.langx.configuration.ConfigurationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
