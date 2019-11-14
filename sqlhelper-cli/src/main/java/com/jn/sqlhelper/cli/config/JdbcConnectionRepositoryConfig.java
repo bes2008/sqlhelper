@@ -16,21 +16,21 @@ package com.jn.sqlhelper.cli.config;
 
 import com.jn.langx.cache.Cache;
 import com.jn.langx.cache.CacheBuilder;
+import com.jn.langx.configuration.ConfigurationEventFactory;
+import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationCacheLoaderAdapter;
+import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationLoader;
+import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
+import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationWriter;
 import com.jn.langx.event.EventPublisher;
 import com.jn.langx.event.local.SimpleEventPublisher;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.function.Supplier;
 import com.jn.langx.util.io.file.FileFilter;
 import com.jn.langx.util.io.file.filter.PatternFilenameFilter;
-import com.jn.langx.util.timing.timer.HashedWheelTimer;
+import com.jn.langx.util.timing.timer.Timer;
 import com.jn.sqlhelper.common.connection.NamedConnectionConfiguration;
 import com.jn.sqlhelper.common.connection.PropertiesNamedConnectionConfigurationParser;
 import com.jn.sqlhelper.common.connection.PropertiesNamedConnectionConfigurationSerializer;
-import com.jn.langx.configuration.ConfigurationEventFactory;
-import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationCacheLoaderAdapter;
-import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationLoader;
-import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
-import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -88,8 +88,15 @@ public class JdbcConnectionRepositoryConfig {
     }
 
     @Bean
-    public Cache<String, NamedConnectionConfiguration> jdbcConnectionConfigurationCache(DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> loader) {
-        return CacheBuilder.<String, NamedConnectionConfiguration>newBuilder().loader(new DirectoryBasedFileConfigurationCacheLoaderAdapter<NamedConnectionConfiguration>(loader)).build();
+    public Cache<String, NamedConnectionConfiguration> jdbcConnectionConfigurationCache(
+            @Autowired @Qualifier("jdbcDirectoryBasedFileConfigurationLoader")
+                    DirectoryBasedFileConfigurationLoader<NamedConnectionConfiguration> loader,
+            @Autowired @Qualifier("timer")
+                    Timer timer) {
+        return CacheBuilder.<String, NamedConnectionConfiguration>newBuilder()
+                .loader(new DirectoryBasedFileConfigurationCacheLoaderAdapter<NamedConnectionConfiguration>(loader))
+                .timer(timer)
+                .build();
     }
 
 
@@ -130,7 +137,7 @@ public class JdbcConnectionRepositoryConfig {
             @Autowired @Qualifier("jdbcConfigurationEventFactory") ConfigurationEventFactory<NamedConnectionConfiguration> eventFactory,
             @Autowired @Qualifier("jdbcConnectionConfigPatternFilter") FileFilter jdbcConnectionConfigPatternFilter,
             @Autowired EventPublisher eventPublisher,
-            @Autowired HashedWheelTimer timer) {
+            @Autowired Timer timer) {
         DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration> repository = new DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration>();
         repository.setCache(cache);
         repository.setName("JdbcConnectionConfigurationRepository");

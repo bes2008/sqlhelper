@@ -16,6 +16,7 @@ package com.jn.sqlhelper.cli.config;
 
 import com.jn.langx.util.concurrent.CommonThreadFactory;
 import com.jn.langx.util.timing.timer.HashedWheelTimer;
+import com.jn.langx.util.timing.timer.Timer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class ThreadPoolConfig {
 
-    @Bean
-    public HashedWheelTimer timer(){
+    @Bean("timer")
+    public Timer timer(){
         return new HashedWheelTimer(new CommonThreadFactory(), 50, TimeUnit.MILLISECONDS);
     }
 
