@@ -33,6 +33,8 @@ public class JdbcConnectionCommands {
             @ShellOption() String url,
             @ShellOption String username,
             @ShellOption(defaultValue = "") String password,
+            @ShellOption(defaultValue = "") String catalog,
+            @ShellOption(defaultValue = "") String schema,
             @ShellOption(defaultValue = "") String props) {
 
         Preconditions.checkTrue(Strings.isNotEmpty(name));

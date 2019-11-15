@@ -1,16 +1,20 @@
 package com.jn.sqlhelper.common.connection;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.langx.configuration.Configuration;
+import com.jn.langx.util.Objects;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.diff.MapDiffResult;
 import com.jn.langx.util.function.Consumer2;
-import com.jn.langx.configuration.Configuration;
 
 import java.util.Map;
 import java.util.Properties;
 
 public class NamedConnectionConfiguration extends ConnectionConfiguration implements Configuration, Cloneable {
     private String name;
+    private String catalog;
+    private String schema;
 
     public NamedConnectionConfiguration() {
 
@@ -50,6 +54,22 @@ public class NamedConnectionConfiguration extends ConnectionConfiguration implem
         this.name = name;
     }
 
+    public String getCatalog() {
+        return catalog;
+    }
+
+    public void setCatalog(String catalog) {
+        this.catalog = catalog;
+    }
+
+    public String getSchema() {
+        return schema;
+    }
+
+    public void setSchema(String schema) {
+        this.schema = schema;
+    }
+
     @Override
     public String toString() {
         return JSONBuilderProvider.simplest().toJson(this);
@@ -75,6 +95,18 @@ public class NamedConnectionConfiguration extends ConnectionConfiguration implem
             }
         }
 
+        String schema1 = Strings.getNullIfBlank(schema);
+        String schema2 = Strings.getNullIfBlank(o2.getSchema());
+        if (!Objects.equals(schema1, schema2)) {
+            return false;
+        }
+
+        String catalog1 = Strings.getNullIfBlank(catalog);
+        String catalog2 = Strings.getNullIfBlank(o2.getCatalog());
+        if (!Objects.equals(catalog1, catalog2)) {
+            return false;
+        }
+
         Map<String, String> map1 = Collects.propertiesToStringMap(getDriverProps(), true);
         Map<String, String> map2 = Collects.propertiesToStringMap(o2.getDriverProps(), true);
         MapDiffResult<String, String> diffResult = Collects.diff(map1, map2);
@@ -86,6 +118,8 @@ public class NamedConnectionConfiguration extends ConnectionConfiguration implem
         NamedConnectionConfiguration conn = new NamedConnectionConfiguration(this);
         conn.setName(name);
         conn.setId(name);
+        conn.setCatalog(catalog);
+        conn.setSchema(schema);
         return conn;
     }
 }

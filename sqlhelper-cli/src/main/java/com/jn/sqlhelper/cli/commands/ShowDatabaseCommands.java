@@ -1,13 +1,17 @@
 package com.jn.sqlhelper.cli.commands;
 
+import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Function;
 import com.jn.langx.util.io.Charsets;
 import com.jn.langx.util.io.IOs;
+import com.jn.langx.util.io.LineDelimiter;
 import com.jn.langx.util.io.file.Files;
 import com.jn.sqlhelper.common.connection.ConnectionFactory;
 import com.jn.sqlhelper.common.connection.NamedConnectionConfiguration;
@@ -17,7 +21,8 @@ import com.jn.sqlhelper.common.ddl.model.Index;
 import com.jn.sqlhelper.common.ddl.model.Table;
 import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.ddl.generator.CommonTableGenerator;
-import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -35,7 +40,7 @@ import static com.jn.sqlhelper.common.utils.SQLs.SQL_FILE_SUFFIX;
 
 @ShellComponent
 public class ShowDatabaseCommands {
-
+    private static final Logger logger = LoggerFactory.getLogger(ShowDatabaseCommands.class);
     @Autowired
     DirectoryBasedFileConfigurationRepository<NamedConnectionConfiguration> repository;
 
@@ -51,11 +56,11 @@ public class ShowDatabaseCommands {
             @ShellOption(help = "the connection configuration name") String connectionName
     ) {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
-
+        NamedConnectionConfiguration configuration = repository.getById(connectionName);
         try {
             DatabaseMetaData dbMetaData = connection.getMetaData();
             final DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
-            List<Table> tables = new DatabaseLoader().loadTables(databaseDescription, null, null, null);
+            List<Table> tables = new DatabaseLoader().loadTables(databaseDescription, configuration.getCatalog(), configuration.getSchema(), null);
             return Pipeline.of(tables).map(new Function<Table, String>() {
                 @Override
                 public String apply(Table table) {
@@ -73,10 +78,10 @@ public class ShowDatabaseCommands {
     public Table getTable(@ShellOption(help = "the connection configuration name") String connectionName,
                           @ShellOption(help = "the table name") String table) {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
-
+        NamedConnectionConfiguration configuration = repository.getById(connectionName);
         try {
             DatabaseMetaData dbMetaData = connection.getMetaData();
-            return new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), null, null, table);
+            return new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), configuration.getCatalog(), configuration.getSchema(), table);
         } catch (Throwable ex) {
             throw Throwables.wrapAsRuntimeException(ex);
         } finally {
@@ -91,9 +96,10 @@ public class ShowDatabaseCommands {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
 
         try {
+            NamedConnectionConfiguration configuration = repository.getById(connectionName);
             DatabaseMetaData dbMetaData = connection.getMetaData();
             DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
-            List<Index> indexes = new DatabaseLoader().findTableIndexes(databaseDescription, null, null, table);
+            List<Index> indexes = new DatabaseLoader().findTableIndexes(databaseDescription, configuration.getCatalog(), configuration.getSchema(), table);
             return Pipeline.of(indexes).map(new Function<Index, String>() {
                 @Override
                 public String apply(Index index) {
@@ -114,8 +120,9 @@ public class ShowDatabaseCommands {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
 
         try {
+            NamedConnectionConfiguration configuration = repository.getById(connectionName);
             DatabaseMetaData dbMetaData = connection.getMetaData();
-            Table t = new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), null, null, table);
+            Table t = new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), configuration.getCatalog(), configuration.getSchema(), table);
             return t.getIndex(index);
         } catch (Throwable ex) {
             throw Throwables.wrapAsRuntimeException(ex);
@@ -129,9 +136,10 @@ public class ShowDatabaseCommands {
                               @ShellOption(help = "the table name") String table) {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
         try {
+            NamedConnectionConfiguration configuration = repository.getById(connectionName);
             DatabaseMetaData dbMetaData = connection.getMetaData();
             DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
-            Table t = new DatabaseLoader().loadTable(databaseDescription, null, null, table);
+            Table t = new DatabaseLoader().loadTable(databaseDescription, configuration.getCatalog(), configuration.getSchema(), table);
             Preconditions.checkNotNull(t, StringTemplates.formatWithPlaceholder("table {} is not exists", table));
             CommonTableGenerator generator = new CommonTableGenerator(databaseDescription);
             return generator.generate(t);
@@ -143,17 +151,18 @@ public class ShowDatabaseCommands {
     }
 
     @ShellMethod(key = "dump ddl", value = "Show table DDL")
-    public String dumpTableDDL(@ShellOption(help = "the connection configuration name") String connectionName,
-                               @ShellOption(help = "the table name") String table,
+    public String dumpTablesDDL(@ShellOption(help = "the connection configuration name") String connectionName,
+                               @ShellOption(help = "the table name", defaultValue = "") String table,
                                @ShellOption(help = "the dump directory") String directory,
                                @ShellOption(help = "the dump filename") String filename) {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
         BufferedWriter bf = null;
         try {
+            NamedConnectionConfiguration configuration = repository.getById(connectionName);
             DatabaseMetaData dbMetaData = connection.getMetaData();
             DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
-            Table t = new DatabaseLoader().loadTable(databaseDescription, null, null, table);
-            Preconditions.checkNotNull(t, StringTemplates.formatWithPlaceholder("table {} is not exists", table));
+            List<Table> ts = new DatabaseLoader().loadTables(databaseDescription, configuration.getCatalog(), configuration.getSchema(), table, true, true, true, true);
+            Preconditions.checkNotNull(ts, StringTemplates.formatWithPlaceholder("table {} is not exists", table));
 
             if (!Strings.endsWithIgnoreCase(filename, SQL_FILE_SUFFIX)) {
                 filename = filename + ".sql";
@@ -162,13 +171,28 @@ public class ShowDatabaseCommands {
             File file = new File(directory, filename);
             Files.makeFile(file);
             bf = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-
+            final BufferedWriter bufferedWriter = bf;
 
             CommonTableGenerator generator = new CommonTableGenerator(databaseDescription);
-            String ddl = generator.generate(t);
-            IOs.write(ddl.getBytes(Charsets.UTF_8), bf, Charsets.UTF_8);
-            bf.flush();
-            return ddl;
+
+            StringBuilder builder = new StringBuilder();
+            Collects.forEach(ts, new Consumer<Table>() {
+                @Override
+                public void accept(Table t) {
+                    try {
+                        String ddl = generator.generate(t);
+                        builder.append(ddl);
+                        builder.append(LineDelimiter.DEFAULT.getValue());
+                        IOs.write(ddl.getBytes(Charsets.UTF_8), bufferedWriter, Charsets.UTF_8);
+                        bufferedWriter.write(LineDelimiter.DEFAULT.getValue());
+                        bufferedWriter.flush();
+                    }catch (Throwable ex){
+                        logger.error(ex.getMessage());
+                    }
+
+                }
+            });
+            return builder.toString();
         } catch (Throwable ex) {
             throw Throwables.wrapAsRuntimeException(ex);
         } finally {

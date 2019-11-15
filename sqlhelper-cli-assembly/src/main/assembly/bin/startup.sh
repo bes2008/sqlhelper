@@ -50,4 +50,4 @@ export LOADER_PATH=$SQLHelperCLI_COMPONENT_HOME/lib/drivers
 #echo $DEBUG_OPTS
 $JAVA -version
 #echo $JAVA -server $JAVA_OPTS $DEBUG_OPTS -jar $SQLHelperCLI_COMPONENT_HOME/lib/sqlhelper-cli.jar >>$CLI_LOG_FILE 2$CLI_LOG_FILE &
-$JAVA -server $JAVA_OPTS $DEBUG_OPTS -jar $SQLHelperCLI_COMPONENT_HOME/lib/sqlhelper-cli.jar >>$CLI_LOG_FILE 2>>$CLI_LOG_FILE &
+$JAVA -server $JAVA_OPTS $DEBUG_OPTS -jar $SQLHelperCLI_COMPONENT_HOME/lib/sqlhelper-cli.jar

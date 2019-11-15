@@ -66,4 +66,4 @@ set LOADER_PATH=%SQLHelperCLI_COMPONENT_HOME%/lib/drivers
 
 "%JAVA%" -version
 @REM echo "%JAVA%" -server %JAVA_OPTS% %DEBUG_OPTS% -jar "%SQLHelperCLI_COMPONENT_HOME%\lib\sqlhelper-cli.jar" >>%CLI_LOG_FILE% 2>&1
-"%JAVA%" -server %JAVA_OPTS% %DEBUG_OPTS% -jar "%SQLHelperCLI_COMPONENT_HOME%\lib\sqlhelper-cli.jar" >>%CLI_LOG_FILE% 2>&1
+"%JAVA%" -server %JAVA_OPTS% %DEBUG_OPTS% -jar "%SQLHelperCLI_COMPONENT_HOME%\lib\sqlhelper-cli.jar"

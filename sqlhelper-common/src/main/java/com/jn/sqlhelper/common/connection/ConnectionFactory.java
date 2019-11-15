@@ -42,7 +42,7 @@ public class ConnectionFactory {
         }
     }
 
-    public void setConnectionConfiguration(ConnectionConfiguration connectionConfiguration) {
+    public <T extends ConnectionConfiguration> void setConnectionConfiguration(T connectionConfiguration) {
         this.connectionConfiguration = connectionConfiguration;
     }
 
