@@ -15,24 +15,24 @@
     </description>
     <url>https://github.com/fangjinuo/sqlhelper</url>
     <modules>
+        <module>sqlhelper-common</module>
         <module>sqlhelper-dialect</module>
-        <module>sqlhelper-mybatis</module>
-        <module>sqlhelper-examples</module>
-        <module>sqlhelper-mybatis-spring-boot</module>
-        <module>sqlhelper-mybatis-over-pagehelper</module>
+        <module>sqlhelper-dbutils</module>
         <module>sqlhelper-jfinal</module>
         <module>sqlhelper-hibernate</module>
         <module>sqlhelper-mango</module>
         <module>sqlhelper-ebean</module>
-        <module>sqlhelper-batchinsert</module>
-        <module>sqlhelper-springjdbc</module>
-        <module>sqlhelper-springjdbc-spring-boot</module>
-        <module>sqlhelper-common</module>
-        <module>sqlhelper-cli</module>
-        <module>sqlhelper-dbutils</module>
+        <module>sqlhelper-mybatis</module>
+        <module>sqlhelper-mybatis-spring-boot</module>
+        <module>sqlhelper-mybatis-over-pagehelper</module>
         <module>sqlhelper-mybatisplus-spring-boot</module>
         <module>sqlhelper-mybatisplus</module>
+        <module>sqlhelper-springjdbc</module>
+        <module>sqlhelper-springjdbc-spring-boot</module>
+        <module>sqlhelper-cli</module>
         <module>sqlhelper-cli-assembly</module>
+        <module>sqlhelper-examples</module>
+        <module>sqlhelper-batchinsert</module>
     </modules>
     <developers>
         <developer>
@@ -290,7 +290,7 @@
                             <revisionOnScmFailure>unknow</revisionOnScmFailure>
                             <doCheck>false</doCheck>
                             <doUpdate>true</doUpdate>
-                            <getRevisionOnlyOne>true</getRevisionOnlyOne>
+                            <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
                             <scmConnectionUrl>scm:git:https://github.com/fangjinuo/sqlhelper.git</scmConnectionUrl>
                             <useLastCommittedRevision>true</useLastCommittedRevision>
                         </configuration>
