@@ -64,7 +64,7 @@ public class Column {
 
     private String scopeTable;
 
-    private Short sourceDataType;
+    private int sourceDataType;
 
     @com.jn.sqlhelper.common.annotation.Column(value = "IS_AUTOINCREMENT", converter = BooleanFlagConverter.class)
     private BooleanFlag isAutoincrement;
@@ -232,11 +232,11 @@ public class Column {
         this.scopeTable = scopeTable;
     }
 
-    public Short getSourceDataType() {
+    public Integer getSourceDataType() {
         return sourceDataType;
     }
 
-    public void setSourceDataType(Short sourceDataType) {
+    public void setSourceDataType(Integer sourceDataType) {
         this.sourceDataType = sourceDataType;
     }
 

@@ -148,10 +148,18 @@ public class BeanRowMapper<T> implements RowMapper<T> {
         Method method = fieldInfo.getSetter();
         if (method != null && Modifiers.isPublic(method)) {
             method.setAccessible(true);
-            method.invoke(target, fieldValue);
+            try {
+                method.invoke(target, fieldValue);
+            } catch (Throwable ex) {
+                logger.error("set field by setter fail, field: {}, setter: {}, value: {}", fieldInfo.getField().getName(), method.getName(), fieldValue);
+            }
         } else {
             fieldInfo.getField().setAccessible(true);
-            fieldInfo.getField().set(target, fieldValue);
+            try {
+                fieldInfo.getField().set(target, fieldValue);
+            } catch (Throwable ex) {
+                logger.error("set field by reflection fail, field: {}, value: {}", fieldInfo.getField().getName(), fieldValue);
+            }
         }
     }
 
