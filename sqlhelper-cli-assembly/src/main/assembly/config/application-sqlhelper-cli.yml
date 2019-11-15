@@ -1,0 +1,3 @@
+jdbc-connection-repository:
+  directory: ./conf
+  reload-interval-in-seconds: 30
