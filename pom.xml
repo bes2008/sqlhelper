@@ -32,6 +32,7 @@
         <module>sqlhelper-dbutils</module>
         <module>sqlhelper-mybatisplus-spring-boot</module>
         <module>sqlhelper-mybatisplus</module>
+        <module>sqlhelper-cli-assembly</module>
     </modules>
     <developers>
         <developer>
@@ -84,6 +85,9 @@
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.compilerVersion>1.6</maven.compiler.compilerVersion>
+
+        <project.major.version>2.3.0</project.major.version>
+        <project.internal.version>2.3.0.RC1.0</project.internal.version>
     </properties>
 
     <dependencyManagement>
@@ -257,6 +261,59 @@
                     <source>1.6</source>
                     <target>1.6</target>
                     <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>build_number_create_timestamp</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create-timestamp</goal>
+                        </goals>
+                        <configuration>
+                            <timestampPropertyName>buildTimestamp</timestampPropertyName>
+                            <timestampFormat>yyyy-MM-dd HH:mm:ss</timestampFormat>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>build_number_create</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                        <configuration>
+                            <buildNumberPropertyName>buildNumber</buildNumberPropertyName>
+                            <revisionOnScmFailure>unknow</revisionOnScmFailure>
+                            <doCheck>false</doCheck>
+                            <doUpdate>true</doUpdate>
+                            <getRevisionOnlyOne>true</getRevisionOnlyOne>
+                            <scmConnectionUrl>scm:git:https://github.com/fangjinuo/sqlhelper.git</scmConnectionUrl>
+                            <useLastCommittedRevision>true</useLastCommittedRevision>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>true</addMavenDescriptor>
+                        <forced>true</forced>
+                        <index>true</index>
+                        <manifestEntries>
+                            <Build-Timestamp>${buildTimestamp}</Build-Timestamp>
+                            <Build-SCM-Version>${buildNumber}</Build-SCM-Version>
+                            <Build-Major-Version>${project.major.version}</Build-Major-Version>
+                            <Build-Internal-Version>${project.internal.version}</Build-Internal-Version>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
             </plugin>
         </plugins>
