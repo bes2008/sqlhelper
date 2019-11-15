@@ -4,6 +4,7 @@ import com.jn.langx.Converter;
 import com.jn.langx.exception.NoMappedFieldException;
 import com.jn.langx.exception.ValueConvertException;
 import com.jn.langx.text.StringTemplates;
+import com.jn.langx.util.Objects;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Collects;
@@ -146,19 +147,33 @@ public class BeanRowMapper<T> implements RowMapper<T> {
 
     private void setValue(FieldInfo fieldInfo, Object target, Object fieldValue) throws Throwable {
         Method method = fieldInfo.getSetter();
+        boolean valueIsNull = Objects.isNull(fieldValue);
+
         if (method != null && Modifiers.isPublic(method)) {
-            method.setAccessible(true);
-            try {
-                method.invoke(target, fieldValue);
-            } catch (Throwable ex) {
-                logger.error("set {} # field by setter fail, field: {}, setter: {}, value: {}", Reflects.getFQNClassName(targetClass), fieldInfo.getField().getName(), method.getName(), fieldValue);
+            boolean willInvoke = true;
+            if (valueIsNull) {
+                willInvoke = !Primitives.isPrimitive(method.getParameterTypes()[0]);
+            }
+            if (willInvoke) {
+                method.setAccessible(true);
+                try {
+                    method.invoke(target, fieldValue);
+                } catch (Throwable ex) {
+                    logger.error("set {} # field by setter fail, field: {}, setter: {}, value: {}", Reflects.getFQNClassName(targetClass), fieldInfo.getField().getName(), method.getName(), fieldValue);
+                }
             }
         } else {
-            fieldInfo.getField().setAccessible(true);
-            try {
-                fieldInfo.getField().set(target, fieldValue);
-            } catch (Throwable ex) {
-                logger.error("set {} #  field by reflection fail, field: {}, value: {}", Reflects.getFQNClassName(targetClass), fieldInfo.getField().getName(), fieldValue);
+            boolean willInvoke = true;
+            if (valueIsNull) {
+                willInvoke = !Primitives.isPrimitive(fieldInfo.getFieldType());
+            }
+            if (willInvoke) {
+                fieldInfo.getField().setAccessible(true);
+                try {
+                    fieldInfo.getField().set(target, fieldValue);
+                } catch (Throwable ex) {
+                    logger.error("set {} #  field by reflection fail, field: {}, value: {}", Reflects.getFQNClassName(targetClass), fieldInfo.getField().getName(), fieldValue);
+                }
             }
         }
     }
