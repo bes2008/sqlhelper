@@ -31,15 +31,15 @@ public class Column {
     private String typeName;
 
     @com.jn.sqlhelper.common.annotation.Column("COLUMN_SIZE")
-    private int size;
+    private Integer size;
 
-    private int bufferLength;
+    private Integer bufferLength;
 
-    private int decimalDigits;
+    private Integer decimalDigits;
 
-    private int numPrecRadix;
+    private Integer numPrecRadix;
 
-    private int nullable;
+    private Integer nullable;
 
     private String remarks;
 
@@ -49,11 +49,11 @@ public class Column {
     @com.jn.sqlhelper.common.annotation.Column(value = "SQL_DATA_TYPE", converter = JdbcTypeConverter.class)
     private JdbcType sqlDataType;
 
-    private int sqlDatetimeSub;
+    private Integer sqlDatetimeSub;
 
-    private int charOctetLength;
+    private Integer charOctetLength;
 
-    private int ordinalPosition;
+    private Integer ordinalPosition;
 
     @com.jn.sqlhelper.common.annotation.Column(value = "IS_NULLABLE", converter = BooleanFlagConverter.class)
     private BooleanFlag isNullable;
@@ -64,7 +64,7 @@ public class Column {
 
     private String scopeTable;
 
-    private int sourceDataType;
+    private Integer sourceDataType;
 
     @com.jn.sqlhelper.common.annotation.Column(value = "IS_AUTOINCREMENT", converter = BooleanFlagConverter.class)
     private BooleanFlag isAutoincrement;
@@ -120,37 +120,6 @@ public class Column {
         this.typeName = typeName;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public int getBufferLength() {
-        return bufferLength;
-    }
-
-    public void setBufferLength(int bufferLength) {
-        this.bufferLength = bufferLength;
-    }
-
-    public int getDecimalDigits() {
-        return decimalDigits;
-    }
-
-    public void setDecimalDigits(int decimalDigits) {
-        this.decimalDigits = decimalDigits;
-    }
-
-    public int getNullable() {
-        return nullable;
-    }
-
-    public void setNullable(int nullable) {
-        this.nullable = nullable;
-    }
 
     public String getRemarks() {
         return remarks;
@@ -176,29 +145,6 @@ public class Column {
         this.sqlDataType = sqlDataType;
     }
 
-    public int getSqlDatetimeSub() {
-        return sqlDatetimeSub;
-    }
-
-    public void setSqlDatetimeSub(int sqlDatetimeSub) {
-        this.sqlDatetimeSub = sqlDatetimeSub;
-    }
-
-    public int getCharOctetLength() {
-        return charOctetLength;
-    }
-
-    public void setCharOctetLength(int charOctetLength) {
-        this.charOctetLength = charOctetLength;
-    }
-
-    public int getOrdinalPosition() {
-        return ordinalPosition;
-    }
-
-    public void setOrdinalPosition(int ordinalPosition) {
-        this.ordinalPosition = ordinalPosition;
-    }
 
     public BooleanFlag getIsNullable() {
         return isNullable;
@@ -232,14 +178,6 @@ public class Column {
         this.scopeTable = scopeTable;
     }
 
-    public Integer getSourceDataType() {
-        return sourceDataType;
-    }
-
-    public void setSourceDataType(Integer sourceDataType) {
-        this.sourceDataType = sourceDataType;
-    }
-
     public BooleanFlag getIsAutoincrement() {
         return isAutoincrement;
     }
@@ -256,12 +194,76 @@ public class Column {
         this.isGeneratedColumn = isGeneratedColumn;
     }
 
-    public int getNumPrecRadix() {
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
+
+    public Integer getBufferLength() {
+        return bufferLength;
+    }
+
+    public void setBufferLength(Integer bufferLength) {
+        this.bufferLength = bufferLength;
+    }
+
+    public Integer getDecimalDigits() {
+        return decimalDigits;
+    }
+
+    public void setDecimalDigits(Integer decimalDigits) {
+        this.decimalDigits = decimalDigits;
+    }
+
+    public Integer getNumPrecRadix() {
         return numPrecRadix;
     }
 
-    public void setNumPrecRadix(int numPrecRadix) {
+    public void setNumPrecRadix(Integer numPrecRadix) {
         this.numPrecRadix = numPrecRadix;
+    }
+
+    public Integer getNullable() {
+        return nullable;
+    }
+
+    public void setNullable(Integer nullable) {
+        this.nullable = nullable;
+    }
+
+    public Integer getSqlDatetimeSub() {
+        return sqlDatetimeSub;
+    }
+
+    public void setSqlDatetimeSub(Integer sqlDatetimeSub) {
+        this.sqlDatetimeSub = sqlDatetimeSub;
+    }
+
+    public Integer getCharOctetLength() {
+        return charOctetLength;
+    }
+
+    public void setCharOctetLength(Integer charOctetLength) {
+        this.charOctetLength = charOctetLength;
+    }
+
+    public Integer getOrdinalPosition() {
+        return ordinalPosition;
+    }
+
+    public void setOrdinalPosition(Integer ordinalPosition) {
+        this.ordinalPosition = ordinalPosition;
+    }
+
+    public Integer getSourceDataType() {
+        return sourceDataType;
+    }
+
+    public void setSourceDataType(Integer sourceDataType) {
+        this.sourceDataType = sourceDataType;
     }
 
     @Override

@@ -30,18 +30,18 @@ public class IndexColumn {
     @Column(value = {"TYPE", "INDEX_TYPE"}, converter = IndexTypeConverter.class)
     private IndexType type;
 
-    private int ordinalPosition;
+    private Integer ordinalPosition;
 
     private String columnName;
 
     @Column(value = {"ASC_OR_DESC"}, converter = SortTypeConverter.class)
     private SortType ascOrDesc;
 
-    private int sortType;
+    private Integer sortType;
 
-    private long cardinality;
+    private Long cardinality;
 
-    private long pages;
+    private Long pages;
 
     private String filterCondition;
 
@@ -125,22 +125,6 @@ public class IndexColumn {
         this.ascOrDesc = ascOrDesc;
     }
 
-    public long getCardinality() {
-        return cardinality;
-    }
-
-    public void setCardinality(long cardinality) {
-        this.cardinality = cardinality;
-    }
-
-    public long getPages() {
-        return pages;
-    }
-
-    public void setPages(long pages) {
-        this.pages = pages;
-    }
-
     public String getFilterCondition() {
         return filterCondition;
     }
@@ -149,12 +133,32 @@ public class IndexColumn {
         this.filterCondition = filterCondition;
     }
 
-    public int getSortType() {
+    public void setOrdinalPosition(Integer ordinalPosition) {
+        this.ordinalPosition = ordinalPosition;
+    }
+
+    public Integer getSortType() {
         return sortType;
     }
 
-    public void setSortType(int sortType) {
+    public void setSortType(Integer sortType) {
         this.sortType = sortType;
+    }
+
+    public Long getCardinality() {
+        return cardinality;
+    }
+
+    public void setCardinality(Long cardinality) {
+        this.cardinality = cardinality;
+    }
+
+    public Long getPages() {
+        return pages;
+    }
+
+    public void setPages(Long pages) {
+        this.pages = pages;
     }
 
     @Override

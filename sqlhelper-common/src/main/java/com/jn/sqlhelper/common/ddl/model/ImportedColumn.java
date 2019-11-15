@@ -28,7 +28,7 @@ public class ImportedColumn {
 
     private String fkColumnName;
 
-    private int keySeq;
+    private Integer keySeq;
 
     @Column(value = {"UPDATE_RULE"}, converter = FkMutatedRuleConverter.class)
     private FkMutatedRule updateRule;
@@ -109,11 +109,11 @@ public class ImportedColumn {
         this.fkColumnName = fkColumnName;
     }
 
-    public int getKeySeq() {
+    public Integer getKeySeq() {
         return keySeq;
     }
 
-    public void setKeySeq(int keySeq) {
+    public void setKeySeq(Integer keySeq) {
         this.keySeq = keySeq;
     }
 

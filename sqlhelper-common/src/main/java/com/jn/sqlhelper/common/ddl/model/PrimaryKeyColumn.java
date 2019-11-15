@@ -22,7 +22,7 @@ public class PrimaryKeyColumn {
     private String columnName;
 
     @Column("KEY_SEQ")
-    private int keySeq;
+    private Integer keySeq;
 
     @Nullable
     @Column("PK_NAME")
@@ -60,11 +60,11 @@ public class PrimaryKeyColumn {
         this.columnName = columnName;
     }
 
-    public int getKeySeq() {
+    public Integer getKeySeq() {
         return keySeq;
     }
 
-    public void setKeySeq(int keySeq) {
+    public void setKeySeq(Integer keySeq) {
         this.keySeq = keySeq;
     }
 
