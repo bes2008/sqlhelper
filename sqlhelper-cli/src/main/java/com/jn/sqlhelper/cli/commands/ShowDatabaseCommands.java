@@ -152,15 +152,19 @@ public class ShowDatabaseCommands {
 
     @ShellMethod(key = "dump ddl", value = "Show table DDL")
     public String dumpTablesDDL(@ShellOption(help = "the connection configuration name") String connectionName,
-                               @ShellOption(help = "the table name", defaultValue = "") String table,
-                               @ShellOption(help = "the dump directory") String directory,
-                               @ShellOption(help = "the dump filename") String filename) {
+                                @ShellOption(help = "the table name", defaultValue = "") String table,
+                                @ShellOption(help = "the dump directory") String directory,
+                                @ShellOption(help = "the dump filename") String filename,
+                                @ShellOption(help = "postback to you", defaultValue = "false") boolean postback) {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
         BufferedWriter bf = null;
         try {
             NamedConnectionConfiguration configuration = repository.getById(connectionName);
             DatabaseMetaData dbMetaData = connection.getMetaData();
             DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
+            if (Strings.isBlank(table)) {
+                table = null;
+            }
             List<Table> ts = new DatabaseLoader().loadTables(databaseDescription, configuration.getCatalog(), configuration.getSchema(), table, true, true, true, true);
             Preconditions.checkNotNull(ts, StringTemplates.formatWithPlaceholder("table {} is not exists", table));
 
@@ -186,13 +190,16 @@ public class ShowDatabaseCommands {
                         IOs.write(ddl.getBytes(Charsets.UTF_8), bufferedWriter, Charsets.UTF_8);
                         bufferedWriter.write(LineDelimiter.DEFAULT.getValue());
                         bufferedWriter.flush();
-                    }catch (Throwable ex){
+                    } catch (Throwable ex) {
                         logger.error(ex.getMessage());
                     }
 
                 }
             });
-            return builder.toString();
+            if (postback) {
+                return builder.toString();
+            }
+            return null;
         } catch (Throwable ex) {
             throw Throwables.wrapAsRuntimeException(ex);
         } finally {

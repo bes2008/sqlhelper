@@ -59,6 +59,8 @@ public class JdbcConnectionCommands {
         configuration.setUser(username);
         configuration.setPassword(password);
         configuration.setDriverProps(properties);
+        configuration.setSchema(Strings.getNullIfBlank(catalog));
+        configuration.setCatalog(Strings.getNullIfBlank(schema));
 
         properties.setProperty("user", username);
         properties.setProperty("password", password);

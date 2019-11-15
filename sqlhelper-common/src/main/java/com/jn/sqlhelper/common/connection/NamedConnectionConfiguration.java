@@ -33,6 +33,8 @@ public class NamedConnectionConfiguration extends ConnectionConfiguration implem
             }
         });
 
+        this.setSchema(props.getProperty("schema"));
+        this.setCatalog(props.getProperty("catalog"));
         setDriverProps(props);
     }
 
