@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2019 the original author or authors.
+  ~
+  ~ Licensed under the LGPL, Version 3.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at  http://www.gnu.org/licenses/lgpl-3.0.html
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<configuration debug="true" scan="true" scanPeriod="60 seconds" packagingData="true">
+    <jmxConfigurator />
+    <property name="AppContext" value="SQLHelper-CLI" />
+    <property name="LogDir" value="${SQLHelper-CLI.location}/logs:-./logs"/>
+    <property name="CommonPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p [%t] [%cn] %C{35}:%M:%L - %msg %n"/>
+    <contextName>${AppContext}</contextName>
+    <timestamp key="bySecond" datePattern="yyyy-MM-dd'T'HHmmss"/>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    <!-- ###################### Appender ############################ -->
+
+    <if condition='property("runMode").equals("dev")'>
+        <then>
+            <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+                <file>${LogDir}/sqlhelper-cli-${bySecond}.log</file>
+                <append>false</append>
+                <encoder>
+                    <pattern>${CommonPattern}</pattern>
+                </encoder>
+                <immediateFlush>true</immediateFlush>
+                <prudent>false</prudent>
+            </appender>
+        </then>
+        <else>
+            <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${LogDir}/sqlhelper-cli.log</file>
+                <append>true</append>
+                <encoder>
+                    <pattern>${CommonPattern}</pattern>
+                </encoder>
+                <prudent>false</prudent>
+                <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                    <fileNamePattern>${LogDir}/sqlhelper-cli-%d{yyyy-MM}-%i.gz</fileNamePattern>
+                    <maxHistory>12</maxHistory>
+                    <totalSizeCap>12GB</totalSizeCap>
+                    <cleanHistoryOnStart>false</cleanHistoryOnStart>
+                    <maxFileSize>1GB</maxFileSize>
+                </rollingPolicy>
+                <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                    <maxFileSize>500MB</maxFileSize>
+                </triggeringPolicy>
+            </appender>
+        </else>
+    </if>
+
+    <appender name="SQL-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LogDir}/sqlhelper-cli-sql.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>${CommonPattern}</pattern>
+        </encoder>
+        <prudent>false</prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LogDir}/sqlhelper-cli-sql-%d{yyyy-MM}-%i.gz</fileNamePattern>
+            <maxHistory>12</maxHistory>
+            <totalSizeCap>12GB</totalSizeCap>
+            <cleanHistoryOnStart>false</cleanHistoryOnStart>
+            <maxFileSize>1GB</maxFileSize>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>500MB</maxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+
+    <!-- ###################### Logger ############################ -->
+    <if condition='p("runMode").equals("dev")'>
+        <then />
+        <else>
+            <logger name="com.jn.sqlhelper" level="INFO" additivity="true" />
+            <logger name="org.elasticsearch.client.RequestLogger" level="DEBUG" additivity="true"/>
+            <logger name="org.springframework.boot.SpringApplication" level="DEBUG" additivity="true" />
+        </else>
+    </if>
+
+
+
+    <!-- ###################### root ############################ -->
+    <if condition='property("runMode").equals("dev")'>
+        <then>
+            <root level="DEBUG">
+                <appender-ref ref="CONSOLE"/>
+                <appender-ref ref="FILE" />
+            </root>
+        </then>
+        <else>
+            <root level="WARN">
+                <appender-ref ref="CONSOLE"/>
+                <appender-ref ref="FILE" />
+            </root>
+        </else>
+    </if>
+
+</configuration>
