@@ -1,12 +1,12 @@
 package com.jn.sqlhelper.cli.commands;
 
+import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.StringMap;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.common.connection.NamedConnectionConfiguration;
-import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -59,8 +59,6 @@ public class JdbcConnectionCommands {
         configuration.setUser(username);
         configuration.setPassword(password);
         configuration.setDriverProps(properties);
-        configuration.setSchema(Strings.getNullIfBlank(catalog));
-        configuration.setCatalog(Strings.getNullIfBlank(schema));
 
         properties.setProperty("user", username);
         properties.setProperty("password", password);
@@ -72,6 +70,12 @@ public class JdbcConnectionCommands {
     @ShellMethod(key = "jdbc get", value = "get a connection configuration by name")
     public NamedConnectionConfiguration getConnection(String name) {
         return repository.getById(name);
+    }
+
+    @ShellMethod(key = "jdbc remove", value = "remove a connection configuration by name")
+    public boolean removeConnection(String name) {
+        repository.removeById(name);
+        return true;
     }
 
 
