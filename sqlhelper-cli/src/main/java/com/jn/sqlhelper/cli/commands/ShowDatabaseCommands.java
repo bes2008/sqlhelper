@@ -19,6 +19,7 @@ import com.jn.sqlhelper.common.ddl.dump.DatabaseLoader;
 import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 import com.jn.sqlhelper.common.ddl.model.Index;
 import com.jn.sqlhelper.common.ddl.model.Table;
+import com.jn.sqlhelper.common.utils.Connections;
 import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.ddl.generator.CommonTableGenerator;
 import org.slf4j.Logger;
@@ -56,11 +57,11 @@ public class ShowDatabaseCommands {
             @ShellOption(help = "the connection configuration name") String connectionName
     ) {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
-        NamedConnectionConfiguration configuration = repository.getById(connectionName);
         try {
             DatabaseMetaData dbMetaData = connection.getMetaData();
             final DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
-            List<Table> tables = new DatabaseLoader().loadTables(databaseDescription, configuration.getCatalog(), configuration.getSchema(), null);
+
+            List<Table> tables = new DatabaseLoader().loadTables(databaseDescription, Connections.getCatalog(connection), Connections.getSchema(connection), null);
             return Pipeline.of(tables).map(new Function<Table, String>() {
                 @Override
                 public String apply(Table table) {
@@ -81,7 +82,7 @@ public class ShowDatabaseCommands {
         NamedConnectionConfiguration configuration = repository.getById(connectionName);
         try {
             DatabaseMetaData dbMetaData = connection.getMetaData();
-            return new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), configuration.getCatalog(), configuration.getSchema(), table);
+            return new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), Connections.getCatalog(connection), Connections.getSchema(connection), table);
         } catch (Throwable ex) {
             throw Throwables.wrapAsRuntimeException(ex);
         } finally {
@@ -96,10 +97,9 @@ public class ShowDatabaseCommands {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
 
         try {
-            NamedConnectionConfiguration configuration = repository.getById(connectionName);
             DatabaseMetaData dbMetaData = connection.getMetaData();
             DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
-            List<Index> indexes = new DatabaseLoader().findTableIndexes(databaseDescription, configuration.getCatalog(), configuration.getSchema(), table);
+            List<Index> indexes = new DatabaseLoader().findTableIndexes(databaseDescription, Connections.getCatalog(connection), Connections.getSchema(connection), table);
             return Pipeline.of(indexes).map(new Function<Index, String>() {
                 @Override
                 public String apply(Index index) {
@@ -122,7 +122,7 @@ public class ShowDatabaseCommands {
         try {
             NamedConnectionConfiguration configuration = repository.getById(connectionName);
             DatabaseMetaData dbMetaData = connection.getMetaData();
-            Table t = new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), configuration.getCatalog(), configuration.getSchema(), table);
+            Table t = new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), Connections.getCatalog(connection), Connections.getSchema(connection), table);
             return t.getIndex(index);
         } catch (Throwable ex) {
             throw Throwables.wrapAsRuntimeException(ex);
@@ -136,10 +136,9 @@ public class ShowDatabaseCommands {
                               @ShellOption(help = "the table name") String table) {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
         try {
-            NamedConnectionConfiguration configuration = repository.getById(connectionName);
             DatabaseMetaData dbMetaData = connection.getMetaData();
             DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
-            Table t = new DatabaseLoader().loadTable(databaseDescription, configuration.getCatalog(), configuration.getSchema(), table);
+            Table t = new DatabaseLoader().loadTable(databaseDescription, Connections.getCatalog(connection), Connections.getSchema(connection), table);
             Preconditions.checkNotNull(t, StringTemplates.formatWithPlaceholder("table {} is not exists", table));
             CommonTableGenerator generator = new CommonTableGenerator(databaseDescription);
             return generator.generate(t);
@@ -165,7 +164,7 @@ public class ShowDatabaseCommands {
             if (Strings.isBlank(table)) {
                 table = null;
             }
-            List<Table> ts = new DatabaseLoader().loadTables(databaseDescription, configuration.getCatalog(), configuration.getSchema(), table, true, true, true, true);
+            List<Table> ts = new DatabaseLoader().loadTables(databaseDescription, Connections.getCatalog(connection), Connections.getSchema(connection), table, true, true, true, true);
             Preconditions.checkNotNull(ts, StringTemplates.formatWithPlaceholder("table {} is not exists", table));
 
             if (!Strings.endsWithIgnoreCase(filename, SQL_FILE_SUFFIX)) {
