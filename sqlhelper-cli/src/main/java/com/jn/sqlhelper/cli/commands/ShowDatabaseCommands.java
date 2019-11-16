@@ -161,9 +161,7 @@ public class ShowDatabaseCommands {
             NamedConnectionConfiguration configuration = repository.getById(connectionName);
             DatabaseMetaData dbMetaData = connection.getMetaData();
             DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
-            if (Strings.isBlank(table)) {
-                table = null;
-            }
+            table = Strings.getNullIfBlank(table);
             List<Table> ts = new DatabaseLoader().loadTables(databaseDescription, Connections.getCatalog(connection), Connections.getSchema(connection), table, true, true, true, true);
             Preconditions.checkNotNull(ts, StringTemplates.formatWithPlaceholder("table {} is not exists", table));
 
