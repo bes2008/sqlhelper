@@ -159,7 +159,7 @@ public class BeanRowMapper<T> implements RowMapper<T> {
                 try {
                     method.invoke(target, fieldValue);
                 } catch (Throwable ex) {
-                    logger.error("set {} # field by setter fail, field: {}, setter: {}, value: {}", Reflects.getFQNClassName(targetClass), fieldInfo.getField().getName(), method.getName(), fieldValue);
+                    logger.error("set {} # {} field by setter {} fail, value: {}", Reflects.getFQNClassName(targetClass), fieldInfo.getField().getName(), method.getName(), fieldValue);
                 }
             }
         } else {
@@ -172,7 +172,7 @@ public class BeanRowMapper<T> implements RowMapper<T> {
                 try {
                     fieldInfo.getField().set(target, fieldValue);
                 } catch (Throwable ex) {
-                    logger.error("set {} #  field by reflection fail, field: {}, value: {}", Reflects.getFQNClassName(targetClass), fieldInfo.getField().getName(), fieldValue);
+                    logger.error("set {} # {} field by reflection fail, value: {}", Reflects.getFQNClassName(targetClass), fieldInfo.getField().getName(), fieldValue);
                 }
             }
         }
