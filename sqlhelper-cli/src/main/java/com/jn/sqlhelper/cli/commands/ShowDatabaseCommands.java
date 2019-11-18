@@ -79,7 +79,6 @@ public class ShowDatabaseCommands {
     public Table getTable(@ShellOption(help = "the connection configuration name") String connectionName,
                           @ShellOption(help = "the table name") String table) {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
-        NamedConnectionConfiguration configuration = repository.getById(connectionName);
         try {
             DatabaseMetaData dbMetaData = connection.getMetaData();
             return new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), Connections.getCatalog(connection), Connections.getSchema(connection), table);
@@ -120,7 +119,6 @@ public class ShowDatabaseCommands {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
 
         try {
-            NamedConnectionConfiguration configuration = repository.getById(connectionName);
             DatabaseMetaData dbMetaData = connection.getMetaData();
             Table t = new DatabaseLoader().loadTable(new DatabaseDescription(dbMetaData), Connections.getCatalog(connection), Connections.getSchema(connection), table);
             return t.getIndex(index);
@@ -158,7 +156,6 @@ public class ShowDatabaseCommands {
         Connection connection = getConnectionByConnectionConfigurationId(connectionName);
         BufferedWriter bf = null;
         try {
-            NamedConnectionConfiguration configuration = repository.getById(connectionName);
             DatabaseMetaData dbMetaData = connection.getMetaData();
             DatabaseDescription databaseDescription = new DatabaseDescription(dbMetaData);
             table = Strings.getNullIfBlank(table);
