@@ -14,13 +14,13 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;
+import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.OscarUrlParser;
 
 public class OscarDialect extends AbstractDialect {
     public OscarDialect() {
         setUrlParser(new OscarUrlParser());
-        setLimitHandler(new OracleXLimitHandler());
+        setLimitHandler(new LimitOffsetLimitHandler());
     }
 
     @Override
@@ -37,4 +37,10 @@ public class OscarDialect extends AbstractDialect {
     public boolean isUseMaxForLimit() {
         return true;
     }
+
+    @Override
+    public boolean isSupportsLimitOffset() {
+        return true;
+    }
+
 }
