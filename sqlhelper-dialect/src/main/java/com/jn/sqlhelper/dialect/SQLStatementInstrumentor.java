@@ -227,18 +227,37 @@ public class SQLStatementInstrumentor {
                 return countSql;
             }
         }
+
         // do count
-        boolean hasOrderBy = false;
+        boolean sliceOrderBy = false;
         final String lowerSql = originalSql.toLowerCase().trim();
         final int orderIndex = originalSql.toLowerCase().lastIndexOf("order");
         if (orderIndex != -1) {
-            final String remainSql = lowerSql.substring(orderIndex + "order".length()).trim();
-            hasOrderBy = remainSql.startsWith("by");
-            if ((remainSql.contains("select") && remainSql.contains("from")) || remainSql.contains(" union ") || remainSql.contains(" where ") || remainSql.contains(" and ") || remainSql.contains(" or ") || remainSql.contains(" between ") || remainSql.contains(" in ") || remainSql.contains(" case ")) {
-                hasOrderBy = false;
+            String remainSql = lowerSql.substring(orderIndex + "order".length()).trim();
+            sliceOrderBy = remainSql.startsWith("by");
+            if (sliceOrderBy) {
+                remainSql = Strings.replacePattern(remainSql, "\\s+", " ");
+                if ((remainSql.contains(" select ") && remainSql.contains(" from ")) || remainSql.contains(" union ") || remainSql.contains(" where ") || remainSql.contains(" and ") || remainSql.contains(" or ") || remainSql.contains(" between ") || remainSql.contains(" in ") || remainSql.contains(" case ")) {
+                    sliceOrderBy = false;
+                }
+                if (sliceOrderBy) {
+                    int leftBracketsCount = 0;
+                    for (int i = 0; i < remainSql.length(); i++) {
+                        char c = remainSql.charAt(i);
+                        if (c == '(') {
+                            leftBracketsCount++;
+                        } else if (c == ')') {
+                            leftBracketsCount--;
+                            if (leftBracketsCount < 0) {
+                                sliceOrderBy = false;
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
-        if (hasOrderBy) {
+        if (sliceOrderBy) {
             originalSql = originalSql.trim().substring(0, orderIndex).trim();
         }
         String countSql = "select count(" + countColumn + ") from (" + originalSql + ") tmp_count";
