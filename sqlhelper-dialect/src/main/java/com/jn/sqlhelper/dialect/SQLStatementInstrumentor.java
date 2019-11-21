@@ -234,7 +234,7 @@ public class SQLStatementInstrumentor {
         if (orderIndex != -1) {
             final String remainSql = lowerSql.substring(orderIndex + "order".length()).trim();
             hasOrderBy = remainSql.startsWith("by");
-            if ((remainSql.contains("select") && remainSql.contains("from")) || remainSql.contains(" union ")) {
+            if ((remainSql.contains("select") && remainSql.contains("from")) || remainSql.contains(" union ") || remainSql.contains(" where ") || remainSql.contains(" and ") || remainSql.contains(" or ") || remainSql.contains(" between ") || remainSql.contains(" in ") || remainSql.contains(" case ")) {
                 hasOrderBy = false;
             }
         }
