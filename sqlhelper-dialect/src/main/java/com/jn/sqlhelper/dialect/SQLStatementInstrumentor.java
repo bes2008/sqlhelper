@@ -22,7 +22,9 @@ import com.jn.langx.cache.CacheBuilder;
 import com.jn.langx.cache.Loader;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Consumer;
+import com.jn.langx.util.function.Predicate;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
@@ -32,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SQLStatementInstrumentor {
@@ -216,6 +219,7 @@ public class SQLStatementInstrumentor {
         return countSql(originalSql, null);
     }
 
+    private final static List<String> keywordsNotAfterOrderBy = Collects.asList("select", "union", "from", "where", "and", "or", "between", "in", "case");
     public String countSql(String originalSql, String countColumn) {
         if (Strings.isBlank(countColumn)) {
             countColumn = "1";
@@ -236,17 +240,30 @@ public class SQLStatementInstrumentor {
             String remainSql = lowerSql.substring(orderIndex + "order".length()).trim();
             sliceOrderBy = remainSql.startsWith("by");
             if (sliceOrderBy) {
-                remainSql = Strings.replacePattern(remainSql, "\\s+", " ");
-                if ((remainSql.contains(" select ") && remainSql.contains(" from ")) || remainSql.contains(" union ") || remainSql.contains(" where ") || remainSql.contains(" and ") || remainSql.contains(" or ") || remainSql.contains(" between ") || remainSql.contains(" in ") || remainSql.contains(" case ")) {
+                remainSql =Strings.replace(remainSql, "("," ( ");
+                remainSql = Strings.replace(remainSql,")"," ) ");
+                Pipeline<String> pipeline = Pipeline.<String>of(remainSql.split("\\s+")).filter(new Predicate<String>() {
+                    @Override
+                    public boolean test(String value) {
+                        return Strings.isNotEmpty(value);
+                    }
+                });
+                if (pipeline.anyMatch(new Predicate<String>() {
+                    @Override
+                    public boolean test(String value) {
+                        return keywordsNotAfterOrderBy.contains(value);
+                    }
+                })) {
                     sliceOrderBy = false;
                 }
                 if (sliceOrderBy) {
                     int leftBracketsCount = 0;
-                    for (int i = 0; i < remainSql.length(); i++) {
-                        char c = remainSql.charAt(i);
-                        if (c == '(') {
+                    List<String> list = pipeline.asList();
+                    for (int i = 0; i < list.size(); i++) {
+                        String c = list.get(i);
+                        if (c.equals("(")) {
                             leftBracketsCount++;
-                        } else if (c == ')') {
+                        } else if (c.equals(")")) {
                             leftBracketsCount--;
                             if (leftBracketsCount < 0) {
                                 sliceOrderBy = false;
