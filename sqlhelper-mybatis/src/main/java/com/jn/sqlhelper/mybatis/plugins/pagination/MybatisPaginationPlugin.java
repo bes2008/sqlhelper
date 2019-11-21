@@ -55,7 +55,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     private PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
     private Cache<String, MappedStatement> countStatementCache;
     private String countSuffix = "_COUNT";
-    private static final String orderBySuffix = "_orderBy";
+    private static final String ORDER_BY_SUFFIX = "_orderBy";
     private boolean inited = false;
 
 
@@ -367,7 +367,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                 builder.append(c);
             }
         }
-        return builder.append(this.orderBySuffix).toString();
+        return builder.append(ORDER_BY_SUFFIX).toString();
     }
 
     private MappedStatement customOrderByStatement(final MappedStatement ms, final String orderByStatementId) {
