@@ -23,8 +23,8 @@ public class SQLInstrumentConfig {
     private String dialect;
     private String dialectClassName;
     private boolean cacheInstrumentedSql = false;
-    private String subqueryPagingStartFlag;
-    private String subqueryPagingEndFlag;
+    private String subqueryPagingStartFlag = "[PAGING_START]";
+    private String subqueryPagingEndFlag = "[PAGING_END]";
 
 
     public String getDialect() {
