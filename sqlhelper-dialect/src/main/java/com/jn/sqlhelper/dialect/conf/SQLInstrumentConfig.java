@@ -23,6 +23,8 @@ public class SQLInstrumentConfig {
     private String dialect;
     private String dialectClassName;
     private boolean cacheInstrumentedSql = false;
+    private String subqueryPagingStartFlag;
+    private String subqueryPagingEndFlag;
 
 
     public String getDialect() {
@@ -52,5 +54,21 @@ public class SQLInstrumentConfig {
 
     public void setCacheInstrumentedSql(boolean cacheInstrumentedSql) {
         this.cacheInstrumentedSql = cacheInstrumentedSql;
+    }
+
+    public String getSubqueryPagingStartFlag() {
+        return subqueryPagingStartFlag;
+    }
+
+    public void setSubqueryPagingStartFlag(String subqueryPagingStartFlag) {
+        this.subqueryPagingStartFlag = subqueryPagingStartFlag;
+    }
+
+    public String getSubqueryPagingEndFlag() {
+        return subqueryPagingEndFlag;
+    }
+
+    public void setSubqueryPagingEndFlag(String subqueryPagingEndFlag) {
+        this.subqueryPagingEndFlag = subqueryPagingEndFlag;
     }
 }

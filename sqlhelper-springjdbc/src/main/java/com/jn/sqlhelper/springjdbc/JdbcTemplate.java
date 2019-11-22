@@ -10,6 +10,8 @@ import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.springjdbc.statement.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.core.*;
@@ -25,6 +27,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JdbcTemplate.class);
     private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
 
@@ -285,7 +288,43 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                     if (needQuery) {
                         applyStatementSettingsInPaginationRequest(request);
                         RowSelection rowSelection = rowSelectionBuilder.build(request);
-                        String paginationSql = PAGING_CONTEXT.isOrderByRequest() ? instrumentor.instrumentOrderByLimitSql(sql, request.getOrderBy(), rowSelection) : instrumentor.instrumentLimitSql(sql, rowSelection);
+
+                        String paginationSql = sql;
+                        boolean subQueryPagination = false;
+                        if (SqlPaginations.isSubqueryPagingRequest(request)) {
+                            if (!SqlPaginations.isValidSubQueryPagination(request, instrumentor)) {
+                                LOGGER.warn("Paging request is not a valid subquery pagination request, so the paging request will not as a subquery pagination request. request: {}, the instrument configuration is: {}", request, instrumentor.getConfig());
+                            } else {
+                                subQueryPagination = true;
+                            }
+                        }
+
+                        int beforeSubqueryParametersCount = 0;
+                        int afterSubqueryParametersCount = 0;
+
+                        if (!subQueryPagination) {
+                            if (PAGING_CONTEXT.isOrderByRequest()) {
+                                paginationSql = instrumentor.instrumentOrderByLimitSql(sql, PAGING_CONTEXT.getPagingRequest().getOrderBy(), rowSelection);
+                            } else {
+                                paginationSql = instrumentor.instrumentLimitSql(sql, rowSelection);
+                            }
+                            PagingRequestContext ctx = PAGING_CONTEXT.get();
+                        } else {
+                            String startFlag = SqlPaginations.getSubqueryPaginationStartFlag(request, instrumentor);
+                            String endFlag = SqlPaginations.getSubqueryPaginationEndFlag(request, instrumentor);
+                            String subqueryPartition = SqlPaginations.extractSubqueryPartition(sql, startFlag, endFlag);
+                            String limitedSubqueryPartition = instrumentor.instrumentLimitSql(subqueryPartition, rowSelection);
+                            String beforeSubqueryPartition = SqlPaginations.extractBeforeSubqueryPartition(sql, startFlag);
+                            String afterSubqueryPartition = SqlPaginations.extractAfterSubqueryPartition(sql, endFlag);
+                            paginationSql = beforeSubqueryPartition + " " + limitedSubqueryPartition + " " + afterSubqueryPartition;
+                            if (PAGING_CONTEXT.isOrderByRequest()) {
+                                paginationSql = instrumentor.instrumentOrderBySql(paginationSql, PAGING_CONTEXT.getPagingRequest().getOrderBy());
+                            }
+
+                            PagingRequestContext ctx = PAGING_CONTEXT.get();
+                            beforeSubqueryParametersCount = SqlPaginations.findPlaceholderParameterCount(beforeSubqueryPartition);
+                            afterSubqueryParametersCount = SqlPaginations.findPlaceholderParameterCount(afterSubqueryPartition);
+                        }
 
                         if (psc instanceof NamedParameterPreparedStatementCreator) {
                             NamedParameterPreparedStatementCreator oldCreator = (NamedParameterPreparedStatementCreator) psc;
@@ -298,6 +337,8 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         SpringJdbcQueryParameters queryParameters = new SpringJdbcQueryParameters();
                         queryParameters.setCallable(false);
                         queryParameters.setRowSelection(rowSelection);
+                        queryParameters.setParameters(null, beforeSubqueryParametersCount, afterSubqueryParametersCount);
+
 
                         PaginationPreparedStatementSetter parameterSetter = (pss == null && psc instanceof NamedParameterPreparedStatementCreator) ? new PaginationPreparedStatementSetter((NamedParameterPreparedStatementCreator) psc) : new PaginationPreparedStatementSetter(pss);
                         instrumentor.bindParameters(ps, parameterSetter, queryParameters, true);
@@ -366,7 +407,10 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
         if (request.needCount() == null) {
             return paginationConfig.isCount();
         }
-        return Boolean.TRUE.equals(request.needCount());
+        if( Boolean.TRUE.equals(request.needCount())){
+            return !SqlPaginations.isSubqueryPagingRequest(request);
+        }
+        return false;
     }
 
     private boolean isUseLastPageIfPageNoOut(@NonNull PagingRequest request) {

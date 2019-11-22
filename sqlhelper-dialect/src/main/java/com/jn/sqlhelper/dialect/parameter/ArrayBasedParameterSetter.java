@@ -15,22 +15,56 @@
 
 package com.jn.sqlhelper.dialect.parameter;
 
-import com.jn.sqlhelper.dialect.PrepareParameterSetter;
+import com.jn.sqlhelper.dialect.PagedPreparedParameterSetter;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 
-public class ArrayBasedParameterSetter implements PrepareParameterSetter<ArrayBasedQueryParameters> {
+public class ArrayBasedParameterSetter implements PagedPreparedParameterSetter<ArrayBasedQueryParameters> {
     @Override
-    public int setParameters(PreparedStatement statement, ArrayBasedQueryParameters parameters, int startIndex)
-            throws SQLException {
-        if (parameters.getParameterValuesSize() > 0) {
-            for (Object value : (Object[]) parameters.getParameterValues()) {
+    public int setOriginalParameters(PreparedStatement statement, ArrayBasedQueryParameters queryParameters, int startIndex) throws SQLException {
+        if (queryParameters.getParameterValuesSize() > 0) {
+            for (Object value : queryParameters.getParameterValues()) {
                 statement.setObject(startIndex, value);
                 startIndex++;
             }
         }
-        return startIndex;
+        return queryParameters.getParameterValuesSize();
+    }
+
+
+    @Override
+    public int setBeforeSubqueryParameters(PreparedStatement statement, ArrayBasedQueryParameters queryParameters, int startIndex) throws SQLException {
+        if (queryParameters.getBeforeSubqueryParameterCount() > 0) {
+            for (Object value : queryParameters.getBeforeSubqueryParameterValues()) {
+                statement.setObject(startIndex, value);
+                startIndex++;
+            }
+        }
+        return queryParameters.getBeforeSubqueryParameterCount();
+    }
+
+    @Override
+    public int setSubqueryParameters(PreparedStatement statement, ArrayBasedQueryParameters parameters, int startIndex)
+            throws SQLException {
+        if (parameters.getSubqueryParameterValues().length > 0) {
+            for (Object value : parameters.getSubqueryParameterValues()) {
+                statement.setObject(startIndex, value);
+                startIndex++;
+            }
+        }
+        return parameters.getSubqueryParameterValues().length;
+    }
+
+    @Override
+    public int setAfterSubqueryParameters(PreparedStatement statement, ArrayBasedQueryParameters queryParameters, int startIndex) throws SQLException {
+        if (queryParameters.getAfterSubqueryParameterCount() > 0) {
+            for (Object value : queryParameters.getAfterSubqueryParameterValues()) {
+                statement.setObject(startIndex, value);
+                startIndex++;
+            }
+        }
+        return queryParameters.getAfterSubqueryParameterCount();
     }
 }

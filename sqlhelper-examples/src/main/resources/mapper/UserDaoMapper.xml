@@ -52,4 +52,17 @@
         <if test="name!=null and name != ''">AND NAME = #{name}</if>
         <if test="age!=null and age gte 0">AND AGE > #{age}</if>
     </select>
+
+    <select id="selectByLimit_subqueryPagination" parameterType="com.jn.sqlhelper.examples.common.model.User" resultMap="entity">
+        SELECT * FROM ( [PAGING_START]
+            SELECT
+            <include refid="all_columns"/>
+            FROM USER
+            WHERE 1=1 <if test="age!=null and age gte 0">AND AGE > #{age}</if>
+        [PAGING_END]
+        ) n
+        WHERE 1=1
+        <if test="id!=null and id != ''">AND n.ID = #{id}</if>
+        <if test="name!=null and name != ''">AND n.NAME like CONCAT(#{name},'%')</if>
+    </select>
 </mapper>

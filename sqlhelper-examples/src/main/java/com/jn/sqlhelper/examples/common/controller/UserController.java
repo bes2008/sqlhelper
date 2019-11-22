@@ -124,6 +124,30 @@ public class UserController {
         return request.getResult();
     }
 
+    @GetMapping("/subqueryPagination_useMyBatis")
+    public PagingResult subqueryPagination_useMyBatis(
+            @RequestParam(name = "pageNo", required = false) Integer pageNo,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name = "sort", required = false) String sort,
+            @RequestParam(value = "count", required = false) boolean count,
+            @RequestParam(value = "useLastPageIfPageNoOut", required = false) boolean useLastPageIfPageNoOut) {
+        User queryCondition = new User();
+        queryCondition.setAge(10);
+        queryCondition.setName("zhangsan_");
+
+
+        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
+        request.subQueryPaging(true);
+        request.setCount(count);
+        request.setUseLastPageIfPageNoOut(useLastPageIfPageNoOut);
+        List<User> users = userDao.selectByLimit_subqueryPagination(queryCondition);
+        String json = JSONBuilderProvider.simplest().toJson(request.getResult());
+        System.out.println(json);
+        json = JSONBuilderProvider.simplest().toJson(users);
+        System.out.println(json);
+        return request.getResult();
+    }
+
     @GetMapping("/_useSpringJdbc_rowMapper")
     public PagingResult list_useSpringJdbc_rowMapper(
             @RequestParam(name = "pageNo", required = false) Integer pageNo,

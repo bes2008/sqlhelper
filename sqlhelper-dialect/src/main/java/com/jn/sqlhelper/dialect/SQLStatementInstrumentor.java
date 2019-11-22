@@ -212,7 +212,7 @@ public class SQLStatementInstrumentor {
     }
 
     public void finish() {
-        SQLStatementInstrumentor.DIALECT_HOLDER.remove();
+        DIALECT_HOLDER.remove();
     }
 
     public String countSql(String originalSql) {
@@ -220,6 +220,7 @@ public class SQLStatementInstrumentor {
     }
 
     private final static List<String> keywordsNotAfterOrderBy = Collects.asList("select", "union", "from", "where", "and", "or", "between", "in", "case");
+
     public String countSql(String originalSql, String countColumn) {
         if (Strings.isBlank(countColumn)) {
             countColumn = "1";
@@ -240,8 +241,8 @@ public class SQLStatementInstrumentor {
             String remainSql = lowerSql.substring(orderIndex + "order".length()).trim();
             sliceOrderBy = remainSql.startsWith("by");
             if (sliceOrderBy) {
-                remainSql =Strings.replace(remainSql, "("," ( ");
-                remainSql = Strings.replace(remainSql,")"," ) ");
+                remainSql = Strings.replace(remainSql, "(", " ( ");
+                remainSql = Strings.replace(remainSql, ")", " ) ");
                 Pipeline<String> pipeline = Pipeline.<String>of(remainSql.split("\\s+")).filter(new Predicate<String>() {
                     @Override
                     public boolean test(String value) {
@@ -305,24 +306,54 @@ public class SQLStatementInstrumentor {
         return null;
     }
 
-    public PreparedStatement bindParameters(final PreparedStatement statement, final PrepareParameterSetter parameterSetter, final QueryParameters queryParameters, final boolean setOriginalParameters) throws SQLException, SQLDialectException {
+    /**
+     * bind all parameters for a subquery pagination sql
+     *
+     * @param statement       the sql statement
+     * @param queryParameters all the original parameters
+     * @return the count of set in the invocation
+     * @throws SQLException        throw it if error
+     * @throws SQLDialectException
+     */
+    public PreparedStatement bindParameters(final PreparedStatement statement, final PagedPreparedParameterSetter parameterSetter, final QueryParameters queryParameters, final boolean setOriginalParameters) throws SQLException, SQLDialectException {
         final Dialect dialect = this.getDialect(statement);
         return bindParameters(dialect, statement, parameterSetter, queryParameters, setOriginalParameters);
     }
 
-    public PreparedStatement bindParameters(Dialect dialect, final PreparedStatement statement, final PrepareParameterSetter parameterSetter, final QueryParameters queryParameters, final boolean setOriginalParameters) throws SQLException, SQLDialectException {
+    /**
+     * bind all parameters for a subquery pagination sql
+     *
+     * @param statement       the sql statement
+     * @param queryParameters all the original parameters
+     * @return the count of set in the invocation
+     * @throws SQLException        throw it if error
+     * @throws SQLDialectException
+     */
+    public PreparedStatement bindParameters(Dialect dialect, final PreparedStatement statement, final PagedPreparedParameterSetter parameterSetter, final QueryParameters queryParameters, final boolean setOriginalParameters) throws SQLException, SQLDialectException {
         final RowSelection selection = queryParameters.getRowSelection();
         final boolean callable = queryParameters.isCallable();
         try {
             int col = 1;
+            int countOfBeforeSubquery = queryParameters.getBeforeSubqueryParameterCount();
+            int countOfAfterSubquery = queryParameters.getAfterSubqueryParameterCount();
+            if (setOriginalParameters && countOfBeforeSubquery > 0) {
+                col += parameterSetter.setBeforeSubqueryParameters(statement, queryParameters, col);
+            }
             col += dialect.bindLimitParametersAtStartOfQuery(selection, statement, col);
             if (callable) {
                 col = dialect.registerResultSetOutParameter((CallableStatement) statement, col);
             }
             if (setOriginalParameters) {
-                col += parameterSetter.setParameters(statement, queryParameters, col);
+                if (countOfBeforeSubquery < 1 && countOfAfterSubquery < 1) {
+                    col += parameterSetter.setOriginalParameters(statement, queryParameters, col);
+                } else {
+                    col += parameterSetter.setSubqueryParameters(statement, queryParameters, col);
+                }
             }
             col += dialect.bindLimitParametersAtEndOfQuery(selection, statement, col);
+            if (setOriginalParameters && countOfAfterSubquery > 0) {
+                col += parameterSetter.setAfterSubqueryParameters(statement, queryParameters, col);
+            }
             dialect.setMaxRows(selection, statement);
             if (selection != null) {
                 if (selection.getTimeout() != null && selection.getTimeout() > 0) {
@@ -333,7 +364,7 @@ public class SQLStatementInstrumentor {
                 }
             }
         } catch (SQLException ex) {
-            logger.error("Set sql parameter fail, errorCode: {}, stack:{}", (Object) Integer.valueOf(ex.getErrorCode()), (Object) ex);
+            logger.error("Set sql parameter fail, errorCode: {}, stack:{}", ex.getErrorCode(), ex);
         }
         return statement;
     }

@@ -346,7 +346,43 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
         final RowSelection rowSelection = rowSelectionBuilder.build(request);
         PAGING_CONTEXT.setRowSelection(rowSelection);
-        final String pageSql = PAGING_CONTEXT.isOrderByRequest() ? instrumentor.instrumentOrderByLimitSql(boundSql.getSql(), PAGING_CONTEXT.getPagingRequest().getOrderBy(), rowSelection) : instrumentor.instrumentLimitSql(boundSql.getSql(), rowSelection);
+
+        String pageSql = boundSql.getSql();
+
+        boolean subQueryPagination = false;
+        if (SqlPaginations.isSubqueryPagingRequest(request)) {
+            if (!SqlPaginations.isValidSubQueryPagination(request, instrumentor)) {
+                logger.warn("Paging request is not a valid subquery pagination request, so the paging request will not as a subquery pagination request. request: {}, the instrument configuration is: {}", request, instrumentor.getConfig());
+            } else {
+                subQueryPagination = true;
+            }
+        }
+        if (!subQueryPagination) {
+            if (PAGING_CONTEXT.isOrderByRequest()) {
+                pageSql = instrumentor.instrumentOrderByLimitSql(boundSql.getSql(), PAGING_CONTEXT.getPagingRequest().getOrderBy(), rowSelection);
+            } else {
+                pageSql = instrumentor.instrumentLimitSql(boundSql.getSql(), rowSelection);
+            }
+            PagingRequestContext ctx = PAGING_CONTEXT.get();
+            ctx.setInteger(PagingRequestContext.BEFORE_SUBQUERY_PARAMETERS_COUNT, 0);
+            ctx.setInteger(PagingRequestContext.AFTER_SUBQUERY_PARAMETERS_COUNT, 0);
+        } else {
+            String startFlag = SqlPaginations.getSubqueryPaginationStartFlag(request, instrumentor);
+            String endFlag = SqlPaginations.getSubqueryPaginationEndFlag(request, instrumentor);
+            String subqueryPartition = SqlPaginations.extractSubqueryPartition(boundSql.getSql(), startFlag, endFlag);
+            String limitedSubqueryPartition = instrumentor.instrumentLimitSql(subqueryPartition, rowSelection);
+            String beforeSubqueryPartition = SqlPaginations.extractBeforeSubqueryPartition(boundSql.getSql(), startFlag);
+            String afterSubqueryPartition = SqlPaginations.extractAfterSubqueryPartition(boundSql.getSql(), endFlag);
+            pageSql = beforeSubqueryPartition + " " + limitedSubqueryPartition + " " + afterSubqueryPartition;
+            if (PAGING_CONTEXT.isOrderByRequest()) {
+                pageSql = instrumentor.instrumentOrderBySql(pageSql, PAGING_CONTEXT.getPagingRequest().getOrderBy());
+            }
+
+            PagingRequestContext ctx = PAGING_CONTEXT.get();
+            ctx.setInteger(PagingRequestContext.BEFORE_SUBQUERY_PARAMETERS_COUNT, SqlPaginations.findPlaceholderParameterCount(beforeSubqueryPartition));
+            ctx.setInteger(PagingRequestContext.AFTER_SUBQUERY_PARAMETERS_COUNT, SqlPaginations.findPlaceholderParameterCount(afterSubqueryPartition));
+        }
+
         final BoundSql pageBoundSql = new BoundSql(ms.getConfiguration(), pageSql, boundSql.getParameterMappings(), parameter);
         final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
         for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {
@@ -457,7 +493,10 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         if (request.needCount() == null) {
             return pluginConfig.isCount();
         }
-        return Boolean.TRUE.compareTo(request.needCount()) == 0;
+        if (Boolean.TRUE.compareTo(request.needCount()) == 0) {
+            return !SqlPaginations.isSubqueryPagingRequest(request);
+        }
+        return false;
     }
 
     private String getCountStatementId(final PagingRequest request, final String currentSqlId) {

@@ -15,12 +15,38 @@
 
 package com.jn.sqlhelper.dialect;
 
+/**
+ * This represent all the parameters.
+ * <p>
+ * all parameters will slice 3 segments:
+ * <p>
+ * |------before-----|-----subquery-----|------after-----|
+ * |-----------------original parameters-----------------|
+ *
+ * @param <P>
+ */
 public interface QueryParameters<P> {
     RowSelection getRowSelection();
 
     boolean isCallable();
 
+    /**
+     * all parameters
+     */
     P getParameterValues();
 
+    /**
+     * the count of all parameters
+     */
     int getParameterValuesSize();
+
+    P getBeforeSubqueryParameterValues();
+
+    int getBeforeSubqueryParameterCount();
+
+    P getSubqueryParameterValues();
+
+    P getAfterSubqueryParameterValues();
+
+    int getAfterSubqueryParameterCount();
 }

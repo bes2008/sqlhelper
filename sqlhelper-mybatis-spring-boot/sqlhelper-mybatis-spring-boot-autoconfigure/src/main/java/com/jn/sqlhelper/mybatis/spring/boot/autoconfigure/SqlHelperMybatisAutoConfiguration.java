@@ -15,9 +15,11 @@
 package com.jn.sqlhelper.mybatis.spring.boot.autoconfigure;
 
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.pagination.CustomScriptLanguageDriver;
 import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin;
+import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationPluginConfig;
 import com.jn.sqlhelper.mybatis.plugins.pagination.SqlHelperMybatisProperties;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.session.Configuration;
@@ -41,9 +43,24 @@ public class SqlHelperMybatisAutoConfiguration implements ConfigurationCustomize
     }
 
     @Bean
+    @ConfigurationProperties(prefix = "sqlhelper.mybatis.instrumentor")
+    public SQLInstrumentConfig sqlInstrumentConfig(){
+        return new SQLInstrumentConfig();
+    }
+
+    @Bean
+    @ConfigurationProperties(prefix = "sqlhelper.mybatis.pagination")
+    public PaginationPluginConfig paginationPluginConfig(){
+        return new PaginationPluginConfig();
+    }
+
+    @Bean
     @ConfigurationProperties(prefix = "sqlhelper.mybatis")
-    public SqlHelperMybatisProperties sqlHelperMybatisProperties() {
-        return new SqlHelperMybatisProperties();
+    public SqlHelperMybatisProperties sqlHelperMybatisProperties(SQLInstrumentConfig sqlInstrumentConfig, PaginationPluginConfig paginationPluginConfig) {
+        SqlHelperMybatisProperties p =  new SqlHelperMybatisProperties();
+        p.setInstrumentor(sqlInstrumentConfig);
+        p.setPagination(paginationPluginConfig);
+        return p;
     }
 
     private SqlHelperMybatisProperties sqlHelperMybatisProperties;

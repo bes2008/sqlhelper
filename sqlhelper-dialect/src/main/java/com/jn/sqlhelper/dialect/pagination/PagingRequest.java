@@ -15,11 +15,16 @@
 
 package com.jn.sqlhelper.dialect.pagination;
 
+import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.annotation.Ignore;
+import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
+import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public class PagingRequest<C, E> {
+public class PagingRequest<C, E> implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Boolean count = null;
     private String countColumn;
     private String dialect;
@@ -37,6 +42,11 @@ public class PagingRequest<C, E> {
     private C condition;
     private PagingResult<E> result;
 
+    private boolean isSubQueryPaging = false;
+    private String subqueryPagingStartFlag;
+    private String subqueryPagingEndFlag;
+
+    @Ignore
     private PagingRequestContext ctx;
 
     /**
@@ -171,9 +181,10 @@ public class PagingRequest<C, E> {
     public void clear(boolean clearResult) {
         count = null;
         useLastPageIfPageNoOut = null;
+        ctx = null;
         if (clearResult) {
             if (result != null) {
-                result.setItems(new ArrayList());
+                result.setItems(Collects.<E>emptyArrayList());
             }
         }
         setCondition(null);
@@ -210,5 +221,42 @@ public class PagingRequest<C, E> {
 
     public void setUseLastPageIfPageNoOut(Boolean useLastPageIfPageNoOut) {
         this.useLastPageIfPageNoOut = useLastPageIfPageNoOut;
+    }
+
+    public String getSubqueryPagingStartFlag() {
+        return subqueryPagingStartFlag;
+    }
+
+    public PagingRequest<C, E> setSubqueryPagingStartFlag(String subqueryPagingStartFlag) {
+        this.subqueryPagingStartFlag = subqueryPagingStartFlag;
+        return this;
+    }
+
+    public String getSubqueryPagingEndFlag() {
+        return subqueryPagingEndFlag;
+    }
+
+    public PagingRequest<C, E> setSubqueryPagingEndFlag(String subqueryPagingEndFlag) {
+        this.subqueryPagingEndFlag = subqueryPagingEndFlag;
+        return this;
+    }
+
+    public boolean isSubQueryPaging() {
+        return isSubQueryPaging;
+    }
+
+    public PagingRequest<C, E> subQueryPaging(boolean subQueryPaging) {
+        isSubQueryPaging = subQueryPaging;
+        return this;
+    }
+
+
+    public PagingRequest<C, E> subQueryPaging(String subQueryPagingStartFlag, String subQueryPagingEndFlag) {
+        return subQueryPaging(true).setSubqueryPagingStartFlag(subQueryPagingStartFlag).setSubqueryPagingEndFlag(subQueryPagingEndFlag);
+    }
+
+    @Override
+    public String toString() {
+        return JSONBuilderProvider.create().serializeNulls(true).prettyFormat(true).addSerializationExclusion(new IgnoreAnnotationExclusion()).build().toJson(this);
     }
 }

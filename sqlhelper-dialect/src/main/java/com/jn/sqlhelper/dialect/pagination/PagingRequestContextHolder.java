@@ -45,6 +45,7 @@ public class PagingRequestContextHolder {
             @Override
             public void accept(PagingRequestContext context) {
                 context.setRequest(request);
+                request.setCtx(context);
             }
         });
     }

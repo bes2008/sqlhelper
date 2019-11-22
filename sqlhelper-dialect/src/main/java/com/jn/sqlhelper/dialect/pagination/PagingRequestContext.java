@@ -61,4 +61,7 @@ public class PagingRequestContext<E, R> extends BasedStringAccessor<String, Map<
     public void set(String key, Object value) {
         getTarget().put(key, value);
     }
+
+    public static final String BEFORE_SUBQUERY_PARAMETERS_COUNT = "BEFORE_SUBQUERY_PARAMETERS_COUNT";
+    public static final String AFTER_SUBQUERY_PARAMETERS_COUNT = "AFTER_SUBQUERY_PARAMETERS_COUNT";
 }

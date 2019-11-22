@@ -25,6 +25,11 @@ public class BaseQueryParameters<P> implements QueryParameters<P> {
     private RowSelection rowSelection;
     private boolean isCallable;
     protected P parameters;
+    private int beforeSubqueryCount = 0;
+    private int afterSubqueryCount = 0;
+    protected P beforeSubqueryParameters;
+    protected P subqueryParameters;
+    protected P afterSubqueryParameters;
 
     @Override
     public P getParameterValues() {
@@ -60,7 +65,44 @@ public class BaseQueryParameters<P> implements QueryParameters<P> {
         isCallable = callable;
     }
 
+    /**
+     * invoke it when a paging request
+     */
     public void setParameters(P parameters) {
         this.parameters = parameters;
+    }
+
+    /**
+     * invoke it when a subquery  paging request
+     */
+    public void setParameters(P parameters, int beforeSubqueryCount, int afterSubqueryCount) {
+        this.parameters = parameters;
+        this.beforeSubqueryCount = beforeSubqueryCount;
+        this.afterSubqueryCount = afterSubqueryCount;
+    }
+
+    @Override
+    public int getBeforeSubqueryParameterCount() {
+        return beforeSubqueryCount;
+    }
+
+    @Override
+    public int getAfterSubqueryParameterCount() {
+        return afterSubqueryCount;
+    }
+
+    @Override
+    public P getBeforeSubqueryParameterValues() {
+        return beforeSubqueryParameters;
+    }
+
+    @Override
+    public P getAfterSubqueryParameterValues() {
+        return afterSubqueryParameters;
+    }
+
+    @Override
+    public P getSubqueryParameterValues() {
+        return subqueryParameters;
     }
 }

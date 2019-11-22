@@ -1,7 +1,9 @@
 package com.jn.sqlhelper.mybatis.plugins.pagination;
 
-import com.jn.sqlhelper.dialect.PrepareParameterSetter;
+import com.jn.langx.util.collection.Collects;
+import com.jn.sqlhelper.dialect.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.QueryParameters;
+import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import org.apache.ibatis.executor.ErrorContext;
@@ -21,7 +23,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class CustomMybatisParameterHandler implements ParameterHandler, PrepareParameterSetter {
+public class CustomMybatisParameterHandler implements ParameterHandler, PagedPreparedParameterSetter {
     private static final Logger logger = LoggerFactory.getLogger(CustomMybatisParameterHandler.class);
     private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
 
@@ -67,14 +69,15 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
     @Override
     public void setParameters(final PreparedStatement ps) {
         if (!isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || isNestedStatement()) {
-            this.setOriginalParameters(ps, 1);
+            this.setParameters(ps, this.boundSql.getParameterMappings(), 1);
             return;
         }
         try {
             final MybatisQueryParameters queryParameters = new MybatisQueryParameters();
             queryParameters.setRowSelection(PAGING_CONTEXT.getRowSelection());
             queryParameters.setCallable(this.mappedStatement.getStatementType() == StatementType.CALLABLE);
-            queryParameters.setParameters(this.getParameterObject());
+            PagingRequestContext request = PAGING_CONTEXT.get();
+            queryParameters.setParameters(this.getParameterObject(), request.getInteger(PagingRequestContext.BEFORE_SUBQUERY_PARAMETERS_COUNT), request.getInteger(PagingRequestContext.AFTER_SUBQUERY_PARAMETERS_COUNT));
             MybatisPaginationPlugin.getInstrumentor().bindParameters(ps, this, queryParameters, true);
         } catch (SQLException ex) {
             logger.error("errorCode:{},message:{}", ex.getErrorCode(), ex.getMessage(), ex);
@@ -82,14 +85,14 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
     }
 
     @Override
-    public int setParameters(final PreparedStatement ps, final QueryParameters parameters, final int startIndex) {
-        this.setOriginalParameters(ps, startIndex);
+    public int setOriginalParameters(final PreparedStatement ps, final QueryParameters parameters, final int startIndex) {
+        final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
+        setParameters(ps, parameterMappings, startIndex);
         return this.boundSql.getParameterMappings().size();
     }
 
-    private void setOriginalParameters(final PreparedStatement ps, final int startIndex) {
+    private void setParameters(final PreparedStatement ps, List<ParameterMapping> parameterMappings, final int startIndex) {
         ErrorContext.instance().activity("setting parameters").object(this.mappedStatement.getParameterMap().getId());
-        final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
         if (parameterMappings != null) {
             for (int i = 0; i < parameterMappings.size(); ++i) {
                 final ParameterMapping parameterMapping = parameterMappings.get(i);
@@ -121,5 +124,32 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PrepareP
                 }
             }
         }
+    }
+
+
+    @Override
+    public int setBeforeSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
+        // find before parameters
+        final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
+        List<ParameterMapping> before = Collects.limit(parameterMappings, queryParameters.getBeforeSubqueryParameterCount());
+        setParameters(statement, before, startIndex);
+        return queryParameters.getBeforeSubqueryParameterCount();
+    }
+
+    @Override
+    public int setSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
+        final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
+        List<ParameterMapping> subquery = Collects.limit(parameterMappings, parameterMappings.size() - queryParameters.getAfterSubqueryParameterCount());
+        subquery = Collects.skip(subquery, queryParameters.getBeforeSubqueryParameterCount());
+        setParameters(statement, subquery, startIndex);
+        return subquery.size();
+    }
+
+    @Override
+    public int setAfterSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
+        final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
+        List<ParameterMapping> after = Collects.skip(parameterMappings, parameterMappings.size() - queryParameters.getAfterSubqueryParameterCount());
+        setParameters(statement, after, startIndex);
+        return queryParameters.getBeforeSubqueryParameterCount();
     }
 }

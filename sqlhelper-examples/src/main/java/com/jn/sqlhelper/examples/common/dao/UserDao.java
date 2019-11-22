@@ -29,5 +29,7 @@ public interface UserDao {
 
     List<User> selectByLimit(User limit);
 
+    List<User> selectByLimit_subqueryPagination(User limit);
+
     User selectById(String id);
 }
