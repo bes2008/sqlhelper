@@ -173,7 +173,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         queryParameters.setCallable(false);
                         queryParameters.setRowSelection(rowSelection);
 
-                        instrumentor.bindParameters(ps, new PaginationPreparedStatementSetter(null), queryParameters, true);
+                        instrumentor.bindParameters(ps, new PagedPreparedStatementSetter(null), queryParameters, true);
                         // DO execute
                         ResultSet resultSet = null;
                         try {
@@ -308,7 +308,6 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                             } else {
                                 paginationSql = instrumentor.instrumentLimitSql(sql, rowSelection);
                             }
-                            PagingRequestContext ctx = PAGING_CONTEXT.get();
                         } else {
                             String startFlag = SqlPaginations.getSubqueryPaginationStartFlag(request, instrumentor);
                             String endFlag = SqlPaginations.getSubqueryPaginationEndFlag(request, instrumentor);
@@ -321,7 +320,6 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                                 paginationSql = instrumentor.instrumentOrderBySql(paginationSql, PAGING_CONTEXT.getPagingRequest().getOrderBy());
                             }
 
-                            PagingRequestContext ctx = PAGING_CONTEXT.get();
                             beforeSubqueryParametersCount = SqlPaginations.findPlaceholderParameterCount(beforeSubqueryPartition);
                             afterSubqueryParametersCount = SqlPaginations.findPlaceholderParameterCount(afterSubqueryPartition);
                         }
@@ -340,7 +338,12 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         queryParameters.setParameters(null, beforeSubqueryParametersCount, afterSubqueryParametersCount);
 
 
-                        PaginationPreparedStatementSetter parameterSetter = (pss == null && psc instanceof NamedParameterPreparedStatementCreator) ? new PaginationPreparedStatementSetter((NamedParameterPreparedStatementCreator) psc) : new PaginationPreparedStatementSetter(pss);
+                        PagedPreparedStatementSetter parameterSetter = null;
+                        if(pss == null && psc instanceof NamedParameterPreparedStatementCreator) {
+                            parameterSetter = new PagedPreparedStatementSetter((NamedParameterPreparedStatementCreator) psc);
+                        } else {
+                            parameterSetter = new PagedPreparedStatementSetter(pss);
+                        }
                         instrumentor.bindParameters(ps, parameterSetter, queryParameters, true);
                         // DO execute
                         ResultSet resultSet = null;

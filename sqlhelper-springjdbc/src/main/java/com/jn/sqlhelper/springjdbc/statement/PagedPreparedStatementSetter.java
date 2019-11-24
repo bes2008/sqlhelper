@@ -8,10 +8,10 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class PaginationPreparedStatementSetter implements PagedPreparedParameterSetter {
+public class PagedPreparedStatementSetter implements PagedPreparedParameterSetter {
     private PreparedStatementSetter delegate;
 
-    public PaginationPreparedStatementSetter(PreparedStatementSetter setter) {
+    public PagedPreparedStatementSetter(PreparedStatementSetter setter) {
         delegate = setter;
     }
 
