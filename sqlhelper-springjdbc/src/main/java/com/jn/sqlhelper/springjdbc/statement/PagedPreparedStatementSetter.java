@@ -33,18 +33,39 @@ public class PagedPreparedStatementSetter implements PagedPreparedParameterSette
     @Override
     public int setBeforeSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
         if (delegate != null) {
-
+            if(statement instanceof PaginationPreparedStatement ){
+                if(delegate instanceof PagedPreparedParameterSetter) {
+                    PagedPreparedParameterSetter setter = (PagedPreparedParameterSetter)delegate;
+                    return setter.setBeforeSubqueryParameters(statement, queryParameters, startIndex);
+                }
+            }
         }
         return queryParameters.getBeforeSubqueryParameterCount();
     }
 
     @Override
     public int setSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
-        return 0;
+        if (delegate != null) {
+            if(statement instanceof PaginationPreparedStatement ){
+                if(delegate instanceof PagedPreparedParameterSetter) {
+                    PagedPreparedParameterSetter setter = (PagedPreparedParameterSetter)delegate;
+                    return setter.setSubqueryParameters(statement, queryParameters, startIndex);
+                }
+            }
+        }
+        return queryParameters.getBeforeSubqueryParameterCount();
     }
 
     @Override
     public int setAfterSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
-        return queryParameters.getAfterSubqueryParameterCount();
+        if (delegate != null) {
+            if(statement instanceof PaginationPreparedStatement ){
+                if(delegate instanceof PagedPreparedParameterSetter) {
+                    PagedPreparedParameterSetter setter = (PagedPreparedParameterSetter)delegate;
+                    return setter.setAfterSubqueryParameters(statement, queryParameters, startIndex);
+                }
+            }
+        }
+        return queryParameters.getBeforeSubqueryParameterCount();
     }
 }
