@@ -16,8 +16,8 @@ package com.jn.sqlhelper.cli.config;
 
 import com.jn.langx.cache.Cache;
 import com.jn.langx.cache.CacheBuilder;
+import com.jn.langx.configuration.ConfigurationCacheLoaderAdapter;
 import com.jn.langx.configuration.ConfigurationEventFactory;
-import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationCacheLoaderAdapter;
 import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationLoader;
 import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationRepository;
 import com.jn.langx.configuration.file.directoryfile.DirectoryBasedFileConfigurationWriter;
@@ -94,7 +94,7 @@ public class JdbcConnectionRepositoryConfig {
             @Autowired @Qualifier("timer")
                     Timer timer) {
         return CacheBuilder.<String, NamedConnectionConfiguration>newBuilder()
-                .loader(new DirectoryBasedFileConfigurationCacheLoaderAdapter<NamedConnectionConfiguration>(loader))
+                .loader(new ConfigurationCacheLoaderAdapter<>(loader))
                 .timer(timer)
                 .build();
     }
