@@ -175,7 +175,44 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                     if (needQuery) {
                         applyStatementSettingsInPaginationRequest(request);
                         RowSelection rowSelection = rowSelectionBuilder.build(request);
-                        String paginationSql = PAGING_CONTEXT.isOrderByRequest() ? instrumentor.instrumentOrderByLimitSql(sql, request.getOrderBy(), rowSelection) : instrumentor.instrumentLimitSql(sql, rowSelection);
+
+
+                        String paginationSql = sql;
+                        boolean subqueryPagination = false;
+                        if (SqlPaginations.isSubqueryPagingRequest(request)) {
+                            if (!SqlPaginations.isValidSubQueryPagination(request, instrumentor)) {
+                                LOGGER.warn("Paging request is not a valid subquery pagination request, so the paging request will not as a subquery pagination request. request: {}, the instrument configuration is: {}", request, instrumentor.getConfig());
+                            } else {
+                                subqueryPagination = true;
+                            }
+                        }
+
+                        int beforeSubqueryParametersCount = 0;
+                        int afterSubqueryParametersCount = 0;
+
+                        if (!subqueryPagination) {
+                            if (PAGING_CONTEXT.isOrderByRequest()) {
+                                paginationSql = instrumentor.instrumentOrderByLimitSql(sql, PAGING_CONTEXT.getPagingRequest().getOrderBy(), rowSelection);
+                            } else {
+                                paginationSql = instrumentor.instrumentLimitSql(sql, rowSelection);
+                            }
+                        } else {
+                            String startFlag = SqlPaginations.getSubqueryPaginationStartFlag(request, instrumentor);
+                            String endFlag = SqlPaginations.getSubqueryPaginationEndFlag(request, instrumentor);
+                            String subqueryPartition = SqlPaginations.extractSubqueryPartition(sql, startFlag, endFlag);
+                            if (Strings.isEmpty(subqueryPartition)) {
+                                throw new IllegalArgumentException("Your pagination sql is wrong, maybe used start flag or end flag is wrong");
+                            }
+                            String limitedSubqueryPartition = instrumentor.instrumentLimitSql(subqueryPartition, rowSelection);
+                            String beforeSubqueryPartition = SqlPaginations.extractBeforeSubqueryPartition(sql, startFlag);
+                            String afterSubqueryPartition = SqlPaginations.extractAfterSubqueryPartition(sql, endFlag);
+                            paginationSql = beforeSubqueryPartition + " " + limitedSubqueryPartition + " " + afterSubqueryPartition;
+                            if (PAGING_CONTEXT.isOrderByRequest()) {
+                                paginationSql = instrumentor.instrumentOrderBySql(paginationSql, PAGING_CONTEXT.getPagingRequest().getOrderBy());
+                            }
+
+                        }
+
                         PreparedStatement ps = new PaginationPreparedStatement(new SimplePreparedStatementCreator(paginationSql).createPreparedStatement(conn));
 
                         SpringJdbcQueryParameters queryParameters = new SpringJdbcQueryParameters();
@@ -301,19 +338,19 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         RowSelection rowSelection = rowSelectionBuilder.build(request);
 
                         String paginationSql = sql;
-                        boolean subQueryPagination = false;
+                        boolean subqueryPagination = false;
                         if (SqlPaginations.isSubqueryPagingRequest(request)) {
                             if (!SqlPaginations.isValidSubQueryPagination(request, instrumentor)) {
                                 LOGGER.warn("Paging request is not a valid subquery pagination request, so the paging request will not as a subquery pagination request. request: {}, the instrument configuration is: {}", request, instrumentor.getConfig());
                             } else {
-                                subQueryPagination = true;
+                                subqueryPagination = true;
                             }
                         }
 
                         int beforeSubqueryParametersCount = 0;
                         int afterSubqueryParametersCount = 0;
 
-                        if (!subQueryPagination) {
+                        if (!subqueryPagination) {
                             if (PAGING_CONTEXT.isOrderByRequest()) {
                                 paginationSql = instrumentor.instrumentOrderByLimitSql(sql, PAGING_CONTEXT.getPagingRequest().getOrderBy(), rowSelection);
                             } else {
@@ -356,7 +393,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         if (pss == null && psc instanceof NamedParameterPreparedStatementCreator) {
                             proxySetter = new PagedPreparedStatementSetter((NamedParameterPreparedStatementCreator) psc);
                         } else {
-                            if (pss != null && subQueryPagination) {
+                            if (pss != null && subqueryPagination) {
                                 if (!(pss instanceof PagedPreparedParameterSetter)) {
                                     if (pss instanceof ArgumentTypePreparedStatementSetter) {
                                         pss = com.jn.sqlhelper.springjdbc.statement.ArgumentTypePreparedStatementSetter.Factory.create((ArgumentTypePreparedStatementSetter) pss);
