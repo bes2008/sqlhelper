@@ -222,7 +222,7 @@ public class UserController {
         }
         StringBuilder sqlBuilder = testSubquery ? new StringBuilder("select * from ([PAGING_START]select ID, NAME, AGE from USER where 1=1 and age > ?[PAGING_END]) n where name like CONCAT(?,'%') ") : new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
 
-        Object[] args = testSubquery? new Object[]{10, "zhangsan"} : new Object[]{10};
+        Object[] args = testSubquery ? new Object[]{10, "zhangsan"} : new Object[]{10};
         List<User> users = jdbcTemplate.query(sqlBuilder.toString(), args, new ResultSetExtractor<List<User>>() {
             @Override
             public List<User> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -267,12 +267,17 @@ public class UserController {
     public PagingResult list_useSpringJdbcNamedTemplate(
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name = "sort", required = false) String sort) {
+            @RequestParam(name = "sort", required = false) String sort,
+            @RequestParam(name = "testSubquery", required = false, defaultValue = "false") boolean testSubquery) {
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-        StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > :age");
+        if (testSubquery) {
+            request.subqueryPaging(true);
+        }
+        StringBuilder sqlBuilder = testSubquery? new StringBuilder("select * from ([PAGING_START]select ID, NAME, AGE from USER where 1=1 and age > :age [PAGING_END]) n where name like CONCAT(:name,'%') ") : new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > :age");
 
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("age", 10);
+        paramMap.put("name", "zhangsan");
 
         List<User> users = namedJdbcTemplate.query(sqlBuilder.toString(), paramMap, new RowMapper<User>() {
             @Override
