@@ -15,26 +15,16 @@
 
 package com.jn.sqlhelper.dialect.parameter;
 
-import com.jn.langx.util.collection.Collects;
-
-import java.util.List;
+import com.jn.langx.util.collection.Pipeline;
 
 public class ArrayBasedQueryParameters extends BaseQueryParameters<Object[]> {
 
     @Override
     public void setParameters(Object[] parameters, int beforeSubqueryCount, int afterSubqueryCount) {
         super.setParameters(parameters, beforeSubqueryCount, afterSubqueryCount);
-        List<Object> all = Collects.asList(parameters);
-        this.beforeSubqueryParameters = new Object[beforeSubqueryCount];
-        for (int i = 0; i < beforeSubqueryCount; i++) {
-            beforeSubqueryParameters[i] = all.remove(0);
-        }
-        int c = 0;
-        this.afterSubqueryParameters = new Object[afterSubqueryCount];
-        for (int i = all.size() - 1; i < afterSubqueryCount; i--) {
-            afterSubqueryParameters[c] = all.remove(i);
-            c++;
-        }
-        this.subqueryParameters = Collects.toArray(all);
+        Pipeline<Object> pipeline = Pipeline.of(parameters);
+        this.beforeSubqueryParameters = pipeline.limit(beforeSubqueryCount).toArray();
+        this.subqueryParameters = pipeline.limit(parameters.length - afterSubqueryCount).skip(beforeSubqueryCount).toArray();
+        this.afterSubqueryParameters = pipeline.skip(parameters.length - afterSubqueryCount).toArray();
     }
 }
