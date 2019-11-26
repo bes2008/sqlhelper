@@ -213,7 +213,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
 
                         }
 
-                        PreparedStatement ps = new PaginationPreparedStatement(new SimplePreparedStatementCreator(paginationSql).createPreparedStatement(conn));
+                        PreparedStatement ps = new PagedPreparedStatement(new SimplePreparedStatementCreator(paginationSql).createPreparedStatement(conn));
 
                         SpringJdbcQueryParameters queryParameters = new SpringJdbcQueryParameters();
                         queryParameters.setCallable(false);
@@ -381,7 +381,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         } else {
                             psc = new SimplePreparedStatementCreator(paginationSql);
                         }
-                        PreparedStatement ps = new PaginationPreparedStatement(psc.createPreparedStatement(conn));
+                        PreparedStatement ps = new PagedPreparedStatement(psc.createPreparedStatement(conn));
 
                         SpringJdbcQueryParameters queryParameters = new SpringJdbcQueryParameters();
                         queryParameters.setCallable(false);

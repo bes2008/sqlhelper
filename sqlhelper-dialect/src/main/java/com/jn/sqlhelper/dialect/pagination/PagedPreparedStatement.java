@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class PaginationPreparedStatement implements PreparedStatement {
+public class PagedPreparedStatement implements PreparedStatement {
     private PreparedStatement delegate;
 
     private int indexOffset = -1; // -1 disable offset
@@ -37,7 +37,7 @@ public class PaginationPreparedStatement implements PreparedStatement {
         this.indexOffset = indexOffset;
     }
 
-    public PaginationPreparedStatement(PreparedStatement delegate) {
+    public PagedPreparedStatement(PreparedStatement delegate) {
         this.delegate = delegate;
     }
 
