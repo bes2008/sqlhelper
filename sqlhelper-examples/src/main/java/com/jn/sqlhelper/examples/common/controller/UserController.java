@@ -17,6 +17,7 @@ package com.jn.sqlhelper.examples.common.controller;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.apachedbutils.QueryRunner;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
 import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
@@ -273,7 +274,7 @@ public class UserController {
         if (testSubquery) {
             request.subqueryPaging(true);
         }
-        StringBuilder sqlBuilder = testSubquery? new StringBuilder("select * from ([PAGING_START]select ID, NAME, AGE from USER where 1=1 and age > :age [PAGING_END]) n where name like CONCAT(:name,'%') ") : new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > :age");
+        StringBuilder sqlBuilder = testSubquery ? new StringBuilder("select * from ([PAGING_START]select ID, NAME, AGE from USER where 1=1 and age > :age [PAGING_END]) n where name like CONCAT(:name,'%') ") : new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > :age");
 
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("age", 10);
@@ -298,14 +299,22 @@ public class UserController {
     public PagingResult list_useApacheDBUtils(
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name = "sort", required = false) String sort) throws SQLException {
+            @RequestParam(name = "sort", required = false) String sort,
+            @RequestParam(name = "testSubquery", required = false, defaultValue = "false") boolean testSubquery) throws SQLException {
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-        StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
+        if (testSubquery) {
+            request.subqueryPaging(true);
+        }
+        StringBuilder sqlBuilder = testSubquery ? new StringBuilder("select * from ([PAGING_START]select ID, NAME, AGE from USER where 1=1 and age > ?[PAGING_END]) n where name like CONCAT(?,'%') ") : new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
 
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("age", 10);
         DataSource ds = namedJdbcTemplate.getJdbcTemplate().getDataSource();
         QueryRunner queryRunner = new QueryRunner(ds);
+
+        List<Object> params = Collects.emptyArrayList();
+        params.add(10);
+        if(testSubquery){
+            params.add("zhangsan");
+        }
 
         List<User> users = queryRunner.query(sqlBuilder.toString(), new ResultSetHandler<List<User>>() {
             RowMapperResultSetExtractor extractor = new RowMapperResultSetExtractor<User>(new BeanRowMapper<User>(User.class));
@@ -314,7 +323,7 @@ public class UserController {
             public List<User> handle(ResultSet rs) throws SQLException {
                 return extractor.extract(rs);
             }
-        }, 10);
+        }, Collects.toArray(params));
         String json = JSONBuilderProvider.simplest().toJson(users);
         System.out.println(json);
         return request.getResult();

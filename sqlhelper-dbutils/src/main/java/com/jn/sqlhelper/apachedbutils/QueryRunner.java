@@ -16,6 +16,7 @@ package com.jn.sqlhelper.apachedbutils;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.RowSelection;
@@ -23,9 +24,11 @@ import com.jn.sqlhelper.dialect.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.pagination.*;
-import com.jn.sqlhelper.dialect.parameter.BaseQueryParameters;
+import com.jn.sqlhelper.dialect.parameter.ArrayBasedQueryParameters;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.StatementConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -36,6 +39,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
     private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
     private SQLInstrumentConfig instrumentConfig;
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
+    private static final Logger logger = LoggerFactory.getLogger(QueryRunner.class);
 
     private DbutilsPaginationProperties paginationConfig = new DbutilsPaginationProperties();
 
@@ -367,7 +371,6 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
     }
 
 
-
     private <T> T doPagingQuery(Connection conn, String sql, ResultSetHandler<T> rsh, Object... params) throws SQLException {
         final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
         final PagingResult result = new PagingResult();
@@ -390,7 +393,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
             if (PAGING_CONTEXT.isOrderByRequest()) {
                 sql0 = instrumentor.instrumentOrderBySql(sql, PAGING_CONTEXT.getPagingRequest().getOrderBy());
             }
-            rs = this.query(conn, false, sql, rsh, params);
+            rs = this.query(conn, false, sql0, rsh, params);
             invalidatePagingRequest(false);
             if (rs == null) {
                 rs = Collects.emptyArrayList();
@@ -439,19 +442,57 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
                 if (needQuery) {
                     applyStatementSettingsInPaginationRequest(request);
                     RowSelection rowSelection = rowSelectionBuilder.build(request);
-                    String paginationSql = PAGING_CONTEXT.isOrderByRequest() ? instrumentor.instrumentOrderByLimitSql(sql, request.getOrderBy(), rowSelection) : instrumentor.instrumentLimitSql(sql, rowSelection);
+                    String paginationSql = sql;
+                    boolean subqueryPagination = false;
+                    if (SqlPaginations.isSubqueryPagingRequest(request)) {
+                        if (!SqlPaginations.isValidSubQueryPagination(request, instrumentor)) {
+                            logger.warn("Paging request is not a valid subquery pagination request, so the paging request will not as a subquery pagination request. request: {}, the instrument configuration is: {}", request, instrumentor.getConfig());
+                        } else {
+                            subqueryPagination = true;
+                        }
+                    }
 
-                    PreparedStatement ps = new PaginationPreparedStatement(this.prepareStatement(conn, paginationSql));
+                    int beforeSubqueryParametersCount = 0;
+                    int afterSubqueryParametersCount = 0;
 
-                    BaseQueryParameters queryParameters = new BaseQueryParameters();
+                    if (!subqueryPagination) {
+                        if (PAGING_CONTEXT.isOrderByRequest()) {
+                            paginationSql = instrumentor.instrumentOrderByLimitSql(sql, PAGING_CONTEXT.getPagingRequest().getOrderBy(), rowSelection);
+                        } else {
+                            paginationSql = instrumentor.instrumentLimitSql(sql, rowSelection);
+                        }
+                    } else {
+                        String startFlag = SqlPaginations.getSubqueryPaginationStartFlag(request, instrumentor);
+                        String endFlag = SqlPaginations.getSubqueryPaginationEndFlag(request, instrumentor);
+                        String subqueryPartition = SqlPaginations.extractSubqueryPartition(sql, startFlag, endFlag);
+                        if (Strings.isEmpty(subqueryPartition)) {
+                            throw new IllegalArgumentException("Your pagination sql is wrong, maybe used start flag or end flag is wrong");
+                        }
+                        String limitedSubqueryPartition = instrumentor.instrumentLimitSql(subqueryPartition, rowSelection);
+                        String beforeSubqueryPartition = SqlPaginations.extractBeforeSubqueryPartition(sql, startFlag);
+                        String afterSubqueryPartition = SqlPaginations.extractAfterSubqueryPartition(sql, endFlag);
+                        paginationSql = beforeSubqueryPartition + " " + limitedSubqueryPartition + " " + afterSubqueryPartition;
+                        if (PAGING_CONTEXT.isOrderByRequest()) {
+                            paginationSql = instrumentor.instrumentOrderBySql(paginationSql, PAGING_CONTEXT.getPagingRequest().getOrderBy());
+                        }
+
+                        beforeSubqueryParametersCount = SqlPaginations.findPlaceholderParameterCount(beforeSubqueryPartition);
+                        afterSubqueryParametersCount = SqlPaginations.findPlaceholderParameterCount(afterSubqueryPartition);
+
+                    }
+
+
+                    PreparedStatement ps = new PagedPreparedStatement(this.prepareStatement(conn, paginationSql));
+
+                    ArrayBasedQueryParameters queryParameters = new ArrayBasedQueryParameters();
                     queryParameters.setCallable(false);
                     queryParameters.setRowSelection(rowSelection);
+                    queryParameters.setParameters(params, beforeSubqueryParametersCount, afterSubqueryParametersCount);
 
-                    PaginationPreparedStatementSetter parameterSetter = new PaginationPreparedStatementSetter(new DbutilsOriginalPreparedStatementSetter(params));
+                    PagedPreparedStatementSetter parameterSetter = new PagedPreparedStatementSetter(new DbutilsOriginalPreparedStatementSetter(params));
                     instrumentor.bindParameters(ps, parameterSetter, queryParameters, true);
-                    // DO execute
-                    ResultSet resultSet = null;
-                    resultSet = this.wrap(ps.executeQuery());
+                    // execute
+                    ResultSet resultSet = this.wrap(ps.executeQuery());
                     items.addAll((List) rsh.handle(resultSet));
                 }
                 request.setPageNo(requestPageNo);
@@ -478,7 +519,10 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
         if (request.needCount() == null) {
             return paginationConfig.isCount();
         }
-        return Boolean.TRUE.equals(request.needCount());
+        if (Boolean.TRUE.equals(request.needCount())) {
+            return !SqlPaginations.isSubqueryPagingRequest(request);
+        }
+        return false;
     }
 
     private boolean isUseLastPageIfPageNoOut(@NonNull PagingRequest request) {
