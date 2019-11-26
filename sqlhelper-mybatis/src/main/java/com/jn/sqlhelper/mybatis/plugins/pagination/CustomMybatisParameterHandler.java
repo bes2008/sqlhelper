@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.mybatis.plugins.pagination;
 
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.Pipeline;
 import com.jn.sqlhelper.dialect.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.QueryParameters;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
@@ -139,8 +140,10 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
     @Override
     public int setSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
         final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
-        List<ParameterMapping> subquery = Collects.limit(parameterMappings, parameterMappings.size() - queryParameters.getAfterSubqueryParameterCount());
-        subquery = Collects.skip(subquery, queryParameters.getBeforeSubqueryParameterCount());
+        List<ParameterMapping> subquery = Pipeline.of(parameterMappings)
+                .limit(parameterMappings.size() - queryParameters.getAfterSubqueryParameterCount())
+                .skip(queryParameters.getBeforeSubqueryParameterCount())
+                .asList();
         setParameters(statement, subquery, startIndex);
         return subquery.size();
     }
