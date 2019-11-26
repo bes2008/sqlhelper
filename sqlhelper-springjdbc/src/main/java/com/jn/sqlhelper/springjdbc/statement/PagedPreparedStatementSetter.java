@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.springjdbc.statement;
 
+import com.jn.langx.util.Emptys;
 import com.jn.sqlhelper.dialect.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.QueryParameters;
 import com.jn.sqlhelper.dialect.pagination.PaginationPreparedStatement;
@@ -8,6 +9,7 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+@SuppressWarnings("unchecked")
 public class PagedPreparedStatementSetter implements PagedPreparedParameterSetter {
     private PreparedStatementSetter delegate;
 
@@ -32,40 +34,37 @@ public class PagedPreparedStatementSetter implements PagedPreparedParameterSette
 
     @Override
     public int setBeforeSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
-        if (delegate != null) {
-            if(statement instanceof PaginationPreparedStatement ){
-                if(delegate instanceof PagedPreparedParameterSetter) {
-                    PagedPreparedParameterSetter setter = (PagedPreparedParameterSetter)delegate;
-                    return setter.setBeforeSubqueryParameters(statement, queryParameters, startIndex);
-                }
-            }
+        PagedPreparedParameterSetter setter = getPaginationSetter(statement);
+        if (Emptys.isNotNull(setter)) {
+            return setter.setBeforeSubqueryParameters(statement, queryParameters, startIndex);
         }
-        return queryParameters.getBeforeSubqueryParameterCount();
+        return 0;
     }
 
     @Override
     public int setSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
-        if (delegate != null) {
-            if(statement instanceof PaginationPreparedStatement ){
-                if(delegate instanceof PagedPreparedParameterSetter) {
-                    PagedPreparedParameterSetter setter = (PagedPreparedParameterSetter)delegate;
-                    return setter.setSubqueryParameters(statement, queryParameters, startIndex);
-                }
-            }
+        PagedPreparedParameterSetter setter = getPaginationSetter(statement);
+        if (Emptys.isNotNull(setter)) {
+            return setter.setSubqueryParameters(statement, queryParameters, startIndex);
         }
-        return queryParameters.getBeforeSubqueryParameterCount();
+        return 0;
     }
 
     @Override
     public int setAfterSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
-        if (delegate != null) {
-            if(statement instanceof PaginationPreparedStatement ){
-                if(delegate instanceof PagedPreparedParameterSetter) {
-                    PagedPreparedParameterSetter setter = (PagedPreparedParameterSetter)delegate;
-                    return setter.setAfterSubqueryParameters(statement, queryParameters, startIndex);
-                }
-            }
+        PagedPreparedParameterSetter setter = getPaginationSetter(statement);
+        if (Emptys.isNotNull(setter)) {
+            return setter.setAfterSubqueryParameters(statement, queryParameters, startIndex);
         }
-        return queryParameters.getBeforeSubqueryParameterCount();
+        return 0;
     }
+
+
+    private PagedPreparedParameterSetter getPaginationSetter(PreparedStatement statement) {
+        if (delegate != null && delegate instanceof PagedPreparedParameterSetter && statement instanceof PaginationPreparedStatement) {
+            return (PagedPreparedParameterSetter) delegate;
+        }
+        return null;
+    }
+
 }

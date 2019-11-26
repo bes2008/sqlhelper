@@ -25,6 +25,7 @@ import java.sql.SQLException;
  *  |-----------------original parameters-----------------|
  *  |------before-----|-----subquery-----|------after-----|
  * @param <P> original parameters
+ * @see SQLStatementInstrumentor#bindParameters(Dialect, PreparedStatement, PagedPreparedParameterSetter, QueryParameters, boolean)
  */
 public interface PagedPreparedParameterSetter<P extends QueryParameters> {
     /**

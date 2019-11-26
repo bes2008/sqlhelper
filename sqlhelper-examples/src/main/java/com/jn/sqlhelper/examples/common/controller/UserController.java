@@ -137,7 +137,7 @@ public class UserController {
 
 
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-        request.subQueryPaging(true);
+        request.subqueryPaging(true);
         request.setCount(count);
         request.setUseLastPageIfPageNoOut(useLastPageIfPageNoOut);
         List<User> users = userDao.selectByLimit_subqueryPagination(queryCondition);
@@ -153,12 +153,16 @@ public class UserController {
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort,
-            @RequestParam(value = "count", required = false) boolean count,
-            @RequestParam(value = "useLastPageIfPageNoOut", required = false) boolean useLastPageIfPageNoOut) {
+            @RequestParam(name = "count", required = false) boolean count,
+            @RequestParam(name = "useLastPageIfPageNoOut", required = false) boolean useLastPageIfPageNoOut,
+            @RequestParam(name = "testSubquery", required = false, defaultValue = "false") boolean testSubquery) {
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         request.setCount(count);
         request.setUseLastPageIfPageNoOut(useLastPageIfPageNoOut);
-        StringBuilder sqlBuilder = new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > 10");
+        if (testSubquery) {
+            request.subqueryPaging(true);
+        }
+        StringBuilder sqlBuilder = testSubquery ? new StringBuilder("select * from ([PAGING_START]select ID, NAME, AGE from USER where 1=1 and age > 10[PAGING_END]) n where name like 'zhangsan%' ") : new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > 10");
         List<User> users = jdbcTemplate.query(sqlBuilder.toString(), new RowMapper<User>() {
             @Override
             public User mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -187,6 +191,39 @@ public class UserController {
                 ps.setInt(1, 10);
             }
         }, new ResultSetExtractor<List<User>>() {
+            @Override
+            public List<User> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                List<User> users = new ArrayList<>();
+                while (rs.next()) {
+                    User u = new User();
+                    u.setId(rs.getString("ID"));
+                    u.setName(rs.getString("NAME"));
+                    u.setAge(rs.getInt("AGE"));
+                    users.add(u);
+                }
+                return users;
+            }
+        });
+        String json = JSONBuilderProvider.simplest().toJson(request.getResult());
+        System.out.println(json);
+        return request.getResult();
+    }
+
+    @GetMapping("/_useSpringJdbc_args_rExecutor")
+    public PagingResult list__useSpringJdbc_args_rExecutor(
+            @RequestParam(name = "pageNo", required = false) Integer pageNo,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name = "sort", required = false) String sort,
+            @RequestParam(name = "testSubquery", required = false, defaultValue = "false") boolean testSubquery) {
+        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
+
+        if (testSubquery) {
+            request.subqueryPaging(true);
+        }
+        StringBuilder sqlBuilder = testSubquery ? new StringBuilder("select * from ([PAGING_START]select ID, NAME, AGE from USER where 1=1 and age > ?[PAGING_END]) n where name like CONCAT(?,'%') ") : new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
+
+        Object[] args = testSubquery? new Object[]{10, "zhangsan"} : new Object[]{10};
+        List<User> users = jdbcTemplate.query(sqlBuilder.toString(), args, new ResultSetExtractor<List<User>>() {
             @Override
             public List<User> extractData(ResultSet rs) throws SQLException, DataAccessException {
                 List<User> users = new ArrayList<>();

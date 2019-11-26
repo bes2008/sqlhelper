@@ -241,18 +241,18 @@ public class PagingRequest<C, E> implements Serializable {
         return this;
     }
 
-    public boolean isSubQueryPaging() {
+    public boolean isSubqueryPaging() {
         return isSubQueryPaging;
     }
 
-    public PagingRequest<C, E> subQueryPaging(boolean subQueryPaging) {
+    public PagingRequest<C, E> subqueryPaging(boolean subQueryPaging) {
         isSubQueryPaging = subQueryPaging;
         return this;
     }
 
 
-    public PagingRequest<C, E> subQueryPaging(String subQueryPagingStartFlag, String subQueryPagingEndFlag) {
-        return subQueryPaging(true).setSubqueryPagingStartFlag(subQueryPagingStartFlag).setSubqueryPagingEndFlag(subQueryPagingEndFlag);
+    public PagingRequest<C, E> subqueryPaging(String subQueryPagingStartFlag, String subQueryPagingEndFlag) {
+        return subqueryPaging(true).setSubqueryPagingStartFlag(subQueryPagingStartFlag).setSubqueryPagingEndFlag(subQueryPagingEndFlag);
     }
 
     @Override

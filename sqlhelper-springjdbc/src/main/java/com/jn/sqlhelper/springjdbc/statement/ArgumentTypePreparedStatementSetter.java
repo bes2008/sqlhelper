@@ -1,14 +1,13 @@
 package com.jn.sqlhelper.springjdbc.statement;
 
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.Collection;
-
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.collection.PrimitiveArrays;
+import com.jn.langx.util.function.Consumer2;
+import com.jn.langx.util.reflect.Reflects;
+import com.jn.langx.util.struct.Entry;
+import com.jn.langx.util.struct.Pair;
 import com.jn.sqlhelper.dialect.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.QueryParameters;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -16,6 +15,13 @@ import org.springframework.jdbc.core.ParameterDisposer;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.StatementCreatorUtils;
 import org.springframework.lang.Nullable;
+
+import java.lang.reflect.Field;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Simple adapter for {@link PreparedStatementSetter} that applies
@@ -32,55 +38,101 @@ public class ArgumentTypePreparedStatementSetter implements PreparedStatementSet
 
     /**
      * Create a new ArgTypePreparedStatementSetter for the given arguments.
-     * @param args the arguments to set
+     *
+     * @param args     the arguments to set
      * @param argTypes the corresponding SQL types of the arguments
      */
     public ArgumentTypePreparedStatementSetter(@Nullable Object[] args, @Nullable int[] argTypes) {
-        if ((args != null && argTypes == null) || (args == null && argTypes != null) ||
-                (args != null && args.length != argTypes.length)) {
+        boolean argsIsNull = args == null;
+        boolean argTypesIsNull = argTypes == null;
+        if ((argsIsNull != argTypesIsNull) || (!argsIsNull && args.length != argTypes.length)) {
             throw new InvalidDataAccessApiUsageException("args and argTypes parameters must match");
         }
+
         this.args = args;
         this.argTypes = argTypes;
     }
 
     @Override
     public int setBeforeSubqueryParameters(PreparedStatement ps, QueryParameters queryParameters, int startIndex) throws SQLException {
-        Object[] args = Pipeline.of(this.args).limit(queryParameters.getBeforeSubqueryParameterCount()).toArray();
-        int[] argTypes = PrimitiveArrays.unwrap(Pipeline.<Integer>of(this.argTypes).limit(queryParameters.getBeforeSubqueryParameterCount()).toArray(Integer[].class), true);
-        setPagedSubqueryValues(ps, args, argTypes, startIndex);
-        return queryParameters.getBeforeSubqueryParameterCount();
+        Pair<Object[], Integer[]> parametersPair = flatParameters();
+        Object[] args = Pipeline.of(parametersPair.getKey()).limit(queryParameters.getBeforeSubqueryParameterCount()).toArray();
+        int[] argTypes = PrimitiveArrays.unwrap(Pipeline.<Integer>of(parametersPair.getValue()).limit(queryParameters.getBeforeSubqueryParameterCount()).toArray(Integer[].class), true);
+        return internalSetValues(ps, args, argTypes, startIndex);
+    }
+
+    private Pair<Object[], Integer[]> flatParameters() {
+        final List<Object> arguments = Collects.emptyArrayList();
+        final List<Integer> argumentTypes = Collects.emptyArrayList();
+        Collects.forEach(this.args, new Consumer2<Integer, Object>() {
+            @Override
+            public void accept(Integer index, Object arg) {
+                int type = argTypes[index];
+                if (arg instanceof Collection && type != Types.ARRAY) {
+                    Collection<?> entries = (Collection<?>) arg;
+                    for (Object entry : entries) {
+                        if (entry instanceof Object[]) {
+                            Object[] valueArray = ((Object[]) entry);
+                            for (Object argValue : valueArray) {
+                                arguments.add(argValue);
+                                argumentTypes.add(type);
+                            }
+                        } else {
+                            arguments.add(entry);
+                            argumentTypes.add(type);
+                        }
+                    }
+                } else {
+                    arguments.add(arg);
+                    argumentTypes.add(type);
+                }
+            }
+        });
+        return new Entry<Object[], Integer[]>(Collects.toArray(arguments), Collects.toArray(argumentTypes, Integer[].class));
     }
 
     @Override
     public int setSubqueryParameters(PreparedStatement ps, QueryParameters queryParameters, int startIndex) throws SQLException {
-        if(this.args!=null) {
-            Object[] args = Pipeline.of(this.args)
-                    .limit(this.args.length - queryParameters.getAfterSubqueryParameterCount())
+        if (this.args != null) {
+            Pair<Object[], Integer[]> parametersPair = flatParameters();
+            Object[] args = Pipeline.of(parametersPair.getKey())
+                    .limit(parametersPair.getKey().length - queryParameters.getAfterSubqueryParameterCount())
                     .skip(queryParameters.getBeforeSubqueryParameterCount())
                     .toArray();
             int[] argTypes = PrimitiveArrays.unwrap(
-                    Pipeline.<Integer>of(this.argTypes)
-                            .limit(this.args.length - queryParameters.getAfterSubqueryParameterCount())
+                    Pipeline.<Integer>of(parametersPair.getValue())
+                            .limit(parametersPair.getValue().length - queryParameters.getAfterSubqueryParameterCount())
                             .skip(queryParameters.getBeforeSubqueryParameterCount())
                             .toArray(Integer[].class), true);
-            setPagedSubqueryValues(ps, args, argTypes, startIndex);
-            return args.length;
+            return internalSetValues(ps, args, argTypes, startIndex);
         }
         return 0;
     }
 
     @Override
     public int setAfterSubqueryParameters(PreparedStatement ps, QueryParameters queryParameters, int startIndex) throws SQLException {
-        Object[] args = Pipeline.of(this.args).skip(queryParameters.getAfterSubqueryParameterCount()).toArray();
-        int[] argTypes = PrimitiveArrays.unwrap(Pipeline.<Integer>of(this.argTypes).skip(queryParameters.getAfterSubqueryParameterCount()).toArray(Integer[].class), true);
-        setPagedSubqueryValues(ps, args, argTypes, startIndex);
-        return queryParameters.getAfterSubqueryParameterCount();
+        Pair<Object[], Integer[]> parametersPair = flatParameters();
+        Object[] args = Pipeline.of(parametersPair.getKey()).skip(queryParameters.getAfterSubqueryParameterCount()).toArray();
+        int[] argTypes = PrimitiveArrays.unwrap(Pipeline.<Integer>of(parametersPair.getValue()).skip(queryParameters.getAfterSubqueryParameterCount()).toArray(Integer[].class), true);
+        return internalSetValues(ps, args, argTypes, startIndex);
     }
 
-    private void setPagedSubqueryValues(PreparedStatement ps, Object[] args, int[] argTypes, int startIndex) throws SQLException {
+
+    @Override
+    public int setOriginalParameters(PreparedStatement ps, QueryParameters queryParameters, int startIndex) throws SQLException {
+        return internalSetValues(ps, this.args, this.argTypes, 1);
+    }
+
+
+    @Override
+    public void setValues(PreparedStatement ps) throws SQLException {
+        internalSetValues(ps, this.args, this.argTypes, 1);
+    }
+
+    private int internalSetValues(PreparedStatement ps, Object[] args, int[] argTypes, int startIndex) throws SQLException {
+        int count = 0;
         int parameterPosition = startIndex;
-        if (this.args != null && argTypes != null) {
+        if (args != null && argTypes != null) {
             for (int i = 0; i < args.length; i++) {
                 Object arg = args[i];
                 if (arg instanceof Collection && argTypes[i] != Types.ARRAY) {
@@ -91,60 +143,16 @@ public class ArgumentTypePreparedStatementSetter implements PreparedStatementSet
                             for (Object argValue : valueArray) {
                                 doSetValue(ps, parameterPosition, argTypes[i], argValue);
                                 parameterPosition++;
-                            }
-                        }
-                        else {
-                            doSetValue(ps, parameterPosition, argTypes[i], entry);
-                            parameterPosition++;
-                        }
-                    }
-                }
-                else {
-                    doSetValue(ps, parameterPosition, argTypes[i], arg);
-                    parameterPosition++;
-                }
-            }
-        }
-    }
-
-
-    @Override
-    public int setOriginalParameters(PreparedStatement ps, QueryParameters queryParameters, int startIndex) throws SQLException {
-        return _setValues(ps, 1);
-    }
-
-
-    @Override
-    public void setValues(PreparedStatement ps) throws SQLException {
-        _setValues(ps, 1);
-    }
-
-    private int _setValues(PreparedStatement ps, int startIndex) throws SQLException {
-        int count = 0;
-        int parameterPosition = startIndex;
-        if (this.args != null && this.argTypes != null) {
-            for (int i = 0; i < this.args.length; i++) {
-                Object arg = this.args[i];
-                if (arg instanceof Collection && this.argTypes[i] != Types.ARRAY) {
-                    Collection<?> entries = (Collection<?>) arg;
-                    for (Object entry : entries) {
-                        if (entry instanceof Object[]) {
-                            Object[] valueArray = ((Object[]) entry);
-                            for (Object argValue : valueArray) {
-                                doSetValue(ps, parameterPosition, this.argTypes[i], argValue);
-                                parameterPosition++;
                                 count++;
                             }
-                        }
-                        else {
-                            doSetValue(ps, parameterPosition, this.argTypes[i], entry);
+                        } else {
+                            doSetValue(ps, parameterPosition, argTypes[i], entry);
                             parameterPosition++;
                             count++;
                         }
                     }
-                }
-                else {
-                    doSetValue(ps, parameterPosition, this.argTypes[i], arg);
+                } else {
+                    doSetValue(ps, parameterPosition, argTypes[i], arg);
                     parameterPosition++;
                     count++;
                 }
@@ -156,10 +164,11 @@ public class ArgumentTypePreparedStatementSetter implements PreparedStatementSet
     /**
      * Set the value for the prepared statement's specified parameter position using the passed in
      * value and type. This method can be overridden by sub-classes if needed.
-     * @param ps the PreparedStatement
+     *
+     * @param ps                the PreparedStatement
      * @param parameterPosition index of the parameter position
-     * @param argType the argument type
-     * @param argValue the argument value
+     * @param argType           the argument type
+     * @param argValue          the argument value
      * @throws SQLException if thrown by PreparedStatement methods
      */
     protected void doSetValue(PreparedStatement ps, int parameterPosition, int argType, Object argValue)
@@ -170,6 +179,30 @@ public class ArgumentTypePreparedStatementSetter implements PreparedStatementSet
     @Override
     public void cleanupParameters() {
         StatementCreatorUtils.cleanupParameters(this.args);
+    }
+
+    public static class Factory {
+        private static Field argsField;
+        private static Field argTypesField;
+
+        public static ArgumentTypePreparedStatementSetter create(org.springframework.jdbc.core.ArgumentTypePreparedStatementSetter setter) {
+            if (argsField == null) {
+                argsField = Reflects.getDeclaredField(org.springframework.jdbc.core.ArgumentTypePreparedStatementSetter.class, "args");
+                if (argsField != null) {
+                    argsField.setAccessible(true);
+                }
+            }
+            if (argTypesField == null) {
+                argTypesField = Reflects.getDeclaredField(org.springframework.jdbc.core.ArgumentTypePreparedStatementSetter.class, "argTypes");
+                if (argTypesField != null) {
+                    argTypesField.setAccessible(true);
+                }
+            }
+            Object[] args = Reflects.getFieldValue(argsField, setter, true, false);
+            int[] argTypes = Reflects.getFieldValue(argTypesField, setter, true, false);
+            return new ArgumentTypePreparedStatementSetter(args, argTypes);
+        }
+
     }
 
 }

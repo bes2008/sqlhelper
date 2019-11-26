@@ -2,14 +2,20 @@ package com.jn.sqlhelper.springjdbc;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.utils.SQLs;
+import com.jn.sqlhelper.dialect.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.pagination.*;
-import com.jn.sqlhelper.springjdbc.statement.*;
+import com.jn.sqlhelper.springjdbc.statement.NamedParameterPreparedStatementCreator;
+import com.jn.sqlhelper.springjdbc.statement.PagedPreparedStatementSetter;
+import com.jn.sqlhelper.springjdbc.statement.SimplePreparedStatementCreator;
+import com.jn.sqlhelper.springjdbc.statement.SpringJdbcQueryParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -83,6 +89,9 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
     }
 
 
+    /**
+     * Pagination for Statement
+     */
     @Override
     public <T> T query(final String sql, final ResultSetExtractor<T> rse) throws DataAccessException {
         if (!PAGING_CONTEXT.isPagingRequest() || !SQLs.isSelectStatement(sql)) {
@@ -201,7 +210,9 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
         }
     }
 
-
+    /**
+     * Pagination for PreparedStatement
+     */
     @Override
     public <T> T query(PreparedStatementCreator psc, PreparedStatementSetter pss, final ResultSetExtractor<T> rse) throws DataAccessException {
         if (!(psc instanceof SqlProvider)) {
@@ -312,6 +323,9 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                             String startFlag = SqlPaginations.getSubqueryPaginationStartFlag(request, instrumentor);
                             String endFlag = SqlPaginations.getSubqueryPaginationEndFlag(request, instrumentor);
                             String subqueryPartition = SqlPaginations.extractSubqueryPartition(sql, startFlag, endFlag);
+                            if (Strings.isEmpty(subqueryPartition)) {
+                                throw new IllegalArgumentException("Your pagination sql is wrong, maybe used start flag or end flag is wrong");
+                            }
                             String limitedSubqueryPartition = instrumentor.instrumentLimitSql(subqueryPartition, rowSelection);
                             String beforeSubqueryPartition = SqlPaginations.extractBeforeSubqueryPartition(sql, startFlag);
                             String afterSubqueryPartition = SqlPaginations.extractAfterSubqueryPartition(sql, endFlag);
@@ -338,13 +352,29 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                         queryParameters.setParameters(null, beforeSubqueryParametersCount, afterSubqueryParametersCount);
 
 
-                        PagedPreparedStatementSetter parameterSetter = null;
-                        if(pss == null && psc instanceof NamedParameterPreparedStatementCreator) {
-                            parameterSetter = new PagedPreparedStatementSetter((NamedParameterPreparedStatementCreator) psc);
+                        PagedPreparedStatementSetter proxySetter = null;
+                        if (pss == null && psc instanceof NamedParameterPreparedStatementCreator) {
+                            proxySetter = new PagedPreparedStatementSetter((NamedParameterPreparedStatementCreator) psc);
                         } else {
-                            parameterSetter = new PagedPreparedStatementSetter(pss);
+                            if (pss != null && subQueryPagination) {
+                                if (!(pss instanceof PagedPreparedParameterSetter)) {
+                                    if (pss instanceof ArgumentTypePreparedStatementSetter) {
+                                        pss = com.jn.sqlhelper.springjdbc.statement.ArgumentTypePreparedStatementSetter.Factory.create((ArgumentTypePreparedStatementSetter) pss);
+                                    } else if (pss instanceof ArgumentPreparedStatementSetter) {
+                                        pss = com.jn.sqlhelper.springjdbc.statement.ArgumentPreparedStatementSetter.Factory.create((ArgumentPreparedStatementSetter) pss);
+                                    } else {
+                                        String className = Reflects.getFQNClassName(pss.getClass());
+                                        if (className.contains("org.springframework.jdbc.core.PreparedStatementCreatorFactory")) {
+                                            pss = com.jn.sqlhelper.springjdbc.statement.PreparedStatementCreatorImpl.Factory.creator(pss);
+                                        } else {
+                                            throw new IllegalArgumentException("Current sql is an subquery pagation sql, but your the PreparedStatementSetter instance no an instance of com.jn.sqlhelper.dialect.PagedPreparedParameterSetter");
+                                        }
+                                    }
+                                }
+                            }
+                            proxySetter = new PagedPreparedStatementSetter(pss);
                         }
-                        instrumentor.bindParameters(ps, parameterSetter, queryParameters, true);
+                        instrumentor.bindParameters(ps, proxySetter, queryParameters, true);
                         // DO execute
                         ResultSet resultSet = null;
                         try {
@@ -410,7 +440,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
         if (request.needCount() == null) {
             return paginationConfig.isCount();
         }
-        if( Boolean.TRUE.equals(request.needCount())){
+        if (Boolean.TRUE.equals(request.needCount())) {
             return !SqlPaginations.isSubqueryPagingRequest(request);
         }
         return false;

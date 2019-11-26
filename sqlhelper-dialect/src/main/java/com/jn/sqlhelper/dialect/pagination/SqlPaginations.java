@@ -69,6 +69,7 @@ public class SqlPaginations {
         if(Strings.isNotEmpty(sqlsegment)) {
             sqlsegment = sqlsegment.replaceAll("([\\\\][?])", "");
             sqlsegment = sqlsegment.replaceAll("[^?]", "");
+            sqlsegment = sqlsegment.replaceAll("'\\?'", "");
             return sqlsegment.length();
         }
         return 0;
@@ -114,7 +115,7 @@ public class SqlPaginations {
         if (Objects.isNull(request)) {
             return false;
         }
-        return request.isSubQueryPaging();
+        return request.isSubqueryPaging();
     }
 
     public static boolean isValidSubQueryPagination(@Nullable PagingRequest request, @NonNull SQLStatementInstrumentor instrumentor) {
