@@ -111,6 +111,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 11. Supports Memory Pagination
 12. Supports SqlSymbolMapper, use it you can mapping any symbol to SQL symbol
 13. Supports Dump DDL
+14. Supports subquery pagination for mybatis, spring-jdbc, apache commons-dbutils
 
 #### sqlhelper vs mybatis-pagehelper
 |  metric                  | mybatis-pagehelper |      sqlhelper    |
@@ -130,7 +131,8 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |  Spring JDBC             |         X          | 2.x,3.x,4.x,5.x   | 
 |  SqlSymbol Mapping       |         X          |         √         |
 |  MyBatis-Plus            |         X          |         √         |   
-|  Apache Commons-DBUtils  |         X          |         √         | 
+|  Apache Commons-DBUtils  |         X          |         √         |
+|  Subquery pagination     |         X          |         √         |  
                      
 
 
