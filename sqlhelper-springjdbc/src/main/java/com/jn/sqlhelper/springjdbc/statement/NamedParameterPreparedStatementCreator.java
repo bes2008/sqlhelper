@@ -105,7 +105,7 @@ public class NamedParameterPreparedStatementCreator implements PreparedStatement
     @Override
     public int setAfterSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
         List<Pair<SqlParameter, Object>> parameters = flatParameters();
-        return setSqlParameters(statement, Collects.limit(parameters, queryParameters.getBeforeSubqueryParameterCount()), startIndex);
+        return setSqlParameters(statement, Collects.skip(parameters, parameters.size() - queryParameters.getAfterSubqueryParameterCount()), startIndex);
     }
 
     @Override

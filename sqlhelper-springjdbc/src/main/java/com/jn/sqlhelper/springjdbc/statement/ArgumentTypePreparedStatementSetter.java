@@ -113,7 +113,7 @@ public class ArgumentTypePreparedStatementSetter implements PreparedStatementSet
     public int setAfterSubqueryParameters(PreparedStatement ps, QueryParameters queryParameters, int startIndex) throws SQLException {
         Pair<Object[], Integer[]> parametersPair = flatParameters();
         Object[] args = Pipeline.of(parametersPair.getKey()).skip(queryParameters.getAfterSubqueryParameterCount()).toArray();
-        int[] argTypes = PrimitiveArrays.unwrap(Pipeline.<Integer>of(parametersPair.getValue()).skip(queryParameters.getAfterSubqueryParameterCount()).toArray(Integer[].class), true);
+        int[] argTypes = PrimitiveArrays.unwrap(Pipeline.<Integer>of(parametersPair.getValue()).skip(parametersPair.getKey().length - queryParameters.getAfterSubqueryParameterCount()).toArray(Integer[].class), true);
         return internalSetValues(ps, args, argTypes, startIndex);
     }
 
