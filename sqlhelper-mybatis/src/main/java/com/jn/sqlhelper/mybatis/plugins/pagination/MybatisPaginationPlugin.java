@@ -53,6 +53,10 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     private static final SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
     private PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
+    /**
+     * count sql cache
+     * key: count sql, should not count_id, because the mysql's sql is dynamic
+     */
     private Cache<String, MappedStatement> countStatementCache;
     private String countSuffix = "_COUNT";
     private static final String ORDER_BY_SUFFIX = "_orderBy";
@@ -464,12 +468,15 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                 final Object countResultList = executor.query(countStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey, countBoundSql);
                 count = ((Number) ((List) countResultList).get(0)).intValue();
             } else {
-                countStatement = this.customCountStatement(ms, countStatementId);
+                String querySql = boundSql.getSql();
+                final String countSql = instrumentor.countSql(querySql, request.getCountColumn());
+                countStatement = this.customCountStatement(ms, countStatementId, querySql);
+
                 final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
                 final CacheKey countKey2 = executor.createCacheKey(countStatement, parameter, RowBounds.DEFAULT, boundSql);
                 countKey2.update(request.getPageNo());
                 countKey2.update(request.getPageSize());
-                final String countSql = instrumentor.countSql(boundSql.getSql(), request.getCountColumn());
+
                 countBoundSql = new BoundSql(countStatement.getConfiguration(), countSql, boundSql.getParameterMappings(), parameter);
                 requestContext.set(MybatisPaginationRequestContextKeys.COUNT_SQL, countBoundSql);
                 for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {
@@ -517,8 +524,8 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         return mappedStatement;
     }
 
-    private MappedStatement customCountStatement(final MappedStatement ms, final String countStatementId) {
-        MappedStatement countStatement = pluginConfig.enableCountCache() ? this.countStatementCache.getIfPresent(countStatementId) : null;
+    private MappedStatement customCountStatement(final MappedStatement ms, final String countStatementId, String querySql) {
+        MappedStatement countStatement = pluginConfig.enableCountCache() ? this.countStatementCache.getIfPresent(querySql) : null;
         if (countStatement == null) {
             final MappedStatement.Builder builder = new MappedStatement.Builder(ms.getConfiguration(), countStatementId, ms.getSqlSource(), ms.getSqlCommandType());
             builder.resource(ms.getResource());
@@ -545,8 +552,8 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             builder.useCache(ms.isUseCache());
 
             countStatement = builder.build();
-            if (pluginConfig.enableCountCache()) {
-                this.countStatementCache.set(countStatementId, countStatement);
+            if (pluginConfig.enableCountCache() && ms.isUseCache()) {
+                this.countStatementCache.set(querySql, countStatement);
             }
         }
         return countStatement;
