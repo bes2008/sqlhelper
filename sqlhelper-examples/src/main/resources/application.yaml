@@ -16,4 +16,3 @@ sqlhelper:
       cache-instrumented-sql: true
       subquery-paging-start-flag: "[PAGING_START]"
       subquery-paging-end-flag: "[PAGING_END]"
-

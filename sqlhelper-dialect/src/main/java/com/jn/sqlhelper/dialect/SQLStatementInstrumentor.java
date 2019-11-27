@@ -219,7 +219,7 @@ public class SQLStatementInstrumentor {
         return countSql(originalSql, null);
     }
 
-    private final static List<String> keywordsNotAfterOrderBy = Collects.asList("select", "union", "from", "where", "and", "or", "between", "in", "case");
+    private final static List<String> keywordsNotAfterOrderBy = Collects.asList("select", "?", "union", "from", "where", "and", "or", "between", "in", "case");
 
     public String countSql(String originalSql, String countColumn) {
         if (Strings.isBlank(countColumn)) {
@@ -243,7 +243,7 @@ public class SQLStatementInstrumentor {
             if (sliceOrderBy) {
                 remainSql = Strings.replace(remainSql, "(", " ( ");
                 remainSql = Strings.replace(remainSql, ")", " ) ");
-                Pipeline<String> pipeline = Pipeline.<String>of(remainSql.split("\\s+")).filter(new Predicate<String>() {
+                Pipeline<String> pipeline = Pipeline.<String>of(remainSql.split("[\\s,]+")).filter(new Predicate<String>() {
                     @Override
                     public boolean test(String value) {
                         return Strings.isNotEmpty(value);

@@ -31,6 +31,8 @@ public class CountSQLTests {
         System.out.println(countSql(sql, null));
         sql = "select a, b from x where a>0 and b>0 order by a, \t b ";
         System.out.println(countSql(sql, null));
+        sql = "select * from (select a, b from x where a>0 and b>0 order by field(name,a,?,?,?,?,\t b))     n ";
+        System.out.println(countSql(sql, null));
     }
 
     private String countSql(String originalSql, String countColumn) {
@@ -51,7 +53,7 @@ public class CountSQLTests {
                 remainSql = Strings.replace(remainSql,")"," ) ");
 
 
-                Pipeline<String> pipeline = Pipeline.<String>of(remainSql.split("\\s+")).filter(new Predicate<String>() {
+                Pipeline<String> pipeline = Pipeline.<String>of(remainSql.split("[\\s,]+")).filter(new Predicate<String>() {
                     @Override
                     public boolean test(String value) {
                         return Strings.isNotEmpty(value);
@@ -62,7 +64,7 @@ public class CountSQLTests {
 
                     @Override
                     public boolean test(String value) {
-                        return Collects.asList("select", "union", "from", "where", "and", "or", "between", "in", "case").contains(value);
+                        return Collects.asList("select","?", "union", "from", "where", "and", "or", "between", "in", "case").contains(value);
                     }
                 })) {
                     sliceOrderBy = false;
