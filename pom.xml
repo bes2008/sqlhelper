@@ -87,7 +87,7 @@
         <maven.compiler.compilerVersion>1.6</maven.compiler.compilerVersion>
 
         <project.major.version>2.3.0</project.major.version>
-        <project.internal.version>2.3.0.RC1.0</project.internal.version>
+        <project.internal.version>2.4.0.RC1.0</project.internal.version>
     </properties>
 
     <dependencyManagement>
