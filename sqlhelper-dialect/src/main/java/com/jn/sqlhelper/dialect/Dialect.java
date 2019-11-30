@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright 2019 the original author or authors.
  *
@@ -21,7 +19,6 @@ import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
 public interface Dialect extends UrlParser, LikeEscaper {
     String getDatabaseId();
