@@ -261,6 +261,8 @@ public class DialectRegistry {
                 TrafodionDialect.class,
                 TransbaseDialect.class,
 
+                UxDBDialect.class,
+
                 ValentinaDialect.class,
                 VerticaDialect.class,
                 VirtuosoDialect.class,
