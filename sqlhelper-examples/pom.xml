@@ -17,6 +17,12 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>28.1-jre</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis-spring</artifactId>
                 <version>${mybatis.spring.version}</version>
