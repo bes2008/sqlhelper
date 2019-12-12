@@ -18,6 +18,7 @@ package com.jn.sqlhelper.dialect.pagination;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.annotation.Ignore;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
+import com.jn.langx.util.Objects;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 
@@ -119,7 +120,7 @@ public class PagingRequest<C, E> implements Serializable {
     }
 
     public String getOrderByAsString() {
-        return this.orderBy.toString();
+        return Objects.isNull(this.orderBy)? "" : this.orderBy.toString();
     }
 
     public OrderBy getOrderBy() {
@@ -160,7 +161,7 @@ public class PagingRequest<C, E> implements Serializable {
         return this.result;
     }
 
-    public PagingRequest<C, E> setResult(PagingResult result) {
+    public PagingRequest<C, E> setResult(PagingResult<E> result) {
         this.result = result;
         return this;
     }
@@ -210,9 +211,13 @@ public class PagingRequest<C, E> implements Serializable {
         return ctx;
     }
 
-    public PagingRequest setCtx(PagingRequestContext<C, E> ctx) {
+    public PagingRequest<C, E> setContext(PagingRequestContext ctx) {
         this.ctx = ctx;
         return this;
+    }
+
+    public PagingRequest<C, E> setCtx(PagingRequestContext ctx) {
+        return setContext(ctx);
     }
 
     public Boolean isUseLastPageIfPageNoOut() {
