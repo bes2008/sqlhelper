@@ -21,5 +21,5 @@ public interface LikeEscaper {
 
     String escapeLikeKeyChars(String pattern);
 
-    String appendmentAfterLike();
+    String appendmentAfterLikeClause();
 }

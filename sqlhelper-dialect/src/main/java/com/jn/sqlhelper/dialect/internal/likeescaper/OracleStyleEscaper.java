@@ -26,7 +26,7 @@ public class OracleStyleEscaper extends BaseLikeEscaper {
     }
 
     @Override
-    public String appendmentAfterLike() {
+    public String appendmentAfterLikeClause() {
         return " ESCAPE '" + escapeChar + "' ";
     }
 }

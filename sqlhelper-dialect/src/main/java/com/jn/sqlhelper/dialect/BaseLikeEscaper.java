@@ -71,7 +71,7 @@ public class BaseLikeEscaper implements LikeEscaper {
 
 
     @Override
-    public String appendmentAfterLike() {
+    public String appendmentAfterLikeClause() {
         return "";
     }
 }
