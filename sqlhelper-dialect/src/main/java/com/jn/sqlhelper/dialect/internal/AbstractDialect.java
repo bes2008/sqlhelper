@@ -280,7 +280,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     }
 
     @Override
-    public String appentmentAfterLike() {
-        return getRealDialect().likeEscaper.appentmentAfterLike();
+    public String appendmentAfterLike() {
+        return getRealDialect().likeEscaper.appendmentAfterLike();
     }
 }

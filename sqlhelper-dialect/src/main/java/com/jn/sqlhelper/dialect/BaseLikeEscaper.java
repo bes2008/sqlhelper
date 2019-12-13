@@ -58,7 +58,7 @@ public class BaseLikeEscaper implements LikeEscaper {
 
 
     @Override
-    public String appentmentAfterLike() {
+    public String appendmentAfterLike() {
         return "";
     }
 }

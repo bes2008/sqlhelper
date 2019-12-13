@@ -24,7 +24,7 @@ public class OracleStyleEscaper extends CustomCharStyleEscaper {
     }
 
     @Override
-    public String appentmentAfterLike() {
+    public String appendmentAfterLike() {
         return " ESCAPE " + replacement + " ";
     }
 }
