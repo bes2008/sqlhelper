@@ -12,11 +12,12 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect;
+package com.jn.sqlhelper.dialect.internal.likeescaper;
 
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
+import com.jn.sqlhelper.dialect.LikeEscaper;
 
 import java.util.List;
 
@@ -68,7 +69,6 @@ public class BaseLikeEscaper implements LikeEscaper {
     protected String escapeLikeKeyChar(char c) {
         return escapeChar == '0' ? ("" + c) : ("" + escapeChar + c);
     }
-
 
     @Override
     public String appendmentAfterLikeClause() {

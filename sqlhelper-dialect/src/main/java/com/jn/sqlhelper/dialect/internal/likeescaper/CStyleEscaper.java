@@ -14,8 +14,6 @@
 
 package com.jn.sqlhelper.dialect.internal.likeescaper;
 
-import com.jn.sqlhelper.dialect.BaseLikeEscaper;
-
 public class CStyleEscaper extends BaseLikeEscaper {
 
     public CStyleEscaper(){

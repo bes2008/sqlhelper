@@ -12,19 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.internal.likeescaper;
+package com.jn.sqlhelper.tests;
 
-public class OracleStyleEscaper extends BaseLikeEscaper {
-    public OracleStyleEscaper() {
-        this('/');
-    }
-
-    public OracleStyleEscaper(char escapeChar ) {
-        super(escapeChar);
-    }
-
-    @Override
-    public String appendmentAfterLikeClause() {
-        return " ESCAPE '" + escapeChar + "' ";
-    }
+public class LikeEscaperTeste {
 }
