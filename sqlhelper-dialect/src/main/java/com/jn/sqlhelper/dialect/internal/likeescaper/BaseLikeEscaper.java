@@ -16,6 +16,7 @@ package com.jn.sqlhelper.dialect.internal.likeescaper;
 
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.PrimitiveArrays;
 import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.dialect.LikeEscaper;
 
@@ -24,9 +25,9 @@ import java.util.List;
 public class BaseLikeEscaper implements LikeEscaper {
     public static final BaseLikeEscaper INSTANCE = new BaseLikeEscaper();
 
-    protected static final List<Character> STANDARD_LIKE_KEY_CHARS = Collects.asList(new Character[]{
+    protected static final List<Character> STANDARD_LIKE_KEY_CHARS = Collects.asList(
             '\'', '_', '%', '\\'
-    });
+    );
 
     protected char escapeChar = '0';
 
@@ -47,7 +48,7 @@ public class BaseLikeEscaper implements LikeEscaper {
         final List<Character> specifiedChars = getLikeKeyChars();
         if (Emptys.isNotEmpty(pattern)) {
             final StringBuilder builder = new StringBuilder(pattern.length() + 20);
-            Collects.forEach(pattern.toCharArray(), new Consumer<Character>() {
+            Collects.forEach(PrimitiveArrays.wrap(pattern.toCharArray(), true), new Consumer<Character>() {
                 @Override
                 public void accept(Character c) {
                     if (specifiedChars.contains(c)) {
