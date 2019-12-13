@@ -27,6 +27,15 @@ public class BaseLikeEscaper implements LikeEscaper {
             '\'', '_', '%', '\\'
     });
 
+    protected char escapeChar = '0';
+
+    public BaseLikeEscaper() {
+    }
+
+    public BaseLikeEscaper(char escapeChar) {
+        this.escapeChar = escapeChar;
+    }
+
     @Override
     public List<Character> getLikeKeyChars() {
         return STANDARD_LIKE_KEY_CHARS;
@@ -43,7 +52,11 @@ public class BaseLikeEscaper implements LikeEscaper {
                     if (specifiedChars.contains(c)) {
                         builder.append(escapeLikeKeyChar(c));
                     } else {
-                        builder.append(c);
+                        if (c == escapeChar) {
+                            builder.append(escapeChar).append(escapeChar);
+                        } else {
+                            builder.append(c);
+                        }
                     }
                 }
             });
@@ -53,7 +66,7 @@ public class BaseLikeEscaper implements LikeEscaper {
     }
 
     protected String escapeLikeKeyChar(char c) {
-        return "" + c;
+        return escapeChar == '0' ? ("" + c) : ("" + escapeChar + c);
     }
 
 

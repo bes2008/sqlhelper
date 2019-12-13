@@ -14,17 +14,19 @@
 
 package com.jn.sqlhelper.dialect.internal.likeescaper;
 
-public class OracleStyleEscaper extends CustomCharStyleEscaper {
+import com.jn.sqlhelper.dialect.BaseLikeEscaper;
+
+public class OracleStyleEscaper extends BaseLikeEscaper {
     public OracleStyleEscaper() {
         this('/');
     }
 
-    public OracleStyleEscaper(char replacement) {
-        super(replacement);
+    public OracleStyleEscaper(char escapeChar ) {
+        super(escapeChar);
     }
 
     @Override
     public String appendmentAfterLike() {
-        return " ESCAPE " + replacement + " ";
+        return " ESCAPE '" + escapeChar + "' ";
     }
 }

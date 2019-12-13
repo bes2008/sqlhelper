@@ -17,8 +17,8 @@ package com.jn.sqlhelper.dialect.internal.likeescaper;
 import com.jn.sqlhelper.dialect.BaseLikeEscaper;
 
 public class CStyleEscaper extends BaseLikeEscaper {
-    @Override
-    protected String escapeLikeKeyChar(char c) {
-        return "\\"+c;
+
+    public CStyleEscaper(){
+        this.escapeChar = '\\';
     }
 }
