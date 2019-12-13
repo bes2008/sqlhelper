@@ -23,7 +23,6 @@ import com.jn.sqlhelper.dialect.LikeEscaper;
 import java.util.List;
 
 public class BaseLikeEscaper implements LikeEscaper {
-    public static final BaseLikeEscaper INSTANCE = new BaseLikeEscaper();
 
     protected static final List<Character> STANDARD_LIKE_KEY_CHARS = Collects.asList(
             '\'', '_', '%', '\\'

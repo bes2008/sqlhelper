@@ -30,6 +30,7 @@ import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.dialect.ddl.generator.CommonTableGenerator;
 import com.jn.sqlhelper.dialect.internal.likeescaper.BaseLikeEscaper;
+import com.jn.sqlhelper.dialect.internal.likeescaper.CStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.DefaultLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.CommonUrlParser;
@@ -70,7 +71,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         if (nameAnno != null) {
             name = nameAnno.value();
             if (Strings.isBlank(name)) {
-                throw new IllegalStateException("@Name is empty in class" + this.getClass().getClass());
+                throw new IllegalStateException("@Name is empty in class" + this.getClass());
             }
         } else {
             final String simpleClassName = this.getClass().getSimpleName().toLowerCase();
@@ -111,7 +112,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     }
 
     protected void setLikeEscaper(@NonNull LikeEscaper likeEscaper) {
-        likeEscaper = likeEscaper == null ? BaseLikeEscaper.INSTANCE : likeEscaper;
+        likeEscaper = likeEscaper == null ? CStyleEscaper.INSTANCE : likeEscaper;
         getRealDialect().likeEscaper = likeEscaper;
     }
 
