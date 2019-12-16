@@ -15,18 +15,15 @@
 
 package com.jn.sqlhelper.dialect.pagination;
 
-import com.jn.langx.util.BasedStringAccessor;
 import com.jn.sqlhelper.dialect.RowSelection;
+import com.jn.sqlhelper.dialect.SqlRequestContext;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class PagingRequestContext<E, R> extends BasedStringAccessor<String, Map<String, Object>> {
+public class PagingRequestContext<E, R> extends SqlRequestContext {
     private PagingRequest<E, R> request;
     private RowSelection rowSelection;
 
     public PagingRequestContext() {
-        setTarget(new HashMap<String, Object>());
+        super();
     }
 
     public PagingRequest<E, R> getRequest() {
@@ -44,22 +41,6 @@ public class PagingRequestContext<E, R> extends BasedStringAccessor<String, Map<
 
     public void setRowSelection(RowSelection rowSelection) {
         this.rowSelection = rowSelection;
-    }
-
-    @Override
-    public Object get(String key) {
-        return getTarget().get(key);
-    }
-
-    @Override
-    public String getString(String key, String defaultValue) {
-        Object value = getTarget().get(key);
-        return value == null ? defaultValue : value.toString();
-    }
-
-    @Override
-    public void set(String key, Object value) {
-        getTarget().put(key, value);
     }
 
     public static final String BEFORE_SUBQUERY_PARAMETERS_COUNT = "BEFORE_SUBQUERY_PARAMETERS_COUNT";

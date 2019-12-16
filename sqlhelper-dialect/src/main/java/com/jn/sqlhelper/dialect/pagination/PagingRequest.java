@@ -20,15 +20,14 @@ import com.jn.easyjson.core.annotation.Ignore;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.collection.Collects;
+import com.jn.sqlhelper.dialect.SelectRequest;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 
-import java.io.Serializable;
-
-public class PagingRequest<C, E> implements Serializable {
+public class PagingRequest<C, E> extends SelectRequest {
     private static final long serialVersionUID = 1L;
     private Boolean count = null;
     private String countColumn;
-    private String dialect;
+
     // begin 1
     private int pageNo = 1;
     // pageSize < 0, the limit is Integer.MAX
@@ -120,7 +119,7 @@ public class PagingRequest<C, E> implements Serializable {
     }
 
     public String getOrderByAsString() {
-        return Objects.isNull(this.orderBy)? "" : this.orderBy.toString();
+        return Objects.isNull(this.orderBy) ? "" : this.orderBy.toString();
     }
 
     public OrderBy getOrderBy() {
@@ -163,15 +162,6 @@ public class PagingRequest<C, E> implements Serializable {
 
     public PagingRequest<C, E> setResult(PagingResult<E> result) {
         this.result = result;
-        return this;
-    }
-
-    public String getDialect() {
-        return dialect;
-    }
-
-    public PagingRequest<C, E> setDialect(String dialect) {
-        this.dialect = dialect;
         return this;
     }
 

@@ -29,7 +29,16 @@ public class InstrumentedSelectStatement {
      * value: limit sql
      */
     private Map<String, List<String>> dialectLimitSql = new HashMap<String, List<String>>();
+    /**
+     * key: order by
+     * value: orderBySql
+     */
     private Map<OrderBy, String> orderBySql = new HashMap<OrderBy, String>();
+
+    /**
+     * key: orderBy
+     * value:{dialect: sqls}
+     */
     private Map<OrderBy, Map<String, List<String>>> orderByLimitSql = new HashMap<OrderBy, Map<String, List<String>>>();
 
     public String getOriginalSql() {

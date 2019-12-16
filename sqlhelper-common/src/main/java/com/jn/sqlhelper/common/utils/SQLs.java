@@ -151,5 +151,4 @@ public class SQLs {
                 "'".equals(tok);
     }
 
-
 }
