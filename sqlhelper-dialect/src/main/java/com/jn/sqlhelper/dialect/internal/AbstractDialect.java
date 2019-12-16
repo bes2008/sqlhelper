@@ -277,8 +277,8 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     }
 
     @Override
-    public String escapeLikeKeyChars(String pattern) {
-        return getRealDialect().likeEscaper.escapeLikeKeyChars(pattern);
+    public String escape(String string) {
+        return getRealDialect().likeEscaper.escape(string);
     }
 
     @Override

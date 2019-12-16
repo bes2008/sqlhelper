@@ -17,9 +17,18 @@ package com.jn.sqlhelper.dialect;
 import java.util.List;
 
 public interface LikeEscaper {
+    /**
+     * %, _, \ 等
+     * @return
+     */
     List<Character> getLikeKeyChars();
 
-    String escapeLikeKeyChars(String pattern);
+    /**
+     * escape string using escape char
+     * @param pattern
+     * @return
+     */
+    String escape(String pattern);
 
     String appendmentAfterLikeClause();
 }

@@ -24,8 +24,8 @@ import java.util.List;
 
 public class BaseLikeEscaper implements LikeEscaper {
 
-    protected static final List<Character> STANDARD_LIKE_KEY_CHARS = Collects.asList(
-            '\'', '_', '%', '\\'
+    protected final List<Character> keyChars = Collects.asList(
+            '\'', '_', '%'
     );
 
     protected char escapeChar = '0';
@@ -39,11 +39,11 @@ public class BaseLikeEscaper implements LikeEscaper {
 
     @Override
     public List<Character> getLikeKeyChars() {
-        return STANDARD_LIKE_KEY_CHARS;
+        return keyChars;
     }
 
     @Override
-    public String escapeLikeKeyChars(String pattern) {
+    public String escape(String pattern) {
         final List<Character> specifiedChars = getLikeKeyChars();
         if (Emptys.isNotEmpty(pattern)) {
             final StringBuilder builder = new StringBuilder(pattern.length() + 20);
