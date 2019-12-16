@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.dialect.internal.likeescaper;
 
 /**
- * '\'
+ * the escape char is : '\'
  */
 public class CStyleEscaper extends BaseLikeEscaper {
     public static final CStyleEscaper INSTANCE = new CStyleEscaper();
