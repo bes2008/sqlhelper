@@ -14,10 +14,15 @@
 
 package com.jn.sqlhelper.dialect.internal.likeescaper;
 
+/**
+ * '\'
+ */
 public class CStyleEscaper extends BaseLikeEscaper {
     public static final CStyleEscaper INSTANCE = new CStyleEscaper();
-    public CStyleEscaper(){
+
+    public CStyleEscaper() {
         this.escapeChar = '\\';
         this.keyChars.add('\\');
     }
+
 }
