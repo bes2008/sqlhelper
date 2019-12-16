@@ -35,7 +35,7 @@ public class LikeEscaperTests {
         Collects.forEach(parameters, new Consumer2<Integer, String>() {
             @Override
             public void accept(Integer index, String value) {
-                parameters.set(index, likeEscaper.escapeLikeKeyChars(value));
+                parameters.set(index, likeEscaper.escape(value));
                 System.out.println(parameters.get(index));
             }
         });
