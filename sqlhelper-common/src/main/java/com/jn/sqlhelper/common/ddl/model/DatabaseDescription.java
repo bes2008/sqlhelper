@@ -27,7 +27,7 @@ public class DatabaseDescription {
         parseCatalogSeparator();
     }
 
-    private boolean allProceduresAreCallable = false;
+    private Boolean allProceduresAreCallable;
 
     private void parseAllProceduresAreCallable() {
         this.allProceduresAreCallable = Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Object, Boolean>() {
@@ -45,10 +45,13 @@ public class DatabaseDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean allProceduresAreCallable() {
+        if (allProceduresAreCallable == null) {
+            parseAllProceduresAreCallable();
+        }
         return allProceduresAreCallable;
     }
 
-    private boolean supportsMixedCaseIdentifiers = false;
+    private Boolean supportsMixedCaseIdentifiers;
 
     private void parseSupportsMixedCaseIdentifiers() {
         this.supportsMixedCaseIdentifiers = Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Object, Boolean>() {
@@ -66,10 +69,13 @@ public class DatabaseDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean supportsMixedCaseIdentifiers() {
+        if (supportsMixedCaseIdentifiers == null) {
+            parseSupportsMixedCaseIdentifiers();
+        }
         return supportsMixedCaseIdentifiers;
     }
 
-    private boolean supportsMixedCaseQuotedIdentifiers = false;
+    private Boolean supportsMixedCaseQuotedIdentifiers;
 
     private void parseSupportsMixedCaseQuotedIdentifiers() {
         this.supportsMixedCaseQuotedIdentifiers = Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Object, Boolean>() {
@@ -87,10 +93,13 @@ public class DatabaseDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean supportsMixedCaseQuotedIdentifiers() {
+        if (supportsMixedCaseQuotedIdentifiers == null) {
+            parseSupportsMixedCaseQuotedIdentifiers();
+        }
         return supportsMixedCaseQuotedIdentifiers;
     }
 
-    private boolean supportsSchemasInTableDefinitions;
+    private Boolean supportsSchemasInTableDefinitions;
 
     private void parseSupportsSchemasInTableDefinitions() {
         this.supportsSchemasInTableDefinitions = Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Object, Boolean>() {
@@ -107,10 +116,13 @@ public class DatabaseDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean supportsSchemasInTableDefinitions() {
+        if (supportsSchemasInTableDefinitions == null) {
+            parseSupportsSchemasInTableDefinitions();
+        }
         return supportsSchemasInTableDefinitions;
     }
 
-    private boolean supportsSchemasInIndexDefinitions;
+    private Boolean supportsSchemasInIndexDefinitions;
 
     private void parseSupportsSchemasInIndexDefinitions() {
         this.supportsSchemasInIndexDefinitions = Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Object, Boolean>() {
@@ -127,10 +139,13 @@ public class DatabaseDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean supportsSchemasInIndexDefinitions() {
+        if (supportsSchemasInIndexDefinitions == null) {
+            parseSupportsSchemasInIndexDefinitions();
+        }
         return supportsSchemasInIndexDefinitions;
     }
 
-    private boolean supportsCatalogsInTableDefinitions;
+    private Boolean supportsCatalogsInTableDefinitions;
 
     private void parseSupportsCatalogsInTableDefinitions() {
         this.supportsCatalogsInTableDefinitions = Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Object, Boolean>() {
@@ -147,10 +162,13 @@ public class DatabaseDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean supportsCatalogsInTableDefinitions() {
+        if (supportsCatalogsInTableDefinitions) {
+            parseSupportsCatalogsInTableDefinitions();
+        }
         return supportsCatalogsInTableDefinitions;
     }
 
-    private boolean supportsCatalogsInIndexDefinitions;
+    private Boolean supportsCatalogsInIndexDefinitions;
 
     private void parseSupportsCatalogsInIndexDefinitions() {
         this.supportsCatalogsInIndexDefinitions = Throwables.ignoreThrowable(logger, false, new ThrowableFunction<Object, Boolean>() {
@@ -167,6 +185,9 @@ public class DatabaseDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean supportsCatalogsInIndexDefinitions() {
+        if (supportsCatalogsInIndexDefinitions == null) {
+            parseSupportsCatalogsInIndexDefinitions();
+        }
         return supportsCatalogsInIndexDefinitions;
     }
 
@@ -192,10 +213,13 @@ public class DatabaseDescription {
      * @return the separator string
      */
     public String getCatalogSeparator() {
+        if (catalogSeparator == null) {
+            parseCatalogSeparator();
+        }
         return this.catalogSeparator;
     }
 
-    private boolean isCatalogAtStart = true;
+    private Boolean isCatalogAtStart = null;
 
     private void parseIsCatalogAtStart() {
         this.isCatalogAtStart = Throwables.ignoreThrowable(logger, true, new ThrowableFunction<Object, Boolean>() {
@@ -214,6 +238,33 @@ public class DatabaseDescription {
      * of a fully qualified table name; <code>false</code> otherwise
      */
     public boolean isCatalogAtStart() {
+        if (isCatalogAtStart == null) {
+            parseIsCatalogAtStart();
+        }
         return this.isCatalogAtStart;
+    }
+
+    private Boolean isSupportsBatchUpdates = null;
+
+    /**
+     * Retrieves whether this database supports batch updates.
+     *
+     * @return <code>true</code> if this database supports batch updates;
+     * <code>false</code> otherwise
+     */
+    public boolean supportsBatchUpdates() {
+        if (isSupportsBatchUpdates == null) {
+            parseSupportsBatchUpdates();
+        }
+        return isSupportsBatchUpdates;
+    }
+
+    private void parseSupportsBatchUpdates() {
+        this.isSupportsBatchUpdates = Throwables.ignoreThrowable(logger, true, new ThrowableFunction<Object, Boolean>() {
+            @Override
+            public Boolean doFun(Object o) throws Throwable {
+                return dbMetaData.supportsBatchUpdates();
+            }
+        }, null);
     }
 }
