@@ -19,16 +19,16 @@ import java.util.List;
 public interface LikeEscaper {
     /**
      * %, _, \ 等
-     * @return
+     * @return all key characters
      */
     List<Character> getLikeKeyChars();
 
     /**
      * escape string using escape char
-     * @param pattern
-     * @return
+     * @param string a string will be escaped
+     * @return new string
      */
-    String escape(String pattern);
+    String escape(String string);
 
     String appendmentAfterLikeClause();
 }
