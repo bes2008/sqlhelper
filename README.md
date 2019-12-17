@@ -43,7 +43,8 @@
 [![maven](https://img.shields.io/badge/maven-v1.0.RELEASE-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo%20AND%20v:1.0-RELEASE)
 
 
-[中文描述](./wiki/readme_cn.md)
+Tutorial : https://fangjinuo.gitee.io/docs/index.html
+
 
 # sqlhelper
 SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
