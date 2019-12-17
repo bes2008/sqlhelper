@@ -14,6 +14,8 @@
 
 package com.jn.sqlhelper.common.batch;
 
-public interface SqlBatchExecutorFactory {
-    SqlBatchExecutor get(BatchType executorType);
+import java.util.List;
+
+public interface SqlBatchUpdater<E> {
+    BatchResult<E> batchUpdate(BatchStatement statement, List<E> parameters);
 }
