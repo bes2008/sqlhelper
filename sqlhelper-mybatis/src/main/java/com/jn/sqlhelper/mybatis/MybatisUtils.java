@@ -14,15 +14,15 @@
 
 package com.jn.sqlhelper.mybatis;
 
-import com.jn.sqlhelper.dialect.DialectRegistry;
+import com.jn.sqlhelper.mybatis.plugins.pagination.CustomVendorDatabaseIdProvider;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.apache.ibatis.session.RowBounds;
 
 public class MybatisUtils {
-    private static final VendorDatabaseIdProvider vendorDatabaseIdProvider = new VendorDatabaseIdProvider();
+    private static VendorDatabaseIdProvider vendorDatabaseIdProvider;
 
     static {
-        vendorDatabaseIdProvider.setProperties(DialectRegistry.getVendorDatabaseIdMappings());
+        vendorDatabaseIdProvider = new CustomVendorDatabaseIdProvider();
     }
 
     public static VendorDatabaseIdProvider vendorDatabaseIdProvider() {
