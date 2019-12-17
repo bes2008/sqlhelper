@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.common.batch;
 
 public enum BatchType {
-    SIMPLE, // create a statement for every parameter group
     BATCH_SQL, // create at least one statement for all parameter group
-    JDBC_BATCH; // execute using jdbc's batchUpdate API
+    JDBC_BATCH, // execute using jdbc's batchUpdate API
+    SIMPLE; // create a statement for every parameter group
 }
