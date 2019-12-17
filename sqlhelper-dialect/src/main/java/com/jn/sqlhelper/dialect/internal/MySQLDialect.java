@@ -55,4 +55,9 @@ public class MySQLDialect extends AbstractDialect {
     public char getAfterQuote() {
         return '`';
     }
+
+    @Override
+    public boolean isSupportsBatchUpdates() {
+        return true;
+    }
 }

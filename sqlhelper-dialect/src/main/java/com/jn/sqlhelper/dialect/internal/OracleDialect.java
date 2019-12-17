@@ -95,6 +95,11 @@ public class OracleDialect extends AbstractDialect {
             col++;
             return col;
         }
+
+        @Override
+        public boolean isSupportsBatchUpdates() {
+            return true;
+        }
     }
 
     private static class Oracle8i9LimitHandler extends AbstractLimitHandler {
