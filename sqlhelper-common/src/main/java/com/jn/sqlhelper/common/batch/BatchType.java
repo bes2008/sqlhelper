@@ -14,29 +14,8 @@
 
 package com.jn.sqlhelper.common.batch;
 
-import java.util.List;
-
-public class BatchResult<E> {
-    private BatchStatement statement;
-    private List<E> parameters;
-
-    public BatchStatement getStatement() {
-        return statement;
-    }
-
-    public void setStatement(BatchStatement statement) {
-        this.statement = statement;
-    }
-
-    public List<E> getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(List<E> parameters) {
-        this.parameters = parameters;
-    }
-
-    public String getSql(){
-        return statement.getSql();
-    }
+public enum BatchType {
+    SIMPLE, // create a statement for every parameter group
+    BATCH_SQL, // create at least one statement for all parameter group
+    JDBC_BATCH; // execute using jdbc's batchUpdate API
 }
