@@ -272,6 +272,11 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     }
 
     @Override
+    public boolean isSupportsBatchUpdates() {
+        return delegate == null ? false : delegate.isSupportsBatchUpdates();
+    }
+
+    @Override
     public List<Character> getLikeKeyChars() {
         return getRealDialect().likeEscaper.getLikeKeyChars();
     }

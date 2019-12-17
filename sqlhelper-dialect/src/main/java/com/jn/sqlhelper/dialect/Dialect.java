@@ -136,4 +136,6 @@ public interface Dialect extends UrlParser, LikeEscaper {
      * Whether supports distinct keyword
      */
     boolean isSupportsDistinct();
+
+    boolean isSupportsBatchUpdates();
 }
