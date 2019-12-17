@@ -138,4 +138,6 @@ public interface Dialect extends UrlParser, LikeEscaper {
     boolean isSupportsDistinct();
 
     boolean isSupportsBatchUpdates();
+
+    boolean isSupportsBatchSql();
 }

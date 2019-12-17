@@ -100,6 +100,11 @@ public class OracleDialect extends AbstractDialect {
         public boolean isSupportsBatchUpdates() {
             return true;
         }
+
+        @Override
+        public boolean isSupportsBatchSql() {
+            return true;
+        }
     }
 
     private static class Oracle8i9LimitHandler extends AbstractLimitHandler {

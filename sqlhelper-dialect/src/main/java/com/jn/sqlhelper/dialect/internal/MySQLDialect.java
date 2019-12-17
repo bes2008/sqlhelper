@@ -60,4 +60,9 @@ public class MySQLDialect extends AbstractDialect {
     public boolean isSupportsBatchUpdates() {
         return true;
     }
+
+    @Override
+    public boolean isSupportsBatchSql() {
+        return true;
+    }
 }
