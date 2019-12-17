@@ -17,7 +17,9 @@ package com.jn.sqlhelper.common.utils;
 import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
@@ -149,6 +151,14 @@ public class SQLs {
                 "]".equals(tok) ||
                 "[".equals(tok) ||
                 "'".equals(tok);
+    }
+
+    public static boolean isSupportsBatchUpdates(Connection conn) {
+        try {
+            return new DatabaseDescription(conn.getMetaData()).supportsBatchUpdates();
+        } catch (SQLException ex) {
+            return false;
+        }
     }
 
 }
