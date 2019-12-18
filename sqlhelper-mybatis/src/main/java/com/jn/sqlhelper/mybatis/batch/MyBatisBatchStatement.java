@@ -12,10 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.batch;
+package com.jn.sqlhelper.mybatis.batch;
 
-public interface BatchStatement<S> {
-    BatchType getBatchType();
-    void setBatchType(BatchType batchType);
-    String getSql();
+public class MyBatisBatchStatement {
 }

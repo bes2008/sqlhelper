@@ -14,56 +14,41 @@
 
 package com.jn.sqlhelper.mybatis.batch;
 
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchType;
+import com.jn.sqlhelper.common.batch.BatchUpdater;
 import com.jn.sqlhelper.mybatis.mapper.BaseMapper;
-import com.jn.sqlhelper.mybatis.mapper.Entity;
 import org.apache.ibatis.session.SqlSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class SimpleBatchUpdater<E extends Entity<ID>, ID> extends MybatisBatchUpdater<E> {
-    private static final Logger logger = LoggerFactory.getLogger(SimpleBatchUpdater.class);
+public class BatchSqlBatchUpdater<E> implements BatchUpdater<E> {
+    private SqlSession session;
+    private Class<E> mapperClass;
 
     @Override
-    public BatchResult<E> batchUpdate(BatchStatement statement, List<E> entities) throws SQLException {
+    public BatchResult batchUpdate(BatchStatement statement, List<E> beans) throws SQLException {
         Preconditions.checkNotNull(statement);
-        Preconditions.checkArgument(statement.getBatchType() == BatchType.SIMPLE);
+        Preconditions.checkArgument(statement.getBatchType() == BatchType.JDBC_BATCH);
+        Preconditions.checkArgument(Emptys.isNotEmpty(statement.getSql()), "the sql id is null");
 
-        Preconditions.checkNotNull(sessionFactory);
+        Preconditions.checkNotNull(session);
         Preconditions.checkNotNull(mapperClass);
-        SqlSession session = sessionFactory.openSession();
+
         final BaseMapper mapper = (BaseMapper) session.getMapper(mapperClass);
-        int updated = 0;
         String method = statement.getSql();
-        for (int i = 0; i < entities.size(); i++) {
-            E entity = entities.get(i);
-            if (Objects.isNull(method) || (!INSERT.equals(method) && !UPDATE.equals(method))) {
-                E o = (E) mapper.selectById(entity.getId());
-                if (o != null) {
-                    mapper.update(entity);
-                } else {
-                    mapper.insert(entity);
-                }
-                updated++;
-            } else {
-                if (INSERT.equals(method)) {
-                    mapper.insert(entity);
-                } else {
-                    mapper.update(entity);
-                }
-            }
+        if (Objects.isNotNull(method)) {
+            Reflects.invokePublicMethod(mapper, method, new Class[]{List.class}, new Object[]{beans}, true, true);
         }
         BatchResult<E> result = new BatchResult<E>();
-        result.setParameters(entities);
+        result.setParameters(beans);
         result.setStatement(statement);
-        result.setRowsAffected(updated);
         return result;
     }
 }

@@ -12,10 +12,16 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.batch;
+package com.jn.sqlhelper.mybatis.batch;
 
-public interface BatchStatement<S> {
-    BatchType getBatchType();
-    void setBatchType(BatchType batchType);
-    String getSql();
+import com.jn.sqlhelper.common.batch.BatchUpdater;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+public abstract class MybatisBatchUpdater<E> implements BatchUpdater<E> {
+
+    public static final String INSERT = "insert";
+    public static final String UPDATE = "update";
+
+    protected SqlSessionFactory sessionFactory;
+    protected Class<E> mapperClass;
 }
