@@ -15,13 +15,11 @@
 package com.jn.sqlhelper.mybatis.batch;
 
 import com.jn.langx.util.Emptys;
-import com.jn.langx.util.Objects;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchType;
-import com.jn.sqlhelper.mybatis.mapper.BaseMapper;
 import org.apache.ibatis.session.SqlSession;
 
 import java.sql.SQLException;
@@ -33,17 +31,16 @@ public class BatchSqlBatchUpdater<E> extends MybatisBatchUpdater<E> {
     public BatchResult batchUpdate(BatchStatement statement, List<E> beans) throws SQLException {
         Preconditions.checkNotNull(statement);
         Preconditions.checkArgument(statement.getBatchType() == BatchType.JDBC_BATCH);
+        Preconditions.checkNotNull(statement.getSql(), "Sql statement id is null");
         Preconditions.checkArgument(Emptys.isNotEmpty(statement.getSql()), "the sql id is null");
 
         Preconditions.checkNotNull(sessionFactory);
         Preconditions.checkNotNull(mapperClass);
 
         SqlSession session = sessionFactory.openSession(true);
-        final BaseMapper mapper = (BaseMapper) session.getMapper(mapperClass);
-        String method = statement.getSql();
-        if (Objects.isNotNull(method)) {
-            Reflects.invokePublicMethod(mapper, method, new Class[]{List.class}, new Object[]{beans}, true, true);
-        }
+        String statementId = statement.getSql();
+        statementId = Reflects.getFQNClassName(mapperClass) + "." + statementId;
+        session.update(statementId, beans);
         BatchResult<E> result = new BatchResult<E>();
         result.setParameters(beans);
         result.setStatement(statement);
