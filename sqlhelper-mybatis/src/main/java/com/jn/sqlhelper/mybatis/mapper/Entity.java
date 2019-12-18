@@ -14,35 +14,6 @@
 
 package com.jn.sqlhelper.mybatis.mapper;
 
-import java.util.List;
-
-public interface BaseMapper<E extends Entity<ID>, ID> {
-    void insert(E entity);
-
-    void update(E entity);
-
-    void delete(E entity);
-
-    void merge(E entity);
-
-    void deleteById(ID id);
-
-    void updateById(ID id);
-
-    E selectById(ID id);
-
-    void deleteByIds(List<ID> ids);
-
-    List<E> selectByIds(List<ID> ids);
-
-    void update(List<E> entities);
-
-    List<E> selectAll();
-
-    Integer selectTotalCount();
-
-    List<E> selectByLimit(E limit);
-
-    Integer selectCountByLimit(E limit);
-
+public interface Entity<ID> {
+    ID getId();
 }
