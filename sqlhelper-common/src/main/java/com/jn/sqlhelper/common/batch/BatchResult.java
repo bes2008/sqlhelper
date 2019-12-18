@@ -19,7 +19,7 @@ import java.util.List;
 public class BatchResult<E> {
     private BatchStatement statement;
     private List<E> parameters;
-    private int updated;
+    private int rowsAffected;
 
     public BatchStatement getStatement() {
         return statement;
@@ -37,12 +37,12 @@ public class BatchResult<E> {
         this.parameters = parameters;
     }
 
-    public int getUpdated() {
-        return updated;
+    public int getRowsAffected() {
+        return rowsAffected;
     }
 
-    public void setUpdated(int updated) {
-        this.updated = updated;
+    public void setRowsAffected(int rowsAffected) {
+        this.rowsAffected = rowsAffected;
     }
 
     public String getSql(){

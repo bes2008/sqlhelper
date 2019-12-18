@@ -14,9 +14,11 @@
 
 package com.jn.sqlhelper.common.batch.jdbc;
 
+import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.batch.BatchStatement;
-import com.jn.sqlhelper.common.batch.SqlBatchUpdater;
+import com.jn.sqlhelper.common.batch.BatchType;
+import com.jn.sqlhelper.common.batch.BatchUpdater;
 import com.jn.sqlhelper.common.statement.PreparedStatementSetter;
 
 import java.sql.Connection;
@@ -24,22 +26,21 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class JdbcSqlBatchUpdater<E> implements SqlBatchUpdater<E> {
+public class BatchSqlBatchUpdater implements BatchUpdater {
     Connection connection;
-    PreparedStatementSetter<E> setter;
+    PreparedStatementSetter setter;
 
     @Override
-    public BatchResult<E> batchUpdate(BatchStatement statement, List<E> parametersList) throws SQLException {
+    public BatchResult batchUpdate(BatchStatement statement, List parameters) throws SQLException {
+        Preconditions.checkNotNull(statement);
+        Preconditions.checkArgument(statement.getBatchType() == BatchType.BATCH_SQL);
         PreparedStatement pstmt = connection.prepareStatement(statement.getSql());
-        for (int i = 0; i < parametersList.size(); i++) {
-            setter.setParameters(pstmt, 1, parametersList.get(i));
-            pstmt.addBatch();
-        }
-        int[] updateds = pstmt.executeBatch();
-        BatchResult<E> result = new BatchResult<E>();
-        result.setParameters(parametersList);
+        setter.setParameters(pstmt, 1, parameters);
+        int updatedRows = pstmt.executeUpdate();
+        BatchResult result = new BatchResult();
+        result.setRowsAffected(updatedRows);
         result.setStatement(statement);
-        result.setUpdated(updateds[0]);
+        result.setParameters(parameters);
         return result;
     }
 }
