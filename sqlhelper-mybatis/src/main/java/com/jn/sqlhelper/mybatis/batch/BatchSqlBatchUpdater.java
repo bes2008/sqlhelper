@@ -40,10 +40,11 @@ public class BatchSqlBatchUpdater<E> extends MybatisBatchUpdater<E> {
         SqlSession session = sessionFactory.openSession(true);
         String statementId = statement.getSql();
         statementId = Reflects.getFQNClassName(mapperClass) + "." + statementId;
-        session.update(statementId, beans);
+        int updated = session.update(statementId, beans);
         BatchResult<E> result = new BatchResult<E>();
         result.setParameters(beans);
         result.setStatement(statement);
+        result.setRowsAffected(updated);
         return result;
     }
 }
