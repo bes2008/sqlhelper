@@ -18,7 +18,6 @@ import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchType;
-import com.jn.sqlhelper.common.batch.BatchUpdater;
 import com.jn.sqlhelper.mybatis.mapper.BaseMapper;
 import com.jn.sqlhelper.mybatis.mapper.Entity;
 import org.apache.ibatis.session.ExecutorType;
@@ -26,8 +25,6 @@ import org.apache.ibatis.session.SqlSession;
 
 import java.sql.SQLException;
 import java.util.List;
-
-import static com.jn.sqlhelper.mybatis.batch.MybatisBatchUpdater.INSERT;
 
 public class BatchExecutorBatchUpdater<E extends Entity<ID>, ID> extends MybatisBatchUpdater<E> {
 
