@@ -37,20 +37,24 @@ public class BatchExecutorBatchUpdater<E extends Entity<ID>, ID> extends Mybatis
 
         SqlSession session = sessionFactory.openSession(ExecutorType.BATCH);
         final BaseMapper mapper = (BaseMapper) session.getMapper(mapperClass);
-        int updated = 0;
         String method = statement.getSql();
-        for (int i = 0; i < entities.size(); i++) {
-            E entity = entities.get(i);
-            if (INSERT.equals(method)) {
-                mapper.insert(entity);
-            } else {
-                mapper.update(entity);
-            }
-        }
         BatchResult<E> result = new BatchResult<E>();
         result.setParameters(entities);
         result.setStatement(statement);
-        result.setRowsAffected(updated);
+        try {
+            int updated = 0;
+            for (int i = 0; i < entities.size(); i++) {
+                E entity = entities.get(i);
+                if (INSERT.equals(method)) {
+                    mapper.insert(entity);
+                } else {
+                    mapper.update(entity);
+                }
+            }
+            session.commit();
+        }finally {
+            session.close();
+        }
         return result;
     }
 }

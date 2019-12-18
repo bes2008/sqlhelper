@@ -21,16 +21,13 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchType;
-import com.jn.sqlhelper.common.batch.BatchUpdater;
 import com.jn.sqlhelper.mybatis.mapper.BaseMapper;
 import org.apache.ibatis.session.SqlSession;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class BatchSqlBatchUpdater<E> implements BatchUpdater<E> {
-    private SqlSession session;
-    private Class<E> mapperClass;
+public class BatchSqlBatchUpdater<E> extends MybatisBatchUpdater<E> {
 
     @Override
     public BatchResult batchUpdate(BatchStatement statement, List<E> beans) throws SQLException {
@@ -38,9 +35,10 @@ public class BatchSqlBatchUpdater<E> implements BatchUpdater<E> {
         Preconditions.checkArgument(statement.getBatchType() == BatchType.JDBC_BATCH);
         Preconditions.checkArgument(Emptys.isNotEmpty(statement.getSql()), "the sql id is null");
 
-        Preconditions.checkNotNull(session);
+        Preconditions.checkNotNull(sessionFactory);
         Preconditions.checkNotNull(mapperClass);
 
+        SqlSession session = sessionFactory.openSession(true);
         final BaseMapper mapper = (BaseMapper) session.getMapper(mapperClass);
         String method = statement.getSql();
         if (Objects.isNotNull(method)) {

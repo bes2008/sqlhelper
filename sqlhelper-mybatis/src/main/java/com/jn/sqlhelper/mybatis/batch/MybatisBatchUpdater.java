@@ -24,4 +24,20 @@ public abstract class MybatisBatchUpdater<E> implements BatchUpdater<E> {
 
     protected SqlSessionFactory sessionFactory;
     protected Class<E> mapperClass;
+
+    public SqlSessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SqlSessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public Class<E> getMapperClass() {
+        return mapperClass;
+    }
+
+    public void setMapperClass(Class<E> mapperClass) {
+        this.mapperClass = mapperClass;
+    }
 }

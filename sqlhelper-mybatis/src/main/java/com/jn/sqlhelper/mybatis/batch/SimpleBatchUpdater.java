@@ -38,7 +38,7 @@ public class SimpleBatchUpdater<E extends Entity<ID>, ID> extends MybatisBatchUp
 
         Preconditions.checkNotNull(sessionFactory);
         Preconditions.checkNotNull(mapperClass);
-        SqlSession session = sessionFactory.openSession();
+        SqlSession session = sessionFactory.openSession(true);
         final BaseMapper mapper = (BaseMapper) session.getMapper(mapperClass);
         int updated = 0;
         String method = statement.getSql();
