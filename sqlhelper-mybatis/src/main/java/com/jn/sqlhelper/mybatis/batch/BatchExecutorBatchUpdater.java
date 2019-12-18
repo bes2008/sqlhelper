@@ -52,7 +52,9 @@ public class BatchExecutorBatchUpdater<E extends Entity<ID>, ID> extends Mybatis
                 }
             }
             session.commit();
-        }finally {
+        } catch (Exception ex) {
+            session.rollback(true);
+        } finally {
             session.close();
         }
         return result;
