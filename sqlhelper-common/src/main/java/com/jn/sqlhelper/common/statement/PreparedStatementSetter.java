@@ -12,11 +12,11 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.batch;
+package com.jn.sqlhelper.common.statement;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
-public interface SqlBatchUpdater<E> {
-    BatchResult<E> batchUpdate(BatchStatement statement, List<E> parametersList) throws SQLException;
+public interface PreparedStatementSetter<P> {
+    void setParameters(PreparedStatement statement, int startIndex, P parameter) throws SQLException;
 }

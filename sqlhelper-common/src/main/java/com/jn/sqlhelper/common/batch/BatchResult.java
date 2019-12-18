@@ -19,6 +19,7 @@ import java.util.List;
 public class BatchResult<E> {
     private BatchStatement statement;
     private List<E> parameters;
+    private int updated;
 
     public BatchStatement getStatement() {
         return statement;
@@ -34,6 +35,14 @@ public class BatchResult<E> {
 
     public void setParameters(List<E> parameters) {
         this.parameters = parameters;
+    }
+
+    public int getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(int updated) {
+        this.updated = updated;
     }
 
     public String getSql(){
