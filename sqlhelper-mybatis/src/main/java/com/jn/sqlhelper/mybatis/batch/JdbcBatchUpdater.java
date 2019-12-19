@@ -57,7 +57,7 @@ public class JdbcBatchUpdater<E extends Entity<ID>, ID> extends MybatisBatchUpda
                     result.addThrowable(ex);
                 }
             }
-            session.commit();
+            session.commit(true);
         } catch (Exception ex) {
             result.addThrowable(ex);
             updated = 0;
