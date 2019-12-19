@@ -14,13 +14,11 @@
 
 package com.jn.sqlhelper.mybatis.batch;
 
-import com.jn.langx.util.Objects;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchType;
-import com.jn.sqlhelper.mybatis.mapper.BaseMapper;
-import com.jn.sqlhelper.mybatis.mapper.Entity;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SimpleBatchUpdater<E extends Entity<ID>, ID> extends MybatisBatchUpdater<E> {
+public class SimpleBatchUpdater<E> extends MybatisBatchUpdater<E> {
     private static final Logger logger = LoggerFactory.getLogger(SimpleBatchUpdater.class);
 
     @Override
@@ -39,30 +37,36 @@ public class SimpleBatchUpdater<E extends Entity<ID>, ID> extends MybatisBatchUp
         Preconditions.checkNotNull(sessionFactory);
         Preconditions.checkNotNull(mapperClass);
         SqlSession session = sessionFactory.openSession(true);
-        final BaseMapper mapper = (BaseMapper) session.getMapper(mapperClass);
-        int updated = 0;
-        String method = statement.getSql();
-        for (int i = 0; i < entities.size(); i++) {
-            E entity = entities.get(i);
-            if (Objects.isNull(method) || (!INSERT.equals(method) && !UPDATE.equals(method))) {
-                E o = (E) mapper.selectById(entity.getId());
-                if (o != null) {
-                    mapper.update(entity);
-                } else {
-                    mapper.insert(entity);
-                }
-                updated++;
-            } else {
-                if (INSERT.equals(method)) {
-                    mapper.insert(entity);
-                } else {
-                    mapper.update(entity);
-                }
-            }
-        }
+
         BatchResult<E> result = new BatchResult<E>();
         result.setParameters(entities);
         result.setStatement(statement);
+        String statementId = statement.getSql();
+        String statementIdFQN = Reflects.getFQNClassName(mapperClass) + "." + statementId;
+        int updated = 0;
+        try {
+            for (E entity : entities) {
+                try {
+                    if (statementId.contains(INSERT)) {
+                        updated = updated + session.insert(statementIdFQN, entity);
+                    } else if (statementId.contains(UPDATE)) {
+                        updated = updated + session.update(statementIdFQN, entity);
+                    } else if (statementId.contains(DELETE)) {
+                        updated = updated + session.delete(statementIdFQN, entity);
+                    }
+                    updated++;
+                } catch (Exception ex) {
+                    result.addThrowable(ex);
+                }
+            }
+            session.commit(true);
+        } catch (Exception ex) {
+            result.addThrowable(ex);
+            updated = 0;
+        } finally {
+            session.close();
+        }
+
         result.setRowsAffected(updated);
         return result;
     }

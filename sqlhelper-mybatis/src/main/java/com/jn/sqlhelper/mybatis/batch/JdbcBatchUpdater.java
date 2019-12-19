@@ -19,14 +19,13 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchType;
-import com.jn.sqlhelper.mybatis.mapper.Entity;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class JdbcBatchUpdater<E extends Entity<ID>, ID> extends MybatisBatchUpdater<E> {
+public class JdbcBatchUpdater<E> extends MybatisBatchUpdater<E> {
 
     @Override
     public BatchResult<E> batchUpdate(BatchStatement statement, List<E> entities) throws SQLException {
@@ -36,10 +35,11 @@ public class JdbcBatchUpdater<E extends Entity<ID>, ID> extends MybatisBatchUpda
         Preconditions.checkNotNull(mapperClass);
 
         SqlSession session = sessionFactory.openSession(ExecutorType.BATCH);
-        String statementId = statement.getSql();
         BatchResult<E> result = new BatchResult<E>();
         result.setParameters(entities);
         result.setStatement(statement);
+
+        String statementId = statement.getSql();
         String statementIdFQN = Reflects.getFQNClassName(mapperClass) + "." + statementId;
         int updated = 0;
         try {
