@@ -14,9 +14,12 @@
 
 package com.jn.sqlhelper.mybatis;
 
+import com.jn.langx.annotation.NonNull;
+import com.jn.sqlhelper.mybatis.batch.MybatisBatchStatement;
 import com.jn.sqlhelper.mybatis.plugins.pagination.CustomVendorDatabaseIdProvider;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 public class MybatisUtils {
     private static VendorDatabaseIdProvider vendorDatabaseIdProvider;
@@ -34,5 +37,9 @@ public class MybatisUtils {
             return false;
         }
         return rowBounds.getOffset() != RowBounds.NO_ROW_OFFSET || rowBounds.getLimit() != RowBounds.NO_ROW_LIMIT;
+    }
+
+    public static boolean hasStatement(@NonNull SqlSessionFactory sessionFactory, String statementName){
+        return sessionFactory.getConfiguration().hasStatement(statementName);
     }
 }
