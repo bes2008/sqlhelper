@@ -14,8 +14,8 @@
 
 package com.jn.sqlhelper.mybatis.batch;
 
+import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.Preconditions;
-import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.batch.BatchType;
 import org.apache.ibatis.session.SqlSession;
@@ -33,14 +33,13 @@ public class SimpleBatchUpdater<E> extends MybatisBatchUpdater<E> {
         Preconditions.checkNotNull(sessionFactory);
         Preconditions.checkNotNull(statement);
         Preconditions.checkArgument(statement.getBatchType() == BatchType.SIMPLE);
-        Preconditions.checkNotNull(statement.getMapperClass());
         SqlSession session = sessionFactory.openSession(true);
 
         BatchResult<E> result = new BatchResult<E>();
         result.setParameters(entities);
         result.setStatement(statement);
-        String statementId = statement.getSql();
-        String statementIdFQN = Reflects.getFQNClassName(statement.getMapperClass()) + "." + statementId;
+        String statementId = statement.getStatementId();
+        String statementIdFQN = statement.getSql();
         int updated = 0;
         try {
             for (E entity : entities) {
@@ -54,11 +53,13 @@ public class SimpleBatchUpdater<E> extends MybatisBatchUpdater<E> {
                     }
                     updated++;
                 } catch (Exception ex) {
+                    logger.error("Error occur when execute batch statement: {} with parameter: {}", statementIdFQN, JSONBuilderProvider.simplest().toJson(entity));
                     result.addThrowable(ex);
                 }
             }
             session.commit(true);
         } catch (Exception ex) {
+            logger.error("Error occur when execute batch statement: {}", statementIdFQN);
             result.addThrowable(ex);
             updated = 0;
         } finally {

@@ -14,6 +14,9 @@
 
 package com.jn.sqlhelper.mybatis.batch;
 
+import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchType;
 
@@ -33,7 +36,7 @@ public class MybatisBatchStatement implements BatchStatement<String> {
     public MybatisBatchStatement(BatchType batchType, Class mapperClass, String statementId) {
         setBatchType(batchType);
         setMapperClass(mapperClass);
-        setSql(statementId);
+        setStatementId(statementId);
     }
 
     @Override
@@ -46,12 +49,11 @@ public class MybatisBatchStatement implements BatchStatement<String> {
         this.batchType = batchType;
     }
 
-    @Override
-    public String getSql() {
+    public String getStatementId() {
         return statementId;
     }
 
-    public void setSql(String statementId) {
+    public void setStatementId(String statementId) {
         this.statementId = statementId;
     }
 
@@ -62,4 +64,12 @@ public class MybatisBatchStatement implements BatchStatement<String> {
     public void setMapperClass(Class mapperClass) {
         this.mapperClass = mapperClass;
     }
+
+    @Override
+    public String getSql() {
+        Preconditions.checkNotNull(Emptys.isNotEmpty(statementId), "Sql statement id is null");
+        Preconditions.checkNotNull(mapperClass, "The mapper class is null");
+        return Reflects.getFQNClassName(mapperClass) + "." + statementId;
+    }
+
 }
