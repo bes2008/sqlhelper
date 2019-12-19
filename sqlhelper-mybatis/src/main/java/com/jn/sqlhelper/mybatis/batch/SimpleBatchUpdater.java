@@ -17,7 +17,6 @@ package com.jn.sqlhelper.mybatis.batch;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchResult;
-import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchType;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
