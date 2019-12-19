@@ -15,10 +15,10 @@
 package com.jn.sqlhelper.mybatis.batch;
 
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchType;
-import com.jn.sqlhelper.mybatis.mapper.BaseMapper;
 import com.jn.sqlhelper.mybatis.mapper.Entity;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -26,7 +26,7 @@ import org.apache.ibatis.session.SqlSession;
 import java.sql.SQLException;
 import java.util.List;
 
-public class BatchExecutorBatchUpdater<E extends Entity<ID>, ID> extends MybatisBatchUpdater<E> {
+public class JdbcBatchUpdater<E extends Entity<ID>, ID> extends MybatisBatchUpdater<E> {
 
     @Override
     public BatchResult<E> batchUpdate(BatchStatement statement, List<E> entities) throws SQLException {
@@ -36,27 +36,35 @@ public class BatchExecutorBatchUpdater<E extends Entity<ID>, ID> extends Mybatis
         Preconditions.checkNotNull(mapperClass);
 
         SqlSession session = sessionFactory.openSession(ExecutorType.BATCH);
-        final BaseMapper mapper = (BaseMapper) session.getMapper(mapperClass);
-        String method = statement.getSql();
+        String statementId = statement.getSql();
         BatchResult<E> result = new BatchResult<E>();
         result.setParameters(entities);
         result.setStatement(statement);
+        String statementIdFQN = Reflects.getFQNClassName(mapperClass) + "." + statementId;
+        int updated = 0;
         try {
-            int updated = 0;
-            for (int i = 0; i < entities.size(); i++) {
-                E entity = entities.get(i);
-                if (INSERT.equals(method)) {
-                    mapper.insert(entity);
-                } else {
-                    mapper.update(entity);
+            for (E entity : entities) {
+                try {
+                    if (statementId.contains(INSERT)) {
+                        updated = updated + session.insert(statementIdFQN, entity);
+                    } else if (statementId.contains(UPDATE)) {
+                        updated = updated + session.update(statementIdFQN, entity);
+                    } else if (statementId.contains(DELETE)) {
+                        updated = updated + session.delete(statementIdFQN, entity);
+                    }
+                    updated++;
+                } catch (Exception ex) {
+                    result.addThrowable(ex);
                 }
             }
             session.commit();
         } catch (Exception ex) {
-            session.rollback(true);
+            result.addThrowable(ex);
+            updated = 0;
         } finally {
             session.close();
         }
+        result.setRowsAffected(updated);
         return result;
     }
 }

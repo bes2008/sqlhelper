@@ -21,6 +21,9 @@ public abstract class MybatisBatchUpdater<E> implements BatchUpdater<E> {
 
     public static final String INSERT = "insert";
     public static final String UPDATE = "update";
+    public static final String UPDATE_BY_ID = "updateById";
+    public static final String DELETE = "delete";
+    public static final String DELETE_BY_ID = "deleteById";
 
     protected SqlSessionFactory sessionFactory;
     protected Class<E> mapperClass;

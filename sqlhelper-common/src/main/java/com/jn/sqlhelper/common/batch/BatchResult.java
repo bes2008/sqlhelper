@@ -14,12 +14,16 @@
 
 package com.jn.sqlhelper.common.batch;
 
+import com.jn.langx.util.collection.Collects;
+
 import java.util.List;
+import java.util.Set;
 
 public class BatchResult<E> {
     private BatchStatement statement;
     private List<E> parameters;
     private int rowsAffected;
+    private final Set<Throwable> throwables = Collects.newLinkedHashSet();
 
     public BatchStatement getStatement() {
         return statement;
@@ -45,7 +49,23 @@ public class BatchResult<E> {
         this.rowsAffected = rowsAffected;
     }
 
-    public String getSql(){
+    public List<Throwable> getThrowables() {
+        return Collects.asList(throwables);
+    }
+
+    public void setThrowables(List<Throwable> throwables) {
+        this.throwables.addAll(throwables);
+    }
+
+    public void addThrowable(Throwable ex) {
+        this.throwables.add(ex);
+    }
+
+    public boolean hasThrowable() {
+        return !this.throwables.isEmpty();
+    }
+
+    public String getSql() {
         return statement.getSql();
     }
 }
