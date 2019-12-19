@@ -18,14 +18,19 @@ import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.batch.BatchType;
+import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
+import com.jn.sqlhelper.common.utils.SQLs;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class JdbcBatchUpdater<E> extends MybatisBatchUpdater<E> {
-
+    private static final Logger logger = LoggerFactory.getLogger(JdbcBatchUpdater.class);
     @Override
     public BatchResult<E> batchUpdate(MybatisBatchStatement statement, List<E> entities) throws SQLException {
         Preconditions.checkNotNull(statement);
@@ -34,6 +39,11 @@ public class JdbcBatchUpdater<E> extends MybatisBatchUpdater<E> {
         Preconditions.checkNotNull(statement.getMapperClass());
 
         SqlSession session = sessionFactory.openSession(ExecutorType.BATCH);
+        Connection connection = session.getConnection();
+        DatabaseDescription databaseDescription = new DatabaseDescription(connection.getMetaData());
+        if(!databaseDescription.supportsBatchUpdates()){
+            logger.error("Batch update is no supported in current database: {}", databaseDescription.getDbMetaData().getDatabaseProductName());
+        }
         BatchResult<E> result = new BatchResult<E>();
         result.setParameters(entities);
         result.setStatement(statement);
