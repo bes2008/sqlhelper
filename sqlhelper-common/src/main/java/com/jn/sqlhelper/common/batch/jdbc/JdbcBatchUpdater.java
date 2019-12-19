@@ -26,12 +26,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class JdbcBatchUpdater<E> implements BatchUpdater<E> {
+public class JdbcBatchUpdater<E, STATEMENT extends BatchStatement<String>> implements BatchUpdater<E, String, STATEMENT> {
     Connection connection;
     PreparedStatementSetter<E> setter;
 
     @Override
-    public BatchResult<E> batchUpdate(BatchStatement statement, List<E> parametersList) throws SQLException {
+    public BatchResult<E> batchUpdate(STATEMENT statement, List<E> parametersList) throws SQLException {
         Preconditions.checkNotNull(statement);
         Preconditions.checkArgument(statement.getBatchType() == BatchType.JDBC_BATCH);
         PreparedStatement pstmt = connection.prepareStatement(statement.getSql());

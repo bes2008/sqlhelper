@@ -17,6 +17,6 @@ package com.jn.sqlhelper.common.batch;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface BatchUpdater<E> {
-    BatchResult<E> batchUpdate(BatchStatement statement, List<E> parametersList) throws SQLException;
+public interface BatchUpdater<E, SQL, STATEMENT extends BatchStatement<SQL>> {
+    BatchResult<E> batchUpdate(STATEMENT statement, List<E> parametersList) throws SQLException;
 }

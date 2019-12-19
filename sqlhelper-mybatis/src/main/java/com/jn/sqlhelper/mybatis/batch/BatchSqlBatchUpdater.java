@@ -18,7 +18,6 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchResult;
-import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchType;
 import org.apache.ibatis.session.SqlSession;
 
@@ -28,18 +27,18 @@ import java.util.List;
 public class BatchSqlBatchUpdater<E> extends MybatisBatchUpdater<E> {
 
     @Override
-    public BatchResult batchUpdate(BatchStatement statement, List<E> beans) throws SQLException {
+    public BatchResult batchUpdate(MybatisBatchStatement statement, List<E> beans) throws SQLException {
         Preconditions.checkNotNull(statement);
         Preconditions.checkArgument(statement.getBatchType() == BatchType.JDBC_BATCH);
         Preconditions.checkNotNull(statement.getSql(), "Sql statement id is null");
         Preconditions.checkArgument(Emptys.isNotEmpty(statement.getSql()), "the sql id is null");
 
         Preconditions.checkNotNull(sessionFactory);
-        Preconditions.checkNotNull(mapperClass);
+        Preconditions.checkNotNull(statement.getMapperClass());
 
         SqlSession session = sessionFactory.openSession(true);
         String statementId = statement.getSql();
-        statementId = Reflects.getFQNClassName(mapperClass) + "." + statementId;
+        statementId = Reflects.getFQNClassName(statement.getMapperClass()) + "." + statementId;
         int updated = session.update(statementId, beans);
         BatchResult<E> result = new BatchResult<E>();
         result.setParameters(beans);

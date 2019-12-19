@@ -26,12 +26,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SimpleBatchUpdater<E> implements BatchUpdater<E> {
+public class SimpleBatchUpdater<E, STATEMENT extends BatchStatement<String>> implements BatchUpdater<E, String, STATEMENT> {
     Connection connection;
     PreparedStatementSetter<E> setter;
 
     @Override
-    public BatchResult<E> batchUpdate(BatchStatement statement, List<E> parametersList) throws SQLException {
+    public BatchResult<E> batchUpdate(STATEMENT statement, List<E> parametersList) throws SQLException {
         Preconditions.checkNotNull(statement);
         Preconditions.checkArgument(statement.getBatchType() == BatchType.SIMPLE);
         int sum = 0;

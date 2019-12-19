@@ -30,19 +30,18 @@ public class SimpleBatchUpdater<E> extends MybatisBatchUpdater<E> {
     private static final Logger logger = LoggerFactory.getLogger(SimpleBatchUpdater.class);
 
     @Override
-    public BatchResult<E> batchUpdate(BatchStatement statement, List<E> entities) throws SQLException {
+    public BatchResult<E> batchUpdate(MybatisBatchStatement statement, List<E> entities) throws SQLException {
+        Preconditions.checkNotNull(sessionFactory);
         Preconditions.checkNotNull(statement);
         Preconditions.checkArgument(statement.getBatchType() == BatchType.SIMPLE);
-
-        Preconditions.checkNotNull(sessionFactory);
-        Preconditions.checkNotNull(mapperClass);
+        Preconditions.checkNotNull(statement.getMapperClass());
         SqlSession session = sessionFactory.openSession(true);
 
         BatchResult<E> result = new BatchResult<E>();
         result.setParameters(entities);
         result.setStatement(statement);
         String statementId = statement.getSql();
-        String statementIdFQN = Reflects.getFQNClassName(mapperClass) + "." + statementId;
+        String statementIdFQN = Reflects.getFQNClassName(statement.getMapperClass()) + "." + statementId;
         int updated = 0;
         try {
             for (E entity : entities) {

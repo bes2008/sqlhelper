@@ -17,7 +17,7 @@ package com.jn.sqlhelper.mybatis.batch;
 import com.jn.sqlhelper.common.batch.BatchUpdater;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-public abstract class MybatisBatchUpdater<E> implements BatchUpdater<E> {
+public abstract class MybatisBatchUpdater<E> implements BatchUpdater<E, String, MybatisBatchStatement> {
 
     public static final String INSERT = "insert";
     public static final String UPDATE = "update";
@@ -26,7 +26,6 @@ public abstract class MybatisBatchUpdater<E> implements BatchUpdater<E> {
     public static final String DELETE_BY_ID = "deleteById";
 
     protected SqlSessionFactory sessionFactory;
-    protected Class<E> mapperClass;
 
     public SqlSessionFactory getSessionFactory() {
         return sessionFactory;
@@ -36,11 +35,4 @@ public abstract class MybatisBatchUpdater<E> implements BatchUpdater<E> {
         this.sessionFactory = sessionFactory;
     }
 
-    public Class<E> getMapperClass() {
-        return mapperClass;
-    }
-
-    public void setMapperClass(Class<E> mapperClass) {
-        this.mapperClass = mapperClass;
-    }
 }

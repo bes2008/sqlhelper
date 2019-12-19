@@ -17,7 +17,6 @@ package com.jn.sqlhelper.mybatis.batch;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchResult;
-import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchType;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -28,11 +27,11 @@ import java.util.List;
 public class JdbcBatchUpdater<E> extends MybatisBatchUpdater<E> {
 
     @Override
-    public BatchResult<E> batchUpdate(BatchStatement statement, List<E> entities) throws SQLException {
+    public BatchResult<E> batchUpdate(MybatisBatchStatement statement, List<E> entities) throws SQLException {
         Preconditions.checkNotNull(statement);
         Preconditions.checkArgument(statement.getBatchType() == BatchType.SIMPLE);
         Preconditions.checkNotNull(sessionFactory);
-        Preconditions.checkNotNull(mapperClass);
+        Preconditions.checkNotNull(statement.getMapperClass());
 
         SqlSession session = sessionFactory.openSession(ExecutorType.BATCH);
         BatchResult<E> result = new BatchResult<E>();
@@ -40,7 +39,7 @@ public class JdbcBatchUpdater<E> extends MybatisBatchUpdater<E> {
         result.setStatement(statement);
 
         String statementId = statement.getSql();
-        String statementIdFQN = Reflects.getFQNClassName(mapperClass) + "." + statementId;
+        String statementIdFQN = Reflects.getFQNClassName(statement.getMapperClass()) + "." + statementId;
         int updated = 0;
         try {
             for (E entity : entities) {
