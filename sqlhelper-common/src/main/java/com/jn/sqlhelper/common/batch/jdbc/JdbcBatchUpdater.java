@@ -17,7 +17,7 @@ package com.jn.sqlhelper.common.batch.jdbc;
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.batch.BatchStatement;
-import com.jn.sqlhelper.common.batch.BatchType;
+import com.jn.sqlhelper.common.batch.BatchMode;
 import com.jn.sqlhelper.common.batch.BatchUpdater;
 import com.jn.sqlhelper.common.statement.PreparedStatementSetter;
 
@@ -26,14 +26,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class JdbcBatchUpdater<E, STATEMENT extends BatchStatement<String>> implements BatchUpdater<E, String, STATEMENT> {
+public class JdbcBatchUpdater<E, STATEMENT extends BatchStatement> implements BatchUpdater<E, STATEMENT> {
     Connection connection;
     PreparedStatementSetter<E> setter;
 
     @Override
     public BatchResult<E> batchUpdate(STATEMENT statement, List<E> parametersList) throws SQLException {
         Preconditions.checkNotNull(statement);
-        Preconditions.checkArgument(statement.getBatchType() == BatchType.JDBC_BATCH);
+        Preconditions.checkArgument(statement.getBatchType() == BatchMode.JDBC_BATCH);
         PreparedStatement pstmt = connection.prepareStatement(statement.getSql());
         for (int i = 0; i < parametersList.size(); i++) {
             setter.setParameters(pstmt, 1, parametersList.get(i));

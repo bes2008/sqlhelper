@@ -17,7 +17,7 @@ package com.jn.sqlhelper.mybatis.batch;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.common.batch.BatchResult;
-import com.jn.sqlhelper.common.batch.BatchType;
+import com.jn.sqlhelper.common.batch.BatchMode;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class SimpleBatchUpdater<E> extends MybatisBatchUpdater<E> {
     public BatchResult<E> batchUpdate(MybatisBatchStatement statement, List<E> entities) throws SQLException {
         Preconditions.checkNotNull(sessionFactory);
         Preconditions.checkNotNull(statement);
-        Preconditions.checkArgument(statement.getBatchType() == BatchType.SIMPLE);
+        Preconditions.checkArgument(statement.getBatchType() == BatchMode.SIMPLE);
         SqlSession session = sessionFactory.openSession(true);
 
         BatchResult<E> result = new BatchResult<E>();

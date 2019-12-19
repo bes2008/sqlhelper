@@ -18,10 +18,10 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchStatement;
-import com.jn.sqlhelper.common.batch.BatchType;
+import com.jn.sqlhelper.common.batch.BatchMode;
 
-public class MybatisBatchStatement implements BatchStatement<String> {
-    private BatchType batchType = BatchType.JDBC_BATCH;
+public class MybatisBatchStatement implements BatchStatement {
+    private BatchMode batchType = BatchMode.JDBC_BATCH;
     private String statementId;
     private Class mapperClass;
 
@@ -30,22 +30,22 @@ public class MybatisBatchStatement implements BatchStatement<String> {
     }
 
     public MybatisBatchStatement(Class mapperClass, String statementId) {
-        this(BatchType.JDBC_BATCH, mapperClass, statementId);
+        this(BatchMode.JDBC_BATCH, mapperClass, statementId);
     }
 
-    public MybatisBatchStatement(BatchType batchType, Class mapperClass, String statementId) {
+    public MybatisBatchStatement(BatchMode batchType, Class mapperClass, String statementId) {
         setBatchType(batchType);
         setMapperClass(mapperClass);
         setStatementId(statementId);
     }
 
     @Override
-    public BatchType getBatchType() {
+    public BatchMode getBatchType() {
         return batchType;
     }
 
     @Override
-    public void setBatchType(BatchType batchType) {
+    public void setBatchType(BatchMode batchType) {
         this.batchType = batchType;
     }
 

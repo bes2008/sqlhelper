@@ -17,7 +17,7 @@ package com.jn.sqlhelper.mybatis.batch;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.common.batch.BatchResult;
-import com.jn.sqlhelper.common.batch.BatchType;
+import com.jn.sqlhelper.common.batch.BatchMode;
 import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -34,14 +34,14 @@ public class JdbcBatchUpdater<E> extends MybatisBatchUpdater<E> {
     @Override
     public BatchResult<E> batchUpdate(MybatisBatchStatement statement, List<E> entities) throws SQLException {
         Preconditions.checkNotNull(statement);
-        Preconditions.checkArgument(statement.getBatchType() == BatchType.SIMPLE);
+        Preconditions.checkArgument(statement.getBatchType() == BatchMode.SIMPLE);
         Preconditions.checkNotNull(sessionFactory);
 
         SqlSession session = sessionFactory.openSession(ExecutorType.BATCH);
         Connection connection = session.getConnection();
         DatabaseDescription databaseDescription = new DatabaseDescription(connection.getMetaData());
         if (!databaseDescription.supportsBatchUpdates()) {
-            logger.error("Batch update is no supported in current database: {}", databaseDescription.getDbMetaData().getDatabaseProductName());
+            throw new UnsupportedOperationException("batch update");
         }
         BatchResult<E> result = new BatchResult<E>();
         result.setParameters(entities);

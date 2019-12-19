@@ -17,7 +17,7 @@ package com.jn.sqlhelper.mybatis.batch;
 import com.jn.sqlhelper.common.batch.BatchUpdater;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-public abstract class MybatisBatchUpdater<E> implements BatchUpdater<E, String, MybatisBatchStatement> {
+public abstract class MybatisBatchUpdater<E> implements BatchUpdater<E, MybatisBatchStatement> {
 
     public static final String INSERT = "insert";
     public static final String UPDATE = "update";
@@ -34,5 +34,6 @@ public abstract class MybatisBatchUpdater<E> implements BatchUpdater<E, String, 
     public void setSessionFactory(SqlSessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
+
 
 }

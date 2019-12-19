@@ -15,5 +15,5 @@
 package com.jn.sqlhelper.common.batch;
 
 public interface SqlBatchUpdaterFactory {
-    BatchUpdater get(BatchType executorType);
+    BatchUpdater get(BatchMode executorType);
 }
