@@ -15,8 +15,8 @@
 package com.jn.sqlhelper.mybatis.batch;
 
 import com.jn.langx.util.Preconditions;
+import com.jn.sqlhelper.common.batch.BatchMode;
 import com.jn.sqlhelper.common.batch.BatchResult;
-import com.jn.sqlhelper.common.batch.BatchType;
 import org.apache.ibatis.session.SqlSession;
 
 import java.sql.SQLException;
@@ -27,15 +27,21 @@ public class BatchSqlBatchUpdater<E> extends MybatisBatchUpdater<E> {
     @Override
     public BatchResult batchUpdate(MybatisBatchStatement statement, List<E> beans) throws SQLException {
         Preconditions.checkNotNull(statement);
-        Preconditions.checkArgument(statement.getBatchType() == BatchType.JDBC_BATCH);
+        Preconditions.checkArgument(statement.getBatchType() == BatchMode.JDBC_BATCH);
         Preconditions.checkNotNull(sessionFactory);
 
         SqlSession session = sessionFactory.openSession(true);
-        int updated = session.update(statement.getSql(), beans);
         BatchResult<E> result = new BatchResult<E>();
         result.setParameters(beans);
         result.setStatement(statement);
-        result.setRowsAffected(updated);
+        try {
+            int updated = session.update(statement.getSql(), beans);
+            result.setRowsAffected(updated);
+        } catch (Throwable ex) {
+            result.addThrowable(ex);
+        } finally {
+            session.close();
+        }
         return result;
     }
 }
