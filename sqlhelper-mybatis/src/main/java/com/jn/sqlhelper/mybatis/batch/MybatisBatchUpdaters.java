@@ -35,19 +35,19 @@ import java.util.List;
 public class MybatisBatchUpdaters {
     private static final Logger logger = LoggerFactory.getLogger(MybatisBatchUpdaters.class);
 
-    public static <E> MybatisBatchUpdater<E> simpleBatchUpdater(@NonNull SqlSessionFactory sessionFactory) {
-        return batchUpdater(sessionFactory, BatchMode.SIMPLE);
+    public static <E> MybatisBatchUpdater<E> createSimpleBatchUpdater(@NonNull SqlSessionFactory sessionFactory) {
+        return createBatchUpdater(sessionFactory, BatchMode.SIMPLE);
     }
 
-    public static <E> MybatisBatchUpdater<E> batchSqlBatchUpdater(@NonNull SqlSessionFactory sessionFactory) {
-        return batchUpdater(sessionFactory, BatchMode.BATCH_SQL);
+    public static <E> MybatisBatchUpdater<E> createBatchSqlBatchUpdater(@NonNull SqlSessionFactory sessionFactory) {
+        return createBatchUpdater(sessionFactory, BatchMode.BATCH_SQL);
     }
 
-    public static <E> MybatisBatchUpdater<E> jdbcBatchUpdater(@NonNull SqlSessionFactory sessionFactory) {
-        return batchUpdater(sessionFactory, BatchMode.JDBC_BATCH);
+    public static <E> MybatisBatchUpdater<E> createJdbcBatchUpdater(@NonNull SqlSessionFactory sessionFactory) {
+        return createBatchUpdater(sessionFactory, BatchMode.JDBC_BATCH);
     }
 
-    public static <E> MybatisBatchUpdater<E> batchUpdater(@NonNull SqlSessionFactory sessionFactory, @Nullable BatchMode batchType) {
+    public static <E> MybatisBatchUpdater<E> createBatchUpdater(@NonNull SqlSessionFactory sessionFactory, @Nullable BatchMode batchType) {
         MybatisBatchUpdater<E> updater = null;
         if (batchType != null) {
             switch (batchType) {
@@ -83,24 +83,24 @@ public class MybatisBatchUpdaters {
             }
         });
 
-        MybatisBatchUpdater<E> updater = batchUpdater(sessionFactory, batchMode);
+        MybatisBatchUpdater<E> updater = createBatchUpdater(sessionFactory, batchMode);
         if (batchMode != null && updater != null) {
             return updater.batchUpdate(statement, entities);
         }
         BatchResult<E> result = null;
-        updater = batchSqlBatchUpdater(sessionFactory);
+        updater = createBatchSqlBatchUpdater(sessionFactory);
         result = updater.batchUpdate(statement, entities);
         if (!result.hasThrowable()) {
             return result;
         }
         result = null;
         logger.warn("Error when execute batch update based on database's batch sql, may be the statement {} not a batch sql, will use jdbc batch method execute it. error: {}", statement.getSql(), result.getThrowables().get(0));
-        updater = jdbcBatchUpdater(sessionFactory);
+        updater = createJdbcBatchUpdater(sessionFactory);
         try {
             result = updater.batchUpdate(statement, entities);
         } catch (UnsupportedOperationException e2) {
             logger.warn("the database is not supports jdbc update, will use the simple batch mode");
-            updater = simpleBatchUpdater(sessionFactory);
+            updater = createSimpleBatchUpdater(sessionFactory);
             result = updater.batchUpdate(statement, entities);
             if (result.hasThrowable()) {
                 logger.warn("Error when execute batch update based simple batch mode, statement: {}, errors", statement.getSql());
