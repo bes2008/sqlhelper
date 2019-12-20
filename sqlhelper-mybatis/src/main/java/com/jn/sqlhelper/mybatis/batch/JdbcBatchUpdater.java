@@ -41,6 +41,7 @@ public class JdbcBatchUpdater<E> extends MybatisBatchUpdater<E> {
         Connection connection = session.getConnection();
         DatabaseDescription databaseDescription = new DatabaseDescription(connection.getMetaData());
         if (!databaseDescription.supportsBatchUpdates()) {
+            logger.warn("The database is not supports jdbc update");
             throw new UnsupportedOperationException("batch update");
         }
         BatchResult<E> result = new BatchResult<E>();

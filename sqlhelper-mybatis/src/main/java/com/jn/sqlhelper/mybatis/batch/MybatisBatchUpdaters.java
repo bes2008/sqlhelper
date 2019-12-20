@@ -19,16 +19,22 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Supplier;
 import com.jn.sqlhelper.common.batch.BatchMode;
 import com.jn.sqlhelper.common.batch.BatchResult;
+import com.jn.sqlhelper.dialect.Dialect;
+import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -70,11 +76,11 @@ public class MybatisBatchUpdaters {
         return updater;
     }
 
-    public static <E> BatchResult<E> batch(@NonNull SqlSessionFactory sessionFactory,
-                                           @NonNull Class mapperClass,
-                                           @NonNull String statementId,
-                                           @Nullable BatchMode batchMode,
-                                           List<E> entities) throws SQLException {
+    public static <E> BatchResult<E> batchUpdate(@NonNull SqlSessionFactory sessionFactory,
+                                                 @NonNull Class mapperClass,
+                                                 @NonNull String statementId,
+                                                 @Nullable BatchMode batchMode,
+                                                 List<E> entities) throws SQLException {
         final MybatisBatchStatement statement = new MybatisBatchStatement(batchMode, mapperClass, statementId);
         Preconditions.checkArgument(hasStatement(sessionFactory, statement), new Supplier<Object[], String>() {
             @Override
@@ -82,39 +88,54 @@ public class MybatisBatchUpdaters {
                 return StringTemplates.formatWithPlaceholder("The statement {} is not exists", statement.getSql());
             }
         });
-
-        MybatisBatchUpdater<E> updater = createBatchUpdater(sessionFactory, batchMode);
-        if (batchMode != null && updater != null) {
-            return updater.batchUpdate(statement, entities);
+        Configuration configuration = sessionFactory.getConfiguration();
+        String databaseId = configuration.getDatabaseId();
+        Dialect dialect = null;
+        if (!Strings.isEmpty(databaseId)) {
+            dialect = DialectRegistry.getInstance().getDialectByName(databaseId);
         }
+        if (Objects.isNull(dialect)) {
+            SqlSession session = sessionFactory.openSession();
+            Connection connection = session.getConnection();
+            dialect = DialectRegistry.getInstance().getDialectByDatabaseMetadata(connection.getMetaData());
+            session.close();
+        }
+        boolean supportsBatchSqlMode = dialect == null ? true : dialect.isSupportsBatchSql();
+        MybatisBatchUpdater<E> updater = null;
         BatchResult<E> result = null;
-        updater = createBatchSqlBatchUpdater(sessionFactory);
-        result = updater.batchUpdate(statement, entities);
-        if (!result.hasThrowable()) {
-            return result;
-        }
-        result = null;
-        logger.warn("Error when execute batch update based on database's batch sql, may be the statement {} not a batch sql, will use jdbc batch method execute it. error: {}", statement.getSql(), result.getThrowables().get(0));
-        updater = createJdbcBatchUpdater(sessionFactory);
-        try {
+        if (supportsBatchSqlMode) {
+            updater = createBatchUpdater(sessionFactory, batchMode);
+            if (batchMode != null && updater != null) {
+                return updater.batchUpdate(statement, entities);
+            }
+            updater = createBatchSqlBatchUpdater(sessionFactory);
             result = updater.batchUpdate(statement, entities);
-        } catch (UnsupportedOperationException e2) {
-            logger.warn("the database is not supports jdbc update, will use the simple batch mode");
-            updater = createSimpleBatchUpdater(sessionFactory);
+            if (!result.hasThrowable()) {
+                return result;
+            }
+            result = null;
+            logger.warn("Error when execute batch update based on database's batch sql, may be the statement {} not a batch sql, will use jdbc batch method execute it. error: {}", statement.getSql(), result.getThrowables().get(0));
+        }
+        boolean supportsJdbcBatch = dialect == null ? true : dialect.isSupportsBatchUpdates();
+        if (supportsJdbcBatch) {
+            updater = createJdbcBatchUpdater(sessionFactory);
             result = updater.batchUpdate(statement, entities);
             if (result.hasThrowable()) {
-                logger.warn("Error when execute batch update based simple batch mode, statement: {}, errors", statement.getSql());
+                logger.warn("Error when execute batch update based jdbc batch mode, statement: {}, errors:", statement.getSql());
                 Collects.forEach(result.getThrowables(), new Consumer2<Integer, Throwable>() {
                     @Override
                     public void accept(Integer index, Throwable throwable) {
                         logger.warn("errors[{}]", index, throwable);
                     }
                 });
+            } else {
+                return result;
             }
-            return result;
         }
-        if (result != null && result.hasThrowable()) {
-            logger.warn("Error when execute batch update based jdbc batch mode, statement: {}, errors:", statement.getSql());
+        updater = createSimpleBatchUpdater(sessionFactory);
+        result = updater.batchUpdate(statement, entities);
+        if (result.hasThrowable()) {
+            logger.warn("Error when execute batch update based simple batch mode, statement: {}, errors", statement.getSql());
             Collects.forEach(result.getThrowables(), new Consumer2<Integer, Throwable>() {
                 @Override
                 public void accept(Integer index, Throwable throwable) {
