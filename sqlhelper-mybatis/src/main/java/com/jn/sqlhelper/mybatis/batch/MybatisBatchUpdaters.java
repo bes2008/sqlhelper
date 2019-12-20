@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.util.List;
 
-public class MyBatisBatchUpdaters {
-    private static final Logger logger = LoggerFactory.getLogger(MyBatisBatchUpdaters.class);
+public class MybatisBatchUpdaters {
+    private static final Logger logger = LoggerFactory.getLogger(MybatisBatchUpdaters.class);
 
     public static <E> MybatisBatchUpdater<E> simpleBatchUpdater(@NonNull SqlSessionFactory sessionFactory) {
         return batchUpdater(sessionFactory, BatchMode.SIMPLE);
