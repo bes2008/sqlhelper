@@ -116,7 +116,7 @@ public class UserController {
 
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         request.setCount(count);
-        request.setUseLastPageIfPageNoOut(useLastPageIfPageNoOut);
+        request.setUseLastPageIfPageOut(useLastPageIfPageNoOut);
         List<User> users = userDao.selectByLimit(queryCondition);
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
@@ -140,7 +140,7 @@ public class UserController {
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         request.subqueryPaging(true);
         request.setCount(count);
-        request.setUseLastPageIfPageNoOut(useLastPageIfPageNoOut);
+        request.setUseLastPageIfPageOut(useLastPageIfPageNoOut);
         List<User> users = userDao.selectByLimit_subqueryPagination(queryCondition);
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
@@ -159,7 +159,7 @@ public class UserController {
             @RequestParam(name = "testSubquery", required = false, defaultValue = "false") boolean testSubquery) {
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         request.setCount(count);
-        request.setUseLastPageIfPageNoOut(useLastPageIfPageNoOut);
+        request.setUseLastPageIfPageOut(useLastPageIfPageNoOut);
         if (testSubquery) {
             request.subqueryPaging(true);
         }

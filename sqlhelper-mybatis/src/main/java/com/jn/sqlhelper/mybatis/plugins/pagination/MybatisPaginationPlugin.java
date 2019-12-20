@@ -146,10 +146,10 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
 
     private boolean isUseLastPageIfPageNoOut(@NonNull PagingRequest request) {
         Preconditions.checkNotNull(request);
-        if (request.isUseLastPageIfPageNoOut() == null) {
+        if (request.isUseLastPageIfPageOut() == null) {
             return pluginConfig.isUseLastPageIfPageNoOut();
         }
-        return request.isUseLastPageIfPageNoOut();
+        return request.isUseLastPageIfPageOut();
     }
 
     @Override

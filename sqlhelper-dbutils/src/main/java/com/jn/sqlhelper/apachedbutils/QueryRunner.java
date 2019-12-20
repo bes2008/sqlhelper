@@ -527,10 +527,10 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
 
     private boolean isUseLastPageIfPageNoOut(@NonNull PagingRequest request) {
         Preconditions.checkNotNull(request);
-        if (request.isUseLastPageIfPageNoOut() == null) {
+        if (request.isUseLastPageIfPageOut() == null) {
             return paginationConfig.isUseLastPageIfPageNoOut();
         }
-        return request.isUseLastPageIfPageNoOut();
+        return request.isUseLastPageIfPageOut();
     }
 
     private void applyStatementSettingsInPaginationRequest(PagingRequest pagingRequest) throws SQLException {

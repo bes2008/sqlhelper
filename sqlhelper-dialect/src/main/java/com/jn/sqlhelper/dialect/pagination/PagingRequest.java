@@ -38,7 +38,7 @@ public class PagingRequest<C, E> extends SelectRequest {
     private int maxRows = -1;
     private int timeout;
     private OrderBy orderBy;
-    private Boolean useLastPageIfPageNoOut;
+    private Boolean useLastPageIfPageOut;
     private C condition;
     private PagingResult<E> result;
 
@@ -171,7 +171,7 @@ public class PagingRequest<C, E> extends SelectRequest {
 
     public void clear(boolean clearResult) {
         count = null;
-        useLastPageIfPageNoOut = null;
+        useLastPageIfPageOut = null;
         ctx = null;
         if (clearResult) {
             if (result != null) {
@@ -210,12 +210,12 @@ public class PagingRequest<C, E> extends SelectRequest {
         return setContext(ctx);
     }
 
-    public Boolean isUseLastPageIfPageNoOut() {
-        return useLastPageIfPageNoOut;
+    public Boolean isUseLastPageIfPageOut() {
+        return useLastPageIfPageOut;
     }
 
-    public void setUseLastPageIfPageNoOut(Boolean useLastPageIfPageNoOut) {
-        this.useLastPageIfPageNoOut = useLastPageIfPageNoOut;
+    public void setUseLastPageIfPageOut(Boolean useLastPageIfPageNoOut) {
+        this.useLastPageIfPageOut = useLastPageIfPageNoOut;
     }
 
     public String getSubqueryPagingStartFlag() {

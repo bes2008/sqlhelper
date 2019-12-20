@@ -19,7 +19,7 @@ import com.jn.easyjson.core.JSONBuilderProvider;
 public class PaginationProperties {
     private boolean count = true;
     private int defaultPageSize = 10;
-    private boolean useLastPageIfPageNoOut = false;
+    private boolean useLastPageIfPageOut = false;
 
     public boolean isCount() {
         return count;
@@ -38,12 +38,21 @@ public class PaginationProperties {
     }
 
     public boolean isUseLastPageIfPageNoOut() {
-        return useLastPageIfPageNoOut;
+        return useLastPageIfPageOut;
     }
 
     public void setUseLastPageIfPageNoOut(boolean useLastPageIfPageNoOut) {
-        this.useLastPageIfPageNoOut = useLastPageIfPageNoOut;
+        this.useLastPageIfPageOut = useLastPageIfPageNoOut;
     }
+
+    public boolean isUseLastPageIfPageOut() {
+        return useLastPageIfPageOut;
+    }
+
+    public void setUseLastPageIfPageOut(boolean useLastPageIfPageNoOut) {
+        this.useLastPageIfPageOut = useLastPageIfPageNoOut;
+    }
+
 
     @Override
     public String toString() {
