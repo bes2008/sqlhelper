@@ -23,7 +23,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.dialect.SelectRequest;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 
-public class PagingRequest<C, E> extends SelectRequest {
+public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C,E>, PagingRequestContext<C,E>> {
     private static final long serialVersionUID = 1L;
     private Boolean count = null;
     private String countColumn;
@@ -253,5 +253,10 @@ public class PagingRequest<C, E> extends SelectRequest {
     @Override
     public String toString() {
         return JSONBuilderProvider.create().serializeNulls(true).prettyFormat(true).addSerializationExclusion(new IgnoreAnnotationExclusion()).build().toJson(this);
+    }
+
+    @Override
+    public boolean isPagingRequest() {
+        return true;
     }
 }

@@ -18,21 +18,16 @@ package com.jn.sqlhelper.dialect.pagination;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
 
-public class PagingRequestContext<E, R> extends SqlRequestContext {
-    private PagingRequest<E, R> request;
+public class PagingRequestContext<E, R> extends SqlRequestContext<PagingRequest<E, R>> {
     private RowSelection rowSelection;
 
     public PagingRequestContext() {
         super();
     }
 
+    @Override
     public PagingRequest<E, R> getRequest() {
-        return this.request;
-    }
-
-    public void setRequest(PagingRequest<E, R> request) {
-        this.request = request;
-        this.request.setCtx(this);
+        return super.getRequest();
     }
 
     public RowSelection getRowSelection() {
@@ -41,6 +36,11 @@ public class PagingRequestContext<E, R> extends SqlRequestContext {
 
     public void setRowSelection(RowSelection rowSelection) {
         this.rowSelection = rowSelection;
+    }
+
+    @Override
+    public boolean isPagingRequest() {
+        return true;
     }
 
     public static final String BEFORE_SUBQUERY_PARAMETERS_COUNT = "BEFORE_SUBQUERY_PARAMETERS_COUNT";

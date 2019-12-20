@@ -17,15 +17,18 @@ package com.jn.sqlhelper.dialect.pagination;
 
 import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.dialect.RowSelection;
+import com.jn.sqlhelper.dialect.SqlRequestContext;
+import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PagingRequestContextHolder {
+public class PagingRequestContextHolder extends SqlRequestContextHolder {
     private static final Logger logger = LoggerFactory.getLogger(PagingRequestContextHolder.class);
 
-    private final ThreadLocal<PagingRequestContext> variables = new ThreadLocal<PagingRequestContext>();
-
     private static final PagingRequestContextHolder INSTANCE = new PagingRequestContextHolder();
+
+    private PagingRequestContextHolder() {
+    }
 
     public static PagingRequestContextHolder getContext() {
         return INSTANCE;
@@ -74,7 +77,11 @@ public class PagingRequestContextHolder {
     }
 
     public PagingRequestContext get() {
-        return this.variables.get();
+        SqlRequestContext context = this.variables.get();
+        if(context.isPagingRequest()){
+            return (PagingRequestContext)context;
+        }
+        return null;
     }
 
     public void set(PagingRequestContext ctx) {
@@ -118,4 +125,5 @@ public class PagingRequestContextHolder {
         }
         return true;
     }
+
 }
