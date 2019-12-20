@@ -100,7 +100,7 @@ public class MybatisBatchUpdaters {
             dialect = DialectRegistry.getInstance().getDialectByDatabaseMetadata(connection.getMetaData());
             session.close();
         }
-        boolean supportsBatchSqlMode = dialect == null ? true : dialect.isSupportsBatchSql();
+        boolean supportsBatchSqlMode = dialect == null || dialect.isSupportsBatchSql();
         MybatisBatchUpdater<E> updater = null;
         BatchResult<E> result = null;
         if (supportsBatchSqlMode) {
@@ -116,7 +116,7 @@ public class MybatisBatchUpdaters {
             result = null;
             logger.warn("Error when execute batch update based on database's batch sql, may be the statement {} not a batch sql, will use jdbc batch method execute it. error: {}", statement.getSql(), result.getThrowables().get(0));
         }
-        boolean supportsJdbcBatch = dialect == null ? true : dialect.isSupportsBatchUpdates();
+        boolean supportsJdbcBatch = dialect == null || dialect.isSupportsBatchUpdates();
         if (supportsJdbcBatch) {
             updater = createJdbcBatchUpdater(sessionFactory);
             result = updater.batchUpdate(statement, entities);
