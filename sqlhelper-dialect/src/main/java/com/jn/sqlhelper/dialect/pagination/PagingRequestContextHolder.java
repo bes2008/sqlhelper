@@ -15,6 +15,7 @@
 
 package com.jn.sqlhelper.dialect.pagination;
 
+import com.jn.langx.util.Objects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
@@ -64,13 +65,13 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
 
     private <X> void setContextContent(Consumer<PagingRequestContext> consumer) {
         PagingRequestContext context = get();
-        if (context == null) {
+        if (Objects.isNull(context)) {
             context = newOne();
-            if (context == null) {
+            if (Objects.isNull(context)) {
                 this.variables.remove();
             }
         }
-        if (context != null) {
+        if (Objects.isNotNull(context)) {
             this.variables.set(context);
             consumer.accept(context);
         }
@@ -78,7 +79,7 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
 
     public PagingRequestContext get() {
         SqlRequestContext context = this.variables.get();
-        if(context.isPagingRequest()){
+        if(Objects.isNotNull(context) && context.isPagingRequest()){
             return (PagingRequestContext)context;
         }
         return null;
@@ -90,7 +91,7 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
 
     public PagingRequest getPagingRequest() {
         PagingRequestContext context = get();
-        if (context != null) {
+        if (Objects.isNotNull(context)) {
             return context.getRequest();
         }
         return null;
@@ -98,7 +99,7 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
 
     public RowSelection getRowSelection() {
         PagingRequestContext context = get();
-        if (context != null) {
+        if (Objects.isNotNull(context)) {
             return context.getRowSelection();
         }
         return null;
