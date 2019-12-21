@@ -2,6 +2,7 @@ package com.jn.sqlhelper.mybatis.plugins;
 
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
+import com.jn.sqlhelper.mybatis.MybatisUtils;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -35,9 +36,11 @@ public class LikeParameterEscapePlugin implements Interceptor, Initializable {
         }
         final Object[] args = invocation.getArgs();
         final MappedStatement ms = (MappedStatement) args[0];
+        if(!MybatisUtils.isPreparedStatement(ms)) {
+            return invocation.proceed();
+        }
         final Object parameter = args[1];
         final Executor executor = (Executor) invocation.getTarget();
-
         return invocation.proceed();
     }
 
