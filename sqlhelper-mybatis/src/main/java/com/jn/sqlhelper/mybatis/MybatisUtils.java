@@ -17,6 +17,9 @@ package com.jn.sqlhelper.mybatis;
 import com.jn.langx.annotation.NonNull;
 import com.jn.sqlhelper.mybatis.batch.MybatisBatchStatement;
 import com.jn.sqlhelper.mybatis.plugins.pagination.CustomVendorDatabaseIdProvider;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
+import org.apache.ibatis.mapping.StatementType;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -42,4 +45,16 @@ public class MybatisUtils {
     public static boolean hasStatement(@NonNull SqlSessionFactory sessionFactory, String statementName){
         return sessionFactory.getConfiguration().hasStatement(statementName);
     }
+
+    public static boolean isQueryStatement(@NonNull final MappedStatement statement) {
+        return SqlCommandType.SELECT == statement.getSqlCommandType();
+    }
+
+    public static boolean isPreparedStatement(@NonNull final MappedStatement statement) {
+        return statement.getStatementType() == StatementType.PREPARED || statement.getStatementType() == StatementType.CALLABLE;
+    }
+    public static boolean isCallableStatement(@NonNull final MappedStatement statement) {
+        return statement.getStatementType() == StatementType.CALLABLE;
+    }
+
 }

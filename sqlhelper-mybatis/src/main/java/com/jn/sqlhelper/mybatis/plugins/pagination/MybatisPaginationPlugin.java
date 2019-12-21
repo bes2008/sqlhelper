@@ -45,7 +45,11 @@ import java.sql.SQLException;
 import java.util.*;
 
 @SuppressWarnings({"unchecked", "unused"})
-@Intercepts({@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}), @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class})})
+@Intercepts({
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),
+        @Signature(type = Executor.class, method = "queryCursor", args = {MappedStatement.class, Object.class, RowBounds.class})
+})
 public class MybatisPaginationPlugin implements Interceptor, Initializable {
     private static final Logger logger = LoggerFactory.getLogger(MybatisPaginationPlugin.class);
     private static final int NON_CACHE_QUERY_METHOD_PARAMS = 4;
@@ -161,24 +165,28 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         final MappedStatement ms = (MappedStatement) args[0];
         final Object parameter = args[1];
         final RowBounds rowBounds = (RowBounds) args[2];
-        final ResultHandler resultHandler = (ResultHandler) args[3];
         final Executor executor = (Executor) invocation.getTarget();
-        BoundSql boundSql;
-        CacheKey cacheKey;
-        if (args.length == NON_CACHE_QUERY_METHOD_PARAMS) {
-            boundSql = ms.getBoundSql(parameter);
-            cacheKey = executor.createCacheKey(ms, parameter, rowBounds, boundSql);
-        } else {
-            cacheKey = (CacheKey) args[4];
-            boundSql = (BoundSql) args[5];
+        BoundSql boundSql = null;
+        CacheKey cacheKey = null;
+        ResultHandler resultHandler = null;
+        if (args.length >= NON_CACHE_QUERY_METHOD_PARAMS) {
+            resultHandler = (ResultHandler) args[3];
+            if (args.length == NON_CACHE_QUERY_METHOD_PARAMS) {
+                boundSql = ms.getBoundSql(parameter);
+                cacheKey = executor.createCacheKey(ms, parameter, rowBounds, boundSql);
+            } else {
+                cacheKey = (CacheKey) args[4];
+                boundSql = (BoundSql) args[5];
+            }
         }
+
         Object rs = null;
 
         setPagingRequestBasedRowBounds(rowBounds);
 
         try {
             if (!isPagingRequest(ms)) {
-                if (isQueryRequest(ms) && PAGING_CONTEXT.isPagingRequest() && PAGING_CONTEXT.isOrderByRequest() && !isNestedQueryInPagingRequest(ms)) {
+                if (MybatisUtils.isQueryStatement(ms) && PAGING_CONTEXT.isPagingRequest() && PAGING_CONTEXT.isOrderByRequest() && !isNestedQueryInPagingRequest(ms)) {
                     // do order by
                     rs = executeOrderBy(PAGING_CONTEXT.getPagingRequest().getOrderBy(), ms, parameter, RowBounds.DEFAULT, resultHandler, executor, boundSql);
                 } else {
@@ -297,12 +305,8 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         PAGING_CONTEXT.remove();
     }
 
-    private boolean isQueryRequest(final MappedStatement statement) {
-        return SqlCommandType.SELECT == statement.getSqlCommandType();
-    }
-
     private boolean isPagingRequest(final MappedStatement statement) {
-        return statement.getStatementType() == StatementType.PREPARED && isQueryRequest(statement) && PAGING_CONTEXT.isPagingRequest();
+        return MybatisUtils.isPreparedStatement(statement)&& MybatisUtils.isQueryStatement(statement) && PAGING_CONTEXT.isPagingRequest();
     }
 
     private boolean isNestedQueryInPagingRequest(final MappedStatement statement) {

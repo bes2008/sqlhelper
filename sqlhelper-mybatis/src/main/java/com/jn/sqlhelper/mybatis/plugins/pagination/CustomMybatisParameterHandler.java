@@ -7,6 +7,7 @@ import com.jn.sqlhelper.dialect.QueryParameters;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
+import com.jn.sqlhelper.mybatis.MybatisUtils;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.*;
@@ -76,7 +77,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
         try {
             final MybatisQueryParameters queryParameters = new MybatisQueryParameters();
             queryParameters.setRowSelection(PAGING_CONTEXT.getRowSelection());
-            queryParameters.setCallable(this.mappedStatement.getStatementType() == StatementType.CALLABLE);
+            queryParameters.setCallable(MybatisUtils.isCallableStatement(this.mappedStatement));
             PagingRequestContext request = PAGING_CONTEXT.get();
             queryParameters.setParameters(this.getParameterObject(), request.getInteger(PagingRequestContext.BEFORE_SUBQUERY_PARAMETERS_COUNT), request.getInteger(PagingRequestContext.AFTER_SUBQUERY_PARAMETERS_COUNT));
             MybatisPaginationPlugin.getInstrumentor().bindParameters(ps, this, queryParameters, true);
