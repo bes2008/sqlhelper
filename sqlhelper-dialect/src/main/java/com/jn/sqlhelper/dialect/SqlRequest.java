@@ -5,12 +5,18 @@ import java.io.Serializable;
 public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * the dialect, every Dialect is also a likeEscaper;
+     */
     private String dialect;
-    private boolean escapeLikeParameter;
+    /**
+     * the customer likeEscaper
+     */
     private LikeEscaper likeEscaper;
+
+    private Boolean escapeLikeParameter; // will be used for prepared statement
+
     private C context;
-
-
 
     public String getDialect() {
         return dialect;
@@ -21,11 +27,11 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
         return this;
     }
 
-    public boolean isEscapeLikeParameter() {
+    public Boolean isEscapeLikeParameter() {
         return escapeLikeParameter;
     }
 
-    public SqlRequest<R,C> setEscapeLikeParameter(boolean escapeLikeParameter) {
+    public SqlRequest<R,C> setEscapeLikeParameter(Boolean escapeLikeParameter) {
         this.escapeLikeParameter = escapeLikeParameter;
         return this;
     }
