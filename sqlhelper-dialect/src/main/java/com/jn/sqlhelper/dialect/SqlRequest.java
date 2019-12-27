@@ -20,11 +20,15 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
     @Ignore
     private C context;
 
+
+    private Integer fetchSize;
+    private int maxRows = -1;
+
     public String getDialect() {
         return dialect;
     }
 
-    public SqlRequest<R,C> setDialect(String dialect) {
+    public SqlRequest<R, C> setDialect(String dialect) {
         this.dialect = dialect;
         return this;
     }
@@ -33,7 +37,7 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
         return escapeLikeParameter;
     }
 
-    public SqlRequest<R,C> setEscapeLikeParameter(Boolean escapeLikeParameter) {
+    public SqlRequest<R, C> setEscapeLikeParameter(Boolean escapeLikeParameter) {
         this.escapeLikeParameter = escapeLikeParameter;
         return this;
     }
@@ -42,7 +46,7 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
         return likeEscaper;
     }
 
-    public SqlRequest<R,C> setLikeEscaper(LikeEscaper likeEscaper) {
+    public SqlRequest<R, C> setLikeEscaper(LikeEscaper likeEscaper) {
         this.likeEscaper = likeEscaper;
         return this;
     }
@@ -51,12 +55,29 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
         return context;
     }
 
-    public SqlRequest<R,C> setContext(C context) {
+    public SqlRequest<R, C> setContext(C context) {
         this.context = context;
         return this;
     }
 
-    public boolean isPagingRequest(){
+    public int getMaxRows() {
+        return maxRows;
+    }
+
+    public void setMaxRows(int maxRows) {
+        this.maxRows = maxRows;
+    }
+
+    public Integer getFetchSize() {
+        return this.fetchSize;
+    }
+
+    public SqlRequest<R, C> setFetchSize(int fetchSize) {
+        this.fetchSize = fetchSize;
+        return this;
+    }
+
+    public boolean isPagingRequest() {
         return false;
     }
 }

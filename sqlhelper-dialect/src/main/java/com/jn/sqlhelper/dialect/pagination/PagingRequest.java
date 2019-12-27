@@ -17,10 +17,8 @@ package com.jn.sqlhelper.dialect.pagination;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
-import com.jn.langx.util.Objects;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.dialect.SelectRequest;
-import com.jn.sqlhelper.dialect.orderby.OrderBy;
 
 public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, PagingRequestContext<C, E>> {
     private static final long serialVersionUID = 1L;
@@ -33,10 +31,6 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
     // pageSize =0, is Empty paging request, the limit is 0
     // pageSize > 0, the limit is pageSize
     private int pageSize;
-    private Integer fetchSize;
-    private int maxRows = -1;
-    private int timeout;
-    private OrderBy orderBy;
     private Boolean useLastPageIfPageOut;
     private C condition;
     private PagingResult<E> result;
@@ -97,44 +91,6 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
         return this;
     }
 
-    public Integer getFetchSize() {
-        return this.fetchSize;
-    }
-
-    public PagingRequest setFetchSize(int fetchSize) {
-        this.fetchSize = fetchSize;
-        return this;
-    }
-
-    public int getTimeout() {
-        return this.timeout;
-    }
-
-    public PagingRequest<C, E> setTimeout(int timeout) {
-        this.timeout = timeout;
-        return this;
-    }
-
-    public String getOrderByAsString() {
-        return Objects.isNull(this.orderBy) ? "" : this.orderBy.toString();
-    }
-
-    public OrderBy getOrderBy() {
-        return orderBy;
-    }
-
-    public PagingRequest<C, E> setOrderBy(OrderBy orderBy) {
-        this.orderBy = orderBy;
-        return this;
-    }
-
-    public boolean needOrderBy() {
-        if (this.orderBy == null || !this.orderBy.isValid()) {
-            return false;
-        }
-        return true;
-    }
-
     public C getCondition() {
         return (C) this.condition;
     }
@@ -178,13 +134,6 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
         setCondition(null);
     }
 
-    public int getMaxRows() {
-        return maxRows;
-    }
-
-    public void setMaxRows(int maxRows) {
-        this.maxRows = maxRows;
-    }
 
     public String getCountColumn() {
         return countColumn;
