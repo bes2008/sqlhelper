@@ -1,5 +1,7 @@
 package com.jn.sqlhelper.dialect;
 
+import com.jn.easyjson.core.annotation.Ignore;
+
 import java.io.Serializable;
 
 public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> implements Serializable {
@@ -15,7 +17,7 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
     private LikeEscaper likeEscaper;
 
     private Boolean escapeLikeParameter; // will be used for prepared statement
-
+    @Ignore
     private C context;
 
     public String getDialect() {

@@ -16,14 +16,13 @@
 package com.jn.sqlhelper.dialect.pagination;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
-import com.jn.easyjson.core.annotation.Ignore;
 import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.dialect.SelectRequest;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 
-public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C,E>, PagingRequestContext<C,E>> {
+public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, PagingRequestContext<C, E>> {
     private static final long serialVersionUID = 1L;
     private Boolean count = null;
     private String countColumn;
@@ -46,8 +45,6 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C,E>, Pagin
     private String subqueryPagingStartFlag;
     private String subqueryPagingEndFlag;
 
-    @Ignore
-    private PagingRequestContext ctx;
 
     /**
      * Nothing to do, will not do query, the result is empty list
@@ -172,7 +169,7 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C,E>, Pagin
     public void clear(boolean clearResult) {
         count = null;
         useLastPageIfPageOut = null;
-        ctx = null;
+        setCtx(null);
         if (clearResult) {
             if (result != null) {
                 result.setItems(Collects.<E>emptyArrayList());
@@ -197,17 +194,8 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C,E>, Pagin
         this.countColumn = countColumn;
     }
 
-    public PagingRequestContext getContext() {
-        return ctx;
-    }
-
-    public PagingRequest<C, E> setContext(PagingRequestContext ctx) {
-        this.ctx = ctx;
-        return this;
-    }
-
     public PagingRequest<C, E> setCtx(PagingRequestContext ctx) {
-        return setContext(ctx);
+        return (PagingRequest) setContext(ctx);
     }
 
     public Boolean isUseLastPageIfPageOut() {
