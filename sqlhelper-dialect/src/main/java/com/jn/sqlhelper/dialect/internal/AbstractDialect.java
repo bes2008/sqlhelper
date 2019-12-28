@@ -224,7 +224,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         return new CommonTableGenerator(databaseDescription, this);
     }
 
-    public final String generate(@NonNull DatabaseDescription database, String catalog, String schema, @NonNull String tableName) throws SQLException {
+    public final String generateTableDDL(@NonNull DatabaseDescription database, String catalog, String schema, @NonNull String tableName) throws SQLException {
         Preconditions.checkNotNull(database);
         Preconditions.checkNotNull(tableName);
         Table table = new DatabaseLoader().loadTable(database, catalog, schema, tableName);
