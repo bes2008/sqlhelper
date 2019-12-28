@@ -12,6 +12,7 @@ import com.jn.sqlhelper.dialect.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.pagination.*;
+import com.jn.sqlhelper.springjdbc.resultset.SelectCountRSExtractor;
 import com.jn.sqlhelper.springjdbc.statement.NamedParameterPreparedStatementCreator;
 import com.jn.sqlhelper.springjdbc.statement.PagedPreparedStatementSetter;
 import com.jn.sqlhelper.springjdbc.statement.SimplePreparedStatementCreator;
@@ -143,16 +144,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                     boolean needQuery = true;
                     if (needCountInPagingRequest(request)) {
                         String countSql = instrumentor.countSql(sql, request.getCountColumn());
-                        int count = super.query(countSql, new ResultSetExtractor<Integer>() {
-                            @Override
-                            public Integer extractData(ResultSet rs0) throws SQLException, DataAccessException {
-                                if (rs0.next() && rs0.getMetaData().getColumnCount() > 0) {
-                                    return rs0.getInt(1);
-                                } else {
-                                    return 0;
-                                }
-                            }
-                        });
+                        int count = super.query(countSql, new SelectCountRSExtractor());
                         if (count <= 0) {
                             needQuery = false;
                         }
@@ -186,9 +178,6 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                                 subqueryPagination = true;
                             }
                         }
-
-                        int beforeSubqueryParametersCount = 0;
-                        int afterSubqueryParametersCount = 0;
 
                         if (!subqueryPagination) {
                             if (PAGING_CONTEXT.isOrderByRequest()) {
@@ -304,16 +293,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                     boolean needQuery = true;
                     if (needCountInPagingRequest(request)) {
                         String countSql = instrumentor.countSql(sql, request.getCountColumn());
-                        int count = super.query(new SimplePreparedStatementCreator(countSql), pss == null && (psc instanceof NamedParameterPreparedStatementCreator) ? (NamedParameterPreparedStatementCreator) psc : pss, new ResultSetExtractor<Integer>() {
-                            @Override
-                            public Integer extractData(ResultSet rs0) throws SQLException, DataAccessException {
-                                if (rs0.next() && rs0.getMetaData().getColumnCount() > 0) {
-                                    return rs0.getInt(1);
-                                } else {
-                                    return 0;
-                                }
-                            }
-                        });
+                        int count = super.query(new SimplePreparedStatementCreator(countSql), pss == null && (psc instanceof NamedParameterPreparedStatementCreator) ? (NamedParameterPreparedStatementCreator) psc : pss, new SelectCountRSExtractor());
                         if (count <= 0) {
                             needQuery = false;
                         }

@@ -410,16 +410,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
                 boolean needQuery = true;
                 if (needCountInPagingRequest(request)) {
                     String countSql = instrumentor.countSql(sql, request.getCountColumn());
-                    int count = this.query(conn, false, countSql, new ResultSetHandler<Integer>() {
-                        @Override
-                        public Integer handle(ResultSet rs0) throws SQLException {
-                            if (rs0.next() && rs0.getMetaData().getColumnCount() > 0) {
-                                return rs0.getInt(1);
-                            } else {
-                                return 0;
-                            }
-                        }
-                    }, params);
+                    int count = this.query(conn, false, countSql, new SelectCountResultSetHandler(), params);
                     if (count <= 0) {
                         needQuery = false;
                     }
