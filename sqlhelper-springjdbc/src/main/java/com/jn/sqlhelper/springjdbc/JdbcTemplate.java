@@ -149,7 +149,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                             needQuery = false;
                         }
                         result.setTotal(count);
-                        int maxPageCount = result.getMaxPageCount();
+                        int maxPageCount = result.getMaxPage();
                         if (maxPageCount >= 0) {
                             if (requestPageNo > maxPageCount) {
                                 if (isUseLastPageIfPageNoOut(request)) {
@@ -298,7 +298,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
                             needQuery = false;
                         }
                         result.setTotal(count);
-                        int maxPageCount = result.getMaxPageCount();
+                        int maxPageCount = result.getMaxPage();
                         if (maxPageCount >= 0) {
                             if (requestPageNo > maxPageCount) {
                                 if (isUseLastPageIfPageNoOut(request)) {

@@ -20,7 +20,7 @@ import java.util.List;
 public class PagingResult<E> {
     private int pageNo;
     private int pageSize;
-    private int total;
+    private long total;
     private List<E> items;
 
     public int getPageNo() {
@@ -41,7 +41,7 @@ public class PagingResult<E> {
         return this;
     }
 
-    public int getTotal() {
+    public long getTotal() {
         return this.total;
     }
 
@@ -60,14 +60,15 @@ public class PagingResult<E> {
     }
 
     public int getMaxPage() {
+        return Long.valueOf(getMaxPageCount(pageSize)).intValue();
+    }
+
+    @Deprecated
+    public long getMaxPageCount() {
         return getMaxPageCount(pageSize);
     }
 
-    public int getMaxPageCount() {
-        return getMaxPageCount(pageSize);
-    }
-
-    public int getMaxPageCount(int pageSize) {
+    public long getMaxPageCount(int pageSize) {
         // unknown
         if (this.total < 0) {
             return -1;

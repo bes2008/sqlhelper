@@ -243,7 +243,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                                 needQuery = false;
                             }
                             result.setTotal(count);
-                            int maxPageCount = result.getMaxPageCount();
+                            int maxPageCount = result.getMaxPage();
                             if (maxPageCount >= 0) {
                                 if (requestPageNo > maxPageCount) {
                                     if (isUseLastPageIfPageNoOut(request)) {

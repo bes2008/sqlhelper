@@ -88,7 +88,7 @@ public class PageHelper {
         public void clear(boolean clearResult) {
             this.page.setPageSize(this.getResult().getPageSize());
             this.page.setPageNum(this.getResult().getPageNo());
-            this.page.setPages(this.getResult().getMaxPageCount());
+            this.page.setPages(this.getResult().getMaxPage());
             this.page.setTotal(this.getResult().getTotal());
             this.page.addAll(this.getResult().getItems());
 
