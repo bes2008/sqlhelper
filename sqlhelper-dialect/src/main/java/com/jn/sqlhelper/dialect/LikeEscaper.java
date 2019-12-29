@@ -31,4 +31,6 @@ public interface LikeEscaper {
     String escape(String string);
 
     String appendmentAfterLikeClause();
+
+
 }
