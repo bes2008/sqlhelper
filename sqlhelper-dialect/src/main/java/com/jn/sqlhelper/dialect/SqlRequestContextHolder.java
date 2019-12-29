@@ -12,4 +12,8 @@ public class SqlRequestContextHolder {
     public static SqlRequestContextHolder getInstance() {
         return INSTANCE;
     }
+
+    public SqlRequestContext get(){
+        return variables.get();
+    }
 }

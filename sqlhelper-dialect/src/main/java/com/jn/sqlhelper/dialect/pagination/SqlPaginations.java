@@ -20,11 +20,12 @@ import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
+import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.orderby.OrderByBuilder;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 
-public class SqlPaginations {
+public class SqlPaginations extends SQLs {
     public static <C, E> PagingRequest<C, E> preparePagination(int pageNo, int pageSize) {
         return preparePagination(pageNo, pageSize, null);
     }
@@ -65,15 +66,6 @@ public class SqlPaginations {
         return pagingRequest;
     }
 
-    public static int findPlaceholderParameterCount(String sqlsegment){
-        if(Strings.isNotEmpty(sqlsegment)) {
-            sqlsegment = sqlsegment.replaceAll("([\\\\][?])", "");
-            sqlsegment = sqlsegment.replaceAll("[^?]", "");
-            sqlsegment = sqlsegment.replaceAll("'\\?'", "");
-            return sqlsegment.length();
-        }
-        return 0;
-    }
 
     public static String extractBeforeSubqueryPartition(@NonNull String sql, @NonNull String startFlag) {
         Preconditions.checkNotNull(startFlag, StringTemplates.formatWithPlaceholder("The start flag of the subquery paging request is invalid: {}", startFlag));

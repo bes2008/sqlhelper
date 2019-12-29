@@ -68,6 +68,16 @@ public class SQLs {
         return SQLs.getTableFQN(catalog, schema, tableName, catalogSeparator, databaseDesc.isCatalogAtStart());
     }
 
+    public static int findPlaceholderParameterCount(String sqlsegment){
+        if(Strings.isNotEmpty(sqlsegment)) {
+            sqlsegment = sqlsegment.replaceAll("([\\\\][?])", "");
+            sqlsegment = sqlsegment.replaceAll("[^?]", "");
+            sqlsegment = sqlsegment.replaceAll("'\\?'", "");
+            return sqlsegment.length();
+        }
+        return 0;
+    }
+
     //DML
     public static boolean isSelectStatement(String sql) {
         String sql0 = sql.trim();
