@@ -37,7 +37,7 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
     }
 
     @Override
-    protected String getLimitString(String sql, int offset, int limit) {
+    protected String getLimitString(String sql, long offset, int limit) {
         // https://fmhelp.filemaker.com/docs/16/en/fm16_sql_reference.pdf
         // https://documentation.progress.com/output/ua/OpenEdge_latest/#page/dmsrf%2Foffset-and-fetch-clauses.html%23wwID0E6CPQ
         boolean hasOffset = offset > 0;

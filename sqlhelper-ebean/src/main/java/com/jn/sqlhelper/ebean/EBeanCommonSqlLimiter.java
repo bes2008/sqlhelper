@@ -55,7 +55,7 @@ public class EBeanCommonSqlLimiter implements SqlLimiter {
         sb.append(dbSql);
 
         RowSelection rowSelection = new RowSelection();
-        rowSelection.setOffset(request.getFirstRow());
+        rowSelection.setOffset(Long.valueOf(request.getFirstRow()));
         rowSelection.setLimit(request.getMaxRows());
         String sql = instrumentor.instrumentLimitSql(dialect, sb.toString(), rowSelection);
         sql = request.getDbPlatform().completeSql(sql, request.getOrmQuery());

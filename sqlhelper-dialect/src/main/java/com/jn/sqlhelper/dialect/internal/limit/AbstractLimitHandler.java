@@ -23,7 +23,7 @@ import java.sql.SQLException;
 
 public abstract class AbstractLimitHandler extends LimitHandler {
 
-    protected int convertToFirstRowValue(int zeroBasedFirstResult) {
+    protected long convertToFirstRowValue(long zeroBasedFirstResult) {
         return zeroBasedFirstResult;
     }
 
@@ -53,12 +53,12 @@ public abstract class AbstractLimitHandler extends LimitHandler {
         if ((!getDialect().isUseLimitInVariableMode()) || (!LimitHelper.hasMaxRows(selection))) {
             return 0;
         }
-        int firstRow = convertToFirstRowValue(LimitHelper.getFirstRow(selection));
+        long firstRow = convertToFirstRowValue(LimitHelper.getFirstRow(selection));
         int lastRow = getMaxOrLimit(selection);
         boolean hasFirstRow = (getDialect().isSupportsLimitOffset()) && ((firstRow > 0) || (getDialect().isForceLimitUsage()));
         boolean reverse = getDialect().isBindLimitParametersInReverseOrder();
         if (hasFirstRow) {
-            statement.setInt(index + (reverse ? 1 : 0), firstRow);
+            statement.setInt(index + (reverse ? 1 : 0), Long.valueOf(firstRow).intValue());
         }
         statement.setInt(index + ((reverse) || (!hasFirstRow) ? 0 : 1), lastRow);
         return hasFirstRow ? 2 : 1;
@@ -66,8 +66,8 @@ public abstract class AbstractLimitHandler extends LimitHandler {
 
 
     protected final int getMaxOrLimit(RowSelection selection) {
-        int firstRow = convertToFirstRowValue(LimitHelper.getFirstRow(selection));
+        long firstRow = convertToFirstRowValue(LimitHelper.getFirstRow(selection));
         int limit = selection.getLimit();
-        return getDialect().isUseMaxForLimit() ? limit + firstRow : limit;
+        return getDialect().isUseMaxForLimit() ? Long.valueOf(limit + firstRow).intValue() : limit;
     }
 }

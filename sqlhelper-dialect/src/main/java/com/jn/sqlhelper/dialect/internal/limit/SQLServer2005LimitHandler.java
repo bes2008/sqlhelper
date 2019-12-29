@@ -43,7 +43,7 @@ public class SQLServer2005LimitHandler
     private boolean topAdded;
 
     @Override
-    public int convertToFirstRowValue(int zeroBasedFirstResult) {
+    public long convertToFirstRowValue(long zeroBasedFirstResult) {
         return zeroBasedFirstResult + 1;
     }
 

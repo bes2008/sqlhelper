@@ -29,7 +29,7 @@ public class LimitOnlyLimitHandler extends AbstractLimitHandler {
     }
 
     @Override
-    protected String getLimitString(String sql, int offset, int limit) {
+    protected String getLimitString(String sql, long offset, int limit) {
         if (getDialect().isUseLimitInVariableMode()) {
             return sql + " limit ?";
         } else {

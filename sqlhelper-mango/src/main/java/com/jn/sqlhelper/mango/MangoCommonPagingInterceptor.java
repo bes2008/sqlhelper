@@ -50,7 +50,7 @@ public class MangoCommonPagingInterceptor extends QueryInterceptor {
             page.setTotal(total);
         }
 
-        int offset = pageNum <= 0 ? 0 : (pageNum - 1) * pageSize;
+        long offset = pageNum <= 0 ? 0L : (pageNum - 1) * pageSize;
         RowSelection rowSelection = new RowSelection();
         rowSelection.setLimit(pageSize);
         rowSelection.setOffset(offset);

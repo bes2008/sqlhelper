@@ -37,7 +37,7 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler {
     }
 
     @Override
-    protected String getLimitString(String sql, int offset, int limit) {
+    protected String getLimitString(String sql, long offset, int limit) {
         boolean hasOffset = offset > 0;
         sql = sql.trim();
         String forUpdateClause = "";

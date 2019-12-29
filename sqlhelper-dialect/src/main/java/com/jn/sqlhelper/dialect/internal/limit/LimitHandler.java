@@ -37,7 +37,7 @@ public abstract class LimitHandler {
     public abstract String processSql(String sql, RowSelection rowSelection);
 
 
-    protected String getLimitString(String sql, int offset, int limit) {
+    protected String getLimitString(String sql, long offset, int limit) {
         return getLimitString(sql, (offset > 0) || (getDialect().isForceLimitUsage()));
     }
 

@@ -43,7 +43,7 @@ public class JFinalCommonDialect extends Dialect {
     @Override
     public String forPaginate(int pageNumber, int pageSize, StringBuilder findSql) {
         RowSelection rowSelection = new RowSelection();
-        rowSelection.setOffset(pageNumber <= 0 ? 0 : (pageNumber - 1) * pageSize);
+        rowSelection.setOffset(pageNumber <= 0 ? 0L : (pageNumber - 1) * pageSize);
         rowSelection.setLimit(pageSize);
         if (instrumentor.beginIfSupportsLimit(databaseId)) {
             pagingRequestHolder.set(rowSelection);

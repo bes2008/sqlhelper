@@ -42,7 +42,7 @@ public class NoopLimitHandler
     @Override
     public void setMaxRows(RowSelection selection, PreparedStatement statement) throws SQLException {
         if (LimitHelper.hasMaxRows(selection)) {
-            int maxRows = selection.getLimit().intValue() + convertToFirstRowValue(LimitHelper.getFirstRow(selection));
+            int maxRows = selection.getLimit() + Long.valueOf(convertToFirstRowValue(LimitHelper.getFirstRow(selection))).intValue();
             if (maxRows < 0) {
                 statement.setMaxRows(Integer.MAX_VALUE);
             } else {

@@ -22,7 +22,7 @@ public class CirroDBDialect extends AbstractDialect {
             }
 
             @Override
-            protected int convertToFirstRowValue(int zeroBasedFirstResult) {
+            protected long convertToFirstRowValue(long zeroBasedFirstResult) {
                 return zeroBasedFirstResult + 1;
             }
         });

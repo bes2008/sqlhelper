@@ -31,7 +31,7 @@ public class PagingRequestBasedRowSelectionBuilder implements RowSelectionBuilde
             rowSelection.setTimeout(request.getTimeout());
 
             int pageNo = request.getPageNo();
-            int offset = 0;
+            long offset = 0L;
             int limit = request.getPageSize();
             if (request.isGetAllFromNonZeroOffsetRequest()) {
                 offset = (pageNo - 1) * getDefaultPageSize();
@@ -41,7 +41,7 @@ public class PagingRequestBasedRowSelectionBuilder implements RowSelectionBuilde
             }
             rowSelection.setLimit(limit);
             if (offset - 1 + rowSelection.getLimit() > Integer.MAX_VALUE) {
-                rowSelection.setFetchSize(Integer.MAX_VALUE - offset);
+                rowSelection.setFetchSize(Integer.MAX_VALUE - Long.valueOf(offset).intValue());
             }
             rowSelection.setOffset(offset);
 

@@ -31,8 +31,8 @@ public class LimitHelper {
         return getFirstRow(selection) > 0;
     }
 
-    public static int getFirstRow(final RowSelection selection) {
-        return (selection == null || selection.getOffset() == null) ? 0 : ((int) selection.getOffset());
+    public static long getFirstRow(final RowSelection selection) {
+        return (selection == null || selection.getOffset() == null) ? 0 : (selection.getOffset());
     }
 
     private LimitHelper() {

@@ -16,17 +16,17 @@
 package com.jn.sqlhelper.dialect;
 
 public final class RowSelection {
-    private Integer offset;
+    private Long offset;
     private Integer limit;
     private Integer timeout;
     private Integer fetchSize;
     private Integer maxRows = -1;
 
-    public Integer getOffset() {
+    public Long getOffset() {
         return this.offset;
     }
 
-    public void setOffset(final Integer offset) {
+    public void setOffset(final Long offset) {
         this.offset = offset;
     }
 
