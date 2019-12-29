@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.mybatis.plugins.pagination;
+package com.jn.sqlhelper.mybatis.plugins;
 
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
@@ -7,6 +7,9 @@ import com.jn.sqlhelper.dialect.QueryParameters;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
+import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin;
+import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationRequestContextKeys;
+import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisQueryParameters;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.BoundSql;
