@@ -15,8 +15,7 @@
 package com.jn.sqlhelper.mybatis;
 
 import com.jn.langx.annotation.NonNull;
-import com.jn.sqlhelper.mybatis.batch.MybatisBatchStatement;
-import com.jn.sqlhelper.mybatis.plugins.pagination.CustomVendorDatabaseIdProvider;
+import com.jn.sqlhelper.mybatis.plugins.CustomVendorDatabaseIdProvider;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.mapping.StatementType;

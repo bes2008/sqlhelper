@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.plugins.pagination;
+package com.jn.sqlhelper.mybatis.plugins;
 
 import com.jn.sqlhelper.dialect.DialectRegistry;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;

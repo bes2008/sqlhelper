@@ -12,9 +12,10 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.plugins.pagination;
+package com.jn.sqlhelper.mybatis.plugins;
 
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
+import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationPluginConfig;
 
 public class SqlHelperMybatisProperties {
 

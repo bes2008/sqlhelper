@@ -1,5 +1,6 @@
-package com.jn.sqlhelper.mybatis.plugins.pagination;
+package com.jn.sqlhelper.mybatis.plugins;
 
+import com.jn.sqlhelper.mybatis.plugins.pagination.CustomMybatisParameterHandler;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;

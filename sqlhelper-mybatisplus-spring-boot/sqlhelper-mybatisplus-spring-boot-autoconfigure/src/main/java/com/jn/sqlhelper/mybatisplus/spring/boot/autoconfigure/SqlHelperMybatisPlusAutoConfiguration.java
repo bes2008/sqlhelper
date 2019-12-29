@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin;
-import com.jn.sqlhelper.mybatis.plugins.pagination.SqlHelperMybatisProperties;
+import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisProperties;
 import com.jn.sqlhelper.mybatisplus.plugins.pagination.CustomMybatisPlusScriptLanguageDriver;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.mybatis.plugins;
+package com.jn.sqlhelper.mybatis.plugins.likeescape;
 
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
@@ -39,7 +39,7 @@ public class LikeParameterEscapePlugin implements Interceptor, Initializable {
         if(!MybatisUtils.isPreparedStatement(ms)) {
             return invocation.proceed();
         }
-        final Object parameter = args[1];
+        final Object parameters = args[1];
         final Executor executor = (Executor) invocation.getTarget();
         return invocation.proceed();
     }
