@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.jn.sqlhelper.mybatis.plugins.pagination.CustomMybatisParameterHandler;
+import com.jn.sqlhelper.mybatis.plugins.CustomMybatisParameterHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
