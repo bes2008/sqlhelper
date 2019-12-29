@@ -2,6 +2,8 @@ package com.jn.sqlhelper.mybatis.plugins.likeescape;
 
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
+import com.jn.sqlhelper.dialect.SqlRequestContext;
+import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
@@ -36,11 +38,36 @@ public class LikeParameterEscapePlugin implements Interceptor, Initializable {
         }
         final Object[] args = invocation.getArgs();
         final MappedStatement ms = (MappedStatement) args[0];
-        if(!MybatisUtils.isPreparedStatement(ms)) {
+        if (!MybatisUtils.isPreparedStatement(ms)) {
             return invocation.proceed();
         }
-        final Object parameters = args[1];
+        SqlRequestContext sqlContext = SqlRequestContextHolder.getInstance().get();
+        if(sqlContext == null || !sqlContext.getRequest().isEscapeLikeParameter()){
+            return invocation.proceed();
+        }
+        final Object parameter = args[1];
         final Executor executor = (Executor) invocation.getTarget();
+
+        BoundSql boundSql = null;
+        CacheKey cacheKey = null;
+        ResultHandler resultHandler = null;
+        if (args.length >= 4) {
+            final RowBounds rowBounds = (RowBounds) args[2];
+            resultHandler = (ResultHandler) args[3];
+            if (args.length == 4) {
+                boundSql = ms.getBoundSql(parameter);
+                cacheKey = executor.createCacheKey(ms, parameter, rowBounds, boundSql);
+            } else {
+                cacheKey = (CacheKey) args[4];
+                boundSql = (BoundSql) args[5];
+            }
+        } else {
+            boundSql = ms.getBoundSql(parameter);
+        }
+
+        String sql = boundSql.getSql();
+
+
         return invocation.proceed();
     }
 

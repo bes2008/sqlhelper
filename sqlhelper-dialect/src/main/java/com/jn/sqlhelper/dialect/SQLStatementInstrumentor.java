@@ -373,6 +373,8 @@ public class SQLStatementInstrumentor {
         return this.config;
     }
 
+
+
     @NonNull
     public void setConfig(final SQLInstrumentConfig config) {
         this.config = config;
