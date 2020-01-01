@@ -14,21 +14,16 @@
 
 package com.jn.sqlhelper.dialect;
 
+import com.jn.langx.escape.Escaper;
+
 import java.util.List;
 
-public interface LikeEscaper {
+public interface LikeEscaper extends Escaper {
     /**
      * %, _, \ 等
      * @return all key characters
      */
     List<Character> getLikeKeyChars();
-
-    /**
-     * escape string using escape char
-     * @param string a string will be escaped
-     * @return new string
-     */
-    String escape(String string);
 
     String appendmentAfterLikeClause();
 
