@@ -331,24 +331,11 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         } else {
             PAGING_CONTEXT.get().setString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID, statement.getId());
         }
-        final String databaseId = getDatabaseId(statement);
+        final String databaseId = MybatisUtils.getDatabaseId(PAGING_CONTEXT, instrumentor, statement);
         return instrumentor.beginIfSupportsLimit(databaseId);
     }
 
-    private String getDatabaseId(final MappedStatement ms) {
-        PagingRequest request = PAGING_CONTEXT.getPagingRequest();
-        String databaseId = request.getDialect();
-        if (databaseId == null) {
-            databaseId = ms.getDatabaseId();
-        }
-        if (databaseId == null) {
-            databaseId = instrumentor.getConfig().getDialect();
-        }
-        if (databaseId == null) {
-            return ms.getConfiguration().getDatabaseId();
-        }
-        return databaseId;
-    }
+
 
     private List executeQuery(final MappedStatement ms, final Object parameter, final RowBounds rowBounds, final ResultHandler resultHandler, final Executor executor, final BoundSql boundSql, final CacheKey cacheKey) throws SQLException {
         final PagingRequest request = PAGING_CONTEXT.getPagingRequest();

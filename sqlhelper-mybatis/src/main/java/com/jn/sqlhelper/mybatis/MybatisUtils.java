@@ -15,6 +15,12 @@
 package com.jn.sqlhelper.mybatis;
 
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
+import com.jn.langx.util.Emptys;
+import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
+import com.jn.sqlhelper.dialect.SqlRequest;
+import com.jn.sqlhelper.dialect.SqlRequestContext;
+import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.mybatis.plugins.CustomVendorDatabaseIdProvider;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
@@ -41,7 +47,7 @@ public class MybatisUtils {
         return rowBounds.getOffset() != RowBounds.NO_ROW_OFFSET || rowBounds.getLimit() != RowBounds.NO_ROW_LIMIT;
     }
 
-    public static boolean hasStatement(@NonNull SqlSessionFactory sessionFactory, String statementName){
+    public static boolean hasStatement(@NonNull SqlSessionFactory sessionFactory, String statementName) {
         return sessionFactory.getConfiguration().hasStatement(statementName);
     }
 
@@ -52,8 +58,37 @@ public class MybatisUtils {
     public static boolean isPreparedStatement(@NonNull final MappedStatement statement) {
         return statement.getStatementType() == StatementType.PREPARED || statement.getStatementType() == StatementType.CALLABLE;
     }
+
     public static boolean isCallableStatement(@NonNull final MappedStatement statement) {
         return statement.getStatementType() == StatementType.CALLABLE;
     }
 
+    public static String getDatabaseId(@Nullable SqlRequestContextHolder sqlRequestContextHolder,
+                                 @Nullable SQLStatementInstrumentor instrumentor,
+                                 @NonNull final MappedStatement ms) {
+        String databaseId = null;
+        if (sqlRequestContextHolder != null) {
+            SqlRequestContext sqlRequestContext = sqlRequestContextHolder.get();
+            if (sqlRequestContext != null) {
+                SqlRequest request = sqlRequestContext.getRequest();
+                if (request != null) {
+                    databaseId = request.getDialect();
+                }
+            }
+        }
+
+        if (Emptys.isEmpty(databaseId)) {
+            databaseId = ms.getDatabaseId();
+        }
+
+        if (Emptys.isEmpty(databaseId) && instrumentor != null && instrumentor.getConfig() != null) {
+            databaseId = instrumentor.getConfig().getDialect();
+        }
+
+        if (Emptys.isEmpty(databaseId)) {
+            return ms.getConfiguration().getDatabaseId();
+        }
+
+        return databaseId;
+    }
 }
