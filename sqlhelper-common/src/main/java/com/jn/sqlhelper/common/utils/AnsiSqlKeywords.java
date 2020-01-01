@@ -36,65 +36,63 @@ public class AnsiSqlKeywords {
 
     public AnsiSqlKeywords() {
         final Set<String> keywordsSql2003 = new HashSet<String>();
-        Collects.addAll(keywordsSql2003, new String[]{"ADD", "ALL", "ALLOCATE", "ALTER", "AND", "ANY",
+        Collects.addAll(keywordsSql2003, "ADD", "ALL", "ALLOCATE", "ALTER", "AND", "ANY",
                 "ARE", "ARRAY", "AS", "ASC", "ASENSITIVE",
-                "ASYMMETRIC", "AT", "ATOMIC", "AUTHORIZATION"});
-        Collects.addAll(keywordsSql2003, new String[]{"BEGIN", "BETWEEN", "BIGINT", "BINARY", "BLOB", "BOTH", "BY"});
-        Collects.addAll(keywordsSql2003, new String[]{"CALL", "CALLED", "CASCADED", "CASE", "CHAR",
+                "ASYMMETRIC", "AT", "ATOMIC", "AUTHORIZATION");
+        Collects.addAll(keywordsSql2003, "BEGIN", "BETWEEN", "BIGINT", "BINARY", "BLOB", "BOTH", "BY");
+        Collects.addAll(keywordsSql2003, "CALL", "CALLED", "CASCADED", "CASE", "CHAR",
                 "CHARACTER", "CHECK", "CLOB", "CLOSE", "COLLATE",
                 "COLUMN", "COMMIT", "CONDITION", "CONNECT", "CONSTRAINT",
                 "CONTINUE", "CORRESPONDING", "CREATE", "CROSS", "CUBE",
                 "CURRENT", "CURRENT_DATE", "CURRENT_PATH", "CURRENT_ROLE", "CURRENT_TIME",
-                "CURRENT_TIMESTAMP", "CURRENT_USER", "CURSOR", "CYCLE"});
-        Collects.addAll(keywordsSql2003, new String[]{"DATE", "DAY", "DEALLOCATE", "DEC", "DECIMAL",
+                "CURRENT_TIMESTAMP", "CURRENT_USER", "CURSOR", "CYCLE");
+        Collects.addAll(keywordsSql2003, "DATE", "DAY", "DEALLOCATE", "DEC", "DECIMAL",
                 "DECLARE", "DEFAULT", "DELETE", "DEREF", "DESCRIBE",
                 "DETERMINISTIC", "DISCONNECT", "DISTINCT", "DO", "DOUBLE",
-                "DROP", "DYNAMIC"});
-        Collects.addAll(keywordsSql2003, new String[]{"EACH", "ELEMENT", "ELSE", "ELSIF", "END",
+                "DROP", "DYNAMIC");
+        Collects.addAll(keywordsSql2003, "EACH", "ELEMENT", "ELSE", "ELSIF", "END",
                 "ESCAPE", "EXCEPT", "EXEC", "EXECUTE", "EXISTS",
-                "EXIT", "EXTERNAL"});
-        Collects.addAll(keywordsSql2003, new String[]{"FALSE", "FETCH", "FILTER", "FLOAT", "FOR",
-                "FOREIGN", "FREE", "FROM", "FULL", "FUNCTION"});
-        Collects.addAll(keywordsSql2003, new String[]{"GET", "GLOBAL", "GRANT", "GROUP", "GROUPING"});
-        Collects.addAll(keywordsSql2003, new String[]{"HANDLER", "HAVING", "HOLD", "HOUR"});
-        Collects.addAll(keywordsSql2003, new String[]{"IDENTITY", "IF", "IMMEDIATE", "IN", "INDICATOR",
+                "EXIT", "EXTERNAL");
+        Collects.addAll(keywordsSql2003, "FALSE", "FETCH", "FILTER", "FLOAT", "FOR",
+                "FOREIGN", "FREE", "FROM", "FULL", "FUNCTION");
+        Collects.addAll(keywordsSql2003, "GET", "GLOBAL", "GRANT", "GROUP", "GROUPING");
+        Collects.addAll(keywordsSql2003, "HANDLER", "HAVING", "HOLD", "HOUR");
+        Collects.addAll(keywordsSql2003, "IDENTITY", "IF", "IMMEDIATE", "IN", "INDICATOR",
                 "INNER", "INOUT", "INPUT", "INSENSITIVE", "INSERT",
                 "INT", "INTEGER", "INTERSECT", "INTERVAL", "INTO",
-                "IS", "ITERATE", "IS"});
+                "IS", "ITERATE", "IS");
         keywordsSql2003.add("JOIN");
-        Collects.addAll(keywordsSql2003, new String[]{"LANGUAGE", "LARGE", "LATERAL", "LEADING", "LEAVE",
-                "LEFT", "LIKE", "LOCAL", "LOCALTIME", "LOCALTIMESTAMP",
-                "LOOP"});
-        Collects.addAll(keywordsSql2003, new String[]{"MATCH", "MEMBER", "MERGE", "METHOD", "MINUTE",
-                "MODIFIES", "MODULE", "MONTH", "MULTISET"});
-        Collects.addAll(keywordsSql2003, new String[]{"NATIONAL", "NATURAL", "NCHAR", "NCLOB", "NEW",
-                "NO", "NONE", "NOT", "NULL", "NUMERIC"});
-        Collects.addAll(keywordsSql2003, new String[]{"OF", "OLD", "ON", "ONLY", "OPEN",
+        Collects.addAll(keywordsSql2003, "LANGUAGE", "LARGE", "LATERAL", "LEADING", "LEAVE",
+                "LEFT", "LIKE", "LOCAL", "LOCALTIME", "LOCALTIMESTAMP", "LOOP");
+        Collects.addAll(keywordsSql2003, "MATCH", "MEMBER", "MERGE", "METHOD", "MINUTE",
+                "MODIFIES", "MODULE", "MONTH", "MULTISET");
+        Collects.addAll(keywordsSql2003, "NATIONAL", "NATURAL", "NCHAR", "NCLOB", "NEW",
+                "NO", "NONE", "NOT", "NULL", "NUMERIC");
+        Collects.addAll(keywordsSql2003, "OF", "OLD", "ON", "ONLY", "OPEN",
                 "OR", "ORDER", "OUT", "OUTER", "OUTPUT",
-                "OVER", "OVERLAPS"});
+                "OVER", "OVERLAPS");
 
         keywordsSql2003.add("OVER");
         keywordsSql2003.add("OVERLAPS");
-        Collects.addAll(keywordsSql2003, new String[]{"PARAMETER", "PARTITION", "PRECISION", "PREPARE", "PRIMARY",
-                "PROCEDURE"});
-        Collects.addAll(keywordsSql2003, new String[]{"RANGE", "READS", "REAL", "RECURSIVE", "REF",
+        Collects.addAll(keywordsSql2003, "PARAMETER", "PARTITION", "PRECISION", "PREPARE", "PRIMARY", "PROCEDURE");
+        Collects.addAll(keywordsSql2003, "RANGE", "READS", "REAL", "RECURSIVE", "REF",
                 "REFERENCES", "REFERENCING", "RELEASE", "REPEAT", "RESIGNAL",
                 "RESULT", "SOME", "RETURN", "RETURNS", "RIGHT",
-                "ROLLBACK", "ROLLUP", "ROW", "ROWS"});
-        Collects.addAll(keywordsSql2003, new String[]{"SAVEPOINT", "SCROLL", "SEARCH", "SECOND", "SELECT",
+                "ROLLBACK", "ROLLUP", "ROW", "ROWS");
+        Collects.addAll(keywordsSql2003, "SAVEPOINT", "SCROLL", "SEARCH", "SECOND", "SELECT",
                 "SENSITIVE", "SESSION_USE", "SET", "SIGNAL", "SIMILAR",
                 "SMALLINT", "SOME", "SPECIFIC", "SPECIFICTYPE", "SQL",
                 "SQLEXCEPTION", "SQLSTATE", "SQLWARNING", "START", "STATIC",
-                "SUBMULTISET", "SYMMETRIC", "SYSTEM", "SYSTEM_USER"});
-        Collects.addAll(keywordsSql2003, new String[]{"TABLE", "TABLESAMPLE", "THEN", "TIME", "TIMESTAMP",
+                "SUBMULTISET", "SYMMETRIC", "SYSTEM", "SYSTEM_USER");
+        Collects.addAll(keywordsSql2003, "TABLE", "TABLESAMPLE", "THEN", "TIME", "TIMESTAMP",
                 "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TO", "TRAILING", "TRANSLATION",
-                "TREAT", "TRIGGER", "TRUE"});
-        Collects.addAll(keywordsSql2003, new String[]{"UNDO", "UNION", "UNIQUE", "UNKNOWN", "UNNEST",
-                "UNTIL", "UPDATE", "USER", "USING"});
-        Collects.addAll(keywordsSql2003, new String[]{"VALUE", "VALUES", "VARCHAR", "VARYING"});
-        Collects.addAll(keywordsSql2003, new String[]{"WHEN", "WHENEVER", "WHERE", "WHILE", "WINDOW",
-                "WITH", "WITHIN", "WITHOUT"});
-        Collects.addAll(keywordsSql2003, new String[]{"YEAR"});
+                "TREAT", "TRIGGER", "TRUE");
+        Collects.addAll(keywordsSql2003, "UNDO", "UNION", "UNIQUE", "UNKNOWN", "UNNEST",
+                "UNTIL", "UPDATE", "USER", "USING");
+        Collects.addAll(keywordsSql2003, "VALUE", "VALUES", "VARCHAR", "VARYING");
+        Collects.addAll(keywordsSql2003, "WHEN", "WHENEVER", "WHERE", "WHILE", "WINDOW",
+                "WITH", "WITHIN", "WITHOUT");
+        Collects.addAll(keywordsSql2003, "YEAR");
         this.keywordsSql2003 = Collections.unmodifiableSet(keywordsSql2003);
     }
 
