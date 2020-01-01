@@ -6,8 +6,9 @@ import org.junit.Test;
 
 public class LikeEscapeTests {
     @Test
-    public static void test(){
+    public void test(){
         LikeEscaper escaper = new CStyleEscaper();
-
+        String sql = "afs%fl";
+        System.out.println(escaper.escape(sql));
     }
 }
