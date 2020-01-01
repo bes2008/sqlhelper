@@ -383,4 +383,8 @@ public class SQLStatementInstrumentor {
     public void setDialectRegistry(final DialectRegistry dialectRegistry) {
         this.dialectRegistry = dialectRegistry;
     }
+
+    public DialectRegistry getDialectRegistry(){
+        return this.dialectRegistry;
+    }
 }
