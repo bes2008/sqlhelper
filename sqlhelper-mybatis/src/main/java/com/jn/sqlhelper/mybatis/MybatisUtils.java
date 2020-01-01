@@ -22,12 +22,12 @@ import com.jn.sqlhelper.dialect.SqlRequest;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.mybatis.plugins.CustomVendorDatabaseIdProvider;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.SqlCommandType;
-import org.apache.ibatis.mapping.StatementType;
-import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
+import org.apache.ibatis.mapping.*;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSessionFactory;
+
+import java.util.Map;
 
 public class MybatisUtils {
     private static VendorDatabaseIdProvider vendorDatabaseIdProvider;
@@ -64,8 +64,8 @@ public class MybatisUtils {
     }
 
     public static String getDatabaseId(@Nullable SqlRequestContextHolder sqlRequestContextHolder,
-                                 @Nullable SQLStatementInstrumentor instrumentor,
-                                 @NonNull final MappedStatement ms) {
+                                       @Nullable SQLStatementInstrumentor instrumentor,
+                                       @NonNull final MappedStatement ms) {
         String databaseId = null;
         if (sqlRequestContextHolder != null) {
             SqlRequestContext sqlRequestContext = sqlRequestContextHolder.get();
@@ -90,5 +90,14 @@ public class MybatisUtils {
         }
 
         return databaseId;
+    }
+
+    public static BoundSql rebuildBoundSql(String newSql, Configuration configuration, BoundSql boundSql) {
+        BoundSql newBoundSql = new BoundSql(configuration, newSql, boundSql.getParameterMappings(), boundSql.getParameterObject());
+        final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
+        for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {
+            newBoundSql.setAdditionalParameter(entry.getKey(), entry.getValue());
+        }
+        return newBoundSql;
     }
 }

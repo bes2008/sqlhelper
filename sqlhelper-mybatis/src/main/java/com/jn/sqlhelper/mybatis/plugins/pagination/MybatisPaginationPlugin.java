@@ -32,7 +32,10 @@ import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.mapping.*;
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
@@ -306,7 +309,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     }
 
     private boolean isPagingRequest(final MappedStatement statement) {
-        return MybatisUtils.isPreparedStatement(statement)&& MybatisUtils.isQueryStatement(statement) && PAGING_CONTEXT.isPagingRequest();
+        return MybatisUtils.isPreparedStatement(statement) && MybatisUtils.isQueryStatement(statement) && PAGING_CONTEXT.isPagingRequest();
     }
 
     private boolean isNestedQueryInPagingRequest(final MappedStatement statement) {
@@ -334,7 +337,6 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         final String databaseId = MybatisUtils.getDatabaseId(PAGING_CONTEXT, instrumentor, statement);
         return instrumentor.beginIfSupportsLimit(databaseId);
     }
-
 
 
     private List executeQuery(final MappedStatement ms, final Object parameter, final RowBounds rowBounds, final ResultHandler resultHandler, final Executor executor, final BoundSql boundSql, final CacheKey cacheKey) throws SQLException {
@@ -378,11 +380,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             ctx.setInteger(PagingRequestContext.AFTER_SUBQUERY_PARAMETERS_COUNT, SqlPaginations.findPlaceholderParameterCount(afterSubqueryPartition));
         }
 
-        final BoundSql pageBoundSql = new BoundSql(ms.getConfiguration(), pageSql, boundSql.getParameterMappings(), parameter);
-        final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
-        for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {
-            pageBoundSql.setAdditionalParameter(entry.getKey(), entry.getValue());
-        }
+        final BoundSql pageBoundSql = MybatisUtils.rebuildBoundSql(pageSql, ms.getConfiguration(), boundSql);
         cacheKey.update(request.getPageNo());
         cacheKey.update(request.getPageSize());
         return executor.query(ms, parameter, RowBounds.DEFAULT, resultHandler, cacheKey, pageBoundSql);
@@ -434,10 +432,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
         final CacheKey orderByCacheKey = executor.createCacheKey(orderByStatement, parameter, RowBounds.DEFAULT, boundSql);
         final String orderBySql = instrumentor.instrumentOrderBySql(boundSql.getSql(), orderBy);
-        orderByBoundSql = new BoundSql(orderByStatement.getConfiguration(), orderBySql, boundSql.getParameterMappings(), parameter);
-        for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {
-            orderByBoundSql.setAdditionalParameter(entry.getKey(), entry.getValue());
-        }
+        orderByBoundSql = MybatisUtils.rebuildBoundSql(orderBySql, orderByStatement.getConfiguration(), boundSql);
         return executor.query(orderByStatement, parameter, RowBounds.DEFAULT, resultHandler, orderByCacheKey, orderByBoundSql);
     }
 
@@ -468,11 +463,8 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                 countKey2.update(request.getPageNo());
                 countKey2.update(request.getPageSize());
 
-                countBoundSql = new BoundSql(countStatement.getConfiguration(), countSql, boundSql.getParameterMappings(), parameter);
+                countBoundSql = MybatisUtils.rebuildBoundSql(countSql, countStatement.getConfiguration(), boundSql);
                 requestContext.set(MybatisPaginationRequestContextKeys.COUNT_SQL, countBoundSql);
-                for (Map.Entry<String, Object> entry : additionalParameters.entrySet()) {
-                    countBoundSql.setAdditionalParameter(entry.getKey(), entry.getValue());
-                }
                 final Object countResultList2 = executor.query(countStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey2, countBoundSql);
                 count = ((Number) ((List) countResultList2).get(0)).intValue();
             }
