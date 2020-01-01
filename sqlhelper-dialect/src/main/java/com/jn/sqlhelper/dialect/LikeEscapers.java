@@ -19,7 +19,7 @@ import java.util.*;
 
 public class LikeEscapers {
 
-    public static String insert(@NonNull final String string, @Nullable final List<Integer> slotIndexes, @NonNull String insertment) {
+    private static String insert(@NonNull final String string, @Nullable final List<Integer> slotIndexes, @NonNull String insertment) {
         Preconditions.checkNotNull(string);
         if (Emptys.isEmpty(slotIndexes)) {
             return string;
@@ -88,7 +88,7 @@ public class LikeEscapers {
     }
 
     /**
-     * @return key: all will be escaped ? indexes
+     * @return key: the parameters placeholder index: all will be escaped ? indexes
      * value: all slots will be insert appentmentOfLikeClause
      */
     public static Pair<List<Integer>, List<Integer>> findEscapedSlots(String sql) {
