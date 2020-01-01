@@ -4,7 +4,9 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.struct.Pair;
 import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import org.apache.ibatis.cache.CacheKey;
@@ -17,6 +19,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Properties;
 
 @Intercepts({
@@ -47,10 +50,15 @@ public class LikeParameterEscapePlugin implements Interceptor, Initializable {
         if (!isEnableLikeEscape()) {
             return invocation.proceed();
         }
+        SqlRequestContext sqlContext = SqlRequestContextHolder.getInstance().get();
+        LikeEscaper likeEscaper = getLikeEscaper(ms, sqlContext.getRequest());
+        if (likeEscaper == null) {
+            logger.warn("Can't find a suitable LikeEscaper for the sql request: {}, statement id: {}", sqlContext.getRequest(), ms.getId());
+            invocation.proceed();
+        }
 
         final Object parameter = args[1];
         final Executor executor = (Executor) invocation.getTarget();
-
         BoundSql boundSql = null;
         CacheKey cacheKey = null;
         ResultHandler resultHandler = null;
@@ -69,8 +77,16 @@ public class LikeParameterEscapePlugin implements Interceptor, Initializable {
         }
 
         String sql = boundSql.getSql();
-        SqlRequestContext sqlContext = SqlRequestContextHolder.getInstance().get();
-        LikeEscaper likeEscaper = getLikeEscaper(ms, sqlContext.getRequest());
+        Pair<List<Integer>, List<Integer>> pair = LikeEscapers.findEscapedSlots(sql);
+        if (Emptys.isEmpty(pair.getKey()) && Emptys.isEmpty(pair.getValue())) {
+            invocation.proceed();
+        }
+        String newSql = LikeEscapers.insertLikeEscapeDeclares(sql, pair.getValue(), likeEscaper);
+        if (logger.isDebugEnabled()) {
+            logger.debug("after like escape, the sql become: {}", newSql);
+        }
+        // rebuild a BoundSql
+        boundSql = MybatisUtils.rebuildBoundSql(newSql, ms.getConfiguration(), boundSql);
         return invocation.proceed();
     }
 
