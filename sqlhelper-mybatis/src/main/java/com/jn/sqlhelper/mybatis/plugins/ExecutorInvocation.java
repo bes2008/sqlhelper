@@ -19,5 +19,7 @@ import org.apache.ibatis.plugin.Invocation;
 public class ExecutorInvocation {
     private Invocation invocation;
 
-
+    public ExecutorInvocation(Invocation invocation){
+        this.invocation = invocation;
+    }
 }
