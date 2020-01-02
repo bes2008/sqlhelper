@@ -72,6 +72,6 @@ public class BaseLikeEscaper implements LikeEscaper {
 
     @Override
     public String appendmentAfterLikeClause() {
-        return " ESCAPE '"+escapeChar+"' ";
+        return " ESCAPE '" + escapeChar + "' ";
     }
 }
