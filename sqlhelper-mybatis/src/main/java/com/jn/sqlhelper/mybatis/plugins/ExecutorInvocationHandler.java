@@ -14,6 +14,20 @@
 
 package com.jn.sqlhelper.mybatis.plugins;
 
-public interface ExecutorInvocationHandler {
-    Object handle(ExecutorInvocation invocation);
+public abstract class ExecutorInvocationHandler {
+    private ExecutorInvocationHandler next;
+
+    public abstract Object handle(ExecutorInvocation invocation);
+
+    public ExecutorInvocationHandler getNext() {
+        return next;
+    }
+
+    public void setNext(ExecutorInvocationHandler next) {
+        this.next = next;
+    }
+
+    public boolean hasNext() {
+        return next != null;
+    }
 }

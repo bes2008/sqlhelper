@@ -14,18 +14,31 @@
 
 package com.jn.sqlhelper.mybatis.plugins;
 
-import com.jn.langx.util.collection.Collects;
-
-import java.util.List;
-
 public class ExecutorInvocationPipeline {
-    private List<ExecutorInvocationHandler> handlers = Collects.emptyArrayList();
+    private ExecutorInvocationHandler head;
+    private ExecutorInvocationHandler tail;
 
-    public void addHandler(ExecutorInvocationHandler handler) {
-        handlers.add(handler);
+    public void addFirstHandler(ExecutorInvocationHandler handler) {
+        if (head == null && tail == null) {
+            head = handler;
+            tail = handler;
+        } else {
+            handler.setNext(head);
+            head = handler;
+        }
     }
 
-    public void clear() {
-        handlers.clear();
+    public void addLastHandler(ExecutorInvocationHandler handler) {
+        if (head == null && tail == null) {
+            head = handler;
+            tail = handler;
+        } else {
+            tail.setNext(handler);
+            tail = handler;
+        }
+    }
+
+    public void handle(ExecutorInvocation invocation) {
+
     }
 }
