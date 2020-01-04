@@ -1,11 +1,9 @@
 package com.jn.langx.pipeline;
 
-import com.jn.langx.annotation.Prototype;
 import com.jn.langx.util.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Prototype
 public class DefaultPipeline<T> implements Pipeline<T> {
     private static final Logger logger = LoggerFactory.getLogger(DefaultPipeline.class);
     private HeadHandlerContext head;
@@ -106,5 +104,24 @@ public class DefaultPipeline<T> implements Pipeline<T> {
         return target;
     }
 
+    public void setHeadHandler(Handler headHandler) {
+        HeadHandlerContext ctx = new HeadHandlerContext(headHandler);
+        ctx.setPipeline(this);
 
+        if (this.head.hasNext()) {
+            ctx.setNext(this.head.getNext());
+            this.head.getNext().setPrev(ctx);
+        }
+
+        this.head = ctx;
+    }
+
+    public void setTailHandler(Handler tailHandler) {
+        TailHandlerContext ctx = new TailHandlerContext(tailHandler);
+        ctx.setPipeline(this);
+        if (this.tail.hasPrev()) {
+            this.tail.getPrev().setNext(ctx);
+            ctx.setPrev(this.tail);
+        }
+    }
 }
