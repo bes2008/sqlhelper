@@ -3,15 +3,11 @@ package com.jn.langx.pipeline;
 public class AbstractHandler implements Handler {
     @Override
     public void inbound(HandlerContext ctx) throws Throwable  {
-        if (ctx.hasNext()) {
-            ctx.getNext().inbound();
-        }
+        Pipelines.inbound(ctx);
     }
 
     @Override
     public void outbound(HandlerContext ctx) throws Throwable  {
-        if (ctx.hasPrev()) {
-            ctx.getPrev().inbound();
-        }
+        Pipelines.outbound(ctx);
     }
 }
