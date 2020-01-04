@@ -15,13 +15,13 @@ public class NoopHandler extends AbstractHandler {
     }
 
     @Override
-    public void inbound(HandlerContext ctx) {
+    public void inbound(HandlerContext ctx) throws Throwable {
         // NOOP
         super.inbound(ctx);
     }
 
     @Override
-    public void outbound(HandlerContext ctx) {
+    public void outbound(HandlerContext ctx) throws Throwable {
         // NOOP
         super.outbound(ctx);
     }

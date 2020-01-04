@@ -4,7 +4,7 @@ import com.jn.langx.annotation.Singleton;
 
 @Singleton
 public interface Handler {
-    void inbound(HandlerContext ctx);
+    void inbound(HandlerContext ctx) throws Throwable;
 
-    void outbound(HandlerContext ctx);
+    void outbound(HandlerContext ctx) throws Throwable;
 }

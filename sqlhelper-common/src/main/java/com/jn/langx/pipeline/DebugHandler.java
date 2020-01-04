@@ -7,7 +7,7 @@ public class DebugHandler extends AbstractHandler {
     private static final Logger logger = LoggerFactory.getLogger(DebugHandler.class);
 
     @Override
-    public void inbound(HandlerContext ctx) {
+    public void inbound(HandlerContext ctx)throws Throwable  {
         if (logger.isDebugEnabled()) {
             logger.debug("inbounding, context: {}", ctx.toString());
         }
@@ -15,7 +15,7 @@ public class DebugHandler extends AbstractHandler {
     }
 
     @Override
-    public void outbound(HandlerContext ctx) {
+    public void outbound(HandlerContext ctx) throws Throwable {
         if (logger.isDebugEnabled()) {
             logger.debug("outbounding, context: {}", ctx.toString());
         }
