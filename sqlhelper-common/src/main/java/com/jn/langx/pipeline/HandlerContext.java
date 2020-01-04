@@ -17,6 +17,7 @@ public class HandlerContext {
 
     private boolean inbounded = false;
     private boolean outbounded = false;
+    private boolean skiped = false;
 
     public HandlerContext(Handler handler) {
         Preconditions.checkNotNull(handler);
@@ -32,12 +33,18 @@ public class HandlerContext {
     }
 
     public void inbound() throws Throwable {
+        if(isSkiped()){
+            Pipelines.skipHandler(this, true);
+        }
         getPipeline().setCurrentHandlerContext(this);
         this.inbounded = true;
         handler.inbound(this);
     }
 
     public void outbound() throws Throwable {
+        if (isSkiped()) {
+            Pipelines.skipHandler(this, false);
+        }
         getPipeline().setCurrentHandlerContext(this);
         this.outbounded = true;
         handler.outbound(this);
@@ -87,6 +94,14 @@ public class HandlerContext {
 
     public void setOutbounded(boolean outbounded) {
         this.outbounded = outbounded;
+    }
+
+    public boolean isSkiped() {
+        return skiped;
+    }
+
+    public void setSkiped(boolean skiped) {
+        this.skiped = skiped;
     }
 
     @Override

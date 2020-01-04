@@ -108,7 +108,7 @@ public class DefaultPipeline<T> implements Pipeline<T> {
     }
 
     public void setHeadHandler(Handler headHandler) {
-        Preconditions.checkTrue(!head.isOutbounded());
+        Preconditions.checkTrue(head != null && !head.isSkiped() && !head.isInbounded() && !head.isOutbounded());
         HeadHandlerContext ctx = new HeadHandlerContext(headHandler);
         ctx.setPipeline(this);
 
@@ -121,6 +121,7 @@ public class DefaultPipeline<T> implements Pipeline<T> {
     }
 
     public void setTailHandler(Handler tailHandler) {
+        Preconditions.checkNotNull(tail != null && !tail.isSkiped() && !tail.isInbounded() && tail.isOutbounded());
         TailHandlerContext ctx = new TailHandlerContext(tailHandler);
         ctx.setPipeline(this);
         if (this.tail.hasPrev()) {
