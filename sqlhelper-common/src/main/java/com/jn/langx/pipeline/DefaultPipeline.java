@@ -108,7 +108,7 @@ public class DefaultPipeline<T> implements Pipeline<T> {
     }
 
     public void setHeadHandler(Handler headHandler) {
-        Preconditions.checkTrue(!head.hadOutbound());
+        Preconditions.checkTrue(!head.isOutbounded());
         HeadHandlerContext ctx = new HeadHandlerContext(headHandler);
         ctx.setPipeline(this);
 
