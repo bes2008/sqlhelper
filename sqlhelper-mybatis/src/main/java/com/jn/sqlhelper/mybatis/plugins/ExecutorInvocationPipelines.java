@@ -1,7 +1,6 @@
 package com.jn.sqlhelper.mybatis.plugins;
 
 import com.jn.langx.pipeline.HandlerContext;
-import com.jn.langx.pipeline.Pipeline;
 import org.apache.ibatis.plugin.Invocation;
 
 public class ExecutorInvocationPipelines {
