@@ -68,22 +68,36 @@ public class ExecutorInvocation {
         }
     }
 
+    /**
+     * lazy parse bound sql
+     */
+    private BoundSql parseBoundSql() {
+        if (Objects.isNull(boundSql)) {
+            Object[] args = invocation.getArgs();
+            if (this.methodName.equals("query")) {
+                if (args.length > 4) {
+                    this.cacheKey = (CacheKey) args[4];
+                    this.boundSql = (BoundSql) args[5];
+                }
+            }
+            if (Objects.isNull(this.boundSql)) {
+                this.boundSql = this.mappedStatement.getBoundSql(parameter);
+            }
+            if (this.methodName.equals("query")) {
+                if (Objects.isNull(cacheKey)) {
+                    this.cacheKey = this.executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
+                }
+            }
+        }
+        return this.boundSql;
+    }
+
     private void parseQuery() {
         Object[] args = invocation.getArgs();
         this.mappedStatement = (MappedStatement) args[0];
         this.parameter = args[1];
         this.rowBounds = (RowBounds) args[2];
         this.resultHandler = (ResultHandler) args[3];
-        if (args.length > 4) {
-            this.cacheKey = (CacheKey) args[4];
-            this.boundSql = (BoundSql) args[5];
-        }
-        if (Objects.isNull(this.boundSql)) {
-            this.boundSql = this.mappedStatement.getBoundSql(parameter);
-        }
-        if (Objects.isNull(cacheKey)) {
-            this.cacheKey = this.executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
-        }
     }
 
     private void parseQueryCursor() {
@@ -128,7 +142,11 @@ public class ExecutorInvocation {
     }
 
     public BoundSql getBoundSql() {
-        return boundSql;
+        return Objects.isNull(boundSql) ? parseBoundSql() : this.boundSql;
+    }
+
+    public void setBoundSql(BoundSql boundSql) {
+        this.boundSql = boundSql;
     }
 
     public String getMethodName() {
