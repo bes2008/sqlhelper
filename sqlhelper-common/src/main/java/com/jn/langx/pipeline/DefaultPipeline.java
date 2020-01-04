@@ -9,6 +9,7 @@ public class DefaultPipeline<T> implements Pipeline<T> {
     private HeadHandlerContext head;
     private TailHandlerContext tail;
     private T target;
+    private HandlerContext current = null;
 
     public DefaultPipeline() {
         this(new HeadHandlerContext(), new TailHandlerContext());
@@ -64,6 +65,7 @@ public class DefaultPipeline<T> implements Pipeline<T> {
 
     @Override
     public void clear() {
+        setCurrentHandlerContext(null);
         HandlerContext ctx = getHead();
         HandlerContext next = null;
         while (ctx.hasNext()) {
@@ -86,7 +88,8 @@ public class DefaultPipeline<T> implements Pipeline<T> {
     @Override
     public void outbound() throws Throwable {
         Preconditions.checkNotNull(target, "target is null");
-        tail.outbound();
+        Preconditions.checkNotNull(current, "current handler context is null");
+        current.outbound();
     }
 
     @Override
@@ -105,6 +108,7 @@ public class DefaultPipeline<T> implements Pipeline<T> {
     }
 
     public void setHeadHandler(Handler headHandler) {
+        Preconditions.checkTrue(!head.hadOutbound());
         HeadHandlerContext ctx = new HeadHandlerContext(headHandler);
         ctx.setPipeline(this);
 
@@ -123,5 +127,20 @@ public class DefaultPipeline<T> implements Pipeline<T> {
             this.tail.getPrev().setNext(ctx);
             ctx.setPrev(this.tail);
         }
+    }
+
+    @Override
+    public boolean hadOutbound() {
+        return false;
+    }
+
+    @Override
+    public HandlerContext getCurrentHandlerContext() {
+        return current;
+    }
+
+    @Override
+    public void setCurrentHandlerContext(HandlerContext handlerContext) {
+        this.current = handlerContext;
     }
 }

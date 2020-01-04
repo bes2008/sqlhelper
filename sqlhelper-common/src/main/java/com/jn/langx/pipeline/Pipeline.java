@@ -18,4 +18,9 @@ public interface Pipeline<T> {
     void inbound() throws Throwable;
 
     void outbound() throws Throwable;
+
+    boolean hadOutbound();
+
+    HandlerContext getCurrentHandlerContext();
+    void setCurrentHandlerContext(HandlerContext handlerContext);
 }
