@@ -16,6 +16,12 @@ package com.jn.sqlhelper.mybatis.plugins;
 
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
+import com.jn.langx.pipeline.DebugHandler;
+import com.jn.langx.pipeline.DefaultPipeline;
+import com.jn.langx.pipeline.Handler;
+import com.jn.langx.pipeline.Pipelines;
+import com.jn.langx.util.collection.Collects;
+import com.jn.sqlhelper.mybatis.plugins.likeescape.LikeParameterEscapeHandler;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -26,6 +32,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Properties;
 
 @Intercepts({
@@ -44,7 +51,18 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        return null;
+        ExecutorInvocation executorInvocation = new ExecutorInvocation(invocation);
+        try {
+            DebugHandler debugHandler = new DebugHandler();
+            List<Handler> handlers = Collects.<Handler>asList(new LikeParameterEscapeHandler());
+            DefaultPipeline<ExecutorInvocation> pipeline = Pipelines.newPipeline(debugHandler, debugHandler, handlers);
+            pipeline.bindTarget(executorInvocation);
+            pipeline.inbound();
+            return executorInvocation.getResult();
+        } finally {
+            // ?
+        }
+
     }
 
     @Override
