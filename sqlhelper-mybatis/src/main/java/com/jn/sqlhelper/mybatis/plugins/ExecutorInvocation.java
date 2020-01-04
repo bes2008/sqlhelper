@@ -14,6 +14,9 @@
 
 package com.jn.sqlhelper.mybatis.plugins;
 
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
+import com.jn.langx.util.Objects;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -22,31 +25,76 @@ import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
-public class ExecutorInvocation {
-    private Invocation invocation;
+import java.lang.reflect.Method;
 
+public class ExecutorInvocation {
+    @NonNull
+    private Invocation invocation;
+    @NonNull
+    private String methodName;
+    @NonNull
     private Executor executor;
+    @NonNull
     private Object parameter;
+    @NonNull
     private MappedStatement mappedStatement;
+    @Nullable
     private RowBounds rowBounds;
+    @Nullable
     private ResultHandler resultHandler;
+    @Nullable
     private CacheKey cacheKey;
+    @NonNull
     private BoundSql boundSql;
 
     public ExecutorInvocation(Invocation invocation) {
         this.invocation = invocation;
+        this.executor = (Executor) invocation.getTarget();
+        parse();
+    }
+
+    private void parse() {
+        Method method = invocation.getMethod();
+        String methodName = method.getName();
+        this.methodName = methodName;
+        if (methodName.equals("query")) {
+            parseQuery();
+        } else if (methodName.equals("queryCursor")) {
+            parseQueryCursor();
+        } else if (methodName.equals("update")) {
+            parseUpdate();
+        }
     }
 
     private void parseQuery() {
-
+        Object[] args = invocation.getArgs();
+        this.mappedStatement = (MappedStatement) args[0];
+        this.parameter = args[1];
+        this.rowBounds = (RowBounds) args[2];
+        this.resultHandler = (ResultHandler) args[3];
+        if (args.length > 4) {
+            this.cacheKey = (CacheKey) args[4];
+            this.boundSql = (BoundSql) args[5];
+        }
+        if (Objects.isNull(this.boundSql)) {
+            this.boundSql = this.mappedStatement.getBoundSql(parameter);
+        }
+        if (Objects.isNull(cacheKey)) {
+            this.cacheKey = this.executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
+        }
     }
 
     private void parseQueryCursor() {
-
+        Object[] args = invocation.getArgs();
+        this.mappedStatement = (MappedStatement) args[0];
+        this.parameter = args[1];
+        this.rowBounds = (RowBounds) args[2];
     }
 
     private void parseUpdate() {
-
+        Object[] args = invocation.getArgs();
+        this.mappedStatement = (MappedStatement) args[0];
+        this.parameter = args[1];
     }
 
     public Invocation getInvocation() {
@@ -79,5 +127,9 @@ public class ExecutorInvocation {
 
     public BoundSql getBoundSql() {
         return boundSql;
+    }
+
+    public String getMethodName() {
+        return methodName;
     }
 }
