@@ -47,6 +47,8 @@ public class ExecutorInvocation {
     @NonNull
     private BoundSql boundSql;
 
+    private Object result;
+
     public ExecutorInvocation(Invocation invocation) {
         this.invocation = invocation;
         this.executor = (Executor) invocation.getTarget();
@@ -131,5 +133,13 @@ public class ExecutorInvocation {
 
     public String getMethodName() {
         return methodName;
+    }
+
+    public Object getResult() {
+        return result;
+    }
+
+    public void setResult(Object result) {
+        this.result = result;
     }
 }
