@@ -28,4 +28,36 @@ public class Pipelines {
             }
         });
     }
+
+    public static void skipHandler(HandlerContext ctx, boolean inbound) throws Throwable {
+        if (inbound) {
+            if (ctx.hasNext()) {
+                ctx.getNext().inbound();
+            }
+        } else {
+            if (ctx.hasPrev()) {
+                ctx.getPrev().outbound();
+            }
+        }
+    }
+
+    public static void inbound(HandlerContext ctx) throws Throwable {
+        if (ctx.hasNext()) {
+            ctx.getNext().inbound();
+        }
+    }
+
+    public static void outbound(HandlerContext ctx) throws Throwable {
+        if (ctx.hasPrev()) {
+            ctx.getPrev().inbound();
+        }
+    }
+
+    public static void outbound(Pipeline pipeline) throws Throwable {
+        pipeline.outbound();
+    }
+
+    public static void interruptPipeline(Pipeline pipeline) throws Throwable {
+        outbound(pipeline);
+    }
 }
