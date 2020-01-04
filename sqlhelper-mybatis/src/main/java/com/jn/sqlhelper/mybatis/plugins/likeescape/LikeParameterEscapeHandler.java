@@ -18,6 +18,7 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.pipeline.AbstractHandler;
 import com.jn.langx.pipeline.HandlerContext;
+import com.jn.langx.pipeline.Pipelines;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.Strings;
@@ -25,15 +26,21 @@ import com.jn.langx.util.struct.Pair;
 import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.ExecutorInvocation;
-import com.jn.sqlhelper.mybatis.plugins.ExecutorInvocationPipelines;
 import com.jn.sqlhelper.mybatis.plugins.MybatisPluginContext;
+import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.session.ResultHandler;
+import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+/**
+ * {@link org.apache.ibatis.executor.Executor#query(MappedStatement, Object, RowBounds, ResultHandler)}
+ * {@link org.apache.ibatis.executor.Executor#query(MappedStatement, Object, RowBounds, ResultHandler, CacheKey, BoundSql)} )}
+ */
 public class LikeParameterEscapeHandler extends AbstractHandler {
     private static Logger logger = LoggerFactory.getLogger(LikeParameterEscapeHandler.class);
 
@@ -41,20 +48,22 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
     public void inbound(HandlerContext ctx) throws Throwable {
         ExecutorInvocation executorInvocation = (ExecutorInvocation) ctx.getPipeline().getTarget();
         MappedStatement mappedStatement = executorInvocation.getMappedStatement();
-        if (!MybatisUtils.isPreparedStatement(mappedStatement) || !isEnableLikeEscape()) {
-            ExecutorInvocationPipelines.interruptPipeline(ctx);
+
+        if (!MybatisUtils.isQueryStatement(mappedStatement) || !MybatisUtils.isPreparedStatement(mappedStatement) || !isEnableLikeEscape()) {
+            Pipelines.skipHandler(ctx, true);
         }
+
         SqlRequestContext sqlContext = SqlRequestContextHolder.getInstance().get();
         LikeEscaper likeEscaper = getLikeEscaper(mappedStatement, sqlContext.getRequest());
         if (Objects.isNull(likeEscaper)) {
             logger.warn("Can't find a suitable LikeEscaper for the sql request: {}, statement id: {}", sqlContext.getRequest(), mappedStatement.getId());
-            ExecutorInvocationPipelines.interruptPipeline(ctx);
+            Pipelines.skipHandler(ctx, true);
         }
         BoundSql boundSql = executorInvocation.getBoundSql();
         String sql = boundSql.getSql();
         Pair<List<Integer>, List<Integer>> pair = LikeEscapers.findEscapedSlots(sql);
         if (Emptys.isEmpty(pair.getKey()) && Emptys.isEmpty(pair.getValue())) {
-            ExecutorInvocationPipelines.interruptPipeline(ctx);
+            Pipelines.skipHandler(ctx, true);
         }
 
         String newSql = LikeEscapers.insertLikeEscapeDeclares(sql, pair.getValue(), likeEscaper);
@@ -64,7 +73,7 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
         // rebuild a BoundSql
         boundSql = MybatisUtils.rebuildBoundSql(newSql, mappedStatement.getConfiguration(), boundSql);
         executorInvocation.setBoundSql(boundSql);
-        super.inbound(ctx);
+        Pipelines.inbound(ctx);
     }
 
 
