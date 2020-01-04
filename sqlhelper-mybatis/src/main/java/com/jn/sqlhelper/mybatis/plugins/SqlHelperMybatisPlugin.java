@@ -58,6 +58,9 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
             DefaultPipeline<ExecutorInvocation> pipeline = Pipelines.newPipeline(debugHandler, debugHandler, handlers);
             pipeline.bindTarget(executorInvocation);
             pipeline.inbound();
+            if(!pipeline.hadOutbound()){
+                Pipelines.outbound(pipeline);
+            }
             return executorInvocation.getResult();
         } finally {
             // ?
