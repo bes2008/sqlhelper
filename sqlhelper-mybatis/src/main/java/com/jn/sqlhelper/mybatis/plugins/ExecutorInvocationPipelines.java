@@ -1,0 +1,13 @@
+package com.jn.sqlhelper.mybatis.plugins;
+
+import com.jn.langx.pipeline.HandlerContext;
+import org.apache.ibatis.plugin.Invocation;
+
+public class ExecutorInvocationPipelines {
+    public static void interruptPipeline(HandlerContext ctx) throws Throwable{
+        ExecutorInvocation executorInvocation = (ExecutorInvocation) ctx.getPipeline().getTarget();
+        Invocation invocation = executorInvocation.getInvocation();
+        executorInvocation.setResult(invocation.proceed());
+        ctx.getPipeline().outbound();
+    }
+}
