@@ -30,6 +30,7 @@ public class Pipelines {
     }
 
     public static void skipHandler(HandlerContext ctx, boolean inbound) throws Throwable {
+        ctx.setSkiped(true);
         if (inbound) {
             if (ctx.hasNext()) {
                 ctx.getNext().inbound();
