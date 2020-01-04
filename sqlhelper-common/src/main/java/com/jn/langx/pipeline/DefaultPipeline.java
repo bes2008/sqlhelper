@@ -78,13 +78,13 @@ public class DefaultPipeline<T> implements Pipeline<T> {
     }
 
     @Override
-    public void inbound() {
+    public void inbound() throws Throwable {
         Preconditions.checkNotNull(target, "target is null");
         getHead().inbound();
     }
 
     @Override
-    public void outbound() {
+    public void outbound() throws Throwable {
         Preconditions.checkNotNull(target, "target is null");
         tail.outbound();
     }

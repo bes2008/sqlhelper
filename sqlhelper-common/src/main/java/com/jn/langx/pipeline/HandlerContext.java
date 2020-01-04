@@ -2,10 +2,8 @@ package com.jn.langx.pipeline;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
-import com.jn.langx.annotation.Prototype;
 import com.jn.langx.util.Preconditions;
 
-@Prototype
 public class HandlerContext {
     @Nullable
     private HandlerContext prev;
@@ -30,11 +28,11 @@ public class HandlerContext {
         this.prev = prev;
     }
 
-    public void inbound() {
+    public void inbound() throws Throwable {
         handler.inbound(this);
     }
 
-    public void outbound() {
+    public void outbound() throws Throwable {
         handler.outbound(this);
     }
 
