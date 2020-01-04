@@ -15,6 +15,9 @@ public class HandlerContext {
     @NonNull
     private Pipeline pipeline;
 
+    private boolean inbounded = false;
+    private boolean outbounded = false;
+
     public HandlerContext(Handler handler) {
         Preconditions.checkNotNull(handler);
         this.handler = handler;
@@ -29,10 +32,14 @@ public class HandlerContext {
     }
 
     public void inbound() throws Throwable {
+        getPipeline().setCurrentHandlerContext(this);
+        this.inbounded = true;
         handler.inbound(this);
     }
 
     public void outbound() throws Throwable {
+        getPipeline().setCurrentHandlerContext(this);
+        this.outbounded = true;
         handler.outbound(this);
     }
 
@@ -64,6 +71,22 @@ public class HandlerContext {
 
     public void setPipeline(Pipeline pipeline) {
         this.pipeline = pipeline;
+    }
+
+    public boolean isInbounded() {
+        return inbounded;
+    }
+
+    public void setInbounded(boolean inbounded) {
+        this.inbounded = inbounded;
+    }
+
+    public boolean isOutbounded() {
+        return outbounded;
+    }
+
+    public void setOutbounded(boolean outbounded) {
+        this.outbounded = outbounded;
     }
 
     @Override
