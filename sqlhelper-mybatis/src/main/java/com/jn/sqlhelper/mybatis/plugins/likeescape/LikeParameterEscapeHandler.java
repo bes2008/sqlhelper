@@ -26,7 +26,7 @@ import com.jn.langx.util.struct.Pair;
 import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.ExecutorInvocation;
-import com.jn.sqlhelper.mybatis.plugins.MybatisPluginContext;
+import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPluginContext;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -94,7 +94,7 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
             likeEscaper = sqlRequest.getLikeEscaper();
         }
         if (likeEscaper == null) {
-            SQLStatementInstrumentor instrumentor = MybatisPluginContext.getInstance().getInstrumentor();
+            SQLStatementInstrumentor instrumentor = SqlHelperMybatisPluginContext.getInstance().getInstrumentor();
             String databaseId = MybatisUtils.getDatabaseId(SqlRequestContextHolder.getInstance(), instrumentor, ms);
             if (Strings.isNotBlank(databaseId)) {
                 likeEscaper = instrumentor.getDialectRegistry().getDialectByName(databaseId);

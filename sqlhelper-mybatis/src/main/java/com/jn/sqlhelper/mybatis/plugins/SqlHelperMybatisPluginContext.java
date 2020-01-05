@@ -20,14 +20,14 @@ import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 
-public class MybatisPluginContext implements Initializable {
-    private static final MybatisPluginContext instance = new MybatisPluginContext();
+public class SqlHelperMybatisPluginContext implements Initializable {
+    private static final SqlHelperMybatisPluginContext instance = new SqlHelperMybatisPluginContext();
     private boolean inited = false;
 
-    private MybatisPluginContext() {
+    private SqlHelperMybatisPluginContext() {
     }
 
-    public static MybatisPluginContext getInstance() {
+    public static SqlHelperMybatisPluginContext getInstance() {
         return instance;
     }
 
