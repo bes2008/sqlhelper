@@ -22,6 +22,7 @@ import com.jn.langx.pipeline.Handler;
 import com.jn.langx.pipeline.Pipelines;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PropertiesAccessor;
+import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.mybatis.plugins.likeescape.LikeParameterEscapeHandler;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationPluginConfig;
@@ -46,6 +47,9 @@ import java.util.Properties;
 })
 public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     private static final Logger logger = LoggerFactory.getLogger(SqlHelperMybatisPlugin.class);
+    private PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
+    private static SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
+    private boolean inited = false;
 
     @Override
     public void init() throws InitializationException {
@@ -61,7 +65,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
             DefaultPipeline<ExecutorInvocation> pipeline = Pipelines.newPipeline(debugHandler, debugHandler, handlers);
             pipeline.bindTarget(executorInvocation);
             pipeline.inbound();
-            if(!pipeline.hadOutbound()){
+            if (!pipeline.hadOutbound()) {
                 Pipelines.outbound(pipeline);
             }
             return executorInvocation.getResult();
@@ -84,15 +88,34 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
 
     @Override
     public void setProperties(Properties properties) {
-
+        logger.info("{}", properties);
+        if (!inited) {
+            PropertiesAccessor accessor = new PropertiesAccessor(properties);
+            PaginationPluginConfig pluginConfig = parsePaginationConfig(accessor);
+            SQLInstrumentConfig instrumentConfig = parseInstrumentorConfig(accessor);
+            setInstrumentorConfig(instrumentConfig);
+            setPaginationPluginConfig(pluginConfig);
+            init();
+        }
     }
 
-    private void parseConfig(Properties props, PaginationPluginConfig pluginConfig, SQLInstrumentConfig instrumentConfig) {
-        if (props == null) {
-            return;
-        }
+    public void setPaginationPluginConfig(PaginationPluginConfig config) {
+        this.pluginConfig = config;
+    }
+
+    public void setInstrumentorConfig(SQLInstrumentConfig config) {
+        instrumentor.setConfig(config);
+    }
+
+    public static SQLStatementInstrumentor getInstrumentor(){
+        return instrumentor;
+    }
+
+
+    private PaginationPluginConfig parsePaginationConfig(PropertiesAccessor accessor) {
+        PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
         String paginationPluginConfigPrefix = "sqlhelper.mybatis.pagination.";
-        PropertiesAccessor accessor = new PropertiesAccessor(props);
+
         pluginConfig.setCount(accessor.getBoolean(paginationPluginConfigPrefix + "count", pluginConfig.isCount()));
         pluginConfig.setCountCacheExpireInSeconds(accessor.getInteger(paginationPluginConfigPrefix + "countCacheExpireInSeconds", pluginConfig.getCountCacheExpireInSeconds()));
         pluginConfig.setCountCacheInitCapacity(accessor.getInteger(paginationPluginConfigPrefix + "countCacheInitCapacity", pluginConfig.getCountCacheInitCapacity()));
@@ -101,9 +124,15 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         pluginConfig.setDefaultPageSize(accessor.getInteger(paginationPluginConfigPrefix + "defaultPageSize", pluginConfig.getDefaultPageSize()));
         pluginConfig.setUseLastPageIfPageNoOut(accessor.getBoolean(paginationPluginConfigPrefix + "useLastPageIfPageNoOut", pluginConfig.isUseLastPageIfPageNoOut()));
 
+        return pluginConfig;
+    }
+
+    private SQLInstrumentConfig parseInstrumentorConfig(PropertiesAccessor accessor) {
+        SQLInstrumentConfig instrumentConfig = new SQLInstrumentConfig();
         String instrumentorConfigPrefix = "sqlhelper.mybatis.instrumentor.";
         instrumentConfig.setDialect(accessor.getString(instrumentorConfigPrefix + "dialect", instrumentConfig.getDialect()));
         instrumentConfig.setDialectClassName(accessor.getString(instrumentorConfigPrefix + "dialectClassName", instrumentConfig.getDialectClassName()));
         instrumentConfig.setCacheInstrumentedSql(accessor.getBoolean(instrumentorConfigPrefix + "cacheInstruemtedSql", false));
+        return instrumentConfig;
     }
 }

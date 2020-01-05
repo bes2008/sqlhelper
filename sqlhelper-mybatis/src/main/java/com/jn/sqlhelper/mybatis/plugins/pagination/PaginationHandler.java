@@ -18,7 +18,7 @@ import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.ExecutorInvocation;
-import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPluginContext;
+import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -217,7 +217,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             throw Throwables.wrapAsRuntimeException(ex2);
         } finally {
             invalidatePagingRequest(false);
-            SQLStatementInstrumentor instrumentor = SqlHelperMybatisPluginContext.getInstance().getInstrumentor();
+            SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
             instrumentor.finish();
         }
     }
@@ -266,7 +266,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         } else {
             PAGING_CONTEXT.get().setString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID, statement.getId());
         }
-        SQLStatementInstrumentor instrumentor = SqlHelperMybatisPluginContext.getInstance().getInstrumentor();
+        SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
         final String databaseId = MybatisUtils.getDatabaseId(PAGING_CONTEXT, instrumentor, statement);
         return instrumentor.beginIfSupportsLimit(databaseId);
     }
@@ -280,7 +280,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         String pageSql = boundSql.getSql();
 
         boolean subQueryPagination = false;
-        SQLStatementInstrumentor instrumentor = SqlHelperMybatisPluginContext.getInstance().getInstrumentor();
+        SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
         if (SqlPaginations.isSubqueryPagingRequest(request)) {
             if (!SqlPaginations.isValidSubQueryPagination(request, instrumentor)) {
                 logger.warn("Paging request is not a valid subquery pagination request, so the paging request will not as a subquery pagination request. request: {}, the instrument configuration is: {}", request, instrumentor.getConfig());
@@ -360,7 +360,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
     }
 
     private Object executeOrderBy(OrderBy orderBy, final MappedStatement ms, final Object parameter, final RowBounds rowBounds, final ResultHandler resultHandler, final Executor executor, final BoundSql boundSql) throws Throwable {
-        SQLStatementInstrumentor instrumentor = SqlHelperMybatisPluginContext.getInstance().getInstrumentor();
+        SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
         String orderBySqlId = getOrderById(ms, orderBy);
         MappedStatement orderByStatement = this.customOrderByStatement(ms, orderBySqlId);
         final CacheKey orderByCacheKey = executor.createCacheKey(orderByStatement, parameter, RowBounds.DEFAULT, boundSql);
@@ -388,7 +388,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                 count = ((Number) ((List) countResultList).get(0)).intValue();
             } else {
                 String querySql = boundSql.getSql();
-                SQLStatementInstrumentor instrumentor = SqlHelperMybatisPluginContext.getInstance().getInstrumentor();
+                SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
                 final String countSql = instrumentor.countSql(querySql, request.getCountColumn());
                 countStatement = this.customCountStatement(ms, countStatementId, querySql);
 
