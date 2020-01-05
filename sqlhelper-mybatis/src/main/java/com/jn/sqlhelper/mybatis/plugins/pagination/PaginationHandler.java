@@ -73,6 +73,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                         .maxCapacity(pluginConfig.getCountCacheMaxCapacity()).build();
                 this.countSuffix = (Strings.isBlank(pluginConfig.getCountSuffix()) ? "_COUNT" : pluginConfig.getCountSuffix().trim());
             }
+            inited = true;
         }
     }
 
@@ -106,7 +107,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         final Executor executor = executorInvocation.getExecutor();
         BoundSql boundSql = executorInvocation.getBoundSql();
         CacheKey cacheKey = executorInvocation.getCacheKey();
-        ResultHandler resultHandler = null;
+        ResultHandler resultHandler = executorInvocation.getResultHandler();
 
         Object rs = null;
 

@@ -70,7 +70,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
 
             ExecutorInvocationSinkHandler sinkHandler = new ExecutorInvocationSinkHandler();
             handlerRegistry.put("sink", sinkHandler);
-
+            inited = true;
         }
     }
 
