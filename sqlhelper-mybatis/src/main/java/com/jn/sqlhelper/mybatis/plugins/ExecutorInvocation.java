@@ -155,6 +155,10 @@ public class ExecutorInvocation {
         this.cacheKey = executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
     }
 
+    public boolean isBoundSqlChanged() {
+        return boundSqlChanged;
+    }
+
     public String getMethodName() {
         return methodName;
     }
