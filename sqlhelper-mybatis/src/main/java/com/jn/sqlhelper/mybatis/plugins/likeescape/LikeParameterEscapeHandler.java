@@ -23,6 +23,7 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.struct.Pair;
+import com.jn.sqlhelper.common.formatter.SqlDmlFormatter;
 import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.ExecutorInvocation;
@@ -72,7 +73,8 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
 
         String newSql = LikeEscapers.insertLikeEscapeDeclares(sql, pair.getValue(), likeEscaper);
         if (logger.isDebugEnabled()) {
-            logger.debug("after like escape, the sql {} become: {}", sql, newSql);
+            SqlDmlFormatter sqlDmlFormatter = new SqlDmlFormatter();
+            logger.debug("after like escape, the sql {} become: {}", sqlDmlFormatter.format(sql), sqlDmlFormatter.format(newSql));
         }
         // rebuild a BoundSql
         boundSql = MybatisUtils.rebuildBoundSql(newSql, mappedStatement.getConfiguration(), boundSql);
