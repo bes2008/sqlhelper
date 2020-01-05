@@ -36,6 +36,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * {@link org.apache.ibatis.executor.Executor#query(MappedStatement, Object, RowBounds, ResultHandler)}
+ * {@link org.apache.ibatis.executor.Executor#query(MappedStatement, Object, RowBounds, ResultHandler, CacheKey, BoundSql)} )}
+ */
 public class PaginationHandler extends AbstractHandler implements Initializable {
     private static final Logger logger = LoggerFactory.getLogger(MybatisPaginationPlugin.class);
     private static final int NON_CACHE_QUERY_METHOD_PARAMS = 4;

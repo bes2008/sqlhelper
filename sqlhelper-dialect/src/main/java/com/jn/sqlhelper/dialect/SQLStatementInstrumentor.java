@@ -44,6 +44,15 @@ public class SQLStatementInstrumentor {
     private DialectRegistry dialectRegistry;
     private static final ThreadLocal<Dialect> DIALECT_HOLDER = new ThreadLocal<Dialect>();
     private boolean inited = false;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     private Cache<String, InstrumentedSelectStatement> instrumentSqlCache;
 
@@ -53,6 +62,7 @@ public class SQLStatementInstrumentor {
 
     public void init() {
         if (!inited) {
+            logger.info("Start to initial the {} SQLStatementInstrumentor with configuration{}", this.name, this.config);
             if (this.config == null) {
                 throw new IllegalStateException("the 'config' field is null");
             }
@@ -86,6 +96,7 @@ public class SQLStatementInstrumentor {
                         })
                         .build();
             }
+            logger.info("The {} SQLStatementInstrumentor initial finish", this.name);
         }
     }
 

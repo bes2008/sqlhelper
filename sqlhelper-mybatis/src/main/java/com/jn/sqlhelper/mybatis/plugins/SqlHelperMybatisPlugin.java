@@ -22,8 +22,8 @@ import com.jn.langx.util.collection.PropertiesAccessor;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.mybatis.plugins.likeescape.LikeParameterEscapeHandler;
-import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationHandler;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
+import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationHandler;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -77,24 +77,20 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         ExecutorInvocation executorInvocation = new ExecutorInvocation(invocation);
-        try {
-            Pipeline<ExecutorInvocation> pipeline = createPipeline(executorInvocation);
-            pipeline.inbound();
-            if (!pipeline.hadOutbound()) {
-                Pipelines.outbound(pipeline);
-            }
-            return executorInvocation.getResult();
-        } finally {
-            // ?
+        Pipeline<ExecutorInvocation> pipeline = createPipeline(executorInvocation);
+        pipeline.inbound();
+        if (!pipeline.hadOutbound()) {
+            Pipelines.outbound(pipeline);
         }
+        return executorInvocation.getResult();
 
     }
 
-    private Pipeline<ExecutorInvocation> createPipeline(ExecutorInvocation executorInvocation){
+    private Pipeline<ExecutorInvocation> createPipeline(ExecutorInvocation executorInvocation) {
         Handler debugHandler = handlerRegistry.get("debug");
         Handler sinkHandler = handlerRegistry.get("sink");
         List<Handler> handlers = Collects.emptyArrayList();
-        if("query".equals(executorInvocation.getMethodName())){
+        if ("query".equals(executorInvocation.getMethodName())) {
             handlers.add(handlerRegistry.get("likeEscape"));
             handlers.add(handlerRegistry.get("pagination"));
         }

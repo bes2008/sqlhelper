@@ -152,6 +152,7 @@ public class ExecutorInvocation {
             this.boundSqlChanged = true;
         }
         this.boundSql = boundSql;
+        this.cacheKey = executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
     }
 
     public String getMethodName() {
@@ -164,5 +165,10 @@ public class ExecutorInvocation {
 
     public void setResult(Object result) {
         this.result = result;
+    }
+
+    @Override
+    public String toString() {
+        return "ExecutorInvocation{}";
     }
 }

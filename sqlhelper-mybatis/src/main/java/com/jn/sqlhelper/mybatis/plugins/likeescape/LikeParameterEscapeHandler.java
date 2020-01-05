@@ -51,6 +51,7 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
 
         if (!MybatisUtils.isQueryStatement(mappedStatement) || !MybatisUtils.isPreparedStatement(mappedStatement) || !isEnableLikeEscape()) {
             Pipelines.skipHandler(ctx, true);
+            return;
         }
 
         SqlRequestContext sqlContext = SqlRequestContextHolder.getInstance().get();
@@ -58,12 +59,14 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
         if (Objects.isNull(likeEscaper)) {
             logger.warn("Can't find a suitable LikeEscaper for the sql request: {}, statement id: {}", sqlContext.getRequest(), mappedStatement.getId());
             Pipelines.skipHandler(ctx, true);
+            return;
         }
         BoundSql boundSql = executorInvocation.getBoundSql();
         String sql = boundSql.getSql();
         Pair<List<Integer>, List<Integer>> pair = LikeEscapers.findEscapedSlots(sql);
         if (Emptys.isEmpty(pair.getKey()) && Emptys.isEmpty(pair.getValue())) {
             Pipelines.skipHandler(ctx, true);
+            return;
         }
 
         String newSql = LikeEscapers.insertLikeEscapeDeclares(sql, pair.getValue(), likeEscaper);
