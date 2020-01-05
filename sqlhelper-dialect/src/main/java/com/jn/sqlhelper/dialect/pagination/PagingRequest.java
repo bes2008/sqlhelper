@@ -24,6 +24,7 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
     private static final long serialVersionUID = 1L;
     private Boolean count = null;
     private String countColumn;
+    private Boolean cacheCount = null;
 
     // begin 1
     private int pageNo = 1;
@@ -141,6 +142,15 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
 
     public void setCountColumn(String countColumn) {
         this.countColumn = countColumn;
+    }
+
+    public Boolean getCacheCount() {
+        return cacheCount;
+    }
+
+    public PagingRequest<C,E> setCacheCount(Boolean cacheCount) {
+        this.cacheCount = cacheCount;
+        return this;
     }
 
     public PagingRequest<C, E> setCtx(PagingRequestContext ctx) {

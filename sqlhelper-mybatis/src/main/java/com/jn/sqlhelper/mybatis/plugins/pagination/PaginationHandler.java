@@ -7,10 +7,7 @@ import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.pipeline.AbstractHandler;
 import com.jn.langx.pipeline.HandlerContext;
 import com.jn.langx.pipeline.Pipelines;
-import com.jn.langx.util.Chars;
-import com.jn.langx.util.Preconditions;
-import com.jn.langx.util.Strings;
-import com.jn.langx.util.Throwables;
+import com.jn.langx.util.*;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
@@ -344,7 +341,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         builder.fetchSize(ms.getFetchSize());
         builder.statementType(ms.getStatementType());
         builder.keyGenerator(ms.getKeyGenerator());
-        if (ms.getKeyProperties() != null && ms.getKeyProperties().length != 0) {
+        if (Emptys.isNotEmpty(ms.getKeyProperties())) {
             final StringBuilder keyProperties = new StringBuilder();
             for (final String keyProperty : ms.getKeyProperties()) {
                 keyProperties.append(keyProperty).append(",");
@@ -394,7 +391,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                 String querySql = boundSql.getSql();
                 SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
                 final String countSql = instrumentor.countSql(querySql, request.getCountColumn());
-                countStatement = this.customCountStatement(ms, countStatementId, querySql);
+                countStatement = this.customCountStatement(ms, countStatementId, querySql, request);
 
                 final CacheKey countKey2 = executor.createCacheKey(countStatement, parameter, RowBounds.DEFAULT, boundSql);
                 countKey2.update(request.getPageNo());
@@ -444,7 +441,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         return mappedStatement;
     }
 
-    private MappedStatement customCountStatement(final MappedStatement ms, final String countStatementId, String querySql) {
+    private MappedStatement customCountStatement(final MappedStatement ms, final String countStatementId, String querySql, PagingRequest pagingRequest) {
         MappedStatement countStatement = paginationConfig.enableCountCache() ? this.countStatementCache.getIfPresent(querySql) : null;
         if (countStatement == null) {
             final MappedStatement.Builder builder = new MappedStatement.Builder(ms.getConfiguration(), countStatementId, ms.getSqlSource(), ms.getSqlCommandType());
@@ -452,7 +449,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             builder.fetchSize(ms.getFetchSize());
             builder.statementType(ms.getStatementType());
             builder.keyGenerator(ms.getKeyGenerator());
-            if (ms.getKeyProperties() != null && ms.getKeyProperties().length != 0) {
+            if (Emptys.isNotEmpty(ms.getKeyProperties())) {
                 final StringBuilder keyProperties = new StringBuilder();
                 for (final String keyProperty : ms.getKeyProperties()) {
                     keyProperties.append(keyProperty).append(",");
@@ -469,10 +466,11 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             builder.resultSetType(ms.getResultSetType());
             builder.cache(ms.getCache());
             builder.flushCacheRequired(ms.isFlushCacheRequired());
-            builder.useCache(ms.isUseCache());
+            boolean useCache = Objects.isNull(pagingRequest.getCacheCount())? ms.isUseCache(): pagingRequest.getCacheCount();
+            builder.useCache(useCache);
 
             countStatement = builder.build();
-            if (paginationConfig.enableCountCache() && ms.isUseCache()) {
+            if (paginationConfig.enableCountCache() && useCache) {
                 this.countStatementCache.set(querySql, countStatement);
             }
         }
