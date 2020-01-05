@@ -41,8 +41,7 @@ import java.util.List;
  * {@link org.apache.ibatis.executor.Executor#query(MappedStatement, Object, RowBounds, ResultHandler, CacheKey, BoundSql)} )}
  */
 public class PaginationHandler extends AbstractHandler implements Initializable {
-    private static final Logger logger = LoggerFactory.getLogger(MybatisPaginationPlugin.class);
-    private static final int NON_CACHE_QUERY_METHOD_PARAMS = 4;
+    private static final Logger logger = LoggerFactory.getLogger(PaginationHandler.class);
     private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
     private PaginationConfig pluginConfig = new PaginationConfig();
@@ -115,7 +114,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
 
         try {
             if (!isPagingRequest(ms)) {
-                if ( PAGING_CONTEXT.isOrderByRequest() && !isNestedQueryInPagingRequest(ms)) {
+                if (PAGING_CONTEXT.isOrderByRequest() && !isNestedQueryInPagingRequest(ms)) {
                     // do order by
                     rs = executeOrderBy(PAGING_CONTEXT.getPagingRequest().getOrderBy(), ms, parameter, RowBounds.DEFAULT, resultHandler, executor, boundSql);
                 } else {

@@ -19,9 +19,8 @@ import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.CustomScriptLanguageDriver;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
-import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin;
-import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisProperties;
+import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.session.Configuration;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
@@ -45,20 +44,20 @@ public class SqlHelperMybatisAutoConfiguration implements ConfigurationCustomize
 
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.mybatis.instrumentor")
-    public SQLInstrumentConfig sqlInstrumentConfig(){
+    public SQLInstrumentConfig sqlInstrumentConfig() {
         return new SQLInstrumentConfig();
     }
 
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.mybatis.pagination")
-    public PaginationConfig paginationPluginConfig(){
+    public PaginationConfig paginationPluginConfig() {
         return new PaginationConfig();
     }
 
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.mybatis")
     public SqlHelperMybatisProperties sqlHelperMybatisProperties(SQLInstrumentConfig sqlInstrumentConfig, PaginationConfig paginationPluginConfig) {
-        SqlHelperMybatisProperties p =  new SqlHelperMybatisProperties();
+        SqlHelperMybatisProperties p = new SqlHelperMybatisProperties();
         p.setInstrumentor(sqlInstrumentConfig);
         p.setPagination(paginationPluginConfig);
         return p;
@@ -82,7 +81,7 @@ public class SqlHelperMybatisAutoConfiguration implements ConfigurationCustomize
         plugin.init();
 
         logger.info("Add interceptor {} to mybatis configuration", plugin);
-        logger.info("The properties of the mybatis plugin [{}] is: {}", Reflects.getFQNClassName(MybatisPaginationPlugin.class), sqlHelperMybatisProperties);
+        logger.info("The properties of the mybatis plugin [{}] is: {}", Reflects.getFQNClassName(SqlHelperMybatisPlugin.class), sqlHelperMybatisProperties);
         configuration.addInterceptor(plugin);
     }
 

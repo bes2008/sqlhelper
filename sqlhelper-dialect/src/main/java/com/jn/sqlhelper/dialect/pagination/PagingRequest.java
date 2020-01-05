@@ -161,7 +161,7 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
      * @param useLastPageIfPageNoOut
      * @return
      * 
-     * @see #setUseLastPageIfPageOut(Boolean) 
+     * @see #setUseLastPageIfPageOut(Boolean)
      */
     @Deprecated
     public PagingRequest<C, E> setUseLastPageIfPageNoOut(Boolean useLastPageIfPageNoOut) {

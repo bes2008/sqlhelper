@@ -20,7 +20,6 @@ import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
-import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisProperties;
 import com.jn.sqlhelper.mybatisplus.plugins.pagination.CustomMybatisPlusScriptLanguageDriver;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
@@ -65,7 +64,7 @@ public class SqlHelperMybatisPlusAutoConfiguration implements ConfigurationCusto
         plugin.init();
 
         logger.info("Add interceptor {} to mybatis-plus configuration", plugin);
-        logger.info("The properties of the mybatis-plus plugin [{}] is: {}", Reflects.getFQNClassName(MybatisPaginationPlugin.class), sqlHelperMybatisProperties);
+        logger.info("The properties of the mybatis-plus plugin [{}] is: {}", Reflects.getFQNClassName(SqlHelperMybatisPlugin.class), sqlHelperMybatisProperties);
         configuration.addInterceptor(plugin);
     }
 
