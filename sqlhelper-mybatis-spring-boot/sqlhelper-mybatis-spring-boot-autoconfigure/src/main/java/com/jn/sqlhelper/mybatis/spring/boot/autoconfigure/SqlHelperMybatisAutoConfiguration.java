@@ -18,6 +18,7 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.CustomScriptLanguageDriver;
+import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
 import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisProperties;
@@ -75,7 +76,7 @@ public class SqlHelperMybatisAutoConfiguration implements ConfigurationCustomize
         logger.info("Start to customize mybatis configuration with mybatis-spring-boot-autoconfigure");
         configuration.setDefaultScriptingLanguage(CustomScriptLanguageDriver.class);
 
-        MybatisPaginationPlugin plugin = new MybatisPaginationPlugin();
+        SqlHelperMybatisPlugin plugin = new SqlHelperMybatisPlugin();
         plugin.setPaginationPluginConfig(sqlHelperMybatisProperties.getPagination());
         plugin.setInstrumentorConfig(sqlHelperMybatisProperties.getInstrumentor());
         plugin.init();

@@ -16,10 +16,7 @@ package com.jn.sqlhelper.mybatis.plugins;
 
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
-import com.jn.langx.pipeline.DebugHandler;
-import com.jn.langx.pipeline.DefaultPipeline;
-import com.jn.langx.pipeline.Handler;
-import com.jn.langx.pipeline.Pipelines;
+import com.jn.langx.pipeline.*;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PropertiesAccessor;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
@@ -60,6 +57,9 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         if (!inited) {
             instrumentor.init();
 
+            DebugHandler debugHandler = new DebugHandler();
+            handlerRegistry.put("debug", debugHandler);
+
             LikeParameterEscapeHandler likeParameterEscapeHandler = new LikeParameterEscapeHandler();
             handlerRegistry.put("likeEscape", likeParameterEscapeHandler);
 
@@ -78,10 +78,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     public Object intercept(Invocation invocation) throws Throwable {
         ExecutorInvocation executorInvocation = new ExecutorInvocation(invocation);
         try {
-            DebugHandler debugHandler = new DebugHandler();
-            List<Handler> handlers = Collects.<Handler>asList(new LikeParameterEscapeHandler());
-            DefaultPipeline<ExecutorInvocation> pipeline = Pipelines.newPipeline(debugHandler, debugHandler, handlers);
-            pipeline.bindTarget(executorInvocation);
+            Pipeline<ExecutorInvocation> pipeline = createPipeline(executorInvocation);
             pipeline.inbound();
             if (!pipeline.hadOutbound()) {
                 Pipelines.outbound(pipeline);
@@ -91,6 +88,19 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
             // ?
         }
 
+    }
+
+    private Pipeline<ExecutorInvocation> createPipeline(ExecutorInvocation executorInvocation){
+        Handler debugHandler = handlerRegistry.get("debug");
+        Handler sinkHandler = handlerRegistry.get("sink");
+        List<Handler> handlers = Collects.emptyArrayList();
+        if("query".equals(executorInvocation.getMethodName())){
+            handlers.add(handlerRegistry.get("likeEscape"));
+            handlers.add(handlerRegistry.get("pagination"));
+        }
+        DefaultPipeline<ExecutorInvocation> pipeline = Pipelines.newPipeline(debugHandler, sinkHandler, handlers);
+        pipeline.bindTarget(executorInvocation);
+        return pipeline;
     }
 
     @Override

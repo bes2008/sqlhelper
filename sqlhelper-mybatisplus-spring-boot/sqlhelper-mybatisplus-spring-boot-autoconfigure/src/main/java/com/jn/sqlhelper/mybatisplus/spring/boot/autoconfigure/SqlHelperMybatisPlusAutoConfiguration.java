@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
+import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
 import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisProperties;
 import com.jn.sqlhelper.mybatisplus.plugins.pagination.CustomMybatisPlusScriptLanguageDriver;
@@ -58,7 +59,7 @@ public class SqlHelperMybatisPlusAutoConfiguration implements ConfigurationCusto
         logger.info("Start to customize mybatis-plus configuration with mybatis-plus-boot-starter");
         configuration.setDefaultScriptingLanguage(CustomMybatisPlusScriptLanguageDriver.class);
 
-        MybatisPaginationPlugin plugin = new MybatisPaginationPlugin();
+        SqlHelperMybatisPlugin plugin = new SqlHelperMybatisPlugin();
         plugin.setPaginationPluginConfig(sqlHelperMybatisProperties.getPagination());
         plugin.setInstrumentorConfig(sqlHelperMybatisProperties.getInstrumentor());
         plugin.init();
