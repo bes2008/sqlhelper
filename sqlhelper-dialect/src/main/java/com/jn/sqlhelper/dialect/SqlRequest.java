@@ -3,6 +3,7 @@ package com.jn.sqlhelper.dialect;
 import com.jn.easyjson.core.annotation.Ignore;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -15,6 +16,9 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
      * the customer likeEscaper
      */
     private LikeEscaper likeEscaper;
+
+    private List<Integer> likeParameterIndexes = null;
+
 
     private Boolean escapeLikeParameter; // will be used for prepared statement
     @Ignore
@@ -79,5 +83,13 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
 
     public boolean isPagingRequest() {
         return false;
+    }
+
+    public List<Integer> getLikeParameterIndexes() {
+        return likeParameterIndexes;
+    }
+
+    public void setLikeParameterIndexes(List<Integer> likeParameterIndexes) {
+        this.likeParameterIndexes = likeParameterIndexes;
     }
 }
