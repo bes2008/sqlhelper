@@ -12,10 +12,8 @@ import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.collection.PropertiesAccessor;
 import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
-import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
@@ -37,18 +35,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Properties;
 
 public class PaginationHandler extends AbstractHandler implements Initializable {
-    @Override
-    public void inbound(HandlerContext ctx) throws Throwable {
-        ExecutorInvocation executorInvocation = (ExecutorInvocation) ctx.getPipeline().getTarget();
-        if (MybatisUtils.isQueryStatement(executorInvocation.getMappedStatement()) && executorInvocation.getMethodName().equals("query")) {
-            intercept(ctx);
-        } else {
-            Pipelines.skipHandler(ctx, true);
-        }
-    }
+
 
     private static final Logger logger = LoggerFactory.getLogger(MybatisPaginationPlugin.class);
     private static final int NON_CACHE_QUERY_METHOD_PARAMS = 4;
@@ -96,6 +85,16 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             return pluginConfig.isUseLastPageIfPageNoOut();
         }
         return request.isUseLastPageIfPageOut();
+    }
+
+    @Override
+    public void inbound(HandlerContext ctx) throws Throwable {
+        ExecutorInvocation executorInvocation = (ExecutorInvocation) ctx.getPipeline().getTarget();
+        if (MybatisUtils.isQueryStatement(executorInvocation.getMappedStatement()) && executorInvocation.getMethodName().equals("query")) {
+            intercept(ctx);
+        } else {
+            Pipelines.skipHandler(ctx, true);
+        }
     }
 
     public void intercept(final HandlerContext ctx) {
