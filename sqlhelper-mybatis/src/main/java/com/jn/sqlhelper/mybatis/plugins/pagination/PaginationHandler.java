@@ -335,7 +335,6 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
     }
 
     private MappedStatement customOrderByStatement(final MappedStatement ms, final String orderByStatementId) {
-        MappedStatement orderBySqlStatement = null;
         final MappedStatement.Builder builder = new MappedStatement.Builder(ms.getConfiguration(), orderByStatementId, ms.getSqlSource(), ms.getSqlCommandType());
         builder.resource(ms.getResource());
         builder.fetchSize(ms.getFetchSize());
@@ -356,8 +355,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         builder.cache(ms.getCache());
         builder.flushCacheRequired(ms.isFlushCacheRequired());
         builder.useCache(ms.isUseCache());
-        orderBySqlStatement = builder.build();
-        return orderBySqlStatement;
+        return builder.build();
     }
 
     private Object executeOrderBy(OrderBy orderBy, final MappedStatement ms, final Object parameter, final RowBounds rowBounds, final ResultHandler resultHandler, final Executor executor, final BoundSql boundSql) throws Throwable {

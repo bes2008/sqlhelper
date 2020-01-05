@@ -61,6 +61,7 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
             Pipelines.skipHandler(ctx, true);
             return;
         }
+        sqlContext.getRequest().setLikeEscaper(likeEscaper);
         BoundSql boundSql = executorInvocation.getBoundSql();
         String sql = boundSql.getSql();
         Pair<List<Integer>, List<Integer>> pair = LikeEscapers.findEscapedSlots(sql);
@@ -101,6 +102,9 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
             String databaseId = MybatisUtils.getDatabaseId(SqlRequestContextHolder.getInstance(), instrumentor, ms);
             if (Strings.isNotBlank(databaseId)) {
                 likeEscaper = instrumentor.getDialectRegistry().getDialectByName(databaseId);
+                if (likeEscaper != null && sqlRequest != null) {
+                    sqlRequest.setDialect(databaseId);
+                }
             }
         }
         return likeEscaper;
