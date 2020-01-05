@@ -37,8 +37,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class PaginationHandler extends AbstractHandler implements Initializable {
-
-
     private static final Logger logger = LoggerFactory.getLogger(MybatisPaginationPlugin.class);
     private static final int NON_CACHE_QUERY_METHOD_PARAMS = 4;
     private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();

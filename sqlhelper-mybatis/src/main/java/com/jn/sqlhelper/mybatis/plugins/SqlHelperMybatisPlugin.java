@@ -14,17 +14,20 @@
 
 package com.jn.sqlhelper.mybatis.plugins;
 
+import com.jn.langx.cache.CacheBuilder;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.pipeline.DebugHandler;
 import com.jn.langx.pipeline.DefaultPipeline;
 import com.jn.langx.pipeline.Handler;
 import com.jn.langx.pipeline.Pipelines;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PropertiesAccessor;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.mybatis.plugins.likeescape.LikeParameterEscapeHandler;
+import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationHandler;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationPluginConfig;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
@@ -36,7 +39,9 @@ import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 @Intercepts({
@@ -50,10 +55,17 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     private PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
     private static SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
     private boolean inited = false;
-
+    private Map<String, Handler> handlerRegistry = new HashMap<String, Handler>();
     @Override
     public void init() throws InitializationException {
+        if (!inited) {
+            instrumentor.init();
 
+            LikeParameterEscapeHandler likeParameterEscapeHandler = new LikeParameterEscapeHandler();
+            PaginationHandler paginationHandler = new PaginationHandler();
+            setPaginationPluginConfig(pluginConfig);
+            paginationHandler.init();
+        }
     }
 
     @Override
