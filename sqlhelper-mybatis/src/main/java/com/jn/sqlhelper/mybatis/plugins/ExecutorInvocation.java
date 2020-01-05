@@ -47,6 +47,8 @@ public class ExecutorInvocation {
     @NonNull
     private BoundSql boundSql;
 
+    private boolean boundSqlChanged = false;
+
     private Object result;
 
     public ExecutorInvocation(Invocation invocation) {
@@ -146,6 +148,9 @@ public class ExecutorInvocation {
     }
 
     public void setBoundSql(BoundSql boundSql) {
+        if (Objects.isNotNull(this.boundSql)) {
+            this.boundSqlChanged = true;
+        }
         this.boundSql = boundSql;
     }
 

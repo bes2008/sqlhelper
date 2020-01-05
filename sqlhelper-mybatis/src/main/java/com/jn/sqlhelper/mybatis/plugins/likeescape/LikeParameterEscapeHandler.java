@@ -68,7 +68,7 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
 
         String newSql = LikeEscapers.insertLikeEscapeDeclares(sql, pair.getValue(), likeEscaper);
         if (logger.isDebugEnabled()) {
-            logger.debug("after like escape, the sql become: {}", newSql);
+            logger.debug("after like escape, the sql {} become: {}", sql, newSql);
         }
         // rebuild a BoundSql
         boundSql = MybatisUtils.rebuildBoundSql(newSql, mappedStatement.getConfiguration(), boundSql);
