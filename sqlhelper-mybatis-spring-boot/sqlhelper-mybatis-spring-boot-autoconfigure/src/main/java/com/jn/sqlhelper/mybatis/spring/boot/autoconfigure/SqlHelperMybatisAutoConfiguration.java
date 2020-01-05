@@ -19,7 +19,7 @@ import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.CustomScriptLanguageDriver;
 import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationPlugin;
-import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationPluginConfig;
+import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisProperties;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.session.Configuration;
@@ -50,13 +50,13 @@ public class SqlHelperMybatisAutoConfiguration implements ConfigurationCustomize
 
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.mybatis.pagination")
-    public PaginationPluginConfig paginationPluginConfig(){
-        return new PaginationPluginConfig();
+    public PaginationConfig paginationPluginConfig(){
+        return new PaginationConfig();
     }
 
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.mybatis")
-    public SqlHelperMybatisProperties sqlHelperMybatisProperties(SQLInstrumentConfig sqlInstrumentConfig, PaginationPluginConfig paginationPluginConfig) {
+    public SqlHelperMybatisProperties sqlHelperMybatisProperties(SQLInstrumentConfig sqlInstrumentConfig, PaginationConfig paginationPluginConfig) {
         SqlHelperMybatisProperties p =  new SqlHelperMybatisProperties();
         p.setInstrumentor(sqlInstrumentConfig);
         p.setPagination(paginationPluginConfig);
