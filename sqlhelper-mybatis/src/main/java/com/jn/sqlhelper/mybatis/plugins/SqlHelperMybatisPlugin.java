@@ -47,7 +47,7 @@ import java.util.Properties;
 })
 public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     private static final Logger logger = LoggerFactory.getLogger(SqlHelperMybatisPlugin.class);
-    private PaginationConfig pluginConfig = new PaginationConfig();
+    private PaginationConfig paginationConfig = new PaginationConfig();
     private static SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
     private boolean inited = false;
     private Map<String, Handler> handlerRegistry = new HashMap<String, Handler>();
@@ -64,7 +64,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
             handlerRegistry.put("likeEscape", likeParameterEscapeHandler);
 
             PaginationHandler paginationHandler = new PaginationHandler();
-            setPaginationPluginConfig(pluginConfig);
+            paginationHandler.setPaginationConfig(this.paginationConfig);
             paginationHandler.init();
             handlerRegistry.put("pagination", paginationHandler);
 
@@ -118,13 +118,13 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
             PaginationConfig pluginConfig = parsePaginationConfig(accessor);
             SQLInstrumentConfig instrumentConfig = parseInstrumentorConfig(accessor);
             setInstrumentorConfig(instrumentConfig);
-            setPaginationPluginConfig(pluginConfig);
+            setPaginationConfig(pluginConfig);
             init();
         }
     }
 
-    public void setPaginationPluginConfig(PaginationConfig config) {
-        this.pluginConfig = config;
+    public void setPaginationConfig(PaginationConfig config) {
+        this.paginationConfig = config;
     }
 
     public void setInstrumentorConfig(SQLInstrumentConfig config) {

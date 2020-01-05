@@ -76,7 +76,7 @@ public class SqlHelperMybatisAutoConfiguration implements ConfigurationCustomize
         configuration.setDefaultScriptingLanguage(CustomScriptLanguageDriver.class);
 
         SqlHelperMybatisPlugin plugin = new SqlHelperMybatisPlugin();
-        plugin.setPaginationPluginConfig(sqlHelperMybatisProperties.getPagination());
+        plugin.setPaginationConfig(sqlHelperMybatisProperties.getPagination());
         plugin.setInstrumentorConfig(sqlHelperMybatisProperties.getInstrumentor());
         plugin.init();
 

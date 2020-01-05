@@ -44,7 +44,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
     private static final Logger logger = LoggerFactory.getLogger(PaginationHandler.class);
     private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
-    private PaginationConfig pluginConfig = new PaginationConfig();
+    private PaginationConfig paginationConfig = new PaginationConfig();
     /**
      * count sql cache
      * key: count sql, should not count_id, because the mysql's sql is dynamic
@@ -63,28 +63,28 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
     @Override
     public void init() {
         if (!inited) {
-            rowSelectionBuilder.setDefaultPageSize(pluginConfig.getDefaultPageSize());
+            rowSelectionBuilder.setDefaultPageSize(paginationConfig.getDefaultPageSize());
 
-            if (pluginConfig.enableCountCache()) {
+            if (paginationConfig.enableCountCache()) {
                 this.countStatementCache = CacheBuilder.<String, MappedStatement>newBuilder()
                         .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-                        .expireAfterWrite(pluginConfig.getCountCacheExpireInSeconds())
-                        .initialCapacity(pluginConfig.getCountCacheInitCapacity())
-                        .maxCapacity(pluginConfig.getCountCacheMaxCapacity()).build();
-                this.countSuffix = (Strings.isBlank(pluginConfig.getCountSuffix()) ? "_COUNT" : pluginConfig.getCountSuffix().trim());
+                        .expireAfterWrite(paginationConfig.getCountCacheExpireInSeconds())
+                        .initialCapacity(paginationConfig.getCountCacheInitCapacity())
+                        .maxCapacity(paginationConfig.getCountCacheMaxCapacity()).build();
+                this.countSuffix = (Strings.isBlank(paginationConfig.getCountSuffix()) ? "_COUNT" : paginationConfig.getCountSuffix().trim());
             }
             inited = true;
         }
     }
 
-    public void setPaginationPluginConfig(PaginationConfig config) {
-        this.pluginConfig = config;
+    public void setPaginationConfig(PaginationConfig config) {
+        this.paginationConfig = config;
     }
 
-    private boolean isUseLastPageIfPageNoOut(@NonNull PagingRequest request) {
+    private boolean isUseLastPageIfPageOut(@NonNull PagingRequest request) {
         Preconditions.checkNotNull(request);
         if (request.isUseLastPageIfPageOut() == null) {
-            return pluginConfig.isUseLastPageIfPageNoOut();
+            return paginationConfig.isUseLastPageIfPageNoOut();
         }
         return request.isUseLastPageIfPageOut();
     }
@@ -182,7 +182,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                             int maxPageCount = result.getMaxPage();
                             if (maxPageCount >= 0) {
                                 if (requestPageNo > maxPageCount) {
-                                    if (isUseLastPageIfPageNoOut(request)) {
+                                    if (isUseLastPageIfPageOut(request)) {
                                         request.setPageNo(maxPageCount);
                                         result.setPageNo(maxPageCount);
                                     } else {
@@ -418,7 +418,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
 
     private boolean needCount(final PagingRequest request) {
         if (request.needCount() == null) {
-            return pluginConfig.isCount();
+            return paginationConfig.isCount();
         }
         if (Boolean.TRUE.compareTo(request.needCount()) == 0) {
             return !SqlPaginations.isSubqueryPagingRequest(request);
@@ -445,7 +445,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
     }
 
     private MappedStatement customCountStatement(final MappedStatement ms, final String countStatementId, String querySql) {
-        MappedStatement countStatement = pluginConfig.enableCountCache() ? this.countStatementCache.getIfPresent(querySql) : null;
+        MappedStatement countStatement = paginationConfig.enableCountCache() ? this.countStatementCache.getIfPresent(querySql) : null;
         if (countStatement == null) {
             final MappedStatement.Builder builder = new MappedStatement.Builder(ms.getConfiguration(), countStatementId, ms.getSqlSource(), ms.getSqlCommandType());
             builder.resource(ms.getResource());
@@ -472,7 +472,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             builder.useCache(ms.isUseCache());
 
             countStatement = builder.build();
-            if (pluginConfig.enableCountCache() && ms.isUseCache()) {
+            if (paginationConfig.enableCountCache() && ms.isUseCache()) {
                 this.countStatementCache.set(querySql, countStatement);
             }
         }
