@@ -14,21 +14,19 @@
 
 package com.jn.sqlhelper.mybatis.plugins;
 
-import com.jn.langx.cache.CacheBuilder;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.pipeline.DebugHandler;
 import com.jn.langx.pipeline.DefaultPipeline;
 import com.jn.langx.pipeline.Handler;
 import com.jn.langx.pipeline.Pipelines;
-import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PropertiesAccessor;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.mybatis.plugins.likeescape.LikeParameterEscapeHandler;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationHandler;
-import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationPluginConfig;
+import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -52,19 +50,27 @@ import java.util.Properties;
 })
 public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     private static final Logger logger = LoggerFactory.getLogger(SqlHelperMybatisPlugin.class);
-    private PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
+    private PaginationConfig pluginConfig = new PaginationConfig();
     private static SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
     private boolean inited = false;
     private Map<String, Handler> handlerRegistry = new HashMap<String, Handler>();
+
     @Override
     public void init() throws InitializationException {
         if (!inited) {
             instrumentor.init();
 
             LikeParameterEscapeHandler likeParameterEscapeHandler = new LikeParameterEscapeHandler();
+            handlerRegistry.put("likeEscape", likeParameterEscapeHandler);
+
             PaginationHandler paginationHandler = new PaginationHandler();
             setPaginationPluginConfig(pluginConfig);
             paginationHandler.init();
+            handlerRegistry.put("pagination", paginationHandler);
+
+            ExecutorInvocationSinkHandler sinkHandler = new ExecutorInvocationSinkHandler();
+            handlerRegistry.put("sink", sinkHandler);
+
         }
     }
 
@@ -103,7 +109,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         logger.info("{}", properties);
         if (!inited) {
             PropertiesAccessor accessor = new PropertiesAccessor(properties);
-            PaginationPluginConfig pluginConfig = parsePaginationConfig(accessor);
+            PaginationConfig pluginConfig = parsePaginationConfig(accessor);
             SQLInstrumentConfig instrumentConfig = parseInstrumentorConfig(accessor);
             setInstrumentorConfig(instrumentConfig);
             setPaginationPluginConfig(pluginConfig);
@@ -111,7 +117,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         }
     }
 
-    public void setPaginationPluginConfig(PaginationPluginConfig config) {
+    public void setPaginationPluginConfig(PaginationConfig config) {
         this.pluginConfig = config;
     }
 
@@ -119,13 +125,13 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         instrumentor.setConfig(config);
     }
 
-    public static SQLStatementInstrumentor getInstrumentor(){
+    public static SQLStatementInstrumentor getInstrumentor() {
         return instrumentor;
     }
 
 
-    private PaginationPluginConfig parsePaginationConfig(PropertiesAccessor accessor) {
-        PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
+    private PaginationConfig parsePaginationConfig(PropertiesAccessor accessor) {
+        PaginationConfig pluginConfig = new PaginationConfig();
         String paginationPluginConfigPrefix = "sqlhelper.mybatis.pagination.";
 
         pluginConfig.setCount(accessor.getBoolean(paginationPluginConfigPrefix + "count", pluginConfig.isCount()));

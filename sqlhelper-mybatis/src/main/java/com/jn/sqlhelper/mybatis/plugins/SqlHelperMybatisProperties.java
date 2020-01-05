@@ -15,12 +15,12 @@
 package com.jn.sqlhelper.mybatis.plugins;
 
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
-import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationPluginConfig;
+import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 
 public class SqlHelperMybatisProperties {
 
     private SQLInstrumentConfig instrumentor = new SQLInstrumentConfig();
-    private PaginationPluginConfig pagination = new PaginationPluginConfig();
+    private PaginationConfig pagination = new PaginationConfig();
 
     public SQLInstrumentConfig getInstrumentor() {
         return instrumentor;
@@ -30,11 +30,11 @@ public class SqlHelperMybatisProperties {
         this.instrumentor = instrumentor;
     }
 
-    public PaginationPluginConfig getPagination() {
+    public PaginationConfig getPagination() {
         return pagination;
     }
 
-    public void setPagination(PaginationPluginConfig pagination) {
+    public void setPagination(PaginationConfig pagination) {
         this.pagination = pagination;
     }
 

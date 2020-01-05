@@ -41,7 +41,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
     private static final int NON_CACHE_QUERY_METHOD_PARAMS = 4;
     private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
-    private PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
+    private PaginationConfig pluginConfig = new PaginationConfig();
     /**
      * count sql cache
      * key: count sql, should not count_id, because the mysql's sql is dynamic
@@ -73,7 +73,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         }
     }
 
-    public void setPaginationPluginConfig(PaginationPluginConfig config) {
+    public void setPaginationPluginConfig(PaginationConfig config) {
         this.pluginConfig = config;
     }
 

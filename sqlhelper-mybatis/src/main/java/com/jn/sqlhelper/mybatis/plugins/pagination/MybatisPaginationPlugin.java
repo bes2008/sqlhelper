@@ -58,7 +58,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
     private static final SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
-    private PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
+    private PaginationConfig pluginConfig = new PaginationConfig();
     /**
      * count sql cache
      * key: count sql, should not count_id, because the mysql's sql is dynamic
@@ -98,7 +98,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         }
     }
 
-    private void parseConfig(Properties props, PaginationPluginConfig pluginConfig, SQLInstrumentConfig instrumentConfig) {
+    private void parseConfig(Properties props, PaginationConfig pluginConfig, SQLInstrumentConfig instrumentConfig) {
         if (props == null) {
             return;
         }
@@ -133,7 +133,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
     public void setProperties(final Properties properties) {
         logger.info("{}", properties);
         if (!inited) {
-            PaginationPluginConfig pluginConfig = new PaginationPluginConfig();
+            PaginationConfig pluginConfig = new PaginationConfig();
             SQLInstrumentConfig instrumentConfig = new SQLInstrumentConfig();
             parseConfig(properties, pluginConfig, instrumentConfig);
             setInstrumentorConfig(instrumentConfig);
@@ -142,7 +142,7 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         }
     }
 
-    public void setPaginationPluginConfig(PaginationPluginConfig config) {
+    public void setPaginationPluginConfig(PaginationConfig config) {
         this.pluginConfig = config;
     }
 
