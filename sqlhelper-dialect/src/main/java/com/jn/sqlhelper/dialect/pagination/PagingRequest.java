@@ -151,9 +151,23 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
         return useLastPageIfPageOut;
     }
 
-    public void setUseLastPageIfPageOut(Boolean useLastPageIfPageNoOut) {
+    public PagingRequest<C, E> setUseLastPageIfPageOut(Boolean useLastPageIfPageNoOut) {
         this.useLastPageIfPageOut = useLastPageIfPageNoOut;
+        return this;
     }
+
+    /**
+     * 
+     * @param useLastPageIfPageNoOut
+     * @return
+     * 
+     * @see #setUseLastPageIfPageOut(Boolean) 
+     */
+    @Deprecated
+    public PagingRequest<C, E> setUseLastPageIfPageNoOut(Boolean useLastPageIfPageNoOut) {
+        return setUseLastPageIfPageOut(useLastPageIfPageNoOut);
+    }
+
 
     public String getSubqueryPagingStartFlag() {
         return subqueryPagingStartFlag;
