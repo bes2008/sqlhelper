@@ -14,10 +14,15 @@
 
 package com.jn.sqlhelper.mybatis.plugins;
 
+import com.jn.langx.lifecycle.Initializable;
+import com.jn.langx.lifecycle.InitializationException;
+import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
+import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 
-public class MybatisPluginContext {
+public class MybatisPluginContext implements Initializable {
     private static final MybatisPluginContext instance = new MybatisPluginContext();
+    private boolean inited = false;
 
     private MybatisPluginContext() {
     }
@@ -34,5 +39,18 @@ public class MybatisPluginContext {
 
     public void setInstrumentor(SQLStatementInstrumentor instrumentor) {
         this.instrumentor = instrumentor;
+    }
+
+    @Override
+    public void init() throws InitializationException {
+        if (!inited) {
+            Preconditions.checkNotNull(instrumentor, "SQL Instrumentor is null");
+            instrumentor.init();
+            inited = true;
+        }
+    }
+
+    public void setInstrumentorConfig(SQLInstrumentConfig config) {
+        instrumentor.setConfig(config);
     }
 }
