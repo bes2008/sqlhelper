@@ -43,7 +43,6 @@ import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -429,7 +428,6 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
         String orderBySqlId = getOrderById(ms, orderBy);
         BoundSql orderByBoundSql = null;
         MappedStatement orderByStatement = this.customOrderByStatement(ms, orderBySqlId);
-        final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
         final CacheKey orderByCacheKey = executor.createCacheKey(orderByStatement, parameter, RowBounds.DEFAULT, boundSql);
         final String orderBySql = instrumentor.instrumentOrderBySql(boundSql.getSql(), orderBy);
         orderByBoundSql = MybatisUtils.rebuildBoundSql(orderBySql, orderByStatement.getConfiguration(), boundSql);
@@ -458,7 +456,6 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
                 final String countSql = instrumentor.countSql(querySql, request.getCountColumn());
                 countStatement = this.customCountStatement(ms, countStatementId, querySql);
 
-                final Map<String, Object> additionalParameters = BoundSqls.getAdditionalParameter(boundSql);
                 final CacheKey countKey2 = executor.createCacheKey(countStatement, parameter, RowBounds.DEFAULT, boundSql);
                 countKey2.update(request.getPageNo());
                 countKey2.update(request.getPageSize());
@@ -540,28 +537,5 @@ public class MybatisPaginationPlugin implements Interceptor, Initializable {
             }
         }
         return countStatement;
-    }
-
-    static class BoundSqls {
-        private static Field additionalParametersField;
-
-        static Map<String, Object> getAdditionalParameter(final BoundSql boundSql) {
-            if (additionalParametersField != null) {
-                try {
-                    return (Map<String, Object>) additionalParametersField.get(boundSql);
-                } catch (IllegalAccessException ex) {
-                    // Noop
-                }
-            }
-            return Collections.emptyMap();
-        }
-
-        static {
-            try {
-                (additionalParametersField = BoundSql.class.getDeclaredField("additionalParameters")).setAccessible(true);
-            } catch (NoSuchFieldException ex) {
-                // Noop
-            }
-        }
     }
 }

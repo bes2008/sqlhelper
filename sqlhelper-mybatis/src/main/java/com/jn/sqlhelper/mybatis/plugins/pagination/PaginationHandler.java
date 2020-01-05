@@ -39,7 +39,12 @@ import java.util.*;
 public class PaginationHandler extends AbstractHandler implements Initializable {
     @Override
     public void inbound(HandlerContext ctx) throws Throwable {
-        intercept(ctx);
+        ExecutorInvocation executorInvocation = (ExecutorInvocation) ctx.getPipeline().getTarget();
+        if (executorInvocation.getMethodName().equals("query")) {
+            intercept(ctx);
+        } else {
+            Pipelines.skipHandler(ctx, true);
+        }
     }
 
     private static final Logger logger = LoggerFactory.getLogger(MybatisPaginationPlugin.class);
@@ -233,11 +238,6 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             SQLStatementInstrumentor instrumentor = SqlHelperMybatisPluginContext.getInstance().getInstrumentor();
             instrumentor.finish();
         }
-        try {
-            ctx.outbound();
-        } catch (Throwable ex) {
-            throw Throwables.wrapAsRuntimeException(ex);
-        }
     }
 
     private void setPagingRequestBasedRowBounds(RowBounds rowBounds) {
@@ -380,12 +380,10 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
     private Object executeOrderBy(OrderBy orderBy, final MappedStatement ms, final Object parameter, final RowBounds rowBounds, final ResultHandler resultHandler, final Executor executor, final BoundSql boundSql) throws Throwable {
         SQLStatementInstrumentor instrumentor = SqlHelperMybatisPluginContext.getInstance().getInstrumentor();
         String orderBySqlId = getOrderById(ms, orderBy);
-        BoundSql orderByBoundSql = null;
         MappedStatement orderByStatement = this.customOrderByStatement(ms, orderBySqlId);
-        final Map<String, Object> additionalParameters = MybatisPaginationPlugin.BoundSqls.getAdditionalParameter(boundSql);
         final CacheKey orderByCacheKey = executor.createCacheKey(orderByStatement, parameter, RowBounds.DEFAULT, boundSql);
         final String orderBySql = instrumentor.instrumentOrderBySql(boundSql.getSql(), orderBy);
-        orderByBoundSql = MybatisUtils.rebuildBoundSql(orderBySql, orderByStatement.getConfiguration(), boundSql);
+        BoundSql orderByBoundSql = MybatisUtils.rebuildBoundSql(orderBySql, orderByStatement.getConfiguration(), boundSql);
         return executor.query(orderByStatement, parameter, RowBounds.DEFAULT, resultHandler, orderByCacheKey, orderByBoundSql);
     }
 
@@ -412,7 +410,6 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                 final String countSql = instrumentor.countSql(querySql, request.getCountColumn());
                 countStatement = this.customCountStatement(ms, countStatementId, querySql);
 
-                final Map<String, Object> additionalParameters = MybatisPaginationPlugin.BoundSqls.getAdditionalParameter(boundSql);
                 final CacheKey countKey2 = executor.createCacheKey(countStatement, parameter, RowBounds.DEFAULT, boundSql);
                 countKey2.update(request.getPageNo());
                 countKey2.update(request.getPageSize());

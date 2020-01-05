@@ -79,8 +79,8 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
 
     public PagingRequestContext get() {
         SqlRequestContext context = this.variables.get();
-        if(Objects.isNotNull(context) && context.isPagingRequest()){
-            return (PagingRequestContext)context;
+        if (Objects.isNotNull(context) && context.isPagingRequest()) {
+            return (PagingRequestContext) context;
         }
         return null;
     }
