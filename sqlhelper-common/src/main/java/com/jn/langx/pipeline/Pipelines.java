@@ -50,7 +50,7 @@ public class Pipelines {
 
     public static void outbound(HandlerContext ctx) throws Throwable {
         if (ctx.hasPrev()) {
-            ctx.getPrev().inbound();
+            ctx.getPrev().outbound();
         }
     }
 
