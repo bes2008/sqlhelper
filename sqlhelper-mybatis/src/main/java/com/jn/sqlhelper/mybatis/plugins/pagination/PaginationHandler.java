@@ -149,6 +149,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                     result.setTotal(0);
                     rs = items;
                     executorInvocation.setResult(rs);
+                    return;
                 }
                 if (request.isGetAllRequest()) {
                     if (PAGING_CONTEXT.isOrderByRequest()) {
@@ -166,6 +167,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                     }
                     executorInvocation.setResult(rs);
                     invalidatePagingRequest(false);
+                    return;
                 }
 
                 if (this.beginIfSupportsLimit(ms)) {
