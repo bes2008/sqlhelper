@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.dialect;
 
+import com.jn.langx.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,12 @@ public class SqlRequestContextHolder {
         return INSTANCE;
     }
 
-    public SqlRequestContext get(){
+    public SqlRequestContext get() {
         return variables.get();
+    }
+
+    public boolean isOrderByRequest() {
+        SqlRequestContext ctx = get();
+        return Objects.isNotNull(ctx) && ctx.isOrderByRequest();
     }
 }

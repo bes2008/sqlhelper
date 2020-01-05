@@ -113,18 +113,4 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
         return getPagingRequest() != null;
     }
 
-    public boolean isOrderByRequest() {
-        if (!isPagingRequest()) {
-            return false;
-        }
-        PagingRequest request = getPagingRequest();
-        if (!request.needOrderBy()) {
-            return false;
-        }
-        if (request.getOrderByAsString().contains("?")) {
-            return false;
-        }
-        return true;
-    }
-
 }

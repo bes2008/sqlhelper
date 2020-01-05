@@ -34,13 +34,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Properties;
 
 public class PaginationHandler extends AbstractHandler implements Initializable {
     @Override
     public void inbound(HandlerContext ctx) throws Throwable {
         ExecutorInvocation executorInvocation = (ExecutorInvocation) ctx.getPipeline().getTarget();
-        if (executorInvocation.getMethodName().equals("query")) {
+        if (MybatisUtils.isQueryStatement(executorInvocation.getMappedStatement()) && executorInvocation.getMethodName().equals("query")) {
             intercept(ctx);
         } else {
             Pipelines.skipHandler(ctx, true);
@@ -131,7 +134,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
 
         try {
             if (!isPagingRequest(ms)) {
-                if (MybatisUtils.isQueryStatement(ms) && PAGING_CONTEXT.isPagingRequest() && PAGING_CONTEXT.isOrderByRequest() && !isNestedQueryInPagingRequest(ms)) {
+                if (PAGING_CONTEXT.isPagingRequest() && PAGING_CONTEXT.isOrderByRequest() && !isNestedQueryInPagingRequest(ms)) {
                     // do order by
                     rs = executeOrderBy(PAGING_CONTEXT.getPagingRequest().getOrderBy(), ms, parameter, RowBounds.DEFAULT, resultHandler, executor, boundSql);
                 } else {
@@ -259,7 +262,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
     }
 
     private boolean isPagingRequest(final MappedStatement statement) {
-        return MybatisUtils.isPreparedStatement(statement) && MybatisUtils.isQueryStatement(statement) && PAGING_CONTEXT.isPagingRequest();
+        return MybatisUtils.isPreparedStatement(statement) && PAGING_CONTEXT.isPagingRequest();
     }
 
     private boolean isNestedQueryInPagingRequest(final MappedStatement statement) {

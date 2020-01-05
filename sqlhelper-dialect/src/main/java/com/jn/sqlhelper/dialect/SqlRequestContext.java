@@ -7,7 +7,8 @@ import java.util.Map;
 
 public class SqlRequestContext<R extends SqlRequest> extends BasedStringAccessor<String, Map<String, Object>> {
     private R request;
-    public SqlRequestContext(){
+
+    public SqlRequestContext() {
         setTarget(new HashMap<String, Object>());
     }
 
@@ -36,7 +37,21 @@ public class SqlRequestContext<R extends SqlRequest> extends BasedStringAccessor
         getTarget().put(key, value);
     }
 
-    public boolean isPagingRequest(){
+    public boolean isPagingRequest() {
         return false;
+    }
+
+    public boolean isOrderByRequest() {
+        if (!(this.getRequest() instanceof SelectRequest)) {
+            return false;
+        }
+        SelectRequest request = (SelectRequest) this.getRequest();
+        if (!request.needOrderBy()) {
+            return false;
+        }
+        if (request.getOrderByAsString().contains("?")) {
+            return false;
+        }
+        return true;
     }
 }
