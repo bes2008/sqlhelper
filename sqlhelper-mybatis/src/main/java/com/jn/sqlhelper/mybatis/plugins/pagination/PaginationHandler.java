@@ -6,6 +6,7 @@ import com.jn.langx.cache.CacheBuilder;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.pipeline.AbstractHandler;
 import com.jn.langx.pipeline.HandlerContext;
+import com.jn.langx.pipeline.Pipelines;
 import com.jn.langx.util.Chars;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
@@ -18,6 +19,7 @@ import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
+import com.jn.sqlhelper.mybatis.plugins.ExecutorInvocation;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPluginContext;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
@@ -25,7 +27,6 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
-import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
@@ -38,7 +39,7 @@ import java.util.*;
 public class PaginationHandler extends AbstractHandler implements Initializable {
     @Override
     public void inbound(HandlerContext ctx) throws Throwable {
-        super.inbound(ctx);
+        intercept(ctx);
     }
 
     private static final Logger logger = LoggerFactory.getLogger(MybatisPaginationPlugin.class);
@@ -109,28 +110,15 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         return request.isUseLastPageIfPageOut();
     }
 
-    public Object intercept(final Invocation invocation) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("{}", invocation);
-        }
-        final Object[] args = invocation.getArgs();
-        final MappedStatement ms = (MappedStatement) args[0];
-        final Object parameter = args[1];
-        final RowBounds rowBounds = (RowBounds) args[2];
-        final Executor executor = (Executor) invocation.getTarget();
-        BoundSql boundSql = null;
-        CacheKey cacheKey = null;
+    public void intercept(final HandlerContext ctx) {
+        ExecutorInvocation executorInvocation = (ExecutorInvocation) ctx.getPipeline().getTarget();
+        final MappedStatement ms = executorInvocation.getMappedStatement();
+        final Object parameter = executorInvocation.getParameter();
+        final RowBounds rowBounds = executorInvocation.getRowBounds();
+        final Executor executor = executorInvocation.getExecutor();
+        BoundSql boundSql = executorInvocation.getBoundSql();
+        CacheKey cacheKey = executorInvocation.getCacheKey();
         ResultHandler resultHandler = null;
-        if (args.length >= NON_CACHE_QUERY_METHOD_PARAMS) {
-            resultHandler = (ResultHandler) args[3];
-            if (args.length == NON_CACHE_QUERY_METHOD_PARAMS) {
-                boundSql = ms.getBoundSql(parameter);
-                cacheKey = executor.createCacheKey(ms, parameter, rowBounds, boundSql);
-            } else {
-                cacheKey = (CacheKey) args[4];
-                boundSql = (BoundSql) args[5];
-            }
-        }
 
         Object rs = null;
 
@@ -143,17 +131,21 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                     rs = executeOrderBy(PAGING_CONTEXT.getPagingRequest().getOrderBy(), ms, parameter, RowBounds.DEFAULT, resultHandler, executor, boundSql);
                 } else {
                     // not a paging request, not a order by paging request
-                    rs = invocation.proceed();
+                    Pipelines.skipHandler(ctx, true);
+                    rs = executorInvocation.getResult();
                 }
                 if (rs == null) {
                     rs = Collects.emptyArrayList();
                 }
+                executorInvocation.setResult(rs);
                 invalidatePagingRequest(false);
             } else if (isNestedQueryInPagingRequest(ms)) {
-                rs = invocation.proceed();
+                Pipelines.skipHandler(ctx, true);
+                rs = executorInvocation.getResult();
                 if (rs == null) {
                     rs = Collects.emptyArrayList();
                 }
+                executorInvocation.setResult(rs);
             } else {
                 final PagingRequest request = PAGING_CONTEXT.getPagingRequest();
                 final PagingResult result = new PagingResult();
@@ -167,13 +159,14 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                 if (request.isEmptyRequest()) {
                     result.setTotal(0);
                     rs = items;
-                    return rs;
+                    executorInvocation.setResult(rs);
                 }
                 if (request.isGetAllRequest()) {
                     if (PAGING_CONTEXT.isOrderByRequest()) {
                         rs = executeOrderBy(PAGING_CONTEXT.getPagingRequest().getOrderBy(), ms, parameter, RowBounds.DEFAULT, resultHandler, executor, boundSql);
                     } else {
-                        rs = invocation.proceed();
+                        Pipelines.skipHandler(ctx, true);
+                        rs = executorInvocation.getResult();
                     }
                     if (rs == null) {
                         rs = Collects.emptyArrayList();
@@ -182,8 +175,8 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                         items.addAll((Collection) rs);
                         result.setTotal(items.size());
                     }
+                    executorInvocation.setResult(rs);
                     invalidatePagingRequest(false);
-                    return rs;
                 }
 
                 if (this.beginIfSupportsLimit(ms)) {
@@ -222,11 +215,14 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                     request.setPageNo(requestPageNo);
                     result.setPageNo(request.getPageNo());
                     rs = items;
+                    executorInvocation.setResult(rs);
                 } else {
-                    rs = invocation.proceed();
+                    Pipelines.skipHandler(ctx, true);
+                    rs = executorInvocation.getResult();
                     if (rs == null) {
                         rs = Collects.emptyArrayList();
                     }
+                    executorInvocation.setResult(rs);
                 }
             }
         } catch (Throwable ex2) {
@@ -237,7 +233,11 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             SQLStatementInstrumentor instrumentor = SqlHelperMybatisPluginContext.getInstance().getInstrumentor();
             instrumentor.finish();
         }
-        return rs;
+        try {
+            ctx.outbound();
+        } catch (Throwable ex) {
+            throw Throwables.wrapAsRuntimeException(ex);
+        }
     }
 
     private void setPagingRequestBasedRowBounds(RowBounds rowBounds) {
