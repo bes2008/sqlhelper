@@ -68,17 +68,17 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
         if (Objects.isNull(context)) {
             context = newOne();
             if (Objects.isNull(context)) {
-                this.variables.remove();
+                variables.remove();
             }
         }
         if (Objects.isNotNull(context)) {
-            this.variables.set(context);
+            variables.set(context);
             consumer.accept(context);
         }
     }
 
     public PagingRequestContext get() {
-        SqlRequestContext context = this.variables.get();
+        SqlRequestContext context = variables.get();
         if (Objects.isNotNull(context) && context.isPagingRequest()) {
             return (PagingRequestContext) context;
         }
@@ -86,7 +86,7 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
     }
 
     public void set(PagingRequestContext ctx) {
-        this.variables.set(ctx);
+        variables.set(ctx);
     }
 
     public PagingRequest getPagingRequest() {
@@ -106,7 +106,7 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
     }
 
     public void remove() {
-        this.variables.remove();
+        variables.remove();
     }
 
     public boolean isPagingRequest() {

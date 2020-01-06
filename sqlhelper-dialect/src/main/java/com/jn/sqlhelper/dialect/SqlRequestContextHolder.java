@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 public class SqlRequestContextHolder {
     private static final Logger logger = LoggerFactory.getLogger(SqlRequestContextHolder.class);
-    protected final ThreadLocal<SqlRequestContext> variables = new ThreadLocal<SqlRequestContext>();
+    protected static final ThreadLocal<SqlRequestContext> variables = new ThreadLocal<SqlRequestContext>();
 
     private static final SqlRequestContextHolder INSTANCE = new SqlRequestContextHolder();
 
