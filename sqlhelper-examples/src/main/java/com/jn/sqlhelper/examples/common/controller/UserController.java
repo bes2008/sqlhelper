@@ -110,13 +110,16 @@ public class UserController {
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort,
             @RequestParam(value = "count", required = false) boolean count,
-            @RequestParam(value = "useLastPageIfPageNoOut", required = false) boolean useLastPageIfPageNoOut) {
+            @RequestParam(value = "useLastPageIfPageOut", required = false) boolean useLastPageIfPageOut,
+            @RequestParam(value = "namelike", required = false) String namelike) {
         User queryCondition = new User();
         queryCondition.setAge(10);
+        queryCondition.setName(namelike);
 
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
+        request.setEscapeLikeParameter(true);
         request.setCount(count);
-        request.setUseLastPageIfPageOut(useLastPageIfPageNoOut);
+        request.setUseLastPageIfPageOut(useLastPageIfPageOut);
         List<User> users = userDao.selectByLimit(queryCondition);
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
@@ -131,7 +134,7 @@ public class UserController {
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort,
             @RequestParam(value = "count", required = false) boolean count,
-            @RequestParam(value = "useLastPageIfPageNoOut", required = false) boolean useLastPageIfPageNoOut) {
+            @RequestParam(value = "useLastPageIfPageOut", required = false) boolean useLastPageIfPageOut) {
         User queryCondition = new User();
         queryCondition.setAge(10);
         queryCondition.setName("zhangsan_");
@@ -140,7 +143,7 @@ public class UserController {
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         request.subqueryPaging(true);
         request.setCount(count);
-        request.setUseLastPageIfPageOut(useLastPageIfPageNoOut);
+        request.setUseLastPageIfPageOut(useLastPageIfPageOut);
         List<User> users = userDao.selectByLimit_subqueryPagination(queryCondition);
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
@@ -155,11 +158,11 @@ public class UserController {
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort,
             @RequestParam(name = "count", required = false) boolean count,
-            @RequestParam(name = "useLastPageIfPageNoOut", required = false) boolean useLastPageIfPageNoOut,
+            @RequestParam(name = "useLastPageIfPageOut", required = false) boolean useLastPageIfPageOut,
             @RequestParam(name = "testSubquery", required = false, defaultValue = "false") boolean testSubquery) {
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         request.setCount(count);
-        request.setUseLastPageIfPageOut(useLastPageIfPageNoOut);
+        request.setUseLastPageIfPageOut(useLastPageIfPageOut);
         if (testSubquery) {
             request.subqueryPaging(true);
         }
