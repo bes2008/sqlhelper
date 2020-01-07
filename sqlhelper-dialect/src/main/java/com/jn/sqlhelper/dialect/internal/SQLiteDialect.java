@@ -15,12 +15,17 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.internal.likeescaper.CStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
+/**
+ * https://www.sqlite.org/lang_select.html
+ */
 public class SQLiteDialect extends AbstractDialect {
     public SQLiteDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
+        setLikeEscaper(CStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

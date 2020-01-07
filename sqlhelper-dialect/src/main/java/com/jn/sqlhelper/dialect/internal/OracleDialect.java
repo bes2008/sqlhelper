@@ -19,6 +19,7 @@ import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SQLDialectException;
 import com.jn.sqlhelper.dialect.annotation.Driver;
 import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
+import com.jn.sqlhelper.dialect.internal.likeescaper.CStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;
@@ -71,6 +72,7 @@ public class OracleDialect extends AbstractDialect {
 
     class OracleBaseDialect extends AbstractDialect {
         OracleBaseDialect() {
+            OracleDialect.this.setLikeEscaper(CStyleEscaper.NON_DEFAULT_INSTANCE);
         }
 
         @Override
