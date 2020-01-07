@@ -39,6 +39,7 @@ import java.util.List;
  * {@link org.apache.ibatis.executor.Executor#query(MappedStatement, Object, RowBounds, ResultHandler)}
  * {@link org.apache.ibatis.executor.Executor#query(MappedStatement, Object, RowBounds, ResultHandler, CacheKey, BoundSql)} )}
  */
+@SuppressWarnings({"rawtypes","unchecked","unused"})
 public class PaginationHandler extends AbstractHandler implements Initializable {
     private static final Logger logger = LoggerFactory.getLogger(PaginationHandler.class);
     private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
@@ -271,7 +272,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         final RowSelection rowSelection = rowSelectionBuilder.build(request);
         PAGING_CONTEXT.setRowSelection(rowSelection);
 
-        String pageSql = boundSql.getSql();
+        String pageSql;
 
         boolean subQueryPagination = false;
         SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
