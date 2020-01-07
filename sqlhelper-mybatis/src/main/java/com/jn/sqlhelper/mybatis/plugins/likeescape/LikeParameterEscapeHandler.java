@@ -27,6 +27,7 @@ import com.jn.sqlhelper.common.formatter.SqlDmlFormatter;
 import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.ExecutorInvocation;
+import com.jn.sqlhelper.mybatis.plugins.MybatisSqlRequestContextKeys;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.mapping.BoundSql;
@@ -55,6 +56,7 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
             return;
         }
 
+        // notice: the sqlcontext, sqlrequest is not null
         SqlRequestContext sqlContext = SqlRequestContextHolder.getInstance().get();
         LikeEscaper likeEscaper = getLikeEscaper(mappedStatement, sqlContext.getRequest());
         if (Objects.isNull(likeEscaper)) {
@@ -80,6 +82,8 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
         // rebuild a BoundSql
         boundSql = MybatisUtils.rebuildBoundSql(newSql, mappedStatement.getConfiguration(), boundSql);
         executorInvocation.setBoundSql(boundSql);
+        sqlContext.set(MybatisSqlRequestContextKeys.LIKE_ESCAPE_PARAMETERS_INDEXES, pair.getKey());
+        sqlContext.set(MybatisSqlRequestContextKeys.LIKE_ESCAPER, likeEscaper);
         Pipelines.inbound(ctx);
     }
 
