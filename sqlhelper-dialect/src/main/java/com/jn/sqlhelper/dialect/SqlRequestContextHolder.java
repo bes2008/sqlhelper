@@ -22,4 +22,12 @@ public class SqlRequestContextHolder {
         SqlRequestContext ctx = get();
         return Objects.isNotNull(ctx) && ctx.isOrderByRequest();
     }
+
+    public void clear(){
+        SqlRequestContext requestContext = get();
+        if(Objects.isNotNull(requestContext)){
+            requestContext.clear();
+        }
+        variables.remove();
+    }
 }

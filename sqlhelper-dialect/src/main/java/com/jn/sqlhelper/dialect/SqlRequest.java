@@ -92,4 +92,9 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
     public void setLikeParameterIndexes(List<Integer> likeParameterIndexes) {
         this.likeParameterIndexes = likeParameterIndexes;
     }
+
+    public void clear(){
+        likeEscaper = null;
+        context = null;
+    }
 }

@@ -124,6 +124,7 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
     }
 
     public void clear(boolean clearResult) {
+        super.clear();
         count = null;
         useLastPageIfPageOut = null;
         setCtx(null);

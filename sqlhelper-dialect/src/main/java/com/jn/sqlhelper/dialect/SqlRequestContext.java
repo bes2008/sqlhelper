@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect;
 
 import com.jn.langx.util.BasedStringAccessor;
+import com.jn.langx.util.Objects;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,5 +54,12 @@ public class SqlRequestContext<R extends SqlRequest> extends BasedStringAccessor
             return false;
         }
         return true;
+    }
+
+    public void clear(){
+        if(Objects.isNotNull(request)) {
+            request.clear();
+        }
+        request = null;
     }
 }
