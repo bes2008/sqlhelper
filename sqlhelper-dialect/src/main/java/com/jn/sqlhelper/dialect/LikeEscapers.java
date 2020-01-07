@@ -57,6 +57,17 @@ public class LikeEscapers {
             }
         });
 
+        if (Emptys.isEmpty(sortedSlotIndexList)) {
+            segmentOffsetPairs.add(new Entry<Integer, Integer>(0, string.length()));
+        } else {
+            int lastSlotIndex = sortedSlotIndexList.get(sortedSlotIndexList.size() - 1);
+            int stringLength = string.length();
+            if (lastSlotIndex < stringLength) {
+                segmentOffsetPairs.add(new Entry<Integer, Integer>(lastSlotIndex, stringLength));
+            }
+        }
+
+
         final Collection<String> segments = Collects.map(segmentOffsetPairs, new Function<Pair<Integer, Integer>, String>() {
             @Override
             public String apply(Pair<Integer, Integer> pair) {
@@ -87,6 +98,8 @@ public class LikeEscapers {
         return insert(sql, slotIndexes, escaper.appendmentAfterLikeClause());
     }
 
+    private static final List<String> keywordsAfterLikeClause = Collects.asList("and", "or", "group", "order");
+
     /**
      * @return key: the parameters placeholder index: all will be escaped ? indexes
      * value: all slots will be insert appentmentOfLikeClause
@@ -116,17 +129,6 @@ public class LikeEscapers {
             } else if ("'".equals(token)) {
                 singleQuoteCount++;
                 readedLength++;
-                if (inLikeClause && singleQuoteCount % 2 == 0) {
-                    inLikeClause = false;
-                    escapeDeclareSlotIndexes.add(readedLength);
-                    String segment = sql.substring(segmentStartIndex, readedLength);
-                    int parameterCountInLikeClause = SQLs.findPlaceholderParameterCount(segment);
-                    for (int i = 0; i < parameterCountInLikeClause; i++) {
-                        parameterPlaceholderIndexes.add(readedParameterCount + i);
-                    }
-                    readedParameterCount = readedParameterCount + parameterCountInLikeClause;
-                    segmentStartIndex = readedLength;
-                }
             } else if (",".equals(token)) {
                 readedLength++;
             } else if ("like".equals(token) && singleQuoteCount % 2 == 0) {
@@ -135,10 +137,33 @@ public class LikeEscapers {
                 readedParameterCount = readedParameterCount + SQLs.findPlaceholderParameterCount(segment);
                 readedLength = readedLength + token.length();
                 segmentStartIndex = readedLength;
+            } else if (inLikeClause && singleQuoteCount % 2 == 0 && keywordsAfterLikeClause.contains(token)) {
+                inLikeClause = false;
+                escapeDeclareSlotIndexes.add(readedLength);
+                String segment = sql.substring(segmentStartIndex, readedLength);
+                int parameterCountInLikeClause = SQLs.findPlaceholderParameterCount(segment);
+                for (int i = 0; i < parameterCountInLikeClause; i++) {
+                    parameterPlaceholderIndexes.add(readedParameterCount + i);
+                }
+                readedParameterCount = readedParameterCount + parameterCountInLikeClause;
+                segmentStartIndex = readedLength;
             } else {
                 readedLength = readedLength + token.length();
             }
         }
+
+        if (inLikeClause && singleQuoteCount % 2 == 0) {
+            inLikeClause = false;
+            escapeDeclareSlotIndexes.add(readedLength);
+            String segment = sql.substring(segmentStartIndex);
+            int parameterCountInLikeClause = SQLs.findPlaceholderParameterCount(segment);
+            for (int i = 0; i < parameterCountInLikeClause; i++) {
+                parameterPlaceholderIndexes.add(readedParameterCount + i);
+            }
+            readedParameterCount = readedParameterCount + parameterCountInLikeClause;
+            segmentStartIndex = readedLength;
+        }
+
         return new Entry<List<Integer>, List<Integer>>(parameterPlaceholderIndexes, escapeDeclareSlotIndexes);
     }
 }
