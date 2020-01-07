@@ -21,7 +21,6 @@ import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SqlRequest;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
-import com.jn.sqlhelper.mybatis.plugins.CustomVendorDatabaseIdProvider;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.RowBounds;
