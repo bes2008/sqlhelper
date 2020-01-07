@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the LGPL, Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,9 +12,10 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.plugins.pagination;
+package com.jn.sqlhelper.mybatis.plugins;
 
-public class MybatisPaginationRequestContextKeys {
+public class MybatisSqlRequestContextKeys {
+
     // value: String
     public static final String QUERY_SQL_ID = "querySqlId";
     // value: BoundSql
@@ -22,4 +23,8 @@ public class MybatisPaginationRequestContextKeys {
 
     // value: String
     public static final String COUNT_SQL_ID = "countSqlId";
+
+    public static final String LIKE_ESCAPE_PARAMETERS_INDEXES = "LIKE_ESCAPE_PARAMETERS_INDEXES";
+
+    public static final String LIKE_ESCAPER = "LIKE_ESCAPER";
 }
