@@ -20,6 +20,7 @@ import com.jn.langx.pipeline.*;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PropertiesAccessor;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
+import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.mybatis.plugins.likeescape.LikeParameterEscapeHandler;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
@@ -77,13 +78,18 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         ExecutorInvocation executorInvocation = new ExecutorInvocation(invocation);
-        Pipeline<ExecutorInvocation> pipeline = createPipeline(executorInvocation);
-        pipeline.inbound();
-        if (!pipeline.hadOutbound()) {
-            Pipelines.outbound(pipeline);
+        try {
+            Pipeline<ExecutorInvocation> pipeline = createPipeline(executorInvocation);
+            pipeline.inbound();
+            if (!pipeline.hadOutbound()) {
+                Pipelines.outbound(pipeline);
+            }
+            return executorInvocation.getResult();
+        } finally {
+            if (!NestedStatements.isNestedStatement(executorInvocation.getMappedStatement())) {
+                SqlRequestContextHolder.getInstance().clear();
+            }
         }
-        return executorInvocation.getResult();
-
     }
 
     private Pipeline<ExecutorInvocation> createPipeline(ExecutorInvocation executorInvocation) {

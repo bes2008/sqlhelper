@@ -15,6 +15,8 @@ import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.ExecutorInvocation;
+import com.jn.sqlhelper.mybatis.plugins.MybatisSqlRequestContextKeys;
+import com.jn.sqlhelper.mybatis.plugins.NestedStatements;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
@@ -112,7 +114,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
 
         try {
             if (!isPagingRequest(ms)) {
-                if (PAGING_CONTEXT.isOrderByRequest() && !isNestedQueryInPagingRequest(ms)) {
+                if (PAGING_CONTEXT.isOrderByRequest() && !NestedStatements.isNestedStatement(ms)) {
                     // do order by
                     rs = executeOrderBy(PAGING_CONTEXT.getPagingRequest().getOrderBy(), ms, parameter, RowBounds.DEFAULT, resultHandler, executor, boundSql);
                 } else {
@@ -125,7 +127,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                 }
                 executorInvocation.setResult(rs);
                 invalidatePagingRequest(false);
-            } else if (isNestedQueryInPagingRequest(ms)) {
+            } else if (NestedStatements.isNestedStatement(ms)) {
                 Pipelines.skipHandler(ctx, true);
                 rs = executorInvocation.getResult();
                 if (rs == null) {
@@ -245,27 +247,18 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         return MybatisUtils.isPreparedStatement(statement) && PAGING_CONTEXT.isPagingRequest();
     }
 
-    private boolean isNestedQueryInPagingRequest(final MappedStatement statement) {
-        if (PAGING_CONTEXT.get().getString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID) != null) {
-            if (!PAGING_CONTEXT.get().getString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID).equals(statement.getId())) {
-                // the statement is a nested statement
-                return true;
-            }
-        }
-        return false;
-    }
 
     private boolean beginIfSupportsLimit(final MappedStatement statement) {
         if (!PAGING_CONTEXT.getPagingRequest().isValidRequest()) {
             invalidatePagingRequest(false);
             return false;
         }
-        if (PAGING_CONTEXT.get().getString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID) != null) {
-            if (isNestedQueryInPagingRequest(statement)) {
+        if (PAGING_CONTEXT.get().getString(MybatisSqlRequestContextKeys.QUERY_SQL_ID) != null) {
+            if (NestedStatements.isNestedStatement(statement)) {
                 return false;
             }
         } else {
-            PAGING_CONTEXT.get().setString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID, statement.getId());
+            PAGING_CONTEXT.get().setString(MybatisSqlRequestContextKeys.QUERY_SQL_ID, statement.getId());
         }
         SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
         final String databaseId = MybatisUtils.getDatabaseId(PAGING_CONTEXT, instrumentor, statement);
@@ -382,7 +375,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                 countKey.update(request.getPageNo());
                 countKey.update(request.getPageSize());
                 countBoundSql = countStatement.getBoundSql(parameter);
-                requestContext.set(MybatisPaginationRequestContextKeys.COUNT_SQL, countBoundSql);
+                requestContext.set(MybatisSqlRequestContextKeys.COUNT_SQL, countBoundSql);
                 final Object countResultList = executor.query(countStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey, countBoundSql);
                 count = ((Number) ((List) countResultList).get(0)).intValue();
             } else {
@@ -396,7 +389,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                 countKey2.update(request.getPageSize());
 
                 countBoundSql = MybatisUtils.rebuildBoundSql(countSql, countStatement.getConfiguration(), boundSql);
-                requestContext.set(MybatisPaginationRequestContextKeys.COUNT_SQL, countBoundSql);
+                requestContext.set(MybatisSqlRequestContextKeys.COUNT_SQL, countBoundSql);
                 final Object countResultList2 = executor.query(countStatement, parameter, RowBounds.DEFAULT, resultHandler, countKey2, countBoundSql);
                 count = ((Number) ((List) countResultList2).get(0)).intValue();
             }
@@ -406,7 +399,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             }
             throw ex;
         } finally {
-            requestContext.set(MybatisPaginationRequestContextKeys.COUNT_SQL, null);
+            requestContext.set(MybatisSqlRequestContextKeys.COUNT_SQL, null);
         }
         return count;
     }
@@ -422,7 +415,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
     }
 
     private String getCountStatementId(final PagingRequest request, final String currentSqlId) {
-        String customCountSqlId = PAGING_CONTEXT.get().getString(MybatisPaginationRequestContextKeys.COUNT_SQL_ID);
+        String customCountSqlId = PAGING_CONTEXT.get().getString(MybatisSqlRequestContextKeys.COUNT_SQL_ID);
         if (!Strings.isBlank(customCountSqlId)) {
             return customCountSqlId;
         }
@@ -464,7 +457,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             builder.resultSetType(ms.getResultSetType());
             builder.cache(ms.getCache());
             builder.flushCacheRequired(ms.isFlushCacheRequired());
-            boolean useCache = Objects.isNull(pagingRequest.getCacheCount())? ms.isUseCache(): pagingRequest.getCacheCount();
+            boolean useCache = Objects.isNull(pagingRequest.getCacheCount()) ? ms.isUseCache() : pagingRequest.getCacheCount();
             builder.useCache(useCache);
 
             countStatement = builder.build();
