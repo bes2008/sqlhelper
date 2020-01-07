@@ -96,6 +96,7 @@ public class SQLStatementInstrumentor {
                         })
                         .build();
             }
+            setName(this.config.getName());
             logger.info("The {} SQLStatementInstrumentor initial finish", this.name);
         }
     }

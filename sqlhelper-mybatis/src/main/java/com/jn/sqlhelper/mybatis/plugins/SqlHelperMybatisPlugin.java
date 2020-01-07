@@ -160,6 +160,9 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     private SQLInstrumentConfig parseInstrumentorConfig(PropertiesAccessor accessor) {
         SQLInstrumentConfig instrumentConfig = new SQLInstrumentConfig();
         String instrumentorConfigPrefix = "sqlhelper.mybatis.instrumentor.";
+        instrumentConfig.setName(accessor.getString(instrumentorConfigPrefix + "name", "undefined"));
+        instrumentConfig.setSubqueryPagingStartFlag(accessor.getString(instrumentorConfigPrefix + "subqueryPagingStartFlag", "[PAGING_START]"));
+        instrumentConfig.setSubqueryPagingEndFlag(accessor.getString(instrumentorConfigPrefix + "subqueryPagingEndFlag", "[PAGING_END]"));
         instrumentConfig.setDialect(accessor.getString(instrumentorConfigPrefix + "dialect", instrumentConfig.getDialect()));
         instrumentConfig.setDialectClassName(accessor.getString(instrumentorConfigPrefix + "dialectClassName", instrumentConfig.getDialectClassName()));
         instrumentConfig.setCacheInstrumentedSql(accessor.getBoolean(instrumentorConfigPrefix + "cacheInstruemtedSql", false));

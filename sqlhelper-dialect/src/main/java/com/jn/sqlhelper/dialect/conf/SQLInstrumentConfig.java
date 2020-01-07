@@ -20,6 +20,7 @@ import com.jn.easyjson.core.JSONBuilderProvider;
 public class SQLInstrumentConfig {
     public static final SQLInstrumentConfig DEFAULT = new SQLInstrumentConfig();
 
+    private String name = "undefined";
     private String dialect;
     private String dialectClassName;
     private boolean cacheInstrumentedSql = false;
@@ -70,5 +71,13 @@ public class SQLInstrumentConfig {
 
     public void setSubqueryPagingEndFlag(String subqueryPagingEndFlag) {
         this.subqueryPagingEndFlag = subqueryPagingEndFlag;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
