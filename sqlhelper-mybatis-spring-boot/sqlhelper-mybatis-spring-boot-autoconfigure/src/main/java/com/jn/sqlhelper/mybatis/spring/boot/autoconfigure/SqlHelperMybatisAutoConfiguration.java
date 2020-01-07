@@ -19,7 +19,7 @@ import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.CustomScriptLanguageDriver;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
-import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisProperties;
+import com.jn.sqlhelper.mybatis.SqlHelperMybatisProperties;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.session.Configuration;
