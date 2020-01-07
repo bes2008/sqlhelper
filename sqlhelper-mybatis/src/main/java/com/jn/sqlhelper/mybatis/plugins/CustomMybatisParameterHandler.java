@@ -8,7 +8,6 @@ import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
-import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisQueryParameters;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.BoundSql;
