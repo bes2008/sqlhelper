@@ -1,13 +1,13 @@
 package com.jn.sqlhelper.mybatis.plugins;
 
+import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Objects;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
-import com.jn.sqlhelper.dialect.PagedPreparedParameterSetter;
-import com.jn.sqlhelper.dialect.QueryParameters;
+import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
-import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisPaginationRequestContextKeys;
 import com.jn.sqlhelper.mybatis.plugins.pagination.MybatisQueryParameters;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
@@ -54,14 +54,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
 
     private boolean isPagingCountStatement() {
         final PagingRequestContext requestContext = PAGING_CONTEXT.get();
-        return requestContext.get(MybatisPaginationRequestContextKeys.COUNT_SQL) == this.boundSql;
-    }
-
-    private boolean isNestedStatement() {
-        if (PAGING_CONTEXT.get().getString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID) != null && PAGING_CONTEXT.get().getString(MybatisPaginationRequestContextKeys.QUERY_SQL_ID).equals(mappedStatement.getId())) {
-            return false;
-        }
-        return true;
+        return requestContext.get(MybatisSqlRequestContextKeys.COUNT_SQL) == this.boundSql;
     }
 
     private boolean isInPagingRequestScope() {
@@ -72,10 +65,22 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
         return !PAGING_CONTEXT.getPagingRequest().isValidRequest();
     }
 
+
+    private List<Integer> getEscapeLikeParametersIndexes() {
+        SqlRequestContext sqlRequestContext = SqlRequestContextHolder.getInstance().get();
+        if (Objects.isNull(sqlRequestContext) || Objects.isNull(sqlRequestContext.getRequest())) {
+            return null;
+        }
+        if (Objects.isNull(sqlRequestContext.get(MybatisSqlRequestContextKeys.LIKE_ESCAPER))) {
+            return null;
+        }
+        return (List<Integer>) sqlRequestContext.get(MybatisSqlRequestContextKeys.LIKE_ESCAPE_PARAMETERS_INDEXES);
+    }
+
     @Override
     public void setParameters(final PreparedStatement ps) {
-        if (!isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || isNestedStatement()) {
-            this.setParameters(ps, this.boundSql.getParameterMappings(), 1);
+        if (!isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || NestedStatements.isNestedStatement(mappedStatement)) {
+            this.setParameters(ps, this.boundSql.getParameterMappings(), 1, getEscapeLikeParametersIndexes());
             return;
         }
         try {
@@ -93,11 +98,16 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
     @Override
     public int setOriginalParameters(final PreparedStatement ps, final QueryParameters parameters, final int startIndex) {
         final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
-        setParameters(ps, parameterMappings, startIndex);
+        setParameters(ps, parameterMappings, startIndex, getEscapeLikeParametersIndexes());
         return this.boundSql.getParameterMappings().size();
     }
 
-    private void setParameters(final PreparedStatement ps, List<ParameterMapping> parameterMappings, final int startIndex) {
+    private void setParameters(final PreparedStatement ps, List<ParameterMapping> parameterMappings, final int startIndex, List<Integer> escapeLikeParametersIndexes) {
+        boolean needEscapeLikeParameters = Emptys.isNotEmpty(escapeLikeParametersIndexes);
+        LikeEscaper likeEscaper = null;
+        if (needEscapeLikeParameters) {
+            likeEscaper = (LikeEscaper) SqlRequestContextHolder.getInstance().get().get(MybatisSqlRequestContextKeys.LIKE_ESCAPER);
+        }
         ErrorContext.instance().activity("setting parameters").object(this.mappedStatement.getParameterMap().getId());
         if (parameterMappings != null) {
             for (int i = 0; i < parameterMappings.size(); ++i) {
@@ -121,6 +131,11 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
                         jdbcType = this.configuration.getJdbcTypeForNull();
                     }
                     try {
+                        if (value instanceof String && needEscapeLikeParameters) {
+                            if (escapeLikeParametersIndexes.contains(i + startIndex - 1)) {
+                                value = likeEscaper.escape(value.toString());
+                            }
+                        }
                         typeHandler.setParameter(ps, i + startIndex, value, jdbcType);
                     } catch (TypeException e) {
                         throw new TypeException("Could not set parameters for mapping: " + parameterMapping + ". Cause: " + e, e);
@@ -138,7 +153,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
         // find before parameters
         final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
         List<ParameterMapping> before = Collects.limit(parameterMappings, queryParameters.getBeforeSubqueryParameterCount());
-        setParameters(statement, before, startIndex);
+        setParameters(statement, before, startIndex, getEscapeLikeParametersIndexes());
         return queryParameters.getBeforeSubqueryParameterCount();
     }
 
@@ -149,7 +164,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
                 .limit(parameterMappings.size() - queryParameters.getAfterSubqueryParameterCount())
                 .skip(queryParameters.getBeforeSubqueryParameterCount())
                 .asList();
-        setParameters(statement, subquery, startIndex);
+        setParameters(statement, subquery, startIndex, getEscapeLikeParametersIndexes());
         return subquery.size();
     }
 
@@ -157,7 +172,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
     public int setAfterSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
         final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
         List<ParameterMapping> after = Collects.skip(parameterMappings, parameterMappings.size() - queryParameters.getAfterSubqueryParameterCount());
-        setParameters(statement, after, startIndex);
+        setParameters(statement, after, startIndex, getEscapeLikeParametersIndexes());
         return queryParameters.getBeforeSubqueryParameterCount();
     }
 }
