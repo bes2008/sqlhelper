@@ -152,7 +152,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         paginationConfig.setCountCacheMaxCapacity(accessor.getInteger(paginationPluginConfigPrefix + "countCacheMaxCapacity", paginationConfig.getCountCacheMaxCapacity()));
         paginationConfig.setCountSuffix(accessor.getString(paginationPluginConfigPrefix + "countSuffix", paginationConfig.getCountSuffix()));
         paginationConfig.setDefaultPageSize(accessor.getInteger(paginationPluginConfigPrefix + "defaultPageSize", paginationConfig.getDefaultPageSize()));
-        paginationConfig.setUseLastPageIfPageOut(accessor.getBoolean(paginationPluginConfigPrefix + "useLastPageIfPageOut", paginationConfig.isUseLastPageIfPageOut()));
+        paginationConfig.setUseLastPageIfPageOut(accessor.getBoolean(paginationPluginConfigPrefix + "useLastPageIfPageOut", accessor.getBoolean(paginationPluginConfigPrefix + "useLastPageIfPageNoOut", paginationConfig.isUseLastPageIfPageOut())));
 
         return paginationConfig;
     }
