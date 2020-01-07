@@ -466,7 +466,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
     private boolean isUseLastPageIfPageNoOut(@NonNull PagingRequest request) {
         Preconditions.checkNotNull(request);
         if (request.isUseLastPageIfPageOut() == null) {
-            return paginationConfig.isUseLastPageIfPageNoOut();
+            return paginationConfig.isUseLastPageIfPageOut();
         }
         return request.isUseLastPageIfPageOut();
     }

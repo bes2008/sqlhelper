@@ -37,10 +37,7 @@ public class PaginationProperties {
         this.defaultPageSize = defaultPageSize;
     }
 
-    public boolean isUseLastPageIfPageNoOut() {
-        return useLastPageIfPageOut;
-    }
-
+    @Deprecated
     public void setUseLastPageIfPageNoOut(boolean useLastPageIfPageNoOut) {
         this.useLastPageIfPageOut = useLastPageIfPageNoOut;
     }

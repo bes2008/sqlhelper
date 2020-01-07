@@ -62,10 +62,11 @@ public class SQLStatementInstrumentor {
 
     public void init() {
         if (!inited) {
-            logger.info("Start to initial the {} SQLStatementInstrumentor with configuration{}", this.name, this.config);
             if (this.config == null) {
                 throw new IllegalStateException("the 'config' field is null");
             }
+            setName(this.config.getName());
+            logger.info("Start to initial the {} SQLStatementInstrumentor with configuration{}", this.name, this.config);
             this.dialectRegistry = DialectRegistry.getInstance();
             inited = true;
             if (this.config.isCacheInstrumentedSql()) {
@@ -96,7 +97,6 @@ public class SQLStatementInstrumentor {
                         })
                         .build();
             }
-            setName(this.config.getName());
             logger.info("The {} SQLStatementInstrumentor initial finish", this.name);
         }
     }

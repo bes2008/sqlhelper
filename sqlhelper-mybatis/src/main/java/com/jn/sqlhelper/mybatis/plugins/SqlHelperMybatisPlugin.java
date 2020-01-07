@@ -143,18 +143,18 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
 
 
     private PaginationConfig parsePaginationConfig(PropertiesAccessor accessor) {
-        PaginationConfig pluginConfig = new PaginationConfig();
+        PaginationConfig paginationConfig = new PaginationConfig();
         String paginationPluginConfigPrefix = "sqlhelper.mybatis.pagination.";
 
-        pluginConfig.setCount(accessor.getBoolean(paginationPluginConfigPrefix + "count", pluginConfig.isCount()));
-        pluginConfig.setCountCacheExpireInSeconds(accessor.getInteger(paginationPluginConfigPrefix + "countCacheExpireInSeconds", pluginConfig.getCountCacheExpireInSeconds()));
-        pluginConfig.setCountCacheInitCapacity(accessor.getInteger(paginationPluginConfigPrefix + "countCacheInitCapacity", pluginConfig.getCountCacheInitCapacity()));
-        pluginConfig.setCountCacheMaxCapacity(accessor.getInteger(paginationPluginConfigPrefix + "countCacheMaxCapacity", pluginConfig.getCountCacheMaxCapacity()));
-        pluginConfig.setCountSuffix(accessor.getString(paginationPluginConfigPrefix + "countSuffix", pluginConfig.getCountSuffix()));
-        pluginConfig.setDefaultPageSize(accessor.getInteger(paginationPluginConfigPrefix + "defaultPageSize", pluginConfig.getDefaultPageSize()));
-        pluginConfig.setUseLastPageIfPageNoOut(accessor.getBoolean(paginationPluginConfigPrefix + "useLastPageIfPageNoOut", pluginConfig.isUseLastPageIfPageNoOut()));
+        paginationConfig.setCount(accessor.getBoolean(paginationPluginConfigPrefix + "count", paginationConfig.isCount()));
+        paginationConfig.setCountCacheExpireInSeconds(accessor.getInteger(paginationPluginConfigPrefix + "countCacheExpireInSeconds", paginationConfig.getCountCacheExpireInSeconds()));
+        paginationConfig.setCountCacheInitCapacity(accessor.getInteger(paginationPluginConfigPrefix + "countCacheInitCapacity", paginationConfig.getCountCacheInitCapacity()));
+        paginationConfig.setCountCacheMaxCapacity(accessor.getInteger(paginationPluginConfigPrefix + "countCacheMaxCapacity", paginationConfig.getCountCacheMaxCapacity()));
+        paginationConfig.setCountSuffix(accessor.getString(paginationPluginConfigPrefix + "countSuffix", paginationConfig.getCountSuffix()));
+        paginationConfig.setDefaultPageSize(accessor.getInteger(paginationPluginConfigPrefix + "defaultPageSize", paginationConfig.getDefaultPageSize()));
+        paginationConfig.setUseLastPageIfPageOut(accessor.getBoolean(paginationPluginConfigPrefix + "useLastPageIfPageOut", paginationConfig.isUseLastPageIfPageOut()));
 
-        return pluginConfig;
+        return paginationConfig;
     }
 
     private SQLInstrumentConfig parseInstrumentorConfig(PropertiesAccessor accessor) {

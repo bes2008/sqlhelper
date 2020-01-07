@@ -83,7 +83,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
     private boolean isUseLastPageIfPageOut(@NonNull PagingRequest request) {
         Preconditions.checkNotNull(request);
         if (request.isUseLastPageIfPageOut() == null) {
-            return paginationConfig.isUseLastPageIfPageNoOut();
+            return paginationConfig.isUseLastPageIfPageOut();
         }
         return request.isUseLastPageIfPageOut();
     }

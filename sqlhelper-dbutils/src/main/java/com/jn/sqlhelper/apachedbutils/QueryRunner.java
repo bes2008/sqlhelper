@@ -519,7 +519,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
     private boolean isUseLastPageIfPageNoOut(@NonNull PagingRequest request) {
         Preconditions.checkNotNull(request);
         if (request.isUseLastPageIfPageOut() == null) {
-            return paginationConfig.isUseLastPageIfPageNoOut();
+            return paginationConfig.isUseLastPageIfPageOut();
         }
         return request.isUseLastPageIfPageOut();
     }
