@@ -32,36 +32,36 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
         return dialect;
     }
 
-    public SqlRequest<R, C> setDialect(String dialect) {
+    public R setDialect(String dialect) {
         this.dialect = dialect;
-        return this;
+        return (R)this;
     }
 
     public Boolean isEscapeLikeParameter() {
         return escapeLikeParameter;
     }
 
-    public SqlRequest<R, C> setEscapeLikeParameter(Boolean escapeLikeParameter) {
+    public R setEscapeLikeParameter(Boolean escapeLikeParameter) {
         this.escapeLikeParameter = escapeLikeParameter;
-        return this;
+        return (R)this;
     }
 
     public LikeEscaper getLikeEscaper() {
         return likeEscaper;
     }
 
-    public SqlRequest<R, C> setLikeEscaper(LikeEscaper likeEscaper) {
+    public R setLikeEscaper(LikeEscaper likeEscaper) {
         this.likeEscaper = likeEscaper;
-        return this;
+        return (R)this;
     }
 
     public C getContext() {
         return context;
     }
 
-    public SqlRequest<R, C> setContext(C context) {
+    public R setContext(C context) {
         this.context = context;
-        return this;
+        return (R)this;
     }
 
     public int getMaxRows() {
@@ -76,9 +76,9 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
         return this.fetchSize;
     }
 
-    public SqlRequest<R, C> setFetchSize(int fetchSize) {
+    public R setFetchSize(int fetchSize) {
         this.fetchSize = fetchSize;
-        return this;
+        return (R)this;
     }
 
     public boolean isPagingRequest() {

@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SQLStatementInstrumentor {
-    private static final Logger logger = LoggerFactory.getLogger((Class) SQLStatementInstrumentor.class);
+    private static final Logger logger = LoggerFactory.getLogger(SQLStatementInstrumentor.class);
     @NonNull
     private SQLInstrumentConfig config;
     private DialectRegistry dialectRegistry;
