@@ -16,7 +16,7 @@ package com.jn.sqlhelper.examples.test.dialect;
 
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
-import com.jn.sqlhelper.dialect.internal.likeescaper.CStyleEscaper;
+import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import org.junit.Test;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class LikeEscaperTests {
                 "%a_b_"
         );
 
-        final CStyleEscaper likeEscaper = new CStyleEscaper();
+        final BackslashStyleEscaper likeEscaper = new BackslashStyleEscaper();
         Collects.forEach(parameters, new Consumer2<Integer, String>() {
             @Override
             public void accept(Integer index, String value) {
