@@ -16,8 +16,12 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.util.ClassLoaders;
+import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 
+/**
+ * http://db.apache.org/derby/docs/10.14/ref/index.html
+ */
 public class DerbyDialect extends AbstractDialect {
     private int driverVersionMajor;
     private int driverVersionMinor;
@@ -26,6 +30,7 @@ public class DerbyDialect extends AbstractDialect {
         super();
         determineDriverVersion();
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     private void determineDriverVersion() {

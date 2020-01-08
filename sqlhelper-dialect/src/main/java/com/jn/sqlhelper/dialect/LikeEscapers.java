@@ -104,7 +104,8 @@ public class LikeEscapers {
             "limit","fetch","offset",
             "window", "union",
             "into",
-            "using");
+            "using",
+            "plan","for","with");
 
     /**
      * @return key: the parameters placeholder index: all will be escaped ? indexes

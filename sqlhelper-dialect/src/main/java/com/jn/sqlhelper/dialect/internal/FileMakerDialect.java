@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 
 /**
@@ -23,6 +24,7 @@ public class FileMakerDialect extends AbstractDialect {
     public FileMakerDialect() {
         super();
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override
