@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
 
@@ -25,12 +26,15 @@ import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
  * 2) limit $offset, $limit
  * <p>
  * We use 1)
+ *
+ * https://bloomberg.github.io/comdb2/sql.html
  */
 public class ComDB2Dialect extends AbstractDialect {
     @Override
     protected void setUrlParser(UrlParser urlParser) {
         super.setUrlParser(urlParser);
         setLimitHandler(new LimitOffsetLimitHandler());
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

@@ -16,13 +16,17 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.RowSelection;
+import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
 
-
+/**
+ * https://www.ibm.com/support/knowledgecenter/en/SSEPGG_11.5.0/com.ibm.db2.luw.sql.ref.doc/doc/r0061832.html
+ * https://www.ibm.com/support/knowledgecenter/en/SSEPGG_11.5.0/com.ibm.db2.luw.sql.ref.doc/doc/r0000751.html
+ */
 public class DB2Dialect extends AbstractDialect {
     public DB2Dialect() {
         super();
@@ -42,6 +46,8 @@ public class DB2Dialect extends AbstractDialect {
                 return sql + " fetch first " + limit + " rows only ";
             }
         });
+
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
 
