@@ -15,6 +15,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.internal.likeescaper.CStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.PostgreSQLUrlParser;
 
@@ -30,6 +31,7 @@ public class PostgreSQLDialect extends AbstractDialect {
         super();
         setUrlParser(new PostgreSQLUrlParser());
         setLimitHandler(new LimitOffsetLimitHandler());
+        setLikeEscaper(CStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

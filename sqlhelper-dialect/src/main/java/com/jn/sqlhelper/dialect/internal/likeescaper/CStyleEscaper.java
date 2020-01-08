@@ -19,7 +19,7 @@ package com.jn.sqlhelper.dialect.internal.likeescaper;
  */
 public class CStyleEscaper extends BaseLikeEscaper {
     public static final CStyleEscaper INSTANCE = new CStyleEscaper();
-    public static final CStyleEscaper NON_DEFAULT_INSTANCE = new CStyleEscaper();
+    public static final CStyleEscaper NON_DEFAULT_INSTANCE = new CStyleEscaper(false);
     private boolean isDefault = true;
 
     public CStyleEscaper() {
@@ -38,6 +38,6 @@ public class CStyleEscaper extends BaseLikeEscaper {
         if (!isDefault) {
             return super.appendmentAfterLikeClause();
         }
-        return " ESCAPE '\\' ";
+        return "";
     }
 }

@@ -28,7 +28,7 @@ public class MySQLDialect extends AbstractDialect {
         super();
         setUrlParser(new MySqlUrlParser());
         setLimitHandler(new LimitCommaLimitHandler());
-        setLikeEscaper(new CStyleEscaper());
+        setLikeEscaper(CStyleEscaper.INSTANCE);
     }
 
     @Override

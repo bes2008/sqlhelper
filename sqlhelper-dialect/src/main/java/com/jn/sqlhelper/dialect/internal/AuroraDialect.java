@@ -14,6 +14,8 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.LikeEscaper;
+import com.jn.sqlhelper.dialect.internal.likeescaper.CStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
@@ -33,10 +35,14 @@ public class AuroraDialect extends AbstractDialect {
     private WorkingWith workingWith;
 
     private static final Map<WorkingWith, LimitHandler> limitHandlerMap = new HashMap<WorkingWith, LimitHandler>();
+    private static final Map<WorkingWith, LikeEscaper> likeEscaperMap = new HashMap<WorkingWith, LikeEscaper>();
 
     static {
         limitHandlerMap.put(WorkingWith.MySQL, new LimitCommaLimitHandler());
         limitHandlerMap.put(WorkingWith.PostgreSQL, new LimitOffsetLimitHandler());
+
+        likeEscaperMap.put(WorkingWith.MySQL, CStyleEscaper.INSTANCE);
+        likeEscaperMap.put(WorkingWith.PostgreSQL, CStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     public AuroraDialect() {
