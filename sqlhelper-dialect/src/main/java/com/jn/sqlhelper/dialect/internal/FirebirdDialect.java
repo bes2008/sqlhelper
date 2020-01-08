@@ -16,6 +16,7 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.RowSelection;
+import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 
@@ -39,6 +40,8 @@ public class FirebirdDialect extends InterbaseDialect {
                 return new StringBuilder(sql.length() + 20).append(sql).insert(6, hasOffset ? " first ? skip ?" : " first ?").toString();
             }
         });
+
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override
