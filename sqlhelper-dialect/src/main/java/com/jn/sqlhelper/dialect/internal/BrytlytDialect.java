@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 /**
@@ -26,6 +27,7 @@ public class BrytlytDialect extends AbstractDialect {
     public BrytlytDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

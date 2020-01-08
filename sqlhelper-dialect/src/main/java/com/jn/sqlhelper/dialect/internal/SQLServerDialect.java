@@ -15,7 +15,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.sqlhelper.dialect.internal.likeescaper.CStyleEscaper;
+import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.SQLServer2005LimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.TopLimitHandler;
@@ -27,7 +27,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
 
     public SQLServerDialect() {
         super();
-        setLikeEscaper(CStyleEscaper.NON_DEFAULT_INSTANCE);
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
         setDelegate(new SQLServer2008Dialect());
         setUrlParser(new SqlServerUrlParser());
     }

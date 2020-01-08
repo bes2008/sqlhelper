@@ -15,7 +15,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.sqlhelper.dialect.internal.likeescaper.CStyleEscaper;
+import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 /**
@@ -25,7 +25,7 @@ public class SQLiteDialect extends AbstractDialect {
     public SQLiteDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
-        setLikeEscaper(CStyleEscaper.NON_DEFAULT_INSTANCE);
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

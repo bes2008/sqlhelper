@@ -98,7 +98,7 @@ public class LikeEscapers {
         return insert(sql, slotIndexes, escaper.appendmentAfterLikeClause());
     }
 
-    private static final List<String> keywordsAfterLikeClause = Collects.asList("and", "or", "group", "order");
+    private static final List<String> keywordsAfterLikeClause = Collects.asList("and", "or", "group", "order","limit","fetch","offset", "window", "union", "into");
 
     /**
      * @return key: the parameters placeholder index: all will be escaped ? indexes

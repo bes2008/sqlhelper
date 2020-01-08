@@ -15,7 +15,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.sqlhelper.dialect.internal.likeescaper.CStyleEscaper;
+import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 
@@ -24,7 +24,7 @@ public class H2Dialect extends AbstractDialect {
     public H2Dialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
-        setLikeEscaper(new CStyleEscaper());
+        setLikeEscaper(new BackslashStyleEscaper());
     }
 
     @Override

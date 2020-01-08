@@ -15,29 +15,14 @@
 package com.jn.sqlhelper.dialect.internal.likeescaper;
 
 /**
- * the escape char is : '\'
+ * '/'
  */
-public class CStyleEscaper extends BaseLikeEscaper {
-    public static final CStyleEscaper INSTANCE = new CStyleEscaper();
-    public static final CStyleEscaper NON_DEFAULT_INSTANCE = new CStyleEscaper(false);
-    private boolean isDefault = true;
-
-    public CStyleEscaper() {
-        this(true);
+public class SlashStyleEscaper extends BaseLikeEscaper {
+    public SlashStyleEscaper() {
+        this('/');
     }
 
-    public CStyleEscaper(boolean isDefault) {
-        this.escapeChar = '\\';
-        this.keyChars.add('\\');
-        this.isDefault = isDefault;
-    }
-
-
-    @Override
-    public String appendmentAfterLikeClause() {
-        if (!isDefault) {
-            return super.appendmentAfterLikeClause();
-        }
-        return "";
+    public SlashStyleEscaper(char escapeChar ) {
+        super(escapeChar);
     }
 }

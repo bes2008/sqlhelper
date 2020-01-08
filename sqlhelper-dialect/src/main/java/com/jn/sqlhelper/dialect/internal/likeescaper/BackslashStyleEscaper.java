@@ -15,14 +15,29 @@
 package com.jn.sqlhelper.dialect.internal.likeescaper;
 
 /**
- * '/'
+ * the escape char is : '\'
  */
 public class BackslashStyleEscaper extends BaseLikeEscaper {
+    public static final BackslashStyleEscaper INSTANCE = new BackslashStyleEscaper();
+    public static final BackslashStyleEscaper NON_DEFAULT_INSTANCE = new BackslashStyleEscaper(false);
+    private boolean isDefault = true;
+
     public BackslashStyleEscaper() {
-        this('/');
+        this(true);
     }
 
-    public BackslashStyleEscaper(char escapeChar ) {
-        super(escapeChar);
+    public BackslashStyleEscaper(boolean isDefault) {
+        this.escapeChar = '\\';
+        this.keyChars.add('\\');
+        this.isDefault = isDefault;
+    }
+
+
+    @Override
+    public String appendmentAfterLikeClause() {
+        if (!isDefault) {
+            return super.appendmentAfterLikeClause();
+        }
+        return "";
     }
 }

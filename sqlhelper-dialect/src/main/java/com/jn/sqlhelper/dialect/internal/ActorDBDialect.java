@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
-import com.jn.sqlhelper.dialect.internal.likeescaper.CStyleEscaper;
+import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 /**
@@ -26,7 +26,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 public class ActorDBDialect extends AbstractDialect {
     public ActorDBDialect() {
         setLimitHandler(new LimitOffsetLimitHandler());
-        setLikeEscaper(CStyleEscaper.NON_DEFAULT_INSTANCE);
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override
