@@ -24,7 +24,6 @@ public class AltibaseDialect extends AbstractDialect {
     public AltibaseDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

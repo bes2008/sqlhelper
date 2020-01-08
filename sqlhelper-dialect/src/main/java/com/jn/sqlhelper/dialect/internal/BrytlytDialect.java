@@ -27,7 +27,6 @@ public class BrytlytDialect extends AbstractDialect {
     public BrytlytDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

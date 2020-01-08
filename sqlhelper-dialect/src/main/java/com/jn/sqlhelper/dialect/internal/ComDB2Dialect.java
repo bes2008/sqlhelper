@@ -34,7 +34,6 @@ public class ComDB2Dialect extends AbstractDialect {
     protected void setUrlParser(UrlParser urlParser) {
         super.setUrlParser(urlParser);
         setLimitHandler(new LimitOffsetLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

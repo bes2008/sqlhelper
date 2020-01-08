@@ -26,7 +26,6 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 public class ActorDBDialect extends AbstractDialect {
     public ActorDBDialect() {
         setLimitHandler(new LimitOffsetLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

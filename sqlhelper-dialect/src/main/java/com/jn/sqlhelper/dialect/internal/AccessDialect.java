@@ -21,7 +21,6 @@ public class AccessDialect extends AbstractDialect {
     public AccessDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

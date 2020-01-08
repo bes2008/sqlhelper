@@ -40,9 +40,6 @@ public class AuroraDialect extends AbstractDialect {
     static {
         limitHandlerMap.put(WorkingWith.MySQL, new LimitCommaLimitHandler());
         limitHandlerMap.put(WorkingWith.PostgreSQL, new LimitOffsetLimitHandler());
-
-        likeEscaperMap.put(WorkingWith.MySQL, BackslashStyleEscaper.INSTANCE);
-        likeEscaperMap.put(WorkingWith.PostgreSQL, BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     public AuroraDialect() {

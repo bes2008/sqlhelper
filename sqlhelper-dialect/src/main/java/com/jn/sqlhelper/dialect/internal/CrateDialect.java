@@ -24,7 +24,6 @@ public class CrateDialect extends AbstractDialect {
     public CrateDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override
