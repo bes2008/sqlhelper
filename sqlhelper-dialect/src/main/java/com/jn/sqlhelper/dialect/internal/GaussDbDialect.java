@@ -9,7 +9,6 @@ public class GaussDbDialect extends AbstractDialect {
     public GaussDbDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
 

@@ -57,6 +57,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     public AbstractDialect() {
         setLimitHandler(new DefaultLimitHandler(this));
         setUrlParser(new NoopUrlParser());
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     public AbstractDialect(Driver driver) {

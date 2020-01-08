@@ -28,7 +28,6 @@ public class CubridDialect extends AbstractDialect {
     public CubridDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

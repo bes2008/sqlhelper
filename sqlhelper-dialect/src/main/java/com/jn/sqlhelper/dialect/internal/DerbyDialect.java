@@ -30,7 +30,6 @@ public class DerbyDialect extends AbstractDialect {
         super();
         determineDriverVersion();
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     private void determineDriverVersion() {

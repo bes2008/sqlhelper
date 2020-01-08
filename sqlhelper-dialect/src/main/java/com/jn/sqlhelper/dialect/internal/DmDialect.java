@@ -20,7 +20,6 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 public class DmDialect extends AbstractDialect {
     public DmDialect() {
         setLimitHandler(new LimitOffsetLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

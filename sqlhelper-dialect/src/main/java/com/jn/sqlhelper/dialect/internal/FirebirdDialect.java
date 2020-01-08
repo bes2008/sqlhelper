@@ -41,7 +41,6 @@ public class FirebirdDialect extends InterbaseDialect {
             }
         });
 
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

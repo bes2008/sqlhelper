@@ -23,7 +23,6 @@ public class EsgynDBDialect extends AbstractDialect {
     public EsgynDBDialect() {
         super();
         setLimitHandler(new FirstLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

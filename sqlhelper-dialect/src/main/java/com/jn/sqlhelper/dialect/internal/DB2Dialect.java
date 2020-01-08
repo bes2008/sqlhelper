@@ -47,7 +47,6 @@ public class DB2Dialect extends AbstractDialect {
             }
         });
 
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
 

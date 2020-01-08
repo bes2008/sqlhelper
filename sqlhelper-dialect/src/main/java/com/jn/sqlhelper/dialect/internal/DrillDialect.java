@@ -24,7 +24,6 @@ public class DrillDialect extends AbstractDialect {
     public DrillDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override

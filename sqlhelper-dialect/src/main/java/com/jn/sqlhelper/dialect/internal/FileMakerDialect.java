@@ -24,7 +24,6 @@ public class FileMakerDialect extends AbstractDialect {
     public FileMakerDialect() {
         super();
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     @Override
