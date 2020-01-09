@@ -26,9 +26,7 @@ public class NestedStatements {
             return false;
         }
         String querySqlId = context.getString(MybatisSqlRequestContextKeys.QUERY_SQL_ID);
-        if (querySqlId != null && querySqlId.equals(mappedStatement.getId())) {
-            return false;
-        }
-        return true;
+
+        return Objects.isNotNull(querySqlId) && !querySqlId.equals(mappedStatement.getId()) ;
     }
 }
