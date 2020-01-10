@@ -16,8 +16,8 @@ package com.jn.sqlhelper.mybatis.batch;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.Preconditions;
-import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.batch.BatchMode;
+import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -34,7 +34,7 @@ public class JdbcBatchUpdater<E> extends MybatisBatchUpdater<E> {
     @Override
     public BatchResult<E> batchUpdate(MybatisBatchStatement statement, List<E> entities) throws SQLException {
         Preconditions.checkNotNull(statement);
-        Preconditions.checkArgument(statement.getBatchType() == BatchMode.SIMPLE);
+        Preconditions.checkArgument(statement.getBatchMode() == BatchMode.JDBC_BATCH);
         Preconditions.checkNotNull(sessionFactory);
 
         SqlSession session = sessionFactory.openSession(ExecutorType.BATCH);
@@ -50,32 +50,36 @@ public class JdbcBatchUpdater<E> extends MybatisBatchUpdater<E> {
 
         String statementId = statement.getStatementId();
         String statementIdFQN = statement.getSql();
-        int updated = 0;
+        int affectedRows = 0;
+
+        // 对于mybatis batch executor 来说，insert, update, delete的返回值是负数，没有意义
         try {
             for (E entity : entities) {
                 try {
                     if (statementId.contains(INSERT)) {
-                        updated = updated + session.insert(statementIdFQN, entity);
+                        session.insert(statementIdFQN, entity);
                     } else if (statementId.contains(UPDATE)) {
-                        updated = updated + session.update(statementIdFQN, entity);
+                        session.update(statementIdFQN, entity);
                     } else if (statementId.contains(DELETE)) {
-                        updated = updated + session.delete(statementIdFQN, entity);
+                        session.delete(statementIdFQN, entity);
+                    } else {
+                        session.update(statementIdFQN, entity);
                     }
-                    updated++;
                 } catch (Exception ex) {
                     logger.error("Error occur when execute batch statement: {} with parameter: {}", statementIdFQN, JSONBuilderProvider.simplest().toJson(entity));
                     result.addThrowable(ex);
                 }
+                affectedRows = affectedRows + 1;
             }
             session.commit(true);
         } catch (Exception ex) {
             logger.error("Error occur when execute batch statement: {}", statementIdFQN);
             result.addThrowable(ex);
-            updated = 0;
+            affectedRows = 0;
         } finally {
             session.close();
         }
-        result.setRowsAffected(updated);
+        result.setRowsAffected(affectedRows);
         return result;
     }
 }
