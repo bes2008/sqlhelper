@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.common.batch;
 
 public interface BatchStatement {
-    BatchMode getBatchType();
-    void setBatchType(BatchMode batchType);
+    BatchMode getBatchMode();
+    void setBatchMode(BatchMode batchMode);
     String getSql();
 }

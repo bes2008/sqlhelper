@@ -33,7 +33,7 @@ public class JdbcBatchUpdater<E, STATEMENT extends BatchStatement> implements Ba
     @Override
     public BatchResult<E> batchUpdate(STATEMENT statement, List<E> parametersList) throws SQLException {
         Preconditions.checkNotNull(statement);
-        Preconditions.checkArgument(statement.getBatchType() == BatchMode.JDBC_BATCH);
+        Preconditions.checkArgument(statement.getBatchMode() == BatchMode.JDBC_BATCH);
         PreparedStatement pstmt = connection.prepareStatement(statement.getSql());
         for (int i = 0; i < parametersList.size(); i++) {
             setter.setParameters(pstmt, 1, parametersList.get(i));

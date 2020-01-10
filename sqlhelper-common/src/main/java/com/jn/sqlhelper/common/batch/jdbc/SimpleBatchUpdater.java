@@ -33,7 +33,7 @@ public class SimpleBatchUpdater<E, STATEMENT extends BatchStatement> implements 
     @Override
     public BatchResult<E> batchUpdate(STATEMENT statement, List<E> parametersList) throws SQLException {
         Preconditions.checkNotNull(statement);
-        Preconditions.checkArgument(statement.getBatchType() == BatchMode.SIMPLE);
+        Preconditions.checkArgument(statement.getBatchMode() == BatchMode.SIMPLE);
         int sum = 0;
         for (int i = 0; i < parametersList.size(); i++) {
             PreparedStatement pstmt = connection.prepareStatement(statement.getSql());
