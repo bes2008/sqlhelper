@@ -165,7 +165,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                         items.addAll((Collection) rs);
                         result.setTotal(items.size());
                     }
-                    executorInvocation.setResult(rs);
+                    executorInvocation.setResult(items);
                     invalidatePagingRequest(false);
                     return;
                 }
