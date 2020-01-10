@@ -21,7 +21,7 @@ import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchMode;
 
 public class MybatisBatchStatement implements BatchStatement {
-    private BatchMode batchType = BatchMode.JDBC_BATCH;
+    private BatchMode batchMode = BatchMode.JDBC_BATCH;
     private String statementId;
     private Class mapperClass;
 
@@ -34,19 +34,19 @@ public class MybatisBatchStatement implements BatchStatement {
     }
 
     public MybatisBatchStatement(BatchMode batchType, Class mapperClass, String statementId) {
-        setBatchType(batchType);
+        setBatchMode(batchType);
         setMapperClass(mapperClass);
         setStatementId(statementId);
     }
 
     @Override
-    public BatchMode getBatchType() {
-        return batchType;
+    public BatchMode getBatchMode() {
+        return batchMode;
     }
 
     @Override
-    public void setBatchType(BatchMode batchType) {
-        this.batchType = batchType;
+    public void setBatchMode(BatchMode batchMode) {
+        this.batchMode = batchMode;
     }
 
     public String getStatementId() {

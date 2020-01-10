@@ -32,7 +32,7 @@ public class SimpleBatchUpdater<E> extends MybatisBatchUpdater<E> {
     public BatchResult<E> batchUpdate(MybatisBatchStatement statement, List<E> entities) throws SQLException {
         Preconditions.checkNotNull(sessionFactory);
         Preconditions.checkNotNull(statement);
-        Preconditions.checkArgument(statement.getBatchType() == BatchMode.SIMPLE);
+        Preconditions.checkArgument(statement.getBatchMode() == BatchMode.SIMPLE);
         SqlSession session = sessionFactory.openSession(true);
 
         BatchResult<E> result = new BatchResult<E>();
@@ -50,8 +50,9 @@ public class SimpleBatchUpdater<E> extends MybatisBatchUpdater<E> {
                         updated = updated + session.update(statementIdFQN, entity);
                     } else if (statementId.contains(DELETE)) {
                         updated = updated + session.delete(statementIdFQN, entity);
+                    }else{
+                        updated = updated + session.update(statementIdFQN, entity);
                     }
-                    updated++;
                 } catch (Exception ex) {
                     logger.error("Error occur when execute batch statement: {} with parameter: {}", statementIdFQN, JSONBuilderProvider.simplest().toJson(entity));
                     result.addThrowable(ex);

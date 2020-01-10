@@ -27,7 +27,7 @@ public class BatchSqlBatchUpdater<E> extends MybatisBatchUpdater<E> {
     @Override
     public BatchResult batchUpdate(MybatisBatchStatement statement, List<E> beans) throws SQLException {
         Preconditions.checkNotNull(statement);
-        Preconditions.checkArgument(statement.getBatchType() == BatchMode.JDBC_BATCH);
+        Preconditions.checkArgument(statement.getBatchMode() == BatchMode.BATCH_SQL);
         Preconditions.checkNotNull(sessionFactory);
 
         SqlSession session = sessionFactory.openSession(true);
