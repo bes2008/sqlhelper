@@ -12,11 +12,13 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.mvc.dao;
+package com.jn.sqlhelper.mybatis.mvc.repository;
+
+import com.jn.sqlhelper.mybatis.mvc.entity.Entity;
 
 import java.util.List;
 
-public interface BaseMapper<E extends Entity<ID>, ID> {
+public interface Repository<E extends Entity<ID>, ID> {
     void insert(E entity);
 
     void update(E entity);

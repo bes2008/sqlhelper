@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.mvc.dao;
+package com.jn.sqlhelper.mybatis.mvc.entity;
 
 public interface Entity<ID> {
     ID getId();
