@@ -273,12 +273,14 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     @Override
     public boolean isSupportsBatchUpdates() {
-        return delegate == null ? false : delegate.isSupportsBatchUpdates();
+        // default is true
+        return delegate == null || delegate.isSupportsBatchUpdates();
     }
 
     @Override
     public boolean isSupportsBatchSql() {
-        return delegate == null ? false : delegate.isSupportsBatchSql();
+        // default is true
+        return delegate == null || delegate.isSupportsBatchSql();
     }
 
     @Override
