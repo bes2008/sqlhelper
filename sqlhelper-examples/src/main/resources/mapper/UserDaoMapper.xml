@@ -23,6 +23,20 @@
         )
     </insert>
 
+    <insert id="batchInsert" parameterType="com.jn.sqlhelper.examples.common.model.User" databaseId="h2">
+        INSERT INTO
+        USER (<include refid="all_columns"/>)
+        VALUES
+        <foreach collection="list" item="item" index="i" open="" close="" separator=",">
+            (
+            #{item.id},
+            #{item.name},
+            #{item.age}
+            )
+        </foreach>
+
+    </insert>
+
     <update id="updateById" parameterType="com.jn.sqlhelper.examples.common.model.User">
         UPDATE USER
         SET

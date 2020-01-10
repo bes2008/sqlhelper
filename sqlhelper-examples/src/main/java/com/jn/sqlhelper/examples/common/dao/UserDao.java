@@ -32,4 +32,6 @@ public interface UserDao {
     List<User> selectByLimit_subqueryPagination(User limit);
 
     User selectById(String id);
+
+    void batchInsert(List<User> users);
 }
