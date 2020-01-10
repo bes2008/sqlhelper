@@ -13,18 +13,6 @@ public class DatabaseDescription {
 
     public DatabaseDescription(DatabaseMetaData databaseMetaData) {
         this.dbMetaData = databaseMetaData;
-        init();
-    }
-
-    private void init() {
-        parseAllProceduresAreCallable();
-        parseSupportsMixedCaseIdentifiers();
-        parseSupportsMixedCaseQuotedIdentifiers();
-        parseSupportsSchemasInTableDefinitions();
-        parseSupportsSchemasInIndexDefinitions();
-        parseSupportsCatalogsInTableDefinitions();
-        parseSupportsCatalogsInIndexDefinitions();
-        parseCatalogSeparator();
     }
 
     private Boolean allProceduresAreCallable;
