@@ -81,6 +81,7 @@ public class MybatisBatchUpdaters {
                                                  @NonNull String statementId,
                                                  @Nullable BatchMode batchMode,
                                                  List<E> entities) throws SQLException {
+        // build batch statement
         final MybatisBatchStatement statement = new MybatisBatchStatement(batchMode, mapperClass, statementId);
         Preconditions.checkArgument(hasStatement(sessionFactory, statement), new Supplier<Object[], String>() {
             @Override
@@ -88,6 +89,8 @@ public class MybatisBatchUpdaters {
                 return StringTemplates.formatWithPlaceholder("The statement {} is not exists", statement.getSql());
             }
         });
+
+        // find dialect
         Configuration configuration = sessionFactory.getConfiguration();
         String databaseId = configuration.getDatabaseId();
         Dialect dialect = null;
@@ -100,10 +103,12 @@ public class MybatisBatchUpdaters {
             dialect = DialectRegistry.getInstance().getDialectByDatabaseMetadata(connection.getMetaData());
             session.close();
         }
-        boolean supportsBatchSqlMode = dialect == null || dialect.isSupportsBatchSql();
+
+
+        boolean supportsBatchSqlMode = dialect != null && dialect.isSupportsBatchSql();
         MybatisBatchUpdater<E> updater = null;
         BatchResult<E> result = null;
-        if (supportsBatchSqlMode) {
+        if (supportsBatchSqlMode && (batchMode == null || batchMode == BatchMode.BATCH_SQL)) {
             updater = createBatchUpdater(sessionFactory, batchMode);
             if (batchMode != null && updater != null) {
                 return updater.batchUpdate(statement, entities);
@@ -113,11 +118,13 @@ public class MybatisBatchUpdaters {
             if (!result.hasThrowable()) {
                 return result;
             }
-            result = null;
             logger.warn("Error when execute batch update based on database's batch sql, may be the statement {} not a batch sql, will use jdbc batch method execute it. error: {}", statement.getSql(), result.getThrowables().get(0));
+            if (batchMode != null) {
+                return result;
+            }
         }
-        boolean supportsJdbcBatch = dialect == null || dialect.isSupportsBatchUpdates();
-        if (supportsJdbcBatch) {
+        boolean supportsJdbcBatch = dialect != null && dialect.isSupportsBatchUpdates();
+        if (supportsJdbcBatch && (batchMode == null || batchMode == BatchMode.JDBC_BATCH)) {
             updater = createJdbcBatchUpdater(sessionFactory);
             result = updater.batchUpdate(statement, entities);
             if (result.hasThrowable()) {
@@ -128,6 +135,9 @@ public class MybatisBatchUpdaters {
                         logger.warn("errors[{}]", index, throwable);
                     }
                 });
+                if (batchMode != null) {
+                    return result;
+                }
             } else {
                 return result;
             }
