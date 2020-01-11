@@ -77,14 +77,28 @@ public class MybatisBatchUpdaters {
     }
 
     public static <E> BatchResult<E> batchUpdate(@NonNull SqlSessionFactory sessionFactory,
+                                                 @NonNull String statementIdFQN,
+                                                 @Nullable BatchMode batchMode,
+                                                 List<E> entities) throws SQLException {
+        final MybatisBatchStatement statement = new MybatisBatchStatement(batchMode, statementIdFQN);
+        return batch(sessionFactory, batchMode, statement, entities);
+    }
+
+
+    public static <E> BatchResult<E> batchUpdate(@NonNull SqlSessionFactory sessionFactory,
                                                  @NonNull Class mapperClass,
                                                  @NonNull String statementId,
                                                  @Nullable BatchMode batchMode,
                                                  List<E> entities) throws SQLException {
-
-
-        // build batch statement
         final MybatisBatchStatement statement = new MybatisBatchStatement(batchMode, mapperClass, statementId);
+        return batch(sessionFactory, batchMode, statement, entities);
+    }
+
+    private static <E> BatchResult<E> batch(@NonNull SqlSessionFactory sessionFactory,
+                                            @Nullable BatchMode batchMode,
+                                            final MybatisBatchStatement statement,
+                                            List<E> entities) throws SQLException {
+        // build batch statement
         Preconditions.checkArgument(hasStatement(sessionFactory, statement), new Supplier<Object[], String>() {
             @Override
             public String get(Object[] objects) {
