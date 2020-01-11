@@ -14,29 +14,41 @@
 
 package com.jn.sqlhelper.mybatis.batch;
 
-import com.jn.langx.util.Emptys;
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.common.batch.BatchStatement;
 import com.jn.sqlhelper.common.batch.BatchMode;
+import com.jn.sqlhelper.common.batch.BatchStatement;
 
 public class MybatisBatchStatement implements BatchStatement {
     private BatchMode batchMode = BatchMode.JDBC_BATCH;
-    private String statementId;
-    private Class mapperClass;
+    private String statementId; // optional
+    private Class mapperClass; // optional
+    private String statementIdFQN; // the sql, required
 
     public MybatisBatchStatement() {
 
     }
 
-    public MybatisBatchStatement(Class mapperClass, String statementId) {
+    public MybatisBatchStatement(@NonNull String statementIdFQN) {
+        this(BatchMode.JDBC_BATCH, statementIdFQN);
+    }
+
+    public MybatisBatchStatement(@Nullable BatchMode batchType, @NonNull String statementIdFQN) {
+        setBatchMode(batchType);
+        setStatementIdFQN(statementIdFQN);
+    }
+
+    public MybatisBatchStatement(@NonNull Class mapperClass, @NonNull String statementId) {
         this(BatchMode.JDBC_BATCH, mapperClass, statementId);
     }
 
-    public MybatisBatchStatement(BatchMode batchType, Class mapperClass, String statementId) {
+    public MybatisBatchStatement(@Nullable BatchMode batchType, @NonNull Class mapperClass, @NonNull String statementId) {
         setBatchMode(batchType);
         setMapperClass(mapperClass);
         setStatementId(statementId);
+        setStatementIdFQN(Reflects.getFQNClassName(mapperClass) + "." + statementId);
     }
 
     @Override
@@ -54,6 +66,7 @@ public class MybatisBatchStatement implements BatchStatement {
     }
 
     public void setStatementId(String statementId) {
+        Preconditions.checkNotNull(statementId, "mybatis sql statement id is null");
         this.statementId = statementId;
     }
 
@@ -62,14 +75,20 @@ public class MybatisBatchStatement implements BatchStatement {
     }
 
     public void setMapperClass(Class mapperClass) {
+        Preconditions.checkNotNull(mapperClass, "mybatis mapper class is null");
         this.mapperClass = mapperClass;
     }
 
     @Override
     public String getSql() {
-        Preconditions.checkNotNull(Emptys.isNotEmpty(statementId), "Sql statement id is null");
-        Preconditions.checkNotNull(mapperClass, "The mapper class is null");
-        return Reflects.getFQNClassName(mapperClass) + "." + statementId;
+        return statementIdFQN;
     }
 
+    public String getStatementIdFQN() {
+        return statementIdFQN;
+    }
+
+    public void setStatementIdFQN(String statementIdFQN) {
+        this.statementIdFQN = Preconditions.checkNotNull(statementIdFQN);
+    }
 }
