@@ -111,9 +111,10 @@ public class UserController {
             @RequestParam(name = "sort", required = false) String sort,
             @RequestParam(value = "count", required = false) boolean count,
             @RequestParam(value = "useLastPageIfPageOut", required = false) boolean useLastPageIfPageOut,
-            @RequestParam(value = "namelike", required = false) String namelike) {
+            @RequestParam(value = "namelike", required = false) String namelike,
+            @RequestParam(value = "grateAge", required = false, defaultValue = "10") int age) {
         User queryCondition = new User();
-        queryCondition.setAge(10);
+        queryCondition.setAge(age);
         queryCondition.setName(namelike);
 
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
