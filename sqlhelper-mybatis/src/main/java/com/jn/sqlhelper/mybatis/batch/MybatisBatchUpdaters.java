@@ -17,6 +17,7 @@ package com.jn.sqlhelper.mybatis.batch;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
@@ -98,6 +99,8 @@ public class MybatisBatchUpdaters {
                                             @Nullable BatchMode batchMode,
                                             final MybatisBatchStatement statement,
                                             List<E> entities) throws SQLException {
+        Preconditions.checkArgument(Emptys.isNotEmpty(entities));
+
         // build batch statement
         Preconditions.checkArgument(hasStatement(sessionFactory, statement), new Supplier<Object[], String>() {
             @Override
