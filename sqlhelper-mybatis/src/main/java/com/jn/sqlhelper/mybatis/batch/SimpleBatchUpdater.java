@@ -40,34 +40,39 @@ public class SimpleBatchUpdater<E> extends MybatisBatchUpdater<E> {
         result.setStatement(statement);
         String statementId = statement.getStatementId();
         String statementIdFQN = statement.getSql();
-        int updated = 0;
+        int affectedRows = 0;
         try {
             for (E entity : entities) {
+                int updated = 0;
                 try {
                     if (statementId.contains(INSERT)) {
-                        updated = updated + session.insert(statementIdFQN, entity);
+                        updated =  session.insert(statementIdFQN, entity);
                     } else if (statementId.contains(UPDATE)) {
-                        updated = updated + session.update(statementIdFQN, entity);
+                        updated = session.update(statementIdFQN, entity);
                     } else if (statementId.contains(DELETE)) {
-                        updated = updated + session.delete(statementIdFQN, entity);
+                        updated = session.delete(statementIdFQN, entity);
                     }else{
-                        updated = updated + session.update(statementIdFQN, entity);
+                        updated =  session.update(statementIdFQN, entity);
                     }
                 } catch (Exception ex) {
                     logger.error("Error occur when execute batch statement: {} with parameter: {}", statementIdFQN, JSONBuilderProvider.simplest().toJson(entity));
                     result.addThrowable(ex);
                 }
+                if(updated<0){
+                    logger.warn("the affectedRows < 0 , maybe your default executor type is not simple");
+                    updated = 1;
+                }
+                affectedRows += updated;
             }
             session.commit(true);
         } catch (Exception ex) {
             logger.error("Error occur when execute batch statement: {}", statementIdFQN);
             result.addThrowable(ex);
-            updated = 0;
         } finally {
             session.close();
         }
 
-        result.setRowsAffected(updated);
+        result.setRowsAffected(affectedRows);
         return result;
     }
 }
