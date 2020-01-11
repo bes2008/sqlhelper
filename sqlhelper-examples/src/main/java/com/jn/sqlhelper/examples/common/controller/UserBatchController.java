@@ -44,7 +44,7 @@ public class UserBatchController {
 
     @PostMapping("/addUsers_Guess")
     public void addUsers_Guess(@RequestBody List<User> users) throws Throwable {
-        MybatisBatchUpdaters.batchUpdate(sessionFactory, UserDao.class, "insert", BatchMode.SIMPLE, users);
+        MybatisBatchUpdaters.batchUpdate(sessionFactory, UserDao.class, "insert", null, users);
     }
 
 

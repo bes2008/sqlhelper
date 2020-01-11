@@ -71,10 +71,11 @@ public class JdbcBatchUpdater<E> extends MybatisBatchUpdater<E> {
                 }
                 affectedRows = affectedRows + 1;
             }
-            session.commit(true);
+            session.commit(false);
         } catch (Exception ex) {
             logger.error("Error occur when execute batch statement: {}", statementIdFQN);
             result.addThrowable(ex);
+            session.rollback(true);
             affectedRows = 0;
         } finally {
             session.close();
