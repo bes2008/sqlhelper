@@ -14,9 +14,11 @@
 
 package com.jn.sqlhelper.mybatis.batch;
 
+import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.batch.BatchMode;
 import com.jn.sqlhelper.common.batch.BatchStatement;
@@ -24,7 +26,6 @@ import com.jn.sqlhelper.common.batch.BatchStatement;
 public class MybatisBatchStatement implements BatchStatement {
     private BatchMode batchMode = BatchMode.JDBC_BATCH;
     private String statementId; // optional
-    private Class mapperClass; // optional
     private String statementIdFQN; // the sql, required
 
     public MybatisBatchStatement() {
@@ -37,6 +38,12 @@ public class MybatisBatchStatement implements BatchStatement {
 
     public MybatisBatchStatement(@Nullable BatchMode batchType, @NonNull String statementIdFQN) {
         setBatchMode(batchType);
+        String[] segments = Strings.split(statementIdFQN, ".");
+        if (segments.length > 0) {
+            setStatementId(segments[segments.length - 1]);
+        } else {
+            throw new IllegalArgumentException("the mybatis statement id fqn is illegal");
+        }
         setStatementIdFQN(statementIdFQN);
     }
 
@@ -46,7 +53,6 @@ public class MybatisBatchStatement implements BatchStatement {
 
     public MybatisBatchStatement(@Nullable BatchMode batchType, @NonNull Class mapperClass, @NonNull String statementId) {
         setBatchMode(batchType);
-        setMapperClass(mapperClass);
         setStatementId(statementId);
         setStatementIdFQN(Reflects.getFQNClassName(mapperClass) + "." + statementId);
     }
@@ -70,14 +76,6 @@ public class MybatisBatchStatement implements BatchStatement {
         this.statementId = statementId;
     }
 
-    public Class getMapperClass() {
-        return mapperClass;
-    }
-
-    public void setMapperClass(Class mapperClass) {
-        Preconditions.checkNotNull(mapperClass, "mybatis mapper class is null");
-        this.mapperClass = mapperClass;
-    }
 
     @Override
     public String getSql() {
@@ -90,5 +88,10 @@ public class MybatisBatchStatement implements BatchStatement {
 
     public void setStatementIdFQN(String statementIdFQN) {
         this.statementIdFQN = Preconditions.checkNotNull(statementIdFQN);
+    }
+
+    @Override
+    public String toString() {
+        return JSONBuilderProvider.simplest().toJson(this);
     }
 }
