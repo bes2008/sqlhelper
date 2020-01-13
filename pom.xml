@@ -6,7 +6,7 @@
 
     <groupId>com.github.fangjinuo.sqlhelper</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>2.4.1</version>
+    <version>3.0.0</version>
     <name>sqlhelper</name>
     <description>
         JDBC Extensions:
@@ -84,8 +84,8 @@
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.compilerVersion>1.6</maven.compiler.compilerVersion>
 
-        <project.major.version>2.3.0</project.major.version>
-        <project.internal.version>2.4.1</project.internal.version>
+        <project.major.version>3.0.0</project.major.version>
+        <project.internal.version>3.0.0</project.internal.version>
     </properties>
 
     <dependencyManagement>
