@@ -16,6 +16,7 @@ package com.jn.sqlhelper.examples.common.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.apachedbutils.QueryRunner;
@@ -100,6 +101,9 @@ public class UserController {
         String json = JSONBuilderProvider.simplest().toJson(users);
         System.out.println(json);
         json = JSONBuilderProvider.simplest().toJson(users);
+        System.out.println(json);
+        PageInfo pageInfo = new PageInfo(page);
+        json = JSONBuilderProvider.simplest().toJson(pageInfo);
         System.out.println(json);
         return page;
     }
