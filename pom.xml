@@ -6,7 +6,7 @@
 
     <groupId>com.github.fangjinuo.sqlhelper</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
     <name>sqlhelper</name>
     <description>
         JDBC Extensions:
@@ -274,7 +274,7 @@
                         </goals>
                         <configuration>
                             <buildNumberPropertyName>buildNumber</buildNumberPropertyName>
-                            <revisionOnScmFailure>unknow</revisionOnScmFailure>
+                            <revisionOnScmFailure>unknown</revisionOnScmFailure>
                             <doCheck>false</doCheck>
                             <doUpdate>true</doUpdate>
                             <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
