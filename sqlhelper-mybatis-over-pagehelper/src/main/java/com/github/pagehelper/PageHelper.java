@@ -25,9 +25,11 @@
 package com.github.pagehelper;
 
 import com.github.pagehelper.util.PageObjectUtil;
+import com.jn.langx.util.Objects;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
+import com.jn.sqlhelper.dialect.pagination.PagingResult;
 
 import java.util.Properties;
 
@@ -51,8 +53,8 @@ public class PageHelper {
         return pagingRequest;
     }
 
-    static PagingRequestAdapter getLocalPagingRequest(){
-        return (PagingRequestAdapter)PagingRequestContextHolder.getContext().getPagingRequest();
+    static PagingRequestAdapter getLocalPagingRequest() {
+        return (PagingRequestAdapter) PagingRequestContextHolder.getContext().getPagingRequest();
     }
 
     public static class PagingRequestAdapter extends PagingRequest {
@@ -62,12 +64,12 @@ public class PageHelper {
 
         }
 
-        void setOrderBy(String orderBy){
+        void setOrderBy(String orderBy) {
             page.setOrderBy(orderBy);
             setOrderBy();
         }
 
-        void setOrderBy(){
+        void setOrderBy() {
             this.setOrderBy(SqlStyleOrderByBuilder.DEFAULT.build(page.getOrderBy()));
         }
 
@@ -81,16 +83,24 @@ public class PageHelper {
                 pageSize = -1;
             }
             this.setPageSize(pageSize);
+            this.setUseLastPageIfPageOut(page.getReasonable());
+            this.setCountColumn(page.getCountColumn());
             return this;
         }
 
         @Override
         public void clear(boolean clearResult) {
-            this.page.setPageSize(this.getResult().getPageSize());
-            this.page.setPageNum(this.getResult().getPageNo());
-            this.page.setPages(this.getResult().getMaxPage());
-            this.page.setTotal(this.getResult().getTotal());
-            this.page.addAll(this.getResult().getItems());
+            PagingResult result = this.getResult();
+            if (Objects.isNull(result)) {
+                this.page.setPageSize(this.getPageSize());
+                this.page.setPageNum(this.getPageNo());
+            } else {
+                this.page.setPageSize(result.getPageSize());
+                this.page.setPageNum(result.getPageNo());
+                this.page.setPages(result.getMaxPage());
+                this.page.setTotal(result.getTotal());
+                this.page.addAll(result.getItems());
+            }
 
             page.close();
             super.clear(clearResult);
