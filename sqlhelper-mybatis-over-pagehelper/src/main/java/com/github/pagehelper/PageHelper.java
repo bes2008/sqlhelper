@@ -30,13 +30,13 @@ import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
+import com.jn.sqlhelper.mybatis.plugins.PageHelperCompibles;
 
 import java.util.Properties;
 
 public class PageHelper {
     private static final ThreadLocal<Page> LOCAL_PAGE = new ThreadLocal<Page>();
     private static boolean DEFAULT_COUNT = true;
-    public static final String PAGE_HELPER_PAGING_FLAG = "pagehelper";
 
     /**
      * 设置 Page 参数
@@ -51,7 +51,7 @@ public class PageHelper {
         LOCAL_PAGE.set(page);
         PagingRequest pagingRequest = new PagingRequestAdapter().setPage(page);
         PagingRequestContextHolder.getContext().setPagingRequest(pagingRequest);
-        PagingRequestContextHolder.getContext().get().setBoolean(PAGE_HELPER_PAGING_FLAG, true);
+        PagingRequestContextHolder.getContext().get().setBoolean(PageHelperCompibles.pageHelperRequestFlag, true);
         return pagingRequest;
     }
 

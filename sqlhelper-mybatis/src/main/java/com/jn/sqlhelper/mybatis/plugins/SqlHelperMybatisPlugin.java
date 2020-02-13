@@ -75,9 +75,9 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
 
             if (paginationConfig.isPageHelperCompatible()) {
                 try {
-                    Class pageHelperHandlerClass = ClassLoaders.loadClass(paginationConfig.getPageHelperHandlerClass(), SqlHelperMybatisPlugin.class);
+                    Class<Handler> pageHelperHandlerClass = ClassLoaders.loadClass(paginationConfig.getPageHelperHandlerClass(), SqlHelperMybatisPlugin.class);
                     Handler pageHelperHandler = Reflects.<Handler>newInstance(pageHelperHandlerClass);
-                    handlerRegistry.put("pagehelper", pageHelperHandler);
+                    handlerRegistry.put(PageHelperCompibles.pageHelperRequestFlag, pageHelperHandler);
                 } catch (ClassNotFoundException ex) {
                     logger.info("Can't find the pageHelperHandler, maybe it is unnecessary");
                     this.paginationConfig.setPageHelperCompatible(false);
@@ -114,11 +114,11 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         if ("query".equals(executorInvocation.getMethodName())) {
             handlers.add(handlerRegistry.get("likeEscape"));
             handlers.add(handlerRegistry.get("pagination"));
-            Handler pageHelperHander = handlerRegistry.get("pagehelper");
+            Handler pageHelperHander = handlerRegistry.get(PageHelperCompibles.pageHelperRequestFlag);
             if (this.paginationConfig.isPageHelperCompatible() && pageHelperHander != null) {
                 if (PagingRequestContextHolder.getContext().isPagingRequest()) {
                     PagingRequestContext context = PagingRequestContextHolder.getContext().get();
-                    boolean isPageHelperRequest = context.getBoolean("pagehelper", false);
+                    boolean isPageHelperRequest = context.getBoolean(PageHelperCompibles.pageHelperRequestFlag, false);
                     if (isPageHelperRequest) {
                         handlers.add(pageHelperHander);
                     }
@@ -179,6 +179,8 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         paginationConfig.setCountSuffix(accessor.getString(paginationPluginConfigPrefix + "countSuffix", paginationConfig.getCountSuffix()));
         paginationConfig.setDefaultPageSize(accessor.getInteger(paginationPluginConfigPrefix + "defaultPageSize", paginationConfig.getDefaultPageSize()));
         paginationConfig.setUseLastPageIfPageOut(accessor.getBoolean(paginationPluginConfigPrefix + "useLastPageIfPageOut", accessor.getBoolean(paginationPluginConfigPrefix + "useLastPageIfPageNoOut", paginationConfig.isUseLastPageIfPageOut())));
+        paginationConfig.setPageHelperCompatible(accessor.getBoolean(paginationPluginConfigPrefix + "pageHelperCompatible", paginationConfig.isPageHelperCompatible()));
+        paginationConfig.setPageHelperHandlerClass(accessor.getString(paginationPluginConfigPrefix + "pageHelperHandlerClass", paginationConfig.getPageHelperHandlerClass()));
 
         return paginationConfig;
     }

@@ -14,10 +14,7 @@ import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
-import com.jn.sqlhelper.mybatis.plugins.ExecutorInvocation;
-import com.jn.sqlhelper.mybatis.plugins.MybatisSqlRequestContextKeys;
-import com.jn.sqlhelper.mybatis.plugins.NestedStatements;
-import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
+import com.jn.sqlhelper.mybatis.plugins.*;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -258,7 +255,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         if(!isPagingRequest(statement)){
             return false;
         }
-        return PAGING_CONTEXT.get().getBoolean("pagehelper", false);
+        return PAGING_CONTEXT.get().getBoolean(PageHelperCompibles.pageHelperRequestFlag, false);
     }
 
     private boolean beginIfSupportsLimit(final MappedStatement statement) {
