@@ -93,7 +93,8 @@ public class UserController {
             @RequestParam(name = "sort", required = false) String sort,
             @RequestParam(value = "countColumn", required = false) String countColumn) {
 
-        Page page = PageHelper.startPage(pageNo, pageSize, sort);
+        Page page = PageHelper.offsetPage(pageNo, pageSize);
+        // Page page = PageHelper.startPage(pageNo, pageSize, sort);
         page.setCountColumn(countColumn);
         User queryCondition = new User();
         queryCondition.setAge(10);
@@ -102,8 +103,11 @@ public class UserController {
         System.out.println(json);
         json = JSONBuilderProvider.simplest().toJson(users);
         System.out.println(json);
-        PageInfo pageInfo = new PageInfo(page);
-        json = JSONBuilderProvider.simplest().toJson(pageInfo);
+        PageInfo pageInfo1 = new PageInfo(page);
+        json = JSONBuilderProvider.simplest().toJson(pageInfo1);
+        System.out.println(json);
+        PageInfo pageInfo2 = new PageInfo(users);
+        json = JSONBuilderProvider.simplest().toJson(pageInfo2);
         System.out.println(json);
         return page;
     }

@@ -18,10 +18,14 @@ import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.pipeline.*;
 import com.jn.langx.text.properties.PropertiesAccessor;
+import com.jn.langx.util.ClassLoaders;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
+import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.mybatis.plugins.likeescape.LikeParameterEscapeHandler;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationHandler;
@@ -69,6 +73,17 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
             paginationHandler.init();
             handlerRegistry.put("pagination", paginationHandler);
 
+            if (paginationConfig.isPageHelperCompatible()) {
+                try {
+                    Class pageHelperHandlerClass = ClassLoaders.loadClass(paginationConfig.getPageHelperHandlerClass(), SqlHelperMybatisPlugin.class);
+                    Handler pageHelperHandler = Reflects.<Handler>newInstance(pageHelperHandlerClass);
+                    handlerRegistry.put("pagehelper", pageHelperHandler);
+                } catch (ClassNotFoundException ex) {
+                    logger.info("Can't find the pageHelperHandler, maybe it is unnecessary");
+                    this.paginationConfig.setPageHelperCompatible(false);
+                }
+            }
+
             ExecutorInvocationSinkHandler sinkHandler = new ExecutorInvocationSinkHandler();
             handlerRegistry.put("sink", sinkHandler);
             inited = true;
@@ -99,7 +114,18 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         if ("query".equals(executorInvocation.getMethodName())) {
             handlers.add(handlerRegistry.get("likeEscape"));
             handlers.add(handlerRegistry.get("pagination"));
+            Handler pageHelperHander = handlerRegistry.get("pagehelper");
+            if (this.paginationConfig.isPageHelperCompatible() && pageHelperHander != null) {
+                if (PagingRequestContextHolder.getContext().isPagingRequest()) {
+                    PagingRequestContext context = PagingRequestContextHolder.getContext().get();
+                    boolean isPageHelperRequest = context.getBoolean("pagehelper", false);
+                    if (isPageHelperRequest) {
+                        handlers.add(pageHelperHander);
+                    }
+                }
+            }
         }
+
         DefaultPipeline<ExecutorInvocation> pipeline = Pipelines.newPipeline(debugHandler, sinkHandler, handlers);
         pipeline.bindTarget(executorInvocation);
         return pipeline;
@@ -121,10 +147,10 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         logger.info("{}", properties);
         if (!inited) {
             PropertiesAccessor accessor = new PropertiesAccessor(properties);
-            PaginationConfig pluginConfig = parsePaginationConfig(accessor);
+            PaginationConfig paginationConfig = parsePaginationConfig(accessor);
             SQLInstrumentConfig instrumentConfig = parseInstrumentorConfig(accessor);
             setInstrumentorConfig(instrumentConfig);
-            setPaginationConfig(pluginConfig);
+            setPaginationConfig(paginationConfig);
             init();
         }
     }

@@ -13,6 +13,9 @@ public class PaginationConfig extends PaginationProperties {
         return this.countCacheMaxCapacity > 0;
     }
 
+    private boolean pageHelperCompatible = true;
+    private String pageHelperHandlerClass = "com.github.pagehelper.PageHelperHandler";
+
     @Override
     public String toString() {
         return JSONBuilderProvider.create().serializeNulls(true).build().toJson(this);
@@ -50,4 +53,19 @@ public class PaginationConfig extends PaginationProperties {
         this.countCacheExpireInSeconds = countCacheExpireInSeconds;
     }
 
+    public boolean isPageHelperCompatible() {
+        return pageHelperCompatible;
+    }
+
+    public void setPageHelperCompatible(boolean pageHelperCompatible) {
+        this.pageHelperCompatible = pageHelperCompatible;
+    }
+
+    public String getPageHelperHandlerClass() {
+        return pageHelperHandlerClass;
+    }
+
+    public void setPageHelperHandlerClass(String pageHelperHandlerClass) {
+        this.pageHelperHandlerClass = pageHelperHandlerClass;
+    }
 }

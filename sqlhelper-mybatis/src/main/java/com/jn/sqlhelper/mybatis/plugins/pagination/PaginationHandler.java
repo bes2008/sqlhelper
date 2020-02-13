@@ -127,7 +127,6 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                     rs = Collects.emptyArrayList();
                 }
                 executorInvocation.setResult(rs);
-                invalidatePagingRequest(false);
             } else if (NestedStatements.isNestedStatement(ms)) {
                 Pipelines.skipHandler(ctx, true);
                 rs = executorInvocation.getResult();
@@ -166,7 +165,6 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                         result.setTotal(items.size());
                     }
                     executorInvocation.setResult(items);
-                    invalidatePagingRequest(false);
                     return;
                 }
 
@@ -220,7 +218,15 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             logger.error(ex2.getMessage(), ex2);
             throw Throwables.wrapAsRuntimeException(ex2);
         } finally {
+            boolean isPageHelperRequest = isPageHelperRequest(ms);
             invalidatePagingRequest(false);
+            if(isPageHelperRequest && this.paginationConfig.isPageHelperCompatible()){
+                try {
+                    Pipelines.inbound(ctx);
+                }catch (Throwable ex){
+                    throw Throwables.wrapAsRuntimeException(ex);
+                }
+            }
             SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
             instrumentor.finish();
         }
@@ -248,6 +254,12 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         return MybatisUtils.isPreparedStatement(statement) && PAGING_CONTEXT.isPagingRequest();
     }
 
+    private boolean isPageHelperRequest(final MappedStatement statement){
+        if(!isPagingRequest(statement)){
+            return false;
+        }
+        return PAGING_CONTEXT.get().getBoolean("pagehelper", false);
+    }
 
     private boolean beginIfSupportsLimit(final MappedStatement statement) {
         if (!PAGING_CONTEXT.getPagingRequest().isValidRequest()) {

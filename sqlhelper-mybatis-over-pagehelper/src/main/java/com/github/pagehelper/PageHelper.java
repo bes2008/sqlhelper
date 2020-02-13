@@ -36,6 +36,7 @@ import java.util.Properties;
 public class PageHelper {
     private static final ThreadLocal<Page> LOCAL_PAGE = new ThreadLocal<Page>();
     private static boolean DEFAULT_COUNT = true;
+    public static final String PAGE_HELPER_PAGING_FLAG = "pagehelper";
 
     /**
      * 设置 Page 参数
@@ -50,6 +51,7 @@ public class PageHelper {
         LOCAL_PAGE.set(page);
         PagingRequest pagingRequest = new PagingRequestAdapter().setPage(page);
         PagingRequestContextHolder.getContext().setPagingRequest(pagingRequest);
+        PagingRequestContextHolder.getContext().get().setBoolean(PAGE_HELPER_PAGING_FLAG, true);
         return pagingRequest;
     }
 
@@ -102,7 +104,9 @@ public class PageHelper {
                 this.page.addAll(result.getItems());
             }
 
-            page.close();
+            //  move it to pageHelperHandler
+            //  page.close();
+
             super.clear(clearResult);
         }
     }
