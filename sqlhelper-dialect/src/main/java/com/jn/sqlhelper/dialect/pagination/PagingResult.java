@@ -45,7 +45,7 @@ public class PagingResult<E> {
         return this.total;
     }
 
-    public PagingResult<E> setTotal(int total) {
+    public PagingResult<E> setTotal(long total) {
         this.total = total;
         return this;
     }
