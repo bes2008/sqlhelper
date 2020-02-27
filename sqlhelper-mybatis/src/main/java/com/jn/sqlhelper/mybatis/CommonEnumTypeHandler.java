@@ -26,7 +26,7 @@ public class CommonEnumTypeHandler<E extends Enum<E> & Delegatable<EnumDelegate>
 
     public void setEnumType(Class<E> enumType) {
         if (enumType != null) {
-            if (Reflects.isSubClassOrEquals(CommonEnum.class, enumType)) {
+            if (Reflects.isSubClassOrEquals(Enum.class, enumType)) {
                 this.enumType = enumType;
             }
         }
