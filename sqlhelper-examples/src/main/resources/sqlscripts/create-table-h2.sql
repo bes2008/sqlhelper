@@ -83,3 +83,15 @@ INSERT INTO user (ID, NAME, AGE) VALUES ('0045', 'zhangsan_45', 45);
 INSERT INTO user (ID, NAME, AGE) VALUES ('0046', 'zhangsan_46', 46);
 INSERT INTO user (ID, NAME, AGE) VALUES ('0047', 'zhangsan_47', 47);
 INSERT INTO user (ID, NAME, AGE) VALUES ('0048', 'zhangsan_48', 48);
+
+
+CREATE TABLE Customer
+(
+    ID varchar(50),
+    name varchar(50),
+    Address varchar(50),
+    City varchar(50),
+    Country varchar(25),
+    BirthDate date,
+    UPDATEDate date
+);
