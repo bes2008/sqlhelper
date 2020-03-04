@@ -78,7 +78,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
 
     @Override
     public void setParameters(final PreparedStatement ps) {
-        if (!isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || NestedStatements.isNestedStatement(mappedStatement)) {
+        if (!MybatisUtils.isQueryStatement(mappedStatement) || !isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || NestedStatements.isNestedStatement(mappedStatement)) {
             this.setParameters(ps, this.boundSql.getParameterMappings(), 1, getEscapeLikeParametersIndexes());
             return;
         }

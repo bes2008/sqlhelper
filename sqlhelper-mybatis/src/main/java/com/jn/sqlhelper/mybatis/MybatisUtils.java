@@ -99,4 +99,8 @@ public class MybatisUtils {
         }
         return newBoundSql;
     }
+
+    public static String getSql(BoundSql boundSql) {
+        return boundSql.getSql();
+    }
 }

@@ -36,7 +36,7 @@ import java.util.List;
  * {@link org.apache.ibatis.executor.Executor#query(MappedStatement, Object, RowBounds, ResultHandler)}
  * {@link org.apache.ibatis.executor.Executor#query(MappedStatement, Object, RowBounds, ResultHandler, CacheKey, BoundSql)} )}
  */
-@SuppressWarnings({"rawtypes","unchecked","unused"})
+@SuppressWarnings({"rawtypes", "unchecked", "unused"})
 public class PaginationHandler extends AbstractHandler implements Initializable {
     private static final Logger logger = LoggerFactory.getLogger(PaginationHandler.class);
     private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
@@ -92,6 +92,9 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         if (MybatisUtils.isQueryStatement(executorInvocation.getMappedStatement()) && executorInvocation.getMethodName().equals("query")) {
             intercept(ctx);
         } else {
+            if (!MybatisUtils.isQueryStatement(executorInvocation.getMappedStatement()) && isPagingRequest(executorInvocation.getMappedStatement())) {
+                logger.warn("The sql {} is not a select statement, but the PagingRequest was supplied", MybatisUtils.getSql(executorInvocation.getBoundSql()));
+            }
             Pipelines.skipHandler(ctx, true);
         }
     }
@@ -217,10 +220,10 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         } finally {
             boolean isPageHelperRequest = isPageHelperRequest(ms);
             invalidatePagingRequest(false);
-            if(isPageHelperRequest && this.paginationConfig.isPageHelperCompatible()){
+            if (isPageHelperRequest && this.paginationConfig.isPageHelperCompatible()) {
                 try {
                     Pipelines.inbound(ctx);
-                }catch (Throwable ex){
+                } catch (Throwable ex) {
                     throw Throwables.wrapAsRuntimeException(ex);
                 }
             }
@@ -251,8 +254,8 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         return MybatisUtils.isPreparedStatement(statement) && PAGING_CONTEXT.isPagingRequest();
     }
 
-    private boolean isPageHelperRequest(final MappedStatement statement){
-        if(!isPagingRequest(statement)){
+    private boolean isPageHelperRequest(final MappedStatement statement) {
+        if (!isPagingRequest(statement)) {
             return false;
         }
         return PAGING_CONTEXT.get().getBoolean(PageHelperCompibles.pageHelperRequestFlag, false);
