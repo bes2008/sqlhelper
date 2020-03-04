@@ -93,7 +93,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             intercept(ctx);
         } else {
             if (!MybatisUtils.isQueryStatement(executorInvocation.getMappedStatement()) && isPagingRequest(executorInvocation.getMappedStatement())) {
-                logger.warn("The sql {} is not a select statement, but the PagingRequest was supplied", MybatisUtils.getSql(executorInvocation.getBoundSql()));
+                logger.warn("The sql {} is not a select statement, but the PagingRequest was supplied . Please check your usage", MybatisUtils.getSql(executorInvocation.getBoundSql()));
             }
             Pipelines.skipHandler(ctx, true);
         }
