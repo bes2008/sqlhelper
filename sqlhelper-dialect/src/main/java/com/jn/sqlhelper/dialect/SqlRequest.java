@@ -15,7 +15,7 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
     /**
      * the customer likeEscaper
      */
-    private LikeEscaper likeEscaper;
+    private transient LikeEscaper likeEscaper;
 
     private List<Integer> likeParameterIndexes = null;
 

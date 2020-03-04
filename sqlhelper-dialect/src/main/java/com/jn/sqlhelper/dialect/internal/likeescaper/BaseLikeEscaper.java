@@ -74,4 +74,12 @@ public class BaseLikeEscaper implements LikeEscaper {
     public String appendmentAfterLikeClause() {
         return " ESCAPE '" + escapeChar + "' ";
     }
+
+    @Override
+    public String toString() {
+        return "BaseLikeEscaper{" +
+                "keyChars=" + keyChars +
+                ", escapeChar=" + escapeChar +
+                '}';
+    }
 }
