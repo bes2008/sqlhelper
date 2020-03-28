@@ -13,7 +13,11 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect;
+package com.jn.sqlhelper.dialect.pagination;
+
+import com.jn.sqlhelper.dialect.Dialect;
+import com.jn.sqlhelper.dialect.QueryParameters;
+import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

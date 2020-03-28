@@ -12,8 +12,10 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect;
+package com.jn.sqlhelper.dialect.urlparser;
 
+import com.jn.sqlhelper.dialect.Dialect;
+import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.dialect.internal.urlparser.UnKnownDatabaseInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

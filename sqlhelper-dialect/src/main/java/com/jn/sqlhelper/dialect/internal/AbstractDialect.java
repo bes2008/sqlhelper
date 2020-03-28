@@ -35,6 +35,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.CommonUrlParser;
 import com.jn.sqlhelper.dialect.internal.urlparser.NoopUrlParser;
 import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
+import com.jn.sqlhelper.dialect.urlparser.DatabaseInfo;
 
 import java.sql.CallableStatement;
 import java.sql.Driver;

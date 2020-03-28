@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect;
+package com.jn.sqlhelper.dialect.urlparser;
 
 import java.util.List;
 

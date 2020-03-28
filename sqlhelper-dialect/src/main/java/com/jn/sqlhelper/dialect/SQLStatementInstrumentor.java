@@ -29,6 +29,7 @@ import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.orderby.OrderByInstrumentor;
+import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
