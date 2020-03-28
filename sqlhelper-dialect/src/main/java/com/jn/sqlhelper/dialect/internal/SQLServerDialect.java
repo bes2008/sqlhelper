@@ -19,7 +19,7 @@ import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.SQLServer2005LimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.TopLimitHandler;
-import com.jn.sqlhelper.dialect.urlparser.SqlServerUrlParser;
+import com.jn.sqlhelper.dialect.internal.urlparser.SqlServerUrlParser;
 
 
 public class SQLServerDialect extends AbstractTransactSQLDialect {

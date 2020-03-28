@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
-import com.jn.sqlhelper.dialect.urlparser.PostgreSQLUrlParser;
+import com.jn.sqlhelper.dialect.internal.urlparser.PostgreSQLUrlParser;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;

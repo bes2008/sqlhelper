@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.dialect;
 
-import com.jn.sqlhelper.dialect.urlparser.UnKnownDatabaseInfo;
+import com.jn.sqlhelper.dialect.internal.urlparser.UnKnownDatabaseInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

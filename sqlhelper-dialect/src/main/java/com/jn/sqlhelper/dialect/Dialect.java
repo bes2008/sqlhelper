@@ -16,7 +16,7 @@ package com.jn.sqlhelper.dialect;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
-import com.jn.sqlhelper.dialect.urlparser.UrlParser;
+import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;

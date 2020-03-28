@@ -13,22 +13,23 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.urlparser;
+package com.jn.sqlhelper.dialect.internal.urlparser;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class KingbaseUrlParser extends CommonUrlParser {
-    private static final String URL_PREFIX = "jdbc:kingbase:";
-
-    public KingbaseUrlParser() {
-    }
-
-    private static final List<String> URL_SCHEMAS = Arrays.asList(new String[]{URL_PREFIX});
+public class DmUrlParser extends CommonUrlParser {
+    public static final int DEFAULT_PORT = 12345;
+    private static final String URL_PREFIX = "jdbc:dm:";
+    private static final List<String> URL_SCHEMAS = Arrays.asList(URL_PREFIX);
 
     @Override
     public List<String> getUrlSchemas() {
         return URL_SCHEMAS;
+    }
+
+    public DmUrlParser() {
+
     }
 
 }

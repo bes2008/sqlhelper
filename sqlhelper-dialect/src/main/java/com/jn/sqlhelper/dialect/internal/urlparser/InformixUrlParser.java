@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.urlparser;
+package com.jn.sqlhelper.dialect.internal.urlparser;
 
 import com.jn.langx.util.StringMaker;
 import com.jn.sqlhelper.dialect.DatabaseInfo;

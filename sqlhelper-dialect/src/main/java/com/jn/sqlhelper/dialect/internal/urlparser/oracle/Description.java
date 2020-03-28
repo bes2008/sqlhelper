@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.urlparser.oracle;
+package com.jn.sqlhelper.dialect.internal.urlparser.oracle;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Preconditions;
