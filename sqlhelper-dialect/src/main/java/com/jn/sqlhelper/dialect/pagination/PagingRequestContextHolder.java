@@ -17,7 +17,6 @@ package com.jn.sqlhelper.dialect.pagination;
 
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.function.Consumer;
-import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import org.slf4j.Logger;

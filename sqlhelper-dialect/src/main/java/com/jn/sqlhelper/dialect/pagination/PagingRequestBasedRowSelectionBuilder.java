@@ -15,8 +15,6 @@
 
 package com.jn.sqlhelper.dialect.pagination;
 
-import com.jn.sqlhelper.dialect.RowSelection;
-import com.jn.sqlhelper.dialect.RowSelectionBuilder;
 import com.jn.sqlhelper.dialect.conf.Settings;
 
 public class PagingRequestBasedRowSelectionBuilder implements RowSelectionBuilder<PagingRequest> {

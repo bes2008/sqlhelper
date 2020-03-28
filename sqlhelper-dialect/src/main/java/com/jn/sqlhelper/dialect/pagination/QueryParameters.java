@@ -13,7 +13,9 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect;
+package com.jn.sqlhelper.dialect.pagination;
+
+import com.jn.sqlhelper.dialect.pagination.RowSelection;
 
 /**
  * This represent all the parameters.

@@ -18,6 +18,7 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
+import com.jn.sqlhelper.dialect.pagination.RowSelection;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;

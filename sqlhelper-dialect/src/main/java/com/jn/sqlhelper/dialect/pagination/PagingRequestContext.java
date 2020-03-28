@@ -15,7 +15,6 @@
 
 package com.jn.sqlhelper.dialect.pagination;
 
-import com.jn.sqlhelper.dialect.RowSelection;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
 
 public class PagingRequestContext<E, R> extends SqlRequestContext<PagingRequest<E, R>> {
