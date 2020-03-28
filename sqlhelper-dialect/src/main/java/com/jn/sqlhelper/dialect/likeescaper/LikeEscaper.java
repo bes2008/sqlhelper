@@ -12,17 +12,20 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.internal.likeescaper;
+package com.jn.sqlhelper.dialect.likeescaper;
 
-/**
- * '/'
- */
-public class SlashStyleEscaper extends BaseLikeEscaper {
-    public SlashStyleEscaper() {
-        this('/');
-    }
+import com.jn.langx.escape.Escaper;
 
-    public SlashStyleEscaper(char escapeChar ) {
-        super(escapeChar);
-    }
+import java.util.List;
+
+public interface LikeEscaper extends Escaper {
+    /**
+     * %, _, \ 等
+     * @return all key characters
+     */
+    List<Character> getLikeKeyChars();
+
+    String appendmentAfterLikeClause();
+
+
 }

@@ -15,7 +15,6 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
-import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 /**

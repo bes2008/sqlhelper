@@ -29,12 +29,13 @@ import com.jn.sqlhelper.common.exception.TableNonExistsException;
 import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.dialect.ddl.generator.CommonTableGenerator;
-import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
+import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.DefaultLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.CommonUrlParser;
 import com.jn.sqlhelper.dialect.internal.urlparser.NoopUrlParser;
 import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
+import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.urlparser.DatabaseInfo;
 
 import java.sql.CallableStatement;

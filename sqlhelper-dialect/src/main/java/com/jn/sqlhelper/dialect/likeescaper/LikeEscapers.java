@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.dialect;
+package com.jn.sqlhelper.dialect.likeescaper;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;

@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect;
 
 import com.jn.easyjson.core.annotation.Ignore;
+import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 
 import java.io.Serializable;
 import java.util.List;

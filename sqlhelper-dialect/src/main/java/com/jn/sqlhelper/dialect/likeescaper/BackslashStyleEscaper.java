@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.internal.likeescaper;
+package com.jn.sqlhelper.dialect.likeescaper;
 
 /**
  * the escape char is : '\'

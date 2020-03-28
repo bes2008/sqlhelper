@@ -17,6 +17,7 @@ package com.jn.sqlhelper.dialect;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.common.utils.SQLs;
+import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.orderby.OrderByBuilder;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;

@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.internal.likeescaper;
+package com.jn.sqlhelper.dialect.likeescaper;
 
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.PrimitiveArrays;
 import com.jn.langx.util.function.Consumer;
-import com.jn.sqlhelper.dialect.LikeEscaper;
+import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 
 import java.util.List;
 

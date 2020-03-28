@@ -25,6 +25,8 @@ import com.jn.langx.util.Strings;
 import com.jn.langx.util.struct.Pair;
 import com.jn.sqlhelper.common.formatter.SqlDmlFormatter;
 import com.jn.sqlhelper.dialect.*;
+import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
+import com.jn.sqlhelper.dialect.likeescaper.LikeEscapers;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.ExecutorInvocation;
 import com.jn.sqlhelper.mybatis.plugins.MybatisSqlRequestContextKeys;
