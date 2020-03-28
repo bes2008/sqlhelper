@@ -14,9 +14,12 @@
 
 package com.jn.sqlhelper.dialect.urlparser;
 
+import com.jn.langx.util.Objects;
+import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.dialect.internal.urlparser.UnKnownDatabaseInfo;
+import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,20 +29,24 @@ public class JdbcUrlParser {
     private static final Logger logger = LoggerFactory.getLogger(JdbcUrlParser.class);
     private DialectRegistry dialectRegistry = DialectRegistry.getInstance();
 
-    public DatabaseInfo parse(String url) {
+    public DatabaseInfo parse(final String url) {
+        Preconditions.checkNotNull(url);
         Collection<Dialect> dialects = dialectRegistry.getDialects();
-        Dialect d = null;
+        UrlParser parser = null;
+
         for (Dialect dialect : dialects) {
-            for (String schema : dialect.getUrlSchemas()) {
-                if (url.startsWith(schema)) {
-                    d = dialect;
-                    break;
+            if (Objects.isNotNull(dialect.getUrlParser())) {
+                for (String schema : dialect.getUrlParser().getUrlSchemas()) {
+                    if (url.startsWith(schema)) {
+                        parser = dialect.getUrlParser();
+                        break;
+                    }
                 }
             }
         }
-        if (d != null) {
+        if (parser != null) {
             try {
-                return d.parse(url);
+                return parser.parse(url);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 return UnKnownDatabaseInfo.createUnknownDataBase(url);

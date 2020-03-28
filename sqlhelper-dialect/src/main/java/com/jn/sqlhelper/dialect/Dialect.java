@@ -23,7 +23,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public interface Dialect extends UrlParser, LikeEscaper {
+public interface Dialect extends LikeEscaper {
     String getDatabaseId();
 
     /**
@@ -145,4 +145,6 @@ public interface Dialect extends UrlParser, LikeEscaper {
     boolean isSupportsBatchSql();
 
     String generateTableDDL(@NonNull DatabaseDescription database, String catalog, String schema, @NonNull String tableName) throws SQLException;
+
+    UrlParser getUrlParser();
 }

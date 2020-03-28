@@ -23,6 +23,7 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.dialect.annotation.Driver;
 import com.jn.sqlhelper.dialect.internal.*;
+import com.jn.sqlhelper.dialect.sqlparser.SqlParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ import java.util.*;
 
 public class DialectRegistry {
 
-    private static final Logger logger = LoggerFactory.getLogger((Class) DialectRegistry.class);
+    private static final Logger logger = LoggerFactory.getLogger(DialectRegistry.class);
     private static final Map<String, Dialect> nameToDialectMap = new TreeMap<String, Dialect>();
     private static final Map<String, String> classNameToNameMap = new TreeMap<String, String>();
     // key:DatabaseMetaData.getProduceName() + getDriver();

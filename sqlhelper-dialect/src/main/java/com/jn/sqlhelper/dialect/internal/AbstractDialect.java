@@ -208,18 +208,8 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         return getLimitHandler().bindLimitParametersAtStartOfQuery(selection, statement, index);
     }
 
-    protected UrlParser getUrlParser() {
+    public UrlParser getUrlParser() {
         return getRealDialect().urlParser;
-    }
-
-    @Override
-    public DatabaseInfo parse(String jdbcUrl) {
-        return getUrlParser().parse(jdbcUrl);
-    }
-
-    @Override
-    public List<String> getUrlSchemas() {
-        return getUrlParser().getUrlSchemas();
     }
 
     protected TableGenerator createTableGenerator(DatabaseDescription databaseDescription) {
