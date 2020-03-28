@@ -10,7 +10,7 @@ import com.jn.langx.pipeline.Pipelines;
 import com.jn.langx.util.*;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
-import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
+import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.mybatis.MybatisUtils;

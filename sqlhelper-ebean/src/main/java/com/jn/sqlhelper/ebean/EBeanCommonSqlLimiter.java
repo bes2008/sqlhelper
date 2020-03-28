@@ -3,7 +3,7 @@ package com.jn.sqlhelper.ebean;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
-import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
+import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.internal.AbstractDialect;
 import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;

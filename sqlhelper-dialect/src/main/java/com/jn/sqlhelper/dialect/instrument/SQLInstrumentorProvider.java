@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.dialect;
+package com.jn.sqlhelper.dialect.instrument;
 
 import com.jn.langx.factory.Provider;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;

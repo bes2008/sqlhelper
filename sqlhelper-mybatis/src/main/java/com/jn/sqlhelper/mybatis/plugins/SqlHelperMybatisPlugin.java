@@ -21,7 +21,7 @@ import com.jn.langx.text.properties.PropertiesAccessor;
 import com.jn.langx.util.ClassLoaders;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
+import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;

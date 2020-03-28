@@ -16,7 +16,7 @@
 package com.jn.sqlhelper.dialect.pagination;
 
 import com.jn.sqlhelper.dialect.Dialect;
-import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
+import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

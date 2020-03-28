@@ -17,7 +17,7 @@ package com.jn.sqlhelper.mybatis;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Emptys;
-import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
+import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SqlRequest;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;

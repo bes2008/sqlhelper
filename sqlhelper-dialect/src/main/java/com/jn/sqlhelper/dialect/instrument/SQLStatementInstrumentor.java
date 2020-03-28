@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect;
+package com.jn.sqlhelper.dialect.instrument;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
@@ -25,10 +25,12 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
+import com.jn.sqlhelper.dialect.Dialect;
+import com.jn.sqlhelper.dialect.DialectRegistry;
+import com.jn.sqlhelper.dialect.SQLDialectException;
 import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
-import com.jn.sqlhelper.dialect.orderby.OrderByInstrumentor;
 import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.pagination.QueryParameters;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;

@@ -20,7 +20,7 @@ import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
-import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
+import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SqlRequests;
 
 @SuppressWarnings({"unused", "unchecked", "rawtypes"})

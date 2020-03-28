@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.examples.test.jsqlparser;
 
-import com.jn.sqlhelper.dialect.orderby.OrderByInstrumentor;
+import com.jn.sqlhelper.dialect.instrument.OrderByInstrumentor;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statement;
