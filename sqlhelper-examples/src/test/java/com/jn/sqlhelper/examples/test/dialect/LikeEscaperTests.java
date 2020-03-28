@@ -16,7 +16,7 @@ package com.jn.sqlhelper.examples.test.dialect;
 
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
-import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
+import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import org.junit.Test;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.jn.sqlhelper.tests;
 
-import com.jn.sqlhelper.dialect.LikeEscaper;
-import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
+import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
+import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import org.junit.Test;
 
 public class LikeEscapeTests {
