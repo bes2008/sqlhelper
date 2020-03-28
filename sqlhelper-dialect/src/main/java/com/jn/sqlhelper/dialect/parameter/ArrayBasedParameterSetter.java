@@ -15,7 +15,7 @@
 
 package com.jn.sqlhelper.dialect.parameter;
 
-import com.jn.sqlhelper.dialect.PagedPreparedParameterSetter;
+import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

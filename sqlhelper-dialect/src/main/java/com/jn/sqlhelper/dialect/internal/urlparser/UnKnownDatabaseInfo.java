@@ -15,7 +15,7 @@
 
 package com.jn.sqlhelper.dialect.internal.urlparser;
 
-import com.jn.sqlhelper.dialect.DatabaseInfo;
+import com.jn.sqlhelper.dialect.urlparser.DatabaseInfo;
 
 import java.util.ArrayList;
 import java.util.List;

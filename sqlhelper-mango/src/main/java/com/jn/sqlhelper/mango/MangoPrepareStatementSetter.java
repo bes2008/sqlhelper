@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.mango;
 
-import com.jn.sqlhelper.dialect.PagedPreparedParameterSetter;
+import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import org.jfaster.mango.binding.BoundSql;
 import org.jfaster.mango.type.TypeHandler;
 

@@ -8,7 +8,7 @@ import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.struct.Entry;
 import com.jn.langx.util.struct.Pair;
-import com.jn.sqlhelper.dialect.PagedPreparedParameterSetter;
+import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.QueryParameters;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.ParameterDisposer;

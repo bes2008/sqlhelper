@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.dialect.internal.urlparser;
 
 import com.jn.langx.util.StringMaker;
-import com.jn.sqlhelper.dialect.DatabaseInfo;
+import com.jn.sqlhelper.dialect.urlparser.DatabaseInfo;
 import com.jn.sqlhelper.dialect.Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

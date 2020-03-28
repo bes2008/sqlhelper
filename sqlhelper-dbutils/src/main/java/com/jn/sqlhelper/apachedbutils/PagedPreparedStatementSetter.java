@@ -17,7 +17,7 @@ package com.jn.sqlhelper.apachedbutils;
 import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
-import com.jn.sqlhelper.dialect.PagedPreparedParameterSetter;
+import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.pagination.PagedPreparedStatement;
 import com.jn.sqlhelper.dialect.parameter.ArrayBasedQueryParameters;
 
