@@ -13,9 +13,14 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.internal.urlparser.oracle;
+package com.jn.sqlhelper.dialect.urlparser;
 
-public enum DriverType {
-    THIN,
-    OCI;
+import com.jn.sqlhelper.dialect.DatabaseInfo;
+
+import java.util.List;
+
+public interface UrlParser {
+    DatabaseInfo parse(final String url);
+
+    List<String> getUrlSchemas();
 }

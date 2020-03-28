@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.internal.urlparser.oracle;
+package com.jn.sqlhelper.dialect.urlparser.oracle;
 
 import java.util.ArrayList;
 import java.util.List;

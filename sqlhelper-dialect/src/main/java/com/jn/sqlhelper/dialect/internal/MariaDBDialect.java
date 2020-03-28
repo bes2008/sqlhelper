@@ -15,7 +15,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.sqlhelper.dialect.internal.urlparser.MariaDBUrlParser;
+import com.jn.sqlhelper.dialect.urlparser.MariaDBUrlParser;
 
 public class MariaDBDialect extends MySQLDialect {
     public MariaDBDialect() {

@@ -16,18 +16,19 @@
 package com.jn.sqlhelper.dialect;
 
 public class SQLDialectException extends RuntimeException {
-    public SQLDialectException(final String message) {
+    public SQLDialectException() {
+    }
 
+    public SQLDialectException(final String message) {
         super(message);
     }
 
-    public SQLDialectException(final Throwable cause) {
+    public SQLDialectException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
+    public SQLDialectException(Throwable cause) {
         super(cause);
     }
 
-    public SQLDialectException(final String message, final Throwable cause) {
-
-        super(message, cause);
-    }
 }

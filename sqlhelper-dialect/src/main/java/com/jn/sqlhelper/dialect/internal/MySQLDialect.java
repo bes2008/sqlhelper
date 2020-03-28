@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.internal.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
-import com.jn.sqlhelper.dialect.internal.urlparser.MySqlUrlParser;
+import com.jn.sqlhelper.dialect.urlparser.MySqlUrlParser;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;

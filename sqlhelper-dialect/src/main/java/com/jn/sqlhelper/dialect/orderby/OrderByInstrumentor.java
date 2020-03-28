@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.orderby;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.dialect.SQLInstrumentException;
-import com.jn.sqlhelper.dialect.jsqlparser.Selects;
+import com.jn.sqlhelper.dialect.sqlparser.jsqlparser.Selects;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;

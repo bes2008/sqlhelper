@@ -13,13 +13,13 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.internal.urlparser;
+package com.jn.sqlhelper.dialect.urlparser;
 
 import com.jn.langx.util.StringMaker;
 import com.jn.sqlhelper.dialect.DatabaseInfo;
-import com.jn.sqlhelper.dialect.internal.urlparser.oracle.Description;
-import com.jn.sqlhelper.dialect.internal.urlparser.oracle.KeyValue;
-import com.jn.sqlhelper.dialect.internal.urlparser.oracle.OracleNetConnectionDescriptorParser;
+import com.jn.sqlhelper.dialect.urlparser.oracle.Description;
+import com.jn.sqlhelper.dialect.urlparser.oracle.KeyValue;
+import com.jn.sqlhelper.dialect.urlparser.oracle.OracleNetConnectionDescriptorParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;

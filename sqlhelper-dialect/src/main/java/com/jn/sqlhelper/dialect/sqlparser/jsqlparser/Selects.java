@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.jsqlparser;
+package com.jn.sqlhelper.dialect.sqlparser.jsqlparser;
 
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.schema.Column;
