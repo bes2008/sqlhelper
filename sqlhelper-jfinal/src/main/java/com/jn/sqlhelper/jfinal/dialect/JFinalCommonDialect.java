@@ -5,7 +5,7 @@ import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.dialect.Dialect;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
-import com.jn.sqlhelper.dialect.RowSelection;
+import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.internal.OracleDialect;
 import com.jn.sqlhelper.dialect.parameter.ArrayBasedParameterSetter;

@@ -2,7 +2,7 @@ package com.jn.sqlhelper.springjdbc.statement;
 
 import com.jn.langx.util.Emptys;
 import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
-import com.jn.sqlhelper.dialect.QueryParameters;
+import com.jn.sqlhelper.dialect.pagination.QueryParameters;
 import com.jn.sqlhelper.dialect.pagination.PagedPreparedStatement;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 

@@ -16,8 +16,8 @@
 package com.jn.sqlhelper.dialect.parameter;
 
 import com.jn.langx.util.collection.Collects;
-import com.jn.sqlhelper.dialect.QueryParameters;
-import com.jn.sqlhelper.dialect.RowSelection;
+import com.jn.sqlhelper.dialect.pagination.QueryParameters;
+import com.jn.sqlhelper.dialect.pagination.RowSelection;
 
 import java.util.Map;
 

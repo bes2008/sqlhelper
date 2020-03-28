@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.mango;
 
-import com.jn.sqlhelper.dialect.RowSelection;
+import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import org.jfaster.mango.binding.BoundSql;
 import org.jfaster.mango.interceptor.Parameter;
 import org.jfaster.mango.interceptor.QueryInterceptor;

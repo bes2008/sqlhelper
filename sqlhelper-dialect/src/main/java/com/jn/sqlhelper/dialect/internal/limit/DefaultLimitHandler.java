@@ -15,7 +15,7 @@
 
 package com.jn.sqlhelper.dialect.internal.limit;
 
-import com.jn.sqlhelper.dialect.RowSelection;
+import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.internal.AbstractDialect;
 
 

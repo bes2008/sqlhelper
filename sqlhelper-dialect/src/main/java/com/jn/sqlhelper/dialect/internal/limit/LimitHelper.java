@@ -16,7 +16,7 @@
 package com.jn.sqlhelper.dialect.internal.limit;
 
 import com.jn.sqlhelper.dialect.Dialect;
-import com.jn.sqlhelper.dialect.RowSelection;
+import com.jn.sqlhelper.dialect.pagination.RowSelection;
 
 public class LimitHelper {
     public static boolean hasMaxRows(final RowSelection selection) {

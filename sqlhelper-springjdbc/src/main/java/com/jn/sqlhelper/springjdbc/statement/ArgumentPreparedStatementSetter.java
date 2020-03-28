@@ -18,7 +18,7 @@ package com.jn.sqlhelper.springjdbc.statement;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
-import com.jn.sqlhelper.dialect.QueryParameters;
+import com.jn.sqlhelper.dialect.pagination.QueryParameters;
 import org.springframework.jdbc.core.*;
 import org.springframework.lang.Nullable;
 
