@@ -28,7 +28,6 @@ import com.jn.langx.util.function.Predicate;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.dialect.SQLDialectException;
-import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;

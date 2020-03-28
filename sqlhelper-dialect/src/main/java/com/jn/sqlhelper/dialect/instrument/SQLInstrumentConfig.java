@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.conf;
+package com.jn.sqlhelper.dialect.instrument;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
 
