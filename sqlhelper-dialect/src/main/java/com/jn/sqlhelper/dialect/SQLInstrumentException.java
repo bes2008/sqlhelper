@@ -14,11 +14,10 @@
 
 package com.jn.sqlhelper.dialect;
 
-public class SQLInstrumentException extends RuntimeException {
+public class SQLInstrumentException extends SQLDialectException {
     public SQLInstrumentException(String message) {
         super(message);
     }
-
     public SQLInstrumentException(Throwable ex) {
         super(ex);
     }
