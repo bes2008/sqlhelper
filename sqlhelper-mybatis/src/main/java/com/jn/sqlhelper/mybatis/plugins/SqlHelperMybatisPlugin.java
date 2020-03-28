@@ -23,7 +23,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
-import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.mybatis.plugins.likeescape.LikeParameterEscapeHandler;

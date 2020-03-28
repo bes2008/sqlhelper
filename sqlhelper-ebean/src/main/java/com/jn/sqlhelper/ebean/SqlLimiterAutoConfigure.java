@@ -3,7 +3,7 @@ package com.jn.sqlhelper.ebean;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
-import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentConfig;
 import io.ebean.config.AutoConfigure;
 import io.ebean.config.ServerConfig;
 import io.ebean.config.dbplatform.DatabasePlatform;

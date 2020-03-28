@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.mybatis.spring.boot.autoconfigure;
 
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentConfig;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.CustomScriptLanguageDriver;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;

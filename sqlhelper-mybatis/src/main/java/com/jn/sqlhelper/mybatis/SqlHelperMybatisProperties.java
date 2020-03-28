@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.mybatis;
 
-import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentConfig;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 
 public class SqlHelperMybatisProperties {

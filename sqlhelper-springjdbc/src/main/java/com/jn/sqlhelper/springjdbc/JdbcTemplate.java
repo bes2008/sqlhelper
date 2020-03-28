@@ -10,7 +10,7 @@ import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
-import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentConfig;
 import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.springjdbc.resultset.SelectCountRSExtractor;
 import com.jn.sqlhelper.springjdbc.statement.NamedParameterPreparedStatementCreator;

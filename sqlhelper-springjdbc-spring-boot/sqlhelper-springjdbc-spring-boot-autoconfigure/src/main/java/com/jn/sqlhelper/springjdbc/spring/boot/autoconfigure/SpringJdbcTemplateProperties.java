@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.springjdbc.spring.boot.autoconfigure;
 
-import com.jn.sqlhelper.dialect.conf.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentConfig;
 import com.jn.sqlhelper.springjdbc.JdbcTemplatePaginationProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
