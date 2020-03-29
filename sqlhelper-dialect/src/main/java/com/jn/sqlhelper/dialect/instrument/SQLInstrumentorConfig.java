@@ -24,9 +24,37 @@ public class SQLInstrumentorConfig {
     private String dialect;
     private String dialectClassName;
     private boolean cacheInstrumentedSql = false;
+    private int cacheInitialCapacity = 1000;
+    private int cacheMaxCapacity = Integer.MAX_VALUE;
+    private int cacheExpireAfterRead = 5 * 60; //unit: s
     private String subqueryPagingStartFlag = "[PAGING_START]";
     private String subqueryPagingEndFlag = "[PAGING_END]";
 
+    public int getCacheInitialCapacity() {
+        return cacheInitialCapacity;
+    }
+
+    public void setCacheInitialCapacity(int cacheInitialCapacity) {
+        if (cacheInitialCapacity > 0) {
+            this.cacheInitialCapacity = cacheInitialCapacity;
+        }
+    }
+
+    public int getCacheMaxCapacity() {
+        return cacheMaxCapacity;
+    }
+
+    public void setCacheMaxCapacity(int cacheMaxCapacity) {
+        this.cacheMaxCapacity = cacheMaxCapacity;
+    }
+
+    public int getCacheExpireAfterRead() {
+        return cacheExpireAfterRead;
+    }
+
+    public void setCacheExpireAfterRead(int cacheExpireAfterRead) {
+        this.cacheExpireAfterRead = cacheExpireAfterRead;
+    }
 
     public String getDialect() {
         return this.dialect;

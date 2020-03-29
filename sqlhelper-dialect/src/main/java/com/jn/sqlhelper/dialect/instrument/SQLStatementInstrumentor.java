@@ -75,10 +75,10 @@ public class SQLStatementInstrumentor {
             inited = true;
             if (this.config.isCacheInstrumentedSql()) {
                 instrumentSqlCache = CacheBuilder.<String, InstrumentedStatement>newBuilder()
-                        .initialCapacity(1000)
-                        .maxCapacity(Integer.MAX_VALUE)
+                        .initialCapacity(config.getCacheInitialCapacity())
+                        .maxCapacity(config.getCacheMaxCapacity())
                         .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-                        .expireAfterRead(5 * 60)
+                        .expireAfterRead(config.getCacheExpireAfterRead())
                         .loader(new Loader<String, InstrumentedStatement>() {
                             @Override
                             public InstrumentedStatement load(String originalSql) {
