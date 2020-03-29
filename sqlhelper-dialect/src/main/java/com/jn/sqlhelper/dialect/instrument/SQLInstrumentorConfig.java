@@ -45,7 +45,9 @@ public class SQLInstrumentorConfig {
     }
 
     public void setCacheMaxCapacity(int cacheMaxCapacity) {
-        this.cacheMaxCapacity = cacheMaxCapacity;
+        if (cacheMaxCapacity >= this.cacheInitialCapacity) {
+            this.cacheMaxCapacity = cacheMaxCapacity;
+        }
     }
 
     public int getCacheExpireAfterRead() {
@@ -53,7 +55,9 @@ public class SQLInstrumentorConfig {
     }
 
     public void setCacheExpireAfterRead(int cacheExpireAfterRead) {
-        this.cacheExpireAfterRead = cacheExpireAfterRead;
+        if (cacheExpireAfterRead > 0) {
+            this.cacheExpireAfterRead = cacheExpireAfterRead;
+        }
     }
 
     public String getDialect() {
