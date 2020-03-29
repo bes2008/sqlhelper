@@ -17,8 +17,8 @@ package com.jn.sqlhelper.dialect.instrument;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
 
-public class SQLInstrumentConfig {
-    public static final SQLInstrumentConfig DEFAULT = new SQLInstrumentConfig();
+public class SQLInstrumentorConfig {
+    public static final SQLInstrumentorConfig DEFAULT = new SQLInstrumentorConfig();
 
     private String name = "undefined";
     private String dialect;

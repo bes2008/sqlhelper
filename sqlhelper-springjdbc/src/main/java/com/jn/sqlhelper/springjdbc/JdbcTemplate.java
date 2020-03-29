@@ -10,7 +10,7 @@ import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
-import com.jn.sqlhelper.dialect.instrument.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.springjdbc.resultset.SelectCountRSExtractor;
 import com.jn.sqlhelper.springjdbc.statement.NamedParameterPreparedStatementCreator;
@@ -39,7 +39,7 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
 
     private JdbcTemplatePaginationProperties paginationConfig = new JdbcTemplatePaginationProperties();
-    private SQLInstrumentConfig instrumentConfig;
+    private SQLInstrumentorConfig instrumentConfig;
 
     public JdbcTemplate() {
         super();
@@ -71,9 +71,9 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
         this.paginationConfig = paginationConfig;
     }
 
-    public void setInstrumentConfig(SQLInstrumentConfig instrumentConfig) {
+    public void setInstrumentConfig(SQLInstrumentorConfig instrumentConfig) {
         if (instrumentConfig == null) {
-            instrumentConfig = SQLInstrumentConfig.DEFAULT;
+            instrumentConfig = SQLInstrumentorConfig.DEFAULT;
         }
         this.instrumentConfig = instrumentConfig;
     }

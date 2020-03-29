@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.springjdbc.spring.boot.autoconfigure;
 
-import com.jn.sqlhelper.dialect.instrument.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.springjdbc.JdbcTemplatePaginationProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -8,17 +8,17 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties(prefix = "sqlhelper.springjdbc")
 public class SpringJdbcTemplateProperties {
     @NestedConfigurationProperty
-    private SQLInstrumentConfig instrumentor = SQLInstrumentConfig.DEFAULT;
+    private SQLInstrumentorConfig instrumentor = SQLInstrumentorConfig.DEFAULT;
     @NestedConfigurationProperty
     private JdbcTemplatePaginationProperties pagination = new JdbcTemplatePaginationProperties();
     @NestedConfigurationProperty
     private JdbcTemplateNativeProperties template = new JdbcTemplateNativeProperties();
 
-    public SQLInstrumentConfig getInstrumentor() {
+    public SQLInstrumentorConfig getInstrumentor() {
         return instrumentor;
     }
 
-    public void setInstrumentor(SQLInstrumentConfig instrumentor) {
+    public void setInstrumentor(SQLInstrumentorConfig instrumentor) {
         this.instrumentor = instrumentor;
     }
 

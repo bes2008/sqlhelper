@@ -22,7 +22,7 @@ import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
-import com.jn.sqlhelper.dialect.instrument.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.dialect.parameter.ArrayBasedQueryParameters;
 import org.apache.commons.dbutils.ResultSetHandler;
@@ -37,7 +37,7 @@ import java.util.List;
 
 public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
     private static final PagingRequestContextHolder PAGING_CONTEXT = PagingRequestContextHolder.getContext();
-    private SQLInstrumentConfig instrumentConfig;
+    private SQLInstrumentorConfig instrumentConfig;
     private PagingRequestBasedRowSelectionBuilder rowSelectionBuilder = new PagingRequestBasedRowSelectionBuilder();
     private static final Logger logger = LoggerFactory.getLogger(QueryRunner.class);
 
@@ -134,9 +134,9 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
         this.paginationConfig = paginationConfig;
     }
 
-    public void setInstrumentConfig(SQLInstrumentConfig instrumentConfig) {
+    public void setInstrumentConfig(SQLInstrumentorConfig instrumentConfig) {
         if (instrumentConfig == null) {
-            instrumentConfig = SQLInstrumentConfig.DEFAULT;
+            instrumentConfig = SQLInstrumentorConfig.DEFAULT;
         }
         this.instrumentConfig = instrumentConfig;
     }

@@ -23,7 +23,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
-import com.jn.sqlhelper.dialect.instrument.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.mybatis.plugins.likeescape.LikeParameterEscapeHandler;
@@ -148,7 +148,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         if (!inited) {
             PropertiesAccessor accessor = new PropertiesAccessor(properties);
             PaginationConfig paginationConfig = parsePaginationConfig(accessor);
-            SQLInstrumentConfig instrumentConfig = parseInstrumentorConfig(accessor);
+            SQLInstrumentorConfig instrumentConfig = parseInstrumentorConfig(accessor);
             setInstrumentorConfig(instrumentConfig);
             setPaginationConfig(paginationConfig);
             init();
@@ -159,7 +159,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         this.paginationConfig = config;
     }
 
-    public void setInstrumentorConfig(SQLInstrumentConfig config) {
+    public void setInstrumentorConfig(SQLInstrumentorConfig config) {
         instrumentor.setConfig(config);
     }
 
@@ -185,8 +185,8 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         return paginationConfig;
     }
 
-    private SQLInstrumentConfig parseInstrumentorConfig(PropertiesAccessor accessor) {
-        SQLInstrumentConfig instrumentConfig = new SQLInstrumentConfig();
+    private SQLInstrumentorConfig parseInstrumentorConfig(PropertiesAccessor accessor) {
+        SQLInstrumentorConfig instrumentConfig = new SQLInstrumentorConfig();
         String instrumentorConfigPrefix = "sqlhelper.mybatis.instrumentor.";
         instrumentConfig.setName(accessor.getString(instrumentorConfigPrefix + "name", "undefined"));
         instrumentConfig.setSubqueryPagingStartFlag(accessor.getString(instrumentorConfigPrefix + "subqueryPagingStartFlag", "[PAGING_START]"));

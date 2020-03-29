@@ -44,7 +44,7 @@ import java.util.Map;
 public class SQLStatementInstrumentor {
     private static final Logger logger = LoggerFactory.getLogger(SQLStatementInstrumentor.class);
     @NonNull
-    private SQLInstrumentConfig config;
+    private SQLInstrumentorConfig config;
     private DialectRegistry dialectRegistry;
     private static final ThreadLocal<Dialect> DIALECT_HOLDER = new ThreadLocal<Dialect>();
     private boolean inited = false;
@@ -58,7 +58,7 @@ public class SQLStatementInstrumentor {
         this.name = name;
     }
 
-    private Cache<String, InstrumentedSelectStatement> instrumentSqlCache;
+    private Cache<String, InstrumentedStatement> instrumentSqlCache;
 
     public SQLStatementInstrumentor() {
 
@@ -74,22 +74,22 @@ public class SQLStatementInstrumentor {
             this.dialectRegistry = DialectRegistry.getInstance();
             inited = true;
             if (this.config.isCacheInstrumentedSql()) {
-                instrumentSqlCache = CacheBuilder.<String, InstrumentedSelectStatement>newBuilder()
+                instrumentSqlCache = CacheBuilder.<String, InstrumentedStatement>newBuilder()
                         .initialCapacity(1000)
                         .maxCapacity(Integer.MAX_VALUE)
                         .concurrencyLevel(Runtime.getRuntime().availableProcessors())
                         .expireAfterRead(5 * 60)
-                        .loader(new Loader<String, InstrumentedSelectStatement>() {
+                        .loader(new Loader<String, InstrumentedStatement>() {
                             @Override
-                            public InstrumentedSelectStatement load(String originalSql) {
-                                InstrumentedSelectStatement s = new InstrumentedSelectStatement();
+                            public InstrumentedStatement load(String originalSql) {
+                                InstrumentedStatement s = new InstrumentedStatement();
                                 s.setOriginalSql(originalSql);
                                 return s;
                             }
 
                             @Override
-                            public Map<String, InstrumentedSelectStatement> getAll(Iterable<String> keys) {
-                                final Map<String, InstrumentedSelectStatement> map = new HashMap<String, InstrumentedSelectStatement>();
+                            public Map<String, InstrumentedStatement> getAll(Iterable<String> keys) {
+                                final Map<String, InstrumentedStatement> map = new HashMap<String, InstrumentedStatement>();
                                 Collects.forEach(keys, new Consumer<String>() {
                                     @Override
                                     public void accept(String k) {
@@ -175,14 +175,14 @@ public class SQLStatementInstrumentor {
         if (LimitHelper.useLimit(dialect, selection) && dialect.isSupportsVariableLimit()) {
             String originalSql = sql;
             if (this.config.isCacheInstrumentedSql()) {
-                sql = getInstrumentedSelectStatement(originalSql).getLimitSql(dialect.getDatabaseId(), selection.hasOffset());
+                sql = getInstrumentedStatement(originalSql).getLimitSql(dialect.getDatabaseId(), selection.hasOffset());
                 if (sql != null) {
                     return sql;
                 }
             }
             sql = dialect.getLimitSql(originalSql, selection);
             if (this.config.isCacheInstrumentedSql()) {
-                getInstrumentedSelectStatement(originalSql).setLimitSql(dialect.getDatabaseId(), sql, selection.hasOffset());
+                getInstrumentedStatement(originalSql).setLimitSql(dialect.getDatabaseId(), sql, selection.hasOffset());
             }
         }
         return sql;
@@ -190,7 +190,7 @@ public class SQLStatementInstrumentor {
 
     public String instrumentOrderBySql(String sql, OrderBy orderBy) {
         if (this.config.isCacheInstrumentedSql()) {
-            String orderBySql = getInstrumentedSelectStatement(sql).getOrderBySql(orderBy);
+            String orderBySql = getInstrumentedStatement(sql).getOrderBySql(orderBy);
             if (orderBySql != null) {
                 return orderBySql;
             }
@@ -199,7 +199,7 @@ public class SQLStatementInstrumentor {
             String sql2 = OrderByInstrumentor.instrument(sql, orderBy);
             if (sql2 != null) {
                 if (this.config.isCacheInstrumentedSql()) {
-                    getInstrumentedSelectStatement(sql).setOrderBySql(orderBy, sql2);
+                    getInstrumentedStatement(sql).setOrderBySql(orderBy, sql2);
                 }
                 return sql2;
             }
@@ -222,7 +222,7 @@ public class SQLStatementInstrumentor {
         sql = instrumentLimitSql(dialect, sql, selection);
         sql = instrumentOrderBySql(sql, orderBy);
         if (this.config.isCacheInstrumentedSql()) {
-            getInstrumentedSelectStatement(originalSql).setOrderByLimitSql(orderBy, dialect.getDatabaseId(), sql, selection.hasOffset());
+            getInstrumentedStatement(originalSql).setOrderByLimitSql(orderBy, dialect.getDatabaseId(), sql, selection.hasOffset());
         }
         return sql;
     }
@@ -241,7 +241,7 @@ public class SQLStatementInstrumentor {
         if (Strings.isBlank(countColumn)) {
             countColumn = "1";
         }
-        InstrumentedSelectStatement instrumentedSql = getInstrumentedSelectStatement(originalSql);
+        InstrumentedStatement instrumentedSql = getInstrumentedStatement(originalSql);
         if (instrumentedSql != null) {
             String countSql = instrumentedSql.getCountSql();
             if (countSql != null) {
@@ -298,13 +298,13 @@ public class SQLStatementInstrumentor {
 
         // cache it
         if (this.config.isCacheInstrumentedSql()) {
-            getInstrumentedSelectStatement(originalSql).setCountSql(countSql);
+            getInstrumentedStatement(originalSql).setCountSql(countSql);
         }
         return countSql;
     }
 
 
-    private InstrumentedSelectStatement getInstrumentedSelectStatement(String originalSql) {
+    private InstrumentedStatement getInstrumentedStatement(String originalSql) {
         if (this.config.isCacheInstrumentedSql()) {
             try {
                 return this.instrumentSqlCache.get(originalSql);
@@ -315,7 +315,7 @@ public class SQLStatementInstrumentor {
         return null;
     }
 
-    private InstrumentedSelectStatement getInstrumentedSelectStatementIfPresent(String originalSql) {
+    private InstrumentedStatement getInstrumentedStatementIfPresent(String originalSql) {
         if (this.config.isCacheInstrumentedSql()) {
             return this.instrumentSqlCache.getIfPresent(originalSql);
         }
@@ -385,14 +385,14 @@ public class SQLStatementInstrumentor {
         return statement;
     }
 
-    public SQLInstrumentConfig getConfig() {
+    public SQLInstrumentorConfig getConfig() {
         return this.config;
     }
 
 
 
     @NonNull
-    public void setConfig(final SQLInstrumentConfig config) {
+    public void setConfig(final SQLInstrumentorConfig config) {
         this.config = config;
     }
 

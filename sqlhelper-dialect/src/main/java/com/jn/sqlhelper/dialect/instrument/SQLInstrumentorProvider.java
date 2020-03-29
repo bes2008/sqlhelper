@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.IdentityHashMap;
 
-public class SQLInstrumentorProvider implements Provider<SQLInstrumentConfig, SQLStatementInstrumentor> {
+public class SQLInstrumentorProvider implements Provider<SQLInstrumentorConfig, SQLStatementInstrumentor> {
     private static final Logger logger = LoggerFactory.getLogger(SQLInstrumentorProvider.class);
-    private IdentityHashMap<SQLInstrumentConfig, SQLStatementInstrumentor> instrumentCache = new IdentityHashMap<SQLInstrumentConfig, SQLStatementInstrumentor>();
+    private IdentityHashMap<SQLInstrumentorConfig, SQLStatementInstrumentor> instrumentCache = new IdentityHashMap<SQLInstrumentorConfig, SQLStatementInstrumentor>();
     private static SQLInstrumentorProvider instance = new SQLInstrumentorProvider();
 
     private SQLInstrumentorProvider() {
@@ -20,9 +20,9 @@ public class SQLInstrumentorProvider implements Provider<SQLInstrumentConfig, SQ
     }
 
     @Override
-    public SQLStatementInstrumentor get(SQLInstrumentConfig config) {
+    public SQLStatementInstrumentor get(SQLInstrumentorConfig config) {
         if (config == null) {
-            config = SQLInstrumentConfig.DEFAULT;
+            config = SQLInstrumentorConfig.DEFAULT;
         }
         SQLStatementInstrumentor instrumentor = instrumentCache.get(config);
         if (instrumentor != null) {
@@ -32,7 +32,7 @@ public class SQLInstrumentorProvider implements Provider<SQLInstrumentConfig, SQ
                 instrumentor = instrumentCache.get(config);
                 if (instrumentor == null) {
                     instrumentor = new SQLStatementInstrumentor();
-                    if (config == SQLInstrumentConfig.DEFAULT) {
+                    if (config == SQLInstrumentorConfig.DEFAULT) {
                         logger.warn("Initial the SQL instrument config use default value");
                     }
                     instrumentor.setConfig(config);

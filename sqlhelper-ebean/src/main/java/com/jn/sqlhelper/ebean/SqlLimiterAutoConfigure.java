@@ -3,7 +3,7 @@ package com.jn.sqlhelper.ebean;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
-import com.jn.sqlhelper.dialect.instrument.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import io.ebean.config.AutoConfigure;
 import io.ebean.config.ServerConfig;
 import io.ebean.config.dbplatform.DatabasePlatform;
@@ -34,7 +34,7 @@ public class SqlLimiterAutoConfigure implements AutoConfigure {
             return;
         }
         SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
-        SQLInstrumentConfig instrumentConfig = null;
+        SQLInstrumentorConfig instrumentConfig = null;
 
         String databaseId = null;
         // guess database id
@@ -52,7 +52,7 @@ public class SqlLimiterAutoConfigure implements AutoConfigure {
         }
 
         if (databaseId != null) {
-            instrumentConfig = new SQLInstrumentConfig();
+            instrumentConfig = new SQLInstrumentorConfig();
             instrumentConfig.setDialect(databaseId);
         }
         if (instrumentConfig != null) {

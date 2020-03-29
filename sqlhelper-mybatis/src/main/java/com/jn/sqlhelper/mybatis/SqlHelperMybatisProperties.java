@@ -14,19 +14,19 @@
 
 package com.jn.sqlhelper.mybatis;
 
-import com.jn.sqlhelper.dialect.instrument.SQLInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 
 public class SqlHelperMybatisProperties {
 
-    private SQLInstrumentConfig instrumentor = new SQLInstrumentConfig();
+    private SQLInstrumentorConfig instrumentor = new SQLInstrumentorConfig();
     private PaginationConfig pagination = new PaginationConfig();
 
-    public SQLInstrumentConfig getInstrumentor() {
+    public SQLInstrumentorConfig getInstrumentor() {
         return instrumentor;
     }
 
-    public void setInstrumentor(SQLInstrumentConfig instrumentor) {
+    public void setInstrumentor(SQLInstrumentorConfig instrumentor) {
         this.instrumentor = instrumentor;
     }
 
