@@ -13,12 +13,12 @@ public class JSqlParserStatementWrapper implements SqlStatementWrapper<Statement
     }
 
     @Override
-    public String getSql() {
+    public String getOriginalSql() {
         return sql;
     }
 
     @Override
-    public void setSql(String sql) {
+    public void setOriginalSql(String sql) {
         this.sql=sql;
     }
 

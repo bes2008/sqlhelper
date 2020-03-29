@@ -12,7 +12,7 @@ public class JSqlParser implements SqlParser<JSqlParserStatementWrapper> {
         try {
             Statement statement = CCJSqlParserUtil.parse(sql);
             JSqlParserStatementWrapper result = new JSqlParserStatementWrapper(statement);
-            result.setSql(sql);
+            result.setOriginalSql(sql);
             return result;
         } catch (JSQLParserException ex) {
             throw new SQLParseException(ex);

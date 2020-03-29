@@ -21,8 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InstrumentedSelectStatement {
-    private String originalSql;
+public class InstrumentedSelectStatement extends InstrumentedStatement{
     private String countSql;
     /**
      * key: dialect
@@ -40,14 +39,6 @@ public class InstrumentedSelectStatement {
      * value:{dialect: sqls}
      */
     private Map<OrderBy, Map<String, List<String>>> orderByLimitSql = new HashMap<OrderBy, Map<String, List<String>>>();
-
-    public String getOriginalSql() {
-        return originalSql;
-    }
-
-    public void setOriginalSql(String originalSql) {
-        this.originalSql = originalSql;
-    }
 
     public String getCountSql() {
         return countSql;
