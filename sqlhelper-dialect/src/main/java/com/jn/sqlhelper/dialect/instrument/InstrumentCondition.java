@@ -1,7 +1,7 @@
 package com.jn.sqlhelper.dialect.instrument;
 
 import com.jn.langx.util.Objects;
-import com.jn.sqlhelper.common.utils.HashCodeBuilder;
+import com.jn.langx.util.hash.HashCodeBuilder;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 
