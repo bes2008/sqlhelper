@@ -7,7 +7,7 @@ import com.jn.sqlhelper.dialect.orderby.OrderBy;
 
 import java.io.Serializable;
 
-public class InstrumentCondition implements Serializable {
+public class InstrumentConfig implements Serializable {
 
     /**
      * case null: not a pagination request
@@ -26,7 +26,6 @@ public class InstrumentCondition implements Serializable {
 
     private boolean isCount = false;
 
-    private String tenantColumn;
 
     @Override
     public boolean equals(Object o) {
@@ -37,7 +36,7 @@ public class InstrumentCondition implements Serializable {
             return false;
         }
 
-        InstrumentCondition that = (InstrumentCondition) o;
+        InstrumentConfig that = (InstrumentConfig) o;
 
         if (likeEscaped != that.likeEscaped) {
             return false;
@@ -57,7 +56,7 @@ public class InstrumentCondition implements Serializable {
         if (!Objects.equals(likeEscaper, that.likeEscaper)) {
             return false;
         }
-        return Objects.equals(tenantColumn, that.tenantColumn);
+        return true;
     }
 
     @Override
@@ -69,7 +68,6 @@ public class InstrumentCondition implements Serializable {
                 .with(this.limitOffset)
                 .with(this.orderBy)
                 .with(this.dialect)
-                .with(this.tenantColumn)
                 .build();
     }
 
@@ -121,11 +119,4 @@ public class InstrumentCondition implements Serializable {
         isCount = count;
     }
 
-    public String getTenantColumn() {
-        return tenantColumn;
-    }
-
-    public void setTenantColumn(String tenantColumn) {
-        this.tenantColumn = tenantColumn;
-    }
 }

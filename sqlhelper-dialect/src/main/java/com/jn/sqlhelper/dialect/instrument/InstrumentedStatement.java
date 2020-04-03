@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class InstrumentedStatement implements SqlStatementWrapper {
     private String originalSql;
-    private Map<InstrumentCondition, String> instrumentedSqlMap = new HashMap<InstrumentCondition, String>();
-
+    private Map<InstrumentConfig, String> instrumentedSqlMap = new HashMap<InstrumentConfig, String>();
+    private boolean changed =false;
     @Override
     public String getOriginalSql() {
         return originalSql;
@@ -25,58 +25,73 @@ public class InstrumentedStatement implements SqlStatementWrapper {
         return null;
     }
 
+    @Override
+    public boolean isChanged() {
+        return this.changed;
+    }
+
+    @Override
+    public String getSql() {
+        return null;
+    }
+
+    @Override
+    public void setChanged(boolean changed) {
+        this.changed = changed;
+    }
+
     public void setCountSql(String countSql){
-        InstrumentCondition condition = new InstrumentCondition();
-        condition.setCount(true);
-        instrumentedSqlMap.put(condition, countSql);
+        InstrumentConfig config = new InstrumentConfig();
+        config.setCount(true);
+        instrumentedSqlMap.put(config, countSql);
     }
 
     public String getCountSql(){
-        InstrumentCondition condition = new InstrumentCondition();
-        condition.setCount(true);
-        return instrumentedSqlMap.get(condition);
+        InstrumentConfig config = new InstrumentConfig();
+        config.setCount(true);
+        return instrumentedSqlMap.get(config);
     }
 
     public void setLimitSql(String dialect, String limitSql, boolean hasOffset){
-        InstrumentCondition condition = new InstrumentCondition();
-        condition.setDialect(dialect);
-        condition.setLimitOffset(hasOffset);
-        instrumentedSqlMap.put(condition, limitSql);
+        InstrumentConfig config = new InstrumentConfig();
+        config.setDialect(dialect);
+        config.setLimitOffset(hasOffset);
+        instrumentedSqlMap.put(config, limitSql);
     }
 
     public String getLimitSql(String dialect, boolean hasOffset){
-        InstrumentCondition condition = new InstrumentCondition();
-        condition.setDialect(dialect);
-        condition.setLimitOffset(hasOffset);
-        return instrumentedSqlMap.get(condition);
+        InstrumentConfig config = new InstrumentConfig();
+        config.setDialect(dialect);
+        config.setLimitOffset(hasOffset);
+        return instrumentedSqlMap.get(config);
     }
 
     public String getOrderBySql(OrderBy orderBy){
-        InstrumentCondition condition = new InstrumentCondition();
-        condition.setOrderBy(orderBy);
-        return instrumentedSqlMap.get(condition);
+        InstrumentConfig config = new InstrumentConfig();
+        config.setOrderBy(orderBy);
+        return instrumentedSqlMap.get(config);
     }
 
     public void setOrderBySql(OrderBy orderBy, String orderBySql){
-        InstrumentCondition condition = new InstrumentCondition();
-        condition.setOrderBy(orderBy);
-        instrumentedSqlMap.put(condition, orderBySql);
+        InstrumentConfig config = new InstrumentConfig();
+        config.setOrderBy(orderBy);
+        instrumentedSqlMap.put(config, orderBySql);
     }
 
     public void setOrderByLimitSql(OrderBy orderBy, String dialect, String sql, boolean hasOffset){
-        InstrumentCondition condition = new InstrumentCondition();
-        condition.setOrderBy(orderBy);
-        condition.setDialect(dialect);
-        condition.setLimitOffset(hasOffset);
-        instrumentedSqlMap.put(condition, sql);
+        InstrumentConfig config = new InstrumentConfig();
+        config.setOrderBy(orderBy);
+        config.setDialect(dialect);
+        config.setLimitOffset(hasOffset);
+        instrumentedSqlMap.put(config, sql);
     }
 
     public String getOrderByLimitSql(OrderBy orderBy, String dialect, boolean hasOffset){
-        InstrumentCondition condition = new InstrumentCondition();
-        condition.setOrderBy(orderBy);
-        condition.setDialect(dialect);
-        condition.setLimitOffset(hasOffset);
-        return instrumentedSqlMap.get(condition);
+        InstrumentConfig config = new InstrumentConfig();
+        config.setOrderBy(orderBy);
+        config.setDialect(dialect);
+        config.setLimitOffset(hasOffset);
+        return instrumentedSqlMap.get(config);
     }
 
 }
