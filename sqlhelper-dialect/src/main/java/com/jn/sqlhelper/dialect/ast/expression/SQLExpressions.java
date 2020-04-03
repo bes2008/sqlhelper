@@ -16,9 +16,9 @@ public class SQLExpressions {
         private SQLExpression right;
         private Supplier0<E> supplier;
 
-        public T supplier(Supplier0<E> supplier){
+        public T supplier(Supplier0<E> supplier) {
             this.supplier = supplier;
-            return (T)this;
+            return (T) this;
         }
 
         public T symbol(String symbol) {
@@ -73,7 +73,7 @@ public class SQLExpressions {
             Preconditions.checkNotNull(supplier);
 
             E binaryOperator = supplier.get();
-            if(Strings.isNotEmpty(symbol)){
+            if (Strings.isNotEmpty(symbol)) {
                 binaryOperator.setOperateSymbol(symbol);
             }
             binaryOperator.setLeft(left);
@@ -83,7 +83,7 @@ public class SQLExpressions {
     }
 
     public static class AndBuilder extends BinaryOperatorExpressionBuilder<AndExpression, AndBuilder> {
-        public AndBuilder(){
+        public AndBuilder() {
             supplier(new Supplier0<AndExpression>() {
                 @Override
                 public AndExpression get() {
