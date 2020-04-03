@@ -6,11 +6,21 @@ import com.jn.langx.util.function.Consumer2;
 import java.util.List;
 
 public class ListExpression implements SQLExpression<SQLExpression> {
-    private List<SQLExpression> expressions;
+    private List<SQLExpression> expressions = Collects.emptyArrayList();
 
     @Override
     public SQLExpression execute() {
         return null;
+    }
+
+    public void addAll(List<SQLExpression> expressions) {
+        for (SQLExpression expression : expressions) {
+            add(expression);
+        }
+    }
+
+    public void add(SQLExpression expression) {
+        expressions.add(expression);
     }
 
     @Override

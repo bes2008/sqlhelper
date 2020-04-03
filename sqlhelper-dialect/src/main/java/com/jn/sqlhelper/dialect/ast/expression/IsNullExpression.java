@@ -2,16 +2,21 @@ package com.jn.sqlhelper.dialect.ast.expression;
 
 import com.jn.langx.expression.operator.AbstractBinaryOperator;
 
-public class InExpression extends AbstractBinaryOperator<SQLExpression, ListExpression, SQLExpression> implements SQLExpression<SQLExpression>, Notable {
-
+public class IsNullExpression extends AbstractBinaryOperator<SQLExpression, SQLExpression, SQLExpression> implements SQLExpression<SQLExpression>, Notable {
     private boolean isNotExpression;
 
-    public InExpression() {
-       this(false);
+    public IsNullExpression() {
+        this(false);
     }
 
-    public InExpression(boolean not) {
-        not(not);
+    public IsNullExpression(boolean isNotExpression) {
+        not(isNotExpression);
+    }
+
+
+    @Override
+    public SQLExpression execute() {
+        return this;
     }
 
     @Override
@@ -25,18 +30,13 @@ public class InExpression extends AbstractBinaryOperator<SQLExpression, ListExpr
     }
 
     @Override
-    public SQLExpression execute() {
-        return this;
-    }
-
-    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder(255);
-        builder.append(getLeft().toString());
-        if (isNotExpression) {
+        builder.append(getLeft().toString()).append(" is");
+        if (not()) {
             builder.append(" not");
         }
-        builder.append(" in (").append(getRight().toString()).append(")");
+        builder.append("null");
         return builder.toString();
     }
 }

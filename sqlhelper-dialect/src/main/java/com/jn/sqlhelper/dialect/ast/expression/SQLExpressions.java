@@ -11,10 +11,10 @@ public class SQLExpressions {
     }
 
     public static abstract class BinaryOperatorExpressionBuilder<E extends SQLExpression & BinaryOperator, T extends BinaryOperatorExpressionBuilder<E, T>> extends AbstractExpressionBuilder<E> {
-        private String symbol;
-        private SQLExpression left;
-        private SQLExpression right;
-        private Supplier0<E> supplier;
+        protected String symbol; // optional
+        protected SQLExpression left; // required
+        protected SQLExpression right; // required
+        private Supplier0<E> supplier; // required
 
         public T supplier(Supplier0<E> supplier) {
             this.supplier = supplier;
@@ -126,4 +126,42 @@ public class SQLExpressions {
         }
     }
 
+    public static class InBuilder extends BinaryOperatorExpressionBuilder<InExpression, InBuilder> {
+        public InBuilder(final boolean not) {
+            supplier(new Supplier0<InExpression>() {
+                @Override
+                public InExpression get() {
+                    return new InExpression(not);
+                }
+            });
+            right(new ListExpression());
+        }
+
+        public void addValue(long value) {
+            addValue(new IntegerOrLongExpression(value));
+        }
+
+        public void addValue(double value) {
+            addValue(new DoubleExpression(value));
+        }
+
+        public void addString(String value) {
+            addValue(new StringExpression(value));
+        }
+
+        public void addValue(SQLExpression value) {
+            ((ListExpression) this.right).add(value);
+        }
+    }
+
+    public static class IsNullBuilder extends BinaryOperatorExpressionBuilder<IsNullExpression, IsNullBuilder> {
+        public IsNullBuilder(final boolean not) {
+            supplier(new Supplier0<IsNullExpression>() {
+                @Override
+                public IsNullExpression get() {
+                    return new IsNullExpression(not);
+                }
+            });
+        }
+    }
 }
