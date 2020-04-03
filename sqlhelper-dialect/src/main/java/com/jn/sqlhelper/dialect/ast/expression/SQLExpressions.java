@@ -164,4 +164,37 @@ public class SQLExpressions {
             });
         }
     }
+
+    public static class BetweenAndBuilder extends AbstractExpressionBuilder<BetweenAndExpression> {
+        private BetweenAndExpression between = new BetweenAndExpression();
+
+        public BetweenAndBuilder() {
+
+        }
+
+        public BetweenAndBuilder not(boolean isNotExpression) {
+            between.not(isNotExpression);
+            return this;
+        }
+
+        public BetweenAndBuilder target(SQLExpression target) {
+            between.setTarget(target);
+            return this;
+        }
+
+        public BetweenAndBuilder low(SQLExpression low) {
+            between.setLow(low);
+            return this;
+        }
+
+        public BetweenAndBuilder high(SQLExpression high) {
+            between.setHigh(high);
+            return this;
+        }
+
+        @Override
+        public BetweenAndExpression build() {
+            return between;
+        }
+    }
 }
