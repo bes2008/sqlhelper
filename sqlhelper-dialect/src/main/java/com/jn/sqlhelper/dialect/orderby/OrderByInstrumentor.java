@@ -12,12 +12,10 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.instrument;
+package com.jn.sqlhelper.dialect.orderby;
 
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
-import com.jn.sqlhelper.dialect.orderby.OrderBy;
-import com.jn.sqlhelper.dialect.orderby.OrderByItem;
 import com.jn.sqlhelper.dialect.sqlparser.jsqlparser.OrderByClauseJSqlParserInstrumentor;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
