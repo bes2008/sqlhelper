@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect.ast.expression;
 
 import com.jn.langx.expression.operator.BinaryOperator;
+import com.jn.langx.util.Numbers;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.function.Supplier0;
@@ -208,6 +209,63 @@ public class SQLExpressions {
                     return like;
                 }
             });
+        }
+    }
+
+    public static class IntegerOrLongExpressionBuilder extends AbstractExpressionBuilder<IntegerOrLongExpression> {
+        private IntegerOrLongExpression expression = new IntegerOrLongExpression();
+
+        public IntegerOrLongExpressionBuilder() {
+        }
+
+
+        public IntegerOrLongExpressionBuilder value(long value) {
+            expression.setValue(value);
+            return this;
+        }
+
+        public IntegerOrLongExpressionBuilder value(int value) {
+            expression.setValue(Numbers.toLong(value));
+            return this;
+        }
+
+        @Override
+        public IntegerOrLongExpression build() {
+            return expression;
+        }
+    }
+
+    public static class DoubleExpressionBuilder extends AbstractExpressionBuilder<DoubleExpression> {
+        private DoubleExpression expression = new DoubleExpression();
+
+        public DoubleExpressionBuilder() {
+        }
+
+        public DoubleExpressionBuilder value(double value) {
+            expression.setValue(value);
+            return this;
+        }
+
+        @Override
+        public DoubleExpression build() {
+            return expression;
+        }
+    }
+
+    public static class StringExpressionBuilder extends AbstractExpressionBuilder<StringExpression> {
+        private StringExpression expression = new StringExpression();
+
+        public StringExpressionBuilder() {
+        }
+
+        public StringExpressionBuilder value(String value) {
+            expression.setValue(value);
+            return this;
+        }
+
+        @Override
+        public StringExpression build() {
+            return expression;
         }
     }
 }
