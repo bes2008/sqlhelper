@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.dialect.ast.expression;
 
+import com.jn.langx.Builder;
 import com.jn.langx.expression.operator.BinaryOperator;
 import com.jn.langx.util.Numbers;
 import com.jn.langx.util.Preconditions;
@@ -7,8 +8,21 @@ import com.jn.langx.util.Strings;
 import com.jn.langx.util.function.Supplier0;
 
 public class SQLExpressions {
-    public static abstract class AbstractExpressionBuilder<E extends SQLExpression> {
-        public abstract E build();
+    public static abstract class AbstractExpressionBuilder<E extends SQLExpression> implements Builder<E> {
+    }
+
+    public static class SymbolBuilder extends AbstractExpressionBuilder<SymbolExpression>{
+        private SymbolExpression symbolExpression = new SymbolExpression();
+
+        public SymbolBuilder value(String symbol){
+            symbolExpression.setValue(symbol);
+            return this;
+        }
+
+        @Override
+        public SymbolExpression build() {
+            return symbolExpression;
+        }
     }
 
     public static abstract class BinaryOperatorExpressionBuilder<E extends SQLExpression & BinaryOperator, T extends BinaryOperatorExpressionBuilder<E, T>> extends AbstractExpressionBuilder<E> {
