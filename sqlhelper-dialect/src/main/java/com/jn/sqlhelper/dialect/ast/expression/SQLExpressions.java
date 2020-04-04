@@ -11,10 +11,10 @@ public class SQLExpressions {
     public static abstract class AbstractExpressionBuilder<E extends SQLExpression> implements Builder<E> {
     }
 
-    public static class SymbolBuilder extends AbstractExpressionBuilder<SymbolExpression>{
+    public static class SymbolBuilder extends AbstractExpressionBuilder<SymbolExpression> {
         private SymbolExpression symbolExpression = new SymbolExpression();
 
-        public SymbolBuilder value(String symbol){
+        public SymbolBuilder value(String symbol) {
             symbolExpression.setValue(symbol);
             return this;
         }
@@ -42,7 +42,11 @@ public class SQLExpressions {
         }
 
         public T left(String expression) {
-            left = new StringExpression(expression);
+           return left(expression, true);
+        }
+
+        public T left(String expression, boolean isSymbol) {
+            left = isSymbol ? new SymbolExpression(expression) : new StringExpression(expression);
             return (T) this;
         }
 
@@ -62,7 +66,11 @@ public class SQLExpressions {
         }
 
         public T right(String expression) {
-            right = new StringExpression(expression);
+            return right(expression, false);
+        }
+
+        public T right(String expression, boolean isSymbol) {
+            right = isSymbol ? new SymbolExpression(expression) : new StringExpression(expression);
             return (T) this;
         }
 
