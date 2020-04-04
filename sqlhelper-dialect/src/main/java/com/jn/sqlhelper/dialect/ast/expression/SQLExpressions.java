@@ -5,7 +5,13 @@ import com.jn.langx.expression.operator.BinaryOperator;
 import com.jn.langx.util.Numbers;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer;
+import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.function.Supplier0;
+import com.jn.langx.util.reflect.type.Primitives;
+
+import java.util.List;
 
 public class SQLExpressions {
     public static abstract class AbstractExpressionBuilder<E extends SQLExpression> implements Builder<E> {
@@ -42,7 +48,7 @@ public class SQLExpressions {
         }
 
         public T left(String expression) {
-           return left(expression, true);
+            return left(expression, true);
         }
 
         public T left(String expression, boolean isSymbol) {
@@ -91,9 +97,9 @@ public class SQLExpressions {
 
         @Override
         public E build() {
-            Preconditions.checkNotNull(left);
-            Preconditions.checkNotNull(right);
-            Preconditions.checkNotNull(supplier);
+            Preconditions.checkNotNull(left, "left expression is null");
+            Preconditions.checkNotNull(right, "right expression is null");
+            Preconditions.checkNotNull(supplier, "the supplier is null");
 
             E binaryOperator = supplier.get();
             if (Strings.isNotEmpty(symbol)) {
@@ -150,6 +156,12 @@ public class SQLExpressions {
     }
 
     public static class InBuilder extends BinaryOperatorExpressionBuilder<InExpression, InBuilder> {
+        ListExpressionBuilder listExpressionBuilder = new ListExpressionBuilder();
+
+        public InBuilder() {
+            this(false);
+        }
+
         public InBuilder(final boolean not) {
             supplier(new Supplier0<InExpression>() {
                 @Override
@@ -157,24 +169,34 @@ public class SQLExpressions {
                     return new InExpression(not);
                 }
             });
-            right(new ListExpression());
+            right(listExpressionBuilder.getListExpression());
         }
 
-        public void addValue(long value) {
-            addValue(new IntegerOrLongExpression(value));
+        public InBuilder addValue(long value) {
+            listExpressionBuilder.addValue(value);
+            return this;
         }
 
-        public void addValue(double value) {
-            addValue(new DoubleExpression(value));
+        public InBuilder addValue(double value) {
+            listExpressionBuilder.addValue(value);
+            return this;
         }
 
-        public void addString(String value) {
-            addValue(new StringExpression(value));
+        public InBuilder addValue(String value) {
+            listExpressionBuilder.addValue(value);
+            return this;
         }
 
-        public void addValue(SQLExpression value) {
-            ((ListExpression) this.right).add(value);
+        public InBuilder addValue(SQLExpression value) {
+            listExpressionBuilder.addValue(value);
+            return this;
         }
+
+        public InBuilder addValues(List<?> values) {
+            listExpressionBuilder.addValues(values);
+            return this;
+        }
+
     }
 
     public static class IsNullBuilder extends BinaryOperatorExpressionBuilder<IsNullExpression, IsNullBuilder> {
@@ -288,6 +310,79 @@ public class SQLExpressions {
         @Override
         public StringExpression build() {
             return expression;
+        }
+    }
+
+    public static class ListExpressionBuilder extends AbstractExpressionBuilder<ListExpression> {
+        private ListExpression list = new ListExpression();
+
+        public ListExpressionBuilder() {
+
+        }
+
+        public ListExpression getListExpression() {
+            return list;
+        }
+
+        public ListExpressionBuilder addValue(String value) {
+            list.add(new StringExpression(value));
+            return this;
+        }
+
+        public ListExpressionBuilder addValue(int value) {
+            list.add(new IntegerOrLongExpression(value));
+            return this;
+        }
+
+        public ListExpressionBuilder addValue(long value) {
+            list.add(new IntegerOrLongExpression(value));
+            return this;
+        }
+
+        public ListExpressionBuilder addValue(double value) {
+            list.add(new DoubleExpression(value));
+            return this;
+        }
+
+        public ListExpressionBuilder addValue(SQLExpression expression) {
+            list.add(expression);
+            return this;
+        }
+
+        public ListExpressionBuilder addValues(List<?> values) {
+            Collects.forEach(values, new Predicate() {
+                @Override
+                public boolean test(Object value) {
+                    return value != null;
+                }
+            }, new Consumer() {
+                @Override
+                public void accept(Object o) {
+                    Class clazz = Primitives.wrap(o.getClass());
+                    if (clazz == String.class || clazz == Character.class) {
+                        addValue((String) o);
+                        return;
+                    }
+                    if (clazz == Short.class || clazz == Byte.class || clazz == Integer.class) {
+                        addValue((Integer) o);
+                        return;
+                    }
+                    if (clazz == Long.class) {
+                        addValue((Long) o);
+                        return;
+                    }
+                    if (clazz == Float.class || clazz == Double.class) {
+                        addValue(Numbers.toDouble((Number) o));
+                    }
+                    addValue(new ValueExpression(o));
+                }
+            });
+            return this;
+        }
+
+        @Override
+        public ListExpression build() {
+            return list;
         }
     }
 }
