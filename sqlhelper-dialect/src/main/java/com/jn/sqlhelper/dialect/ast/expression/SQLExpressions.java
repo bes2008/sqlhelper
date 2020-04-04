@@ -197,4 +197,17 @@ public class SQLExpressions {
             return between;
         }
     }
+
+    public static class LikeExpressionBuilder extends BinaryOperatorExpressionBuilder<LikeExpression, LikeExpressionBuilder> {
+        public LikeExpressionBuilder(final boolean isNotExpression, final String escape) {
+            supplier(new Supplier0<LikeExpression>() {
+                @Override
+                public LikeExpression get() {
+                    LikeExpression like = new LikeExpression(isNotExpression);
+                    like.setEscape(escape);
+                    return like;
+                }
+            });
+        }
+    }
 }
