@@ -32,11 +32,10 @@ public class IsNullExpression extends AbstractBinaryOperator<SQLExpression, SQLE
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder(255);
-        builder.append(getLeft().toString()).append(" is");
-        if (not()) {
-            builder.append(" not");
-        }
-        builder.append("null");
+        builder.append(getLeft().toString())
+                .append(" is")
+                .append(not() ? " not" : "")
+                .append(" null");
         return builder.toString();
     }
 }

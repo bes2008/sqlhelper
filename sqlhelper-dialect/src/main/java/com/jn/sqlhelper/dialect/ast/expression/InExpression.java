@@ -7,7 +7,7 @@ public class InExpression extends AbstractBinaryOperator<SQLExpression, ListExpr
     private boolean isNotExpression;
 
     public InExpression() {
-       this(false);
+        this(false);
     }
 
     public InExpression(boolean not) {
@@ -32,11 +32,11 @@ public class InExpression extends AbstractBinaryOperator<SQLExpression, ListExpr
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder(255);
-        builder.append(getLeft().toString());
-        if (isNotExpression) {
-            builder.append(" not");
-        }
-        builder.append(" in (").append(getRight().toString()).append(")");
+        builder.append(getLeft().toString())
+                .append(not() ? " not" : "")
+                .append(" in (")
+                .append(getRight().toString())
+                .append(")");
         return builder.toString();
     }
 }

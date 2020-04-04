@@ -17,7 +17,7 @@ public class BetweenAndExpression implements SQLExpression<SQLExpression>, Notab
 
     @Override
     public void not(boolean isNotExpression) {
-        this.isNotExpression=isNotExpression;
+        this.isNotExpression = isNotExpression;
     }
 
     @Override
@@ -50,6 +50,7 @@ public class BetweenAndExpression implements SQLExpression<SQLExpression>, Notab
 
         StringBuilder builder = new StringBuilder(255);
         builder.append(target.toString())
+                .append(not() ? " not" : "")
                 .append(" between ")
                 .append(low.toString())
                 .append(" and ")
