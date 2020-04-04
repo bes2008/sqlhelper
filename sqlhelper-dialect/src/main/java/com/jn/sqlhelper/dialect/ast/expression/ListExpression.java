@@ -6,7 +6,7 @@ import com.jn.langx.util.function.Consumer2;
 import java.util.List;
 
 public class ListExpression implements SQLExpression<SQLExpression> {
-    private List<SQLExpression> expressions = Collects.emptyArrayList();
+    private final List<SQLExpression> expressions = Collects.emptyArrayList();
 
     @Override
     public SQLExpression execute() {
@@ -21,6 +21,36 @@ public class ListExpression implements SQLExpression<SQLExpression> {
 
     public void add(SQLExpression expression) {
         expressions.add(expression);
+    }
+
+    public boolean isEmpty() {
+        return expressions.isEmpty();
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof ListExpression)) {
+            return false;
+        }
+        ListExpression that = (ListExpression) obj;
+        if (expressions.size() != that.expressions.size()) {
+            return false;
+        }
+        if (!Collects.containsAll(expressions, that.expressions)) {
+            return false;
+        }
+
+        if (!Collects.containsAll(that.expressions, expressions)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return expressions.hashCode();
     }
 
     @Override
