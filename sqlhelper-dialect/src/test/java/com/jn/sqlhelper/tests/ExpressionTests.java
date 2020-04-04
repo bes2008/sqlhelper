@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.tests;
 
+import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.dialect.ast.expression.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class ExpressionTests {
                 .build()
         );
 
-        // <>
+        // !=
         NotEqualExpression notEqualExpression = new NotEqualExpression();
         notEqualExpression.setLeft(name);
         notEqualExpression.setRight(value);
@@ -47,6 +48,25 @@ public class ExpressionTests {
                 .right(value)
                 .build()
         );
+
+        // in
+        InExpression inExpression = new InExpression();
+        inExpression.setLeft(name);
+        ListExpression listExpression = new ListExpressionBuilder()
+                .addValue("zhangsan")
+                .addValue("lisi")
+                .addValues(Collects.newArrayList("wangwu", "zhaoliu"))
+                .build();
+        inExpression.setRight(listExpression);
+
+        testExpression(inExpression, new InBuilder()
+                .left(name)
+                .addValue("zhangsan")
+                .addValue("lisi")
+                .addValues(Collects.newArrayList("wangwu", "zhaoliu"))
+                .build()
+        );
+
         System.out.println("==========compare expression tests start==========");
     }
 
