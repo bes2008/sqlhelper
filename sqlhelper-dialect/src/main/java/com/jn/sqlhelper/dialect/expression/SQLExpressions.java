@@ -497,4 +497,19 @@ public class SQLExpressions {
         }
     }
 
+    public static class ExistsBuilder extends UnaryOperatorExpressionBuilder<ExistsExpression, ExistsBuilder> {
+        public ExistsBuilder() {
+            this(false);
+        }
+
+        public ExistsBuilder(final boolean isNotExpression) {
+            supplier(new Supplier0<ExistsExpression>() {
+                @Override
+                public ExistsExpression get() {
+                    return new ExistsExpression(isNotExpression);
+                }
+            });
+        }
+    }
+
 }

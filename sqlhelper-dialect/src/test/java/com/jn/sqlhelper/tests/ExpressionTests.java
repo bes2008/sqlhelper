@@ -1,11 +1,11 @@
 package com.jn.sqlhelper.tests;
 
 import com.jn.langx.util.collection.Collects;
-import com.jn.sqlhelper.dialect.ast.expression.*;
+import com.jn.sqlhelper.dialect.expression.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.jn.sqlhelper.dialect.ast.expression.SQLExpressions.*;
+import static com.jn.sqlhelper.dialect.expression.SQLExpressions.*;
 
 public class ExpressionTests {
     @Test
