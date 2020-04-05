@@ -196,9 +196,9 @@ public class ExpressionTests {
         likeExpression.setRight(new StringExpression("%zhangsan%"));
 
         testExpression(likeExpression, new LikeBuilder()
-                        .left(name)
-                        .right("%zhangsan%")
-                        .build());
+                .left(name)
+                .right("%zhangsan%")
+                .build());
         System.out.println("====expression [like] test finish====");
     }
 
@@ -265,16 +265,50 @@ public class ExpressionTests {
         System.out.println("====expression [or] test finish====");
     }
 
+    @Test
     public void testAllExpression() {
+        System.out.println("====expression [all] test start====");
+        StatementExpression statement = new StatementExpression("select column from table");
+        AllExpression all = new AllExpression();
+        all.setTarget(statement);
 
+        GreaterOrEqualExpression ge = new GreaterOrEqualExpression();
+        SymbolExpression age = new SymbolExpression("age");
+        ge.setLeft(age);
+        ge.setRight(all);
+
+        testExpression(ge, new GreaterOrEqualBuilder()
+                .left(age)
+                .right(all)
+                .build());
+        System.out.println("====expression [all] test finish====");
     }
 
+    @Test
     public void testAnyExpression() {
+        System.out.println("====expression [any] test start====");
+        StatementExpression statement = new StatementExpression("select column from table");
+        AllExpression any = new AllExpression();
+        any.setTarget(statement);
 
+        GreaterOrEqualExpression ge = new GreaterOrEqualExpression();
+        SymbolExpression age = new SymbolExpression("age");
+        ge.setLeft(age);
+        ge.setRight(any);
+
+        testExpression(ge, new GreaterOrEqualBuilder()
+                .left(age)
+                .right(any)
+                .build());
+
+        System.out.println("====expression [any] test finish====");
     }
 
     public void testIsNullExpression() {
+        IsNullExpression isNull = new IsNullExpression();
+        isNull.setTarget(name);
 
+        testExpression(isNull, new IsNullBuilder().target(name).build());
     }
 
 

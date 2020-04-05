@@ -418,7 +418,11 @@ public class SQLExpressions {
 
     }
 
-    public static class IsNullBuilder extends BinaryOperatorExpressionBuilder<IsNullExpression, IsNullBuilder> {
+    public static class IsNullBuilder extends UnaryOperatorExpressionBuilder<IsNullExpression, IsNullBuilder> {
+        public IsNullBuilder() {
+            this(false);
+        }
+
         public IsNullBuilder(final boolean not) {
             supplier(new Supplier0<IsNullExpression>() {
                 @Override
@@ -510,9 +514,11 @@ public class SQLExpressions {
         public LikeBuilder() {
             this(false, null);
         }
+
         public LikeBuilder(final String escape) {
             this(false, escape);
         }
+
         public LikeBuilder(final boolean isNotExpression, final String escape) {
             supplier(new Supplier0<LikeExpression>() {
                 @Override
