@@ -223,8 +223,35 @@ public class ExpressionTests {
         System.out.println("====expression [and] test finish====");
     }
 
+    @Test
     public void testOrExpression() {
+        System.out.println("====expression [or] test start====");
 
+        LikeExpression likeExpression = new LikeExpression();
+        likeExpression.setLeft(name);
+        likeExpression.setRight(new StringExpression("%zhangsan%"));
+
+        GreaterOrEqualExpression ge = new GreaterOrEqualExpression();
+        SymbolExpression statement = new SymbolExpression("age");
+        ge.setLeft(statement);
+        ge.setRight(new IntegerOrLongExpression(3));
+
+        OrExpression or = new OrExpression();
+        or.setLeft(likeExpression);
+        or.setRight(ge);
+
+        testExpression(or, new OrBuilder()
+                .left(new LikeBuilder()
+                        .left(name)
+                        .right("%zhangsan%")
+                        .build())
+                .right(new GreaterOrEqualBuilder()
+                        .left(statement)
+                        .right(new IntegerOrLongExpressionBuilder()
+                                .value(3)
+                                .build())
+                        .build()).build());
+        System.out.println("====expression [or] test finish====");
     }
 
     public void testAllExpression() {
