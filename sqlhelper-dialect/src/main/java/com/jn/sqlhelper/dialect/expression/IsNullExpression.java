@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.expression.operator.AbstractBinaryOperator;
+import com.jn.langx.util.hash.HashCodeBuilder;
 
 public class IsNullExpression extends AbstractBinaryOperator<SQLExpression, SQLExpression, SQLExpression> implements SQLExpression<SQLExpression>, Notable {
     private boolean isNotExpression;
@@ -37,5 +38,9 @@ public class IsNullExpression extends AbstractBinaryOperator<SQLExpression, SQLE
                 .append(not() ? " not" : "")
                 .append(" null");
         return builder.toString();
+    }
+
+    public int hashCode(){
+        return new HashCodeBuilder().with(isNotExpression).with(super.hashCode()).build();
     }
 }

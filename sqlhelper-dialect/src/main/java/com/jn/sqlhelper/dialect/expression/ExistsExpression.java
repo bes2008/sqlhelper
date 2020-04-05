@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.expression.operator.AbstractUnaryOperator;
+import com.jn.langx.util.hash.HashCodeBuilder;
 
 public class ExistsExpression extends AbstractUnaryOperator<SQLExpression<SQLExpression>, SQLExpression> implements SQLExpression<SQLExpression>, Notable {
     private boolean isNotExpression;
@@ -43,8 +44,6 @@ public class ExistsExpression extends AbstractUnaryOperator<SQLExpression<SQLExp
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (isNotExpression ? 1 : 0);
-        return result;
+        return new HashCodeBuilder().with(super.hashCode()).with(not()).build();
     }
 }
