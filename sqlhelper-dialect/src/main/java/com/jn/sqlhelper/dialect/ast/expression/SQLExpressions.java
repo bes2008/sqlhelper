@@ -14,7 +14,10 @@ import com.jn.langx.util.reflect.type.Primitives;
 import java.util.List;
 
 public class SQLExpressions {
-    public static abstract class AbstractExpressionBuilder<E extends SQLExpression> implements Builder<E> {
+    private SQLExpressions() {
+    }
+
+    public abstract static class AbstractExpressionBuilder<E extends SQLExpression> implements Builder<E> {
     }
 
     public static class SymbolBuilder extends AbstractExpressionBuilder<SymbolExpression> {
@@ -31,7 +34,7 @@ public class SQLExpressions {
         }
     }
 
-    public static abstract class BinaryOperatorExpressionBuilder<E extends SQLExpression & BinaryOperator, T extends BinaryOperatorExpressionBuilder<E, T>> extends AbstractExpressionBuilder<E> {
+    public abstract static class BinaryOperatorExpressionBuilder<E extends SQLExpression & BinaryOperator, T extends BinaryOperatorExpressionBuilder<E, T>> extends AbstractExpressionBuilder<E> {
         protected String symbol; // optional
         protected SQLExpression left; // required
         protected SQLExpression right; // required
@@ -155,6 +158,50 @@ public class SQLExpressions {
         }
     }
 
+    public static class GraterThanBuilder extends BinaryOperatorExpressionBuilder<GreaterThanExpression, GraterThanBuilder>{
+        public GraterThanBuilder(){
+            supplier(new Supplier0<GreaterThanExpression>() {
+                @Override
+                public GreaterThanExpression get() {
+                    return new GreaterThanExpression();
+                }
+            });
+        }
+    }
+
+    public static class GraterOrEqualBuilder extends BinaryOperatorExpressionBuilder<GreaterOrEqualExpression, GraterOrEqualBuilder>{
+        public GraterOrEqualBuilder(){
+            supplier(new Supplier0<GreaterOrEqualExpression>() {
+                @Override
+                public GreaterOrEqualExpression get() {
+                    return new GreaterOrEqualExpression();
+                }
+            });
+        }
+    }
+
+    public static class LesserThanBuilder extends BinaryOperatorExpressionBuilder<LesserThanExpression, LesserThanBuilder>{
+        public LesserThanBuilder(){
+            supplier(new Supplier0<LesserThanExpression>() {
+                @Override
+                public LesserThanExpression get() {
+                    return new LesserThanExpression();
+                }
+            });
+        }
+    }
+
+    public static class LesserOrEqualBuilder extends BinaryOperatorExpressionBuilder<LesserOrEqualExpression, LesserOrEqualBuilder>{
+        public LesserOrEqualBuilder(){
+            supplier(new Supplier0<LesserOrEqualExpression>() {
+                @Override
+                public LesserOrEqualExpression get() {
+                    return new LesserOrEqualExpression();
+                }
+            });
+        }
+    }
+
     public static class InBuilder extends BinaryOperatorExpressionBuilder<InExpression, InBuilder> {
         ListExpressionBuilder listExpressionBuilder = new ListExpressionBuilder();
 
@@ -214,7 +261,7 @@ public class SQLExpressions {
         private BetweenAndExpression between = new BetweenAndExpression();
 
         public BetweenAndBuilder() {
-
+            super();
         }
 
         public BetweenAndBuilder not(boolean isNotExpression) {
@@ -260,6 +307,7 @@ public class SQLExpressions {
         private IntegerOrLongExpression expression = new IntegerOrLongExpression();
 
         public IntegerOrLongExpressionBuilder() {
+            super();
         }
 
 
@@ -283,6 +331,7 @@ public class SQLExpressions {
         private DoubleExpression expression = new DoubleExpression();
 
         public DoubleExpressionBuilder() {
+            super();
         }
 
         public DoubleExpressionBuilder value(double value) {
@@ -300,6 +349,7 @@ public class SQLExpressions {
         private StringExpression expression = new StringExpression();
 
         public StringExpressionBuilder() {
+            super();
         }
 
         public StringExpressionBuilder value(String value) {
@@ -315,10 +365,6 @@ public class SQLExpressions {
 
     public static class ListExpressionBuilder extends AbstractExpressionBuilder<ListExpression> {
         private ListExpression list = new ListExpression();
-
-        public ListExpressionBuilder() {
-
-        }
 
         public ListExpression getListExpression() {
             return list;
