@@ -6,6 +6,7 @@ import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class InstrumentConfig implements Serializable {
 
@@ -26,6 +27,7 @@ public class InstrumentConfig implements Serializable {
 
     private boolean isCount = false;
 
+    private List<WhereClauseExpressionInstrumentConfig> whereClauseExpressionInstrumentConfigs;
 
     @Override
     public boolean equals(Object o) {
@@ -56,6 +58,9 @@ public class InstrumentConfig implements Serializable {
         if (!Objects.equals(likeEscaper, that.likeEscaper)) {
             return false;
         }
+        if (!Objects.equals(whereClauseExpressionInstrumentConfigs, that.whereClauseExpressionInstrumentConfigs)) {
+            return false;
+        }
         return true;
     }
 
@@ -68,6 +73,7 @@ public class InstrumentConfig implements Serializable {
                 .with(this.limitOffset)
                 .with(this.orderBy)
                 .with(this.dialect)
+                .with(this.whereClauseExpressionInstrumentConfigs)
                 .build();
     }
 
@@ -119,4 +125,11 @@ public class InstrumentConfig implements Serializable {
         isCount = count;
     }
 
+    public List<WhereClauseExpressionInstrumentConfig> getWhereClauseExpressionInstrumentConfigs() {
+        return whereClauseExpressionInstrumentConfigs;
+    }
+
+    public void setWhereClauseExpressionInstrumentConfigs(List<WhereClauseExpressionInstrumentConfig> configs) {
+        this.whereClauseExpressionInstrumentConfigs = configs;
+    }
 }
