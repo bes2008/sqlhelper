@@ -46,7 +46,7 @@ public class OrderByClauseJSqlParserInstrumentor implements ClauseInsturmentor<S
         try {
             SelectBody selectBody = select.getSelectBody();
 
-            PlainSelect plainSelect = Selects.extractPlainSelect(selectBody);
+            PlainSelect plainSelect = Jsqlparsers.extractPlainSelect(selectBody);
             if (plainSelect == null) {
                 return;
             }
@@ -70,7 +70,7 @@ public class OrderByClauseJSqlParserInstrumentor implements ClauseInsturmentor<S
                     for (OrderByElement orderByElement : orderByElements) {
                         Expression exprInSql = orderByElement.getExpression();
                         if (exprForAppend.getClass() == exprInSql.getClass()) {
-                            if (Selects.expressionEquals(exprForAppend, exprInSql)) {
+                            if (Jsqlparsers.expressionEquals(exprForAppend, exprInSql)) {
                                 needAppend = false;
                                 // do asc, desc change
                                 if (item.getType() == null) {
