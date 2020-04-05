@@ -17,6 +17,10 @@ public class StatementExpression extends BaseExpression<SQLExpression> implement
         this.statement = statement;
     }
 
+    public String getStatement(){
+        return this.statement;
+    }
+
     @Override
     public StatementExpression execute() {
         return this;

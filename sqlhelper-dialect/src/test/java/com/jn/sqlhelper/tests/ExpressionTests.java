@@ -160,14 +160,31 @@ public class ExpressionTests {
                 .high(2000)
                 .target(name);
         testExpression(ba, builder.build());
-        System.out.println("====expression [not between and] test finish====");
+        System.out.println("====expression [between and] test finish====");
 
 
-        System.out.println("====expression [between and] test start====");
+        System.out.println("====expression [not between and] test start====");
         ba.not(true);
         testExpression(ba, builder.not(true).build());
         System.out.println("====expression [not between and] test finish====");
 
+    }
+
+    @Test
+    public void testExistsExpression() {
+        System.out.println("====expression [exists] test start====");
+        StatementExpression statement = new StatementExpression("select * from table");
+        ExistsExpression ba = new ExistsExpression();
+        ba.setTarget(statement);
+
+        testExpression(ba, new ExistsBuilder().target(statement).build());
+        System.out.println("====expression [exists] test finish====");
+
+
+        System.out.println("====expression [not exists] test start====");
+        ba.not(true);
+        testExpression(ba, new ExistsBuilder(true).target(statement).build());
+        System.out.println("====expression [not exists] test finish====");
     }
 
 }
