@@ -1,10 +1,10 @@
 package com.jn.sqlhelper.dialect.expression;
 
-public class ValueExpression extends com.jn.langx.expression.value.ValueExpression implements SQLExpression{
+public class ValueExpression<E> extends com.jn.langx.expression.value.ValueExpression<E> implements SQLExpression<E>{
     public ValueExpression() {
     }
 
-    public ValueExpression(Object value) {
+    public ValueExpression(E value) {
         super(value);
     }
 
