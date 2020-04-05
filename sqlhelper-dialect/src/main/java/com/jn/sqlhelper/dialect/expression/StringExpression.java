@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.dialect.ast.expression;
+package com.jn.sqlhelper.dialect.expression;
 
 public class StringExpression extends com.jn.langx.expression.value.StringExpression implements SQLExpression<String> {
     public StringExpression() {

@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.dialect.ast.expression;
+package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.expression.operator.logic.And;
 

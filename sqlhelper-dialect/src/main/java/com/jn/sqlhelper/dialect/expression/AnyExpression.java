@@ -1,11 +1,11 @@
-package com.jn.sqlhelper.dialect.ast.expression;
+package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.expression.operator.AbstractUnaryOperator;
 
-public class AllExpression extends AbstractUnaryOperator<SQLExpression<SQLExpression>, SQLExpression> implements SQLExpression<SQLExpression> {
+public class AnyExpression extends AbstractUnaryOperator<SQLExpression<SQLExpression>, SQLExpression> implements SQLExpression<SQLExpression> {
 
-    public AllExpression() {
-        setOperateSymbol("all");
+    public AnyExpression() {
+        setOperateSymbol("any");
     }
 
     @Override

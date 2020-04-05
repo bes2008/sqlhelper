@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.dialect.ast.expression;
+package com.jn.sqlhelper.dialect.expression;
 
 public interface Notable {
     void not(boolean isNotExpression);
