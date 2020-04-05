@@ -1,8 +1,10 @@
 package com.jn.sqlhelper.dialect.expression;
 
+import com.jn.langx.expression.BaseExpression;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.hash.HashCodeBuilder;
 
-public class BetweenAndExpression implements SQLExpression<SQLExpression>, Notable {
+public class BetweenAndExpression extends BaseExpression<SQLExpression> implements SQLExpression<SQLExpression>, Notable {
     private SQLExpression target;
     private SQLExpression low;
     private SQLExpression high;
@@ -40,6 +42,16 @@ public class BetweenAndExpression implements SQLExpression<SQLExpression>, Notab
     @Override
     public SQLExpression execute() {
         return this;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .with(isNotExpression)
+                .with(target)
+                .with(low)
+                .with(high)
+                .build();
     }
 
     @Override

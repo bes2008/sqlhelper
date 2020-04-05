@@ -446,8 +446,52 @@ public class SQLExpressions {
             return this;
         }
 
+        public BetweenAndBuilder low(int low) {
+            between.setLow(new IntegerOrLongExpression(low));
+            return this;
+        }
+
+
+        public BetweenAndBuilder low(long low) {
+            between.setLow(new IntegerOrLongExpression(low));
+            return this;
+        }
+
+
+        public BetweenAndBuilder low(double low) {
+            between.setLow(new DoubleExpression(low));
+            return this;
+        }
+
+        public BetweenAndBuilder low(String low) {
+            between.setLow(new StringExpression(low));
+            return this;
+        }
+
         public BetweenAndBuilder low(SQLExpression low) {
             between.setLow(low);
+            return this;
+        }
+
+        public BetweenAndBuilder high(int low) {
+            between.setHigh(new IntegerOrLongExpression(low));
+            return this;
+        }
+
+
+        public BetweenAndBuilder high(long low) {
+            between.setHigh(new IntegerOrLongExpression(low));
+            return this;
+        }
+
+
+        public BetweenAndBuilder high(double low) {
+            between.setHigh(new DoubleExpression(low));
+            return this;
+        }
+
+        public BetweenAndBuilder high(String low) {
+            between.setHigh(new StringExpression(low));
             return this;
         }
 
@@ -510,6 +554,7 @@ public class SQLExpressions {
                 }
             });
         }
+
     }
 
 }

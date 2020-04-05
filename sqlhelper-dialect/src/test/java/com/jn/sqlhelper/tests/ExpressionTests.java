@@ -56,7 +56,7 @@ public class ExpressionTests {
     }
 
     @Test
-    public void testGreaterThanExpression(){
+    public void testGreaterThanExpression() {
         System.out.println("====expression [>] test start====");
         // !=
         GreaterThanExpression gtExpression = new GreaterThanExpression();
@@ -83,7 +83,7 @@ public class ExpressionTests {
     }
 
     @Test
-    public void testLesserThanExpression(){
+    public void testLesserThanExpression() {
         System.out.println("====expression [<] test start====");
         // !=
         LesserThanExpression ltExpression = new LesserThanExpression();
@@ -134,7 +134,7 @@ public class ExpressionTests {
 
         System.out.println("====expression [not in] test start====");
         // not in
-        inExpression  = new InExpression(true);
+        inExpression = new InExpression(true);
         inExpression.setLeft(name);
         inExpression.setRight(listExpression);
         testExpression(inExpression, new InBuilder(true)
@@ -147,5 +147,27 @@ public class ExpressionTests {
         System.out.println("====expression [not in] test finish====");
     }
 
+    @Test
+    public void testBetweenExpression() {
+        System.out.println("====expression [between and] test start====");
+        BetweenAndExpression ba = new BetweenAndExpression();
+        ba.setTarget(name);
+        ba.setLow(new IntegerOrLongExpression(100));
+        ba.setHigh(new IntegerOrLongExpression(2000));
+
+        BetweenAndBuilder builder = new BetweenAndBuilder()
+                .low(100)
+                .high(2000)
+                .target(name);
+        testExpression(ba, builder.build());
+        System.out.println("====expression [not between and] test finish====");
+
+
+        System.out.println("====expression [between and] test start====");
+        ba.not(true);
+        testExpression(ba, builder.not(true).build());
+        System.out.println("====expression [not between and] test finish====");
+
+    }
 
 }
