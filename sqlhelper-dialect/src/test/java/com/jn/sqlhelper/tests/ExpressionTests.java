@@ -10,7 +10,8 @@ import static com.jn.sqlhelper.dialect.expression.SQLExpressions.*;
 public class ExpressionTests {
 
     private SymbolExpression name = new SymbolExpression("name_");
-    private StringExpression value = new StringExpression("3");
+    private StringExpression stringValue = new StringExpression("hello");
+    private IntegerOrLongExpression intValue = new IntegerOrLongExpression(3);
 
     @Test
     public void valueExpressionTests() {
@@ -33,28 +34,79 @@ public class ExpressionTests {
         // =
         EqualExpression equalExpression = new EqualExpression();
         equalExpression.setLeft(name);
-        equalExpression.setRight(value);
+        equalExpression.setRight(stringValue);
         testExpression(equalExpression, new EqualBuilder()
                 .left("name_", true)
-                .right("3")
+                .right("hello")
                 .build()
         );
         System.out.println("====expression [=] test finish====");
-    }
 
-    @Test
-    public void testNotEqualExpression() {
         System.out.println("====expression [!=] test start====");
         // !=
         NotEqualExpression notEqualExpression = new NotEqualExpression();
         notEqualExpression.setLeft(name);
-        notEqualExpression.setRight(value);
+        notEqualExpression.setRight(stringValue);
         testExpression(notEqualExpression, new NotEqualBuilder()
                 .left(name)
-                .right(value)
+                .right(stringValue)
                 .build()
         );
         System.out.println("====expression [!=] test finish====");
+    }
+
+    @Test
+    public void testGreaterThanExpression(){
+        System.out.println("====expression [>] test start====");
+        // !=
+        GreaterThanExpression gtExpression = new GreaterThanExpression();
+        gtExpression.setLeft(name);
+        gtExpression.setRight(intValue);
+        testExpression(gtExpression, new GraterThanBuilder()
+                .left(name)
+                .right(intValue)
+                .build()
+        );
+        System.out.println("====expression [>] test finish====");
+
+        System.out.println("====expression [>=] test start====");
+        // !=
+        GreaterOrEqualExpression geExpression = new GreaterOrEqualExpression();
+        geExpression.setLeft(name);
+        geExpression.setRight(intValue);
+        testExpression(geExpression, new GraterOrEqualBuilder()
+                .left(name)
+                .right(intValue)
+                .build()
+        );
+        System.out.println("====expression [>=] test finish====");
+    }
+
+    @Test
+    public void testLesserThanExpression(){
+        System.out.println("====expression [<] test start====");
+        // !=
+        LesserThanExpression ltExpression = new LesserThanExpression();
+        ltExpression.setLeft(name);
+        ltExpression.setRight(intValue);
+        testExpression(ltExpression, new LesserThanBuilder()
+                .left(name)
+                .right(intValue)
+                .build()
+        );
+        System.out.println("====expression [<] test finish====");
+
+        System.out.println("====expression [<=] test start====");
+        // !=
+        LesserOrEqualExpression leExpression = new LesserOrEqualExpression();
+        leExpression.setLeft(name);
+        leExpression.setRight(intValue);
+        testExpression(leExpression, new LesserOrEqualBuilder()
+                .left(name)
+                .right(intValue)
+                .build()
+        );
+        System.out.println("====expression [<=] test finish====");
     }
 
     @Test
