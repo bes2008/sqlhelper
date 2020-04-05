@@ -3,7 +3,7 @@ package com.jn.sqlhelper.dialect.expression;
 import com.jn.langx.expression.BaseExpression;
 import com.jn.langx.util.hash.HashCodeBuilder;
 
-public class PlaceholderExpression extends BaseExpression<SQLExpression> implements SQLExpression<SQLExpression> {
+public final class PlaceholderExpression extends BaseExpression<SQLExpression> implements SQLExpression<SQLExpression> {
     public final String placeholder = "?";
 
     public PlaceholderExpression() {
