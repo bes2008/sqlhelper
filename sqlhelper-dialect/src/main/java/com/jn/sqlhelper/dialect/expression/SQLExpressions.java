@@ -566,7 +566,6 @@ public class SQLExpressions {
                 }
             });
         }
-
     }
 
 }
