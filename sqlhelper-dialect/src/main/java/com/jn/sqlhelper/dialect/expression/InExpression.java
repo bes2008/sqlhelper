@@ -34,10 +34,8 @@ public class InExpression extends AbstractBinaryOperator<SQLExpression, ListExpr
     public String toString() {
         StringBuilder builder = new StringBuilder(255);
         builder.append(getLeft().toString())
-                .append(not() ? " not" : "")
-                .append(" in (")
-                .append(getRight().toString())
-                .append(")");
+                .append(not() ? " not in " : " in ")
+                .append(getRight().toString());
         return builder.toString();
     }
 

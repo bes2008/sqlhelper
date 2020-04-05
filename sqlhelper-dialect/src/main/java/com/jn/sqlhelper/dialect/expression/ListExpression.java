@@ -56,6 +56,7 @@ public class ListExpression implements SQLExpression<SQLExpression> {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder(255);
+        builder.append("(");
         Collects.forEach(expressions, new Consumer2<Integer, SQLExpression>() {
             @Override
             public void accept(Integer index, SQLExpression expression) {
@@ -65,6 +66,7 @@ public class ListExpression implements SQLExpression<SQLExpression> {
                 builder.append(expression.toString());
             }
         });
+        builder.append(")");
         return builder.toString();
     }
 }
