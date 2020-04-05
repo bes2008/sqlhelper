@@ -62,7 +62,7 @@ public class ExpressionTests {
         GreaterThanExpression gtExpression = new GreaterThanExpression();
         gtExpression.setLeft(name);
         gtExpression.setRight(intValue);
-        testExpression(gtExpression, new GraterThanBuilder()
+        testExpression(gtExpression, new GreaterThanBuilder()
                 .left(name)
                 .right(intValue)
                 .build()
@@ -74,7 +74,7 @@ public class ExpressionTests {
         GreaterOrEqualExpression geExpression = new GreaterOrEqualExpression();
         geExpression.setLeft(name);
         geExpression.setRight(intValue);
-        testExpression(geExpression, new GraterOrEqualBuilder()
+        testExpression(geExpression, new GreaterOrEqualBuilder()
                 .left(name)
                 .right(intValue)
                 .build()
@@ -186,5 +186,58 @@ public class ExpressionTests {
         testExpression(ba, new ExistsBuilder(true).target(statement).build());
         System.out.println("====expression [not exists] test finish====");
     }
+
+    public void testLikeExpression() {
+
+    }
+
+    @Test
+    public void testAndExpression() {
+        System.out.println("====expression [and] test start====");
+
+        AndExpression and = new AndExpression();
+        LikeExpression likeExpression = new LikeExpression();
+        likeExpression.setLeft(name);
+        likeExpression.setRight(new StringExpression("%zhangsan%"));
+
+
+        GreaterOrEqualExpression ge = new GreaterOrEqualExpression();
+        SymbolExpression statement = new SymbolExpression("age");
+        ge.setLeft(statement);
+        ge.setRight(new IntegerOrLongExpression(3));
+
+        and.setLeft(likeExpression);
+        and.setRight(ge);
+
+        testExpression(and, new AndBuilder()
+                .left(new LikeBuilder()
+                        .left(name)
+                        .right("%zhangsan%")
+                        .build())
+                .right(new GreaterOrEqualBuilder()
+                        .left(statement)
+                        .right(new IntegerOrLongExpressionBuilder()
+                                .value(3)
+                                .build())
+                        .build()).build());
+        System.out.println("====expression [and] test finish====");
+    }
+
+    public void testOrExpression() {
+
+    }
+
+    public void testAllExpression() {
+
+    }
+
+    public void testAnyExpression() {
+
+    }
+
+    public void testIsNullExpression() {
+
+    }
+
 
 }

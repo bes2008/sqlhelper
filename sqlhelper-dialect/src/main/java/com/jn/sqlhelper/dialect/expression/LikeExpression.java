@@ -49,9 +49,9 @@ public class LikeExpression extends AbstractBinaryOperator<SQLExpression, String
         StringBuilder builder = new StringBuilder(255);
         builder.append(getLeft().toString())
                 .append(not() ? " not" : "")
-                .append(" like")
+                .append(" like ")
                 .append(getPatternExpression().toString())
-                .append(Strings.isEmpty(escape) ? "" : escape);
+                .append(Strings.isEmpty(escape) ? "" : (" " + escape));
         return builder.toString();
     }
 }

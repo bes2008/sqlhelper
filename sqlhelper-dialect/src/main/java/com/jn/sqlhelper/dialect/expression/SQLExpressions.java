@@ -330,8 +330,8 @@ public class SQLExpressions {
         }
     }
 
-    public static class GraterThanBuilder extends BinaryOperatorExpressionBuilder<GreaterThanExpression, GraterThanBuilder> {
-        public GraterThanBuilder() {
+    public static class GreaterThanBuilder extends BinaryOperatorExpressionBuilder<GreaterThanExpression, GreaterThanBuilder> {
+        public GreaterThanBuilder() {
             supplier(new Supplier0<GreaterThanExpression>() {
                 @Override
                 public GreaterThanExpression get() {
@@ -341,8 +341,8 @@ public class SQLExpressions {
         }
     }
 
-    public static class GraterOrEqualBuilder extends BinaryOperatorExpressionBuilder<GreaterOrEqualExpression, GraterOrEqualBuilder> {
-        public GraterOrEqualBuilder() {
+    public static class GreaterOrEqualBuilder extends BinaryOperatorExpressionBuilder<GreaterOrEqualExpression, GreaterOrEqualBuilder> {
+        public GreaterOrEqualBuilder() {
             supplier(new Supplier0<GreaterOrEqualExpression>() {
                 @Override
                 public GreaterOrEqualExpression get() {
@@ -506,8 +506,14 @@ public class SQLExpressions {
         }
     }
 
-    public static class LikeExpressionBuilder extends BinaryOperatorExpressionBuilder<LikeExpression, LikeExpressionBuilder> {
-        public LikeExpressionBuilder(final boolean isNotExpression, final String escape) {
+    public static class LikeBuilder extends BinaryOperatorExpressionBuilder<LikeExpression, LikeBuilder> {
+        public LikeBuilder() {
+            this(false, null);
+        }
+        public LikeBuilder(final String escape) {
+            this(false, escape);
+        }
+        public LikeBuilder(final boolean isNotExpression, final String escape) {
             supplier(new Supplier0<LikeExpression>() {
                 @Override
                 public LikeExpression get() {
