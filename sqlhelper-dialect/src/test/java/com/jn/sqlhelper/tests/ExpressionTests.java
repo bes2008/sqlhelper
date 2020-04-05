@@ -187,8 +187,19 @@ public class ExpressionTests {
         System.out.println("====expression [not exists] test finish====");
     }
 
+    @Test
     public void testLikeExpression() {
+        System.out.println("====expression [like] test start====");
 
+        LikeExpression likeExpression = new LikeExpression();
+        likeExpression.setLeft(name);
+        likeExpression.setRight(new StringExpression("%zhangsan%"));
+
+        testExpression(likeExpression, new LikeBuilder()
+                        .left(name)
+                        .right("%zhangsan%")
+                        .build());
+        System.out.println("====expression [like] test finish====");
     }
 
     @Test
