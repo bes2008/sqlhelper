@@ -15,4 +15,4 @@ com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.BetweenAndExpressionCon
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.ExistsExpressionConverter
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.IsNullExpressionConverter
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.LikeExpressionConverter
-
+com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.ListExpressionConverter
