@@ -3,12 +3,15 @@ package com.jn.sqlhelper.dialect.sqlparser.jsqlparser;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
+import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.instrument.InstrumentConfig;
 import com.jn.sqlhelper.dialect.instrument.WhereInstrumentConfig;
 import com.jn.sqlhelper.dialect.instrument.WhereInstrumentor;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
+import com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.ExpressionConverters;
 import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.select.PlainSelect;
@@ -34,11 +37,11 @@ public class JSqlParserWhereInstrumentor implements WhereInstrumentor<Statement>
         }
 
         if (Reflects.isSubClassOrEquals(Select.class, statement.getClass())) {
-            instrument((Select)statement, expressionConfigs);
+            instrument((Select) statement, expressionConfigs);
         } else if (Reflects.isSubClassOrEquals(Update.class, statement.getClass())) {
-            instrument((Update)statement, expressionConfigs);
+            instrument((Update) statement, expressionConfigs);
         } else if (Reflects.isSubClassOrEquals(Delete.class, statement.getClass())) {
-            instrument((Delete)statement, expressionConfigs);
+            instrument((Delete) statement, expressionConfigs);
         }
     }
 
@@ -48,22 +51,98 @@ public class JSqlParserWhereInstrumentor implements WhereInstrumentor<Statement>
             return;
         }
 
-        Collects.forEach(expressionConfigs, new Consumer<WhereInstrumentConfig>() {
+        Collects.forEach(expressionConfigs, new Predicate<WhereInstrumentConfig>() {
             @Override
-            public void accept(WhereInstrumentConfig whereInstrumentConfig) {
+            public boolean test(WhereInstrumentConfig config) {
+                return config != null && config.getExpression() != null;
+            }
+        }, new Consumer<WhereInstrumentConfig>() {
+            @Override
+            public void accept(WhereInstrumentConfig config) {
                 Expression where = plainSelect.getWhere();
-                if(where==null){
-                  //
+                Expression expression = ExpressionConverters.toJSqlParserExpression(config.getExpression());
+
+                if (where == null) {
+                    plainSelect.setWhere(expression);
+                } else {
+                    WhereInstrumentConfig.Position position = config.getPosition();
+                    switch (position) {
+                        case FIRST:
+                            plainSelect.setWhere(new AndExpression(expression, where));
+                            break;
+                        case LAST:
+                            plainSelect.setWhere(new AndExpression(where, expression));
+                            break;
+                        case BEST:
+                            // TODO compute the best position based on the index
+                            break;
+                    }
                 }
             }
         });
     }
 
-    private void instrument(Update update, List<WhereInstrumentConfig> expressionConfigs) {
+    private void instrument(final Update update, List<WhereInstrumentConfig> expressionConfigs) {
+        Collects.forEach(expressionConfigs, new Predicate<WhereInstrumentConfig>() {
+            @Override
+            public boolean test(WhereInstrumentConfig config) {
+                return config != null && config.getExpression() != null;
+            }
+        }, new Consumer<WhereInstrumentConfig>() {
+            @Override
+            public void accept(WhereInstrumentConfig config) {
+                Expression where = update.getWhere();
+                Expression expression = ExpressionConverters.toJSqlParserExpression(config.getExpression());
 
+                if (where == null) {
+                    update.setWhere(expression);
+                } else {
+                    WhereInstrumentConfig.Position position = config.getPosition();
+                    switch (position) {
+                        case FIRST:
+                            update.setWhere(new AndExpression(expression, where));
+                            break;
+                        case LAST:
+                            update.setWhere(new AndExpression(where, expression));
+                            break;
+                        case BEST:
+                            // TODO compute the best position based on the index
+                            break;
+                    }
+                }
+            }
+        });
     }
 
-    private void instrument(Delete delete, List<WhereInstrumentConfig> expressionConfigs) {
+    private void instrument(final Delete delete, List<WhereInstrumentConfig> expressionConfigs) {
+        Collects.forEach(expressionConfigs, new Predicate<WhereInstrumentConfig>() {
+            @Override
+            public boolean test(WhereInstrumentConfig config) {
+                return config != null && config.getExpression() != null;
+            }
+        }, new Consumer<WhereInstrumentConfig>() {
+            @Override
+            public void accept(WhereInstrumentConfig config) {
+                Expression where = delete.getWhere();
+                Expression expression = ExpressionConverters.toJSqlParserExpression(config.getExpression());
 
+                if (where == null) {
+                    delete.setWhere(expression);
+                } else {
+                    WhereInstrumentConfig.Position position = config.getPosition();
+                    switch (position) {
+                        case FIRST:
+                            delete.setWhere(new AndExpression(expression, where));
+                            break;
+                        case LAST:
+                            delete.setWhere(new AndExpression(where, expression));
+                            break;
+                        case BEST:
+                            // TODO compute the best position based on the index
+                            break;
+                    }
+                }
+            }
+        });
     }
 }
