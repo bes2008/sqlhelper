@@ -2,7 +2,6 @@ package com.jn.sqlhelper.dialect.instrument;
 
 import com.jn.langx.util.hash.HashCodeBuilder;
 import com.jn.sqlhelper.dialect.expression.SQLExpression;
-import com.jn.sqlhelper.dialect.expression.SQLExpressions;
 
 public class WhereInstrumentConfig {
 
@@ -29,10 +28,6 @@ public class WhereInstrumentConfig {
 
     public void setExpression(SQLExpression expression) {
         this.expression = expression;
-    }
-
-    public boolean isPlaceholderExpression() {
-        return SQLExpressions.isPlaceholderExpression(expression);
     }
 
     @Override
