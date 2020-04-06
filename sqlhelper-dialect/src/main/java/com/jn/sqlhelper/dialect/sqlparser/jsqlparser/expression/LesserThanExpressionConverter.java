@@ -2,16 +2,15 @@ package com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression;
 
 import com.jn.langx.util.function.Supplier;
 import com.jn.sqlhelper.dialect.expression.LesserThanExpression;
-import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.relational.MinorThan;
 
 public class LesserThanExpressionConverter extends BinaryExpressionConverter<LesserThanExpression, MinorThan> {
 
-    public LesserThanExpressionConverter(){
+    public LesserThanExpressionConverter() {
         setJsqlparserExpressionSupplier(new Supplier<LesserThanExpression, MinorThan>() {
             @Override
             public MinorThan get(LesserThanExpression input) {
-                return  new MinorThan();
+                return new MinorThan();
             }
         });
     }

@@ -2,15 +2,14 @@ package com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression;
 
 import com.jn.langx.util.function.Supplier;
 import com.jn.sqlhelper.dialect.expression.NotEqualExpression;
-import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.relational.NotEqualsTo;
 
 public class NotEqualExpressionConverter extends BinaryExpressionConverter<NotEqualExpression, NotEqualsTo> {
-    public NotEqualExpressionConverter(){
+    public NotEqualExpressionConverter() {
         setJsqlparserExpressionSupplier(new Supplier<NotEqualExpression, NotEqualsTo>() {
             @Override
             public NotEqualsTo get(NotEqualExpression input) {
-                return  new NotEqualsTo(input.getOperateSymbol());
+                return new NotEqualsTo(input.getOperateSymbol());
             }
         });
     }
