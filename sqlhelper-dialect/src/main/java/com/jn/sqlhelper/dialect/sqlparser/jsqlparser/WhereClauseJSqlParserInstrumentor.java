@@ -3,7 +3,7 @@ package com.jn.sqlhelper.dialect.sqlparser.jsqlparser;
 import com.jn.langx.util.Emptys;
 import com.jn.sqlhelper.dialect.instrument.ClauseInsturmentor;
 import com.jn.sqlhelper.dialect.instrument.InstrumentConfig;
-import com.jn.sqlhelper.dialect.instrument.WhereClauseExpressionInstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.WhereInstrumentConfig;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
 import net.sf.jsqlparser.statement.Statement;
 
@@ -16,7 +16,7 @@ public class WhereClauseJSqlParserInstrumentor implements ClauseInsturmentor<Sta
             return;
         }
         Statement statement = statementWrapper.get();
-        List<WhereClauseExpressionInstrumentConfig> expressionConfigs = config.getWhereClauseExpressionInstrumentConfigs();
+        List<WhereInstrumentConfig> expressionConfigs = config.getWhereInstrumentConfigs();
         if(Emptys.isEmpty(statement) || Emptys.isEmpty(expressionConfigs)){
             return;
         }

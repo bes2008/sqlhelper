@@ -27,7 +27,7 @@ public class InstrumentConfig implements Serializable {
 
     private boolean isCount = false;
 
-    private List<WhereClauseExpressionInstrumentConfig> whereClauseExpressionInstrumentConfigs;
+    private List<WhereInstrumentConfig> whereInstrumentConfigs;
 
     @Override
     public boolean equals(Object o) {
@@ -58,7 +58,7 @@ public class InstrumentConfig implements Serializable {
         if (!Objects.equals(likeEscaper, that.likeEscaper)) {
             return false;
         }
-        if (!Objects.equals(whereClauseExpressionInstrumentConfigs, that.whereClauseExpressionInstrumentConfigs)) {
+        if (!Objects.equals(whereInstrumentConfigs, that.whereInstrumentConfigs)) {
             return false;
         }
         return true;
@@ -73,7 +73,7 @@ public class InstrumentConfig implements Serializable {
                 .with(this.limitOffset)
                 .with(this.orderBy)
                 .with(this.dialect)
-                .with(this.whereClauseExpressionInstrumentConfigs)
+                .with(this.whereInstrumentConfigs)
                 .build();
     }
 
@@ -125,11 +125,11 @@ public class InstrumentConfig implements Serializable {
         isCount = count;
     }
 
-    public List<WhereClauseExpressionInstrumentConfig> getWhereClauseExpressionInstrumentConfigs() {
-        return whereClauseExpressionInstrumentConfigs;
+    public List<WhereInstrumentConfig> getWhereInstrumentConfigs() {
+        return whereInstrumentConfigs;
     }
 
-    public void setWhereClauseExpressionInstrumentConfigs(List<WhereClauseExpressionInstrumentConfig> configs) {
-        this.whereClauseExpressionInstrumentConfigs = configs;
+    public void setWhereInstrumentConfigs(List<WhereInstrumentConfig> configs) {
+        this.whereInstrumentConfigs = configs;
     }
 }

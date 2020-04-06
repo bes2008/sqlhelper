@@ -4,7 +4,7 @@ import com.jn.langx.util.hash.HashCodeBuilder;
 import com.jn.sqlhelper.dialect.expression.SQLExpression;
 import com.jn.sqlhelper.dialect.expression.SQLExpressions;
 
-public class WhereClauseExpressionInstrumentConfig {
+public class WhereInstrumentConfig {
 
     public static enum Position {
         FIRST,
@@ -44,7 +44,7 @@ public class WhereClauseExpressionInstrumentConfig {
             return false;
         }
 
-        WhereClauseExpressionInstrumentConfig that = (WhereClauseExpressionInstrumentConfig) o;
+        WhereInstrumentConfig that = (WhereInstrumentConfig) o;
 
         if (position != that.position) {
             return false;
