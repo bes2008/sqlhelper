@@ -21,17 +21,42 @@ public class SQLExpressions {
     public abstract static class AbstractExpressionBuilder<E extends SQLExpression> implements Builder<E> {
     }
 
-    public static class SymbolBuilder extends AbstractExpressionBuilder<SymbolExpression> {
-        private SymbolExpression symbolExpression = new SymbolExpression();
+    public static class ColumnBuilder extends AbstractExpressionBuilder<ColumnExpression> {
+        private ColumnExpression columnExpression = new ColumnExpression();
 
-        public SymbolBuilder value(String symbol) {
-            symbolExpression.setValue(symbol);
+        public ColumnBuilder catalog(String catalog) {
+            columnExpression.setCatalog(catalog);
+            return this;
+        }
+
+        public ColumnBuilder schema(String schema) {
+            columnExpression.setSchema(schema);
+            return this;
+        }
+
+        public ColumnBuilder table(String table) {
+            columnExpression.setTable(table);
+            return this;
+        }
+
+        public ColumnBuilder column(String column) {
+            columnExpression.setColumn(column);
+            return this;
+        }
+
+        public ColumnBuilder separator(String separator) {
+            columnExpression.setSeparator(separator);
+            return this;
+        }
+
+        public ColumnBuilder catalogAtStart(boolean catalogAtStart) {
+            columnExpression.setCatalogAtStart(catalogAtStart);
             return this;
         }
 
         @Override
-        public SymbolExpression build() {
-            return symbolExpression;
+        public ColumnExpression build() {
+            return columnExpression;
         }
     }
 
@@ -188,8 +213,8 @@ public class SQLExpressions {
             return target(expression, false);
         }
 
-        public T target(String expression, boolean isSymbol) {
-            return target(isSymbol ? new SymbolExpression(expression) : new StringExpression(expression));
+        public T target(String expression, boolean isColumn) {
+            return target(isColumn ? new ColumnExpression(expression) : new StringExpression(expression));
         }
 
         @Override
@@ -226,8 +251,8 @@ public class SQLExpressions {
             return left(expression, true);
         }
 
-        public T left(String expression, boolean isSymbol) {
-            left = isSymbol ? new SymbolExpression(expression) : new StringExpression(expression);
+        public T left(String expression, boolean isColumn) {
+            left = isColumn ? new ColumnExpression(expression) : new StringExpression(expression);
             return (T) this;
         }
 
@@ -250,8 +275,8 @@ public class SQLExpressions {
             return right(expression, false);
         }
 
-        public T right(String expression, boolean isSymbol) {
-            right = isSymbol ? new SymbolExpression(expression) : new StringExpression(expression);
+        public T right(String expression, boolean isColumn) {
+            right = isColumn ? new ColumnExpression(expression) : new StringExpression(expression);
             return (T) this;
         }
 
@@ -570,11 +595,11 @@ public class SQLExpressions {
             this(false, null);
         }
 
-        public LikeBuilder(final String escape) {
+        public LikeBuilder(final char escape) {
             this(false, escape);
         }
 
-        public LikeBuilder(final boolean isNotExpression, final String escape) {
+        public LikeBuilder(final boolean isNotExpression, final Character escape) {
             supplier(new Supplier0<LikeExpression>() {
                 @Override
                 public LikeExpression get() {

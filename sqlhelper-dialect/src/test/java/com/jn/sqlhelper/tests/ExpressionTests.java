@@ -9,7 +9,7 @@ import static com.jn.sqlhelper.dialect.expression.SQLExpressions.*;
 
 public class ExpressionTests {
 
-    private SymbolExpression name = new SymbolExpression("name_");
+    private ColumnExpression name = new ColumnExpression("user", "name_");
     private StringExpression stringValue = new StringExpression("hello");
     private IntegerOrLongExpression intValue = new IntegerOrLongExpression(3);
 
@@ -213,7 +213,7 @@ public class ExpressionTests {
 
 
         GreaterOrEqualExpression ge = new GreaterOrEqualExpression();
-        SymbolExpression statement = new SymbolExpression("age");
+        ColumnExpression statement = new ColumnExpression("user", "age");
         ge.setLeft(statement);
         ge.setRight(new IntegerOrLongExpression(3));
 
@@ -243,7 +243,7 @@ public class ExpressionTests {
         likeExpression.setRight(new StringExpression("%zhangsan%"));
 
         GreaterOrEqualExpression ge = new GreaterOrEqualExpression();
-        SymbolExpression statement = new SymbolExpression("age");
+        ColumnExpression statement = new ColumnExpression("user", "age");
         ge.setLeft(statement);
         ge.setRight(new IntegerOrLongExpression(3));
 
@@ -273,7 +273,7 @@ public class ExpressionTests {
         all.setTarget(statement);
 
         GreaterOrEqualExpression ge = new GreaterOrEqualExpression();
-        SymbolExpression age = new SymbolExpression("age");
+        ColumnExpression age = new ColumnExpression("user", "age");
         ge.setLeft(age);
         ge.setRight(all);
 
@@ -292,7 +292,7 @@ public class ExpressionTests {
         any.setTarget(statement);
 
         GreaterOrEqualExpression ge = new GreaterOrEqualExpression();
-        SymbolExpression age = new SymbolExpression("age");
+        ColumnExpression age = new ColumnExpression("user", "age");
         ge.setLeft(age);
         ge.setRight(any);
 
