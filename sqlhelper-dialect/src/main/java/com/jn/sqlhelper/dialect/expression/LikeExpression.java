@@ -1,14 +1,15 @@
 package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.expression.operator.AbstractBinaryOperator;
-import com.jn.langx.util.Strings;
+import com.jn.langx.util.Emptys;
 
 /**
  * left [not] like right escape '/'
  */
 public class LikeExpression extends AbstractBinaryOperator<SQLExpression, StringExpression, SQLExpression> implements SQLExpression<SQLExpression>, Notable {
     private boolean isNotExpression = false;
-    private String escape; // optional
+    private char escape; // BackslashStyleEscaper.INSTANCE.getEscapeChar(); // optional
+    private boolean caseInsensitive = false;
 
     public LikeExpression() {
     }
@@ -17,8 +18,20 @@ public class LikeExpression extends AbstractBinaryOperator<SQLExpression, String
         not(isNotExpression);
     }
 
-    public void setEscape(String escape) {
+    public void setEscape(char escape) {
         this.escape = escape;
+    }
+
+    public char getEscape() {
+        return escape;
+    }
+
+    public boolean isCaseInsensitive() {
+        return caseInsensitive;
+    }
+
+    public void setCaseInsensitive(boolean caseInsensitive) {
+        this.caseInsensitive = caseInsensitive;
     }
 
     @Override
@@ -49,9 +62,9 @@ public class LikeExpression extends AbstractBinaryOperator<SQLExpression, String
         StringBuilder builder = new StringBuilder(255);
         builder.append(getLeft().toString())
                 .append(not() ? " not" : "")
-                .append(" like ")
+                .append(caseInsensitive ? " ilike " : " like ")
                 .append(getPatternExpression().toString())
-                .append(Strings.isEmpty(escape) ? "" : (" " + escape));
+                .append(Emptys.isEmpty(escape) ? "" : (" escape '" + escape + "'"));
         return builder.toString();
     }
 }

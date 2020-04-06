@@ -41,6 +41,10 @@ public class BaseLikeEscaper implements LikeEscaper {
         return keyChars;
     }
 
+    public char getEscapeChar(){
+        return escapeChar;
+    }
+
     @Override
     public String escape(String pattern) {
         final List<Character> specifiedChars = getLikeKeyChars();
