@@ -8,7 +8,7 @@ import net.sf.jsqlparser.expression.Expression;
 
 public abstract class BinaryExpressionConverter<SE extends SQLExpression & BinaryOperator, JE extends BinaryExpression> implements ExpressionConverter<SE, JE> {
 
-    private Supplier<SE,JE > jsqlparserExpressionSupplier;
+    private Supplier<SE, JE> jsqlparserExpressionSupplier;
 
     public void setJsqlparserExpressionSupplier(Supplier<SE, JE> supplier) {
         this.jsqlparserExpressionSupplier = supplier;
@@ -25,10 +25,18 @@ public abstract class BinaryExpressionConverter<SE extends SQLExpression & Binar
         ExpressionConverter rightExpressionConverter = registry.getExpressionConverterByStandardExpressionClass(right.getClass());
         Expression rightExp = rightExpressionConverter.toJSqlParserExpression(right);
 
-        JE jsqlparserExpression = jsqlparserExpressionSupplier.get(expression);
-        jsqlparserExpression.setLeftExpression(leftExp);
-        jsqlparserExpression.setRightExpression(rightExp);
-        return jsqlparserExpression;
+        if (jsqlparserExpressionSupplier != null) {
+            JE jsqlparserExpression = jsqlparserExpressionSupplier.get(expression);
+            jsqlparserExpression.setLeftExpression(leftExp);
+            jsqlparserExpression.setRightExpression(rightExp);
+            return jsqlparserExpression;
+        } else {
+            return buildJSqlParserExpression(expression, leftExp, rightExp);
+        }
+    }
+
+    protected JE buildJSqlParserExpression(SE expression, Expression leftExp, Expression rightExp) {
+        return null;
     }
 
     @Override

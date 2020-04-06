@@ -4,3 +4,5 @@ com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.GreaterThanExpressionCo
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.GreaterOrEqualExpressionConverter
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.LesserThanExpressionConverter
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.LesserOrEqualExpressionConverter
+com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.AndExpressionConverter
+com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.OrExpressionConverter
