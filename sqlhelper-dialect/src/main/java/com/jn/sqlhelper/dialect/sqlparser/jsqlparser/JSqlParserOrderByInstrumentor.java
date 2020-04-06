@@ -5,8 +5,8 @@ import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.function.Supplier;
-import com.jn.sqlhelper.dialect.instrument.ClauseInsturmentor;
 import com.jn.sqlhelper.dialect.instrument.InstrumentConfig;
+import com.jn.sqlhelper.dialect.instrument.OrderByInstrumentor;
 import com.jn.sqlhelper.dialect.instrument.SQLInstrumentException;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.orderby.OrderByItem;
@@ -25,7 +25,7 @@ import net.sf.jsqlparser.statement.select.SelectBody;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderByClauseJSqlParserInstrumentor implements ClauseInsturmentor<Statement> {
+public class JSqlParserOrderByInstrumentor implements OrderByInstrumentor<Statement> {
     @Override
     public void instrument(@NonNull SqlStatementWrapper<Statement> sw, @NonNull InstrumentConfig config) {
         Preconditions.checkNotNull(sw);
