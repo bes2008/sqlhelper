@@ -19,11 +19,8 @@ public abstract class BinaryExpressionConverter<SE extends SQLExpression & Binar
         SQLExpression left = (SQLExpression) expression.getLeft();
         SQLExpression right = (SQLExpression) expression.getRight();
 
-        ExpressionConverterRegistry registry = ExpressionConverterRegistry.getInstance();
-        ExpressionConverter leftExpressionConverter = registry.getExpressionConverterByStandardExpressionClass(left.getClass());
-        Expression leftExp = leftExpressionConverter.toJSqlParserExpression(left);
-        ExpressionConverter rightExpressionConverter = registry.getExpressionConverterByStandardExpressionClass(right.getClass());
-        Expression rightExp = rightExpressionConverter.toJSqlParserExpression(right);
+        Expression leftExp = ExpressionConverters.toJSqlParserExpression(left);
+        Expression rightExp = ExpressionConverters.toJSqlParserExpression(right);
 
         if (jsqlparserExpressionSupplier != null) {
             JE jsqlparserExpression = jsqlparserExpressionSupplier.get(expression);

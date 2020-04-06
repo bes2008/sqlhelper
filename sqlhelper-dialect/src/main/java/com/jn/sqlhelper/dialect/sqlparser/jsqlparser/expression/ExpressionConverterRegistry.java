@@ -49,4 +49,7 @@ public class ExpressionConverterRegistry {
     public ExpressionConverter getExpressionConverterByStandardExpressionClass(Class<? extends SQLExpression>  clazz){
         return standardExpressionConverterMap.get(clazz);
     }
+    public ExpressionConverter getExpressionConverterByJSqlParserExpressionClass(Class<? extends Expression>  clazz){
+        return jsqlparserExpressionConverterMap.get(clazz);
+    }
 }
