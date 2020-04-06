@@ -286,6 +286,61 @@ public class SQLExpressions {
         }
     }
 
+    public static class AddBuilder extends BinaryOperatorExpressionBuilder<AddExpression, AddBuilder> {
+        public AddBuilder() {
+            supplier(new Supplier0<AddExpression>() {
+                @Override
+                public AddExpression get() {
+                    return new AddExpression();
+                }
+            });
+        }
+    }
+
+    public static class SubtractBuilder extends BinaryOperatorExpressionBuilder<SubtractExpression, SubtractBuilder> {
+        public SubtractBuilder() {
+            supplier(new Supplier0<SubtractExpression>() {
+                @Override
+                public SubtractExpression get() {
+                    return new SubtractExpression();
+                }
+            });
+        }
+    }
+
+    public static class MultipleBuilder extends BinaryOperatorExpressionBuilder<MultipleExpression, MultipleBuilder> {
+        public MultipleBuilder() {
+            supplier(new Supplier0<MultipleExpression>() {
+                @Override
+                public MultipleExpression get() {
+                    return new MultipleExpression();
+                }
+            });
+        }
+    }
+
+    public static class DivideBuilder extends BinaryOperatorExpressionBuilder<DivideExpression, DivideBuilder> {
+        public DivideBuilder() {
+            supplier(new Supplier0<DivideExpression>() {
+                @Override
+                public DivideExpression get() {
+                    return new DivideExpression();
+                }
+            });
+        }
+    }
+
+    public static class ModeBuilder extends BinaryOperatorExpressionBuilder<ModeExpression, ModeBuilder> {
+        public ModeBuilder() {
+            supplier(new Supplier0<ModeExpression>() {
+                @Override
+                public ModeExpression get() {
+                    return new ModeExpression();
+                }
+            });
+        }
+    }
+
     public static class AndBuilder extends BinaryOperatorExpressionBuilder<AndExpression, AndBuilder> {
         public AndBuilder() {
             supplier(new Supplier0<AndExpression>() {
@@ -568,11 +623,12 @@ public class SQLExpressions {
         }
     }
 
-    public static boolean isPlaceholderExpression(SQLExpression expression){
-        if(expression==null){
+
+    public static boolean isPlaceholderExpression(SQLExpression expression) {
+        if (expression == null) {
             return false;
         }
-        if(expression instanceof PlaceholderExpression){
+        if (expression instanceof PlaceholderExpression) {
             return true;
         }
         return false;
