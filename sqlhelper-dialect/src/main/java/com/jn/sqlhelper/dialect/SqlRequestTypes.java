@@ -20,5 +20,6 @@ public enum SqlRequestTypes {
     DELETE,
     UPDATE,
     INSERT,
+    MERGE,
     BATCH
 }
