@@ -30,7 +30,7 @@ import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.dialect.SQLDialectException;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
-import com.jn.sqlhelper.dialect.orderby.OrderByInstrumentor;
+import com.jn.sqlhelper.dialect.orderby.OrderByInstrumentors;
 import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.pagination.QueryParameters;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
@@ -197,7 +197,7 @@ public class SQLStatementInstrumentor {
             }
         }
         try {
-            String sql2 = OrderByInstrumentor.instrument(sql, orderBy);
+            String sql2 = OrderByInstrumentors.instrument(sql, orderBy);
             if (sql2 != null) {
                 if (this.config.isCacheInstrumentedSql()) {
                     getInstrumentedStatement(sql).setOrderBySql(orderBy, sql2);

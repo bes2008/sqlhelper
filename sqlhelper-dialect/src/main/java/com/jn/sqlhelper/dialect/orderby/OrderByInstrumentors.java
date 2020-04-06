@@ -21,7 +21,7 @@ import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.Select;
 
-public class OrderByInstrumentor {
+public class OrderByInstrumentors {
 
     private static String instrumentOrderByUsingJSqlParser(String sql, OrderBy orderBy) throws JSQLParserException {
         Select select = (Select) CCJSqlParserUtil.parse(sql);
