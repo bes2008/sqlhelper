@@ -20,5 +20,6 @@ com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.NotExpressionConverter
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.StringExpressionConverter
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.NullExpressionConverter
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.IntegerOrLongValueExpressionConverter
+com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.DoubleExpressionConverter
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.PlaceholderExpressionConverter
 
