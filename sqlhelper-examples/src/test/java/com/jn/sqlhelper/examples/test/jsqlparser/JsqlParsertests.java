@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.examples.test.jsqlparser;
 
-import com.jn.sqlhelper.dialect.orderby.OrderByInstrumentor;
+import com.jn.sqlhelper.dialect.orderby.OrderByInstrumentors;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statement;
@@ -34,7 +34,7 @@ public class JsqlParsertests {
                 System.out.println(tableName);
             }
 
-            String orderBySql = OrderByInstrumentor.instrument(sql, SqlStyleOrderByBuilder.DEFAULT.build("name asc, age desc"));
+            String orderBySql = OrderByInstrumentors.instrument(sql, SqlStyleOrderByBuilder.DEFAULT.build("name asc, age desc"));
 
             System.out.println("print instrumented sql:");
             System.out.println(orderBySql);
