@@ -16,3 +16,4 @@ com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.ExistsExpressionConvert
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.IsNullExpressionConverter
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.LikeExpressionConverter
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.ListExpressionConverter
+com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.NotExpressionConverter
