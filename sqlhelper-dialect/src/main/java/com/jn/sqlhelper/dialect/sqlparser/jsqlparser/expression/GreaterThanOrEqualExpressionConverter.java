@@ -1,16 +1,18 @@
 package com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression;
 
+import com.jn.langx.util.function.Supplier;
 import com.jn.sqlhelper.dialect.expression.GreaterOrEqualExpression;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.relational.GreaterThanEquals;
 
 public class GreaterThanOrEqualExpressionConverter extends BinaryExpressionConverter<GreaterOrEqualExpression, GreaterThanEquals> {
-    @Override
-    protected GreaterThanEquals buildJSqlParserExpression(GreaterOrEqualExpression expression, String operatorSymbol, Expression leftExp, Expression rightExp) {
-        GreaterThanEquals ge = new GreaterThanEquals();
-        ge.setLeftExpression(leftExp);
-        ge.setRightExpression(rightExp);
-        return ge;
+    public GreaterThanOrEqualExpressionConverter(){
+        setJsqlparserExpressionSupplier(new Supplier<GreaterOrEqualExpression, GreaterThanEquals>() {
+            @Override
+            public GreaterThanEquals get(GreaterOrEqualExpression input) {
+                return new GreaterThanEquals();
+            }
+        });
     }
 
     @Override

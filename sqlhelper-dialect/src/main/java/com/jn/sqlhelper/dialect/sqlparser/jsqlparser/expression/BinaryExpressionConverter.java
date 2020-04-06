@@ -1,10 +1,19 @@
 package com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression;
 
 import com.jn.langx.expression.operator.BinaryOperator;
+import com.jn.langx.util.function.Supplier;
 import com.jn.sqlhelper.dialect.expression.SQLExpression;
+import net.sf.jsqlparser.expression.BinaryExpression;
 import net.sf.jsqlparser.expression.Expression;
 
-public abstract class BinaryExpressionConverter<SE extends SQLExpression & BinaryOperator, JE extends Expression> implements ExpressionConverter<SE, JE> {
+public abstract class BinaryExpressionConverter<SE extends SQLExpression & BinaryOperator, JE extends BinaryExpression> implements ExpressionConverter<SE, JE> {
+
+    private Supplier<SE,JE > jsqlparserExpressionSupplier;
+
+    public void setJsqlparserExpressionSupplier(Supplier<SE, JE> supplier) {
+        this.jsqlparserExpressionSupplier = supplier;
+    }
+
     @Override
     public JE toJSqlParserExpression(SE expression) {
         SQLExpression left = (SQLExpression) expression.getLeft();
@@ -15,10 +24,12 @@ public abstract class BinaryExpressionConverter<SE extends SQLExpression & Binar
         Expression leftExp = leftExpressionConverter.toJSqlParserExpression(left);
         ExpressionConverter rightExpressionConverter = registry.getExpressionConverterByStandardExpressionClass(right.getClass());
         Expression rightExp = rightExpressionConverter.toJSqlParserExpression(right);
-        return buildJSqlParserExpression(expression, expression.getOperateSymbol(), leftExp, rightExp);
-    }
 
-    protected abstract JE buildJSqlParserExpression(SE expression, String operatorSymbol, Expression leftExp, Expression rightExp);
+        JE jsqlparserExpression = jsqlparserExpressionSupplier.get(expression);
+        jsqlparserExpression.setLeftExpression(leftExp);
+        jsqlparserExpression.setRightExpression(rightExp);
+        return jsqlparserExpression;
+    }
 
     @Override
     public SE fromJSqlParserExpression(JE expression) {
