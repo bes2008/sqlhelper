@@ -5,8 +5,8 @@ import com.jn.sqlhelper.dialect.expression.GreaterOrEqualExpression;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.relational.GreaterThanEquals;
 
-public class GreaterThanOrEqualExpressionConverter extends BinaryExpressionConverter<GreaterOrEqualExpression, GreaterThanEquals> {
-    public GreaterThanOrEqualExpressionConverter(){
+public class GreaterOrEqualExpressionConverter extends BinaryExpressionConverter<GreaterOrEqualExpression, GreaterThanEquals> {
+    public GreaterOrEqualExpressionConverter(){
         setJsqlparserExpressionSupplier(new Supplier<GreaterOrEqualExpression, GreaterThanEquals>() {
             @Override
             public GreaterThanEquals get(GreaterOrEqualExpression input) {
