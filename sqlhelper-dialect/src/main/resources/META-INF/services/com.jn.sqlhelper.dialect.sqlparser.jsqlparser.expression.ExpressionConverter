@@ -1,0 +1,2 @@
+com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.EqualExpressionConverter
+com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.NotEqualExpressionConverter
