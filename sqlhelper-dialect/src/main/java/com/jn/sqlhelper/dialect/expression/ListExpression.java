@@ -19,6 +19,10 @@ public class ListExpression implements SQLExpression<SQLExpression> {
         }
     }
 
+    public List<SQLExpression> getExpressions(){
+        return expressions;
+    }
+
     public void add(SQLExpression expression) {
         expressions.add(expression);
     }
