@@ -31,12 +31,24 @@ public class BetweenAndExpression extends BaseExpression<SQLExpression> implemen
         this.target = target;
     }
 
+    public SQLExpression getTarget(){
+        return this.target;
+    }
+
     public void setLow(SQLExpression low) {
         this.low = low;
     }
 
+    public SQLExpression getLow(){
+        return this.low;
+    }
+
     public void setHigh(SQLExpression high) {
         this.high = high;
+    }
+
+    public SQLExpression getHigh(){
+        return this.high;
     }
 
     @Override
