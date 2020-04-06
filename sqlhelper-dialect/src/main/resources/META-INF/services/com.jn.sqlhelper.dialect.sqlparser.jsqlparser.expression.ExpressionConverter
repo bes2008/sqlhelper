@@ -12,4 +12,5 @@ com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.MultipleExpressionConve
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.DivideExpressionConverter
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.ModeExpressionConverter
 com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.BetweenAndExpressionConverter
+com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression.ExistsExpressionConverter
 
