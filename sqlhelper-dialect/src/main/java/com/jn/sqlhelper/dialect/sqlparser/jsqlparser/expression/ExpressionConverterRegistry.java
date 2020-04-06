@@ -2,11 +2,15 @@ package com.jn.sqlhelper.dialect.sqlparser.jsqlparser.expression;
 
 import com.jn.langx.annotation.Singleton;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.iter.IteratorIterable;
+import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.dialect.expression.SQLExpression;
 import net.sf.jsqlparser.expression.Expression;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ServiceLoader;
 
 @Singleton
 public class ExpressionConverterRegistry {
@@ -16,6 +20,7 @@ public class ExpressionConverterRegistry {
     private Map<Class<? extends Expression>, ExpressionConverter> jsqlparserExpressionConverterMap = new HashMap<Class<? extends Expression>, ExpressionConverter>();
 
     private ExpressionConverterRegistry() {
+        registryBuiltins();
     }
 
     public static ExpressionConverterRegistry getInstance() {
@@ -31,4 +36,17 @@ public class ExpressionConverterRegistry {
         jsqlparserExpressionConverterMap.put(jSqlParserExpressionClass, converter);
     }
 
+    private void registryBuiltins(){
+        ServiceLoader<ExpressionConverter> loader = ServiceLoader.load(ExpressionConverter.class);
+        Collects.forEach(new IteratorIterable<ExpressionConverter>(loader.iterator()), new Consumer<ExpressionConverter>() {
+            @Override
+            public void accept(ExpressionConverter converter) {
+                registry(converter);
+            }
+        });
+    }
+
+    public ExpressionConverter getExpressionConverterByStandardExpressionClass(Class<? extends SQLExpression>  clazz){
+        return standardExpressionConverterMap.get(clazz);
+    }
 }
