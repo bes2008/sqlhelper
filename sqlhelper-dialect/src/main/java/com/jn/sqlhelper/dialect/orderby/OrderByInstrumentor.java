@@ -16,7 +16,7 @@ package com.jn.sqlhelper.dialect.orderby;
 
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
-import com.jn.sqlhelper.dialect.sqlparser.jsqlparser.OrderByClauseJSqlParserInstrumentor;
+import com.jn.sqlhelper.dialect.sqlparser.jsqlparser.JSqlParserOrderByInstrumentor;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.Select;
@@ -25,7 +25,7 @@ public class OrderByInstrumentor {
 
     private static String instrumentOrderByUsingJSqlParser(String sql, OrderBy orderBy) throws JSQLParserException {
         Select select = (Select) CCJSqlParserUtil.parse(sql);
-        OrderByClauseJSqlParserInstrumentor.instrument(select, orderBy);
+        JSqlParserOrderByInstrumentor.instrument(select, orderBy);
         return select.toString();
     }
 
