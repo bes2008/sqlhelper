@@ -20,7 +20,7 @@ public class JSqlParserWhereInstrumentor implements WhereInstrumentor<Statement>
         if (Emptys.isEmpty(statement) || Emptys.isEmpty(expressionConfigs)) {
             return;
         }
-        if (!Jsqlparsers.isDML(statement)) {
+        if (!JSqlParsers.isDML(statement)) {
             return;
         }
 

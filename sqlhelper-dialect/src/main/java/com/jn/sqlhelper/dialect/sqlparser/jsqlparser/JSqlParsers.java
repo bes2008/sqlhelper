@@ -25,7 +25,7 @@ import net.sf.jsqlparser.statement.values.ValuesStatement;
 
 import java.util.List;
 
-public class Jsqlparsers {
+public class JSqlParsers {
 
     private static final List<Class<? extends Statement>> DDL_STATEMENTS = Collects.newArrayList(
             Comment.class,

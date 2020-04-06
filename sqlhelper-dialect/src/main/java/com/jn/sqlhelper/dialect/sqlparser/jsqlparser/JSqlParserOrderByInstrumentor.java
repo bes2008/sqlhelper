@@ -46,7 +46,7 @@ public class JSqlParserOrderByInstrumentor implements OrderByInstrumentor<Statem
         try {
             SelectBody selectBody = select.getSelectBody();
 
-            PlainSelect plainSelect = Jsqlparsers.extractPlainSelect(selectBody);
+            PlainSelect plainSelect = JSqlParsers.extractPlainSelect(selectBody);
             if (plainSelect == null) {
                 return;
             }
@@ -70,7 +70,7 @@ public class JSqlParserOrderByInstrumentor implements OrderByInstrumentor<Statem
                     for (OrderByElement orderByElement : orderByElements) {
                         Expression exprInSql = orderByElement.getExpression();
                         if (exprForAppend.getClass() == exprInSql.getClass()) {
-                            if (Jsqlparsers.expressionEquals(exprForAppend, exprInSql)) {
+                            if (JSqlParsers.expressionEquals(exprForAppend, exprInSql)) {
                                 needAppend = false;
                                 // do asc, desc change
                                 if (item.getType() == null) {
