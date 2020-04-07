@@ -22,7 +22,7 @@ import net.sf.jsqlparser.statement.update.Update;
 
 import java.util.List;
 
-public class JSqlParserWhereInstrumentor implements WhereTransformer<Statement> {
+public class JSqlParserWhereTransformer implements WhereTransformer<Statement> {
 
     @Override
     public void init() throws InitializationException {
