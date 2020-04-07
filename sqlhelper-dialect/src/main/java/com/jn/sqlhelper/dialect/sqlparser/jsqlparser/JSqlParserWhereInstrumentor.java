@@ -37,7 +37,7 @@ public class JSqlParserWhereInstrumentor implements WhereInstrumentor<Statement>
         }
 
         if (Reflects.isSubClassOrEquals(Select.class, statement.getClass())) {
-            instrument((Select) statement, expressionConfigs);
+            instrument((Select) statement,false, expressionConfigs);
         } else if (Reflects.isSubClassOrEquals(Update.class, statement.getClass())) {
             instrument((Update) statement, expressionConfigs);
         } else if (Reflects.isSubClassOrEquals(Delete.class, statement.getClass())) {
@@ -45,7 +45,7 @@ public class JSqlParserWhereInstrumentor implements WhereInstrumentor<Statement>
         }
     }
 
-    private void instrument(Select select, List<WhereInstrumentConfig> expressionConfigs) {
+    private void instrument(Select select, final boolean isSubSelect, List<WhereInstrumentConfig> expressionConfigs) {
         final PlainSelect plainSelect = JSqlParsers.extractPlainSelect(select.getSelectBody());
         if (plainSelect == null) {
             return;
@@ -54,7 +54,7 @@ public class JSqlParserWhereInstrumentor implements WhereInstrumentor<Statement>
         Collects.forEach(expressionConfigs, new Predicate<WhereInstrumentConfig>() {
             @Override
             public boolean test(WhereInstrumentConfig config) {
-                return config != null && config.getExpression() != null;
+                return config != null && config.getExpression() != null && (!isSubSelect || config.isInstrumentSubSelect());
             }
         }, new Consumer<WhereInstrumentConfig>() {
             @Override
@@ -83,6 +83,9 @@ public class JSqlParserWhereInstrumentor implements WhereInstrumentor<Statement>
     }
 
     private void instrument(final Update update, List<WhereInstrumentConfig> expressionConfigs) {
+        if((update.isUseSelect() && update.getSelect()!=null)){
+            instrument(update.getSelect(),true, expressionConfigs);
+        }
         Collects.forEach(expressionConfigs, new Predicate<WhereInstrumentConfig>() {
             @Override
             public boolean test(WhereInstrumentConfig config) {
@@ -112,6 +115,8 @@ public class JSqlParserWhereInstrumentor implements WhereInstrumentor<Statement>
                 }
             }
         });
+
+
     }
 
     private void instrument(final Delete delete, List<WhereInstrumentConfig> expressionConfigs) {
