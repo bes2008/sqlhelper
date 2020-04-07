@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.jsqlparser;
+package com.jn.sqlhelper.jsqlparser.instrument;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.lifecycle.InitializationException;
@@ -14,6 +14,7 @@ import com.jn.sqlhelper.dialect.orderby.OrderByItem;
 import com.jn.sqlhelper.dialect.orderby.OrderByType;
 import com.jn.sqlhelper.dialect.sqlparser.SQLParseException;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
+import com.jn.sqlhelper.jsqlparser.JSqlParsers;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
@@ -28,12 +29,12 @@ import java.util.List;
 
 public class JSqlParserOrderByTransformer implements OrderByTransformer<Statement> {
     @Override
-    public boolean enabled() {
+    public boolean isEnabled() {
         return false;
     }
 
     @Override
-    public boolean transformable(SqlStatementWrapper<Statement> statementWrapper) {
+    public boolean isTransformable(SqlStatementWrapper<Statement> statementWrapper) {
         return false;
     }
 
