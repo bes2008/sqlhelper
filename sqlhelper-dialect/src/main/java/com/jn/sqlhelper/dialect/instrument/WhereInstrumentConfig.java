@@ -5,6 +5,7 @@ import com.jn.sqlhelper.dialect.expression.SQLExpression;
 
 public class WhereInstrumentConfig {
 
+
     public static enum Position {
         FIRST,
         LAST,
@@ -13,6 +14,7 @@ public class WhereInstrumentConfig {
 
     private Position position = Position.LAST;
     private SQLExpression expression;
+    private boolean instrumentSubSelect = false;
 
     public Position getPosition() {
         return position;
@@ -30,6 +32,14 @@ public class WhereInstrumentConfig {
         this.expression = expression;
     }
 
+    public boolean isInstrumentSubSelect() {
+        return instrumentSubSelect;
+    }
+
+    public void setInstrumentSubSelect(boolean instrumentSubSelect) {
+        this.instrumentSubSelect = instrumentSubSelect;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -42,6 +52,9 @@ public class WhereInstrumentConfig {
         WhereInstrumentConfig that = (WhereInstrumentConfig) o;
 
         if (position != that.position) {
+            return false;
+        }
+        if (instrumentSubSelect != that.instrumentSubSelect) {
             return false;
         }
         return expression.equals(that.expression);
