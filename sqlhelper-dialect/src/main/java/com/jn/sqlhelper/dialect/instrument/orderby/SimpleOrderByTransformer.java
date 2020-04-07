@@ -16,12 +16,12 @@ public class SimpleOrderByTransformer implements OrderByTransformer<String> {
     }
 
     @Override
-    public final boolean enabled() {
+    public final boolean isEnabled() {
         return true;
     }
 
     @Override
-    public boolean transformable(SqlStatementWrapper<String> statementWrapper) {
+    public boolean isTransformable(SqlStatementWrapper<String> statementWrapper) {
         Object statement =  statementWrapper.get();
         if(!(statement instanceof String)){
             return false;

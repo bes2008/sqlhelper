@@ -4,6 +4,6 @@ import com.jn.sqlhelper.dialect.instrument.ClauseTransformer;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
 
 public interface OrderByTransformer<Statement> extends ClauseTransformer<Statement> {
-    boolean enabled();
-    boolean transformable(SqlStatementWrapper<Statement> statementWrapper);
+    boolean isEnabled();
+    boolean isTransformable(SqlStatementWrapper<Statement> statementWrapper);
 }

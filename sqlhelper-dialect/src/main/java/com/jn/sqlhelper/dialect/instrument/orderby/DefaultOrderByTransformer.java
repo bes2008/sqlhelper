@@ -12,18 +12,19 @@ import com.jn.sqlhelper.dialect.sqlparser.StringSqlStatementWrapper;
 import java.util.List;
 import java.util.ServiceLoader;
 
+@SuppressWarnings("rawtypes")
 public class DefaultOrderByTransformer implements OrderByTransformer {
     private final List<OrderByTransformer> delegates = Collects.emptyArrayList();
     private final SimpleOrderByTransformer simpleTransformer = new SimpleOrderByTransformer();
     private boolean inited = false;
 
     @Override
-    public final boolean enabled() {
+    public final boolean isEnabled() {
         return true;
     }
 
     @Override
-    public boolean transformable(SqlStatementWrapper statementWrapper) {
+    public boolean isTransformable(SqlStatementWrapper statementWrapper) {
         return true;
     }
 
@@ -47,7 +48,7 @@ public class DefaultOrderByTransformer implements OrderByTransformer {
             Collects.forEach(delegates, new Predicate<OrderByTransformer>() {
                 @Override
                 public boolean test(OrderByTransformer transformer) {
-                    return transformer.enabled() && transformer.transformable(statement);
+                    return transformer.isEnabled() && transformer.isTransformable(statement);
                 }
             }, new Consumer<OrderByTransformer>() {
                 @Override
@@ -56,7 +57,7 @@ public class DefaultOrderByTransformer implements OrderByTransformer {
                 }
             });
         } catch (Throwable ex) {
-            if (!simpleTransformer.transformable(statement)) {
+            if (!simpleTransformer.isTransformable(statement)) {
                 SqlStatementWrapper<String> sw = new StringSqlStatementWrapper();
                 sw.setOriginalSql(statement.getOriginalSql());
                 sw.setChanged(statement.isChanged());
