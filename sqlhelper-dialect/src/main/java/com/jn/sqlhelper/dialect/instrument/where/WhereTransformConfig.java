@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.dialect.instrument;
+package com.jn.sqlhelper.dialect.instrument.where;
 
 import com.jn.langx.util.hash.HashCodeBuilder;
 import com.jn.sqlhelper.dialect.expression.SQLExpression;
