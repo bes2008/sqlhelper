@@ -4,7 +4,7 @@ public interface SqlStatementWrapper<Statement>  {
     String getOriginalSql();
     void setOriginalSql(String sql);
 
-
+    void setStatement(Statement statement);
     Statement get();
 
     /**

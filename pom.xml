@@ -16,6 +16,7 @@
     <url>https://github.com/fangjinuo/sqlhelper</url>
     <modules>
         <module>sqlhelper-common</module>
+        <module>sqlhelper-jsqlparser</module>
         <module>sqlhelper-dialect</module>
         <module>sqlhelper-dbutils</module>
         <module>sqlhelper-jfinal</module>
@@ -121,6 +122,11 @@
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-jsqlparser</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
