@@ -8,7 +8,7 @@ import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import java.io.Serializable;
 import java.util.List;
 
-public class InstrumentConfig implements Serializable {
+public class TransformConfig implements Serializable {
 
     /**
      * case null: not a pagination request
@@ -27,7 +27,7 @@ public class InstrumentConfig implements Serializable {
 
     private boolean isCount = false;
 
-    private List<WhereInstrumentConfig> whereInstrumentConfigs;
+    private List<WhereTransformConfig> whereInstrumentConfigs;
 
     @Override
     public boolean equals(Object o) {
@@ -38,7 +38,7 @@ public class InstrumentConfig implements Serializable {
             return false;
         }
 
-        InstrumentConfig that = (InstrumentConfig) o;
+        TransformConfig that = (TransformConfig) o;
 
         if (likeEscaped != that.likeEscaped) {
             return false;
@@ -125,11 +125,11 @@ public class InstrumentConfig implements Serializable {
         isCount = count;
     }
 
-    public List<WhereInstrumentConfig> getWhereInstrumentConfigs() {
+    public List<WhereTransformConfig> getWhereInstrumentConfigs() {
         return whereInstrumentConfigs;
     }
 
-    public void setWhereInstrumentConfigs(List<WhereInstrumentConfig> configs) {
+    public void setWhereInstrumentConfigs(List<WhereTransformConfig> configs) {
         this.whereInstrumentConfigs = configs;
     }
 }

@@ -28,12 +28,14 @@ import com.jn.langx.util.function.Predicate;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.dialect.SQLDialectException;
+import com.jn.sqlhelper.dialect.instrument.orderby.DefaultOrderByTransformer;
+import com.jn.sqlhelper.dialect.instrument.orderby.OrderByTransformer;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
-import com.jn.sqlhelper.dialect.orderby.OrderByInstrumentors;
 import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.pagination.QueryParameters;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
+import com.jn.sqlhelper.dialect.sqlparser.StringSqlStatementWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +52,7 @@ public class SQLStatementInstrumentor {
     private static final ThreadLocal<Dialect> DIALECT_HOLDER = new ThreadLocal<Dialect>();
     private boolean inited = false;
     private String name;
+    private OrderByTransformer orderByTransformer;
 
     public String getName() {
         return name;
@@ -102,6 +105,9 @@ public class SQLStatementInstrumentor {
                         })
                         .build();
             }
+
+            orderByTransformer = new DefaultOrderByTransformer();
+            orderByTransformer.init();
             logger.info("The {} SQLStatementInstrumentor initial finish", this.name);
         }
     }
@@ -197,7 +203,12 @@ public class SQLStatementInstrumentor {
             }
         }
         try {
-            String sql2 = OrderByInstrumentors.instrument(sql, orderBy);
+            StringSqlStatementWrapper sqlStatementWrapper = new StringSqlStatementWrapper();
+            sqlStatementWrapper.setOriginalSql(sql);
+            sqlStatementWrapper.setStatement(sql);
+            TransformConfig transformConfig = new TransformConfig();
+            orderByTransformer.transform(sqlStatementWrapper, transformConfig);
+            String sql2 = sqlStatementWrapper.getSql();
             if (sql2 != null) {
                 if (this.config.isCacheInstrumentedSql()) {
                     getInstrumentedStatement(sql).setOrderBySql(orderBy, sql2);
@@ -391,7 +402,6 @@ public class SQLStatementInstrumentor {
     }
 
 
-
     @NonNull
     public void setConfig(final SQLInstrumentorConfig config) {
         this.config = config;
@@ -401,7 +411,7 @@ public class SQLStatementInstrumentor {
         this.dialectRegistry = dialectRegistry;
     }
 
-    public DialectRegistry getDialectRegistry(){
+    public DialectRegistry getDialectRegistry() {
         return this.dialectRegistry;
     }
 }

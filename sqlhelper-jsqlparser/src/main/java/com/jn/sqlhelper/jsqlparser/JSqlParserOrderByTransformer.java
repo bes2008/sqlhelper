@@ -1,12 +1,13 @@
 package com.jn.sqlhelper.jsqlparser;
 
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.function.Supplier;
-import com.jn.sqlhelper.dialect.instrument.InstrumentConfig;
-import com.jn.sqlhelper.dialect.instrument.OrderByInstrumentor;
+import com.jn.sqlhelper.dialect.instrument.TransformConfig;
+import com.jn.sqlhelper.dialect.instrument.orderby.OrderByTransformer;
 import com.jn.sqlhelper.dialect.instrument.SQLInstrumentException;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.orderby.OrderByItem;
@@ -25,9 +26,24 @@ import net.sf.jsqlparser.statement.select.SelectBody;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JSqlParserOrderByInstrumentor implements OrderByInstrumentor<Statement> {
+public class JSqlParserOrderByTransformer implements OrderByTransformer<Statement> {
     @Override
-    public void instrument(@NonNull SqlStatementWrapper<Statement> sw, @NonNull InstrumentConfig config) {
+    public boolean enabled() {
+        return false;
+    }
+
+    @Override
+    public boolean transformable(SqlStatementWrapper<Statement> statementWrapper) {
+        return false;
+    }
+
+    @Override
+    public void init() throws InitializationException {
+
+    }
+
+    @Override
+    public SqlStatementWrapper<Statement> transform(@NonNull SqlStatementWrapper<Statement> sw, @NonNull TransformConfig config) {
         Preconditions.checkNotNull(sw);
         Preconditions.checkNotNull(config);
         OrderBy orderBy = Preconditions.checkNotNull(config.getOrderBy());
@@ -40,6 +56,7 @@ public class JSqlParserOrderByInstrumentor implements OrderByInstrumentor<Statem
             }
         });
         instrument((Select)statement,orderBy);
+        return sw;
     }
 
     public static void instrument(@NonNull Select select, @NonNull OrderBy orderBy) throws SQLParseException {
