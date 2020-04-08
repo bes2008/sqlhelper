@@ -4,7 +4,7 @@ import com.jn.sqlhelper.dialect.instrument.Instrumentation;
 import com.jn.sqlhelper.dialect.instrument.orderby.OrderByTransformer;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformer;
 import com.jn.sqlhelper.dialect.sqlparser.SqlParser;
-import com.jn.sqlhelper.jsqlparser.JSqlParserStatementWrapper;
+import com.jn.sqlhelper.jsqlparser.sqlparser.JSqlParserStatementWrapper;
 import net.sf.jsqlparser.statement.Statement;
 
 public class JSqlParserInstrumentation implements Instrumentation<Statement, JSqlParserStatementWrapper> {

@@ -14,7 +14,7 @@ import com.jn.sqlhelper.dialect.orderby.OrderByItem;
 import com.jn.sqlhelper.dialect.orderby.OrderByType;
 import com.jn.sqlhelper.dialect.sqlparser.SQLParseException;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
-import com.jn.sqlhelper.jsqlparser.JSqlParsers;
+import com.jn.sqlhelper.jsqlparser.utils.JSqlParsers;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;

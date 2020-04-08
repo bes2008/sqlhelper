@@ -10,7 +10,7 @@ import com.jn.sqlhelper.dialect.instrument.TransformConfig;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformConfig;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformer;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
-import com.jn.sqlhelper.jsqlparser.JSqlParsers;
+import com.jn.sqlhelper.jsqlparser.utils.JSqlParsers;
 import com.jn.sqlhelper.jsqlparser.expression.ExpressionConverters;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
