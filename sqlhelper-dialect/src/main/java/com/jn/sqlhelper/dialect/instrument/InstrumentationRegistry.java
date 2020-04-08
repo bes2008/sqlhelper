@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect;
+package com.jn.sqlhelper.dialect.instrument;
 
 import com.jn.langx.annotation.Singleton;
 import com.jn.langx.lifecycle.Initializable;
@@ -21,7 +21,6 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.iter.IteratorIterable;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
-import com.jn.sqlhelper.dialect.instrument.Instrumentation;
 
 import java.util.List;
 import java.util.ServiceLoader;

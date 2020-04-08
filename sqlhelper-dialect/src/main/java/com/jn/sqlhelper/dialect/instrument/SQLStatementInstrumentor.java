@@ -20,6 +20,7 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.cache.Cache;
 import com.jn.langx.cache.CacheBuilder;
 import com.jn.langx.cache.Loader;
+import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
@@ -106,7 +107,8 @@ public class SQLStatementInstrumentor {
                         })
                         .build();
             }
-
+            this.instrumentation = InstrumentationRegistry.getInstance().findInstrumentation();
+            Preconditions.checkNotNull(instrumentation,"Can't find a suitable SQL instrumentation");
             orderByTransformer = new DefaultOrderByTransformer();
             orderByTransformer.setInstrumentation(instrumentation);
             orderByTransformer.init();
