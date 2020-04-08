@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.jsqlparser.instrument;
 
+import com.jn.langx.annotation.Name;
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.sqlhelper.dialect.instrument.Instrumentation;
 import com.jn.sqlhelper.dialect.instrument.orderby.OrderByTransformer;
@@ -9,6 +10,7 @@ import com.jn.sqlhelper.jsqlparser.sqlparser.JSqlParser;
 import com.jn.sqlhelper.jsqlparser.sqlparser.JSqlParserStatementWrapper;
 import net.sf.jsqlparser.statement.Statement;
 
+@Name("jsqlparser")
 public class JSqlParserInstrumentation implements Instrumentation<Statement, JSqlParserStatementWrapper> {
     private boolean enabled = false;
     private boolean inited = false;
