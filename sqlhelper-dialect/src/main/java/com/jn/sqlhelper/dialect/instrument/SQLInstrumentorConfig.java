@@ -29,6 +29,7 @@ public class SQLInstrumentorConfig {
     private int cacheExpireAfterRead = 5 * 60; //unit: s
     private String subqueryPagingStartFlag = "[PAGING_START]";
     private String subqueryPagingEndFlag = "[PAGING_END]";
+    private String instrumentation = "jsqlparser";
 
     public int getCacheInitialCapacity() {
         return cacheInitialCapacity;
@@ -111,5 +112,14 @@ public class SQLInstrumentorConfig {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public String getInstrumentation() {
+        return instrumentation;
+    }
+
+    public void setInstrumentation(String instrumentation) {
+        this.instrumentation = instrumentation;
     }
 }
