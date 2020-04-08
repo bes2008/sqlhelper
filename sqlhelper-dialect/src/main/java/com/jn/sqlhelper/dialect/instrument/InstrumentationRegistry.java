@@ -14,21 +14,32 @@
 
 package com.jn.sqlhelper.dialect.instrument;
 
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.annotation.Singleton;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
+import com.jn.langx.util.Objects;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.iter.IteratorIterable;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
+import com.jn.langx.util.reflect.Reflects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
 
 @Singleton
 public class InstrumentationRegistry implements Initializable {
+    private static final Logger logger = LoggerFactory.getLogger(InstrumentationRegistry.class);
     private static final InstrumentationRegistry instance = new InstrumentationRegistry();
-    private List<Instrumentation> instrumentations = Collects.emptyArrayList();
+    /**
+     * key: instrumentation's class full name
+     */
+    private Map<String, Instrumentation> instrumentationMap = Collects.emptyHashMap();
+    private Map<String, String> aliasMap = Collects.emptyHashMap();
     private boolean inited = false;
 
     private InstrumentationRegistry() {
@@ -43,7 +54,12 @@ public class InstrumentationRegistry implements Initializable {
             Collects.forEach(new IteratorIterable<Instrumentation>(loader.iterator()), new Consumer<Instrumentation>() {
                 @Override
                 public void accept(Instrumentation instrumentation) {
-                    instrumentations.add(instrumentation);
+                    String alias = Instrumentations.getAliasName(instrumentation);
+                    String classFullName = Reflects.getFQNClassName(instrumentation.getClass());
+                    if (Objects.isNotEmpty(alias)) {
+                        aliasMap.put(alias, classFullName);
+                    }
+                    instrumentationMap.put(classFullName, instrumentation);
                     instrumentation.init();
                 }
             });
@@ -54,13 +70,43 @@ public class InstrumentationRegistry implements Initializable {
         return instance;
     }
 
-    public Instrumentation findInstrumentation() {
-        return Collects.findFirst(instrumentations, new Predicate<Instrumentation>() {
-            @Override
-            public boolean test(Instrumentation instrumentation) {
-                return instrumentation.isEnabled();
+    public void enableInstrumentation(@NonNull String name) {
+        if (Objects.isNotEmpty(name)) {
+            logger.info("Start to enable SQL instrumentation: {}", name);
+            Instrumentation instrumentation = findInstrumentation(name, false);
+            if (instrumentation != null) {
+                instrumentation.setEnabled(true);
             }
-        });
+        }
     }
+
+    public Instrumentation findInstrumentation(@Nullable String name) {
+        return findInstrumentation(name, true);
+    }
+
+    private Instrumentation findInstrumentation(@Nullable String name, final boolean enabled) {
+        if (name == null) {
+            return Collects.findFirst(instrumentationMap.values(), new Predicate<Instrumentation>() {
+                @Override
+                public boolean test(Instrumentation instrumentation) {
+                    return !enabled || instrumentation.isEnabled();
+                }
+            });
+        } else {
+            String className = aliasMap.get(name);
+            if (className == null) {
+                className = name;
+            }
+            Instrumentation instrumentation = instrumentationMap.get(className);
+            if (instrumentation == null) {
+                return null;
+            }
+            if (enabled && !instrumentation.isEnabled()) {
+                return null;
+            }
+            return instrumentation;
+        }
+    }
+
 
 }
