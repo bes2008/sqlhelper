@@ -153,7 +153,10 @@
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-common</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-jsqlparser</artifactId>
+        </dependency>
         <!-- databases -->
     </dependencies>
     <build>
