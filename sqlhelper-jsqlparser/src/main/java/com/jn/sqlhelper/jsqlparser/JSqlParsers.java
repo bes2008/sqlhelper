@@ -25,6 +25,7 @@ import net.sf.jsqlparser.statement.values.ValuesStatement;
 
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class JSqlParsers {
 
     private static final List<Class<? extends Statement>> DDL_STATEMENTS = Collects.newArrayList(

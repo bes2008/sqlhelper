@@ -8,7 +8,7 @@ import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.function.Supplier;
 import com.jn.sqlhelper.dialect.instrument.TransformConfig;
 import com.jn.sqlhelper.dialect.instrument.orderby.OrderByTransformer;
-import com.jn.sqlhelper.dialect.instrument.SQLInstrumentException;
+import com.jn.sqlhelper.dialect.instrument.SQLTransformException;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.orderby.OrderByItem;
 import com.jn.sqlhelper.dialect.orderby.OrderByType;
@@ -73,7 +73,7 @@ public class JSqlParserOrderByTransformer implements OrderByTransformer<Statemen
             if (Emptys.isNotEmpty(orderByElements)) {
                 String orderByStringInSql = PlainSelect.orderByToString(orderByElements);
                 if (orderByStringInSql.contains("?")) {
-                    throw new SQLInstrumentException("Can't instrument order by because the original sql has '?' in order by clause");
+                    throw new SQLTransformException("Can't instrument order by because the original sql has '?' in order by clause");
                 }
             }
 

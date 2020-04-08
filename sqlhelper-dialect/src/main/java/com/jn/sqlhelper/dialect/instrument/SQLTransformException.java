@@ -16,11 +16,11 @@ package com.jn.sqlhelper.dialect.instrument;
 
 import com.jn.sqlhelper.dialect.SQLDialectException;
 
-public class SQLInstrumentException extends SQLDialectException {
-    public SQLInstrumentException(String message) {
+public class SQLTransformException extends SQLDialectException {
+    public SQLTransformException(String message) {
         super(message);
     }
-    public SQLInstrumentException(Throwable ex) {
+    public SQLTransformException(Throwable ex) {
         super(ex);
     }
 }
