@@ -14,4 +14,6 @@ public interface Instrumentation<Statement, SQL extends SqlStatementWrapper<Stat
     OrderByTransformer<Statement> getOrderByTransformer();
 
     boolean isEnabled();
+
+    void setEnabled(boolean enabled);
 }
