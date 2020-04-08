@@ -20,6 +20,8 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.cache.Cache;
 import com.jn.langx.cache.CacheBuilder;
 import com.jn.langx.cache.Loader;
+import com.jn.langx.lifecycle.Initializable;
+import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
@@ -45,7 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SQLStatementInstrumentor {
+public class SQLStatementInstrumentor implements Initializable {
     private static final Logger logger = LoggerFactory.getLogger(SQLStatementInstrumentor.class);
     @NonNull
     private SQLInstrumentorConfig config;
@@ -70,7 +72,7 @@ public class SQLStatementInstrumentor {
 
     }
 
-    public void init() {
+    public void init() throws InitializationException {
         if (!inited) {
             if (this.config == null) {
                 throw new IllegalStateException("the 'config' field is null");
