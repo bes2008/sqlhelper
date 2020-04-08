@@ -52,6 +52,7 @@ public class SQLStatementInstrumentor {
     private static final ThreadLocal<Dialect> DIALECT_HOLDER = new ThreadLocal<Dialect>();
     private boolean inited = false;
     private String name;
+    private Instrumentation instrumentation;
     private OrderByTransformer orderByTransformer;
 
     public String getName() {
@@ -107,6 +108,7 @@ public class SQLStatementInstrumentor {
             }
 
             orderByTransformer = new DefaultOrderByTransformer();
+            orderByTransformer.setInstrumentation(instrumentation);
             orderByTransformer.init();
             logger.info("The {} SQLStatementInstrumentor initial finish", this.name);
         }

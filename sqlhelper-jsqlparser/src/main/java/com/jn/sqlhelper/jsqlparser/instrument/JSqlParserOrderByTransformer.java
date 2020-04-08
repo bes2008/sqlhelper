@@ -6,9 +6,10 @@ import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.function.Supplier;
+import com.jn.sqlhelper.dialect.instrument.AbstractClauseTransformer;
+import com.jn.sqlhelper.dialect.instrument.SQLTransformException;
 import com.jn.sqlhelper.dialect.instrument.TransformConfig;
 import com.jn.sqlhelper.dialect.instrument.orderby.OrderByTransformer;
-import com.jn.sqlhelper.dialect.instrument.SQLTransformException;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.orderby.OrderByItem;
 import com.jn.sqlhelper.dialect.orderby.OrderByType;
@@ -27,16 +28,7 @@ import net.sf.jsqlparser.statement.select.SelectBody;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JSqlParserOrderByTransformer implements OrderByTransformer<Statement> {
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
-
-    @Override
-    public boolean isTransformable(SqlStatementWrapper<Statement> statementWrapper) {
-        return false;
-    }
+public class JSqlParserOrderByTransformer extends AbstractClauseTransformer<Statement> implements OrderByTransformer<Statement> {
 
     @Override
     public void init() throws InitializationException {
@@ -49,14 +41,14 @@ public class JSqlParserOrderByTransformer implements OrderByTransformer<Statemen
         Preconditions.checkNotNull(config);
         OrderBy orderBy = Preconditions.checkNotNull(config.getOrderBy());
         final Statement statement = sw.get();
-        Preconditions.checkNotNull(statement,"statement is null");
+        Preconditions.checkNotNull(statement, "statement is null");
         Preconditions.checkTrue(statement instanceof Select, new Supplier<Object[], String>() {
             @Override
             public String get(Object[] input) {
                 return StringTemplates.formatWithPlaceholder("statement is not a select statement: {}", statement.toString());
             }
         });
-        instrument((Select)statement,orderBy);
+        instrument((Select) statement, orderBy);
         return sw;
     }
 
@@ -118,7 +110,7 @@ public class JSqlParserOrderByTransformer implements OrderByTransformer<Statemen
                     plainSelect.setOrderByElements(orderByElements);
                 }
             }
-        }catch (JSQLParserException ex){
+        } catch (JSQLParserException ex) {
             throw new SQLParseException(ex);
         }
     }

@@ -1,29 +1,23 @@
 package com.jn.sqlhelper.dialect.instrument.orderby;
 
 import com.jn.langx.lifecycle.InitializationException;
-import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
+import com.jn.sqlhelper.dialect.instrument.AbstractClauseTransformer;
 import com.jn.sqlhelper.dialect.instrument.TransformConfig;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.orderby.OrderByItem;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
 
-public class SimpleOrderByTransformer implements OrderByTransformer<String> {
+public class SimpleOrderByTransformer extends AbstractClauseTransformer<String> {
     @Override
     public void init() throws InitializationException {
     }
 
-    @Override
-    public final boolean isEnabled() {
-        return true;
-    }
-
-    @Override
     public boolean isTransformable(SqlStatementWrapper<String> statementWrapper) {
-        Object statement =  statementWrapper.get();
-        if(!(statement instanceof String)){
+        Object statement = statementWrapper.get();
+        if (!(statement instanceof String)) {
             return false;
         }
         return Strings.isNotBlank(statement.toString());

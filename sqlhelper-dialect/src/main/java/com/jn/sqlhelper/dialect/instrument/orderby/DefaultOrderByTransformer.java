@@ -1,73 +1,39 @@
 package com.jn.sqlhelper.dialect.instrument.orderby;
 
-import com.jn.langx.lifecycle.InitializationException;
-import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.collection.iter.IteratorIterable;
-import com.jn.langx.util.function.Consumer;
-import com.jn.langx.util.function.Predicate;
+import com.jn.sqlhelper.dialect.instrument.AbstractClauseTransformer;
 import com.jn.sqlhelper.dialect.instrument.TransformConfig;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
 import com.jn.sqlhelper.dialect.sqlparser.StringSqlStatementWrapper;
 
-import java.util.List;
-import java.util.ServiceLoader;
-
 @SuppressWarnings("rawtypes")
-public class DefaultOrderByTransformer implements OrderByTransformer {
-    private final List<OrderByTransformer> delegates = Collects.emptyArrayList();
+public class DefaultOrderByTransformer extends AbstractClauseTransformer implements OrderByTransformer {
     private final SimpleOrderByTransformer simpleTransformer = new SimpleOrderByTransformer();
-    private boolean inited = false;
+
 
     @Override
-    public final boolean isEnabled() {
-        return true;
-    }
+    protected void doInit() {
 
-    @Override
-    public boolean isTransformable(SqlStatementWrapper statementWrapper) {
-        return true;
-    }
-
-    @Override
-    public void init() throws InitializationException {
-        if (!inited) {
-            ServiceLoader<OrderByTransformer> loader = ServiceLoader.load(OrderByTransformer.class);
-            Collects.forEach(new IteratorIterable<OrderByTransformer>(loader.iterator()), new Consumer<OrderByTransformer>() {
-                @Override
-                public void accept(OrderByTransformer orderByTransformer) {
-                    delegates.add(orderByTransformer);
-                }
-            });
-            inited = true;
-        }
     }
 
     @Override
     public SqlStatementWrapper transform(final SqlStatementWrapper statement, final TransformConfig config) {
+        OrderByTransformer orderByTransformer = null;
         try {
-            Collects.forEach(delegates, new Predicate<OrderByTransformer>() {
-                @Override
-                public boolean test(OrderByTransformer transformer) {
-                    return transformer.isEnabled() && transformer.isTransformable(statement);
-                }
-            }, new Consumer<OrderByTransformer>() {
-                @Override
-                public void accept(OrderByTransformer transformer) {
-                    transformer.transform(statement, config);
-                }
-            });
-        } catch (Throwable ex) {
-            if (!simpleTransformer.isTransformable(statement)) {
-                SqlStatementWrapper<String> sw = new StringSqlStatementWrapper();
-                sw.setOriginalSql(statement.getOriginalSql());
-                sw.setChanged(statement.isChanged());
-                sw.setStatement(statement.getSql());
-                simpleTransformer.transform(sw, config);
-                return sw;
-            } else {
-                simpleTransformer.transform(statement, config);
+            orderByTransformer = getInstrumentation().getOrderByTransformer();
+            if (orderByTransformer != null) {
+                return orderByTransformer.transform(statement, config);
             }
+        } catch (Throwable ex) {
+
         }
-        return statement;
+        if (!simpleTransformer.isTransformable(statement)) {
+            SqlStatementWrapper<String> sw = new StringSqlStatementWrapper();
+            sw.setOriginalSql(statement.getOriginalSql());
+            sw.setChanged(statement.isChanged());
+            sw.setStatement(statement.getSql());
+            return simpleTransformer.transform(sw, config);
+        } else {
+            return simpleTransformer.transform(statement, config);
+        }
     }
 }

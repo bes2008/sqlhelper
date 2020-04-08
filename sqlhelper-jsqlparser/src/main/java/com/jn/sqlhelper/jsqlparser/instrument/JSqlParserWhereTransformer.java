@@ -6,12 +6,13 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.sqlhelper.dialect.instrument.AbstractClauseTransformer;
 import com.jn.sqlhelper.dialect.instrument.TransformConfig;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformConfig;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformer;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
-import com.jn.sqlhelper.jsqlparser.utils.JSqlParsers;
 import com.jn.sqlhelper.jsqlparser.expression.ExpressionConverters;
+import com.jn.sqlhelper.jsqlparser.utils.JSqlParsers;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.statement.Statement;
@@ -22,7 +23,7 @@ import net.sf.jsqlparser.statement.update.Update;
 
 import java.util.List;
 
-public class JSqlParserWhereTransformer implements WhereTransformer<Statement> {
+public class JSqlParserWhereTransformer extends AbstractClauseTransformer<Statement> implements WhereTransformer<Statement> {
 
     @Override
     public void init() throws InitializationException {
