@@ -45,16 +45,16 @@ public class JSqlParserWhereTransformer extends AbstractClauseTransformer<Statem
         }
 
         if (Reflects.isSubClassOrEquals(Select.class, statement.getClass())) {
-            instrument((Select) statement, false, expressionConfigs);
+            transform((Select) statement, false, expressionConfigs);
         } else if (Reflects.isSubClassOrEquals(Update.class, statement.getClass())) {
-            instrument((Update) statement, expressionConfigs);
+            transform((Update) statement, expressionConfigs);
         } else if (Reflects.isSubClassOrEquals(Delete.class, statement.getClass())) {
-            instrument((Delete) statement, expressionConfigs);
+            transform((Delete) statement, expressionConfigs);
         }
         return statementWrapper;
     }
 
-    private void instrument(Select select, final boolean isSubSelect, List<WhereTransformConfig> expressionConfigs) {
+    private void transform(Select select, final boolean isSubSelect, List<WhereTransformConfig> expressionConfigs) {
         final PlainSelect plainSelect = JSqlParsers.extractPlainSelect(select.getSelectBody());
         if (plainSelect == null) {
             return;
@@ -91,9 +91,9 @@ public class JSqlParserWhereTransformer extends AbstractClauseTransformer<Statem
         });
     }
 
-    private void instrument(final Update update, List<WhereTransformConfig> expressionConfigs) {
+    private void transform(final Update update, List<WhereTransformConfig> expressionConfigs) {
         if ((update.isUseSelect() && update.getSelect() != null)) {
-            instrument(update.getSelect(), true, expressionConfigs);
+            transform(update.getSelect(), true, expressionConfigs);
         }
         Collects.forEach(expressionConfigs, new Predicate<WhereTransformConfig>() {
             @Override
@@ -128,7 +128,7 @@ public class JSqlParserWhereTransformer extends AbstractClauseTransformer<Statem
 
     }
 
-    private void instrument(final Delete delete, List<WhereTransformConfig> expressionConfigs) {
+    private void transform(final Delete delete, List<WhereTransformConfig> expressionConfigs) {
         Collects.forEach(expressionConfigs, new Predicate<WhereTransformConfig>() {
             @Override
             public boolean test(WhereTransformConfig config) {

@@ -48,11 +48,11 @@ public class JSqlParserOrderByTransformer extends AbstractClauseTransformer<Stat
                 return StringTemplates.formatWithPlaceholder("statement is not a select statement: {}", statement.toString());
             }
         });
-        instrument((Select) statement, orderBy);
+        tranaform((Select) statement, orderBy);
         return sw;
     }
 
-    public static void instrument(@NonNull Select select, @NonNull OrderBy orderBy) throws SQLParseException {
+    public static void tranaform(@NonNull Select select, @NonNull OrderBy orderBy) throws SQLParseException {
         try {
             SelectBody selectBody = select.getSelectBody();
 
