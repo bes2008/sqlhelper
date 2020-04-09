@@ -48,6 +48,8 @@
 
 Tutorial : https://fangjinuo.gitee.io/docs/index.html
 
+##[迁移至GitHub: https://github.com/fangjinuo](https://github.com/fangjinuo)
+
 
 # sqlhelper
 SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
