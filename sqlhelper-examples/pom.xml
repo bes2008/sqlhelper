@@ -157,6 +157,13 @@
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-jsqlparser</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.audit</groupId>
+            <artifactId>audit-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- databases -->
     </dependencies>
     <build>

@@ -19,10 +19,27 @@ sqlhelper:
       subquery-paging-end-flag: "[PAGING_END]"
 logging:
   level:
-    root: warn
+    root: info
     com:
       jn:
         sqlhelper:
           examples:
             common:
               dao: trace
+
+operation:
+  definition:
+    location: classpath:/operation.yml
+    reload-interval-in-seconds: 60
+audit:
+  enabled: true
+  debug-consumer-enabled: true
+  topics:
+    - DEFAULT
+  topic-configs:
+    - name: DEFAULT
+      ring-buffer-size: 1024
+      producer-type: SINGLE
+  http-interceptor-patterns:
+    - /consumers/**
+    - /users/**
