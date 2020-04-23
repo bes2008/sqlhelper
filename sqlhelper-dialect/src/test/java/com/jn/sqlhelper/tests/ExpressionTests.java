@@ -36,7 +36,7 @@ public class ExpressionTests {
         equalExpression.setLeft(name);
         equalExpression.setRight(stringValue);
         testExpression(equalExpression, new EqualBuilder()
-                .left("name_", true)
+                .left(new ColumnExpression("user", "name_"))
                 .right("hello")
                 .build()
         );
