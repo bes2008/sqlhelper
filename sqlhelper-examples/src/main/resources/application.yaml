@@ -17,15 +17,6 @@ sqlhelper:
       cache-instrumented-sql: true
       subquery-paging-start-flag: "[PAGING_START]"
       subquery-paging-end-flag: "[PAGING_END]"
-logging:
-  level:
-    root: info
-    com:
-      jn:
-        sqlhelper:
-          examples:
-            common:
-              dao: trace
 
 operation:
   definition:
@@ -43,3 +34,14 @@ audit:
   http-interceptor-patterns:
     - /consumers/**
     - /users/**
+
+logging:
+  level:
+    root: info
+    com:
+      jn:
+        sqlhelper:
+          examples:
+            common:
+              dao: trace
+
