@@ -61,7 +61,7 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
 
         // notice: the sqlcontext, sqlrequest is not null
         SqlRequestContext sqlContext = SqlRequestContextHolder.getInstance().get();
-        LikeEscaper likeEscaper = getLikeEscaper(mappedStatement, sqlContext.getRequest());
+        LikeEscaper likeEscaper = getLikeEscaper(mappedStatement, sqlContext.getRequest(), executorInvocation);
         if (Objects.isNull(likeEscaper)) {
             logger.warn("Can't find a suitable LikeEscaper for the sql request: {}, statement id: {}", sqlContext.getRequest(), mappedStatement.getId());
             Pipelines.skipHandler(ctx, true);
@@ -102,14 +102,14 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
         }
     }
 
-    private LikeEscaper getLikeEscaper(@NonNull MappedStatement ms, @Nullable SqlRequest sqlRequest) {
+    private LikeEscaper getLikeEscaper(@NonNull MappedStatement ms, @Nullable SqlRequest sqlRequest, ExecutorInvocation executorInvocation) {
         LikeEscaper likeEscaper = null;
         if (sqlRequest != null) {
             likeEscaper = sqlRequest.getLikeEscaper();
         }
         if (likeEscaper == null) {
             SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
-            String databaseId = MybatisUtils.getDatabaseId(SqlRequestContextHolder.getInstance(), instrumentor, ms);
+            String databaseId = MybatisUtils.getDatabaseId(SqlRequestContextHolder.getInstance(), instrumentor, ms, executorInvocation.getExecutor());
             if (Strings.isNotBlank(databaseId)) {
                 likeEscaper = instrumentor.getDialectRegistry().getDialectByName(databaseId);
                 if (likeEscaper != null && sqlRequest != null) {

@@ -162,7 +162,7 @@ public class SQLStatementInstrumentor implements Initializable {
         return dialect;
     }
 
-    private Dialect getDialect(@Nullable DatabaseMetaData databaseMetaData) {
+    public Dialect getDialect(@Nullable DatabaseMetaData databaseMetaData) {
         Dialect dialect = this.getCurrentDialect();
         if (dialect != null) {
             return dialect;
