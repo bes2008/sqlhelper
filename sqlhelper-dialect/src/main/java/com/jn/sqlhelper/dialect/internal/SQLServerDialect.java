@@ -39,7 +39,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
 
     @Name("sqlserver2000")
     public static class SQLServer2000Dialect extends AbstractTransactSQLDialect {
-        private SQLServer2000Dialect() {
+        public SQLServer2000Dialect() {
             setLimitHandler(new TopLimitHandler());
         }
 
@@ -71,8 +71,10 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
 
     @Name("sqlserver2005")
     public static class SQLServer2005Dialect extends AbstractTransactSQLDialect {
-        private SQLServer2005Dialect() {
+        public SQLServer2005Dialect() {
+            setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
             setLimitHandler(new SQLServer2005LimitHandler());
+            setUrlParser(new SqlServerUrlParser());
         }
 
         @Override
@@ -107,10 +109,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
     }
 
     @Name("sqlserver2008")
-    public static class SQLServer2008Dialect extends AbstractTransactSQLDialect {
-        private SQLServer2008Dialect() {
-            setLimitHandler(new SQLServer2005LimitHandler());
-        }
+    public static class SQLServer2008Dialect extends SQLServer2005Dialect {
 
         @Override
         public boolean isSupportsLimit() {
