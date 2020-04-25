@@ -155,7 +155,7 @@ DatabaseInfo dbinfo = new JdbcUrlParser().parse(url)
 
 # Contact
 QQ Group: 750929088   
-![QQ Group](https://github.com/fangjinuo/sqlhelper/blob/master/_images/qq_group.png)
+![QQ Group](./_images/qq_group.png)
 
 
 ##  [推广](https://github.com/fangjinuo)
@@ -168,4 +168,6 @@ QQ Group: 750929088
 + [redisclient](https://github.com/fangjinuo/redisclient): 基于Spring RestTemplate提供的客户端
 + [audit](https://github.com/fangjinuo/audit)：通用的Java应用审计框架
 
-
+## 鸣谢
+最后，感谢 Jetbrains 提供免费License，方便了开源项目的发展。
+[![Jetbrains](./_images/jetbrains.png)](https://www.jetbrains.com/zh-cn/)
