@@ -22,28 +22,6 @@
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-2.x-green.svg)](https://spring.io/projects/spring-boot/)
 
 [![maven](https://img.shields.io/badge/maven-v3.0.2-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:3.0.2)
-[![maven](https://img.shields.io/badge/maven-v3.0.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:3.0.1)
-[![maven](https://img.shields.io/badge/maven-v3.0.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:3.0.0)
-[![maven](https://img.shields.io/badge/maven-v2.4.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.4.0)
-[![maven](https://img.shields.io/badge/maven-v2.3.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.3.1)
-[![maven](https://img.shields.io/badge/maven-v2.3.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.3.0)
-[![maven](https://img.shields.io/badge/maven-v2.2.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.2.0)
-[![maven](https://img.shields.io/badge/maven-v2.1.2-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.1.2)
-[![maven](https://img.shields.io/badge/maven-v2.1.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.1.1)
-[![maven](https://img.shields.io/badge/maven-v2.1.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.1.0)
-[![maven](https://img.shields.io/badge/maven-v2.0.7-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.7)
-[![maven](https://img.shields.io/badge/maven-v2.0.6-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.6)
-[![maven](https://img.shields.io/badge/maven-v2.0.4-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.4)
-[![maven](https://img.shields.io/badge/maven-v2.0.3-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.3)
-[![maven](https://img.shields.io/badge/maven-v2.0.2-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.2)
-[![maven](https://img.shields.io/badge/maven-v2.0.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.1)
-[![maven](https://img.shields.io/badge/maven-v2.0.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:2.0.0)
-[![maven](https://img.shields.io/badge/maven-v1.2.3-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:1.2.3)
-[![maven](https://img.shields.io/badge/maven-v1.2.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:1.2.1)
-[![maven](https://img.shields.io/badge/maven-v1.2.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:1.2.0)
-[![maven](https://img.shields.io/badge/maven-v1.1.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:1.1.1)
-[![maven](https://img.shields.io/badge/maven-v1.1.RELEASE-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo%20AND%20v:1.1-RELEASE)
-[![maven](https://img.shields.io/badge/maven-v1.0.RELEASE-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo%20AND%20v:1.0-RELEASE)
 
 
 Tutorial : https://fangjinuo.gitee.io/docs/index.html
@@ -57,28 +35,31 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 ## modules
 |   module         | sqlhelper version | JDK |  Description      |
 |------------------|-------------------|-----|-------------------|
-|sqlhelper-dialect | 1.0+              |1.6+ |  the core         |
-|sqlhelper-mybatis | 1.0+              |1.6+ |  the mybatis tools (MyBatis Pagination Plugin) |
-|sqlhelper-mybatis-spring-boot | 1.0+  |1.6+ |  spring boot autoconfigure, starter for sqlhelper-mybatis|
-|sqlhelper-mybatis-over-pagehelper|1.0+|1.6+ |  migrate your application from ***mybatis-pagehelper*** |
-|sqlhelper-jfinal  | 1.2+              |1.6+ |  supports jfinal  |
-|sqlhelper-ebean   | 1.2+              |1.6+ |  supports ebean   |
-|sqlhelper-hibernate| 1.2+             |1.6+ |  supports hibernate|
-|sqlhelper-mango   | 1.2+              |1.6+ |  supports mango   |
-|sqlhelper-batchinsert|1.2+            |1.6+ |  Batch insert data to database, use it for performance |
-|sqlhelper-springjdbc | 2.0.2+         |1.6+ |  supports spring-jdbc |
-|sqlhelper-springjdbc-spring-boot| 2.0.2+|1.8+| spring boot autoconfigure, starter for sqlhelper-springjdbc |
-|sqlhelper-mybatisplus|2.0.7+         |1.6+ |  supports mybatis-plus |
-|sqlhelper-mybatisplus-spring-boot|2.0.7+ |1.8+ |  supports mybatis-plus in spring boot application |
-|sqlhelper-dbutils | 2.2.0            |1.6+| supports Apache Commons-DBUtils |
-|sqlhelper-examples|1.0+               |1.8+ |  some examples for there tools |
+|sqlhelper-dialect | 1.0+              |1.6+ |  the core （绝大部分功能都离不开它）|
+|sqlhelper-cli | 2.0+              |1.8+ |  CLI 命令行工具 |
+|sqlhelper-cli-assembly | 2.0+              |1.8+ | 为 CLI 命令行工具 提供打包功能|
+|sqlhelper-mybatis | 1.0+              |1.6+ |  提供对MyBatis的支持 (主要包括：通用分页、通用批量操作) |
+|sqlhelper-mybatis-spring-boot | 1.0+  |1.6+ |  为MyBatis + SqlHelper 提供了Spring Boot 快速启动|
+|sqlhelper-mybatis-over-pagehelper|1.0+|1.6+ |  引入它就可以无缝的从 ***mybatis-pagehelper*** 迁移到 SqlHelper|
+|sqlhelper-jfinal  | 1.2+              |1.6+ |  对国产框架jfinal支持 (主要包括：通用分页) |
+|sqlhelper-ebean   | 1.2+              |1.6+ |  对 ebean 支持(主要包括：通用分页)  |
+|sqlhelper-hibernate| 1.2+             |1.6+ |  对 hibernate 支持(主要包括：通用分页) |
+|sqlhelper-mango   | 1.2+              |1.6+ |  对 mango 支持 支持(主要包括：通用分页) |
+|sqlhelper-batchinsert|1.2+            |1.6+ |  为了 **性能测试** 提供的批量入库工具 |
+|sqlhelper-springjdbc | 2.0.2+         |1.6+ |  对 spring-jdbc 支持 (主要包括：通用分页)|
+|sqlhelper-springjdbc-spring-boot| 2.0.2+|1.8+| 对 spring-jdbc 应用提供了 Spring Boot 快速启动|
+|sqlhelper-mybatisplus|2.0.7+         |1.6+ |  对 mybatis-plus 支持|
+|sqlhelper-mybatisplus-spring-boot|2.0.7+ |1.8+ | 对 mybatis-plus 应用提供了 Spring Boot 快速启动|
+|sqlhelper-dbutils | 2.2.0            |1.6+| 对 Apache Commons-DBUtils 支持 (主要包括：通用分页) |
+|sqlhelper-jsqlparser | 3.0.3          |1.6+| 对于要基于SQL Parser接口来完成的功能 由jsqlparser 这个库来实现|
+|sqlhelper-examples|1.0+               |1.8+ | 为这些工具提供 **测试用例** |
 
 
 ## tools usage
 ### pagination plugin
 #### Key Features
-1. Supports MyBatis, MyBatis-Plus, SpringJdbc, Apache Commons-DBUtils, JFinal, EBean, Mango, Hibernate
-2. Supported 110+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
+1. 支持 MyBatis, MyBatis-Plus, SpringJdbc, Apache Commons-DBUtils, JFinal, EBean, Mango, Hibernate 等众多对数据库操作的框架 
+2. 支持 110+ 数据库（所有功能均支持，不限于分页功能）, 支持的数据库列表参考： ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. 如果你想了解这些数据库的排名，可以参考这里：[DB Engines](https://db-engines.com/en/ranking/relational+dbms).下面是所有支持的国产数据库:
   + AliSQL (阿里 MySQL)
   + AntDB (亚信)
   + CirroDB (东方国信 行云)
@@ -106,23 +87,19 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
   + TiDB (北京平凯星辰科技))
   + Trafodion (易鲸捷 EsgynDB的开源版)
   + UxDB (优炫数据库)
-    
-    
-    If you want know all RDMBS ranking, you can find them in [DB Engines](https://db-engines.com/en/ranking/relational+dbms).
-    
-3. Supports multiple databases in one application 
-4. Supports auto detect dialect, so the dialect option is optional (current supports this mode in mybatis environment)
-5. **The performance is higher than Mybatis-PageHelper**, because the limit、offset will be setted with PrepareStatement placeholder '?'
-6. Supports plugin use Java SPI
-7. Supports spring boot 1.x , 2.x
-8. Supports mybatis 3.x 
-9. Supports mybatis-plus 
-10. Supports JDK6+
-11. Supports **Memory Pagination**
-12. Supports SqlSymbolMapper, use it you can mapping any symbol to SQL symbol
-13. Supports **Dump DDL**
-14. Supports **subquery pagination** for mybatis, spring-jdbc, apache commons-dbutils
-15. Supports **like parameter escape** for mybatis
+3. 支持多个数据库在同一个应用中并存，且不需要做任何的区分，就能自动识别 
+4. 支持自动获取数据库 dialect （方言），也可以指定
+5. 性能要比**The performance is higher than Mybatis-PageHelper**更高, 因为SQL中的 limit、offset 会以占位符 '?'的形式存在，支持缓存等，总之PageHelper支持的这里都支持，PageHelper不支持的这里也支持。
+6. 对于 select count语句，会自动的排除掉 order by 子句，以提升查询效率 
+7. 可以基于 Java SPI 规范来自定义Dialect，以此来扩展数据库
+8. 分页功能支持**子查询**：mybatis, mybatis-plus, spring-jdbc, apache commons-dbutils
+9. 支持 spring boot 1.x , 2.x
+10. 支持 mybatis 3.x, Supports mybatis-plus 
+11. 支持 JDK6+
+12. 支持 **Memory Pagination**
+13. 支持 SqlSymbolMapper, 可以使用它来自动映射数据库字段、表名等
+14. 支持 **Dump DDL**
+15. 支持 **like parameter escape [%]** : mybatis, mybatis-plus
 
 #### sqlhelper vs mybatis-pagehelper
 |  metric                  | mybatis-pagehelper |      sqlhelper    |
@@ -179,3 +156,16 @@ DatabaseInfo dbinfo = new JdbcUrlParser().parse(url)
 # Contact
 QQ Group: 750929088   
 ![QQ Group](https://github.com/fangjinuo/sqlhelper/blob/master/_images/qq_group.png)
+
+
+##  [推广](https://github.com/fangjinuo)
++ langx 系列
+    - [langx-js](https://github.com/fangjinuo/langx-js)：TypeScript, JavaScript tools
+    - [langx-java](https://github.com/fangjinuo/langx-java): Java tools ，可以替换guava, apache commons-lang,io, hu-tool等
++ [easyjson](https://github.com/fangjinuo/easyjson): 一个通用的JSON库门面，可以无缝的在各个JSON库之间切换，就像slf4j那样。
++ [sqlhelper](https://github.com/fangjinuo/sqlhelper): SQL工具套件（通用分页、DDL Dump、SQLParser、URL Parser、批量操作工具等）。
++ [esmvc](https://github.com/fangjinuo/es-mvc): ElasticSearch 通用客户端，就像MyBatis Mapper那样顺滑
++ [redisclient](https://github.com/fangjinuo/redisclient): 基于Spring RestTemplate提供的客户端
++ [audit](https://github.com/fangjinuo/audit)：通用的Java应用审计框架
+
+

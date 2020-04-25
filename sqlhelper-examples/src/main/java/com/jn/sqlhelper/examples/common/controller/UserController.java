@@ -126,6 +126,7 @@ public class UserController {
         queryCondition.setName(namelike);
 
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
+        System.out.println(JSONBuilderProvider.simplest().toJson(request));
         request.setEscapeLikeParameter(true);
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
