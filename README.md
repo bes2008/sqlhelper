@@ -88,7 +88,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
   + UxDB (优炫数据库)
 3. 支持多个数据库在同一个应用中并存，且不需要做任何的区分，就能自动识别 
 4. 支持自动获取数据库 dialect （方言），也可以指定
-5. 性能要比**The performance is higher than Mybatis-PageHelper**更高, 因为SQL中的 limit、offset 会以占位符 '?'的形式存在，支持缓存等，总之PageHelper支持的这里都支持，PageHelper不支持的这里也支持。
+5. 性能要比**Mybatis-PageHelper**更高, 因为SQL中的 limit、offset 会以占位符 '?'的形式存在，支持缓存等，总之PageHelper支持的这里都支持，PageHelper不支持的这里也支持。
 6. 对于 select count语句，会自动的排除掉 order by 子句，以提升查询效率 
 7. 可以基于 Java SPI 规范来自定义Dialect，以此来扩展数据库
 8. 分页功能支持**子查询**：mybatis, mybatis-plus, spring-jdbc, apache commons-dbutils
