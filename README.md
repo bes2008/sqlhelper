@@ -56,8 +56,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 
 
 ## tools usage
-### pagination plugin
-#### Key Features
+### 关键特性
 1. 支持 MyBatis, MyBatis-Plus, SpringJdbc, Apache Commons-DBUtils, JFinal, EBean, Mango, Hibernate 等众多对数据库操作的框架 
 2. 支持 110+ 数据库（所有功能均支持，不限于分页功能）, 支持的数据库列表参考： ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. 如果你想了解这些数据库的排名，可以参考这里：[DB Engines](https://db-engines.com/en/ranking/relational+dbms).下面是所有支持的国产数据库:
   + AliSQL (阿里 MySQL)
@@ -124,7 +123,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
                      
 
 
-# Pagination
+# 分页工具使用说明
 * [Quick Start](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart)
   + [MyBatis application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
     - [Installation](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis)
@@ -139,6 +138,15 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
   + [MyBatis-Plus application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_MyBatis_Plus)
   + [EBean application](https://github.com/fangjinuo/sqlhelper/wiki/Pagination_QuickStart_ebean)
 * Advanced Usage
+
+更多说明，参见教程：
+```html
+1. https://fangjinuo.gitee.io/docs/index.html
+2. https://fangjinuo.github.io
+```
+
+
+
 # UrlParser
 Parse jdbc url.
 ## usage:
@@ -149,13 +157,13 @@ DatabaseInfo dbinfo = new JdbcUrlParser().parse(url)
 </pre> 
 
 # Batch Insert Tool
- If you want to optimize SQL performance, it is essential to create a large amount of sample data. This tool can meet your needs.
+ 如果你想要进行业务SQL性能优化，又苦于数据库里没有太多数据，可以使用它来进行批量插入数据，大大的节省你造数据的时间。具体参加sqlhelper-batchinsert模块。
 
 # [FAQ](https://github.com/fangjinuo/sqlhelper/wiki/FAQ)
 这里提供了一些常见问题，对于刚使用SQLHelper时，可能对你很有帮助
 
 # Contact
-QQ Group: 750929088   
+QQ 交流群: 750929088   
 ![QQ Group](https://github.com/fangjinuo/sqlhelper/blob/master/_images/qq_group.png)
 
 
