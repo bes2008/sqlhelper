@@ -152,6 +152,7 @@ DatabaseInfo dbinfo = new JdbcUrlParser().parse(url)
  If you want to optimize SQL performance, it is essential to create a large amount of sample data. This tool can meet your needs.
 
 # [FAQ](https://github.com/fangjinuo/sqlhelper/wiki/FAQ)
+这里提供了一些常见问题，对于刚使用SQLHelper时，可能对你很有帮助
 
 # Contact
 QQ Group: 750929088   
