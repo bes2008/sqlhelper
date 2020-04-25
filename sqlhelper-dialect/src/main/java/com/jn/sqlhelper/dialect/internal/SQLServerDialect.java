@@ -15,13 +15,13 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
-import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
+import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.dialect.internal.limit.SQLServer2005LimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.TopLimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.SqlServerUrlParser;
+import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 
-
+@Name("sqlserver")
 public class SQLServerDialect extends AbstractTransactSQLDialect {
     private static final int PARAM_LIST_SIZE_LIMIT = 2100;
 
@@ -37,7 +37,8 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         return false;
     }
 
-    private static class SQLServer2000Dialect extends AbstractTransactSQLDialect {
+    @Name("sqlserver2000")
+    public static class SQLServer2000Dialect extends AbstractTransactSQLDialect {
         private SQLServer2000Dialect() {
             setLimitHandler(new TopLimitHandler());
         }
@@ -68,7 +69,8 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         }
     }
 
-    private static class SQLServer2005Dialect extends AbstractTransactSQLDialect {
+    @Name("sqlserver2005")
+    public static class SQLServer2005Dialect extends AbstractTransactSQLDialect {
         private SQLServer2005Dialect() {
             setLimitHandler(new SQLServer2005LimitHandler());
         }
@@ -104,9 +106,10 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         }
     }
 
-    class SQLServer2008Dialect extends AbstractTransactSQLDialect {
+    @Name("sqlserver2008")
+    public static class SQLServer2008Dialect extends AbstractTransactSQLDialect {
         private SQLServer2008Dialect() {
-            setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
+            setLimitHandler(new SQLServer2005LimitHandler());
         }
 
         @Override
@@ -140,10 +143,12 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         }
     }
 
-    class SQLServer2012Dialect extends SQLServer2008Dialect {
+    @Name("sqlserver2012")
+    public static class SQLServer2012Dialect extends SQLServer2008Dialect {
     }
 
-    class SQLServer2017Dialect extends SQLServer2012Dialect {
+    @Name("sqlserver2017")
+    public static class SQLServer2017Dialect extends SQLServer2012Dialect {
     }
 
     @Override
