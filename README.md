@@ -170,4 +170,5 @@ QQ Group: 750929088
 
 ## 鸣谢
 最后，感谢 Jetbrains 提供免费License，方便了开源项目的发展。
+
 [![Jetbrains](https://github.com/fangjinuo/sqlhelper/blob/master/_images/jetbrains.png)](https://www.jetbrains.com/zh-cn/)
