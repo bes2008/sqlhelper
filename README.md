@@ -155,7 +155,7 @@ DatabaseInfo dbinfo = new JdbcUrlParser().parse(url)
 
 # Contact
 QQ Group: 750929088   
-![QQ Group](./_images/qq_group.png)
+![QQ Group](https://github.com/fangjinuo/sqlhelper/blob/master/_images/qq_group.png)
 
 
 ##  [推广](https://github.com/fangjinuo)
@@ -170,4 +170,4 @@ QQ Group: 750929088
 
 ## 鸣谢
 最后，感谢 Jetbrains 提供免费License，方便了开源项目的发展。
-[![Jetbrains](./_images/jetbrains.png)](https://www.jetbrains.com/zh-cn/)
+[![Jetbrains](https://github.com/fangjinuo/sqlhelper/blob/master/_images/jetbrains.png)](https://www.jetbrains.com/zh-cn/)
