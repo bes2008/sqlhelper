@@ -58,8 +58,8 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 ## tools usage
 ### pagination plugin
 #### Key Features
-1. Supports MyBatis, MyBatis-Plus, SpringJdbc, Apache Commons-DBUtils, JFinal, EBean, Mango, Hibernate
-2. Supported 110+ databases, you can find them ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. Conatins almost all chinese database:
+1. 支持 MyBatis, MyBatis-Plus, SpringJdbc, Apache Commons-DBUtils, JFinal, EBean, Mango, Hibernate 等众多对数据库操作的框架 
+2. 支持 110+ 数据库（所有功能均支持，不限于分页功能）, 支持的数据库列表参考： ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. 如果你想了解这些数据库的排名，可以参考这里：[DB Engines](https://db-engines.com/en/ranking/relational+dbms).下面是所有支持的国产数据库:
   + AliSQL (阿里 MySQL)
   + AntDB (亚信)
   + CirroDB (东方国信 行云)
@@ -87,23 +87,19 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
   + TiDB (北京平凯星辰科技))
   + Trafodion (易鲸捷 EsgynDB的开源版)
   + UxDB (优炫数据库)
-    
-    
-    If you want know all RDMBS ranking, you can find them in [DB Engines](https://db-engines.com/en/ranking/relational+dbms).
-    
-3. Supports multiple databases in one application 
-4. Supports auto detect dialect, so the dialect option is optional (current supports this mode in mybatis environment)
-5. **The performance is higher than Mybatis-PageHelper**, because the limit、offset will be setted with PrepareStatement placeholder '?'
-6. Supports plugin use Java SPI
-7. Supports spring boot 1.x , 2.x
-8. Supports mybatis 3.x 
-9. Supports mybatis-plus 
-10. Supports JDK6+
-11. Supports **Memory Pagination**
-12. Supports SqlSymbolMapper, use it you can mapping any symbol to SQL symbol
-13. Supports **Dump DDL**
-14. Supports **subquery pagination** for mybatis, spring-jdbc, apache commons-dbutils
-15. Supports **like parameter escape** for mybatis
+3. 支持多个数据库在同一个应用中并存，且不需要做任何的区分，就能自动识别 
+4. 支持自动获取数据库 dialect （方言），也可以指定
+5. 性能要比**The performance is higher than Mybatis-PageHelper**更高, 因为SQL中的 limit、offset 会以占位符 '?'的形式存在，支持缓存等，总之PageHelper支持的这里都支持，PageHelper不支持的这里也支持。
+6. 对于 select count语句，会自动的排除掉 order by 子句，以提升查询效率 
+7. 可以基于 Java SPI 规范来自定义Dialect，以此来扩展数据库
+8. 分页功能支持**子查询**：mybatis, mybatis-plus, spring-jdbc, apache commons-dbutils
+9. 支持 spring boot 1.x , 2.x
+10. 支持 mybatis 3.x, Supports mybatis-plus 
+11. 支持 JDK6+
+12. 支持 **Memory Pagination**
+13. 支持 SqlSymbolMapper, 可以使用它来自动映射数据库字段、表名等
+14. 支持 **Dump DDL**
+15. 支持 **like parameter escape [%]** : mybatis, mybatis-plus
 
 #### sqlhelper vs mybatis-pagehelper
 |  metric                  | mybatis-pagehelper |      sqlhelper    |
