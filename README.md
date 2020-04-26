@@ -93,12 +93,11 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 7. 可以基于 Java SPI 规范来自定义Dialect，以此来扩展数据库
 8. 分页功能支持**子查询**：mybatis, mybatis-plus, spring-jdbc, apache commons-dbutils
 9. 支持 spring boot 1.x , 2.x
-10. 支持 mybatis 3.x, Supports mybatis-plus 
-11. 支持 JDK6+
-12. 支持 **Memory Pagination**
-13. 支持 SqlSymbolMapper, 可以使用它来自动映射数据库字段、表名等
-14. 支持 **Dump DDL**
-15. 支持 **like parameter escape [%]** : mybatis, mybatis-plus
+10. 支持 JDK6+
+11. 支持 **Memory Pagination**
+12. 支持 SqlSymbolMapper, 可以使用它来自动映射数据库字段、表名等
+13. 支持 **Dump DDL**
+14. 支持 **like parameter escape [%]** : mybatis, mybatis-plus
 
 #### sqlhelper vs mybatis-pagehelper
 |  metric                  | mybatis-pagehelper |      sqlhelper    |
