@@ -168,7 +168,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                     return;
                 }
 
-                if (this.beginIfSupportsLimit(ms, executorInvocation)) {
+                if (this.beginIfSupportsLimit(ms)) {
                     boolean needQuery = true;
                     try {
                         if (this.needCount(request)) {
@@ -261,7 +261,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         return PAGING_CONTEXT.get().getBoolean(PageHelperCompibles.pageHelperRequestFlag, false);
     }
 
-    private boolean beginIfSupportsLimit(final MappedStatement statement, ExecutorInvocation executorInvocation) {
+    private boolean beginIfSupportsLimit(final MappedStatement statement) {
         if (!PAGING_CONTEXT.getPagingRequest().isValidRequest()) {
             invalidatePagingRequest(false);
             return false;
@@ -274,7 +274,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             PAGING_CONTEXT.get().setString(MybatisSqlRequestContextKeys.QUERY_SQL_ID, statement.getId());
         }
         SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
-        final String databaseId = MybatisUtils.getDatabaseId(PAGING_CONTEXT, instrumentor, statement,executorInvocation.getExecutor());
+        final String databaseId = MybatisUtils.getDatabaseId(PAGING_CONTEXT, instrumentor, statement);
         return instrumentor.beginIfSupportsLimit(databaseId);
     }
 

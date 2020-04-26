@@ -29,8 +29,10 @@ import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.mybatis.plugins.likeescape.LikeParameterEscapeHandler;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationHandler;
+import com.jn.sqlhelper.mybatis.plugins.tenant.TenantHandler;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.*;
@@ -39,6 +41,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +70,8 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
 
             LikeParameterEscapeHandler likeParameterEscapeHandler = new LikeParameterEscapeHandler();
             handlerRegistry.put("likeEscape", likeParameterEscapeHandler);
-
+            TenantHandler tenantHandler = new TenantHandler();
+            handlerRegistry.put("tenant", tenantHandler);
             PaginationHandler paginationHandler = new PaginationHandler();
             paginationHandler.setPaginationConfig(this.paginationConfig);
             paginationHandler.init();
@@ -111,6 +115,8 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         Handler debugHandler = handlerRegistry.get("debug");
         Handler sinkHandler = handlerRegistry.get("sink");
         List<Handler> handlers = Collects.emptyArrayList();
+        // 是否开启租户模式
+        handlers.add(handlerRegistry.get("tenant"));
         if ("query".equals(executorInvocation.getMethodName())) {
             handlers.add(handlerRegistry.get("likeEscape"));
             handlers.add(handlerRegistry.get("pagination"));

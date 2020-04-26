@@ -10,6 +10,7 @@ import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.QueryParameters;
+import com.jn.sqlhelper.dialect.tenant.Tenant;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
@@ -67,7 +68,11 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
         return !PAGING_CONTEXT.getPagingRequest().isValidRequest();
     }
 
-
+    private boolean isTenantRequest(){
+        SqlRequestContext sqlRequestContext = SqlRequestContextHolder.getInstance().get();
+        Tenant tenant=sqlRequestContext.getRequest().getTenant();
+        return Emptys.isNotEmpty(tenant);
+    }
     private List<Integer> getEscapeLikeParametersIndexes() {
         SqlRequestContext sqlRequestContext = SqlRequestContextHolder.getInstance().get();
         if (Objects.isNull(sqlRequestContext) || Objects.isNull(sqlRequestContext.getRequest())) {
@@ -81,7 +86,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
 
     @Override
     public void setParameters(final PreparedStatement ps) {
-        if (!MybatisUtils.isQueryStatement(mappedStatement) || !isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || NestedStatements.isNestedStatement(mappedStatement)) {
+        if (!MybatisUtils.isQueryStatement(mappedStatement) || !isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || NestedStatements.isNestedStatement(mappedStatement)||isTenantRequest()) {
             this.setParameters(ps, this.boundSql.getParameterMappings(), 1, getEscapeLikeParametersIndexes());
             return;
         }

@@ -152,7 +152,9 @@ public class ExecutorInvocation {
             this.boundSqlChanged = true;
         }
         this.boundSql = boundSql;
-        this.cacheKey = executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
+        if(!this.methodName.equals("update")){
+            this.cacheKey = executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
+        }
     }
 
     public boolean isBoundSqlChanged() {
@@ -175,4 +177,5 @@ public class ExecutorInvocation {
     public String toString() {
         return "ExecutorInvocation{}";
     }
+
 }
