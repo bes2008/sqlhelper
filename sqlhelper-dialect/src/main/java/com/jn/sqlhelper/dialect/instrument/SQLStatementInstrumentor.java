@@ -33,12 +33,17 @@ import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.dialect.SQLDialectException;
 import com.jn.sqlhelper.dialect.instrument.orderby.DefaultOrderByTransformer;
 import com.jn.sqlhelper.dialect.instrument.orderby.OrderByTransformer;
+import com.jn.sqlhelper.dialect.instrument.tenant.DefaultTenantTransformer;
+import com.jn.sqlhelper.dialect.instrument.tenant.TenantTransformer;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.pagination.QueryParameters;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
+import com.jn.sqlhelper.dialect.sqlparser.StatementWrapper;
 import com.jn.sqlhelper.dialect.sqlparser.StringSqlStatementWrapper;
+import com.jn.sqlhelper.dialect.tenant.Tenant;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +62,7 @@ public class SQLStatementInstrumentor implements Initializable {
     private String name;
     private Instrumentation instrumentation;
     private OrderByTransformer orderByTransformer;
-
+    private TenantTransformer tenantTransformer;
     public String getName() {
         return name;
     }
@@ -112,6 +117,9 @@ public class SQLStatementInstrumentor implements Initializable {
             InstrumentationRegistry.getInstance().enableInstrumentation(this.config.getInstrumentation());
             this.instrumentation = InstrumentationRegistry.getInstance().findInstrumentation(this.config.getInstrumentation());
             Preconditions.checkNotNull(instrumentation,"Can't find a suitable or enabled SQL instrumentation");
+            tenantTransformer = new DefaultTenantTransformer();
+            tenantTransformer.setInstrumentation(instrumentation);
+            tenantTransformer.init();
             orderByTransformer = new DefaultOrderByTransformer();
             orderByTransformer.setInstrumentation(instrumentation);
             orderByTransformer.init();
@@ -242,6 +250,33 @@ public class SQLStatementInstrumentor implements Initializable {
         sql = instrumentOrderBySql(sql, orderBy);
         if (this.config.isCacheInstrumentedSql()) {
             getInstrumentedStatement(originalSql).setOrderByLimitSql(orderBy, dialect.getDatabaseId(), sql, selection.hasOffset());
+        }
+        return sql;
+    }
+
+    public String instrumentTenantSql(String sql,Tenant tenant) {
+        if (this.config.isCacheInstrumentedSql()) {
+            String tenantSql = getInstrumentedStatement(sql).getTenantSql();
+            if (tenantSql != null) {
+                return tenantSql;
+            }
+        }
+        try {
+            StatementWrapper statementWrapper = new StatementWrapper();
+            statementWrapper.setOriginalSql(sql);
+            statementWrapper.setStatement(CCJSqlParserUtil.parse(sql));
+            TransformConfig transformConfig = new TransformConfig();
+            transformConfig.setTenant(tenant);
+            tenantTransformer.transform(statementWrapper, transformConfig);
+            String newSql = statementWrapper.get().toString();
+            if (newSql != null) {
+                if (this.config.isCacheInstrumentedSql()) {
+                    getInstrumentedStatement(sql).setTenantSql(newSql);
+                }
+                return newSql;
+            }
+        }catch (Throwable ex) {
+            logger.warn(ex.getMessage(), ex);
         }
         return sql;
     }
@@ -421,4 +456,6 @@ public class SQLStatementInstrumentor implements Initializable {
     public DialectRegistry getDialectRegistry() {
         return this.dialectRegistry;
     }
+
+
 }

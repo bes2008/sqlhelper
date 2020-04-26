@@ -1,7 +1,10 @@
 package com.jn.sqlhelper.dialect;
 
 import com.jn.easyjson.core.annotation.Ignore;
+import com.jn.sqlhelper.dialect.expression.SQLExpression;
+import com.jn.sqlhelper.dialect.expression.SQLExpressions;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
+import com.jn.sqlhelper.dialect.tenant.Tenant;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,6 +23,7 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
 
     private List<Integer> likeParameterIndexes = null;
 
+    private Tenant tenant;
 
     private Boolean escapeLikeParameter; // will be used for prepared statement
     @Ignore
@@ -28,6 +32,7 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
 
     private Integer fetchSize;
     private int maxRows = -1;
+
 
     public String getDialect() {
         return dialect;
@@ -42,9 +47,22 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
         return escapeLikeParameter == Boolean.TRUE;
     }
 
+
+
+
+
     public R setEscapeLikeParameter(Boolean escapeLikeParameter) {
         this.escapeLikeParameter = escapeLikeParameter;
         return (R) this;
+    }
+
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public R setTenant(Tenant tenant) {
+        this.tenant = tenant;
+        return  (R) this;
     }
 
     public LikeEscaper getLikeEscaper() {
@@ -94,7 +112,9 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
         this.likeParameterIndexes = likeParameterIndexes;
     }
 
+
     public void clear() {
+        tenant=null;
         likeEscaper = null;
         context = null;
     }

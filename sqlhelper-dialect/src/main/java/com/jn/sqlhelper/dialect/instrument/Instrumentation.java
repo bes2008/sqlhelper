@@ -3,6 +3,7 @@ package com.jn.sqlhelper.dialect.instrument;
 import com.jn.langx.annotation.Singleton;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.sqlhelper.dialect.instrument.orderby.OrderByTransformer;
+import com.jn.sqlhelper.dialect.instrument.tenant.TenantTransformer;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformer;
 import com.jn.sqlhelper.dialect.sqlparser.SqlParser;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
@@ -14,6 +15,8 @@ public interface Instrumentation<Statement, SQL extends SqlStatementWrapper<Stat
     WhereTransformer<Statement> getWhereTransformer();
 
     OrderByTransformer<Statement> getOrderByTransformer();
+
+    TenantTransformer<Statement> getTenantTransformer() ;
 
     boolean isEnabled();
 

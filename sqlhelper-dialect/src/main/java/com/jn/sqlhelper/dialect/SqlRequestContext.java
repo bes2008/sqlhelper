@@ -2,6 +2,7 @@ package com.jn.sqlhelper.dialect;
 
 import com.jn.langx.util.BasedStringAccessor;
 import com.jn.langx.util.Objects;
+import com.jn.sqlhelper.dialect.tenant.Tenant;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,5 +62,10 @@ public class SqlRequestContext<R extends SqlRequest> extends BasedStringAccessor
             request.clear();
         }
         request = null;
+    }
+
+    public boolean isTenantRequest() {
+        Tenant tenant=this.getRequest().getTenant();
+        return tenant==null ? false:true;
     }
 }

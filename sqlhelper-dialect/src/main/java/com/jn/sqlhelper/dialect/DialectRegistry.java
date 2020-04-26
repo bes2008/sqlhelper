@@ -253,11 +253,6 @@ public class DialectRegistry {
                 SpliceMachineDialect.class,
                 SQLiteDialect.class,
                 SQLServerDialect.class,
-                SQLServerDialect.SQLServer2000Dialect.class,
-                SQLServerDialect.SQLServer2005Dialect.class,
-                SQLServerDialect.SQLServer2008Dialect.class,
-                SQLServerDialect.SQLServer2012Dialect.class,
-                SQLServerDialect.SQLServer2017Dialect.class,
                 SQReamDialect.class,
 
                 TajoDialect.class,

@@ -22,6 +22,7 @@ import com.jn.sqlhelper.dialect.orderby.OrderByBuilder;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
+import com.jn.sqlhelper.dialect.tenant.TenantByBuilder;
 
 public class SqlRequests extends SQLs {
 
