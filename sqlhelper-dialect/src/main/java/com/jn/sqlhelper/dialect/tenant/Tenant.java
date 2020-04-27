@@ -1,17 +1,9 @@
 package com.jn.sqlhelper.dialect.tenant;
 
-import com.jn.langx.annotation.NonNull;
-import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
-import com.jn.sqlhelper.dialect.orderby.OrderByType;
-import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.StringValue;
-import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
-import net.sf.jsqlparser.expression.operators.relational.InExpression;
-import net.sf.jsqlparser.schema.Column;
+import com.jn.sqlhelper.dialect.expression.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +50,7 @@ public class Tenant {
     }
 
 
-    public Expression getTenant(boolean where) {
+    public SQLExpression getTenant(boolean where) {
         if (where && isMultipleTenant) {
             return multipleTenantCondition();
         } else {
@@ -70,8 +62,11 @@ public class Tenant {
         return this.tenantColumn;
     }
 
-    private Expression singleTenantCondition() {
-        return new StringValue(singleTenantValues);
+    private SQLExpression singleTenantCondition() {
+        EqualExpression equalExpression=new EqualExpression();
+        equalExpression.setLeft(new SQLExpressions.ColumnBuilder().column(this.tenantColumn).build());
+        equalExpression.setRight(new StringExpression(this.singleTenantValues));
+        return equalExpression;
     }
 
     public boolean doTableFilter(String tableName) {
@@ -79,24 +74,16 @@ public class Tenant {
     }
 
 
-    private Expression multipleTenantCondition() {
-        final InExpression inExpression = new InExpression();
-        inExpression.setLeftExpression(new Column(this.tenantColumn));
-        final ExpressionList itemsList = new ExpressionList();
-        final List<Expression> inValues = new ArrayList<>(this.multipleTenantValues.size());
-        Collects.forEach(this.multipleTenantValues, new Predicate<String>() {
-            @Override
-            public boolean test(String test) {
-                return true;
-            }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String item) {
-                inValues.add(new StringValue(item));
-            }
-        });
-        itemsList.setExpressions(inValues);
-        inExpression.setRightItemsList(itemsList);
+    private SQLExpression multipleTenantCondition() {
+        InExpression inExpression = new InExpression();
+        inExpression.setLeft(new ColumnExpression(this.tenantColumn));
+        final ListExpression listExpression = new SQLExpressions.ListExpressionBuilder().addValues(this.multipleTenantValues).build();
+        inExpression.setRight(listExpression);
         return inExpression;
+    }
+
+    @Override
+    public String toString() {
+        return "_tenant";
     }
 }

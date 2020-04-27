@@ -16,11 +16,11 @@ public class DivideExpressionConverter extends BinaryExpressionConverter<DivideE
 
     @Override
     public Class<DivideExpression> getStandardExpressionClass() {
-        return null;
+        return DivideExpression.class;
     }
 
     @Override
     public Class<Division> getJSqlParserExpressionClass() {
-        return null;
+        return Division.class;
     }
 }

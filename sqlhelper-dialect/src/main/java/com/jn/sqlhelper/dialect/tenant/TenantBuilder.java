@@ -1,10 +1,6 @@
 package com.jn.sqlhelper.dialect.tenant;
 
 import com.jn.langx.annotation.Nullable;
-import com.jn.langx.util.Preconditions;
-
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * Usage:
@@ -18,11 +14,11 @@ import java.util.List;
  *  </pre>
  */
 
-public interface TenantByBuilder<T> {
+public interface TenantBuilder<T> {
 
-     TenantByBuilder column(@Nullable String column);
+     TenantBuilder column(@Nullable String column);
 
-     TenantByBuilder value(@Nullable T tenantValue) ;
+     TenantBuilder value(@Nullable T tenantValue) ;
 
      Tenant build() ;
 

@@ -4,14 +4,14 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Preconditions;
 
 
-public class AndTenantByBuilder implements TenantByBuilder<String> {
-    public static final AndTenantByBuilder DEFAULT = new AndTenantByBuilder();
+public class AndTenantBuilder implements TenantBuilder<String> {
+    public static final AndTenantBuilder DEFAULT = new AndTenantBuilder();
     private String tenantValue;
     private String tenantColumn;
 
-    public AndTenantByBuilder() {
+    public AndTenantBuilder() {
     }
-    public AndTenantByBuilder column(String column) {
+    public AndTenantBuilder column(String column) {
         Preconditions.checkNotNull(column);
         if (tenantColumn == null) {
             tenantColumn = column ;
@@ -24,7 +24,7 @@ public class AndTenantByBuilder implements TenantByBuilder<String> {
         return this;
     }
 
-    public TenantByBuilder value(@Nullable String tenantValue) {
+    public TenantBuilder value(@Nullable String tenantValue) {
         this.tenantValue=tenantValue;
         return this;
     }

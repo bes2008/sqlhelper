@@ -5,13 +5,13 @@ import com.jn.langx.util.Preconditions;
 
 import java.util.List;
 
-public class InTenantByBuilder implements TenantByBuilder<List<String>> {
-    public static final InTenantByBuilder DEFAULT = new InTenantByBuilder();
+public class InTenantBuilder implements TenantBuilder<List<String>> {
+    public static final InTenantBuilder DEFAULT = new InTenantBuilder();
     private List<String> tenantValue;
     private String tenantColumn;
-    public InTenantByBuilder() {
+    public InTenantBuilder() {
     }
-    public InTenantByBuilder column(String column) {
+    public InTenantBuilder column(String column) {
         Preconditions.checkNotNull(column);
         if (tenantColumn == null) {
             tenantColumn = column ;
@@ -23,7 +23,7 @@ public class InTenantByBuilder implements TenantByBuilder<List<String>> {
         }
         return this;
     }
-    public TenantByBuilder value(@Nullable List<String> tenantValue) {
+    public TenantBuilder value(@Nullable List<String> tenantValue) {
         Preconditions.checkNotNull(tenantColumn, "you should set which tenantColumn to tenant first");
         if(tenantValue instanceof List){
             this.tenantValue=tenantValue;

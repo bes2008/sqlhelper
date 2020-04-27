@@ -4,7 +4,6 @@ import com.jn.langx.annotation.Name;
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.sqlhelper.dialect.instrument.Instrumentation;
 import com.jn.sqlhelper.dialect.instrument.orderby.OrderByTransformer;
-import com.jn.sqlhelper.dialect.instrument.tenant.TenantTransformer;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformer;
 import com.jn.sqlhelper.dialect.sqlparser.SqlParser;
 import com.jn.sqlhelper.jsqlparser.sqlparser.JSqlParser;
@@ -16,7 +15,6 @@ public class JSqlParserInstrumentation implements Instrumentation<Statement, JSq
     private boolean enabled = false;
     private boolean inited = false;
     private SqlParser<JSqlParserStatementWrapper> sqlParser;
-    private TenantTransformer<Statement> tenantTransformer;
     private WhereTransformer<Statement> whereTransformer;
     private OrderByTransformer<Statement> orderByTransformer;
 
@@ -27,8 +25,6 @@ public class JSqlParserInstrumentation implements Instrumentation<Statement, JSq
             this.sqlParser = new JSqlParser();
             whereTransformer = new JSqlParserWhereTransformer();
             whereTransformer.init();
-            tenantTransformer = new JSqlParserTenantTransformer();
-            tenantTransformer.init();
             orderByTransformer = new JSqlParserOrderByTransformer();
             orderByTransformer.init();
         }
@@ -49,10 +45,6 @@ public class JSqlParserInstrumentation implements Instrumentation<Statement, JSq
         return this.sqlParser;
     }
 
-    @Override
-    public TenantTransformer<Statement> getTenantTransformer() {
-        return tenantTransformer;
-    }
 
     @Override
     public WhereTransformer<Statement> getWhereTransformer() {

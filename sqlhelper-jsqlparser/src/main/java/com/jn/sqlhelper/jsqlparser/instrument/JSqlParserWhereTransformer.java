@@ -11,12 +11,18 @@ import com.jn.sqlhelper.dialect.instrument.TransformConfig;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformConfig;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformer;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
+import com.jn.sqlhelper.dialect.tenant.Tenant;
 import com.jn.sqlhelper.jsqlparser.expression.ExpressionConverters;
 import com.jn.sqlhelper.jsqlparser.utils.JSqlParsers;
 import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+import net.sf.jsqlparser.expression.operators.relational.ItemsList;
+import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.delete.Delete;
+import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.update.Update;
@@ -50,7 +56,10 @@ public class JSqlParserWhereTransformer extends AbstractClauseTransformer<Statem
             transform((Update) statement, expressionConfigs);
         } else if (Reflects.isSubClassOrEquals(Delete.class, statement.getClass())) {
             transform((Delete) statement, expressionConfigs);
+        } else if (Reflects.isSubClassOrEquals(Insert.class, statement.getClass())) {
+            transform((Insert) statement, config.getTenant());
         }
+
         return statementWrapper;
     }
 
@@ -105,7 +114,6 @@ public class JSqlParserWhereTransformer extends AbstractClauseTransformer<Statem
             public void accept(WhereTransformConfig config) {
                 Expression where = update.getWhere();
                 Expression expression = ExpressionConverters.toJSqlParserExpression(config.getExpression());
-
                 if (where == null) {
                     update.setWhere(expression);
                 } else {
@@ -158,5 +166,14 @@ public class JSqlParserWhereTransformer extends AbstractClauseTransformer<Statem
                 }
             }
         });
+    }
+    private void transform(final Insert insert, Tenant tenant) {
+        insert.getColumns().add(new Column(tenant.getTenantColumn()));
+        if (insert.getItemsList() != null) {
+            ItemsList itemsList = insert.getItemsList();
+            if (itemsList instanceof ExpressionList) {
+                ((ExpressionList) insert.getItemsList()).getExpressions().add(new StringValue(tenant.getSingleTenantValues()));
+            }
+        }
     }
 }

@@ -33,13 +33,16 @@ import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.dialect.SQLDialectException;
 import com.jn.sqlhelper.dialect.instrument.orderby.DefaultOrderByTransformer;
 import com.jn.sqlhelper.dialect.instrument.orderby.OrderByTransformer;
-import com.jn.sqlhelper.dialect.instrument.tenant.DefaultTenantTransformer;
-import com.jn.sqlhelper.dialect.instrument.tenant.TenantTransformer;
+
+import com.jn.sqlhelper.dialect.instrument.where.DefaultWhereTransformer;
+import com.jn.sqlhelper.dialect.instrument.where.WhereTransformConfig;
+import com.jn.sqlhelper.dialect.instrument.where.WhereTransformer;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.pagination.QueryParameters;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
+import com.jn.sqlhelper.dialect.sqlparser.SqlParser;
 import com.jn.sqlhelper.dialect.sqlparser.StatementWrapper;
 import com.jn.sqlhelper.dialect.sqlparser.StringSqlStatementWrapper;
 import com.jn.sqlhelper.dialect.tenant.Tenant;
@@ -62,7 +65,7 @@ public class SQLStatementInstrumentor implements Initializable {
     private String name;
     private Instrumentation instrumentation;
     private OrderByTransformer orderByTransformer;
-    private TenantTransformer tenantTransformer;
+    private WhereTransformer whereTransformer;
     public String getName() {
         return name;
     }
@@ -117,9 +120,9 @@ public class SQLStatementInstrumentor implements Initializable {
             InstrumentationRegistry.getInstance().enableInstrumentation(this.config.getInstrumentation());
             this.instrumentation = InstrumentationRegistry.getInstance().findInstrumentation(this.config.getInstrumentation());
             Preconditions.checkNotNull(instrumentation,"Can't find a suitable or enabled SQL instrumentation");
-            tenantTransformer = new DefaultTenantTransformer();
-            tenantTransformer.setInstrumentation(instrumentation);
-            tenantTransformer.init();
+            whereTransformer = new DefaultWhereTransformer();
+            whereTransformer.setInstrumentation(instrumentation);
+            whereTransformer.init();
             orderByTransformer = new DefaultOrderByTransformer();
             orderByTransformer.setInstrumentation(instrumentation);
             orderByTransformer.init();
@@ -265,9 +268,14 @@ public class SQLStatementInstrumentor implements Initializable {
             StatementWrapper statementWrapper = new StatementWrapper();
             statementWrapper.setOriginalSql(sql);
             statementWrapper.setStatement(CCJSqlParserUtil.parse(sql));
+            WhereTransformConfig whereTransformConfig=new WhereTransformConfig();
+            whereTransformConfig.setInstrumentSubSelect(false);
+            whereTransformConfig.setPosition(WhereTransformConfig.Position.FIRST);
+            whereTransformConfig.setExpression(tenant.getTenant(false));
             TransformConfig transformConfig = new TransformConfig();
             transformConfig.setTenant(tenant);
-            tenantTransformer.transform(statementWrapper, transformConfig);
+            transformConfig.setWhereInstrumentConfigs(Collects.asList(whereTransformConfig));
+            whereTransformer.transform(statementWrapper, transformConfig);
             String newSql = statementWrapper.get().toString();
             if (newSql != null) {
                 if (this.config.isCacheInstrumentedSql()) {

@@ -64,10 +64,8 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     public void init() throws InitializationException {
         if (!inited) {
             instrumentor.init();
-
             DebugHandler debugHandler = new DebugHandler();
             handlerRegistry.put("debug", debugHandler);
-
             LikeParameterEscapeHandler likeParameterEscapeHandler = new LikeParameterEscapeHandler();
             handlerRegistry.put("likeEscape", likeParameterEscapeHandler);
             TenantHandler tenantHandler = new TenantHandler();
@@ -76,7 +74,6 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
             paginationHandler.setPaginationConfig(this.paginationConfig);
             paginationHandler.init();
             handlerRegistry.put("pagination", paginationHandler);
-
             if (paginationConfig.isPageHelperCompatible()) {
                 try {
                     Class<Handler> pageHelperHandlerClass = ClassLoaders.loadClass(paginationConfig.getPageHelperHandlerClass(), SqlHelperMybatisPlugin.class);

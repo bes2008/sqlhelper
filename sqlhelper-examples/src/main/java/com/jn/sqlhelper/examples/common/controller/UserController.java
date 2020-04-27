@@ -26,8 +26,7 @@ import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
-import com.jn.sqlhelper.dialect.tenant.AndTenantByBuilder;
-import com.jn.sqlhelper.dialect.tenant.Tenant;
+import com.jn.sqlhelper.dialect.tenant.AndTenantBuilder;
 import com.jn.sqlhelper.examples.common.dao.UserDao;
 import com.jn.sqlhelper.examples.common.model.User;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
@@ -131,7 +130,7 @@ public class UserController {
         request.setEscapeLikeParameter(true);
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
-        request.setTenant(AndTenantByBuilder.DEFAULT.column("tenantId").value("1").build());
+        request.setTenant(AndTenantBuilder.DEFAULT.column("tenantId").value("1").build());
         List<User> users = userDao.selectByLimit(queryCondition);
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
@@ -150,7 +149,7 @@ public class UserController {
         queryCondition.setAge(10);
         queryCondition.setName("zhangsan_");
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-        request.setTenant(AndTenantByBuilder.DEFAULT.column("TENANTID").value("2").build());
+        request.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("2").build());
         request.subqueryPaging(true);
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
@@ -351,22 +350,31 @@ public class UserController {
     @GetMapping("/tenant/{id}")
     public User mutilTenantGetById(@RequestParam("id") String id) throws IllegalAccessException, InstantiationException {
         SqlRequest sqlRequest=new SqlRequest();
-        sqlRequest.setTenant(AndTenantByBuilder.DEFAULT.column("TENANTID").value("3").build());
+        sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
         SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
        return userDao.selectById(id);
     }
-    @PutMapping("/tenant/{id}")
-    public void updateTenant(String id, User user) {
+    @PutMapping("/tenant")
+    public void insertTenant(User user) {
         SqlRequest sqlRequest=new SqlRequest();
-        sqlRequest.setTenant(AndTenantByBuilder.DEFAULT.column("TENANTID").value("3").build());
+        sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
         SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
-        //add(user);
-//        user.setId(id);
-//        User u = userDao.selectById(id);
-//        if (u == null) {
-//            add(user);
-//        } else {
-            userDao.updateById(user);
-//        }
+        add(user);
+
+    }
+    @PutMapping("/tenant/")
+    public void updateTenant(User user) {
+        SqlRequest sqlRequest=new SqlRequest();
+        sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
+        SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
+        userDao.updateById(user);
+    }
+
+    @DeleteMapping("/tenant/{id}")
+    public void updateTenant(@PathVariable("id") String id) {
+        SqlRequest sqlRequest=new SqlRequest();
+        sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
+        SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
+        userDao.deleteById(id);
     }
 }
