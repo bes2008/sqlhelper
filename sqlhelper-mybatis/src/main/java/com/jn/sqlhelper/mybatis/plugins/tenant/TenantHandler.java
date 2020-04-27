@@ -34,7 +34,8 @@ public class TenantHandler extends AbstractHandler{
         SqlRequestContext sqlContext = SqlRequestContextHolder.getInstance().get();
         ExecutorInvocation executorInvocation = (ExecutorInvocation) ctx.getPipeline().getTarget();
         MappedStatement mappedStatement = executorInvocation.getMappedStatement();
-        if (MybatisUtils.isPreparedStatement(mappedStatement)&&Emptys.isNotEmpty(sqlContext.getRequest().getTenant())) {
+
+        if (MybatisUtils.isPreparedStatement(mappedStatement)&&Emptys.isNotEmpty(sqlContext)&&Emptys.isNotEmpty(sqlContext.getRequest().getTenant())) {
             intercept(ctx);
         }else{
             Pipelines.skipHandler(ctx, true);
