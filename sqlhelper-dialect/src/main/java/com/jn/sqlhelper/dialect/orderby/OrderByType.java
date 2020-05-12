@@ -27,10 +27,10 @@ public enum OrderByType {
         s = s.trim().toLowerCase();
 
         if (ASC.name().equalsIgnoreCase(s)) {
-            return DESC;
+            return ASC;
         }
         if (DESC.name().equalsIgnoreCase(s)) {
-            return ASC;
+            return DESC;
         }
 
         throw new IllegalArgumentException(s + " is not a illegal sql sort symbol");
