@@ -79,14 +79,14 @@
         <spring.version>5.2.1.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>2.2.1</easyjson.version>
-        <langx-java.version>2.2.8</langx-java.version>
+        <langx-java.version>2.4.0</langx-java.version>
 
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.compilerVersion>1.6</maven.compiler.compilerVersion>
 
-        <project.major.version>3.0.2</project.major.version>
-        <project.internal.version>3.0.2</project.internal.version>
+        <project.major.version>3.1.0</project.major.version>
+        <project.internal.version>3.1.0</project.internal.version>
     </properties>
 
     <dependencyManagement>
