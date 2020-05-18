@@ -10,13 +10,7 @@ spring:
     url: jdbc:h2:~/test
     driver-class-name: org.h2.Driver
     username: sa
-sqlhelper:
-  mybatis:
-    instrumentor:
-      name: mybatis
-      cache-instrumented-sql: true
-      subquery-paging-start-flag: "[PAGING_START]"
-      subquery-paging-end-flag: "[PAGING_END]"
+
 logging:
   level:
     root: info

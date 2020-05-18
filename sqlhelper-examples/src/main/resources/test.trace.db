@@ -316,3 +316,33 @@ org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TEST" not found; SQL statement:
 select * from TEST; [42102-199]
 2020-01-11 11:33:37 jdbc[4]: exception
 org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-199]
+2020-05-18 21:18:13 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER" not found; SQL statement:
+drop table Customer; [42102-199]
+2020-05-18 21:18:13 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: Savepoint is invalid: "SYSTEM_SAVEPOINT_1"; SQL statement:
+ROLLBACK TO SAVEPOINT SYSTEM_SAVEPOINT_1 [90063-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:502)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:427)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.engine.Session.rollbackToSavepoint(Session.java:1148)
+	at org.h2.command.dml.TransactionCommand.update(TransactionCommand.java:59)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:133)
+	at org.h2.command.Command.executeUpdate(Command.java:267)
+	at org.h2.jdbc.JdbcSavepoint.rollback(JdbcSavepoint.java:66)
+	at org.h2.jdbc.JdbcConnection.rollback(JdbcConnection.java:1118)
+	at com.dci.intellij.dbn.connection.jdbc.DBNConnectionBase.rollback(DBNConnectionBase.java:199)
+	at com.dci.intellij.dbn.connection.jdbc.DBNConnection.rollback(DBNConnection.java:38)
+	at com.dci.intellij.dbn.connection.ResourceUtil.rollback(ResourceUtil.java:263)
+	at com.dci.intellij.dbn.connection.ResourceUtil.rollbackSilently(ResourceUtil.java:254)
+	at com.dci.intellij.dbn.connection.transaction.ConnectionSavepoint.call(ConnectionSavepoint.java:28)
+	at com.dci.intellij.dbn.common.thread.CancellableDatabaseCall.lambda$call$1(CancellableDatabaseCall.java:65)
+	at com.dci.intellij.dbn.common.thread.ThreadMonitor.call(ThreadMonitor.java:62)
+	at com.dci.intellij.dbn.common.thread.CancellableDatabaseCall.call(CancellableDatabaseCall.java:58)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2020-05-18 21:18:13 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-199]

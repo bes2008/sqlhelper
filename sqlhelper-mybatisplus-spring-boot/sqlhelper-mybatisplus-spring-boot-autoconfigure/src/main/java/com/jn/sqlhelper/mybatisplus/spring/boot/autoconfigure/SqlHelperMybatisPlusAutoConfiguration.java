@@ -18,9 +18,10 @@ import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
-import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
 import com.jn.sqlhelper.mybatis.SqlHelperMybatisProperties;
+import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
 import com.jn.sqlhelper.mybatisplus.plugins.pagination.CustomMybatisPlusScriptLanguageDriver;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.slf4j.Logger;
@@ -43,7 +44,10 @@ public class SqlHelperMybatisPlusAutoConfiguration implements ConfigurationCusto
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.mybatis")
     public SqlHelperMybatisProperties sqlHelperMybatisProperties() {
-        return new SqlHelperMybatisProperties();
+        SqlHelperMybatisProperties properties = new SqlHelperMybatisProperties();
+        SQLInstrumentorConfig config = properties.getInstrumentor();
+        config.setName("mybatisplus");
+        return properties;
     }
 
     private SqlHelperMybatisProperties sqlHelperMybatisProperties;
