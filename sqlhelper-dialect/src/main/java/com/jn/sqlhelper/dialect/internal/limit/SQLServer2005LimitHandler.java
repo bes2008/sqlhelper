@@ -284,7 +284,7 @@ public class SQLServer2005LimitHandler
 
 
     private void encloseWithOuterQuery(StringBuilder sql) {
-        sql.insert(0, "SELECT inner_query.*, ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) as __sqlhelper_row_nr__ FROM ( ");
+        sql.insert(0, "SELECT inner_query.*, ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) as __hibernate_row_nr__ FROM ( ");
         sql.append(" ) inner_query ");
     }
 

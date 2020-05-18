@@ -12,7 +12,7 @@
     <artifactId>sqlhelper-examples</artifactId>
     <properties>
         <swagger.version>2.9.2</swagger.version>
-        <audit.version>1.0.1</audit.version>
+
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -141,7 +141,7 @@
 
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
-            <artifactId>easyjson-fastjson</artifactId>
+            <artifactId>easyjson-jackson</artifactId>
             <version>${easyjson.version}</version>
         </dependency>
         <dependency>
@@ -161,7 +161,7 @@
         <dependency>
             <groupId>com.github.fangjinuo.audit</groupId>
             <artifactId>audit-spring-boot-starter</artifactId>
-            <version>${audit.version}</version>
+            <version>1.0.0</version>
         </dependency>
 
         <!-- databases -->

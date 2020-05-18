@@ -78,7 +78,17 @@ public class InstrumentedStatement implements SqlStatementWrapper {
         config.setOrderBy(orderBy);
         instrumentedSqlMap.put(config, orderBySql);
     }
+    public String getTenantSql() {
+        TransformConfig config = new TransformConfig();
+        config.setMultiTenant(true);
+        return instrumentedSqlMap.get(config);
+    }
 
+    public void setTenantSql(String sql){
+        TransformConfig config = new TransformConfig();
+        config.setMultiTenant(true);
+        instrumentedSqlMap.put(config,sql);
+    }
     public void setOrderByLimitSql(OrderBy orderBy, String dialect, String sql, boolean hasOffset) {
         TransformConfig config = new TransformConfig();
         config.setOrderBy(orderBy);

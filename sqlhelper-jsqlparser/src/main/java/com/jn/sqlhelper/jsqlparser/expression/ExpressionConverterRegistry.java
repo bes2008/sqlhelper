@@ -28,6 +28,9 @@ public class ExpressionConverterRegistry {
     }
 
     public void registry(ExpressionConverter converter) {
+        if(converter instanceof DivideExpressionConverter){
+            System.out.println("***********");
+        }
         Class<? extends SQLExpression> standardExpressionClass = converter.getStandardExpressionClass();
         Class<? extends Expression> jSqlParserExpressionClass = converter.getJSqlParserExpressionClass();
         Preconditions.checkNotNull(standardExpressionClass);

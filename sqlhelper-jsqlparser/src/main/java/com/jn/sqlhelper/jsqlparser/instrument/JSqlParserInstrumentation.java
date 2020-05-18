@@ -23,7 +23,6 @@ public class JSqlParserInstrumentation implements Instrumentation<Statement, JSq
         if (!inited) {
             inited = true;
             this.sqlParser = new JSqlParser();
-
             whereTransformer = new JSqlParserWhereTransformer();
             whereTransformer.init();
             orderByTransformer = new JSqlParserOrderByTransformer();
@@ -45,6 +44,7 @@ public class JSqlParserInstrumentation implements Instrumentation<Statement, JSq
     public SqlParser<JSqlParserStatementWrapper> getSqlParser() {
         return this.sqlParser;
     }
+
 
     @Override
     public WhereTransformer<Statement> getWhereTransformer() {

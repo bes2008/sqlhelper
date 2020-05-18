@@ -5,6 +5,7 @@
         <id property="id" column="ID" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result property="name" column="NAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result property="age" column="AGE" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="tenantId" column="TENANTID" javaType="java.lang.String" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="all_columns">
@@ -16,11 +17,7 @@
     <insert id="insert" parameterType="com.jn.sqlhelper.examples.common.model.User">
         INSERT INTO
         USER (<include refid="all_columns"/>)
-        VALUES (
-        #{id},
-        #{name},
-        #{age}
-        )
+        VALUES (#{id}, #{name},#{age})
     </insert>
 
     <insert id="batchInsert" parameterType="com.jn.sqlhelper.examples.common.model.User" databaseId="h2">
@@ -31,7 +28,7 @@
             (
             #{item.id},
             #{item.name},
-            #{item.age}
+            #{item.age},
             )
         </foreach>
 
