@@ -17,15 +17,19 @@ package com.jn.sqlhelper.mybatis;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Emptys;
+import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SqlRequest;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
+import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.transaction.Transaction;
 
+import java.sql.Connection;
 import java.util.Map;
 
 public class MybatisUtils {
@@ -64,7 +68,7 @@ public class MybatisUtils {
 
     public static String getDatabaseId(@Nullable SqlRequestContextHolder sqlRequestContextHolder,
                                        @Nullable SQLStatementInstrumentor instrumentor,
-                                       @NonNull final MappedStatement ms) {
+                                       @NonNull final MappedStatement ms, Executor executor) {
         String databaseId = null;
         if (sqlRequestContextHolder != null) {
             SqlRequestContext sqlRequestContext = sqlRequestContextHolder.get();
@@ -87,7 +91,15 @@ public class MybatisUtils {
         if (Emptys.isEmpty(databaseId)) {
             return ms.getConfiguration().getDatabaseId();
         }
-
+        if (Emptys.isEmpty(databaseId) && executor != null) {
+            Transaction tx = executor.getTransaction();
+            try {
+                Connection connection = tx.getConnection();
+                Dialect dialect = instrumentor.getDialect(connection.getMetaData());
+                return dialect.getDatabaseId();
+            } catch (Throwable ex) {
+            }
+        }
         return databaseId;
     }
 

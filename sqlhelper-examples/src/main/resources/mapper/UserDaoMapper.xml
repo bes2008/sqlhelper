@@ -28,7 +28,7 @@
             (
             #{item.id},
             #{item.name},
-            #{item.age},
+            #{item.age}
             )
         </foreach>
 

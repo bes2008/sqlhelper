@@ -604,7 +604,9 @@ public class SQLExpressions {
                 @Override
                 public LikeExpression get() {
                     LikeExpression like = new LikeExpression(isNotExpression);
-                    like.setEscape(escape);
+                    if (escape != null) {
+                        like.setEscape(escape);
+                    }
                     return like;
                 }
             });

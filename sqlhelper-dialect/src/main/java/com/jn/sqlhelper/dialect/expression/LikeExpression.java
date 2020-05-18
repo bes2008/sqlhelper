@@ -1,7 +1,6 @@
 package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.expression.operator.AbstractBinaryOperator;
-import com.jn.langx.util.Emptys;
 
 /**
  * left [not] like right escape '/'
@@ -64,7 +63,7 @@ public class LikeExpression extends AbstractBinaryOperator<SQLExpression, String
                 .append(not() ? " not" : "")
                 .append(caseInsensitive ? " ilike " : " like ")
                 .append(getPatternExpression().toString())
-                .append(Emptys.isEmpty(escape) ? "" : (" escape '" + escape + "'"));
+                .append(escape == 0 ? "" : (" escape '" + escape + "'"));
         return builder.toString();
     }
 }
