@@ -3,8 +3,6 @@ package com.jn.sqlhelper.mybatis.plugins.tenant;
 import com.jn.langx.pipeline.AbstractHandler;
 import com.jn.langx.pipeline.HandlerContext;
 import com.jn.langx.pipeline.Pipelines;
-
-import com.jn.langx.util.Chars;
 import com.jn.langx.util.Emptys;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
@@ -25,7 +23,7 @@ import java.util.List;
 /**
  * @author huxiongming
  */
-public class TenantHandler extends AbstractHandler{
+public class TenantHandler extends AbstractHandler {
     private static Logger logger = LoggerFactory.getLogger(TenantHandler.class);
     private static final String TENANT_SUFFIX = "tenant";
 
@@ -35,9 +33,9 @@ public class TenantHandler extends AbstractHandler{
         ExecutorInvocation executorInvocation = (ExecutorInvocation) ctx.getPipeline().getTarget();
         MappedStatement mappedStatement = executorInvocation.getMappedStatement();
 
-        if (MybatisUtils.isPreparedStatement(mappedStatement)&&Emptys.isNotEmpty(sqlContext)&&Emptys.isNotEmpty(sqlContext.getRequest().getTenant())) {
+        if (MybatisUtils.isPreparedStatement(mappedStatement) && Emptys.isNotEmpty(sqlContext) && Emptys.isNotEmpty(sqlContext.getRequest()) && Emptys.isNotEmpty(sqlContext.getRequest().getTenant())) {
             intercept(ctx);
-        }else{
+        } else {
             Pipelines.skipHandler(ctx, true);
         }
     }
@@ -49,36 +47,38 @@ public class TenantHandler extends AbstractHandler{
         MappedStatement ms = executorInvocation.getMappedStatement();
         BoundSql boundSql = executorInvocation.getBoundSql();
         final Executor executor = executorInvocation.getExecutor();
-        final Tenant tenant=sqlContext.getRequest().getTenant();
+        final Tenant tenant = sqlContext.getRequest().getTenant();
         final Object parameter = executorInvocation.getParameter();
         SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
         try {
             String tenantSql = instrumentor.instrumentTenantSql(boundSql.getSql(), tenant);
-            if(SqlCommandType.SELECT.equals(ms.getSqlCommandType())){
-               boundSql = MybatisUtils.rebuildBoundSql(tenantSql, ms.getConfiguration(), boundSql);
-               executorInvocation.setBoundSql(boundSql);
-               Pipelines.inbound(ctx);
-            }else{
+            if (SqlCommandType.SELECT.equals(ms.getSqlCommandType())) {
                 boundSql = MybatisUtils.rebuildBoundSql(tenantSql, ms.getConfiguration(), boundSql);
-                String tenantStatementId=this.getTenantStatementId(ms,tenant);
-                MappedStatement customTenantStatement=this.customTenantStatement(ms,parameter,tenantStatementId,boundSql);
+                executorInvocation.setBoundSql(boundSql);
+                Pipelines.inbound(ctx);
+            } else {
+                boundSql = MybatisUtils.rebuildBoundSql(tenantSql, ms.getConfiguration(), boundSql);
+                String tenantStatementId = this.getTenantStatementId(ms);
+                MappedStatement customTenantStatement = this.customTenantStatement(ms, parameter, tenantStatementId, boundSql);
                 executorInvocation.setResult(executor.update(customTenantStatement, parameter));
                 return;
             }
 
-        }catch (Throwable e){
+        } catch (Throwable e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             instrumentor.finish();
         }
     }
-    private String getTenantStatementId(final MappedStatement ms, final Tenant tenant) {
+
+    private String getTenantStatementId(final MappedStatement ms) {
         StringBuilder builder = new StringBuilder(ms.getId() + "_");
         return builder.append(TENANT_SUFFIX).toString();
     }
-    private MappedStatement customTenantStatement(final MappedStatement ms, Object parameter,final String tenantStatementId,BoundSql boundSql) {
-        List<ParameterMapping> parameterMappings= ms.getBoundSql(ms.getParameterMap().getType()).getParameterMappings();
-        StaticSqlSource sqlSource=new StaticSqlSource(ms.getConfiguration(), boundSql.getSql(), parameterMappings);
+
+    private MappedStatement customTenantStatement(final MappedStatement ms, Object parameter, final String tenantStatementId, BoundSql boundSql) {
+        List<ParameterMapping> parameterMappings = ms.getBoundSql(ms.getParameterMap().getType()).getParameterMappings();
+        StaticSqlSource sqlSource = new StaticSqlSource(ms.getConfiguration(), boundSql.getSql(), parameterMappings);
         final MappedStatement.Builder builder = new MappedStatement.Builder(ms.getConfiguration(), tenantStatementId, sqlSource, ms.getSqlCommandType());
         builder.resource(ms.getResource());
         builder.fetchSize(ms.getFetchSize());

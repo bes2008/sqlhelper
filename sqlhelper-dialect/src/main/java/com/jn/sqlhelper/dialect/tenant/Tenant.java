@@ -1,11 +1,8 @@
 package com.jn.sqlhelper.dialect.tenant;
 
-import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.function.Consumer;
-import com.jn.langx.util.function.Predicate;
 import com.jn.sqlhelper.dialect.expression.*;
+import static com.jn.sqlhelper.dialect.expression.SQLExpressions.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,8 +60,8 @@ public class Tenant {
     }
 
     private SQLExpression singleTenantCondition() {
-        EqualExpression equalExpression=new EqualExpression();
-        equalExpression.setLeft(new SQLExpressions.ColumnBuilder().column(this.tenantColumn).build());
+        EqualExpression equalExpression = new EqualExpression();
+        equalExpression.setLeft(new ColumnBuilder().column(this.tenantColumn).build());
         equalExpression.setRight(new StringExpression(this.singleTenantValues));
         return equalExpression;
     }
@@ -77,7 +74,7 @@ public class Tenant {
     private SQLExpression multipleTenantCondition() {
         InExpression inExpression = new InExpression();
         inExpression.setLeft(new ColumnExpression(this.tenantColumn));
-        final ListExpression listExpression = new SQLExpressions.ListExpressionBuilder().addValues(this.multipleTenantValues).build();
+        final ListExpression listExpression = new ListExpressionBuilder().addValues(this.multipleTenantValues).build();
         inExpression.setRight(listExpression);
         return inExpression;
     }
