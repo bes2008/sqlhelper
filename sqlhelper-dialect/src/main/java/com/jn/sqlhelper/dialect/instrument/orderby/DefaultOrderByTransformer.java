@@ -5,6 +5,10 @@ import com.jn.sqlhelper.dialect.instrument.TransformConfig;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
 import com.jn.sqlhelper.dialect.sqlparser.StringSqlStatementWrapper;
 
+/**
+ * 是自定义 OrderByTransformer 的代理，优先使用自定义的 OrderByTransformer 进行SQL转换，如果找不到自定义的 OrderByTransformer，或者自定义的 OrderByTransformer
+ * 转换失败，则会自动采用 SimpleOrderByTransformer 进行转换
+ */
 @SuppressWarnings("rawtypes")
 public class DefaultOrderByTransformer extends AbstractClauseTransformer implements OrderByTransformer {
     private final SimpleOrderByTransformer simpleTransformer = new SimpleOrderByTransformer();
