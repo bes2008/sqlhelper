@@ -51,7 +51,7 @@ public class InstrumentationRegistry implements Initializable {
         if (!inited) {
             this.inited = true;
             ServiceLoader<Instrumentation> loader = ServiceLoader.load(Instrumentation.class);
-            Collects.forEach(new IteratorIterable<Instrumentation>(loader.iterator()), new Consumer<Instrumentation>() {
+            Collects.forEach(loader, new Consumer<Instrumentation>() {
                 @Override
                 public void accept(Instrumentation instrumentation) {
                     String alias = Instrumentations.getAliasName(instrumentation);

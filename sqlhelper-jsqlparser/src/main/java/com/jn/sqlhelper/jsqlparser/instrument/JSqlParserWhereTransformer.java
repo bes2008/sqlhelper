@@ -7,6 +7,7 @@ import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.instrument.AbstractClauseTransformer;
+import com.jn.sqlhelper.dialect.instrument.InjectPosition;
 import com.jn.sqlhelper.dialect.instrument.TransformConfig;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformConfig;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformer;
@@ -83,7 +84,7 @@ public class JSqlParserWhereTransformer extends AbstractClauseTransformer<Statem
                 if (where == null) {
                     plainSelect.setWhere(expression);
                 } else {
-                    WhereTransformConfig.Position position = config.getPosition();
+                    InjectPosition position = config.getPosition();
                     switch (position) {
                         case FIRST:
                             plainSelect.setWhere(new AndExpression(expression, where));
@@ -117,7 +118,7 @@ public class JSqlParserWhereTransformer extends AbstractClauseTransformer<Statem
                 if (where == null) {
                     update.setWhere(expression);
                 } else {
-                    WhereTransformConfig.Position position = config.getPosition();
+                    InjectPosition position = config.getPosition();
                     switch (position) {
                         case FIRST:
                             update.setWhere(new AndExpression(expression, where));
@@ -151,7 +152,7 @@ public class JSqlParserWhereTransformer extends AbstractClauseTransformer<Statem
                 if (where == null) {
                     delete.setWhere(expression);
                 } else {
-                    WhereTransformConfig.Position position = config.getPosition();
+                    InjectPosition position = config.getPosition();
                     switch (position) {
                         case FIRST:
                             delete.setWhere(new AndExpression(expression, where));

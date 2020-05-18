@@ -3,6 +3,7 @@ package com.jn.sqlhelper.jsqlparser.instrument;
 import com.jn.langx.annotation.Name;
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.sqlhelper.dialect.instrument.Instrumentation;
+import com.jn.sqlhelper.dialect.instrument.groupby.GroupByTransformer;
 import com.jn.sqlhelper.dialect.instrument.orderby.OrderByTransformer;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformer;
 import com.jn.sqlhelper.dialect.sqlparser.SqlParser;
@@ -17,6 +18,7 @@ public class JSqlParserInstrumentation implements Instrumentation<Statement, JSq
     private SqlParser<JSqlParserStatementWrapper> sqlParser;
     private WhereTransformer<Statement> whereTransformer;
     private OrderByTransformer<Statement> orderByTransformer;
+    private GroupByTransformer<Statement> groupByTransformer;
 
     @Override
     public void init() throws InitializationException {
@@ -27,6 +29,8 @@ public class JSqlParserInstrumentation implements Instrumentation<Statement, JSq
             whereTransformer.init();
             orderByTransformer = new JSqlParserOrderByTransformer();
             orderByTransformer.init();
+            groupByTransformer = new JSqlParserGroupByTransformer();
+            groupByTransformer.init();
         }
     }
 
@@ -56,4 +60,8 @@ public class JSqlParserInstrumentation implements Instrumentation<Statement, JSq
         return this.orderByTransformer;
     }
 
+    @Override
+    public GroupByTransformer<Statement> getGroupByTransformer() {
+        return groupByTransformer;
+    }
 }
