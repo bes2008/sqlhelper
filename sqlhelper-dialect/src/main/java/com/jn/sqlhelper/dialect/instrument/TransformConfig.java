@@ -2,6 +2,7 @@ package com.jn.sqlhelper.dialect.instrument;
 
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.hash.HashCodeBuilder;
+import com.jn.sqlhelper.dialect.instrument.groupby.GroupByTransformConfig;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformConfig;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
@@ -10,28 +11,56 @@ import com.jn.sqlhelper.dialect.tenant.Tenant;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * 每一次进行转换操作，都需要有一个 TransformConfig
+ */
 public class TransformConfig implements Serializable {
 
     /**
+     * 分页参数
+     *
      * case null: not a pagination request
      * case true: a pagination request with a limit, offset
      * case false: a pagination request with a limit only
      */
     private Boolean limitOffset = null;
 
-    private OrderBy orderBy;
-
+    /**
+     * 数据库方言
+     */
     private String dialect;
 
+    /**
+     * 是否进行 like 转义操作
+     */
     private boolean likeEscaped = false;
 
+    /**
+     * 自定义的like 转义器
+     */
     private LikeEscaper likeEscaper;
 
+    /**
+     * 是否 为 select count 请求
+     */
     private boolean isCount = false;
 
     private boolean isMultiTenant = false;
 
+    /**
+     * 对 where 条件的转换配置
+     */
     private List<WhereTransformConfig> whereInstrumentConfigs;
+
+    /**
+     * order by 子句的转换配置
+     */
+    private OrderBy orderBy;
+
+    /**
+     * group by 子句的转换配置
+     */
+    private List<GroupByTransformConfig> groupByTransformConfigs;
 
     private Tenant tenant;
 
@@ -77,7 +106,6 @@ public class TransformConfig implements Serializable {
 
         return true;
     }
-
 
 
     @Override

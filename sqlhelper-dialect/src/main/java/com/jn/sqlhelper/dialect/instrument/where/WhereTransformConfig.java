@@ -2,25 +2,19 @@ package com.jn.sqlhelper.dialect.instrument.where;
 
 import com.jn.langx.util.hash.HashCodeBuilder;
 import com.jn.sqlhelper.dialect.expression.SQLExpression;
+import com.jn.sqlhelper.dialect.instrument.InjectPosition;
 
 public class WhereTransformConfig {
 
-
-    public static enum Position {
-        FIRST,
-        LAST,
-        BEST;
-    }
-
-    private Position position = Position.LAST;
+    private InjectPosition position = InjectPosition.LAST;
     private SQLExpression expression;
     private boolean instrumentSubSelect = false;
 
-    public Position getPosition() {
+    public InjectPosition getPosition() {
         return position;
     }
 
-    public void setPosition(Position position) {
+    public void setPosition(InjectPosition position) {
         this.position = position;
     }
 
