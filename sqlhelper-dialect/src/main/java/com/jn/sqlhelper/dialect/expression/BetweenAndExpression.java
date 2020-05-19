@@ -4,7 +4,7 @@ import com.jn.langx.expression.BaseExpression;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.hash.HashCodeBuilder;
 
-public class BetweenAndExpression extends BaseExpression<SQLExpression> implements SQLExpression<SQLExpression>, Notable {
+public class BetweenAndExpression extends BaseExpression<SQLExpression> implements SQLExpression<SQLExpression>, Notable, SymbolExpression {
     private SQLExpression target;
     private SQLExpression low;
     private SQLExpression high;

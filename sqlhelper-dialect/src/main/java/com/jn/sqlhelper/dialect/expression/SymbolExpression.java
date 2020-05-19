@@ -12,11 +12,10 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.dialect.expression.builder;
+package com.jn.sqlhelper.dialect.expression;
 
-import com.jn.langx.Builder;
-import com.jn.sqlhelper.dialect.expression.SQLExpression;
-
-public interface SQLExpressionBuilder<E extends SQLExpression> extends Builder<E> {
-
+/**
+ * 只是一个标识而已
+ */
+public interface SymbolExpression {
 }

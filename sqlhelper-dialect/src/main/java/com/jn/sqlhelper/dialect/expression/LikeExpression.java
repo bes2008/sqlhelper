@@ -5,7 +5,7 @@ import com.jn.langx.expression.operator.AbstractBinaryOperator;
 /**
  * left [not] like right escape '/'
  */
-public class LikeExpression extends AbstractBinaryOperator<SQLExpression, StringExpression, SQLExpression> implements SQLExpression<SQLExpression>, Notable {
+public class LikeExpression extends AbstractBinaryOperator<SQLExpression, StringExpression, SQLExpression> implements SQLExpression<SQLExpression>, Notable, SymbolExpression {
     private boolean isNotExpression = false;
     private char escape; // BackslashStyleEscaper.INSTANCE.getEscapeChar(); // optional
     private boolean caseInsensitive = false;

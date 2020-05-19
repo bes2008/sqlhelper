@@ -2,7 +2,7 @@ package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.expression.operator.logic.OR;
 
-public class OrExpression extends OR implements SQLExpression {
+public class OrExpression extends OR implements SQLExpression, SymbolExpression {
     public OrExpression() {
         setOperateSymbol("or");
     }

@@ -2,7 +2,7 @@ package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.expression.operator.AbstractUnaryOperator;
 
-public class AnyExpression extends AbstractUnaryOperator<SQLExpression<SQLExpression>, SQLExpression> implements SQLExpression<SQLExpression> {
+public class AnyExpression extends AbstractUnaryOperator<SQLExpression<SQLExpression>, SQLExpression> implements SQLExpression<SQLExpression>, SymbolExpression {
 
     public AnyExpression() {
         setOperateSymbol("any");
