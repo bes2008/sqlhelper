@@ -14,7 +14,7 @@ public class SQLExpressionBuilders {
     private SQLExpressionBuilders() {
     }
 
-    public static class ColumnBuilder extends AbstractExpressionBuilder<ColumnExpression> {
+    public static class ColumnBuilder implements SQLExpressionBuilder<ColumnExpression> {
         private ColumnExpression columnExpression = new ColumnExpression();
 
         public ColumnBuilder catalog(String catalog) {
@@ -53,7 +53,7 @@ public class SQLExpressionBuilders {
         }
     }
 
-    public static class IntegerOrLongExpressionBuilder extends AbstractExpressionBuilder<IntegerOrLongExpression> {
+    public static class IntegerOrLongExpressionBuilder implements SQLExpressionBuilder<IntegerOrLongExpression> {
         private IntegerOrLongExpression expression = new IntegerOrLongExpression();
 
         public IntegerOrLongExpressionBuilder() {
@@ -77,7 +77,7 @@ public class SQLExpressionBuilders {
         }
     }
 
-    public static class DoubleExpressionBuilder extends AbstractExpressionBuilder<DoubleExpression> {
+    public static class DoubleExpressionBuilder implements SQLExpressionBuilder<DoubleExpression> {
         private DoubleExpression expression = new DoubleExpression();
 
         public DoubleExpressionBuilder() {
@@ -95,7 +95,7 @@ public class SQLExpressionBuilders {
         }
     }
 
-    public static class StringExpressionBuilder extends AbstractExpressionBuilder<StringExpression> {
+    public static class StringExpressionBuilder implements SQLExpressionBuilder<StringExpression> {
         private StringExpression expression = new StringExpression();
 
         public StringExpressionBuilder() {
@@ -113,7 +113,7 @@ public class SQLExpressionBuilders {
         }
     }
 
-    public static class ListExpressionBuilder extends AbstractExpressionBuilder<ListExpression> {
+    public static class ListExpressionBuilder implements SQLExpressionBuilder<ListExpression> {
         private ListExpression list = new ListExpression();
 
         public ListExpression getListExpression() {
@@ -181,7 +181,6 @@ public class SQLExpressionBuilders {
             return list;
         }
     }
-
 
 
     public static class AddBuilder extends BinaryOperatorExpressionBuilder<AddExpression, AddBuilder> {
@@ -386,7 +385,7 @@ public class SQLExpressionBuilders {
         }
     }
 
-    public static class BetweenAndBuilder extends AbstractExpressionBuilder<BetweenAndExpression> {
+    public static class BetweenAndBuilder implements SQLExpressionBuilder<BetweenAndExpression> {
         private BetweenAndExpression between = new BetweenAndExpression();
 
         public BetweenAndBuilder() {
