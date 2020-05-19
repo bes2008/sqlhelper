@@ -40,11 +40,11 @@ public enum ExpressionSymbol implements CommonEnum, Delegatable<EnumDelegate> {
     GT(14, ">", ">"),
     LE(15, "<=", "<="),
     LT(16, "<", "<"),
-    NEQ(17, "!=", "!="),
+    NE(17, "!=", "!="),
 
     IN(18, "IN", "in"),
     IS_NULL(19, "IS NULL", "is null"),
-    EXISTS(20, "IS NULL", "exists"),
+    EXISTS(20, "EXISTS", "exists"),
     LIKE(21, "LIKE", "like");
 
     private EnumDelegate delegate;

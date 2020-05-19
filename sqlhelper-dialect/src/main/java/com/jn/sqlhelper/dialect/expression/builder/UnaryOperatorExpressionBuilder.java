@@ -25,6 +25,9 @@ import com.jn.sqlhelper.dialect.expression.StringExpression;
 public class UnaryOperatorExpressionBuilder<E extends SQLExpression & UnaryOperator, T extends UnaryOperatorExpressionBuilder<E, T>> implements SQLExpressionBuilder<E> {
     protected String operateSymbol; // optional
     protected SQLExpression target; // required
+    /**
+     * operation expression supplier
+     */
     private Supplier0<E> supplier; // required
 
     public T supplier(Supplier0<E> supplier) {
