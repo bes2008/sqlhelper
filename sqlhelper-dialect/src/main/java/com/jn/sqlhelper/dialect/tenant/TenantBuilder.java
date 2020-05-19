@@ -16,10 +16,10 @@ import com.jn.langx.annotation.Nullable;
 
 public interface TenantBuilder<T> {
 
-     TenantBuilder column(@Nullable String column);
+    TenantBuilder column(@Nullable String column);
 
-     TenantBuilder value(@Nullable T tenantValue) ;
+    TenantBuilder value(@Nullable T tenantValue);
 
-     Tenant build() ;
+    Tenant build();
 
 }

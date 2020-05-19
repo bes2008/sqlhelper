@@ -99,4 +99,18 @@ public class ColumnEvaluation {
     public void setValues(List values) {
         this.values = values;
     }
+
+    @Override
+    public String toString() {
+        return "ColumnEvaluation{" +
+                "catalog='" + catalog + '\'' +
+                ", schema='" + schema + '\'' +
+                ", table='" + table + '\'' +
+                ", column='" + column + '\'' +
+                ", jdbcType=" + jdbcType +
+                ", symbol=" + symbol +
+                ", not=" + not +
+                ", values=" + values +
+                '}';
+    }
 }
