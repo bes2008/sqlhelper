@@ -20,7 +20,7 @@ import com.jn.langx.util.Strings;
 import com.jn.langx.util.function.Supplier0;
 import com.jn.sqlhelper.dialect.expression.*;
 
-public class BinaryOperatorExpressionBuilder<E extends SQLExpression & BinaryOperator, T extends BinaryOperatorExpressionBuilder<E, T>> extends AbstractExpressionBuilder<E> {
+public class BinaryOperatorExpressionBuilder<E extends SQLExpression & BinaryOperator, T extends BinaryOperatorExpressionBuilder<E, T>> implements SQLExpressionBuilder<E> {
     protected String operateSymbol; // optional
     protected SQLExpression left; // required
     protected SQLExpression right; // required

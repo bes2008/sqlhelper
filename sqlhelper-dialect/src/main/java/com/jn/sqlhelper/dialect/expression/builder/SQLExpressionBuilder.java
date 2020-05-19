@@ -17,5 +17,5 @@ package com.jn.sqlhelper.dialect.expression.builder;
 import com.jn.langx.Builder;
 import com.jn.sqlhelper.dialect.expression.SQLExpression;
 
-public abstract class AbstractExpressionBuilder<E extends SQLExpression> implements Builder<E> {
+public interface SQLExpressionBuilder<E extends SQLExpression> extends Builder<E> {
 }
