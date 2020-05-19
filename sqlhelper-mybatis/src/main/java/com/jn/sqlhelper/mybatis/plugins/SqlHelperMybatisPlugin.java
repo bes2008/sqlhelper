@@ -57,7 +57,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     private static SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
     private boolean inited = false;
     private Map<String, Handler> handlerRegistry = new HashMap<String, Handler>();
-    private boolean tenantEnabled = false;
+    private boolean tenantEnabled = true;
 
     @Override
     public void init() throws InitializationException {

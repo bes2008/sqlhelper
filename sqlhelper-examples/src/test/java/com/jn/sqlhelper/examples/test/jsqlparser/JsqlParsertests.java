@@ -2,7 +2,6 @@ package com.jn.sqlhelper.examples.test.jsqlparser;
 
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
-import com.jn.sqlhelper.dialect.tenant.AndTenantBuilder;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.Select;
@@ -38,13 +37,14 @@ public class JsqlParsertests {
             }
 
             SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
+            /*
             String tenantSql = instrumentor.instrumentTenantSql(sql, AndTenantBuilder.DEFAULT
                     .column("tenant")
                     .value("1")
                     .build());
             System.out.println("print instrumented sql:");
             System.out.println(tenantSql);
-
+            */
             System.out.println("====================================");
         }
     }

@@ -1,8 +1,5 @@
 package com.jn.sqlhelper.dialect.tenant;
 
-import com.jn.sqlhelper.dialect.expression.*;
-import static com.jn.sqlhelper.dialect.expression.SQLExpressions.*;
-
 import java.util.List;
 
 /**
@@ -10,73 +7,69 @@ import java.util.List;
  */
 public class Tenant {
 
+    /**
+     * 表名
+     */
+    private String table;
 
-    private String tenantColumn;
+    /**
+     * 租户ID的列名
+     */
+    private String column;
 
-    private List<String> multipleTenantValues;
-    private boolean isMultipleTenant;
+    /**
+     * 操作符
+     */
+    private String operateSymbol;
 
-    private String singleTenantValues;
+    /**
+     * 参数值
+     */
+    private List values;
 
-    public void setTenantColumn(String tenantColumn) {
-        this.tenantColumn = tenantColumn;
+    /**
+     * 是否为 not 表达式
+     */
+    private boolean not;
+
+    public String getTable() {
+        return table;
     }
 
-    public List<String> getMultipleTenantValues() {
-        return multipleTenantValues;
+    public void setTable(String table) {
+        this.table = table;
     }
 
-    public void setMultipleTenantValues(List<String> multipleTenantValues) {
-        this.multipleTenantValues = multipleTenantValues;
+    public String getColumn() {
+        return column;
     }
 
-    public boolean isMultipleTenant() {
-        return isMultipleTenant;
+    public void setColumn(String column) {
+        this.column = column;
     }
 
-    public void setMultipleTenant(boolean multipleTenant) {
-        isMultipleTenant = multipleTenant;
+    public String getOperateSymbol() {
+        return operateSymbol;
     }
 
-    public String getSingleTenantValues() {
-        return singleTenantValues;
+    public void setOperateSymbol(String operateSymbol) {
+        this.operateSymbol = operateSymbol;
     }
 
-    public void setSingleTenantValues(String singleTenantValues) {
-        this.singleTenantValues = singleTenantValues;
+    public List getValues() {
+        return values;
     }
 
-
-    public SQLExpression getTenant(boolean where) {
-        if (where && isMultipleTenant) {
-            return multipleTenantCondition();
-        } else {
-            return singleTenantCondition();
-        }
+    public void setValues(List values) {
+        this.values = values;
     }
 
-    public String getTenantColumn() {
-        return this.tenantColumn;
+    public boolean isNot() {
+        return not;
     }
 
-    private SQLExpression singleTenantCondition() {
-        EqualExpression equalExpression = new EqualExpression();
-        equalExpression.setLeft(new ColumnBuilder().column(this.tenantColumn).build());
-        equalExpression.setRight(new StringExpression(this.singleTenantValues));
-        return equalExpression;
-    }
-
-    public boolean doTableFilter(String tableName) {
-        return false;
-    }
-
-
-    private SQLExpression multipleTenantCondition() {
-        InExpression inExpression = new InExpression();
-        inExpression.setLeft(new ColumnExpression(this.tenantColumn));
-        final ListExpression listExpression = new ListExpressionBuilder().addValues(this.multipleTenantValues).build();
-        inExpression.setRight(listExpression);
-        return inExpression;
+    public void setNot(boolean not) {
+        this.not = not;
     }
 
     @Override

@@ -169,6 +169,7 @@ public class JSqlParserWhereTransformer extends AbstractClauseTransformer<Statem
         });
     }
     private void transform(final Insert insert, Tenant tenant) {
+        /*
         insert.getColumns().add(new Column(tenant.getTenantColumn()));
         if (insert.getItemsList() != null) {
             ItemsList itemsList = insert.getItemsList();
@@ -176,5 +177,6 @@ public class JSqlParserWhereTransformer extends AbstractClauseTransformer<Statem
                 ((ExpressionList) insert.getItemsList()).getExpressions().add(new StringValue(tenant.getSingleTenantValues()));
             }
         }
+         */
     }
 }

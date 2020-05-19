@@ -269,7 +269,7 @@ public class SQLStatementInstrumentor implements Initializable {
             WhereTransformConfig whereTransformConfig = new WhereTransformConfig();
             whereTransformConfig.setInstrumentSubSelect(false);
             whereTransformConfig.setPosition(InjectPosition.FIRST);
-            whereTransformConfig.setExpression(tenant.getTenant(false));
+            //whereTransformConfig.setExpression(tenant.getTenant(false));
             TransformConfig transformConfig = new TransformConfig();
             transformConfig.setTenant(tenant);
             transformConfig.setWhereInstrumentConfigs(Collects.asList(whereTransformConfig));

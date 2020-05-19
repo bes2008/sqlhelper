@@ -5,7 +5,7 @@ import com.jn.sqlhelper.dialect.expression.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.jn.sqlhelper.dialect.expression.SQLExpressions.*;
+import static com.jn.sqlhelper.dialect.expression.builder.SQLExpressionBuilders.*;
 
 public class ExpressionTests {
 
