@@ -25,7 +25,7 @@ import static com.jn.sqlhelper.dialect.expression.ExpressionSymbol.*;
 import static com.jn.sqlhelper.dialect.expression.builder.SQLExpressionBuilders.*;
 
 public class SQLSymbolExpressionBuilderRegistry implements Initializable {
-
+    private boolean inited = false;
     private Map<ExpressionSymbol, Class<? extends SQLExpressionBuilder>> registry = new HashMap<ExpressionSymbol, Class<? extends SQLExpressionBuilder>>();
 
     public SQLExpressionBuilder find(ExpressionSymbol symbol) {
@@ -39,7 +39,10 @@ public class SQLSymbolExpressionBuilderRegistry implements Initializable {
 
     @Override
     public void init() throws InitializationException {
-        registerBuiltin();
+        if (!inited) {
+            registerBuiltin();
+            inited = true;
+        }
     }
 
     private void registerBuiltin() {

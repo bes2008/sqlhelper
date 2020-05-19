@@ -67,11 +67,8 @@ public class BuiltinColumnEvaluationExpressionSupplier implements ColumnEvaluati
         return null;
     }
 
-    public SQLSymbolExpressionBuilderRegistry getRegistry() {
-        return registry;
-    }
-
-    public void setRegistry(SQLSymbolExpressionBuilderRegistry registry) {
+    @Override
+    public void setExpressionBuilderRegistry(SQLSymbolExpressionBuilderRegistry registry) {
         this.registry = registry;
     }
 }

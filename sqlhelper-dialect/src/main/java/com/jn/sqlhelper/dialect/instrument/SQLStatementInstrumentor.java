@@ -31,6 +31,10 @@ import com.jn.langx.util.function.Predicate;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.dialect.SQLDialectException;
+import com.jn.sqlhelper.dialect.expression.SQLExpression;
+import com.jn.sqlhelper.dialect.expression.builder.SQLSymbolExpressionBuilderRegistry;
+import com.jn.sqlhelper.dialect.expression.columnevaluation.BuiltinColumnEvaluationExpressionSupplier;
+import com.jn.sqlhelper.dialect.expression.columnevaluation.ColumnEvaluationExpressionSupplier;
 import com.jn.sqlhelper.dialect.instrument.orderby.DefaultOrderByTransformer;
 import com.jn.sqlhelper.dialect.instrument.orderby.OrderByTransformer;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformConfig;
@@ -59,6 +63,8 @@ public class SQLStatementInstrumentor implements Initializable {
     private boolean inited = false;
     private String name;
     private Instrumentation instrumentation;
+    private SQLSymbolExpressionBuilderRegistry sqlSymbolExpressionBuilderRegistry = new SQLSymbolExpressionBuilderRegistry();
+    private ColumnEvaluationExpressionSupplier columnEvaluationExpressionSupplier;
 
     /**
      * order by transformer proxy
@@ -122,6 +128,14 @@ public class SQLStatementInstrumentor implements Initializable {
             orderByTransformer = new DefaultOrderByTransformer();
             orderByTransformer.setInstrumentation(instrumentation);
             orderByTransformer.init();
+
+            sqlSymbolExpressionBuilderRegistry.init();
+            if (columnEvaluationExpressionSupplier == null) {
+                columnEvaluationExpressionSupplier = new BuiltinColumnEvaluationExpressionSupplier();
+            }
+
+            columnEvaluationExpressionSupplier.setExpressionBuilderRegistry(sqlSymbolExpressionBuilderRegistry);
+
             logger.info("The {} SQLStatementInstrumentor initial finish", this.name);
         }
     }
@@ -269,7 +283,8 @@ public class SQLStatementInstrumentor implements Initializable {
             WhereTransformConfig whereTransformConfig = new WhereTransformConfig();
             whereTransformConfig.setInstrumentSubSelect(false);
             whereTransformConfig.setPosition(InjectPosition.FIRST);
-            //whereTransformConfig.setExpression(tenant.getTenant(false));
+            SQLExpression sqlExpression = columnEvaluationExpressionSupplier.get(tenant);
+            whereTransformConfig.setExpression(sqlExpression);
             TransformConfig transformConfig = new TransformConfig();
             transformConfig.setTenant(tenant);
             transformConfig.setWhereInstrumentConfigs(Collects.asList(whereTransformConfig));

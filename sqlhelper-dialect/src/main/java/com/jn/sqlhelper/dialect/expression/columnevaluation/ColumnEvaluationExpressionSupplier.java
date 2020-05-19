@@ -16,7 +16,8 @@ package com.jn.sqlhelper.dialect.expression.columnevaluation;
 
 import com.jn.langx.util.function.Supplier;
 import com.jn.sqlhelper.dialect.expression.SQLExpression;
+import com.jn.sqlhelper.dialect.expression.builder.SQLSymbolExpressionBuilderRegistry;
 
 public interface ColumnEvaluationExpressionSupplier extends Supplier<ColumnEvaluation, SQLExpression> {
-
+    void setExpressionBuilderRegistry(SQLSymbolExpressionBuilderRegistry registry);
 }
