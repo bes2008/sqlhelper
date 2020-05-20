@@ -57,7 +57,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     private static SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
     private boolean inited = false;
     private Map<String, Handler> handlerRegistry = new HashMap<String, Handler>();
-    private boolean tenantEnabled = true;
+    private final boolean tenantEnabled = false;
 
     @Override
     public void init() throws InitializationException {
@@ -119,13 +119,13 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         if ("query".equals(executorInvocation.getMethodName())) {
             handlers.add(handlerRegistry.get("likeEscape"));
             handlers.add(handlerRegistry.get("pagination"));
-            Handler pageHelperHander = handlerRegistry.get(PageHelperCompibles.pageHelperRequestFlag);
-            if (this.paginationConfig.isPageHelperCompatible() && pageHelperHander != null) {
+            Handler pageHelperHandler = handlerRegistry.get(PageHelperCompibles.pageHelperRequestFlag);
+            if (this.paginationConfig.isPageHelperCompatible() && pageHelperHandler != null) {
                 if (PagingRequestContextHolder.getContext().isPagingRequest()) {
                     PagingRequestContext context = PagingRequestContextHolder.getContext().get();
                     boolean isPageHelperRequest = context.getBoolean(PageHelperCompibles.pageHelperRequestFlag, false);
                     if (isPageHelperRequest) {
-                        handlers.add(pageHelperHander);
+                        handlers.add(pageHelperHandler);
                     }
                 }
             }

@@ -38,7 +38,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
 
     protected final TypeHandlerRegistry typeHandlerRegistry;
     protected final MappedStatement mappedStatement;
-    protected final Object parameterObject;
+    protected Object parameterObject;
     protected final BoundSql boundSql;
     protected final Configuration configuration;
 
@@ -109,6 +109,13 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
         return this.boundSql.getParameterMappings().size();
     }
 
+    private Object getUniqueParameterObject(){
+        if(this.parameterObject==null){
+            return this.getParameterObject();
+        }
+        return this.parameterObject;
+    }
+
     private void setParameters(final PreparedStatement ps, List<ParameterMapping> parameterMappings, final int startIndex, List<Integer> escapeLikeParametersIndexes) {
         boolean needEscapeLikeParameters = Emptys.isNotEmpty(escapeLikeParametersIndexes);
         LikeEscaper likeEscaper = null;
@@ -124,10 +131,10 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
                     Object value;
                     if (this.boundSql.hasAdditionalParameter(propertyName)) {
                         value = this.boundSql.getAdditionalParameter(propertyName);
-                    } else if (this.parameterObject == null) {
+                    } else if (getUniqueParameterObject()==null) {
                         value = null;
-                    } else if (this.typeHandlerRegistry.hasTypeHandler(this.parameterObject.getClass())) {
-                        value = this.parameterObject;
+                    } else if (this.typeHandlerRegistry.hasTypeHandler(getUniqueParameterObject().getClass())) {
+                        value = this.parameterObject == null ? this.getParameterObject() : this.parameterObject;
                     } else {
                         final MetaObject metaObject = this.configuration.newMetaObject(this.parameterObject);
                         value = metaObject.getValue(propertyName);

@@ -31,9 +31,15 @@ import org.apache.ibatis.reflection.MetaObject;
 import java.util.*;
 
 public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHandler {
-
+    protected Object parameterObject;
     public CustomMybatisPlusParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
         super(mappedStatement, processBatch(mappedStatement, parameterObject), boundSql);
+        this.parameterObject = parameterObject;
+    }
+
+    @Override
+    public Object getParameterObject() {
+        return parameterObject;
     }
 
     public static Object processBatch(MappedStatement ms, Object parameterObject) {
