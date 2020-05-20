@@ -129,14 +129,15 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
                 if (parameterMapping.getMode() != ParameterMode.OUT) {
                     final String propertyName = parameterMapping.getProperty();
                     Object value;
+                    Object parameterObject = getUniqueParameterObject();
                     if (this.boundSql.hasAdditionalParameter(propertyName)) {
                         value = this.boundSql.getAdditionalParameter(propertyName);
-                    } else if (getUniqueParameterObject()==null) {
+                    } else if (parameterObject==null) {
                         value = null;
-                    } else if (this.typeHandlerRegistry.hasTypeHandler(getUniqueParameterObject().getClass())) {
-                        value = this.parameterObject == null ? this.getParameterObject() : this.parameterObject;
+                    } else if (this.typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
+                        value = parameterObject;
                     } else {
-                        final MetaObject metaObject = this.configuration.newMetaObject(this.parameterObject);
+                        final MetaObject metaObject = this.configuration.newMetaObject(parameterObject);
                         value = metaObject.getValue(propertyName);
                     }
                     final TypeHandler typeHandler = parameterMapping.getTypeHandler();
