@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.fangjinuo.sqlhelper</groupId>
         <artifactId>sqlhelper</artifactId>
-        <version>3.1.0</version>
+        <version>3.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -127,6 +127,7 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-autoconfigure</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
@@ -138,34 +139,34 @@
                     <groupId>com.github.fangjinuo.sqlhelper</groupId>
                     <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
                 </dependency>
--->
+                -->
 
-                <dependency>
-                    <groupId>com.github.fangjinuo.easyjson</groupId>
-                    <artifactId>easyjson-jackson</artifactId>
-                    <version>${easyjson.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>com.github.fangjinuo.sqlhelper</groupId>
-                    <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-jackson</artifactId>
+            <version>${easyjson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
+        </dependency>
 
-                <dependency>
-                    <groupId>com.github.fangjinuo.sqlhelper</groupId>
-                    <artifactId>sqlhelper-common</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>com.github.fangjinuo.sqlhelper</groupId>
-                    <artifactId>sqlhelper-jsqlparser</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-jsqlparser</artifactId>
+        </dependency>
 
-                <dependency>
-                    <groupId>com.github.fangjinuo.audit</groupId>
-                    <artifactId>audit-spring-boot-starter</artifactId>
-                    <version>1.0.0</version>
-                </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.audit</groupId>
+            <artifactId>audit-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
-                <!-- databases -->
+        <!-- databases -->
     </dependencies>
     <build>
         <plugins>
