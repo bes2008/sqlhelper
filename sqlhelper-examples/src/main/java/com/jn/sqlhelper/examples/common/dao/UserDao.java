@@ -29,6 +29,13 @@ public interface UserDao {
 
     List<User> selectByLimit(User limit);
 
+    /**
+     * 测试 '%' #{property} '%' 场景
+     * @param limit
+     * @return
+     */
+    List<User> selectByLimit_like2(User limit);
+
     List<User> selectByLimit_subqueryPagination(User limit);
 
     User selectById(String id);

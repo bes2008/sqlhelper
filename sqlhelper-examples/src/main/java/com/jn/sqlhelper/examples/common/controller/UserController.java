@@ -122,21 +122,32 @@ public class UserController {
             @RequestParam(value = "count", required = false) boolean count,
             @RequestParam(value = "useLastPageIfPageOut", required = false) boolean useLastPageIfPageOut,
             @RequestParam(value = "namelike", required = false) String namelike,
+            @RequestParam(value = "namelikeNotUsingConcat", required = false, defaultValue = "false") boolean namelikeNotUsingConcat,
             @RequestParam(value = "grateAge", required = false, defaultValue = "10") int age,
             @RequestParam(value = "testTenant", required = false, defaultValue = "false") boolean testTenant,
             @RequestParam(value = "tenantId", required = false, defaultValue = "1") String tenantId) {
         User queryCondition = new User();
         queryCondition.setAge(age);
         queryCondition.setName(namelike);
+        List<User> users = null;
+        if (namelikeNotUsingConcat) {
+            users = userDao.selectByLimit_like2(queryCondition);
+        }
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         request.setEscapeLikeParameter(true);
         System.out.println(JSONBuilderProvider.simplest().toJson(request));
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
         if (testTenant) {
-        //    request.setTenant(AndTenantBuilder.DEFAULT.column("tenantId").value(tenantId).build());
+            //    request.setTenant(AndTenantBuilder.DEFAULT.column("tenantId").value(tenantId).build());
         }
-        List<User> users = userDao.selectByLimit(queryCondition);
+
+
+        if (namelikeNotUsingConcat) {
+            //    users = userDao.selectByLimit_like2(queryCondition);
+        } else {
+            users = userDao.selectByLimit(queryCondition);
+        }
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
         json = JSONBuilderProvider.simplest().toJson(users);
@@ -155,7 +166,7 @@ public class UserController {
         queryCondition.setAge(10);
         queryCondition.setName("zhangsan_");
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-       // request.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("2").build());
+        // request.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("2").build());
         request.subqueryPaging(true);
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
@@ -356,7 +367,7 @@ public class UserController {
     @GetMapping("/tenant/{id}")
     public User mutilTenantGetById(@RequestParam("id") String id) throws IllegalAccessException, InstantiationException {
         SqlRequest sqlRequest = new SqlRequest();
-    //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
+        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
         SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
         return userDao.selectById(id);
     }
@@ -364,7 +375,7 @@ public class UserController {
     @PutMapping("/tenant")
     public void insertTenant(User user) {
         SqlRequest sqlRequest = new SqlRequest();
-    //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
+        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
         SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
         add(user);
 
@@ -373,7 +384,7 @@ public class UserController {
     @PutMapping("/tenant/")
     public void updateTenant(User user) {
         SqlRequest sqlRequest = new SqlRequest();
-    //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
+        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
         SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
         userDao.updateById(user);
     }
@@ -381,7 +392,7 @@ public class UserController {
     @DeleteMapping("/tenant/{id}")
     public void updateTenant(@PathVariable("id") String id) {
         SqlRequest sqlRequest = new SqlRequest();
-    //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
+        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
         SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
         userDao.deleteById(id);
     }
