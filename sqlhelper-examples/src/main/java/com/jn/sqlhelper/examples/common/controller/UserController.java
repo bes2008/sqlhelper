@@ -123,6 +123,7 @@ public class UserController {
             @RequestParam(value = "useLastPageIfPageOut", required = false) boolean useLastPageIfPageOut,
             @RequestParam(value = "namelike", required = false) String namelike,
             @RequestParam(value = "namelikeNotUsingConcat", required = false, defaultValue = "false") boolean namelikeNotUsingConcat,
+            @RequestParam(value = "likeEscapeEnabled", required = false, defaultValue = "true") boolean likeEscapeEnabled,
             @RequestParam(value = "grateAge", required = false, defaultValue = "10") int age,
             @RequestParam(value = "testTenant", required = false, defaultValue = "false") boolean testTenant,
             @RequestParam(value = "tenantId", required = false, defaultValue = "1") String tenantId) {
@@ -134,7 +135,7 @@ public class UserController {
             users = userDao.selectByLimit_like2(queryCondition);
         }
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-        request.setEscapeLikeParameter(true);
+        request.setEscapeLikeParameter(likeEscapeEnabled);
         System.out.println(JSONBuilderProvider.simplest().toJson(request));
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
@@ -144,7 +145,7 @@ public class UserController {
 
 
         if (namelikeNotUsingConcat) {
-            //    users = userDao.selectByLimit_like2(queryCondition);
+            users = userDao.selectByLimit_like2(queryCondition);
         } else {
             users = userDao.selectByLimit(queryCondition);
         }
