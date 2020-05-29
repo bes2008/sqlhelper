@@ -271,28 +271,31 @@ public class SQLStatementInstrumentor implements Initializable {
         if (tenant == null) {
             return sql;
         }
-        if (this.config.isCacheInstrumentedSql()) {
-            String tenantSql = getInstrumentedStatement(sql).getTenantSql();
-            if (tenantSql != null) {
-                return tenantSql;
-            }
-        }
 
         try {
-            SqlStatementWrapper statementWrapper = instrumentation.getSqlParser().parse(sql);
+
             WhereTransformConfig whereTransformConfig = new WhereTransformConfig();
             whereTransformConfig.setInstrumentSubSelect(false);
             whereTransformConfig.setPosition(InjectPosition.FIRST);
             SQLExpression sqlExpression = columnEvaluationExpressionSupplier.get(tenant);
             whereTransformConfig.setExpression(sqlExpression);
+
             TransformConfig transformConfig = new TransformConfig();
-            transformConfig.setTenant(tenant);
             transformConfig.setWhereInstrumentConfigs(Collects.asList(whereTransformConfig));
+
+            if (this.config.isCacheInstrumentedSql()) {
+                String tenantSql = getInstrumentedStatement(sql).getInstrumentedSql(transformConfig);
+                if (tenantSql != null) {
+                    return tenantSql;
+                }
+            }
+
+            SqlStatementWrapper statementWrapper = instrumentation.getSqlParser().parse(sql);
             instrumentation.getWhereTransformer().transform(statementWrapper, transformConfig);
             String newSql = statementWrapper.getSql();
             if (newSql != null) {
                 if (this.config.isCacheInstrumentedSql()) {
-                    getInstrumentedStatement(sql).setTenantSql(transformConfig, newSql);
+                    getInstrumentedStatement(sql).setInstrumentedSql(transformConfig, newSql);
                 }
                 return newSql;
             }

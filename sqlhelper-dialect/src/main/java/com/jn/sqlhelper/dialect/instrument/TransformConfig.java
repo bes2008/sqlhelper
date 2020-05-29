@@ -171,14 +171,6 @@ public class TransformConfig implements Serializable {
         isCount = count;
     }
 
-    public boolean isMultiTenant() {
-        return isMultiTenant;
-    }
-
-    public void setMultiTenant(boolean multiTenant) {
-        isMultiTenant = multiTenant;
-    }
-
     public List<WhereTransformConfig> getWhereInstrumentConfigs() {
         return whereInstrumentConfigs;
     }
