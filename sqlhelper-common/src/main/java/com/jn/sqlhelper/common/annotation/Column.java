@@ -25,9 +25,18 @@ import java.lang.annotation.Target;
 
 import static com.jn.sqlhelper.common.ddl.model.internal.JdbcType.UNKNOWN;
 
+/**
+ * 代表数据库的列
+ */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE, ElementType.METHOD})
+@Target({ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})
 public @interface Column {
+    /**
+     * 这里是个数组，通常情况下，一个entity的某个字段只能代表一个列
+     * 如果这里配置了多个，则说明不同的数据库上可能有不同的名称。
+     *
+     * @return
+     */
     String[] value() default {};
 
     JdbcType jdbcType() default UNKNOWN;

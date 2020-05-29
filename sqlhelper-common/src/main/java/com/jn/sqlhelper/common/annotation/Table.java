@@ -20,8 +20,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * 标识某个类对应的数据库表
+ */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
 public @interface Table {
-    String[] value() default {};
+    String value() default "";
 }
