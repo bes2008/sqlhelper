@@ -27,6 +27,7 @@ import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
+import com.jn.sqlhelper.dialect.tenant.TenantBuilder;
 import com.jn.sqlhelper.examples.common.dao.UserDao;
 import com.jn.sqlhelper.examples.common.model.User;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
@@ -140,9 +141,8 @@ public class UserController {
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
         if (testTenant) {
-            //    request.setTenant(AndTenantBuilder.DEFAULT.column("tenantId").value(tenantId).build());
+            request.setTenant(new TenantBuilder().column("tenantId").values(tenantId).build());
         }
-
 
         if (namelikeNotUsingConcat) {
             users = userDao.selectByLimit_like2(queryCondition);
