@@ -21,6 +21,8 @@ import com.jn.langx.util.reflect.reference.ReferenceType;
 
 @Singleton
 public class EntityTableRegistry {
+
+    private EntityTableParser entityTableParser = new DefaultEntityTableMappingParser();
     /**
      * Key: entity class
      * Value：Entity Table Mapping
@@ -31,9 +33,8 @@ public class EntityTableRegistry {
         Preconditions.checkNotNull(entityClass);
         EntityTableMapping mapping = map.get(entityClass);
         if (mapping == null) {
-            mapping = new DefaultEntityTableMappingParser().parse(entityClass);
+            mapping = entityTableParser.parse(entityClass);
             map.putIfAbsent(entityClass, mapping);
-
         }
         EntityTableMapping mapping0 = map.get(entityClass);
         if (mapping0 != null) {
