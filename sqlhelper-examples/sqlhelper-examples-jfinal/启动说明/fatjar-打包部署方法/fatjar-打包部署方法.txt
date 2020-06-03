@@ -1,0 +1,55 @@
+
+
+1､在 DemoConfig 中的 configEngine(Engine me) 方法中添加如下两行代码
+    me.setBaseTemplatePath("webapp");
+    me.setToClassPathSourceFactory();
+    注意：上面两行配置代码要放在最前面，因为 addSharedFunction(...) 
+          这类配置对上面配置有依赖关系
+    
+
+    当你的 webapp 资源目录本来就放在 src/main/resources 之下时，可以去掉 pom.xml 中的
+    maven-resources-plugin 插件，该插件就是在打包的时候将 src/main/webapp 下面的资源
+    复制到 target/classes 下面去，好让其打到 jar 包之中去
+
+    所以，如果项目确定当成 fatjar 来开发的话，建议将 src/main/webapp 整体挪到
+    src/main/resources 之下。这样就从开发到打包不用做额外的动作，避免了出错的可能
+    
+    有部分同学习惯于使用 static 代替 webapp，将上述涉及 webapp 的地方改成 static 即可
+
+2、在 undertow.txt 配置文件中添加如下配置：
+   undertow.resourcePath=src/main/webapp, classpath:webapp
+
+3､将本文件夹下的 pom.xml 替换掉项目中原有的 pom.xml 文件
+
+  这两个文件的差别在于前者打 fatjar 包用到的是
+  maven-resources-plugin、maven-shade-plugin 这两个插件
+  而后者用到的是 maven-assembly-plugin 插件
+
+4､ 打包运行
+   mvn clean package
+   java -jar jfinal-demo.jar
+
+5､ 隐藏功能
+     在打好的 jar 包的目录中添加 config 目录并添加配置文件可以被项目加载，注意，这里的
+配置文件名与 jar 包中的配置文件名不能相同，可以参考 DemoConfig 中的用法：
+PropKit.use("demo-config-dev.txt").appendIfExists("demo-config-pro.txt");
+也就是说在开发的时候使用 dev 配置，在生产环境手动创建一个 pro 配置，由于该配置文件
+在 jar 包中不存在，所以会被加载，该配置文件中的配置会覆盖掉 dev 配置文件中的值
+简单来说这就是 jfinal 的 Prop 工具的一个用法而已
+
+    在打好的 jar 包目录中添加将项目中的 webapp 复制过来，便于对外部 css、js、html 等资源
+进行修改，更重要的是支持有文件上传功能的 web 项目
+
+    以上两个隐藏功能，需要在项目启动之前添加好目录与文件。简单来说这两个目录不存在时
+使用 jar 包中的资源，否则就使用它。注意 config 目录中与 jar 包中的同名配置不会被加载
+
+6､退出程序
+    如果启动时没带与字符 ‘&’ 结尾，则 Ctrl + C 即可退出否则使用下面的方法：
+   找到程序 pid: ps aux | grep java 
+   杀掉进程: kill pid
+
+ 注意使用 kill -9 pid 杀进程时，JFinalConfig.onStop() 不会被回调 
+可以参考 "非 fatjar" 项目的运行、停止脚本来写一个用于 fatjar 的脚本
+
+小结：以上配置并不是仅仅适用于打包部署，开发阶段也使用这些配置，不用改来改去
+
