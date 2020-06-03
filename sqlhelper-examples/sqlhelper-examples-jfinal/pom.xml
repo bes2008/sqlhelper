@@ -76,6 +76,13 @@
             <artifactId>cos</artifactId>
             <version>2020.4</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-jackson</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+
     </dependencies>
 
 
