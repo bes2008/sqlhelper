@@ -86,10 +86,16 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
 
     @Override
     public void setParameters(final PreparedStatement ps) {
-        if (!MybatisUtils.isQueryStatement(mappedStatement) || !isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || NestedStatements.isNestedStatement(mappedStatement) || !isTenantRequest()) {
+        // not a pagination request
+        if (!MybatisUtils.isQueryStatement(mappedStatement)
+                || !isInPagingRequestScope()
+                || isInvalidPagingRequest()
+                || this.isPagingCountStatement()
+                || NestedStatements.isNestedStatement(mappedStatement)) {
             this.setParameters(ps, this.boundSql.getParameterMappings(), 1, getEscapeLikeParametersIndexes());
             return;
         }
+        // a pagination request
         try {
             final MybatisQueryParameters queryParameters = new MybatisQueryParameters();
             queryParameters.setRowSelection(PAGING_CONTEXT.getRowSelection());
