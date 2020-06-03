@@ -4,7 +4,8 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
-import com.jn.sqlhelper.dialect.*;
+import com.jn.sqlhelper.dialect.SqlRequestContext;
+import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
@@ -38,9 +39,9 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
 
     protected final TypeHandlerRegistry typeHandlerRegistry;
     protected final MappedStatement mappedStatement;
-    protected Object parameterObject;
     protected final BoundSql boundSql;
     protected final Configuration configuration;
+    protected Object parameterObject;
 
     public CustomMybatisParameterHandler(final MappedStatement mappedStatement, final Object parameterObject, final BoundSql boundSql) {
         this.mappedStatement = mappedStatement;
@@ -68,11 +69,12 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
         return !PAGING_CONTEXT.getPagingRequest().isValidRequest();
     }
 
-    private boolean isTenantRequest(){
+    private boolean isTenantRequest() {
         SqlRequestContext sqlRequestContext = SqlRequestContextHolder.getInstance().get();
-        Tenant tenant=sqlRequestContext.getRequest().getTenant();
+        Tenant tenant = sqlRequestContext.getRequest().getTenant();
         return Emptys.isNotEmpty(tenant);
     }
+
     private List<Integer> getEscapeLikeParametersIndexes() {
         SqlRequestContext sqlRequestContext = SqlRequestContextHolder.getInstance().get();
         if (Objects.isNull(sqlRequestContext) || Objects.isNull(sqlRequestContext.getRequest())) {
@@ -86,10 +88,17 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
 
     @Override
     public void setParameters(final PreparedStatement ps) {
-        if (!MybatisUtils.isQueryStatement(mappedStatement) || !isInPagingRequestScope() || isInvalidPagingRequest() || this.isPagingCountStatement() || NestedStatements.isNestedStatement(mappedStatement) || !isTenantRequest()) {
+        // not a pagination sql
+        if (!MybatisUtils.isQueryStatement(mappedStatement)
+                || !isInPagingRequestScope()
+                || isInvalidPagingRequest()
+                || this.isPagingCountStatement()
+                || NestedStatements.isNestedStatement(mappedStatement)
+        ) {
             this.setParameters(ps, this.boundSql.getParameterMappings(), 1, getEscapeLikeParametersIndexes());
             return;
         }
+        // pagination request
         try {
             final MybatisQueryParameters queryParameters = new MybatisQueryParameters();
             queryParameters.setRowSelection(PAGING_CONTEXT.getRowSelection());
@@ -109,8 +118,8 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
         return this.boundSql.getParameterMappings().size();
     }
 
-    private Object getUniqueParameterObject(){
-        if(this.parameterObject==null){
+    private Object getUniqueParameterObject() {
+        if (this.parameterObject == null) {
             return this.getParameterObject();
         }
         return this.parameterObject;
@@ -132,7 +141,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
                     Object parameterObject = getUniqueParameterObject();
                     if (this.boundSql.hasAdditionalParameter(propertyName)) {
                         value = this.boundSql.getAdditionalParameter(propertyName);
-                    } else if (parameterObject==null) {
+                    } else if (parameterObject == null) {
                         value = null;
                     } else if (this.typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
                         value = parameterObject;
