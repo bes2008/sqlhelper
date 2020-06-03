@@ -38,10 +38,6 @@ public class JFinalCommonDialect extends Dialect {
         }
     }
 
-    private String getQuotedIdentifier(String identifier) {
-        return delegate == null ? identifier : delegate.getQuotedIdentifier(identifier);
-    }
-
     @Override
     public String forTableBuilderDoBuild(String tableName) {
         return "select * from " + tableName + " where 1 = 2";
@@ -85,13 +81,13 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public String forFindAll(String tableName) {
-        return super.forFindAll(getQuotedIdentifier(tableName));
+        return super.forFindAll(tableName);
     }
 
     @Override
     public String forModelFindById(Table table, String columns) {
         StringBuilder sql = new StringBuilder("select ").append(columns).append(" from ");
-        sql.append(getQuotedIdentifier(table.getName()));
+        sql.append(table.getName());
         sql.append(" where ");
         String[] pKeys = table.getPrimaryKey();
         appendWhereParamters(sql, pKeys);
@@ -103,7 +99,7 @@ public class JFinalCommonDialect extends Dialect {
         String[] pKeys = table.getPrimaryKey();
         StringBuilder sql = new StringBuilder(45);
         sql.append("delete from ");
-        sql.append(getQuotedIdentifier(table.getName()));
+        sql.append(table.getName());
         sql.append(" where ");
         appendWhereParamters(sql, pKeys);
         return sql.toString();
@@ -111,7 +107,7 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public void forModelSave(Table table, Map<String, Object> attrs, StringBuilder sql, List<Object> paras) {
-        sql.append("insert into ").append(getQuotedIdentifier(table.getName())).append('(');
+        sql.append("insert into ").append(table.getName()).append('(');
         StringBuilder temp = new StringBuilder(") values(");
         for (Map.Entry<String, Object> e : attrs.entrySet()) {
             String colName = e.getKey();
@@ -120,7 +116,7 @@ public class JFinalCommonDialect extends Dialect {
                     sql.append(", ");
                     temp.append(", ");
                 }
-                sql.append(getQuotedIdentifier(colName));
+                sql.append(colName);
                 temp.append('?');
                 paras.add(e.getValue());
             }
@@ -130,7 +126,7 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public void forModelUpdate(Table table, Map<String, Object> attrs, Set<String> modifyFlag, StringBuilder sql, List<Object> paras) {
-        sql.append("update ").append(getQuotedIdentifier(table.getName())).append(" set ");
+        sql.append("update ").append(table.getName()).append(" set ");
         String[] pKeys = table.getPrimaryKey();
         for (Map.Entry<String, Object> e : attrs.entrySet()) {
             String colName = e.getKey();
@@ -138,7 +134,7 @@ public class JFinalCommonDialect extends Dialect {
                 if (!paras.isEmpty()) {
                     sql.append(", ");
                 }
-                sql.append(getQuotedIdentifier(colName)).append(" = ? ");
+                sql.append(colName).append(" = ? ");
                 paras.add(e.getValue());
             }
         }
@@ -147,7 +143,7 @@ public class JFinalCommonDialect extends Dialect {
             if (i > 0) {
                 sql.append(" and ");
             }
-            sql.append(getQuotedIdentifier(pKeys[i])).append(" = ?");
+            sql.append(pKeys[i]).append(" = ?");
             paras.add(attrs.get(pKeys[i]));
         }
     }
@@ -157,7 +153,7 @@ public class JFinalCommonDialect extends Dialect {
         tableName = tableName.trim();
         trimPrimaryKeys(pKeys);
 
-        StringBuilder sql = new StringBuilder("select * from ").append(getQuotedIdentifier(tableName)).append(" where ");
+        StringBuilder sql = new StringBuilder("select * from ").append(tableName).append(" where ");
         appendWhereParamters(sql, pKeys);
         return sql.toString();
     }
@@ -167,7 +163,7 @@ public class JFinalCommonDialect extends Dialect {
         tableName = tableName.trim();
         trimPrimaryKeys(pKeys);
 
-        final StringBuilder sql = new StringBuilder("delete from ").append(getQuotedIdentifier(tableName)).append(" where ");
+        final StringBuilder sql = new StringBuilder("delete from ").append(tableName).append(" where ");
         appendWhereParamters(sql, pKeys);
         return sql.toString();
     }
@@ -178,7 +174,7 @@ public class JFinalCommonDialect extends Dialect {
         trimPrimaryKeys(pKeys);
 
         sql.append("insert into ");
-        sql.append(getQuotedIdentifier(tableName)).append('(');
+        sql.append(tableName).append('(');
         StringBuilder temp = new StringBuilder();
         temp.append(") values(");
 
@@ -189,7 +185,7 @@ public class JFinalCommonDialect extends Dialect {
                 sql.append(", ");
                 temp.append(", ");
             }
-            sql.append(getQuotedIdentifier(colName));
+            sql.append(colName);
 
             Object value = e.getValue();
             if (value instanceof String && isPrimaryKey(colName, pKeys) && ((String) value).endsWith(".nextval")) {
@@ -207,14 +203,14 @@ public class JFinalCommonDialect extends Dialect {
         tableName = tableName.trim();
         trimPrimaryKeys(pKeys);
 
-        sql.append("update ").append(getQuotedIdentifier(tableName)).append(" set ");
+        sql.append("update ").append(tableName).append(" set ");
         for (Map.Entry<String, Object> e : record.getColumns().entrySet()) {
             String colName = e.getKey();
             if (!isPrimaryKey(colName, pKeys)) {
                 if (!paras.isEmpty()) {
                     sql.append(", ");
                 }
-                sql.append(getQuotedIdentifier(colName)).append(" = ? ");
+                sql.append(colName).append(" = ? ");
                 paras.add(e.getValue());
             }
         }
@@ -229,7 +225,7 @@ public class JFinalCommonDialect extends Dialect {
                 if (i > 0) {
                     sql.append(" and ");
                 }
-                sql.append(getQuotedIdentifier(s)).append(" = ?");
+                sql.append(s).append(" = ?");
             }
         });
     }
