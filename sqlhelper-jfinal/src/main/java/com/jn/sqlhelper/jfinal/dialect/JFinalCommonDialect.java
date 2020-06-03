@@ -5,6 +5,7 @@ import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.dialect.Dialect;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.internal.OracleDialect;
@@ -26,6 +27,12 @@ public class JFinalCommonDialect extends Dialect {
     public JFinalCommonDialect(String databaseId) {
         this.databaseId = databaseId.toLowerCase();
         this.instrumentor = new SQLStatementInstrumentor();
+        if(this.instrumentor.getConfig()==null){
+            SQLInstrumentorConfig config = new SQLInstrumentorConfig();
+            config.setDialect(databaseId);
+            this.instrumentor.setConfig(config);
+        }
+        this.instrumentor.init();
         if (instrumentor.beginIfSupportsLimit(databaseId)) {
             delegate = instrumentor.getCurrentDialect();
         }

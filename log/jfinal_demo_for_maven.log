@@ -76,3 +76,54 @@ Caused by: java.lang.ClassNotFoundException: org.h2.Driver
 	at java.lang.Class.forName(Class.java:264)
 	at com.alibaba.druid.util.JdbcUtils.createDriver(JdbcUtils.java:568)
 	... 23 more
+
+2020-06-03 23:46:19
+[ERROR]-[Thread: main]-[com.jfinal.core.Config.startPlugins()]: Plugin start error: com.jfinal.plugin.activerecord.ActiveRecordPlugin. 
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "blog" not found; SQL statement:
+select * from "blog" where 1 = 2 [42102-199]
+com.jfinal.plugin.activerecord.ActiveRecordException: org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "blog" not found; SQL statement:
+select * from "blog" where 1 = 2 [42102-199]
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:55)
+	at com.jfinal.plugin.activerecord.ActiveRecordPlugin.start(ActiveRecordPlugin.java:226)
+	at com.jfinal.core.Config.startPlugins(Config.java:128)
+	at com.jfinal.core.Config.configPluginWithOrder(Config.java:71)
+	at com.jfinal.core.Config.configJFinal(Config.java:59)
+	at com.jfinal.core.JFinal.init(JFinal.java:61)
+	at com.jfinal.core.JFinalFilter.init(JFinalFilter.java:64)
+	at io.undertow.servlet.core.LifecyleInterceptorInvocation.proceed(LifecyleInterceptorInvocation.java:111)
+	at io.undertow.servlet.core.ManagedFilter.createFilter(ManagedFilter.java:80)
+	at io.undertow.servlet.core.DeploymentManagerImpl$2.call(DeploymentManagerImpl.java:591)
+	at io.undertow.servlet.core.DeploymentManagerImpl$2.call(DeploymentManagerImpl.java:556)
+	at io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:42)
+	at io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)
+	at io.undertow.servlet.core.DeploymentManagerImpl.start(DeploymentManagerImpl.java:598)
+	at com.jfinal.server.undertow.UndertowServer.configHttp(UndertowServer.java:288)
+	at com.jfinal.server.undertow.UndertowServer.doStart(UndertowServer.java:266)
+	at com.jfinal.server.undertow.UndertowServer.start(UndertowServer.java:159)
+	at com.jfinal.server.undertow.UndertowServer.start(UndertowServer.java:84)
+	at com.demo.common.DemoConfig.main(DemoConfig.java:34)
+Caused by: org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "blog" not found; SQL statement:
+select * from "blog" where 1 = 2 [42102-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:451)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:427)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.command.Parser.readTableOrView(Parser.java:7146)
+	at org.h2.command.Parser.readTableFilter(Parser.java:1895)
+	at org.h2.command.Parser.parseSelectSimpleFromPart(Parser.java:2641)
+	at org.h2.command.Parser.parseSelectSimple(Parser.java:2788)
+	at org.h2.command.Parser.parseSelectSub(Parser.java:2636)
+	at org.h2.command.Parser.parseSelectUnion(Parser.java:2469)
+	at org.h2.command.Parser.parseSelect(Parser.java:2440)
+	at org.h2.command.Parser.parsePrepared(Parser.java:814)
+	at org.h2.command.Parser.parse(Parser.java:788)
+	at org.h2.command.Parser.parse(Parser.java:760)
+	at org.h2.command.Parser.prepareCommand(Parser.java:683)
+	at org.h2.engine.Session.prepareLocal(Session.java:627)
+	at org.h2.engine.Session.prepareCommand(Session.java:565)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1292)
+	at org.h2.jdbc.JdbcStatement.executeQuery(JdbcStatement.java:78)
+	at com.alibaba.druid.pool.DruidPooledStatement.executeQuery(DruidPooledStatement.java:140)
+	at com.jfinal.plugin.activerecord.TableBuilder.doBuild(TableBuilder.java:71)
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:47)
+	... 18 more
