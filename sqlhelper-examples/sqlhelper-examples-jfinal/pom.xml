@@ -18,7 +18,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>sqlhelper-examples</artifactId>
-        <groupId>com.github.fangjinuo.sqlhelper</groupId>
+        <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
         <version>3.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
