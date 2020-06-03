@@ -44,7 +44,7 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public String forTableBuilderDoBuild(String tableName) {
-        return "select * from " + getQuotedIdentifier(tableName) + " where 1 = 2";
+        return "select * from " + tableName + " where 1 = 2";
     }
 
     @Override
