@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class JFinalCommonDialect extends Dialect {
-    private com.jn.sqlhelper.dialect.Dialect delegate;
-    private String databaseId;
+    protected com.jn.sqlhelper.dialect.Dialect delegate;
+    protected String databaseId;
     private SQLStatementInstrumentor instrumentor;
     private ThreadLocal<RowSelection> pagingRequestHolder = new ThreadLocal<RowSelection>();
 
