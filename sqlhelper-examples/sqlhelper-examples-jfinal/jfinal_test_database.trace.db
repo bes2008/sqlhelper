@@ -127,3 +127,21 @@ java.sql.SQLClientInfoException: Client info name 'ApplicationName' not supporte
 2020-06-03 23:46:19 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "blog" not found; SQL statement:
 select * from "blog" where 1 = 2 [42102-199]
+2020-06-03 23:47:59 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "blog" not found; SQL statement:
+select * from "blog" where 1 = 2 [42102-199]
+2020-06-03 23:50:54 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "blog" not found; SQL statement:
+select * from "blog" where 1 = 2 [42102-199]
+2020-06-03 23:53:13 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "blog" not found; SQL statement:
+select * from "blog" where 1 = 2 [42102-199]
+2020-06-03 23:56:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "blog" not found; SQL statement:
+select * from "blog" where 1 = 2 [42102-199]
+2020-06-03 23:56:49 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM 'blog'[*] WHERE 1 = 2 "; expected "identifier"; SQL statement:
+select * from 'blog' where 1 = 2 [42001-199]
+2020-06-03 23:57:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "blog" not found; SQL statement:
+select * from "blog" where 1 = 2 [42102-199]
