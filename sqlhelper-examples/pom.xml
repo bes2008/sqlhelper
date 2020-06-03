@@ -8,8 +8,13 @@
         <version>3.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
     <artifactId>sqlhelper-examples</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>sqlhelper-examples-jfinal</module>
+        <module>sqlhelper-examples-mybatis_apachedbutls</module>
+    </modules>
     <properties>
         <swagger.version>2.9.2</swagger.version>
 
