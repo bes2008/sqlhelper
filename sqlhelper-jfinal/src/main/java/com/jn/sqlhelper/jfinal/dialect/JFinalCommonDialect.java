@@ -2,13 +2,14 @@ package com.jn.sqlhelper.jfinal.dialect;
 
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
-import com.jfinal.plugin.activerecord.dialect.Dialect;
+import com.jfinal.plugin.activerecord.dialect.*;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
-import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.internal.OracleDialect;
+import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.parameter.ArrayBasedParameterSetter;
 import com.jn.sqlhelper.dialect.parameter.ArrayBasedQueryParameters;
 
@@ -20,6 +21,12 @@ import java.util.Set;
 
 public class JFinalCommonDialect extends Dialect {
     protected com.jn.sqlhelper.dialect.Dialect delegate;
+    /**
+     * 语法兼容映射
+     */
+    private static final Map<String, String> sqlSyntaxMap = Collects.emptyHashMap();
+    private static final Map<String, Dialect> builtInDialectMap = Collects.emptyHashMap();
+
     protected String databaseId;
     private SQLStatementInstrumentor instrumentor;
     private ThreadLocal<RowSelection> pagingRequestHolder = new ThreadLocal<RowSelection>();
@@ -27,7 +34,7 @@ public class JFinalCommonDialect extends Dialect {
     public JFinalCommonDialect(String databaseId) {
         this.databaseId = databaseId.toLowerCase();
         this.instrumentor = new SQLStatementInstrumentor();
-        if(this.instrumentor.getConfig()==null){
+        if (this.instrumentor.getConfig() == null) {
             SQLInstrumentorConfig config = new SQLInstrumentorConfig();
             config.setDialect(databaseId);
             this.instrumentor.setConfig(config);
@@ -36,6 +43,21 @@ public class JFinalCommonDialect extends Dialect {
         if (instrumentor.beginIfSupportsLimit(databaseId)) {
             delegate = instrumentor.getCurrentDialect();
         }
+    }
+
+
+    static {
+        builtInDialectMap.put("mysql", new MysqlDialect());
+        builtInDialectMap.put("oracle", new com.jfinal.plugin.activerecord.dialect.OracleDialect());
+        builtInDialectMap.put("postgresql", new PostgreSqlDialect());
+        builtInDialectMap.put("sqlserver", new SqlServerDialect());
+        builtInDialectMap.put("sqlite3", new Sqlite3Dialect());
+
+        sqlSyntaxMap.put("mysql", "mysql");
+        sqlSyntaxMap.put("oracle", "oracle");
+        sqlSyntaxMap.put("sqlserver", "sqlserver");
+        sqlSyntaxMap.put("postgresql", "postgresql");
+        sqlSyntaxMap.put("highgo", "postgresql");
     }
 
     @Override
@@ -79,13 +101,21 @@ public class JFinalCommonDialect extends Dialect {
         return delegate == null ? "oracle".equals(databaseId) : delegate instanceof OracleDialect;
     }
 
-    @Override
-    public String forFindAll(String tableName) {
-        return super.forFindAll(tableName);
+    private Dialect findBuiltDialect() {
+        String builtIn = this.sqlSyntaxMap.get(databaseId);
+        if (Strings.isNotEmpty(builtIn)) {
+            return this.builtInDialectMap.get(builtIn);
+        }
+        return null;
     }
 
     @Override
     public String forModelFindById(Table table, String columns) {
+        Dialect builtInDelegate = findBuiltDialect();
+        if (builtInDelegate != null) {
+            return builtInDelegate.forModelFindById(table, columns);
+        }
+
         StringBuilder sql = new StringBuilder("select ").append(columns).append(" from ");
         sql.append(table.getName());
         sql.append(" where ");
@@ -96,6 +126,11 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public String forModelDeleteById(Table table) {
+        Dialect builtInDelegate = findBuiltDialect();
+        if (builtInDelegate != null) {
+            return builtInDelegate.forModelDeleteById(table);
+        }
+
         String[] pKeys = table.getPrimaryKey();
         StringBuilder sql = new StringBuilder(45);
         sql.append("delete from ");
@@ -107,6 +142,12 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public void forModelSave(Table table, Map<String, Object> attrs, StringBuilder sql, List<Object> paras) {
+        Dialect builtInDelegate = findBuiltDialect();
+        if (builtInDelegate != null) {
+            builtInDelegate.forModelSave(table, attrs, sql, paras);
+            return;
+        }
+
         sql.append("insert into ").append(table.getName()).append('(');
         StringBuilder temp = new StringBuilder(") values(");
         for (Map.Entry<String, Object> e : attrs.entrySet()) {
@@ -126,6 +167,12 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public void forModelUpdate(Table table, Map<String, Object> attrs, Set<String> modifyFlag, StringBuilder sql, List<Object> paras) {
+        Dialect builtInDelegate = findBuiltDialect();
+        if (builtInDelegate != null) {
+            builtInDelegate.forModelUpdate(table, attrs, modifyFlag, sql, paras);
+            return;
+        }
+
         sql.append("update ").append(table.getName()).append(" set ");
         String[] pKeys = table.getPrimaryKey();
         for (Map.Entry<String, Object> e : attrs.entrySet()) {
@@ -150,6 +197,11 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public String forDbFindById(String tableName, String[] pKeys) {
+        Dialect builtInDelegate = findBuiltDialect();
+        if (builtInDelegate != null) {
+            return builtInDelegate.forDbFindById(tableName, pKeys);
+        }
+
         tableName = tableName.trim();
         trimPrimaryKeys(pKeys);
 
@@ -160,6 +212,11 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public String forDbDeleteById(String tableName, String[] pKeys) {
+        Dialect builtInDelegate = findBuiltDialect();
+        if (builtInDelegate != null) {
+            return builtInDelegate.forDbDeleteById(tableName, pKeys);
+        }
+
         tableName = tableName.trim();
         trimPrimaryKeys(pKeys);
 
@@ -170,6 +227,14 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public void forDbSave(String tableName, String[] pKeys, Record record, StringBuilder sql, List<Object> paras) {
+
+        Dialect builtInDelegate = findBuiltDialect();
+        if (builtInDelegate != null) {
+            builtInDelegate.forDbSave(tableName, pKeys, record, sql, paras);
+            return;
+        }
+
+
         tableName = tableName.trim();
         trimPrimaryKeys(pKeys);
 
@@ -200,6 +265,12 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public void forDbUpdate(String tableName, String[] pKeys, Object[] ids, Record record, final StringBuilder sql, List<Object> paras) {
+        Dialect builtInDelegate = findBuiltDialect();
+        if (builtInDelegate != null) {
+            builtInDelegate.forDbUpdate(tableName, pKeys, ids, record, sql, paras);
+            return;
+        }
+
         tableName = tableName.trim();
         trimPrimaryKeys(pKeys);
 
