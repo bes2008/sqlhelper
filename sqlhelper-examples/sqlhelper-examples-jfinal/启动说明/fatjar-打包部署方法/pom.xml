@@ -1,0 +1,209 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>com.demo</groupId>
+	<artifactId>jfinal_demo_for_maven</artifactId>
+	<version>4.9</version>
+	
+	<name>jfinal-demo</name>
+	<packaging>jar</packaging>
+	<url>http://jfinal.com/user/1</url>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+	</properties>
+	
+	<!-- 使用阿里 maven 库 -->
+	<repositories>
+		<repository>
+			<id>ali-maven</id>
+			<url>http://maven.aliyun.com/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+	
+	<dependencies>
+	
+		<!-- jfinal -->
+		<dependency>
+			<groupId>com.jfinal</groupId>
+			<artifactId>jfinal</artifactId>
+			<version>4.9</version>
+		</dependency>
+
+		<!-- jfinal-undertow 开发、部署一体化 web 服务器 -->
+		<dependency>
+			<groupId>com.jfinal</groupId>
+			<artifactId>jfinal-undertow</artifactId>
+			<version>2.1</version>
+		</dependency>
+
+		<!-- junit 单元测试 -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- 避免控制台输出如下提示信息：
+			 SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+			 项目中实际上用不到这个 jar 包，本 jfinal demo 用不上这个依赖，在此仅为大家
+			 在未来基于 jfinal demo 为模板做开发时做准备工作
+			 注意：eclipse 下可以将 scope 设置为 provided
+		 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-nop</artifactId>
+			<version>1.7.29</version>
+			<!-- 打包前改成 provided，此处使用 compile 仅为支持 IDEA -->
+			<scope>compile</scope>
+		</dependency>
+		
+		<!-- log4j 日志 -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		
+		<!-- mysql 驱动 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.44</version>
+		</dependency>
+		
+		<!-- druid 数据源连接池 -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.0.29</version>
+		</dependency>
+	
+		<!-- cos 文件上传 -->
+		<dependency>
+			<groupId>com.jfinal</groupId>
+			<artifactId>cos</artifactId>
+			<version>2020.4</version>
+		</dependency>
+	
+	</dependencies>
+	
+	<build>
+		<finalName>jfinal-demo</finalName>
+		<plugins>
+		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+					<!-- java8 保留参数名编译参数 -->
+					<compilerArgument>-parameters</compilerArgument>
+					<compilerArguments><verbose /></compilerArguments>
+				</configuration>
+			</plugin>
+			
+			<!--
+				当项目的 web 资源在 src/main/webapp 下时，需要使用 maven-resources-plugin
+				将 web 资源复制到 jar 包中去，注意打包的时候需要配置 engine：
+					me.setBaseTemplatePath("webapp");
+					me.setToClassPathSourceFactory();
+				
+				如果 web 资源本身就放在 src/main/resources/webapp 之下，则不需要此插件
+			-->
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>copy-webapp</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<encoding>UTF-8</encoding>
+							<outputDirectory>${basedir}/target/classes/webapp</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/src/main/webapp</directory>
+									<includes>
+										<!-- <include>**/*.xml</include> -->
+										<!-- <include>**/**</include> -->
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<finalName>jfinal-demo</finalName>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>com.demo.common.DemoConfig</mainClass>
+								</transformer>
+								
+								<!--
+									下面的配置支持排除指定文件打包到 jar 之中，可以用于排除需要修改的配置文件以便于在外部的 config 目录下的
+									同名配置文件生效，建议使用 Prop.appendIfExists(xxx_pro.txt) 在外部放一个非同名配置来覆盖开发环境的配置
+									则可以不用使用下面的配置，文档参考:
+										http://maven.apache.org/plugins/maven-shade-plugin/examples/resource-transformers.html#DontIncludeResourceTransformer
+								-->
+								<transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+									<resources>
+									<!-- <resource>demo-config-dev.txt</resource> -->
+									<!-- <resource>.PDF</resource> -->
+									<!-- <resource>READ.md</resource> -->
+									</resources>
+								</transformer>
+							</transformers>
+							
+							<!-- 
+								解决 fatjar 的 "java.lang.SecurityException: Invalid signature file digest
+								for Manifest main attributes" 问题
+							-->
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
+							
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+	</build>
+</project>
