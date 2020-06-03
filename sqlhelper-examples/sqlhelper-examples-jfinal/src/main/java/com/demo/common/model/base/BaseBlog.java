@@ -36,4 +36,9 @@ public abstract class BaseBlog<M extends BaseBlog<M>> extends Model<M> implement
 		return getStr("content");
 	}
 
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}
 }

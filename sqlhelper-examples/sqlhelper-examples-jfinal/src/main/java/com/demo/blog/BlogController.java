@@ -4,6 +4,9 @@ import com.jfinal.aop.Before;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
 import com.demo.common.model.Blog;
+import com.jfinal.plugin.activerecord.Page;
+import com.jn.easyjson.core.JSON;
+import com.jn.easyjson.core.JSONBuilderProvider;
 
 /**
  * 本 demo 仅表达最为粗浅的 jfinal 用法，更为有价值的实用的企业级用法
@@ -14,12 +17,17 @@ import com.demo.common.model.Blog;
  */
 @Before(BlogInterceptor.class)
 public class BlogController extends Controller {
-	
+	JSON json = JSONBuilderProvider.create().build();
 	@Inject
 	BlogService service;
 	
 	public void index() {
-		setAttr("blogPage", service.paginate(getParaToInt(0, 1), 10));
+		Page<Blog> page = service.paginate(getParaToInt(0, 1), 10);
+
+		if(page.getTotalRow()>0){
+			System.out.println(page.getList().toString());
+		}
+		setAttr("blogPage", page);
 		render("blog.html");
 	}
 	
