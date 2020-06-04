@@ -15,6 +15,8 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
+import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
+import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 
 /**
@@ -22,6 +24,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
  * MySQL Syntax Compatible
  */
 @Name("gbase")
+@SyntaxCompat(SQLSyntaxCompatTable.MYSQL)
 public class GBaseDialect extends AbstractDialect {
     public GBaseDialect() {
         super();

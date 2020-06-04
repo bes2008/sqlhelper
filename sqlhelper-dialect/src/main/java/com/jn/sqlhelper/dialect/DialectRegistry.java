@@ -15,15 +15,19 @@
 package com.jn.sqlhelper.dialect;
 
 import com.jn.langx.annotation.Name;
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.struct.Holder;
+import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
 import com.jn.sqlhelper.dialect.annotation.Driver;
+import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.*;
-import com.jn.sqlhelper.dialect.sqlparser.SqlParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +47,7 @@ public class DialectRegistry {
     // key:DatabaseMetaData.getProduceName() + getDriver();
     private static final Map<String, Holder<Dialect>> dbToDialectMap = new HashMap<String, Holder<Dialect>>();
     private static final Properties vendorDatabaseIdMappings = new Properties();
+    private static final DialectRegistry registry = new DialectRegistry();
 
     static {
         loadDatabaseIdMappings();
@@ -53,26 +58,8 @@ public class DialectRegistry {
     private DialectRegistry() {
     }
 
-    private static final DialectRegistry registry = new DialectRegistry();
-
     public static DialectRegistry getInstance() {
         return registry;
-    }
-
-    public Collection<Dialect> getDialects() {
-        return nameToDialectMap.values();
-    }
-
-    public Dialect getDialectByClassName(final String className) {
-        final String dialectName = (String) DialectRegistry.classNameToNameMap.get(className);
-        if (dialectName != null) {
-            return this.getDialectByName(dialectName);
-        }
-        return null;
-    }
-
-    public Dialect getDialectByName(final String databaseId) {
-        return DialectRegistry.nameToDialectMap.get(databaseId);
     }
 
     private static String databaseIdStringLowerCase(DatabaseMetaData databaseMetaData) {
@@ -95,32 +82,6 @@ public class DialectRegistry {
             logger.warn(ex.getMessage(), ex);
         }
         return databaseMetaData.getClass().getCanonicalName();
-    }
-
-    public Dialect getDialectByDatabaseMetadata(final DatabaseMetaData databaseMetaData) {
-        Dialect dialect = null;
-        if (databaseMetaData != null) {
-            String databaseIdString = databaseIdStringLowerCase(databaseMetaData);
-            try {
-                dialect = ((Holder<Dialect>) DialectRegistry.dbToDialectMap.get(databaseIdString)).get();
-            } catch (NullPointerException ex) {
-                // ignore
-            }
-            if (dialect == null) {
-                Enumeration<String> keys = (Enumeration<String>) vendorDatabaseIdMappings.propertyNames();
-                while (keys.hasMoreElements()) {
-                    String key = keys.nextElement();
-                    if (databaseIdString.contains(key.toLowerCase())) {
-                        dialect = getDialectByName(vendorDatabaseIdMappings.getProperty(key));
-                        if (dialect != null) {
-                            dbToDialectMap.put(databaseIdString, new Holder<Dialect>(dialect));
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        return dialect;
     }
 
     private static void loadCustomDialects() {
@@ -335,22 +296,6 @@ public class DialectRegistry {
         return null;
     }
 
-    public void registerDialectByClassName(final String className) throws ClassNotFoundException {
-        this.registerDialect(null, className);
-    }
-
-    public void registerDialect(final String dialectName, final String className) throws ClassNotFoundException {
-        final Class<? extends Dialect> clazz = loadDialectClass(className);
-        try {
-            final Dialect dialect = registerDialectByClass(clazz);
-            if (!Strings.isBlank(dialectName) && dialect != null) {
-                DialectRegistry.nameToDialectMap.put(dialectName, dialect);
-            }
-        } catch (Throwable ex) {
-            DialectRegistry.logger.info(ex.getMessage(), ex);
-        }
-    }
-
     private static Class<? extends Dialect> loadDialectClass(final String className) throws ClassNotFoundException {
         return (Class<? extends Dialect>) loadImplClass(className, Dialect.class);
     }
@@ -380,8 +325,9 @@ public class DialectRegistry {
         return registerDialectByClass(clazz, null);
     }
 
-    private static Dialect registerDialectByClass(final Class<? extends Dialect> clazz, Dialect dialect) {
+    private static Dialect registerDialectByClass(@NonNull final Class<? extends Dialect> clazz, @Nullable Dialect dialect) {
 
+        // step 1: 生成 database id
         final Name nameAnno = (Name) Reflects.getAnnotation(clazz, Name.class);
         String name;
         if (nameAnno != null) {
@@ -460,7 +406,76 @@ public class DialectRegistry {
             DialectRegistry.classNameToNameMap.put(clazz.getCanonicalName(), name);
             setDatabaseId(name, name);
         }
+
+        // step 2: 扫描兼容性
+        if (dialect != null) {
+            SyntaxCompat syntaxCompat = Reflects.getAnnotation(clazz, SyntaxCompat.class);
+            if (syntaxCompat != null) {
+                if (Emptys.isNotEmpty(syntaxCompat.value())) {
+                    SQLSyntaxCompatTable.getInstance().register(name, syntaxCompat.value());
+                }
+            }
+        }
+
         return dialect;
+    }
+
+    public Collection<Dialect> getDialects() {
+        return nameToDialectMap.values();
+    }
+
+    public Dialect getDialectByClassName(final String className) {
+        final String dialectName = (String) DialectRegistry.classNameToNameMap.get(className);
+        if (dialectName != null) {
+            return this.getDialectByName(dialectName);
+        }
+        return null;
+    }
+
+    public Dialect getDialectByName(final String databaseId) {
+        return DialectRegistry.nameToDialectMap.get(databaseId);
+    }
+
+    public Dialect getDialectByDatabaseMetadata(final DatabaseMetaData databaseMetaData) {
+        Dialect dialect = null;
+        if (databaseMetaData != null) {
+            String databaseIdString = databaseIdStringLowerCase(databaseMetaData);
+            try {
+                dialect = ((Holder<Dialect>) DialectRegistry.dbToDialectMap.get(databaseIdString)).get();
+            } catch (NullPointerException ex) {
+                // ignore
+            }
+            if (dialect == null) {
+                Enumeration<String> keys = (Enumeration<String>) vendorDatabaseIdMappings.propertyNames();
+                while (keys.hasMoreElements()) {
+                    String key = keys.nextElement();
+                    if (databaseIdString.contains(key.toLowerCase())) {
+                        dialect = getDialectByName(vendorDatabaseIdMappings.getProperty(key));
+                        if (dialect != null) {
+                            dbToDialectMap.put(databaseIdString, new Holder<Dialect>(dialect));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return dialect;
+    }
+
+    public void registerDialectByClassName(final String className) throws ClassNotFoundException {
+        this.registerDialect(null, className);
+    }
+
+    public void registerDialect(final String dialectName, final String className) throws ClassNotFoundException {
+        final Class<? extends Dialect> clazz = loadDialectClass(className);
+        try {
+            final Dialect dialect = registerDialectByClass(clazz);
+            if (!Strings.isBlank(dialectName) && dialect != null) {
+                DialectRegistry.nameToDialectMap.put(dialectName, dialect);
+            }
+        } catch (Throwable ex) {
+            DialectRegistry.logger.info(ex.getMessage(), ex);
+        }
     }
 
 

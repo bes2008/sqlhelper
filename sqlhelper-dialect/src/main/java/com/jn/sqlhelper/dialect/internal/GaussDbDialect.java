@@ -1,9 +1,12 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
+import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
+import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 @Name("gaussdb")
+@SyntaxCompat(SQLSyntaxCompatTable.POSTGRESQL)
 public class GaussDbDialect extends AbstractDialect {
     public GaussDbDialect() {
         super();
