@@ -124,7 +124,7 @@ public class SQLStatementInstrumentor implements Initializable {
             }
             InstrumentationRegistry.getInstance().enableInstrumentation(this.config.getInstrumentation());
             this.instrumentation = InstrumentationRegistry.getInstance().findInstrumentation(this.config.getInstrumentation());
-            Preconditions.checkNotNull(instrumentation, "Can't find a suitable or enabled SQL instrumentation");
+            Preconditions.checkNotNull(instrumentation, "Can't find a suitable or enabled SQL instrumentation, please add the sqlhelper-jsqlparser.jar to your classpath");
             orderByTransformer = new DefaultOrderByTransformer();
             orderByTransformer.setInstrumentation(instrumentation);
             orderByTransformer.init();
