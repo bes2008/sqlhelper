@@ -3,9 +3,10 @@ package com.jn.sqlhelper.jfinal.dialect;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.dialect.*;
-import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
+import com.jn.langx.util.function.Function2;
+import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
 import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.internal.OracleDialect;
@@ -21,10 +22,6 @@ import java.util.Set;
 
 public class JFinalCommonDialect extends Dialect {
     protected com.jn.sqlhelper.dialect.Dialect delegate;
-    /**
-     * 语法兼容映射
-     */
-    private static final Map<String, String> sqlSyntaxMap = Collects.emptyHashMap();
     private static final Map<String, Dialect> builtInDialectMap = Collects.emptyHashMap();
 
     protected String databaseId;
@@ -51,13 +48,8 @@ public class JFinalCommonDialect extends Dialect {
         builtInDialectMap.put("oracle", new com.jfinal.plugin.activerecord.dialect.OracleDialect());
         builtInDialectMap.put("postgresql", new PostgreSqlDialect());
         builtInDialectMap.put("sqlserver", new SqlServerDialect());
+        builtInDialectMap.put("sqlite", new Sqlite3Dialect());
         builtInDialectMap.put("sqlite3", new Sqlite3Dialect());
-
-        sqlSyntaxMap.put("mysql", "mysql");
-        sqlSyntaxMap.put("oracle", "oracle");
-        sqlSyntaxMap.put("sqlserver", "sqlserver");
-        sqlSyntaxMap.put("postgresql", "postgresql");
-        sqlSyntaxMap.put("highgo", "postgresql");
     }
 
     @Override
@@ -101,17 +93,19 @@ public class JFinalCommonDialect extends Dialect {
         return delegate == null ? "oracle".equals(databaseId) : delegate instanceof OracleDialect;
     }
 
-    private Dialect findBuiltDialect() {
-        String builtIn = this.sqlSyntaxMap.get(databaseId);
-        if (Strings.isNotEmpty(builtIn)) {
-            return this.builtInDialectMap.get(builtIn);
-        }
-        return null;
+    private Dialect findCompatibleDialect() {
+        Set<String> compatDatabases = SQLSyntaxCompatTable.getInstance().getCompatDatabases(databaseId);
+        return Collects.firstMap(compatDatabases, new Function2<Integer, String, Dialect>() {
+            @Override
+            public Dialect apply(Integer index, String compatDatabase) {
+                return JFinalCommonDialect.builtInDialectMap.get(compatDatabase);
+            }
+        });
     }
 
     @Override
     public String forModelFindById(Table table, String columns) {
-        Dialect builtInDelegate = findBuiltDialect();
+        Dialect builtInDelegate = findCompatibleDialect();
         if (builtInDelegate != null) {
             return builtInDelegate.forModelFindById(table, columns);
         }
@@ -126,7 +120,7 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public String forModelDeleteById(Table table) {
-        Dialect builtInDelegate = findBuiltDialect();
+        Dialect builtInDelegate = findCompatibleDialect();
         if (builtInDelegate != null) {
             return builtInDelegate.forModelDeleteById(table);
         }
@@ -142,7 +136,7 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public void forModelSave(Table table, Map<String, Object> attrs, StringBuilder sql, List<Object> paras) {
-        Dialect builtInDelegate = findBuiltDialect();
+        Dialect builtInDelegate = findCompatibleDialect();
         if (builtInDelegate != null) {
             builtInDelegate.forModelSave(table, attrs, sql, paras);
             return;
@@ -167,7 +161,7 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public void forModelUpdate(Table table, Map<String, Object> attrs, Set<String> modifyFlag, StringBuilder sql, List<Object> paras) {
-        Dialect builtInDelegate = findBuiltDialect();
+        Dialect builtInDelegate = findCompatibleDialect();
         if (builtInDelegate != null) {
             builtInDelegate.forModelUpdate(table, attrs, modifyFlag, sql, paras);
             return;
@@ -197,7 +191,7 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public String forDbFindById(String tableName, String[] pKeys) {
-        Dialect builtInDelegate = findBuiltDialect();
+        Dialect builtInDelegate = findCompatibleDialect();
         if (builtInDelegate != null) {
             return builtInDelegate.forDbFindById(tableName, pKeys);
         }
@@ -212,7 +206,7 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public String forDbDeleteById(String tableName, String[] pKeys) {
-        Dialect builtInDelegate = findBuiltDialect();
+        Dialect builtInDelegate = findCompatibleDialect();
         if (builtInDelegate != null) {
             return builtInDelegate.forDbDeleteById(tableName, pKeys);
         }
@@ -228,7 +222,7 @@ public class JFinalCommonDialect extends Dialect {
     @Override
     public void forDbSave(String tableName, String[] pKeys, Record record, StringBuilder sql, List<Object> paras) {
 
-        Dialect builtInDelegate = findBuiltDialect();
+        Dialect builtInDelegate = findCompatibleDialect();
         if (builtInDelegate != null) {
             builtInDelegate.forDbSave(tableName, pKeys, record, sql, paras);
             return;
@@ -265,7 +259,7 @@ public class JFinalCommonDialect extends Dialect {
 
     @Override
     public void forDbUpdate(String tableName, String[] pKeys, Object[] ids, Record record, final StringBuilder sql, List<Object> paras) {
-        Dialect builtInDelegate = findBuiltDialect();
+        Dialect builtInDelegate = findCompatibleDialect();
         if (builtInDelegate != null) {
             builtInDelegate.forDbUpdate(tableName, pKeys, ids, record, sql, paras);
             return;
