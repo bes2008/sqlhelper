@@ -197,12 +197,6 @@
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
-                <artifactId>sqlhelper-jsqlparser</artifactId>
-                <version>${project.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
                 <groupId>com.github.jsqlparser</groupId>
                 <artifactId>jsqlparser</artifactId>
                 <version>${jsqlparser.version}</version>
