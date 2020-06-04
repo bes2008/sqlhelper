@@ -79,7 +79,7 @@
         <spring.version>5.2.1.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>2.2.1</easyjson.version>
-        <langx-java.version>2.4.2</langx-java.version>
+        <langx-java.version>2.5.0</langx-java.version>
 
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
