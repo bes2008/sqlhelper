@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jn.sqlhelper.examples.common.dao.UserDao">
+    <resultMap id="entity" type="com.jn.sqlhelper.examples.common.model.User">
+        <id property="id" column="ID" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="name" column="NAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="age" column="AGE" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="tenantId" column="TENANTID" javaType="java.lang.String" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="all_columns">
+        ID,
+        NAME,
+        AGE
+    </sql>
+
+    <insert id="insert" parameterType="com.jn.sqlhelper.examples.common.model.User">
+        INSERT INTO
+        USER (<include refid="all_columns"/>)
+        VALUES (#{id}, #{name},#{age})
+    </insert>
+
+    <insert id="batchInsert" parameterType="com.jn.sqlhelper.examples.common.model.User" databaseId="h2">
+        INSERT INTO
+        USER (<include refid="all_columns"/>)
+        VALUES
+        <foreach collection="list" item="item" index="i" open="" close="" separator=",">
+            (
+            #{item.id},
+            #{item.name},
+            #{item.age}
+            )
+        </foreach>
+
+    </insert>
+
+    <update id="updateById" parameterType="com.jn.sqlhelper.examples.common.model.User">
+        UPDATE USER
+        SET
+        NAME = #{name},
+        AGE = #{age}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        DELETE FROM USER
+        WHERE ID = #{id}
+    </delete>
+
+    <select id="selectById" parameterType="java.lang.String" resultMap="entity">
+        SELECT
+        <include refid="all_columns"/>
+        FROM USER
+        WHERE ID = #{id}
+    </select>
+
+    <select id="selectByLimit" parameterType="com.jn.sqlhelper.examples.common.model.User" resultMap="entity">
+        SELECT
+        <include refid="all_columns"/>
+        FROM USER
+        WHERE 1=1
+        <if test="id!=null and id != ''">AND ID = #{id}</if>
+        <if test="name!=null and name != ''">AND NAME like CONCAT(CONCAT('%',#{name}),'%')</if>
+        <if test="age!=null and age gte 0">AND AGE > #{age}</if>
+    </select>
+
+    <select id="selectByLimit_subqueryPagination" parameterType="com.jn.sqlhelper.examples.common.model.User" resultMap="entity">
+        SELECT * FROM ( [PAGING_START]
+            SELECT
+            <include refid="all_columns"/>
+            FROM USER
+            WHERE 1=1 <if test="age!=null and age gte 0">AND AGE > #{age}</if>
+        [PAGING_END]
+        ) n
+        WHERE 1=1
+        <if test="id!=null and id != ''">AND n.ID = #{id}</if>
+        <if test="name!=null and name != ''">AND n.NAME like CONCAT(#{name},'%')</if>
+    </select>
+</mapper>
