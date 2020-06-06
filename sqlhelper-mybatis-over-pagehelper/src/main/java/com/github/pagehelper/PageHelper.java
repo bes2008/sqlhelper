@@ -81,6 +81,7 @@ public class PageHelper {
             setOrderBy();
             this.setPageNo(page.getPageNum());
             int pageSize = page.getPageSize();
+            // 不需要关心 page.pageSizeZero 是否为 true, 因为 pagehelper的这个配置项只是为了在最后设置 total时 用的，也就是仍然会执行分页查询
             if (pageSize == 0) {
                 pageSize = -1;
             }
