@@ -15,6 +15,7 @@
         <module>sqlhelper-examples-jfinal</module>
         <module>sqlhelper-examples-mybatis_apachedbutls</module>
         <module>sqlhelper-examples-tkmapper</module>
+        <module>sqlhelper-examples-mbg</module>
     </modules>
     <dependencies>
         <dependency>
