@@ -4,6 +4,8 @@ import com.jn.sqlhelper.dialect.instrument.AbstractClauseTransformer;
 import com.jn.sqlhelper.dialect.instrument.TransformConfig;
 import com.jn.sqlhelper.dialect.sqlparser.SqlStatementWrapper;
 import com.jn.sqlhelper.dialect.sqlparser.StringSqlStatementWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 是自定义 OrderByTransformer 的代理，优先使用自定义的 OrderByTransformer 进行SQL转换，如果找不到自定义的 OrderByTransformer，或者自定义的 OrderByTransformer
@@ -12,7 +14,7 @@ import com.jn.sqlhelper.dialect.sqlparser.StringSqlStatementWrapper;
 @SuppressWarnings("rawtypes")
 public class DefaultOrderByTransformer extends AbstractClauseTransformer implements OrderByTransformer {
     private final SimpleOrderByTransformer simpleTransformer = new SimpleOrderByTransformer();
-
+    private static final Logger logger = LoggerFactory.getLogger(DefaultOrderByTransformer.class);
 
     @Override
     protected void doInit() {
@@ -28,7 +30,7 @@ public class DefaultOrderByTransformer extends AbstractClauseTransformer impleme
                 return orderByTransformer.transform(statement, config);
             }
         } catch (Throwable ex) {
-
+            logger.debug(ex.getMessage(), ex);
         }
         if (!simpleTransformer.isTransformable(statement)) {
             SqlStatementWrapper<String> sw = new StringSqlStatementWrapper();

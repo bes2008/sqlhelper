@@ -231,10 +231,9 @@ public class SQLStatementInstrumentor implements Initializable {
             }
         }
         try {
-            StringSqlStatementWrapper sqlStatementWrapper = new StringSqlStatementWrapper();
-            sqlStatementWrapper.setOriginalSql(sql);
-            sqlStatementWrapper.setStatement(sql);
+            SqlStatementWrapper sqlStatementWrapper = parseSql(sql);
             TransformConfig transformConfig = new TransformConfig();
+            transformConfig.setOrderBy(orderBy);
             orderByTransformer.transform(sqlStatementWrapper, transformConfig);
             String sql2 = sqlStatementWrapper.getSql();
             if (sql2 != null) {
@@ -247,6 +246,19 @@ public class SQLStatementInstrumentor implements Initializable {
             logger.warn(ex.getMessage(), ex);
         }
         return sql;
+    }
+
+    private SqlStatementWrapper parseSql(String sql){
+        try {
+            return instrumentation.getSqlParser().parse(sql);
+        }catch (Throwable ex){
+            logger.error("error occur when parse the sql with jsqlparser: {}", sql);
+        }
+
+        StringSqlStatementWrapper sqlStatementWrapper = new StringSqlStatementWrapper();
+        sqlStatementWrapper.setOriginalSql(sql);
+        sqlStatementWrapper.setStatement(sql);
+        return sqlStatementWrapper;
     }
 
     public String instrumentOrderByLimitSql(String sql, OrderBy orderBy, final RowSelection selection) {
@@ -279,7 +291,7 @@ public class SQLStatementInstrumentor implements Initializable {
         }
 
         try {
-            SqlStatementWrapper statementWrapper = instrumentation.getSqlParser().parse(sql);
+            SqlStatementWrapper statementWrapper = parseSql(sql);
             WhereTransformConfig whereTransformConfig = new WhereTransformConfig();
             whereTransformConfig.setInstrumentSubSelect(false);
             whereTransformConfig.setPosition(InjectPosition.FIRST);
