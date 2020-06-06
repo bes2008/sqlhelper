@@ -41,6 +41,10 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.*;
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.SqlsCriteria;
+import tk.mybatis.mapper.util.Sqls;
+import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
@@ -137,7 +141,10 @@ public class UserController {
         if (testTenant) {
         //    request.setTenant(AndTenantBuilder.DEFAULT.column("tenantId").value(tenantId).build());
         }
-        List<User> users = userDao.selectByExample(queryCondition);
+        SqlsCriteria criteria =WeekendSqls.custom().andLike("name", namelike).andGreaterThan("age", age);
+
+        Example example = Example.builder(User.class).andWhere(criteria).build();
+        List<User> users = userDao.selectByExample(example);
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
         json = JSONBuilderProvider.simplest().toJson(users);

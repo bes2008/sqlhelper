@@ -14,12 +14,13 @@
         AGE
     </sql>
 
+    <!--
     <insert id="insert" parameterType="com.jn.sqlhelper.examples.common.model.User">
         INSERT INTO
         USER (<include refid="all_columns"/>)
         VALUES (#{id}, #{name},#{age})
     </insert>
-
+    -->
     <insert id="batchInsert" parameterType="com.jn.sqlhelper.examples.common.model.User" databaseId="h2">
         INSERT INTO
         USER (<include refid="all_columns"/>)

@@ -1,13 +1,15 @@
 server:
   port: 8088
 
-#mybatis:
-#  type-aliases-package: com.jn.sqlhelper.examples.common.model
-#  mapper-locations: classpath*:mapper/*.xml
+mybatis:
+  type-aliases-package: com.jn.sqlhelper.examples.common.model
+  mapper-locations: classpath*:mapper/*.xml
 
 mapper:
   mappers:
     - tk.mybatis.mapper.common.Mapper
+  not-empty: false
+  identity: H2
 
 spring:
   datasource:
