@@ -17,6 +17,7 @@ package com.jn.sqlhelper.examples.common.controller;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.apachedbutils.QueryRunner;
@@ -130,29 +131,44 @@ public class UserController {
             @RequestParam(value = "grateAge", required = false, defaultValue = "10") int age,
             @RequestParam(value = "testTenant", required = false, defaultValue = "false") boolean testTenant,
             @RequestParam(value = "tenantId", required = false, defaultValue = "1") String tenantId) {
+
+        JSON jsons = JSONBuilderProvider.simplest();
+
         User queryCondition = new User();
         queryCondition.setAge(age);
         queryCondition.setName(namelike);
-        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-        request.setEscapeLikeParameter(true);
-        System.out.println(JSONBuilderProvider.simplest().toJson(request));
-        request.setCount(count);
-        request.setUseLastPageIfPageOut(useLastPageIfPageOut);
+
 
         WeekendSqls weekendSqls = WeekendSqls.custom()
                 .andLike("name", "%"+namelike+"%")
                 .andGreaterThanOrEqualTo("age",age);
         Example example = Example.builder(User.class).setDistinct(false).where(weekendSqls).build();
-    //    List<User> users = userDao.selectByExampleAndRowBounds(example, new RowBounds(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize));
+
         // 正常查询
         List<User> users = userDao.selectByExample(example);
-        String json = JSONBuilderProvider.simplest().toJson(request.getResult());
+        String json = jsons.toJson(users);
+        System.out.println("正常查询");
         System.out.println(json);
+        System.out.println("=====================================");
         // 用 RowBounds分页查询
-        // List<User> users = userDao.selectByExampleAndRowBounds(example, new RowBounds(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize));
-        json = JSONBuilderProvider.simplest().toJson(request.getResult());
+        users = userDao.selectByExampleAndRowBounds(example, new RowBounds(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize));
+        json = jsons.toJson(users);
+        System.out.println("使用row bounds 查询");
         System.out.println(json);
-        json = JSONBuilderProvider.simplest().toJson(users);
+        System.out.println("=====================================");
+
+        // 使用 SqlHelper API 分页查询
+        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
+        request.setEscapeLikeParameter(false);
+        users = userDao.selectByExample(example);
+        System.out.println("使用 SqlHelper API 分页查询");
+        System.out.println(jsons.toJson(request));
+        request.setCount(count);
+        request.setUseLastPageIfPageOut(useLastPageIfPageOut);
+        json = jsons.toJson(request.getResult());
+        System.out.println(json);
+
+        json = jsons.toJson(users);
         System.out.println(json);
         return request.getResult();
     }
@@ -168,7 +184,6 @@ public class UserController {
         queryCondition.setAge(10);
         queryCondition.setName("zhangsan_");
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-       // request.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("2").build());
         request.subqueryPaging(true);
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);

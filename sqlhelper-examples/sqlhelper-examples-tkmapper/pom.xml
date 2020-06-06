@@ -72,20 +72,8 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>tk.mybatis</groupId>
-            <artifactId>mapper-spring-boot-starter</artifactId>
-            <version>2.1.5</version>
-
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-jdbc</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-tkmapper-spring-boot-starter</artifactId>
         </dependency>
 
         <dependency>
@@ -116,6 +104,7 @@
             <artifactId>sqlhelper-springjdbc-spring-boot-autoconfigure</artifactId>
         </dependency>
 
+
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-dbutils</artifactId>
@@ -129,31 +118,6 @@
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
         </dependency>
-
-        <!-- startup mybatis -->
-
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-autoconfigure</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
-        </dependency>
-
-        <!-- startup mybatis-plus -->
-        <!--
-                <dependency>
-                    <groupId>com.github.fangjinuo.sqlhelper</groupId>
-                    <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
-                </dependency>
-                -->
 
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>

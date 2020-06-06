@@ -34,6 +34,7 @@
         <module>sqlhelper-cli-assembly</module>
         <module>sqlhelper-examples</module>
         <module>sqlhelper-batchinsert</module>
+        <module>sqlhelper-tkmapper-spring-boot-starter</module>
     </modules>
     <developers>
         <developer>
@@ -196,6 +197,14 @@
                 <version>${project.version}</version>
                 <scope>compile</scope>
             </dependency>
+
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-tkmapper-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
             <dependency>
                 <groupId>com.github.jsqlparser</groupId>
                 <artifactId>jsqlparser</artifactId>
