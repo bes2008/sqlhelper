@@ -12,20 +12,44 @@
   ~ limitations under the License.
   -->
 
-<!DOCTYPE generatorConfiguration PUBLIC
-        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-    <context id="simple" targetRuntime="MyBatis3Simple">
-        <jdbcConnection driverClass="org.hsqldb.jdbcDriver"
-                        connectionURL="jdbc:hsqldb:mem:aname" />
+    <context id="simple" targetRuntime="MyBatis3">
+        <property name="javaFileEncoding" value="UTF-8"/>
 
-        <javaModelGenerator targetPackage="example.model" targetProject="src/main/java"/>
 
-        <sqlMapGenerator targetPackage="example.mapper" targetProject="src/main/resources"/>
+        <commentGenerator>
+            <property name="suppressAllComments" value="false"/>
+            <property name="suppressDate" value="false"/>
+        </commentGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="example.mapper" targetProject="src/main/java"/>
+        <connectionFactory>
+            <property name="driverClass" value="org.h2.Driver"/>
+            <property name="connectionURL" value="jdbc:h2:~/test"/>
+            <property name="userId" value="sa"/>
+        </connectionFactory>
 
-        <table tableName="FooTable" />
+        <!--model-->
+        <javaModelGenerator targetPackage="com.jn.sqlhelper.examples.common.model2"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaModelGenerator>
+
+        <!--dao-->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.jn.sqlhelper.examples.common.dao2"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- mapper.xml -->
+        <sqlMapGenerator targetPackage="com.jn.sqlhelper.examples.common.dao2"
+                         targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+
     </context>
 </generatorConfiguration>
