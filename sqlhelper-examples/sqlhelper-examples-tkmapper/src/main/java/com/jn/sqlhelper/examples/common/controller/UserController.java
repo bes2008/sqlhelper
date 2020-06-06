@@ -104,18 +104,25 @@ public class UserController {
         Page page = PageHelper.offsetPage(pageNo, pageSize);
         // Page page = PageHelper.startPage(pageNo, pageSize, sort);
         page.setCountColumn(countColumn);
-        User queryCondition = new User();
-        queryCondition.setAge(10);
-        List<User> users = userDao.selectByExample(queryCondition);
-        String json = JSONBuilderProvider.simplest().toJson(users);
+        PageHelper.orderBy(" id desc");
+
+        WeekendSqls weekendSqls = WeekendSqls.custom()
+                .andLike("name", "%zhangsan%")
+                .andGreaterThanOrEqualTo("age",10);
+        Example example = Example.builder(User.class).setDistinct(false).where(weekendSqls).build();
+
+        JSON jsons = JSONBuilderProvider.simplest();
+
+        List<User> users = userDao.selectByExample(example);
+        String json = jsons.toJson(users);
         System.out.println(json);
-        json = JSONBuilderProvider.simplest().toJson(users);
+        json = jsons.toJson(users);
         System.out.println(json);
         PageInfo pageInfo1 = new PageInfo(page);
-        json = JSONBuilderProvider.simplest().toJson(pageInfo1);
+        json = jsons.toJson(pageInfo1);
         System.out.println(json);
         PageInfo pageInfo2 = new PageInfo(users);
-        json = JSONBuilderProvider.simplest().toJson(pageInfo2);
+        json = jsons.toJson(pageInfo2);
         System.out.println(json);
         return page;
     }
