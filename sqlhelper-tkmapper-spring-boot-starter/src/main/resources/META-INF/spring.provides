@@ -1,0 +1,1 @@
+provides: sqlhelper-mybatis, mapper-spring-boot-autoconfigure

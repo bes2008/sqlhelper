@@ -28,12 +28,14 @@
         <module>sqlhelper-mybatis-over-pagehelper</module>
         <module>sqlhelper-mybatisplus-spring-boot</module>
         <module>sqlhelper-mybatisplus</module>
+        <module>sqlhelper-tkmapper-spring-boot-starter</module>
         <module>sqlhelper-springjdbc</module>
         <module>sqlhelper-springjdbc-spring-boot</module>
         <module>sqlhelper-cli</module>
         <module>sqlhelper-cli-assembly</module>
         <module>sqlhelper-examples</module>
         <module>sqlhelper-batchinsert</module>
+
     </modules>
     <developers>
         <developer>
@@ -196,6 +198,14 @@
                 <version>${project.version}</version>
                 <scope>compile</scope>
             </dependency>
+
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-tkmapper-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
             <dependency>
                 <groupId>com.github.jsqlparser</groupId>
                 <artifactId>jsqlparser</artifactId>
