@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jn.sqlhelper.examples.common.dao.CustomerDao">
+    <resultMap id="entity" type="com.jn.sqlhelper.examples.common.model.Customer">
+        <id property="id" column="ID" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="name" column="name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="address" column="Address" javaType="java.lang.String" jdbcType="INTEGER"/>
+        <result property="city" column="City" javaType="java.lang.String" jdbcType="INTEGER"/>
+        <result property="country" column="Country" javaType="java.lang.String" jdbcType="INTEGER"/>
+        <result property="birthDate" column="birthDate" javaType="java.util.Date" jdbcType="DATE"/>
+        <result property="updateDate" column="updateDate" javaType="java.util.Date" jdbcType="DATE"/>
+    </resultMap>
+
+    <sql id="all_columns">
+        ID,
+        NAME,
+        Address,
+        City,
+        Country,
+        BirthDate,
+        UpdateDate
+    </sql>
+
+    <insert id="insert" parameterType="com.jn.sqlhelper.examples.common.model.Customer">
+        INSERT INTO
+        Customer (<include refid="all_columns"/>)
+        VALUES (
+        #{id},
+        #{name},
+        #{address},
+        #{city},
+        #{country},
+        #{birthDate},
+        #{updateDate}
+        )
+    </insert>
+
+    <insert id="batchInsert" parameterType="com.jn.sqlhelper.examples.common.model.Customer" databaseId="h2">
+        INSERT INTO
+        Customer (<include refid="all_columns"/>)
+        VALUES
+        <foreach collection="list" item="item" index="i" open="" close="" separator=",">
+            (
+            #{id},
+            #{name},
+            #{address},
+            #{city},
+            #{country},
+            #{birthDate},
+            #{updateDate}
+            )
+        </foreach>
+
+    </insert>
+
+    <update id="updateById" parameterType="com.jn.sqlhelper.examples.common.model.Customer">
+        UPDATE Customer
+        SET
+            NAME = #{name},
+            Address = #{address},
+            City = #{city},
+            Country = #{country},
+            birthDate = #{birthDate},
+            updateDate = #{updateDate}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        DELETE FROM Customer
+        WHERE ID = #{id}
+    </delete>
+
+    <select id="selectById" parameterType="java.lang.String" resultMap="entity">
+        SELECT
+        <include refid="all_columns"/>
+        FROM Customer
+        WHERE ID = #{id}
+    </select>
+
+    <select id="selectByLimit" parameterType="com.jn.sqlhelper.examples.common.model.Customer" resultMap="entity">
+        SELECT
+        <include refid="all_columns"/>
+        FROM Customer
+        WHERE 1=1
+        <if test="id!=null and id != ''">AND ID = #{id}</if>
+        <if test="name!=null and name != ''">AND NAME like CONCAT(CONCAT('%',#{name}),'%')</if>
+        <if test="birthDate!=null">AND birthDate > #{birthDate}</if>
+        <if test="updateDate!=null">AND updateDate >= #{updateDate} </if>
+    </select>
+
+    <select id="selectByLimit_subqueryPagination" parameterType="com.jn.sqlhelper.examples.common.model.Customer" resultMap="entity">
+        SELECT * FROM ( [PAGING_START]
+            SELECT
+            <include refid="all_columns"/>
+            FROM Customer
+            WHERE 1=1 <if test="age!=null and age gte 0">AND AGE > #{age}</if>
+        [PAGING_END]
+        ) n
+        WHERE 1=1
+        <if test="id!=null and id != ''">AND n.ID = #{id}</if>
+        <if test="name!=null and name != ''">AND n.NAME like CONCAT(#{name},'%')</if>
+    </select>
+</mapper>

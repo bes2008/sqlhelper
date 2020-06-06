@@ -50,6 +50,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |sqlhelper-springjdbc-spring-boot| 2.0.2+|1.8+| 对 spring-jdbc 应用提供了 Spring Boot 快速启动|
 |sqlhelper-mybatisplus|2.0.7+         |1.6+ |  对 mybatis-plus 支持|
 |sqlhelper-mybatisplus-spring-boot|2.0.7+ |1.8+ | 对 mybatis-plus 应用提供了 Spring Boot 快速启动|
+|sqlhelper-tkmapper-spring-boot-starter|3.1.0+ |1.8+ | 对 tk.mybatis Mapper 应用提供了 Spring Boot 快速启动|
 |sqlhelper-dbutils | 2.2.0            |1.6+| 对 Apache Commons-DBUtils 支持 (主要包括：通用分页) |
 |sqlhelper-jsqlparser | 3.0.3          |1.6+| 对于要基于SQL Parser接口来完成的功能 由jsqlparser 这个库来实现|
 |sqlhelper-examples|1.0+               |1.8+ | 为这些工具提供 **测试用例** |
