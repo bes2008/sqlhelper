@@ -25,8 +25,6 @@ public class User {
     private String name;
     @Column(name = "AGE")
     private int age;
-    @Column(name = "tenantId")
-    private String tenantId;
     public String getId() {
         return id;
     }
@@ -51,11 +49,4 @@ public class User {
         this.age = age;
     }
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
 }

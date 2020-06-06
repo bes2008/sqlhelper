@@ -126,7 +126,7 @@ public class UserController {
             @RequestParam(name = "sort", required = false) String sort,
             @RequestParam(value = "count", required = false) boolean count,
             @RequestParam(value = "useLastPageIfPageOut", required = false) boolean useLastPageIfPageOut,
-            @RequestParam(value = "namelike", required = false) String namelike,
+            @RequestParam(value = "namelike", required = false, defaultValue = "") String namelike,
             @RequestParam(value = "grateAge", required = false, defaultValue = "10") int age,
             @RequestParam(value = "testTenant", required = false, defaultValue = "false") boolean testTenant,
             @RequestParam(value = "tenantId", required = false, defaultValue = "1") String tenantId) {
@@ -138,14 +138,19 @@ public class UserController {
         System.out.println(JSONBuilderProvider.simplest().toJson(request));
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
-        if (testTenant) {
-        //    request.setTenant(AndTenantBuilder.DEFAULT.column("tenantId").value(tenantId).build());
-        }
-        SqlsCriteria criteria =WeekendSqls.custom().andLike("name", namelike).andGreaterThan("age", age);
 
-        Example example = Example.builder(User.class).andWhere(criteria).build();
+        WeekendSqls weekendSqls = WeekendSqls.custom()
+                .andLike("name", "%"+namelike+"%")
+                .andGreaterThanOrEqualTo("age",age);
+        Example example = Example.builder(User.class).setDistinct(false).where(weekendSqls).build();
+    //    List<User> users = userDao.selectByExampleAndRowBounds(example, new RowBounds(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize));
+        // 正常查询
         List<User> users = userDao.selectByExample(example);
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
+        System.out.println(json);
+        // 用 RowBounds分页查询
+        // List<User> users = userDao.selectByExampleAndRowBounds(example, new RowBounds(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize));
+        json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);
         json = JSONBuilderProvider.simplest().toJson(users);
         System.out.println(json);

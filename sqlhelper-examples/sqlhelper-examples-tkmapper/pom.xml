@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
-    <artifactId>sqlhelper-examples-mybatis-tkmapper</artifactId>
+    <artifactId>sqlhelper-examples-tkmapper</artifactId>
     <properties>
         <swagger.version>2.9.2</swagger.version>
         <tk.mapper.version>4.1.5</tk.mapper.version>
