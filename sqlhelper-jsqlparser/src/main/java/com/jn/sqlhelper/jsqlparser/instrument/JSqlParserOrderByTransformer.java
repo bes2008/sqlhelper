@@ -48,7 +48,9 @@ public class JSqlParserOrderByTransformer extends AbstractClauseTransformer<Stat
                 return StringTemplates.formatWithPlaceholder("statement is not a select statement: {}", statement.toString());
             }
         });
+
         tranaform((Select) statement, orderBy);
+        sw.setChanged(true);
         return sw;
     }
 
