@@ -141,7 +141,7 @@ public class UserController {
                 .andNameLike("%" + namelike + "%");
 
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-        request.setEscapeLikeParameter(true);
+        request.setEscapeLikeParameter(false);
         System.out.println(jsons.toJson(request));
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
