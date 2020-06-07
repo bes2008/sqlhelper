@@ -31,7 +31,7 @@
         </connectionFactory>
 
         <!--model-->
-        <javaModelGenerator targetPackage="com.jn.sqlhelper.examples.common.model2"
+        <javaModelGenerator targetPackage="com.jn.sqlhelper.examples.common.model"
                             targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaModelGenerator>
@@ -44,11 +44,15 @@
 
         <!--dao-->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.jn.sqlhelper.examples.common.dao2"
+                             targetPackage="com.jn.sqlhelper.examples.common.dao"
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="USER"/>
+        <table tableName="USER"
+               enableSelectByPrimaryKey="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+        />
     </context>
 </generatorConfiguration>
