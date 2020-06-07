@@ -19,7 +19,7 @@
     <parent>
         <artifactId>sqlhelper-examples</artifactId>
         <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
-        <version>3.0.5</version>
+        <version>3.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
