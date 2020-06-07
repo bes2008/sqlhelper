@@ -19,7 +19,6 @@
     <context id="simple" targetRuntime="MyBatis3">
         <property name="javaFileEncoding" value="UTF-8"/>
 
-
         <commentGenerator>
             <property name="suppressAllComments" value="false"/>
             <property name="suppressDate" value="false"/>
@@ -37,6 +36,12 @@
             <property name="enableSubPackages" value="true"/>
         </javaModelGenerator>
 
+        <!-- mapper.xml -->
+        <sqlMapGenerator targetPackage="mapper"
+                         targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
         <!--dao-->
         <javaClientGenerator type="XMLMAPPER"
                              targetPackage="com.jn.sqlhelper.examples.common.dao2"
@@ -44,12 +49,6 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <!-- mapper.xml -->
-        <sqlMapGenerator targetPackage="com.jn.sqlhelper.examples.common.dao2"
-                         targetProject="src/main/resources">
-            <property name="enableSubPackages" value="true"/>
-        </sqlMapGenerator>
-
-
+        <table tableName="USER"/>
     </context>
 </generatorConfiguration>
