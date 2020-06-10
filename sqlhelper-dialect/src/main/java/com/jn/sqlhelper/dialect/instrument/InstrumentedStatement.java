@@ -96,7 +96,6 @@ public class InstrumentedStatement implements SqlStatementWrapper {
         config.setLimitOffset(hasOffset);
         return instrumentedSqlMap.get(config);
     }
-
     @Override
     public void setStatement(Object o) {
 
