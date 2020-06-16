@@ -218,6 +218,8 @@ public class DialectRegistry {
                 SQLServerDialect.SQLServer2005Dialect.class,
                 SQLServerDialect.SQLServer2008Dialect.class,
                 SQLServerDialect.SQLServer2012Dialect.class,
+                SQLServerDialect.SQLServer2014Dialect.class,
+                SQLServerDialect.SQLServer2016Dialect.class,
                 SQLServerDialect.SQLServer2017Dialect.class,
                 SQReamDialect.class,
 
@@ -455,6 +457,24 @@ public class DialectRegistry {
                             dbToDialectMap.put(databaseIdString, new Holder<Dialect>(dialect));
                             break;
                         }
+                    }
+                }
+            }
+
+            // sqlserver
+            if (dialect == null) {
+                if (Strings.containsAny(databaseIdString.toLowerCase(), "sql server") || Strings.containsAny(databaseIdString.toLowerCase(), "sqlserver")) {
+                    try {
+                        String productionVersion = databaseMetaData.getDatabaseProductVersion();
+                        String tmpDatabaseId = SQLServerDialect.guessDatabaseId(productionVersion);
+                        if (Emptys.isNotEmpty(tmpDatabaseId)) {
+                            dialect = getDialectByName(vendorDatabaseIdMappings.getProperty(tmpDatabaseId));
+                            if (dialect != null) {
+                                dbToDialectMap.put(databaseIdString, new Holder<Dialect>(dialect));
+                            }
+                        }
+                    } catch (Throwable ex) {
+                        // ignore it
                     }
                 }
             }
