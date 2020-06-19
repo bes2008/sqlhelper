@@ -18,7 +18,6 @@ public class User {
     private String id;
     private String name;
     private int age;
-    private String tenantId;
     public String getId() {
         return id;
     }
@@ -43,11 +42,4 @@ public class User {
         this.age = age;
     }
 
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
 }

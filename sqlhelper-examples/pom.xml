@@ -16,6 +16,7 @@
         <module>sqlhelper-examples-mybatis_apachedbutls</module>
         <module>sqlhelper-examples-tkmapper</module>
         <module>sqlhelper-examples-mbg</module>
+        <module>sqlhelper-examples-httpclients</module>
     </modules>
     <dependencies>
         <dependency>
