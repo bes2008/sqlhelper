@@ -77,8 +77,8 @@
 
         <mybatis.plus.version>3.2.0</mybatis.plus.version>
         <junit.version>4.12</junit.version>
-        <spring.boot.version>2.2.1.RELEASE</spring.boot.version>
-        <spring.version>5.2.1.RELEASE</spring.version>
+        <spring.boot.version>2.3.0.RELEASE</spring.boot.version>
+        <spring.version>5.2.6.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>2.4.0</easyjson.version>
         <langx-java.version>2.5.2</langx-java.version>
