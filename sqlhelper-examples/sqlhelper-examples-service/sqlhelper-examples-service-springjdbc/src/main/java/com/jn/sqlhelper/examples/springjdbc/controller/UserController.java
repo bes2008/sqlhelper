@@ -14,12 +14,8 @@
 
 package com.jn.sqlhelper.examples.springjdbc.controller;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.collection.Collects;
-import com.jn.sqlhelper.apachedbutils.QueryRunner;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
 import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
 import com.jn.sqlhelper.dialect.SqlRequest;
@@ -27,19 +23,17 @@ import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
-import com.jn.sqlhelper.dialect.tenant.TenantBuilder;
-import com.jn.sqlhelper.examples.mybatis.dao.UserDao;
-import com.jn.sqlhelper.examples.common.model.User;
+import com.jn.sqlhelper.examples.model.User;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
 import com.jn.sqlhelper.springjdbc.NamedParameterJdbcTemplate;
 import com.jn.sqlhelper.springjdbc.resultset.SqlHelperRowMapperResultSetExtractor;
 import io.swagger.annotations.Api;
-import org.apache.commons.dbutils.ResultSetHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.web.bind.annotation.*;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
@@ -54,18 +48,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private UserDao userDao;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private NamedParameterJdbcTemplate namedJdbcTemplate;
-
-    @Autowired
-    public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
-    }
 
     @PostMapping
     public void add(User user) {
@@ -88,72 +76,7 @@ public class UserController {
         userDao.deleteById(id);
     }
 
-    @GetMapping("/_useSqlhelper_over_pageHelper")
-    public Page list_sqlhelper_over_pageHelper(
-            @RequestParam(name = "pageNo") Integer pageNo,
-            @RequestParam(name = "pageSize") Integer pageSize,
-            @RequestParam(name = "sort", required = false) String sort,
-            @RequestParam(value = "countColumn", required = false) String countColumn) {
 
-        Page page = PageHelper.offsetPage(pageNo, pageSize);
-        // Page page = PageHelper.startPage(pageNo, pageSize, sort);
-        page.setCountColumn(countColumn);
-        User queryCondition = new User();
-        queryCondition.setAge(10);
-        List<User> users = userDao.selectByLimit(queryCondition);
-        String json = JSONBuilderProvider.simplest().toJson(users);
-        System.out.println(json);
-        json = JSONBuilderProvider.simplest().toJson(users);
-        System.out.println(json);
-        PageInfo pageInfo1 = new PageInfo(page);
-        json = JSONBuilderProvider.simplest().toJson(pageInfo1);
-        System.out.println(json);
-        PageInfo pageInfo2 = new PageInfo(users);
-        json = JSONBuilderProvider.simplest().toJson(pageInfo2);
-        System.out.println(json);
-        return page;
-    }
-
-    @GetMapping("/_useMyBatis")
-    public PagingResult list_useMyBatis(
-            @RequestParam(name = "pageNo", required = false) Integer pageNo,
-            @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name = "sort", required = false) String sort,
-            @RequestParam(value = "count", required = false) boolean count,
-            @RequestParam(value = "useLastPageIfPageOut", required = false) boolean useLastPageIfPageOut,
-            @RequestParam(value = "namelike", required = false) String namelike,
-            @RequestParam(value = "namelikeNotUsingConcat", required = false, defaultValue = "false") boolean namelikeNotUsingConcat,
-            @RequestParam(value = "likeEscapeEnabled", required = false, defaultValue = "true") boolean likeEscapeEnabled,
-            @RequestParam(value = "grateAge", required = false, defaultValue = "10") int age,
-            @RequestParam(value = "testTenant", required = false, defaultValue = "false") boolean testTenant,
-            @RequestParam(value = "tenantId", required = false, defaultValue = "1") String tenantId) {
-        User queryCondition = new User();
-        queryCondition.setAge(age);
-        queryCondition.setName(namelike);
-        List<User> users = null;
-        if (namelikeNotUsingConcat) {
-            users = userDao.selectByLimit_like2(queryCondition);
-        }
-        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-        request.setEscapeLikeParameter(likeEscapeEnabled);
-        System.out.println(JSONBuilderProvider.simplest().toJson(request));
-        request.setCount(count);
-        request.setUseLastPageIfPageOut(useLastPageIfPageOut);
-        if (testTenant) {
-            request.setTenant(new TenantBuilder().column("tenantId").values(tenantId).build());
-        }
-
-        if (namelikeNotUsingConcat) {
-            users = userDao.selectByLimit_like2(queryCondition);
-        } else {
-            users = userDao.selectByLimit(queryCondition);
-        }
-        String json = JSONBuilderProvider.simplest().toJson(request.getResult());
-        System.out.println(json);
-        json = JSONBuilderProvider.simplest().toJson(users);
-        System.out.println(json);
-        return request.getResult();
-    }
 
     @GetMapping("/subqueryPagination_useMyBatis")
     public PagingResult subqueryPagination_useMyBatis(
@@ -324,39 +247,6 @@ public class UserController {
         return request.getResult();
     }
 
-    @GetMapping("/list_useApacheDBUtils")
-    public PagingResult list_useApacheDBUtils(
-            @RequestParam(name = "pageNo", required = false) Integer pageNo,
-            @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name = "sort", required = false) String sort,
-            @RequestParam(name = "testSubquery", required = false, defaultValue = "false") boolean testSubquery) throws SQLException {
-        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-        if (testSubquery) {
-            request.subqueryPaging(true);
-        }
-        StringBuilder sqlBuilder = testSubquery ? new StringBuilder("select * from ([PAGING_START]select ID, NAME, AGE from USER where 1=1 and age > ?[PAGING_END]) n where name like CONCAT(?,'%') ") : new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
-
-        DataSource ds = namedJdbcTemplate.getJdbcTemplate().getDataSource();
-        QueryRunner queryRunner = new QueryRunner(ds);
-
-        List<Object> params = Collects.emptyArrayList();
-        params.add(10);
-        if (testSubquery) {
-            params.add("zhangsan");
-        }
-
-        List<User> users = queryRunner.query(sqlBuilder.toString(), new ResultSetHandler<List<User>>() {
-            RowMapperResultSetExtractor extractor = new RowMapperResultSetExtractor<User>(new BeanRowMapper<User>(User.class));
-
-            @Override
-            public List<User> handle(ResultSet rs) throws SQLException {
-                return extractor.extract(rs);
-            }
-        }, Collects.toArray(params));
-        String json = JSONBuilderProvider.simplest().toJson(users);
-        System.out.println(json);
-        return request.getResult();
-    }
 
 
     @GetMapping("/{id}")
@@ -364,36 +254,5 @@ public class UserController {
         return userDao.selectById(id);
     }
 
-    @GetMapping("/tenant/{id}")
-    public User mutilTenantGetById(@RequestParam("id") String id) throws IllegalAccessException, InstantiationException {
-        SqlRequest sqlRequest = new SqlRequest();
-        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
-        SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
-        return userDao.selectById(id);
-    }
 
-    @PutMapping("/tenant")
-    public void insertTenant(User user) {
-        SqlRequest sqlRequest = new SqlRequest();
-        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
-        SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
-        add(user);
-
-    }
-
-    @PutMapping("/tenant/")
-    public void updateTenant(User user) {
-        SqlRequest sqlRequest = new SqlRequest();
-        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
-        SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
-        userDao.updateById(user);
-    }
-
-    @DeleteMapping("/tenant/{id}")
-    public void updateTenant(@PathVariable("id") String id) {
-        SqlRequest sqlRequest = new SqlRequest();
-        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
-        SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
-        userDao.deleteById(id);
-    }
 }

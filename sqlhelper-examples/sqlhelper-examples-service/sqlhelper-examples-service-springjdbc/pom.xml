@@ -96,20 +96,6 @@
             <artifactId>sqlhelper-springjdbc-spring-boot-autoconfigure</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-dbutils</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-        </dependency>
-
         <!-- startup mybatis -->
 
         <dependency>
@@ -122,36 +108,11 @@
             <artifactId>mybatis-spring-boot-autoconfigure</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
-        </dependency>
-
-        <!-- startup mybatis-plus -->
-        <!--
-                <dependency>
-                    <groupId>com.github.fangjinuo.sqlhelper</groupId>
-                    <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
-                </dependency>
-                -->
 
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
             <artifactId>easyjson-jackson</artifactId>
             <version>${easyjson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-jsqlparser</artifactId>
         </dependency>
 
         <dependency>
