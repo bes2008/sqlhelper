@@ -45,9 +45,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-nop</artifactId>
-            <version>1.7.29</version>
-            <!-- 打包前改成 provided，此处使用 compile 仅为支持 IDEA -->
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>

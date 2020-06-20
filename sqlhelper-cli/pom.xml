@@ -24,7 +24,6 @@
 
     <properties>
         <name>${project.artifactId}</name>
-        <slf4j.version>1.7.25</slf4j.version>
         <spring.shell.starter.version>2.0.1.RELEASE</spring.shell.starter.version>
     </properties>
 
