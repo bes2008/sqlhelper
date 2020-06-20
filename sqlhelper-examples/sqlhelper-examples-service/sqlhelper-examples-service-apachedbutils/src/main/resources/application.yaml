@@ -9,6 +9,10 @@ spring:
     username: sa
     password: 123456
 
+swagger:
+  base-package: com.jn.sqlhelper.examples.apache.dbutils.controller
+  application-title: SQLHelper + Apache DBUtils
+
 logging:
   level:
     root: info

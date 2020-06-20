@@ -82,15 +82,11 @@
             <artifactId>sqlhelper-examples-db</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-        </dependency>
 
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
+            <artifactId>sqlhelper-examples-swagger</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
@@ -102,12 +98,6 @@
             <groupId>com.github.fangjinuo.easyjson</groupId>
             <artifactId>easyjson-jackson</artifactId>
             <version>${easyjson.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.fangjinuo.audit</groupId>
-            <artifactId>audit-spring-boot-starter</artifactId>
-            <version>${audit.version}</version>
         </dependency>
 
     </dependencies>
