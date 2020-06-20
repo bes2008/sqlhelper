@@ -207,9 +207,35 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-autoconfigure</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>com.github.fangjinuo.langx</groupId>
+                        <artifactId>langx-java</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.github.fangjinuo.langx</groupId>
+                        <artifactId>langx-java8</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.github.fangjinuo.langx</groupId>
+                        <artifactId>langx-java-reflect-aspectj</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
-
+            <dependency>
+                <groupId>com.github.fangjinuo.langx</groupId>
+                <artifactId>langx-java</artifactId>
+                <version>${langx-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.langx</groupId>
+                <artifactId>langx-java8</artifactId>
+                <version>${langx-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.langx</groupId>
+                <artifactId>langx-java-reflect-aspectj</artifactId>
+                <version>${langx-java.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

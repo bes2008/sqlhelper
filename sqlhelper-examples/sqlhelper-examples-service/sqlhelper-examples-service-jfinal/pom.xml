@@ -79,7 +79,7 @@
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
             <artifactId>easyjson-jackson</artifactId>
-            <version>2.2.1</version>
+            <version>${easyjson.version}</version>
         </dependency>
 
         <dependency>
