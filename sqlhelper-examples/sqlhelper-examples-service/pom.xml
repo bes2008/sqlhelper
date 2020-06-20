@@ -16,5 +16,6 @@
     <modules>
         <module>sqlhelper-examples-jfinal</module>
         <module>sqlhelper-examples-mbg</module>
+        <module>sqlhelper-examples-tkmapper</module>
     </modules>
 </project>

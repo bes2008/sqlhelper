@@ -3,12 +3,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
-        <artifactId>sqlhelper-examples</artifactId>
+        <groupId>com.github.fangjinuo.sqlhelper.examples.service</groupId>
+        <artifactId>sqlhelper-examples-service</artifactId>
         <version>3.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
     <artifactId>sqlhelper-examples-tkmapper</artifactId>
     <properties>
         <swagger.version>2.9.2</swagger.version>
