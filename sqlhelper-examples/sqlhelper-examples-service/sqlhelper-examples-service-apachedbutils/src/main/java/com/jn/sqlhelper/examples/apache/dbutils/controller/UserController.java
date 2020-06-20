@@ -20,6 +20,7 @@ import com.jn.langx.util.function.Functions;
 import com.jn.sqlhelper.apachedbutils.QueryRunner;
 import com.jn.sqlhelper.apachedbutils.resultset.RowMapperResultSetHandler;
 import com.jn.sqlhelper.apachedbutils.resultset.SingleRecordRowMapperResultSetHandler;
+import com.jn.sqlhelper.apachedbutils.resultset.UpdatedRowsResultSetHandler;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
 import com.jn.sqlhelper.common.resultset.UpdatedRowsResultSetExtractor;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
@@ -50,9 +51,9 @@ public class UserController {
 
     @PostMapping
     public void add(User user) throws Throwable {
-        queryRunner.execute(
+        queryRunner.insert(
                 sqlMap.get("user.insert"),
-                new UpdatedRowsResultSetExtractor(),
+                new UpdatedRowsResultSetHandler(),
                 user.getId(), user.getName(), user.getAge());
     }
 
@@ -75,8 +76,14 @@ public class UserController {
         queryRunner.update(sqlMap.get("user.deleteById"), id);
     }
 
+    @GetMapping("/users/_all")
+    public List<User> all() throws Throwable{
+        return queryRunner.query(sqlMap.get("user.selectAll"),
+                new RowMapperResultSetHandler<User>(new BeanRowMapper<User>(User.class))
+        );
+    }
 
-    @GetMapping("/list_useApacheDBUtils")
+    @GetMapping("/users")
     public PagingResult list_useApacheDBUtils(
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
