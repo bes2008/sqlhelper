@@ -9,14 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.fangjinuo.sqlhelper.examples.service</groupId>
-    <artifactId>sqlhelper-examples-service</artifactId>
+    <groupId>com.github.fangjinuo.sqlhelper.examples.client</groupId>
+    <artifactId>sqlhelper-examples-client</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>sqlhelper-examples-jfinal</module>
-        <module>sqlhelper-examples-mbg</module>
-        <module>sqlhelper-examples-tkmapper</module>
+        <module>sqlhelper-examples-client-feign</module>
     </modules>
 
     <dependencies>
@@ -25,4 +23,5 @@
             <artifactId>sqlhelper-examples-model</artifactId>
         </dependency>
     </dependencies>
+
 </project>
