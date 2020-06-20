@@ -22,6 +22,7 @@ import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
 import com.jn.sqlhelper.examples.model.User;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
 import com.jn.sqlhelper.springjdbc.NamedParameterJdbcTemplate;
+import com.jn.sqlhelper.springjdbc.resultset.RowMapperAdapter;
 import com.jn.sqlhelper.springjdbc.resultset.SqlHelperRowMapperResultSetExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -76,7 +77,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getById(@RequestParam("id") String id) throws Throwable {
-        return jdbcTemplate.<User>query(sqlMap.get("user.selectById"), new SqlHelperRowMapperResultSetExtractor(new BeanRowMapper(User.class)), id);
+        return jdbcTemplate.<User>queryForObject(sqlMap.get("user.selectById"), new RowMapperAdapter(new BeanRowMapper(User.class)), id);
     }
 
 

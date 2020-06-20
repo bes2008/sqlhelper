@@ -1,0 +1,41 @@
+server:
+  port: 8081
+
+spring:
+  # https://h2database.com/
+  datasource:
+    url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 123456
+
+swagger:
+  base-package: com.jn.sqlhelper.examples.springjdbc.controller
+  application-title: SQLHelper + Spring-JDBC
+
+logging:
+  level:
+    root: info
+    com:
+      jn:
+        sqlhelper:
+          examples:
+            common:
+              dao: trace
+
+operation:
+  definition:
+    location: classpath:/operation.yml
+    reload-interval-in-seconds: 0
+audit:
+  enabled: true
+  debug-consumer-enabled: true
+  topics:
+    - DEFAULT
+  topic-configs:
+    - name: DEFAULT
+      ring-buffer-size: 1024
+      producer-type: SINGLE
+  http-interceptor-patterns:
+    - /consumers/**
+    - /users/**

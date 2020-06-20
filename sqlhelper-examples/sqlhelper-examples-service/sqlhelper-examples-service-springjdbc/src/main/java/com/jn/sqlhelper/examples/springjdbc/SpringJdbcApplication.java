@@ -5,7 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
         "com.jn.sqlhelper.examples.springjdbc",
-        "com.jn.sqlhelper.examples.db.config"
+        "com.jn.sqlhelper.examples.db.config",
+        "com.jn.sqlhelper.examples.swagger.config"
 })
 public class SpringJdbcApplication {
     public static void main(String[] args) {
