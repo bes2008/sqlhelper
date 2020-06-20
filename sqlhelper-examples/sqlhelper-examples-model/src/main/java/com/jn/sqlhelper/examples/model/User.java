@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.examples.common.model;
+package com.jn.sqlhelper.examples.model;
 
 public class User {
     private String id;

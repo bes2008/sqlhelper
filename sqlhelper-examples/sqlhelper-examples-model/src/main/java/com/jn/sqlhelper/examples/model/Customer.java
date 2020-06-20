@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.examples.common.model;
+package com.jn.sqlhelper.examples.model;
 
 import java.util.Date;
 

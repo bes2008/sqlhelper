@@ -12,11 +12,13 @@
     <artifactId>sqlhelper-examples</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>sqlhelper-examples-model</module>
         <module>sqlhelper-examples-jfinal</module>
         <module>sqlhelper-examples-mybatis_apachedbutils</module>
         <module>sqlhelper-examples-tkmapper</module>
         <module>sqlhelper-examples-mbg</module>
         <module>sqlhelper-examples-httpclients</module>
+        <module>sqlhelper-examples-service</module>
     </modules>
     <dependencies>
         <dependency>
