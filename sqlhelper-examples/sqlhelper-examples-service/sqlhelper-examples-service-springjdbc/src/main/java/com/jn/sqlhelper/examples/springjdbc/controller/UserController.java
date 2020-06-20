@@ -15,11 +15,7 @@
 package com.jn.sqlhelper.examples.springjdbc.controller;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
-import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
-import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
-import com.jn.sqlhelper.dialect.SqlRequest;
-import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
@@ -29,13 +25,13 @@ import com.jn.sqlhelper.springjdbc.NamedParameterJdbcTemplate;
 import com.jn.sqlhelper.springjdbc.resultset.SqlHelperRowMapperResultSetExtractor;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.*;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,8 +51,13 @@ public class UserController {
     @Autowired
     private NamedParameterJdbcTemplate namedJdbcTemplate;
 
+    @Autowired
+    @Qualifier("sqlMap")
+    private Map<String, String> sqlMap;
+
     @PostMapping
     public void add(User user) {
+        jdbcTemplate.update(sqlMap.get("user.insert"))
         userDao.insert(user);
     }
 
@@ -77,29 +78,6 @@ public class UserController {
     }
 
 
-
-    @GetMapping("/subqueryPagination_useMyBatis")
-    public PagingResult subqueryPagination_useMyBatis(
-            @RequestParam(name = "pageNo", required = false) Integer pageNo,
-            @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name = "sort", required = false) String sort,
-            @RequestParam(value = "count", required = false) boolean count,
-            @RequestParam(value = "useLastPageIfPageOut", required = false) boolean useLastPageIfPageOut) {
-        User queryCondition = new User();
-        queryCondition.setAge(10);
-        queryCondition.setName("zhangsan_");
-        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-        // request.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("2").build());
-        request.subqueryPaging(true);
-        request.setCount(count);
-        request.setUseLastPageIfPageOut(useLastPageIfPageOut);
-        List<User> users = userDao.selectByLimit_subqueryPagination(queryCondition);
-        String json = JSONBuilderProvider.simplest().toJson(request.getResult());
-        System.out.println(json);
-        json = JSONBuilderProvider.simplest().toJson(users);
-        System.out.println(json);
-        return request.getResult();
-    }
 
     @GetMapping("/_useSpringJdbc_rowMapper")
     public PagingResult list_useSpringJdbc_rowMapper(
@@ -246,7 +224,6 @@ public class UserController {
         System.out.println(json);
         return request.getResult();
     }
-
 
 
     @GetMapping("/{id}")

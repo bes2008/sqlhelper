@@ -69,12 +69,8 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
+            <artifactId>sqlhelper-examples-db</artifactId>
         </dependency>
 
         <dependency>
@@ -97,19 +93,6 @@
             <groupId>com.github.fangjinuo.easyjson</groupId>
             <artifactId>easyjson-jackson</artifactId>
             <version>${easyjson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-jsqlparser</artifactId>
         </dependency>
 
         <dependency>

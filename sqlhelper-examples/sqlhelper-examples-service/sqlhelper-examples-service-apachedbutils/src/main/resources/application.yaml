@@ -1,14 +1,10 @@
 server:
-  port: 8088
-
-mybatis:
-  type-aliases-package: com.jn.sqlhelper.examples.common.model
-  mapper-locations: classpath*:mapper/*.xml
+  port: 8080
 
 spring:
   # https://h2database.com/
   datasource:
-    url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-mybatis_apachedbutils/src/main/resources/test
+    url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
     driver-class-name: org.h2.Driver
     username: sa
     password: 123456
