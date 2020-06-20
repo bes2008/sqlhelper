@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.examples.common.controller;
+package com.jn.sqlhelper.examples.mybatis.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -28,8 +28,8 @@ import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
 import com.jn.sqlhelper.dialect.tenant.TenantBuilder;
-import com.jn.sqlhelper.examples.common.dao.UserDao;
-import com.jn.sqlhelper.examples.common.model.User;
+import com.jn.sqlhelper.examples.mybatis.dao.UserDao;
+import com.jn.sqlhelper.examples.model.User;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
 import com.jn.sqlhelper.springjdbc.NamedParameterJdbcTemplate;
 import com.jn.sqlhelper.springjdbc.resultset.SqlHelperRowMapperResultSetExtractor;
@@ -365,36 +365,5 @@ public class UserController {
         return userDao.selectById(id);
     }
 
-    @GetMapping("/tenant/{id}")
-    public User mutilTenantGetById(@RequestParam("id") String id) throws IllegalAccessException, InstantiationException {
-        SqlRequest sqlRequest = new SqlRequest();
-        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
-        SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
-        return userDao.selectById(id);
-    }
 
-    @PutMapping("/tenant")
-    public void insertTenant(User user) {
-        SqlRequest sqlRequest = new SqlRequest();
-        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
-        SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
-        add(user);
-
-    }
-
-    @PutMapping("/tenant/")
-    public void updateTenant(User user) {
-        SqlRequest sqlRequest = new SqlRequest();
-        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
-        SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
-        userDao.updateById(user);
-    }
-
-    @DeleteMapping("/tenant/{id}")
-    public void updateTenant(@PathVariable("id") String id) {
-        SqlRequest sqlRequest = new SqlRequest();
-        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
-        SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
-        userDao.deleteById(id);
-    }
 }

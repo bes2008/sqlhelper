@@ -1,8 +1,8 @@
-package com.jn.sqlhelper.examples.common.controller;
+package com.jn.sqlhelper.examples.mybatis.controller;
 
 
 import com.jn.sqlhelper.common.batch.BatchMode;
-import com.jn.sqlhelper.examples.common.dao.UserDao;
+import com.jn.sqlhelper.examples.mybatis.dao.UserMapper;
 import com.jn.sqlhelper.examples.common.model.User;
 import com.jn.sqlhelper.mybatis.batch.MybatisBatchUpdaters;
 import io.swagger.annotations.Api;
@@ -29,22 +29,22 @@ public class UserBatchController {
 
     @PostMapping("/addUsers_JDBC_BATCH")
     public void addUsers_JDBC_BATCH(@RequestBody List<User> users) throws Throwable {
-        MybatisBatchUpdaters.batchUpdate(sessionFactory, UserDao.class, "insert", BatchMode.JDBC_BATCH, users);
+        MybatisBatchUpdaters.batchUpdate(sessionFactory, UserMapper.class, "insert", BatchMode.JDBC_BATCH, users);
     }
 
     @PostMapping("/addUsers_BATCH_SQL")
     public void addUsers_BATCH_SQL(@RequestBody List<User> users) throws Throwable {
-        MybatisBatchUpdaters.batchUpdate(sessionFactory, UserDao.class, "batchInsert", BatchMode.BATCH_SQL, users);
+        MybatisBatchUpdaters.batchUpdate(sessionFactory, UserMapper.class, "batchInsert", BatchMode.BATCH_SQL, users);
     }
 
     @PostMapping("/addUsers_SIMPLE")
     public void addUsers_SIMPLE(@RequestBody List<User> users) throws Throwable {
-        MybatisBatchUpdaters.batchUpdate(sessionFactory, UserDao.class, "insert", BatchMode.SIMPLE, users);
+        MybatisBatchUpdaters.batchUpdate(sessionFactory, UserMapper.class, "insert", BatchMode.SIMPLE, users);
     }
 
     @PostMapping("/addUsers_Guess")
     public void addUsers_Guess(@RequestBody List<User> users) throws Throwable {
-        MybatisBatchUpdaters.batchUpdate(sessionFactory, UserDao.class, "insert", null, users);
+        MybatisBatchUpdaters.batchUpdate(sessionFactory, UserMapper.class, "insert", null, users);
     }
 
 

@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.examples.test.mybatis.springboot;
+package com.jn.sqlhelper.examples.mybatis;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"com.jn.sqlhelper.examples.common"})
+@SpringBootApplication
 @MapperScan("com.jn.sqlhelper.examples.common.dao")
 public class MyBatisWithSpringBootTest {
     public static void main(String[] args) {

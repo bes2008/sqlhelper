@@ -185,7 +185,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.jn.sqlhelper.examples.test.mybatis.springboot.MyBatisWithSpringBootTest</mainClass>
+                    <mainClass>com.jn.sqlhelper.examples.mybatis.MyBatisWithSpringBootTest</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
             </plugin>

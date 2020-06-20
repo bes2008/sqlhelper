@@ -16,6 +16,7 @@
         <module>sqlhelper-examples-mybatis_apachedbutils</module>
         <module>sqlhelper-examples-service</module>
         <module>sqlhelper-examples-client</module>
+        <module>sqlhelper-examples-db</module>
     </modules>
 
 

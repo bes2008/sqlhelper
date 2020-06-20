@@ -12,13 +12,11 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.examples.common.dao;
+package com.jn.sqlhelper.examples.mybatis.dao;
 
 import com.jn.sqlhelper.examples.common.model.User;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
-
-import java.util.List;
 
 @Repository
 public interface UserDao extends Mapper<User> {

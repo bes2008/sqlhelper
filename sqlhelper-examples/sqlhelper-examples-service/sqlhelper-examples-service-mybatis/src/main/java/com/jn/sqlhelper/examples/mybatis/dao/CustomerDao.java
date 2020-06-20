@@ -1,6 +1,6 @@
-package com.jn.sqlhelper.examples.common.dao;
+package com.jn.sqlhelper.examples.mybatis.dao;
 
-import com.jn.sqlhelper.examples.common.model.Customer;
+import com.jn.sqlhelper.examples.model.Customer;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

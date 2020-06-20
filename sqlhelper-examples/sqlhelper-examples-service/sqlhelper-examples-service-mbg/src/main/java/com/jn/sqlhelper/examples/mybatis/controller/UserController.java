@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.examples.common.controller;
+package com.jn.sqlhelper.examples.mybatis.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -28,24 +28,20 @@ import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
-import com.jn.sqlhelper.examples.common.dao.UserDao;
+import com.jn.sqlhelper.examples.mybatis.dao.UserMapper;
 import com.jn.sqlhelper.examples.common.model.User;
+import com.jn.sqlhelper.examples.common.model.UserExample;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
 import com.jn.sqlhelper.springjdbc.NamedParameterJdbcTemplate;
 import com.jn.sqlhelper.springjdbc.resultset.SqlHelperRowMapperResultSetExtractor;
 import io.swagger.annotations.Api;
 import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.*;
-import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.entity.SqlsCriteria;
-import tk.mybatis.mapper.util.Sqls;
-import tk.mybatis.mapper.weekend.WeekendSqls;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
@@ -60,7 +56,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private UserDao userDao;
+    private UserMapper userDao;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -69,7 +65,7 @@ public class UserController {
     private NamedParameterJdbcTemplate namedJdbcTemplate;
 
     @Autowired
-    public void setUserDao(UserDao userDao) {
+    public void setUserMapper(UserMapper userDao) {
         this.userDao = userDao;
     }
 
@@ -81,17 +77,17 @@ public class UserController {
     @PutMapping("/{id}")
     public void update(String id, User user) {
         user.setId(id);
-        User u = userDao.selectByPrimaryKey(id);
+        User u = userDao.selectById(id);
         if (u == null) {
             add(user);
         } else {
-            userDao.updateByPrimaryKey(user);
+            userDao.updateById(user);
         }
     }
 
     @DeleteMapping("/{id}")
     public void deleteById(@RequestParam("id") String id) {
-        userDao.deleteByPrimaryKey(id);
+        userDao.deleteById(id);
     }
 
     @GetMapping("/_useSqlhelper_over_pageHelper")
@@ -104,16 +100,15 @@ public class UserController {
         Page page = PageHelper.offsetPage(pageNo, pageSize);
         // Page page = PageHelper.startPage(pageNo, pageSize, sort);
         page.setCountColumn(countColumn);
-        PageHelper.orderBy(" id desc");
-
-        WeekendSqls weekendSqls = WeekendSqls.custom()
-                .andLike("name", "%zhangsan%")
-                .andGreaterThanOrEqualTo("age",10);
-        Example example = Example.builder(User.class).setDistinct(false).where(weekendSqls).build();
 
         JSON jsons = JSONBuilderProvider.simplest();
 
-        List<User> users = userDao.selectByExample(example);
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andAgeGreaterThanOrEqualTo(10)
+                .andNameLike("%zhangsan%");
+
+        List<User> users = userDao.selectByExample(userExample);
         String json = jsons.toJson(users);
         System.out.println(json);
         json = jsons.toJson(users);
@@ -138,71 +133,26 @@ public class UserController {
             @RequestParam(value = "grateAge", required = false, defaultValue = "10") int age,
             @RequestParam(value = "testTenant", required = false, defaultValue = "false") boolean testTenant,
             @RequestParam(value = "tenantId", required = false, defaultValue = "1") String tenantId) {
-
         JSON jsons = JSONBuilderProvider.simplest();
 
-        User queryCondition = new User();
-        queryCondition.setAge(age);
-        queryCondition.setName(namelike);
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andAgeGreaterThanOrEqualTo(10)
+                .andNameLike("%" + namelike + "%");
 
-
-        WeekendSqls weekendSqls = WeekendSqls.custom()
-                .andLike("name", "%"+namelike+"%")
-                .andGreaterThanOrEqualTo("age",age);
-        Example example = Example.builder(User.class).setDistinct(false).where(weekendSqls).build();
-
-        // 正常查询
-        List<User> users = userDao.selectByExample(example);
-        String json = jsons.toJson(users);
-        System.out.println("正常查询");
-        System.out.println(json);
-        System.out.println("=====================================");
-        // 用 RowBounds分页查询
-        users = userDao.selectByExampleAndRowBounds(example, new RowBounds(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize));
-        json = jsons.toJson(users);
-        System.out.println("使用row bounds 查询");
-        System.out.println(json);
-        System.out.println("=====================================");
-
-        // 使用 SqlHelper API 分页查询
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
         request.setEscapeLikeParameter(false);
-        users = userDao.selectByExample(example);
-        System.out.println("使用 SqlHelper API 分页查询");
         System.out.println(jsons.toJson(request));
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
-        json = jsons.toJson(request.getResult());
+        List<User> users = userDao.selectByExample(userExample);
+        String json = jsons.toJson(request.getResult());
         System.out.println(json);
-
         json = jsons.toJson(users);
         System.out.println(json);
         return request.getResult();
     }
 
-    @GetMapping("/subqueryPagination_useMyBatis")
-    public PagingResult subqueryPagination_useMyBatis(
-            @RequestParam(name = "pageNo", required = false) Integer pageNo,
-            @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name = "sort", required = false) String sort,
-            @RequestParam(value = "count", required = false) boolean count,
-            @RequestParam(value = "useLastPageIfPageOut", required = false) boolean useLastPageIfPageOut) {
-        User queryCondition = new User();
-        queryCondition.setAge(10);
-        queryCondition.setName("zhangsan_");
-        PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-        request.subqueryPaging(true);
-        request.setCount(count);
-        request.setUseLastPageIfPageOut(useLastPageIfPageOut);
-        int limit = pageSize == null ? -1 : pageSize;
-        int offset =  ((pageNo == null ? 1 : pageNo) - 1) * limit;
-        List<User> users = userDao.selectByExampleAndRowBounds(queryCondition, new RowBounds(offset, limit));
-        String json = JSONBuilderProvider.simplest().toJson(request.getResult());
-        System.out.println(json);
-        json = JSONBuilderProvider.simplest().toJson(users);
-        System.out.println(json);
-        return request.getResult();
-    }
 
     @GetMapping("/_useSpringJdbc_rowMapper")
     public PagingResult list_useSpringJdbc_rowMapper(
@@ -387,21 +337,20 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getById(@RequestParam("id") String id) {
-        return userDao.selectByPrimaryKey(id);
+        return userDao.selectById(id);
     }
 
     @GetMapping("/tenant/{id}")
     public User mutilTenantGetById(@RequestParam("id") String id) throws IllegalAccessException, InstantiationException {
         SqlRequest sqlRequest = new SqlRequest();
-    //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
         SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
-        return userDao.selectByPrimaryKey(id);
+        return userDao.selectById(id);
     }
 
     @PutMapping("/tenant")
     public void insertTenant(User user) {
         SqlRequest sqlRequest = new SqlRequest();
-    //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
+        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
         SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
         add(user);
 
@@ -410,16 +359,16 @@ public class UserController {
     @PutMapping("/tenant/")
     public void updateTenant(User user) {
         SqlRequest sqlRequest = new SqlRequest();
-    //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
+        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
         SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
-        userDao.updateByPrimaryKey(user);
+        userDao.updateById(user);
     }
 
     @DeleteMapping("/tenant/{id}")
     public void updateTenant(@PathVariable("id") String id) {
         SqlRequest sqlRequest = new SqlRequest();
-    //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
+        //    sqlRequest.setTenant(AndTenantBuilder.DEFAULT.column("TENANTID").value("3").build());
         SqlRequestContextHolder.getInstance().setSqlRequest(sqlRequest);
-        userDao.deleteByPrimaryKey(id);
+        userDao.deleteById(id);
     }
 }
