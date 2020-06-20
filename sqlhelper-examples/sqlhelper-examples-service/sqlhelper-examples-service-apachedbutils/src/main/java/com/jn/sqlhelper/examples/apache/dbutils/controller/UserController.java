@@ -16,47 +16,63 @@ package com.jn.sqlhelper.examples.apache.dbutils.controller;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Functions;
 import com.jn.sqlhelper.apachedbutils.QueryRunner;
+import com.jn.sqlhelper.apachedbutils.resultset.RowMapperResultSetHandler;
+import com.jn.sqlhelper.apachedbutils.resultset.SingleRecordRowMapperResultSetHandler;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
-import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;
+import com.jn.sqlhelper.common.resultset.UpdatedRowsResultSetExtractor;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
 import com.jn.sqlhelper.examples.model.User;
 import io.swagger.annotations.Api;
-import org.apache.commons.dbutils.ResultSetHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
-import javax.sql.DataSource;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @Api
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
+    @Autowired
+    private QueryRunner queryRunner;
+
+    @Autowired
+    @Qualifier("sqlMap")
+    private Map<String, String> sqlMap;
+
 
     @PostMapping
-    public void add(User user) {
-        userDao.insert(user);
+    public void add(User user) throws Throwable {
+        queryRunner.execute(
+                sqlMap.get("user.insert"),
+                new UpdatedRowsResultSetExtractor(),
+                user.getId(), user.getName(), user.getAge());
     }
 
     @PutMapping("/{id}")
-    public void update(String id, User user) {
+    public void update(String id, User user) throws Throwable {
         user.setId(id);
-        User u = userDao.selectById(id);
+        User u = getById(id);
         if (u == null) {
             add(user);
         } else {
-            userDao.updateById(user);
+            queryRunner.update(sqlMap.get("user.updateById"),
+                    user.getId(), user.getName(), user.getAge(),
+                    user.getId()
+            );
         }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@RequestParam("id") String id) {
-        userDao.deleteById(id);
+    public void deleteById(@RequestParam("id") String id) throws Throwable {
+        queryRunner.update(sqlMap.get("user.deleteById"), id);
     }
 
 
@@ -71,24 +87,17 @@ public class UserController {
             request.subqueryPaging(true);
         }
         StringBuilder sqlBuilder = testSubquery ? new StringBuilder("select * from ([PAGING_START]select ID, NAME, AGE from USER where 1=1 and age > ?[PAGING_END]) n where name like CONCAT(?,'%') ") : new StringBuilder("select ID, NAME, AGE from USER where 1=1 and age > ?");
-
-        DataSource ds = namedJdbcTemplate.getJdbcTemplate().getDataSource();
-        QueryRunner queryRunner = new QueryRunner(ds);
-
         List<Object> params = Collects.emptyArrayList();
         params.add(10);
         if (testSubquery) {
             params.add("zhangsan");
         }
 
-        List<User> users = queryRunner.query(sqlBuilder.toString(), new ResultSetHandler<List<User>>() {
-            RowMapperResultSetExtractor extractor = new RowMapperResultSetExtractor<User>(new BeanRowMapper<User>(User.class));
+        List<User> users = queryRunner.query(sqlBuilder.toString(),
+                new RowMapperResultSetHandler<User>(new BeanRowMapper<User>(User.class)),
+                Collects.toArray(params)
+        );
 
-            @Override
-            public List<User> handle(ResultSet rs) throws SQLException {
-                return extractor.extract(rs);
-            }
-        }, Collects.toArray(params));
         String json = JSONBuilderProvider.simplest().toJson(users);
         System.out.println(json);
         return request.getResult();
@@ -96,8 +105,13 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    public User getById(@RequestParam("id") String id) {
-        return userDao.selectById(id);
+    public User getById(@RequestParam("id") String id) throws Throwable {
+        List<User> users = queryRunner.execute(
+                sqlMap.get("user.selectById"),
+                new SingleRecordRowMapperResultSetHandler<User>(new BeanRowMapper<User>(User.class)),
+                id
+        );
+        return Collects.findFirst(users, Functions.nonNullPredicate());
     }
 
 }
