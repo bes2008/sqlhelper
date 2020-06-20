@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.jfinal</groupId>
             <artifactId>jfinal</artifactId>
-            <version>4.9</version>
+            <version>${jfinal.version}</version>
         </dependency>
         <dependency>
             <groupId>com.jfinal</groupId>

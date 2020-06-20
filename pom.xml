@@ -84,6 +84,7 @@
         <langx-java.version>2.5.2</langx-java.version>
 
         <jackson.version>2.11.0</jackson.version>
+        <jfinal.version>4.9</jfinal.version>
 
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
