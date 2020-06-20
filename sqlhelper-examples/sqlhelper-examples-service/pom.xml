@@ -11,6 +11,10 @@
 
     <groupId>com.github.fangjinuo.sqlhelper.examples.service</groupId>
     <artifactId>sqlhelper-examples-service</artifactId>
+    <packaging>pom</packaging>
 
-
+    <modules>
+        <module>sqlhelper-examples-jfinal</module>
+        <module>sqlhelper-examples-mbg</module>
+    </modules>
 </project>
