@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jn.sqlhelper.examples.common.dao.CustomerDao">
-    <resultMap id="entity" type="com.jn.sqlhelper.examples.common.model.Customer">
+<mapper namespace="com.jn.sqlhelper.examples.mybatis.dao.CustomerDao">
+    <resultMap id="entity" type="com.jn.sqlhelper.examples.model.Customer">
         <id property="id" column="ID" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result property="name" column="name" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result property="address" column="Address" javaType="java.lang.String" jdbcType="INTEGER"/>
@@ -21,7 +21,7 @@
         UpdateDate
     </sql>
 
-    <insert id="insert" parameterType="com.jn.sqlhelper.examples.common.model.Customer">
+    <insert id="insert" parameterType="com.jn.sqlhelper.examples.model.Customer">
         INSERT INTO
         Customer (<include refid="all_columns"/>)
         VALUES (
@@ -35,7 +35,7 @@
         )
     </insert>
 
-    <insert id="batchInsert" parameterType="com.jn.sqlhelper.examples.common.model.Customer" databaseId="h2">
+    <insert id="batchInsert" parameterType="com.jn.sqlhelper.examples.model.Customer" databaseId="h2">
         INSERT INTO
         Customer (<include refid="all_columns"/>)
         VALUES
@@ -53,7 +53,7 @@
 
     </insert>
 
-    <update id="updateById" parameterType="com.jn.sqlhelper.examples.common.model.Customer">
+    <update id="updateById" parameterType="com.jn.sqlhelper.examples.model.Customer">
         UPDATE Customer
         SET
             NAME = #{name},
@@ -77,7 +77,7 @@
         WHERE ID = #{id}
     </select>
 
-    <select id="selectByLimit" parameterType="com.jn.sqlhelper.examples.common.model.Customer" resultMap="entity">
+    <select id="selectByLimit" parameterType="com.jn.sqlhelper.examples.model.Customer" resultMap="entity">
         SELECT
         <include refid="all_columns"/>
         FROM Customer
@@ -88,7 +88,7 @@
         <if test="updateDate!=null">AND updateDate >= #{updateDate} </if>
     </select>
 
-    <select id="selectByLimit_subqueryPagination" parameterType="com.jn.sqlhelper.examples.common.model.Customer" resultMap="entity">
+    <select id="selectByLimit_subqueryPagination" parameterType="com.jn.sqlhelper.examples.model.Customer" resultMap="entity">
         SELECT * FROM ( [PAGING_START]
             SELECT
             <include refid="all_columns"/>

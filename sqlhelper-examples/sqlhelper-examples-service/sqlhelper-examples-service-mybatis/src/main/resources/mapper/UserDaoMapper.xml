@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jn.sqlhelper.examples.common.dao.UserDao">
-    <resultMap id="entity" type="com.jn.sqlhelper.examples.common.model.User">
+<mapper namespace="com.jn.sqlhelper.examples.mybatis.dao.UserDao">
+    <resultMap id="entity" type="com.jn.sqlhelper.examples.model.User">
         <id property="id" column="ID" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result property="name" column="NAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result property="age" column="AGE" javaType="java.lang.Integer" jdbcType="INTEGER"/>
@@ -13,12 +13,12 @@
         NAME,
         AGE
     </sql>
-    <insert id="insert" parameterType="com.jn.sqlhelper.examples.common.model.User">
+    <insert id="insert" parameterType="com.jn.sqlhelper.examples.model.User">
         INSERT INTO
         USER (<include refid="all_columns"/>)
         VALUES (#{id}, #{name},#{age})
     </insert>
-    <insert id="batchInsert" parameterType="com.jn.sqlhelper.examples.common.model.User" databaseId="h2">
+    <insert id="batchInsert" parameterType="com.jn.sqlhelper.examples.model.User" databaseId="h2">
         INSERT INTO
         USER (<include refid="all_columns"/>)
         VALUES
@@ -32,7 +32,7 @@
 
     </insert>
 
-    <update id="updateById" parameterType="com.jn.sqlhelper.examples.common.model.User">
+    <update id="updateById" parameterType="com.jn.sqlhelper.examples.model.User">
         UPDATE USER
         SET
         NAME = #{name},
@@ -52,7 +52,7 @@
         WHERE ID = #{id}
     </select>
 
-    <select id="selectByLimit" parameterType="com.jn.sqlhelper.examples.common.model.User" resultMap="entity">
+    <select id="selectByLimit" parameterType="com.jn.sqlhelper.examples.model.User" resultMap="entity">
         SELECT
         <include refid="all_columns"/>
         FROM USER
@@ -62,7 +62,7 @@
         <if test="age!=null and age gte 0">AND AGE > #{age}</if>
     </select>
 
-    <select id="selectByLimit_like2" parameterType="com.jn.sqlhelper.examples.common.model.User" resultMap="entity">
+    <select id="selectByLimit_like2" parameterType="com.jn.sqlhelper.examples.model.User" resultMap="entity">
         SELECT
         <include refid="all_columns"/>
         FROM USER
@@ -74,7 +74,7 @@
         <if test="age!=null and age gte 0">AND AGE > #{age}</if>
     </select>
 
-    <select id="selectByLimit_subqueryPagination" parameterType="com.jn.sqlhelper.examples.common.model.User" resultMap="entity">
+    <select id="selectByLimit_subqueryPagination" parameterType="com.jn.sqlhelper.examples.model.User" resultMap="entity">
         SELECT * FROM ( [PAGING_START]
             SELECT
             <include refid="all_columns"/>
