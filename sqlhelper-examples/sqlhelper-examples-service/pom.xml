@@ -18,6 +18,8 @@
         <module>sqlhelper-examples-service-mbg</module>
         <module>sqlhelper-examples-service-tkmapper</module>
         <module>sqlhelper-examples-service-apachedbutils</module>
+        <module>sqlhelper-examples-service-springjdbc</module>
+        <module>sqlhelper-examples-service-mybatis</module>
     </modules>
 
     <dependencies>
