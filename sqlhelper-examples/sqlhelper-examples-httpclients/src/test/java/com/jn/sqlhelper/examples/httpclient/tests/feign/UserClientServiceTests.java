@@ -29,21 +29,27 @@ public class UserClientServiceTests {
 
     private static ObjectMapper objectMapper = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    private static Feign xxClient;
+    private static Feign feign;
+    private static UserClientService userClientService;
     private static JSON jsons = JSONBuilderProvider.simplest();
 
     @BeforeClass
     public static void init() {
-        xxClient = Feign.builder()
+        feign = Feign.builder()
                 .decoder(new JacksonDecoder(objectMapper))
                 .build();
+        Target<UserClientService> webTarget = new Target.HardCodedTarget(UserClientService.class, "userService", "http://localhost:8088/");
+        userClientService = feign.<UserClientService>newInstance(webTarget);
     }
 
     @Test
-    public void test() {
-        Target<UserClientService> webTarget = new Target.HardCodedTarget(UserClientService.class, "userService", "http://localhost:8088/");
-        UserClientService userClientService = xxClient.<UserClientService>newInstance(webTarget);
+    public void testPagination() {
         System.out.println(jsons.toJson(userClientService.getUsers()));
+    }
+
+    @Test
+    public void testGetById(){
+        System.out.println(jsons.toJson(userClientService.getById("001")));
     }
 
 }
