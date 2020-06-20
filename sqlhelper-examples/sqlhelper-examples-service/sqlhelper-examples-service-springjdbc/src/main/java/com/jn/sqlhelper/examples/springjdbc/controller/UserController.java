@@ -23,7 +23,6 @@ import com.jn.sqlhelper.examples.model.User;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
 import com.jn.sqlhelper.springjdbc.NamedParameterJdbcTemplate;
 import com.jn.sqlhelper.springjdbc.resultset.SqlHelperRowMapperResultSetExtractor;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -40,7 +39,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Api
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -57,26 +55,29 @@ public class UserController {
 
     @PostMapping
     public void add(User user) {
-        jdbcTemplate.update(sqlMap.get("user.insert"))
-        userDao.insert(user);
+        jdbcTemplate.update(sqlMap.get("user.insert"), user.getId(), user.getName(), user.getAge());
     }
 
     @PutMapping("/{id}")
-    public void update(String id, User user) {
+    public void update(String id, User user) throws Throwable {
         user.setId(id);
-        User u = userDao.selectById(id);
+        User u = getById(id);
         if (u == null) {
             add(user);
         } else {
-            userDao.updateById(user);
+            jdbcTemplate.update(sqlMap.get("user.updateById"), id, user.getName(), user.getAge(), id);
         }
     }
 
     @DeleteMapping("/{id}")
     public void deleteById(@RequestParam("id") String id) {
-        userDao.deleteById(id);
+        jdbcTemplate.update(sqlMap.get("user.deleteById"), id);
     }
 
+    @GetMapping("/{id}")
+    public User getById(@RequestParam("id") String id) throws Throwable {
+        return jdbcTemplate.<User>query(sqlMap.get("user.selectById"), new SqlHelperRowMapperResultSetExtractor(new BeanRowMapper(User.class)), id);
+    }
 
 
     @GetMapping("/_useSpringJdbc_rowMapper")
@@ -223,12 +224,6 @@ public class UserController {
         String json = JSONBuilderProvider.simplest().toJson(users);
         System.out.println(json);
         return request.getResult();
-    }
-
-
-    @GetMapping("/{id}")
-    public User getById(@RequestParam("id") String id) {
-        return userDao.selectById(id);
     }
 
 

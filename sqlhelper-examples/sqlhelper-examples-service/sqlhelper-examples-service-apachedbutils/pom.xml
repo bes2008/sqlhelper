@@ -68,6 +68,12 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
             <artifactId>sqlhelper-examples-db</artifactId>
