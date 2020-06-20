@@ -14,9 +14,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>sqlhelper-examples-jfinal</module>
-        <module>sqlhelper-examples-mbg</module>
-        <module>sqlhelper-examples-tkmapper</module>
+        <module>sqlhelper-examples-service-jfinal</module>
+        <module>sqlhelper-examples-service-mbg</module>
+        <module>sqlhelper-examples-service-tkmapper</module>
+        <module>sqlhelper-examples-service-apachedbutils</module>
     </modules>
 
     <dependencies>
