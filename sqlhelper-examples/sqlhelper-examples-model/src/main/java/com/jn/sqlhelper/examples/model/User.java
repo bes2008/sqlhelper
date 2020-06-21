@@ -14,9 +14,16 @@
 
 package com.jn.sqlhelper.examples.model;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+
 public class User {
+    @Column(name = "ID")
+    @Id
     private String id;
+    @Column(name="NAME")
     private String name;
+    @Column(name = "AGE")
     private int age;
     public String getId() {
         return id;
