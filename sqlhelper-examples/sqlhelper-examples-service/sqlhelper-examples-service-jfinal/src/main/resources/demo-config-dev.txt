@@ -2,7 +2,7 @@
 # home PC:
 #jdbcUrl = jdbc:h2:file:D:/Projects/workspace_sqlhelper/sqlhelper/sqlhelper-examples/sqlhelper-examples-jfinal/jfinal_test_database
 # company PC:
-jdbcUrl = jdbc:h2:file:D:/projects/workspace_sqlhelper_idea/sqlhelper/sqlhelper-examples/sqlhelper-examples-jfinal/jfinal_test_database
+jdbcUrl = jdbc:h2:file:D:/projects/workspace_sqlhelper_idea/sqlhelper/sqlhelper-examples/sqlhelper-examples-service/sqlhelper-examples-jfinal/jfinal_test_database
 user = sa
 password = 123456
 devMode = true
