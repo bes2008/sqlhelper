@@ -18,7 +18,11 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {
+        "com.jn.sqlhelper.examples.mybatis",
+        "com.jn.sqlhelper.examples.db.config",
+        "com.jn.sqlhelper.examples.swagger.config",
+})
 @MapperScan("com.jn.sqlhelper.examples.mybatis.dao")
 public class MyBatisWithSpringBootTest {
     public static void main(String[] args) {

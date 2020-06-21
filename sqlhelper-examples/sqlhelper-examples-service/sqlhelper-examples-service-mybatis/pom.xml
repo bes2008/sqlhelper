@@ -21,29 +21,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
+            <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
+            <artifactId>sqlhelper-examples-db</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-springjdbc-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-springjdbc-spring-boot-autoconfigure</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-dbutils</artifactId>
+            <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
+            <artifactId>sqlhelper-examples-swagger</artifactId>
         </dependency>
 
         <dependency>
