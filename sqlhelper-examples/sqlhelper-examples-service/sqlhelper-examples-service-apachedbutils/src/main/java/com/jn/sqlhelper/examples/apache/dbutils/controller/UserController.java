@@ -22,7 +22,6 @@ import com.jn.sqlhelper.apachedbutils.resultset.RowMapperResultSetHandler;
 import com.jn.sqlhelper.apachedbutils.resultset.SingleRecordRowMapperResultSetHandler;
 import com.jn.sqlhelper.apachedbutils.resultset.UpdatedRowsResultSetHandler;
 import com.jn.sqlhelper.common.resultset.BeanRowMapper;
-import com.jn.sqlhelper.common.resultset.UpdatedRowsResultSetExtractor;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;

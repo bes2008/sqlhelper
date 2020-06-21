@@ -31,7 +31,7 @@
         </connectionFactory>
 
         <!--model-->
-        <javaModelGenerator targetPackage="com.jn.sqlhelper.examples.common.model"
+        <javaModelGenerator targetPackage="com.jn.sqlhelper.examples.mybatis.mbg.model"
                             targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaModelGenerator>
@@ -44,7 +44,7 @@
 
         <!--dao-->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.jn.sqlhelper.examples.mybatis.dao"
+                             targetPackage="com.jn.sqlhelper.examples.mybatis.mbg.dao"
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>

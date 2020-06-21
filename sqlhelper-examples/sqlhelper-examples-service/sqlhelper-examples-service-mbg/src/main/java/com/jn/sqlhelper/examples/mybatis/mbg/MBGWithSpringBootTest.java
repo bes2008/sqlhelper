@@ -12,12 +12,19 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.examples.mybatis.dao;
+package com.jn.sqlhelper.examples.mybatis.mbg;
 
-import com.jn.sqlhelper.examples.common.model.User;
-import org.springframework.stereotype.Repository;
-import tk.mybatis.mapper.common.Mapper;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@Repository
-public interface UserDao extends Mapper<User> {
+@SpringBootApplication(scanBasePackages = {
+        "com.jn.sqlhelper.examples.mybatis.mbg",
+        "com.jn.sqlhelper.examples.swagger.config"
+})
+@MapperScan("com.jn.sqlhelper.examples.mybatis.mbg.dao")
+public class MBGWithSpringBootTest {
+    public static void main(String[] args) {
+        SpringApplication.run(MBGWithSpringBootTest.class, args);
+    }
 }

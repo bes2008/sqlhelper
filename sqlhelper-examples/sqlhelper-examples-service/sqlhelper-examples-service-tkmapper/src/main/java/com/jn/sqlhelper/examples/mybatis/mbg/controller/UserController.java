@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.examples.mybatis.controller;
+package com.jn.sqlhelper.examples.mybatis.mbg.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -28,7 +28,7 @@ import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
-import com.jn.sqlhelper.examples.mybatis.dao.UserDao;
+import com.jn.sqlhelper.examples.mybatis.mbg.dao.UserDao;
 import com.jn.sqlhelper.examples.common.model.User;
 import com.jn.sqlhelper.springjdbc.JdbcTemplate;
 import com.jn.sqlhelper.springjdbc.NamedParameterJdbcTemplate;

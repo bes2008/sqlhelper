@@ -1,8 +1,8 @@
-package com.jn.sqlhelper.examples.mybatis.controller;
+package com.jn.sqlhelper.examples.mybatis.mbg.controller;
 
 
 import com.jn.sqlhelper.common.batch.BatchMode;
-import com.jn.sqlhelper.examples.mybatis.dao.UserDao;
+import com.jn.sqlhelper.examples.mybatis.mbg.dao.UserDao;
 import com.jn.sqlhelper.examples.model.User;
 import com.jn.sqlhelper.mybatis.batch.MybatisBatchUpdaters;
 import io.swagger.annotations.Api;

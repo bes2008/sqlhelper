@@ -19,7 +19,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.jn.sqlhelper.examples.common.dao")
+@MapperScan("com.jn.sqlhelper.examples.mybatis.dao")
 public class MyBatisWithSpringBootTest {
     public static void main(String[] args) {
         SpringApplication.run(MyBatisWithSpringBootTest.class, args);

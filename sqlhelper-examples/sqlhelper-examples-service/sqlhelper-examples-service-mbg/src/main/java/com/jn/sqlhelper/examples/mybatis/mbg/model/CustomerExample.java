@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.examples.common.model;
+package com.jn.sqlhelper.examples.mybatis.mbg.model;
 
 import java.util.ArrayList;
 import java.util.Date;
