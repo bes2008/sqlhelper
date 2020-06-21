@@ -12,9 +12,11 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.connection;
+package com.jn.sqlhelper.common.datasource;
 
 import com.jn.langx.text.StringTemplates;
+import com.jn.sqlhelper.common.connection.ConnectionConfiguration;
+import com.jn.sqlhelper.common.connection.ConnectionFactory;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;

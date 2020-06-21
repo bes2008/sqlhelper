@@ -72,7 +72,7 @@ public class ConnectionConfiguration implements Cloneable {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         ConnectionConfiguration conn = new ConnectionConfiguration();
 
 
