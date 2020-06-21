@@ -1,5 +1,5 @@
 server:
-  port: 8088
+  port: 8083
 
 mybatis:
   type-aliases-package: com.jn.sqlhelper.examples.common.model

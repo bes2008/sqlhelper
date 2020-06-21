@@ -1,11 +1,11 @@
-package com.jn.sqlhelper.examples.mybatis.mbg.controller;
+package com.jn.sqlhelper.examples.mybatis.controller;
 
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.Dates;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
-import com.jn.sqlhelper.examples.mybatis.mbg.dao.CustomerDao;
+import com.jn.sqlhelper.examples.mybatis.dao.CustomerDao;
 import com.jn.sqlhelper.examples.model.Customer;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;

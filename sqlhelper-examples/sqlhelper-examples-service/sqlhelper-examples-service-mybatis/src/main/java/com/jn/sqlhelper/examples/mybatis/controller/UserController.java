@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.examples.mybatis.mbg.controller;
+package com.jn.sqlhelper.examples.mybatis.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;

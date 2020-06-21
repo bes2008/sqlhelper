@@ -95,7 +95,7 @@
     where ID = #{id}
   </select>
 
-  <update id="updateById" parameterType="com.jn.sqlhelper.examples.common.model.User" >
+  <update id="updateById" parameterType="com.jn.sqlhelper.examples.model.User" >
     update USER
     set ID = #{record.id,jdbcType=VARCHAR},
     NAME = #{record.name,jdbcType=VARCHAR},
