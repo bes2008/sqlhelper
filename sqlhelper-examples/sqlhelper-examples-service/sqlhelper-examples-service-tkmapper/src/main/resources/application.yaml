@@ -1,5 +1,5 @@
 server:
-  port: 8088
+  port: 8085
 
 mybatis:
   type-aliases-package: com.jn.sqlhelper.examples.model
@@ -13,7 +13,7 @@ mapper:
 
 swagger:
   base-package: com.jn.sqlhelper.examples.mybatis.tkmapper.controller
-  application-title: SQLHelper + MyBatis + MyBatisGenerator
+  application-title: SQLHelper + MyBatis + tk.mapper
 
 spring:
   # https://h2database.com/
