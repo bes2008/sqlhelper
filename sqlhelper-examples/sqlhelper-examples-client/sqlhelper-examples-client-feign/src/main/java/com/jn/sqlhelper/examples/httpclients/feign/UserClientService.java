@@ -20,10 +20,10 @@ import feign.Param;
 import feign.RequestLine;
 
 public interface UserClientService {
-    @RequestLine("GET /users/_useMyBatis?pageSize=10&pageNo=1")
+    @RequestLine("GET /users?pageSize=10&pageNo=1")
     public PagingResult<User> getUsers();
 
-    @RequestLine("GET /users/_useMyBatis?pageSize=10&pageNo={pageNo}}")
+    @RequestLine("GET /users?pageSize=10&pageNo={pageNo}}")
     public PagingResult<User> queryUsers(@Param("pageNo") int pageNo);
 
     @RequestLine("GET /users/{id}")

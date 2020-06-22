@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class UserController {
     private Map<String, String> sqlMap;
 
 
-    @PostMapping
+    @PostMapping()
     public void add(User user) throws Throwable {
         queryRunner.insert(
                 sqlMap.get("user.insert"),
@@ -75,14 +76,14 @@ public class UserController {
         queryRunner.update(sqlMap.get("user.deleteById"), id);
     }
 
-    @GetMapping("/users/_all")
+    @GetMapping("/_all")
     public List<User> all() throws Throwable{
         return queryRunner.query(sqlMap.get("user.selectAll"),
                 new RowMapperResultSetHandler<User>(new BeanRowMapper<User>(User.class))
         );
     }
 
-    @GetMapping("/users")
+    @GetMapping()
     public PagingResult list_useApacheDBUtils(
             @RequestParam(name = "pageNo", required = false) Integer pageNo,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
@@ -111,7 +112,7 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    public User getById(@RequestParam("id") String id) throws Throwable {
+    public User getById(@PathVariable("id") String id) throws Throwable {
         List<User> users = queryRunner.execute(
                 sqlMap.get("user.selectById"),
                 new SingleRecordRowMapperResultSetHandler<User>(new BeanRowMapper<User>(User.class)),
