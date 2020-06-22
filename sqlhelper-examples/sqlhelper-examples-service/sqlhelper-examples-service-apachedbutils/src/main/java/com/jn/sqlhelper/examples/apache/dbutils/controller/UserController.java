@@ -31,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +76,7 @@ public class UserController {
     }
 
     @GetMapping("/_all")
-    public List<User> all() throws Throwable{
+    public List<User> all() throws Throwable {
         return queryRunner.query(sqlMap.get("user.selectAll"),
                 new RowMapperResultSetHandler<User>(new BeanRowMapper<User>(User.class))
         );
