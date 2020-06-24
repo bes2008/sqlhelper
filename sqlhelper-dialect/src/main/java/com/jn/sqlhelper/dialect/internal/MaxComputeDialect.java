@@ -14,7 +14,10 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
+import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
+import com.jn.sqlhelper.dialect.pagination.RowSelection;
 
 /**
  * https://www.alibabacloud.com/help/doc-detail/73777.htm?spm=a2c63.p38356.b99.86.72a82f4dUDIiYI
@@ -25,9 +28,38 @@ public class MaxComputeDialect extends AbstractDialect {
         setLimitHandler(new LimitOnlyLimitHandler());
     }
 
+    private static class MaxComputeLimitHandler extends AbstractLimitHandler {
+        @Override
+        public String processSql(String sql, RowSelection rowSelection) {
+            return getLimitString(sql, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
+        }
+
+        @Override
+        protected String getLimitString(String sql, long offset, int limit) {
+            if (offset == 0) {
+                if (getDialect().isUseLimitInVariableMode()) {
+                    return sql + " limit ?";
+                } else {
+                    return sql + " limit " + limit;
+                }
+            } else {
+                StringBuilder sqlBuilder = new StringBuilder(sql.length() + 256);
+                sqlBuilder.append("select * from ( select row_number() over() as sqlhelper_ROW_ID, * from (")
+                        .append(sql)
+                        .append(" ) ) sqlhelper_tmp  where sqlhelper_ROW_ID between ? and ?");
+                return sqlBuilder.toString();
+            }
+        }
+    }
+
+    @Override
+    public boolean isUseLimitInVariableMode() {
+        return true;
+    }
+
     @Override
     public boolean isSupportsLimitOffset() {
-        return false;
+        return true;
     }
 
     @Override
