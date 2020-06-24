@@ -80,7 +80,7 @@
         <spring.boot.version>2.3.0.RELEASE</spring.boot.version>
         <spring.version>5.2.6.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
-        <easyjson.version>2.4.0</easyjson.version>
+        <easyjson.version>3.0.0</easyjson.version>
         <langx-java.version>2.5.2</langx-java.version>
 
         <jackson.version>2.11.0</jackson.version>

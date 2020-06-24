@@ -14,31 +14,38 @@
 
 package com.jn.sqlhelper.examples.httpclient.tests.feign;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jn.easyjson.core.JSON;
+import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.JSONFactory;
+import com.jn.easyjson.core.factory.JsonFactorys;
+import com.jn.easyjson.core.factory.JsonScope;
+import com.jn.easyjson.supports.feign.codec.EasyjsonDecoder;
 import com.jn.sqlhelper.examples.httpclients.feign.UserClientService;
 import feign.Feign;
 import feign.Target;
-import feign.jackson.JacksonDecoder;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class UserClientServiceTests {
 
-    private static ObjectMapper objectMapper = new ObjectMapper()
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    private static JSONFactory jsonFactory;
     private static Feign feign;
     private static UserClientService userClientService;
-    private static JSON jsons = JSONBuilderProvider.simplest();
+    private static JSON jsons;
+
+    static {
+        JSONBuilder jsonBuilder = JSONBuilderProvider.create().enableIgnoreAnnotation();
+        jsonFactory = JsonFactorys.getJSONFactory(jsonBuilder, JsonScope.SINGLETON);
+        jsons = jsonFactory.get();
+    }
 
     @BeforeClass
     public static void init() {
         feign = Feign.builder()
-                .decoder(new JacksonDecoder(objectMapper))
+                .decoder(new EasyjsonDecoder(jsonFactory))
                 .build();
-        Target<UserClientService> webTarget = new Target.HardCodedTarget(UserClientService.class, "userService", "http://localhost:8088/");
+        Target<UserClientService> webTarget = new Target.HardCodedTarget(UserClientService.class, "userService", "http://localhost:8080/");
         userClientService = feign.<UserClientService>newInstance(webTarget);
     }
 
@@ -48,8 +55,8 @@ public class UserClientServiceTests {
     }
 
     @Test
-    public void testGetById(){
-        System.out.println(jsons.toJson(userClientService.getById("001")));
+    public void testGetById() {
+        System.out.println(jsons.toJson(userClientService.getById("0001")));
     }
 
 }

@@ -57,9 +57,15 @@
         </dependency>
 
         <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-jackson</artifactId>
-            <version>10.7.4</version>
+            <groupId>com.github.fangjinuo.easyjson.supports</groupId>
+            <artifactId>easyjson-supports-feign</artifactId>
+            <version>${easyjson.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.github.openfeign</groupId>
+                    <artifactId>feign-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>

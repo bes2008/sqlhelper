@@ -83,7 +83,7 @@ public class NamedConnectionConfiguration extends ConnectionConfiguration implem
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         NamedConnectionConfiguration conn = new NamedConnectionConfiguration(this);
         conn.setName(name);
         conn.setId(name);
