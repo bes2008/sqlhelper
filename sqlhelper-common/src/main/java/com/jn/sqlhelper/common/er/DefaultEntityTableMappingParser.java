@@ -56,6 +56,15 @@ public class DefaultEntityTableMappingParser implements EntityTableParser {
                 return;
             }
         }
+        if(Emptys.isEmpty(mapping.getTable())) {
+            if (Reflects.hasAnnotation(entityClass, javax.persistence.Table.class)) {
+                javax.persistence.Table table = Reflects.getAnnotation(entityClass, javax.persistence.Table.class);
+                if (Emptys.isNotEmpty(table.name())) {
+                    mapping.setTable(table.name());
+                    return;
+                }
+            }
+        }
         mapping.setTable(Reflects.getSimpleClassName(entityClass));
     }
 
@@ -113,11 +122,10 @@ public class DefaultEntityTableMappingParser implements EntityTableParser {
         }
     }
 
-    private void parseAsColumn(FieldInfo fieldInfo, EntityTableMapping mapping) {
-        String fieldName = fieldInfo.getFieldName();
+    private String parseColumnUseSqlhelperAnnotation(FieldInfo fieldInfo){
         Field field = fieldInfo.getField();
-        Column column = Reflects.getAnnotation(field, Column.class);
         String columnName = null;
+        Column column = Reflects.getAnnotation(field, Column.class);
         if (column != null) {
             if (Emptys.isNotEmpty(column.value())) {
                 columnName = column.value()[0];
@@ -147,9 +155,59 @@ public class DefaultEntityTableMappingParser implements EntityTableParser {
                 }
             }
         }
+        return columnName;
+    }
+
+    private String parseColumnUsingJpaAnnotation(FieldInfo fieldInfo){
+        Field field = fieldInfo.getField();
+        String columnName = null;
+        if (Emptys.isEmpty(columnName)){
+            javax.persistence.Column column = Reflects.getAnnotation(field, javax.persistence.Column.class);
+            if (column != null) {
+                if (Emptys.isNotEmpty(column.name())) {
+                    columnName = column.name();
+                }
+            }
+
+            if (Emptys.isEmpty(columnName)) {
+                Method getter = fieldInfo.getGetter();
+                if (getter != null) {
+                    column = Reflects.getAnnotation(getter,  javax.persistence.Column.class);
+                    if (column != null) {
+                        if (Emptys.isNotEmpty(column.name())) {
+                            columnName = column.name();
+                        }
+                    }
+                }
+            }
+
+            if (Emptys.isEmpty(columnName)) {
+                Method setter = fieldInfo.getSetter();
+                if (setter != null) {
+                    column = Reflects.getAnnotation(setter,  javax.persistence.Column.class);
+                    if (column != null) {
+                        if (Emptys.isNotEmpty(column.name())) {
+                            columnName = column.name();
+                        }
+                    }
+                }
+            }
+
+        }
+        return columnName;
+    }
+
+    private void parseAsColumn(FieldInfo fieldInfo, EntityTableMapping mapping) {
+        String fieldName = fieldInfo.getFieldName();
+
+        String columnName = null;
+
+        // 基于 sqlhelper @Column 来解析
+        columnName = parseColumnUseSqlhelperAnnotation(fieldInfo);
+        // 基于 JPA @Column 注解来解析
 
         if (Emptys.isEmpty(columnName)) {
-            columnName = fieldName;
+            columnName = parseColumnUsingJpaAnnotation(fieldInfo);
         }
         mapping.getColumnMappings().put(fieldName, columnName);
     }
