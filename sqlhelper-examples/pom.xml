@@ -226,8 +226,23 @@
                         <groupId>com.github.fangjinuo.langx</groupId>
                         <artifactId>langx-java-reflect-aspectj</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.yaml</groupId>
+                        <artifactId>snakeyaml</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.audit</groupId>
+                <artifactId>audit-core</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.yaml</groupId>
+                        <artifactId>snakeyaml</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
             <dependency>
                 <groupId>com.github.fangjinuo.langx</groupId>
                 <artifactId>langx-java</artifactId>
