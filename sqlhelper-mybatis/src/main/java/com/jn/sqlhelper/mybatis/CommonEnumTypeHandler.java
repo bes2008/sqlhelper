@@ -1,10 +1,8 @@
 package com.jn.sqlhelper.mybatis;
 
-import com.jn.langx.Delegatable;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.enums.Enums;
 import com.jn.langx.util.enums.base.CommonEnum;
-import com.jn.langx.util.enums.base.EnumDelegate;
 import com.jn.langx.util.reflect.Reflects;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
@@ -16,12 +14,17 @@ import java.sql.SQLException;
 
 /**
  * Just for any enum what implements the {@link CommonEnum} interface
+ *
  * @param <E>
  */
-public class CommonEnumTypeHandler<E extends Enum<E> & Delegatable<EnumDelegate>> extends BaseTypeHandler<E> {
+public class CommonEnumTypeHandler<E extends Enum<E> & CommonEnum> extends BaseTypeHandler<E> {
     private Class<E> enumType;
 
     public CommonEnumTypeHandler() {
+    }
+
+    public CommonEnumTypeHandler(@Nullable Class<E> enumType) {
+        setEnumType(enumType);
     }
 
     public void setEnumType(Class<E> enumType) {
@@ -32,13 +35,9 @@ public class CommonEnumTypeHandler<E extends Enum<E> & Delegatable<EnumDelegate>
         }
     }
 
-    public CommonEnumTypeHandler(@Nullable Class<E> enumType) {
-        setEnumType(enumType);
-    }
-
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, E parameter, JdbcType jdbcType) throws SQLException {
-        ps.setInt(i, parameter.getDelegate().getCode());
+        ps.setInt(i, parameter.getCode());
     }
 
     @Override
