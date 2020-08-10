@@ -89,8 +89,9 @@ public class MybatisUtils {
         }
 
         if (Emptys.isEmpty(databaseId)) {
-            return ms.getConfiguration().getDatabaseId();
+            databaseId = ms.getConfiguration().getDatabaseId();
         }
+
         if (Emptys.isEmpty(databaseId) && executor != null) {
             Transaction tx = executor.getTransaction();
             try {

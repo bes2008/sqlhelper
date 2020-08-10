@@ -101,7 +101,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
             queryParameters.setRowSelection(PAGING_CONTEXT.getRowSelection());
             queryParameters.setCallable(MybatisUtils.isCallableStatement(this.mappedStatement));
             PagingRequestContext request = PAGING_CONTEXT.get();
-            queryParameters.setParameters(this.getParameterObject(), request.getInteger(PagingRequestContext.BEFORE_SUBQUERY_PARAMETERS_COUNT), request.getInteger(PagingRequestContext.AFTER_SUBQUERY_PARAMETERS_COUNT));
+            queryParameters.setParameters(this.getParameterObject(), request.getInteger(PagingRequestContext.BEFORE_SUBQUERY_PARAMETERS_COUNT, 0), request.getInteger(PagingRequestContext.AFTER_SUBQUERY_PARAMETERS_COUNT, 0));
             SqlHelperMybatisPlugin.getInstrumentor().bindParameters(ps, this, queryParameters, true);
         } catch (SQLException ex) {
             logger.error("errorCode:{},message:{}", ex.getErrorCode(), ex.getMessage(), ex);
