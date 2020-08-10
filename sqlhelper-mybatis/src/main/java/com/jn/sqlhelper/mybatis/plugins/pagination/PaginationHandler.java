@@ -275,6 +275,9 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         }
         SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
         final String databaseId = MybatisUtils.getDatabaseId(PAGING_CONTEXT, instrumentor, statement, executorInvocation.getExecutor());
+        if(Strings.isEmpty(databaseId)){
+            logger.error("can't find the dialect");
+        }
         return instrumentor.beginIfSupportsLimit(databaseId);
     }
 
