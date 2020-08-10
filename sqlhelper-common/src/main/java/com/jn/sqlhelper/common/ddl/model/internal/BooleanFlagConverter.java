@@ -6,6 +6,11 @@ import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.reflect.Reflects;
 
 public class BooleanFlagConverter implements Converter<String, BooleanFlag> {
+
+    public boolean isConvertible(Class sourceClass, Class targetClass) {
+        return sourceClass==String.class;
+    }
+
     @Override
     public BooleanFlag apply(String str) {
         if (str == null || str.length() > 3) {
