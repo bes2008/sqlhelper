@@ -24,6 +24,7 @@
         <module>sqlhelper-mango</module>
         <module>sqlhelper-ebean</module>
         <module>sqlhelper-mybatis</module>
+        <module>sqlhelper-mybatis-solon-plugin</module>
         <module>sqlhelper-mybatis-spring-boot</module>
         <module>sqlhelper-mybatis-over-pagehelper</module>
         <module>sqlhelper-mybatisplus-spring-boot</module>
@@ -85,6 +86,7 @@
 
         <jackson.version>2.11.0</jackson.version>
         <jfinal.version>4.9</jfinal.version>
+        <solon.version>1.0.10</solon.version>
 
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
@@ -173,6 +175,11 @@
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-mybatis-solon-plugin</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
