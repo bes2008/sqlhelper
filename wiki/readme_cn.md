@@ -18,6 +18,7 @@ SQLHelper提供了如下功能:
   | sqlhelper-mango | 1.2+               |1.6+ |为Mango应用提供SQL分页功能|
   | sqlhelper-jfinal| 1.2+               |1.6+ |为JFinal应用提供SQL分页功能|
   | sqlhelper-mybatis| 1.0+              |1.6+ |为mybatis 3.x应用提供SQL分页功能|
+  | sqlhelper-mybatis-solon-plugin| 3.1+ |1.8+ |为mybatis 3.x应用提供Solon 的扩展插件|
   | sqlhelper-mybatis-spring-boot|1.0+   |1.8+ | 为mybaits 3.x应用提供Spring Boot启动方式|
   | sqlhelper-mybatis-over-pagehelper|1.0+|1.6+| 提供将现有的使用了pagehelper业务系统为无缝的迁移到sqlhelper来|
   | sqlhelper-mybatisplus|2.0.7+         |1.6+ | 为mybatis-plus应用提供SQL分页功能|
