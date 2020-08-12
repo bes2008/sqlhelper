@@ -14,10 +14,14 @@ import org.noear.solon.annotation.XConfiguration;
 import org.noear.solon.annotation.XEvent;
 import org.noear.solon.annotation.XInject;
 import org.noear.solon.core.XEventListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @XEvent(Configuration.class)
 @XConfiguration
 public class SqlHelperMybatisConfiguration implements XEventListener<Configuration> {
+
+    private static final Logger logger = LoggerFactory.getLogger(SqlHelperMybatisConfiguration.class);
 
     @XBean
     public DatabaseIdProvider databaseIdProvider() {
@@ -44,11 +48,7 @@ public class SqlHelperMybatisConfiguration implements XEventListener<Configurati
 
     @Override
     public void onEvent(Configuration configuration) {
-        if(sqlHelperMybatisProperties == null){
-            return;
-        }
-
-        System.out.println("Start to customize mybatis configuration with mybatis-sqlhelper-solon-plugin");
+        logger.info("Start to customize mybatis configuration with mybatis-spring-boot-autoconfigure");
         configuration.setDefaultScriptingLanguage(CustomScriptLanguageDriver.class);
 
         SqlHelperMybatisPlugin plugin = new SqlHelperMybatisPlugin();
@@ -56,8 +56,8 @@ public class SqlHelperMybatisConfiguration implements XEventListener<Configurati
         plugin.setInstrumentorConfig(sqlHelperMybatisProperties.getInstrumentor());
         plugin.init();
 
-        System.out.println(String.format("Add interceptor {} to mybatis configuration", plugin));
-        System.out.println(String.format("The properties of the mybatis plugin [{}] is: {}", Reflects.getFQNClassName(SqlHelperMybatisPlugin.class), sqlHelperMybatisProperties));
+        logger.info("Add interceptor {} to mybatis configuration", plugin);
+        logger.info("The properties of the mybatis plugin [{}] is: {}", Reflects.getFQNClassName(SqlHelperMybatisPlugin.class), sqlHelperMybatisProperties);
         configuration.addInterceptor(plugin);
     }
 }
