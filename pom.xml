@@ -6,7 +6,7 @@
 
     <groupId>com.github.fangjinuo.sqlhelper</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>3.1.1</version>
+    <version>3.2.0</version>
     <name>sqlhelper</name>
     <description>
         JDBC Extensions:
@@ -207,11 +207,6 @@
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-springjdbc-spring-boot-autoconfigure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
-                <artifactId>sqlhelper-springjdbc-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
