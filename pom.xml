@@ -25,7 +25,7 @@
         <module>sqlhelper-ebean</module>
         <module>sqlhelper-mybatis</module>
         <module>sqlhelper-mybatis-solon-plugin</module>
-        <module>sqlhelper-mybatis-spring-boot</module>
+        <module>sqlhelper-mybatis-spring-boot-starter</module>
         <module>sqlhelper-mybatis-over-pagehelper</module>
         <module>sqlhelper-mybatisplus</module>
         <module>sqlhelper-mybatisplus-spring-boot-starter</module>
@@ -177,22 +177,17 @@
                 <artifactId>sqlhelper-mybatis</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
-                <artifactId>sqlhelper-mybatis-solon-plugin</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
-                <artifactId>sqlhelper-mybatis-spring-boot-autoconfigure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-mybatis-solon-plugin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-dbutils</artifactId>

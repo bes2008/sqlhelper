@@ -51,16 +51,17 @@
             <artifactId>mybatis-spring-boot-autoconfigure</artifactId>
         </dependency>
         <!-- startup mybatis-plus -->
+        <!--
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
         </dependency>
-        <!--
+        -->
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
         </dependency>
-        -->
+
 
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
@@ -87,7 +88,6 @@
             <version>1.1.2</version>
         </dependency>
 
-        <!-- databases -->
     </dependencies>
     <build>
         <plugins>
