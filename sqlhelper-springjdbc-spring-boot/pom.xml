@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>sqlhelper-springjdbc-spring-boot-autoconfigure</module>
+        <module>sqlhelper-springjdbc-spring-boot-starter</module>
     </modules>
     <build>
         <plugins>

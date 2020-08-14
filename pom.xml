@@ -82,7 +82,7 @@
         <spring.version>5.2.6.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>3.0.0</easyjson.version>
-        <langx-java.version>2.8.4</langx-java.version>
+        <langx-java.version>2.8.5</langx-java.version>
 
         <jackson.version>2.11.0</jackson.version>
         <jfinal.version>4.9</jfinal.version>
@@ -207,6 +207,11 @@
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-springjdbc-spring-boot-autoconfigure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-springjdbc-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
