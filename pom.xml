@@ -31,7 +31,7 @@
         <module>sqlhelper-mybatisplus</module>
         <module>sqlhelper-tkmapper-spring-boot-starter</module>
         <module>sqlhelper-springjdbc</module>
-        <module>sqlhelper-springjdbc-spring-boot</module>
+        <module>sqlhelper-springjdbc-spring-boot-starter</module>
         <module>sqlhelper-cli</module>
         <module>sqlhelper-cli-assembly</module>
         <module>sqlhelper-examples</module>
@@ -202,11 +202,6 @@
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-springjdbc</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
-                <artifactId>sqlhelper-springjdbc-spring-boot-autoconfigure</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

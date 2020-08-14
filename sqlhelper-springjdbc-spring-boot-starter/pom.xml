@@ -3,13 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>sqlhelper-springjdbc-spring-boot</artifactId>
+        <artifactId>sqlhelper</artifactId>
         <groupId>com.github.fangjinuo.sqlhelper</groupId>
         <version>3.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sqlhelper-springjdbc-spring-boot-autoconfigure</artifactId>
+    <artifactId>sqlhelper-springjdbc-spring-boot-starter</artifactId>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -62,4 +63,19 @@
             <artifactId>sqlhelper-jsqlparser</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <compilerVersion>1.8</compilerVersion>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
