@@ -27,8 +27,8 @@
         <module>sqlhelper-mybatis-solon-plugin</module>
         <module>sqlhelper-mybatis-spring-boot</module>
         <module>sqlhelper-mybatis-over-pagehelper</module>
-        <module>sqlhelper-mybatisplus-spring-boot</module>
         <module>sqlhelper-mybatisplus</module>
+        <module>sqlhelper-mybatisplus-spring-boot-starter</module>
         <module>sqlhelper-tkmapper-spring-boot-starter</module>
         <module>sqlhelper-springjdbc</module>
         <module>sqlhelper-springjdbc-spring-boot-starter</module>
@@ -222,12 +222,6 @@
                 <scope>compile</scope>
             </dependency>
 
-            <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
-                <artifactId>sqlhelper-mybatisplus-spring-boot-autoconfigure</artifactId>
-                <version>${project.version}</version>
-                <scope>compile</scope>
-            </dependency>
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
