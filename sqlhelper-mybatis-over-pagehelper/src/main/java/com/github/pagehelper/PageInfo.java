@@ -24,10 +24,7 @@
 
 package com.github.pagehelper;
 
-
-import com.jn.easyjson.core.JSONBuilderProvider;
-
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,6 +39,7 @@ import java.util.List;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class PageInfo<T> extends PageSerializable<T> {
+    public static final int DEFAULT_NAVIGATE_PAGES = 8;
     //当前页
     private int pageNum;
     //每页的数量
@@ -53,9 +51,9 @@ public class PageInfo<T> extends PageSerializable<T> {
     //可以在页面中"显示startRow到endRow 共size条数据"
 
     //当前页面第一个元素在数据库中的行号
-    private int startRow;
+    private long startRow;
     //当前页面最后一个元素在数据库中的行号
-    private int endRow;
+    private long endRow;
     //总页数
     private int pages;
 
@@ -90,7 +88,7 @@ public class PageInfo<T> extends PageSerializable<T> {
      * @param list
      */
     public PageInfo(List<T> list) {
-        this(list, 8);
+        this(list, DEFAULT_NAVIGATE_PAGES);
     }
 
     /**
@@ -117,24 +115,18 @@ public class PageInfo<T> extends PageSerializable<T> {
                 //计算实际的endRow（最后一页的时候特殊）
                 this.endRow = this.startRow - 1 + this.size;
             }
-        } else {
+        } else if (list instanceof Collection) {
             this.pageNum = 1;
             this.pageSize = list.size();
 
             this.pages = this.pageSize > 0 ? 1 : 0;
             this.size = list.size();
             this.startRow = 0;
-            this.endRow = list.isEmpty() ? 0: list.size() - 1 ;
+            this.endRow = list.size() > 0 ? list.size() - 1 : 0;
         }
-
-        this.navigatePages = navigatePages;
-        //计算导航页
-        calcNavigatepageNums();
-        //计算前后页，第一页，最后一页
-        calcPage();
-        //判断页面边界
-        judgePageBoudary();
-
+        if (list instanceof Collection) {
+            calcByNavigatePages(navigatePages);
+        }
     }
 
     public static <T> PageInfo<T> of(List<T> list) {
@@ -143,6 +135,16 @@ public class PageInfo<T> extends PageSerializable<T> {
 
     public static <T> PageInfo<T> of(List<T> list, int navigatePages) {
         return new PageInfo<T>(list, navigatePages);
+    }
+
+    public void calcByNavigatePages(int navigatePages) {
+        setNavigatePages(navigatePages);
+        //计算导航页
+        calcNavigatepageNums();
+        //计算前后页，第一页，最后一页
+        calcPage();
+        //判断页面边界
+        judgePageBoudary();
     }
 
     /**
@@ -231,19 +233,19 @@ public class PageInfo<T> extends PageSerializable<T> {
         this.size = size;
     }
 
-    public int getStartRow() {
+    public long getStartRow() {
         return startRow;
     }
 
-    public void setStartRow(int startRow) {
+    public void setStartRow(long startRow) {
         this.startRow = startRow;
     }
 
-    public int getEndRow() {
+    public long getEndRow() {
         return endRow;
     }
 
-    public void setEndRow(int endRow) {
+    public void setEndRow(long endRow) {
         this.endRow = endRow;
     }
 
@@ -312,13 +314,11 @@ public class PageInfo<T> extends PageSerializable<T> {
     }
 
     public int[] getNavigatepageNums() {
-        return Arrays.copyOf(navigatepageNums, navigatepageNums.length);
+        return navigatepageNums;
     }
 
-    public void setNavigatepageNums(int... navigatepageNums) {
-        if (navigatepageNums != null) {
-            this.navigatepageNums = navigatepageNums;
-        }
+    public void setNavigatepageNums(int[] navigatepageNums) {
+        this.navigatepageNums = navigatepageNums;
     }
 
     public int getNavigateFirstPage() {
@@ -339,6 +339,35 @@ public class PageInfo<T> extends PageSerializable<T> {
 
     @Override
     public String toString() {
-        return JSONBuilderProvider.simplest().toJson(this);
+        final StringBuilder sb = new StringBuilder("PageInfo{");
+        sb.append("pageNum=").append(pageNum);
+        sb.append(", pageSize=").append(pageSize);
+        sb.append(", size=").append(size);
+        sb.append(", startRow=").append(startRow);
+        sb.append(", endRow=").append(endRow);
+        sb.append(", total=").append(total);
+        sb.append(", pages=").append(pages);
+        sb.append(", list=").append(list);
+        sb.append(", prePage=").append(prePage);
+        sb.append(", nextPage=").append(nextPage);
+        sb.append(", isFirstPage=").append(isFirstPage);
+        sb.append(", isLastPage=").append(isLastPage);
+        sb.append(", hasPreviousPage=").append(hasPreviousPage);
+        sb.append(", hasNextPage=").append(hasNextPage);
+        sb.append(", navigatePages=").append(navigatePages);
+        sb.append(", navigateFirstPage=").append(navigateFirstPage);
+        sb.append(", navigateLastPage=").append(navigateLastPage);
+        sb.append(", navigatepageNums=");
+        if (navigatepageNums == null) {
+            sb.append("null");
+        } else {
+            sb.append('[');
+            for (int i = 0; i < navigatepageNums.length; ++i) {
+                sb.append(i == 0 ? "" : ", ").append(navigatepageNums[i]);
+            }
+            sb.append(']');
+        }
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -33,7 +33,7 @@ import java.util.List;
 public class PageSerializable<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     //总记录数
-    protected long total;
+    protected long    total;
     //结果集
     protected List<T> list;
 
@@ -42,14 +42,14 @@ public class PageSerializable<T> implements Serializable {
 
     public PageSerializable(List<T> list) {
         this.list = list;
-        if (list instanceof Page) {
-            this.total = ((Page) list).getTotal();
+        if(list instanceof Page){
+            this.total = ((Page)list).getTotal();
         } else {
             this.total = list.size();
         }
     }
 
-    public static <T> PageSerializable<T> of(List<T> list) {
+    public static <T> PageSerializable<T> of(List<T> list){
         return new PageSerializable<T>(list);
     }
 
