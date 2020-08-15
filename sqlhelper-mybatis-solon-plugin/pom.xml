@@ -17,7 +17,9 @@
         use sqlhelper-mybatis in solon application
     </description>
 
-
+    <properties>
+        <solon.version>1.0.10</solon.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.noear</groupId>
