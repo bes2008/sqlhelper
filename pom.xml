@@ -84,7 +84,7 @@
         <easyjson.version>3.0.2</easyjson.version>
         <langx-java.version>2.8.5</langx-java.version>
 
-        <jackson.version>2.6.0</jackson.version>
+        <jackson.version>2.11.2</jackson.version>
         <jfinal.version>4.9</jfinal.version>
         <solon.version>1.0.10</solon.version>
 
