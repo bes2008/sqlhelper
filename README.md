@@ -11,6 +11,8 @@
 [![jFinal](https://img.shields.io/badge/jFinal-4.x-green.svg)](https://github.com/jfinal/jfinal)
 [![EBean](https://img.shields.io/badge/Ebean-11.x-green.svg)](https://ebean.io/docs/query/sqlquery)
 [![Mango](https://img.shields.io/badge/Mango-1.6.x-green.svg)](https://github.com/jfaster/mango)
+[![Commons-DBUtils](https://img.shields.io/badge/Apache_Commons_DBUtils-1.7.x-green.svg)](http://commons.apache.org/proper/commons-dbutils/index.html)
+[![Solon](https://img.shields.io/badge/solon-1.x-green.svg)](https://github.com/noear/solon)
 
 
 [![Spring-Jdbc](https://img.shields.io/badge/SpringJdbc-2.x-green.svg)](https://spring.io/projects/spring-framework)
