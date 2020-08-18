@@ -342,7 +342,7 @@
             <id>envCompany</id>
             <properties>
                 <gpg.executable>D:/Program Files (x86)/GNU/GnuPG/gpg2.exe</gpg.executable>
-                <gpg.homedir>C:/Users/User/AppData/Roaming/gnupg</gpg.homedir>
+                <gpg.homedir>C:/Users/fangjinuo/AppData/Roaming/gnupg</gpg.homedir>
                 <!--
                 <gpg.passphrase>YOUR GPG PASSPHRASE</gpg.passphrase>
                 可以这样配置在pom.xml文件中，也可以在执行mvn 命令时，加上-Dgpg.passphrase=YOUR_GPG_PASSPHRASE
