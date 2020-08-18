@@ -56,20 +56,25 @@ import java.util.Map;
 
 public class SQLStatementInstrumentor implements Initializable {
     private static final Logger logger = LoggerFactory.getLogger(SQLStatementInstrumentor.class);
+    private static final ThreadLocal<Dialect> DIALECT_HOLDER = new ThreadLocal<Dialect>();
+    private final static List<String> keywordsNotAfterOrderBy = Collects.asList("select", "?", "union", "from", "where", "and", "or", "between", "in", "case");
     @NonNull
     private SQLInstrumentorConfig config;
     private DialectRegistry dialectRegistry;
-    private static final ThreadLocal<Dialect> DIALECT_HOLDER = new ThreadLocal<Dialect>();
-    private boolean inited = false;
+    private volatile boolean inited = false;
     private String name;
     private Instrumentation instrumentation;
     private SQLSymbolExpressionBuilderRegistry sqlSymbolExpressionBuilderRegistry = new SQLSymbolExpressionBuilderRegistry();
     private ColumnEvaluationExpressionSupplier columnEvaluationExpressionSupplier;
-
     /**
      * order by transformer proxy
      */
     private OrderByTransformer orderByTransformer;
+    private Cache<String, InstrumentedStatement> instrumentSqlCache;
+
+    public SQLStatementInstrumentor() {
+
+    }
 
     public String getName() {
         return name;
@@ -77,12 +82,6 @@ public class SQLStatementInstrumentor implements Initializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    private Cache<String, InstrumentedStatement> instrumentSqlCache;
-
-    public SQLStatementInstrumentor() {
-
     }
 
     public void init() throws InitializationException {
@@ -248,10 +247,10 @@ public class SQLStatementInstrumentor implements Initializable {
         return sql;
     }
 
-    private SqlStatementWrapper parseSql(String sql){
+    private SqlStatementWrapper parseSql(String sql) {
         try {
             return instrumentation.getSqlParser().parse(sql);
-        }catch (Throwable ex){
+        } catch (Throwable ex) {
             logger.error("error occur when parse the sql with jsqlparser: {}", sql);
         }
 
@@ -324,8 +323,6 @@ public class SQLStatementInstrumentor implements Initializable {
     public String countSql(String originalSql) {
         return countSql(originalSql, null);
     }
-
-    private final static List<String> keywordsNotAfterOrderBy = Collects.asList("select", "?", "union", "from", "where", "and", "or", "between", "in", "case");
 
     public String countSql(String originalSql, String countColumn) {
         if (Strings.isBlank(countColumn)) {
@@ -482,15 +479,17 @@ public class SQLStatementInstrumentor implements Initializable {
 
     @NonNull
     public void setConfig(final SQLInstrumentorConfig config) {
-        this.config = config;
-    }
-
-    public void setDialectRegistry(final DialectRegistry dialectRegistry) {
-        this.dialectRegistry = dialectRegistry;
+        if (!inited) {
+            this.config = config;
+        }
     }
 
     public DialectRegistry getDialectRegistry() {
         return this.dialectRegistry;
+    }
+
+    public void setDialectRegistry(final DialectRegistry dialectRegistry) {
+        this.dialectRegistry = dialectRegistry;
     }
 
 
