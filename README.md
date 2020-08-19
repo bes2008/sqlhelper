@@ -26,8 +26,6 @@
 [![maven](https://img.shields.io/badge/maven-v3.2.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:3.2.0)
 
 
-![访问统计](https://visitor-badge.glitch.me/badge?page_id=fangjinuo)
-
 Tutorial : https://fangjinuo.gitee.io/docs/index.html
 
 # 迁移至 [GitHub (https://github.com/fangjinuo)](https://github.com/fangjinuo)
