@@ -60,6 +60,7 @@ public class SqlPaginationsTests {
         System.out.println(countSql("select * from table where 1=1 order by a ", ""));
         System.out.println(countSql(" select * from \ttable where 1=1 order by a ", ""));
         System.out.println(countSql("\tselect * from table where 1=1 \torder by a ", ""));
+        System.out.println(countSql("\tSELECt * FrOm table where 1=1 \torder by a ", ""));
     }
     private final static List<String> keywordsNotAfterOrderBy = Collects.asList("select", "?", "union", "from", "where", "and", "or", "between", "in", "case");
     public String countSql(String originalSql, String countColumn) {
@@ -70,7 +71,7 @@ public class SqlPaginationsTests {
         // do count
         boolean sliceOrderBy = false;
         final String lowerSql = originalSql.toLowerCase();
-        final int orderIndex = originalSql.toLowerCase().lastIndexOf("order");
+        final int orderIndex = lowerSql.lastIndexOf("order");
         if (orderIndex != -1) {
             String remainSql = lowerSql.substring(orderIndex + "order".length()).trim();
             sliceOrderBy = remainSql.startsWith("by");

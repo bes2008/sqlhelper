@@ -339,7 +339,7 @@ public class SQLStatementInstrumentor implements Initializable {
         // do count
         boolean sliceOrderBy = false;
         final String lowerSql = originalSql.toLowerCase();
-        final int orderIndex = originalSql.toLowerCase().lastIndexOf("order");
+        final int orderIndex = lowerSql.lastIndexOf("order");
         if (orderIndex != -1) {
             String remainSql = lowerSql.substring(orderIndex + "order".length()).trim();
             sliceOrderBy = remainSql.startsWith("by");
