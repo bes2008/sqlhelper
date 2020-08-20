@@ -338,7 +338,7 @@ public class SQLStatementInstrumentor implements Initializable {
 
         // do count
         boolean sliceOrderBy = false;
-        final String lowerSql = originalSql.toLowerCase().trim();
+        final String lowerSql = originalSql.toLowerCase();
         final int orderIndex = originalSql.toLowerCase().lastIndexOf("order");
         if (orderIndex != -1) {
             String remainSql = lowerSql.substring(orderIndex + "order".length()).trim();
@@ -379,7 +379,7 @@ public class SQLStatementInstrumentor implements Initializable {
             }
         }
         if (sliceOrderBy) {
-            originalSql = originalSql.trim().substring(0, orderIndex).trim();
+            originalSql = originalSql.substring(0, orderIndex).trim();
         }
         String countSql = "select count(" + countColumn + ") from (" + originalSql + ") tmp_count";
 
