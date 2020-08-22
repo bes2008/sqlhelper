@@ -23,7 +23,7 @@
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-1.x-green.svg)](https://spring.io/projects/spring-boot/)
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-2.x-green.svg)](https://spring.io/projects/spring-boot/)
 
-[![maven](https://img.shields.io/badge/maven-v3.2.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:3.2.0)
+[![maven](https://img.shields.io/badge/maven-v3.2.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:3.2.1)
 
 
 Tutorial : https://fangjinuo.gitee.io/docs/index.html
@@ -123,6 +123,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |  MyBatis-Plus            |         X          |         √         |   
 |  Apache Commons-DBUtils  |         X          |         √         |
 |  Subquery pagination     |         X          |         √         |  
+|  solon                   |         X          |         √         |
                      
 
 
