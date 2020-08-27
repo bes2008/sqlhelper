@@ -28,7 +28,8 @@
 
 Tutorial : https://fangjinuo.gitee.io/docs/index.html
 
-# 迁移至 [GitHub (https://github.com/fangjinuo)](https://github.com/fangjinuo)
+## [GitHub地址](https://github.com/fangjinuo)
+## [GitHub地址](https://githee.com/fangjinuo)
 
 
 # sqlhelper
