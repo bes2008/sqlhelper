@@ -11,7 +11,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlhelper-examples-client-feign</artifactId>
+    <properties>
+        <agileway.version>1.0.0</agileway.version>
 
+    </properties>
     <dependencies>
 
         <dependency>
@@ -44,9 +47,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.fangjinuo.easyjson.supports</groupId>
-            <artifactId>easyjson-supports-feign</artifactId>
-            <version>${easyjson.version}</version>
+            <groupId>com.github.fangjinuo.agileway</groupId>
+            <artifactId>agileway-feign</artifactId>
+            <version>${agileway.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>io.github.openfeign</groupId>

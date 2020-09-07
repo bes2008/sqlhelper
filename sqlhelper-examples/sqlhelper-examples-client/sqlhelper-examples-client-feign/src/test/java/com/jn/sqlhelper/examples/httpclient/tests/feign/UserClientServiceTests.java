@@ -14,13 +14,13 @@
 
 package com.jn.sqlhelper.examples.httpclient.tests.feign;
 
+import com.jn.agileway.feign.codec.EasyjsonDecoder;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.easyjson.core.JSONFactory;
 import com.jn.easyjson.core.factory.JsonFactorys;
 import com.jn.easyjson.core.factory.JsonScope;
-import com.jn.easyjson.supports.feign.codec.EasyjsonDecoder;
 import com.jn.sqlhelper.examples.httpclients.feign.UserClientService;
 import feign.Feign;
 import feign.Target;
