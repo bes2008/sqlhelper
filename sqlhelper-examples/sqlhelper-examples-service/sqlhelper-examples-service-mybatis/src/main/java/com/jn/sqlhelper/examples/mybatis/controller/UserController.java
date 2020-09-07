@@ -21,17 +21,11 @@ import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
-import com.jn.sqlhelper.dialect.tenant.TenantBuilder;
 import com.jn.sqlhelper.examples.model.User;
 import com.jn.sqlhelper.examples.mybatis.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -117,9 +111,6 @@ public class UserController {
         System.out.println(JSONBuilderProvider.simplest().toJson(request));
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
-        if (testTenant) {
-            request.setTenant(new TenantBuilder().column("tenantId").values(tenantId).build());
-        }
 
         if (namelikeNotUsingConcat) {
             users = userDao.selectByLimit_like2(queryCondition);

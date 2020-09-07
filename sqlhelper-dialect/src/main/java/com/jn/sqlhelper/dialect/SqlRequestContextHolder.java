@@ -50,10 +50,6 @@ public class SqlRequestContextHolder {
         }
     }
 
-    public boolean isTenantRequest() {
-        SqlRequestContext ctx = get();
-        return Objects.isNotNull(ctx) && ctx.isTenantRequest();
-    }
     public void clear(){
         SqlRequestContext requestContext = get();
         if(Objects.isNotNull(requestContext)){

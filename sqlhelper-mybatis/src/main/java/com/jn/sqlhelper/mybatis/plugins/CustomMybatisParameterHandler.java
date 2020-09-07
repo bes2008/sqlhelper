@@ -68,11 +68,6 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
         return !PAGING_CONTEXT.getPagingRequest().isValidRequest();
     }
 
-    private boolean isTenantRequest(){
-        SqlRequestContext sqlRequestContext = SqlRequestContextHolder.getInstance().get();
-        Tenant tenant=sqlRequestContext.getRequest().getTenant();
-        return Emptys.isNotEmpty(tenant);
-    }
     private List<Integer> getEscapeLikeParametersIndexes() {
         SqlRequestContext sqlRequestContext = SqlRequestContextHolder.getInstance().get();
         if (Objects.isNull(sqlRequestContext) || Objects.isNull(sqlRequestContext.getRequest())) {
