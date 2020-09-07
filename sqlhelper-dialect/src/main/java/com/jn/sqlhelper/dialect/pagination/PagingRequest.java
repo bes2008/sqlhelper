@@ -34,7 +34,7 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
     private int pageSize;
     private Boolean useLastPageIfPageOut;
     private C condition;
-    private PagingResult<E> result;
+    private transient PagingResult<E> result;
 
     private boolean isSubQueryPaging = false;
     private String subqueryPagingStartFlag;

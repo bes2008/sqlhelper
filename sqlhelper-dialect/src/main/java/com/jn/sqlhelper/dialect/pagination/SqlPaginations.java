@@ -23,7 +23,7 @@ import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SqlRequests;
 
-@SuppressWarnings({"unused", "unchecked", "rawtypes"})
+@SuppressWarnings({"all"})
 public class SqlPaginations extends SqlRequests {
 
 
