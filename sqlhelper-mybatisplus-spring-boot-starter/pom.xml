@@ -6,16 +6,11 @@
     <parent>
         <artifactId>sqlhelper</artifactId>
         <groupId>com.github.fangjinuo.sqlhelper</groupId>
-        <version>3.1.1</version>
+        <version>3.2.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sqlhelper-mybatisplus-spring-boot</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>sqlhelper-mybatisplus-spring-boot-autoconfigure</module>
-        <module>sqlhelper-mybatisplus-spring-boot-starter</module>
-    </modules>
+    <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
 
     <dependencyManagement>
         <dependencies>
@@ -47,5 +42,45 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <dependencies>
 
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis.plus.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-mybatisplus</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-jsqlparser</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
 </project>

@@ -11,6 +11,8 @@
 [![jFinal](https://img.shields.io/badge/jFinal-4.x-green.svg)](https://github.com/jfinal/jfinal)
 [![EBean](https://img.shields.io/badge/Ebean-11.x-green.svg)](https://ebean.io/docs/query/sqlquery)
 [![Mango](https://img.shields.io/badge/Mango-1.6.x-green.svg)](https://github.com/jfaster/mango)
+[![Commons-DBUtils](https://img.shields.io/badge/Apache_Commons_DBUtils-1.7.x-green.svg)](http://commons.apache.org/proper/commons-dbutils/index.html)
+[![Solon](https://img.shields.io/badge/solon-1.x-green.svg)](https://github.com/noear/solon)
 
 
 [![Spring-Jdbc](https://img.shields.io/badge/SpringJdbc-2.x-green.svg)](https://spring.io/projects/spring-framework)
@@ -21,12 +23,13 @@
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-1.x-green.svg)](https://spring.io/projects/spring-boot/)
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-2.x-green.svg)](https://spring.io/projects/spring-boot/)
 
-[![maven](https://img.shields.io/badge/maven-v3.1.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:3.1.1)
+[![maven](https://img.shields.io/badge/maven-v3.2.1-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:3.2.1)
 
 
 Tutorial : https://fangjinuo.gitee.io/docs/index.html
 
-# 迁移至 [GitHub (https://github.com/fangjinuo)](https://github.com/fangjinuo)
+## [GitHub地址](https://github.com/fangjinuo)
+## [Gitee地址](https://githee.com/fangjinuo)
 
 
 # sqlhelper
@@ -53,6 +56,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |sqlhelper-tkmapper-spring-boot-starter|3.1.0+ |1.8+ | 对 tk.mybatis Mapper 应用提供了 Spring Boot 快速启动|
 |sqlhelper-dbutils | 2.2.0            |1.6+| 对 Apache Commons-DBUtils 支持 (主要包括：通用分页) |
 |sqlhelper-jsqlparser | 3.0.3          |1.6+| 对于要基于SQL Parser接口来完成的功能 由jsqlparser 这个库来实现|
+|sqlhelper-mybatis-solon-plugin|3.2.0|1.8+| 支持solon 框架|
 |sqlhelper-examples|1.0+               |1.8+ | 为这些工具提供 **测试用例** |
 
 
@@ -120,6 +124,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |  MyBatis-Plus            |         X          |         √         |   
 |  Apache Commons-DBUtils  |         X          |         √         |
 |  Subquery pagination     |         X          |         √         |  
+|  solon                   |         X          |         √         |
                      
 
 

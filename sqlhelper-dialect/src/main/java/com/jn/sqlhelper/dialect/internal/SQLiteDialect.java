@@ -29,6 +29,16 @@ public class SQLiteDialect extends AbstractDialect {
     }
 
     @Override
+    public char getBeforeQuote() {
+        return '`';
+    }
+
+    @Override
+    public char getAfterQuote() {
+        return '`';
+    }
+
+    @Override
     public boolean isSupportsLimit() {
         return true;
     }

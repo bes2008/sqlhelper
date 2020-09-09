@@ -28,11 +28,15 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.transaction.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.util.Map;
 
 public class MybatisUtils {
+    private static final Logger logger = LoggerFactory.getLogger(MybatisUtils.class);
+
     private static VendorDatabaseIdProvider vendorDatabaseIdProvider;
 
     static {
@@ -99,6 +103,7 @@ public class MybatisUtils {
                 Dialect dialect = instrumentor.getDialect(connection.getMetaData());
                 return dialect.getDatabaseId();
             } catch (Throwable ex) {
+                logger.error(ex.getMessage(), ex);
             }
         }
         return databaseId;

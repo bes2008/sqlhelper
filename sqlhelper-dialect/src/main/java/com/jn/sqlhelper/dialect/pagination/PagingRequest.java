@@ -20,6 +20,8 @@ import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.dialect.SelectRequest;
 
+import java.lang.reflect.Modifier;
+
 public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, PagingRequestContext<C, E>> {
     private static final long serialVersionUID = 1L;
     private Boolean count = null;
@@ -34,7 +36,7 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
     private int pageSize;
     private Boolean useLastPageIfPageOut;
     private C condition;
-    private PagingResult<E> result;
+    private transient PagingResult<E> result;
 
     private boolean isSubQueryPaging = false;
     private String subqueryPagingStartFlag;
@@ -214,7 +216,13 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
 
     @Override
     public String toString() {
-        return JSONBuilderProvider.create().serializeNulls(true).prettyFormat(true).addSerializationExclusion(new IgnoreAnnotationExclusion()).build().toJson(this);
+        return JSONBuilderProvider.create()
+                .serializeNulls(true)
+                .prettyFormat(true)
+                .addSerializationExclusion(new IgnoreAnnotationExclusion())
+                .excludeFieldsWithModifiers(Modifier.TRANSIENT)
+                .build()
+                .toJson(this);
     }
 
     @Override

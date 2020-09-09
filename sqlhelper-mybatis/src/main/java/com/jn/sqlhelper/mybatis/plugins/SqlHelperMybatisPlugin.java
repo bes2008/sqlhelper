@@ -29,7 +29,6 @@ import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.mybatis.plugins.likeescape.LikeParameterEscapeHandler;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationHandler;
-import com.jn.sqlhelper.mybatis.plugins.tenant.TenantHandler;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -57,7 +56,6 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     private static SQLStatementInstrumentor instrumentor = new SQLStatementInstrumentor();
     private boolean inited = false;
     private Map<String, Handler> handlerRegistry = new HashMap<String, Handler>();
-    private final boolean tenantEnabled = false;
 
     @Override
     public void init() throws InitializationException {
@@ -67,10 +65,6 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
             handlerRegistry.put("debug", debugHandler);
             LikeParameterEscapeHandler likeParameterEscapeHandler = new LikeParameterEscapeHandler();
             handlerRegistry.put("likeEscape", likeParameterEscapeHandler);
-            if (tenantEnabled) {
-                TenantHandler tenantHandler = new TenantHandler();
-                handlerRegistry.put("tenant", tenantHandler);
-            }
             PaginationHandler paginationHandler = new PaginationHandler();
             paginationHandler.setPaginationConfig(this.paginationConfig);
             paginationHandler.init();
@@ -113,9 +107,6 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         Handler debugHandler = handlerRegistry.get("debug");
         Handler sinkHandler = handlerRegistry.get("sink");
         List<Handler> handlers = Collects.emptyArrayList();
-        if (tenantEnabled) {
-            handlers.add(handlerRegistry.get("tenant"));
-        }
         if ("query".equals(executorInvocation.getMethodName())) {
             handlers.add(handlerRegistry.get("likeEscape"));
             handlers.add(handlerRegistry.get("pagination"));
