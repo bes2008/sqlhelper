@@ -143,6 +143,7 @@ public class DialectRegistry {
 
                 GaussDbDialect.class,
                 GBaseDialect.class,
+                GBase8sDialect.class,
                 GoldenDBDialect.class,
                 GreenplumDialect.class,
 

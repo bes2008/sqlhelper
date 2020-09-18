@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 the original author or authors.
+ * Copyright 2020 the original author or authors.
  *
  * Licensed under the LGPL, Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,15 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
-import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
-import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
-import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
+import com.jn.sqlhelper.dialect.internal.limit.SkipLimitHandler;
 
 /**
- * http://www.gbase.cn/download/&pageNo=4&pageSize=10.html
- * MySQL Syntax Compatible
- * 适应于 GBase 8a
+ * https://www.it610.com/article/1281786034576703488.htm
  */
-@Name("gbase")
-@SyntaxCompat(SQLSyntaxCompatTable.MYSQL)
-public class GBaseDialect extends AbstractDialect {
-    public GBaseDialect() {
-        super();
-        setLimitHandler(new LimitCommaLimitHandler());
+@Name("gbase8s")
+public class GBase8sDialect extends AbstractDialect {
+    public GBase8sDialect(){
+        setLimitHandler(new SkipLimitHandler());
     }
 
     @Override
@@ -42,13 +36,4 @@ public class GBaseDialect extends AbstractDialect {
         return true;
     }
 
-    @Override
-    public char getBeforeQuote() {
-        return '`';
-    }
-
-    @Override
-    public char getAfterQuote() {
-        return '`';
-    }
 }
