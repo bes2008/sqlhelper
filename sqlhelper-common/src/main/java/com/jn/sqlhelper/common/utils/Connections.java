@@ -15,10 +15,13 @@
 package com.jn.sqlhelper.common.utils;
 
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.reflect.Reflects;
 
+import javax.sql.DataSource;
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
 public class Connections {
@@ -47,4 +50,15 @@ public class Connections {
         return null;
     }
 
+
+    public static String getDatabaseProductName(DataSource dataSource) throws SQLException {
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+            DatabaseMetaData metaData = conn.getMetaData();
+            return metaData.getDatabaseProductName();
+        } finally {
+            IOs.close(conn);
+        }
+    }
 }

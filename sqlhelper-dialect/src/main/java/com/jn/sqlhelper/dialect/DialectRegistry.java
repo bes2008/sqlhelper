@@ -20,17 +20,21 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.function.Functions;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
+import com.jn.sqlhelper.common.utils.Connections;
 import com.jn.sqlhelper.dialect.annotation.Driver;
 import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -274,7 +278,25 @@ public class DialectRegistry {
     }
 
     public static void setDatabaseId(String keywordsInDriver, String databaseId) {
-        vendorDatabaseIdMappings.setProperty(keywordsInDriver, databaseId);
+        setDatabaseIdIfAbsent(keywordsInDriver, databaseId);
+    }
+
+    public static void setDatabaseIdIfAbsent(String keywordsInDriver, String databaseId) {
+        if (!vendorDatabaseIdMappings.containsKey(keywordsInDriver)) {
+            vendorDatabaseIdMappings.setProperty(keywordsInDriver, databaseId);
+        }
+    }
+
+    public static String guessDatabaseId(DataSource dataSource) {
+        if (dataSource == null) {
+            throw new NullPointerException("dataSource cannot be null");
+        }
+        try {
+            return guessDatabaseId(Connections.getDatabaseProductName(dataSource));
+        } catch (Exception e) {
+            logger.error("Could not get a databaseId from dataSource", e);
+        }
+        return null;
     }
 
     /**
@@ -282,20 +304,52 @@ public class DialectRegistry {
      *
      * @return database id
      */
-    public static String guessDatabaseId(String productName) {
+    public static String guessDatabaseId(final String productName) {
 
         if (productName == null) {
             return null;
         }
-        Iterator<Object> iter = (vendorDatabaseIdMappings.keySet().iterator());
-        productName = productName.toLowerCase();
-        while (iter.hasNext()) {
-            String databaseId = iter.next().toString().toLowerCase();
-            if (productName.contains(databaseId)) {
-                return databaseId;
+        final String _productName = productName.toLowerCase();
+
+        Set<String> productKeywords = vendorDatabaseIdMappings.stringPropertyNames();
+        List<String> matchedProductKeywords = Pipeline.of(productKeywords).filter(new Predicate<String>() {
+            @Override
+            public boolean test(String productKeyword) {
+                return _productName.contains(productKeyword.toLowerCase());
             }
+        }).asList();
+
+        if (matchedProductKeywords.isEmpty()) {
+            return null;
         }
-        return null;
+        if (matchedProductKeywords.size() == 1) {
+            return matchedProductKeywords.get(0);
+        }
+
+        if (matchedProductKeywords.contains(productName)) {
+            return vendorDatabaseIdMappings.getProperty(productName);
+        }
+
+        String bestProductKeyword = Collects.findFirst(matchedProductKeywords, new Predicate<String>() {
+            @Override
+            public boolean test(String value) {
+                return _productName.equals(value.toLowerCase());
+            }
+        });
+
+        if (bestProductKeyword != null) {
+            return vendorDatabaseIdMappings.getProperty(bestProductKeyword);
+        }
+
+        Collection<String> sortedProductKeywords = new TreeSet<String>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.length() - o2.length();
+            }
+        });
+        sortedProductKeywords.addAll(matchedProductKeywords);
+        bestProductKeyword = Collects.findFirst(sortedProductKeywords, Functions.<String>truePredicate());
+        return vendorDatabaseIdMappings.getProperty(bestProductKeyword);
     }
 
     private static Class<? extends Dialect> loadDialectClass(final String className) throws ClassNotFoundException {
