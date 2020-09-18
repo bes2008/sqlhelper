@@ -15,12 +15,8 @@
 
 package com.jn.sqlhelper.dialect.pagination;
 
-import com.jn.easyjson.core.JSONBuilderProvider;
-import com.jn.easyjson.core.exclusion.IgnoreAnnotationExclusion;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.dialect.SelectRequest;
-
-import java.lang.reflect.Modifier;
 
 public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, PagingRequestContext<C, E>> {
     private static final long serialVersionUID = 1L;
@@ -151,7 +147,7 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
         return cacheCount;
     }
 
-    public PagingRequest<C,E> setCacheCount(Boolean cacheCount) {
+    public PagingRequest<C, E> setCacheCount(Boolean cacheCount) {
         this.cacheCount = cacheCount;
         return this;
     }
@@ -170,10 +166,8 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
     }
 
     /**
-     * 
      * @param useLastPageIfPageNoOut
      * @return
-     * 
      * @see #setUseLastPageIfPageOut(Boolean)
      */
     @Deprecated
@@ -228,7 +222,7 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
                 ", isSubQueryPaging=" + isSubQueryPaging +
                 ", subqueryPagingStartFlag='" + subqueryPagingStartFlag + '\'' +
                 ", subqueryPagingEndFlag='" + subqueryPagingEndFlag + '\'' +
-                ", dialect='"+getDialect()+ '\'' +
+                ", dialect='" + getDialect() + '\'' +
                 '}';
     }
 
