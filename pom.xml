@@ -85,6 +85,7 @@
         <langx-java.version>2.8.8</langx-java.version>
 
         <jfinal.version>4.9</jfinal.version>
+        <solon.version>1.0.23</solon.version>
 
 
         <maven.compiler.source>1.6</maven.compiler.source>
@@ -176,7 +177,6 @@
                 <artifactId>sqlhelper-mybatis</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
