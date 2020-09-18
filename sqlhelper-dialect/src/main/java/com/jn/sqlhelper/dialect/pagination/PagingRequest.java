@@ -216,13 +216,20 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
 
     @Override
     public String toString() {
-        return JSONBuilderProvider.create()
-                .serializeNulls(true)
-                .prettyFormat(true)
-                .addSerializationExclusion(new IgnoreAnnotationExclusion())
-                .excludeFieldsWithModifiers(Modifier.TRANSIENT)
-                .build()
-                .toJson(this);
+        return "PagingRequest{" +
+                "count=" + count +
+                ", countColumn='" + countColumn + '\'' +
+                ", cacheCount=" + cacheCount +
+                ", pageNo=" + pageNo +
+                ", pageSize=" + pageSize +
+                ", useLastPageIfPageOut=" + useLastPageIfPageOut +
+                ", condition=" + condition +
+                ", result=" + result +
+                ", isSubQueryPaging=" + isSubQueryPaging +
+                ", subqueryPagingStartFlag='" + subqueryPagingStartFlag + '\'' +
+                ", subqueryPagingEndFlag='" + subqueryPagingEndFlag + '\'' +
+                ", dialect='"+getDialect()+ '\'' +
+                '}';
     }
 
     @Override
