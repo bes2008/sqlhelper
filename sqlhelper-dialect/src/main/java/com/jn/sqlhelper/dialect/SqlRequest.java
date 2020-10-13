@@ -17,10 +17,17 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
      */
     private transient LikeEscaper likeEscaper;
 
+    /**
+     * 用于指定那些 参数要被like escaper 处理
+     */
     private List<Integer> likeParameterIndexes = null;
 
-
-    private Boolean escapeLikeParameter; // will be used for prepared statement
+    /**
+     *
+     * like escaper 启用开关
+     * will be used for prepared statement
+     */
+    private Boolean escapeLikeParameter;
 
     private transient C context;
 

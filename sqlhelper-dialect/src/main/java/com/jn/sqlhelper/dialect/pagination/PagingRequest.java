@@ -20,8 +20,19 @@ import com.jn.sqlhelper.dialect.SelectRequest;
 
 public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, PagingRequestContext<C, E>> {
     private static final long serialVersionUID = 1L;
+    /**
+     * 是否先执行 select count()
+     */
     private Boolean count = null;
+
+    /**
+     * select count(countColumn)
+     */
     private String countColumn;
+
+    /**
+     * count sql 要不要缓存
+     */
     private Boolean cacheCount = null;
 
     // begin 1
@@ -31,11 +42,26 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
     // pageSize > 0, the limit is pageSize
     private int pageSize;
     private Boolean useLastPageIfPageOut;
+    /**
+     * 查询条件
+     */
     private C condition;
+    /**
+     * 分页结果
+     */
     private transient PagingResult<E> result;
-
+    /**
+     * 是否为子查询分页
+     */
     private boolean isSubQueryPaging = false;
+    /**
+     * 要分页的子查询语句的起始标记
+     */
     private String subqueryPagingStartFlag;
+
+    /**
+     * 要分页的子查询语句的结束标记
+     */
     private String subqueryPagingEndFlag;
 
 
