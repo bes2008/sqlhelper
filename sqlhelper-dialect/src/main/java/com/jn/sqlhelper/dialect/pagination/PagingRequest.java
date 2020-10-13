@@ -41,6 +41,10 @@ public class PagingRequest<C, E> extends SelectRequest<PagingRequest<C, E>, Pagi
     // pageSize =0, is Empty paging request, the limit is 0
     // pageSize > 0, the limit is pageSize
     private int pageSize;
+
+    /**
+     * 当查询的页码超出实际的页码时，是否采用最后一页数据
+     */
     private Boolean useLastPageIfPageOut;
     /**
      * 查询条件

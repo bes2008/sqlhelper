@@ -17,8 +17,18 @@ package com.jn.sqlhelper.dialect.pagination;
 import com.jn.easyjson.core.JSONBuilderProvider;
 
 public class PaginationProperties {
+    /**
+     * 是否执行 select count()
+     */
     private boolean count = true;
+    /**
+     * page size 默认值
+     */
     private int defaultPageSize = 10;
+
+    /**
+     * 当查询页码超出最后一页时，是否采用最后一页
+     */
     private boolean useLastPageIfPageOut = false;
 
     public boolean isCount() {
