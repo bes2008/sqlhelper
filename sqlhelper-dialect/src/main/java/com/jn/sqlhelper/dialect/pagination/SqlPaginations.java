@@ -22,6 +22,8 @@ import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SqlRequests;
+import com.jn.sqlhelper.dialect.orderby.OrderByBuilder;
+import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 
 @SuppressWarnings({"all"})
 public class SqlPaginations extends SqlRequests {
@@ -113,5 +115,45 @@ public class SqlPaginations extends SqlRequests {
             return flag;
         }
         return instrumentor.getConfig().getSubqueryPagingEndFlag();
+    }
+
+    public static <C, E> PagingRequest<C, E> preparePagination(int pageNo, int pageSize) {
+        return preparePagination(pageNo, pageSize, null);
+    }
+
+    public static <C, E> PagingRequest<C, E> preparePagination(int pageNo, int pageSize, String sort) {
+        return preparePagination(pageNo, pageSize, sort, null);
+    }
+
+    public static <C, E> PagingRequest<C, E> preparePagination(int pageNo, int pageSize, String sort, OrderByBuilder<String> orderByBuilder) {
+        return preparePagination(pageNo, pageSize, sort, orderByBuilder, true);
+    }
+
+    public static <C, E> PagingRequest<C, E> preparePagination(int pageNo, int pageSize, String sort, OrderByBuilder<String> orderByBuilder, String dialect) {
+        return preparePagination(pageNo, pageSize, sort, orderByBuilder, dialect, true, null);
+    }
+
+    public static <C, E> PagingRequest<C, E> preparePagination(int pageNo, int pageSize, String sort, OrderByBuilder<String> orderByBuilder, boolean count) {
+        return preparePagination(pageNo, pageSize, sort, orderByBuilder, null, count, null);
+    }
+
+    public static <C, E> PagingRequest<C, E> preparePagination(int pageNo, int pageSize, String sort, OrderByBuilder<String> orderByBuilder, String dialect, boolean count, String countColumn) {
+        PagingRequest<C, E> pagingRequest = new PagingRequest<C, E>().limit(pageNo, pageSize);
+        if (Strings.isNotEmpty(sort)) {
+            if (orderByBuilder == null) {
+                orderByBuilder = SqlStyleOrderByBuilder.DEFAULT;
+            }
+            pagingRequest.setOrderBy(orderByBuilder.build(sort));
+        }
+        if (Strings.isNotEmpty(dialect)) {
+            pagingRequest.setDialect(dialect);
+        }
+        pagingRequest.setCount(count);
+        if (Strings.isNotEmpty(countColumn)) {
+            pagingRequest.setCountColumn(countColumn);
+        }
+
+        PagingRequestContextHolder.getContext().setPagingRequest(pagingRequest);
+        return pagingRequest;
     }
 }
