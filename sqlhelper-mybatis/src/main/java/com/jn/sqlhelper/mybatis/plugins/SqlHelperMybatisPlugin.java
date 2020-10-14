@@ -194,6 +194,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         instrumentConfig.setInstrumentation(accessor.getString(instrumentorConfigPrefix + "instrumentation", instrumentConfig.getInstrumentation()));
         instrumentConfig.setDialectClassName(accessor.getString(instrumentorConfigPrefix + "dialectClassName", instrumentConfig.getDialectClassName()));
         instrumentConfig.setCacheInstrumentedSql(accessor.getBoolean(instrumentorConfigPrefix + "cacheInstruemtedSql", false));
+        instrumentConfig.setEscapeLikeParameter(accessor.getBoolean(instrumentorConfigPrefix + "escapeLikeParameter", false));
         return instrumentConfig;
     }
 }
