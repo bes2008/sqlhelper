@@ -72,6 +72,7 @@ public class CustomerController {
 
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
 //        request.setEscapeLikeParameter(true);
+        request.setEscapeLikeParameter(true);
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
         List<Customer> users = customerDao.selectByLimit(queryCondition);

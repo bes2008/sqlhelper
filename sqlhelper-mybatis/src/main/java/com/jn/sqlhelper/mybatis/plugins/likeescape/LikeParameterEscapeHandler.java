@@ -50,10 +50,10 @@ import java.util.List;
 public class LikeParameterEscapeHandler extends AbstractHandler {
     private static Logger logger = LoggerFactory.getLogger(LikeParameterEscapeHandler.class);
 
-    private SQLInstrumentorConfig instrumentorConfig = null;
+    private boolean escapeLikeParameter = false;
 
-    public LikeParameterEscapeHandler(SQLInstrumentorConfig config) {
-        this.instrumentorConfig = config;
+    public LikeParameterEscapeHandler(boolean escapeLikeParameter) {
+        this.escapeLikeParameter = escapeLikeParameter;
     }
 
     @Override
@@ -61,8 +61,6 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
         ExecutorInvocation executorInvocation = (ExecutorInvocation) ctx.getPipeline().getTarget();
         MappedStatement mappedStatement = executorInvocation.getMappedStatement();
 
-        // check escape-like-parameter
-        checkEnableLikeEscape();
 
         if (!MybatisUtils.isQueryStatement(mappedStatement) || !MybatisUtils.isPreparedStatement(mappedStatement) || !isEnableLikeEscape()) {
             Pipelines.skipHandler(ctx, true);
@@ -101,24 +99,12 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
     }
 
 
-    private void checkEnableLikeEscape() {
-        if(instrumentorConfig.isEscapeLikeParameter()) {// escapeLikeParameter: true
-            SqlRequestContext sqlContext = SqlRequestContextHolder.getInstance().get();
-            if (sqlContext == null) {
-                SqlRequestContextHolder.getInstance().setSqlRequest(new SqlRequest().setEscapeLikeParameter(true));
-            } else {
-                SqlRequest sqlRequest = sqlContext.getRequest();
-                sqlRequest.setEscapeLikeParameter(true);
-            }
-        }
-    }
-
-
     private boolean isEnableLikeEscape() {
         SqlRequestContext sqlContext = SqlRequestContextHolder.getInstance().get();
         if (sqlContext == null) {
             // using global configuration
-            return false;
+            SqlRequestContextHolder.getInstance().setSqlRequest(new SqlRequest().setEscapeLikeParameter(escapeLikeParameter));
+            return escapeLikeParameter;
         } else {
             SqlRequest sqlRequest = sqlContext.getRequest();
             return sqlRequest != null && sqlRequest.isEscapeLikeParameter();

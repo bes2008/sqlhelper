@@ -63,7 +63,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
             instrumentor.init();
             DebugHandler debugHandler = new DebugHandler();
             handlerRegistry.put("debug", debugHandler);
-            LikeParameterEscapeHandler likeParameterEscapeHandler = new LikeParameterEscapeHandler(instrumentor.getConfig());
+            LikeParameterEscapeHandler likeParameterEscapeHandler = new LikeParameterEscapeHandler(instrumentor.getConfig().isEscapeLikeParameter());
             handlerRegistry.put("likeEscape", likeParameterEscapeHandler);
             PaginationHandler paginationHandler = new PaginationHandler();
             paginationHandler.setPaginationConfig(this.paginationConfig);
