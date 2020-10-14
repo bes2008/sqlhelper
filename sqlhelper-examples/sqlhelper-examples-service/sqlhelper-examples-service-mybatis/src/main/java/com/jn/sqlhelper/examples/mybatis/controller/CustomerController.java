@@ -28,6 +28,12 @@ public class CustomerController {
         customerDao.insert(customer);
     }
 
+
+    @GetMapping("/get")
+    public void get() {
+//        customerDao
+    }
+
     @PutMapping("/{id}")
     public void update(String id, Customer customer) {
         customer.setId(id);
@@ -65,7 +71,8 @@ public class CustomerController {
         queryCondition.setUpdateDate(updateDate);
 
         PagingRequest request = SqlPaginations.preparePagination(pageNo == null ? 1 : pageNo, pageSize == null ? -1 : pageSize, sort);
-        request.setEscapeLikeParameter(true);
+//        request.setEscapeLikeParameter(true);
+//        request.setEscapeLikeParameter(true);
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
         List<Customer> users = customerDao.selectByLimit(queryCondition);
@@ -75,6 +82,58 @@ public class CustomerController {
         System.out.println(json);
         return request.getResult();
     }
+
+
+    /**
+     * 查询测试1  一个like参数
+     * sqlhelper:
+     *   mybatis:
+     *     instrumentor:
+     *       escape-like-parameter: true #开启escape
+     *
+     * @param namelike
+     * @return
+     */
+    @GetMapping("/select1")
+    public List select1(@RequestParam(value = "namelike", required = false) String namelike) {
+        List<Customer> list = customerDao.select1(namelike);
+        return list;
+    }
+
+    /**
+     * 查询测试2  两个like参数
+     * sqlhelper:
+     *   mybatis:
+     *     instrumentor:
+     *       escape-like-parameter: true #开启escape
+     *
+     * @return
+     */
+    @GetMapping("/select2")
+    public List select2(@RequestParam(value = "namelike", required = false) String namelike,
+                        @RequestParam(value = "addresslike", required = false) String addresslike
+    ) {
+        List<Customer> list = customerDao.select2(namelike,addresslike);
+        return list;
+    }
+
+
+    /**
+     * 更新测试
+     * sqlhelper:
+     *   mybatis:
+     *     instrumentor:
+     *       escape-like-parameter: true #开启escape
+     *
+     * @return
+     */
+    @PostMapping("/updateTest1")
+    public void updateTest1(@RequestParam(value = "city", required = false) String city,
+                            @RequestParam(value = "name", required = false) String name
+    ) {
+        customerDao.updateTest1(city,name);
+    }
+
 
 
     @Autowired

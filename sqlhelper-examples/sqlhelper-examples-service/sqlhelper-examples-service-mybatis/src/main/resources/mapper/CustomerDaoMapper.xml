@@ -100,4 +100,28 @@
         <if test="id!=null and id != ''">AND n.ID = #{id}</if>
         <if test="name!=null and name != ''">AND n.NAME like CONCAT(#{name},'%')</if>
     </select>
+
+
+    <select id="select1" parameterType="com.jn.sqlhelper.examples.model.Customer" resultMap="entity">
+        SELECT
+        <include refid="all_columns"/>
+        FROM Customer
+        WHERE 1=1
+        <if test="name!=null and name != ''">AND NAME like CONCAT(CONCAT('%',#{name}),'%')</if>
+    </select>
+
+    <select id="select2" parameterType="com.jn.sqlhelper.examples.model.Customer" resultMap="entity">
+        SELECT
+        <include refid="all_columns"/>
+        FROM Customer
+        WHERE 1=1
+        <if test="name!=null and name != ''">AND NAME like CONCAT(CONCAT('%',#{name}),'%')</if>
+        <if test="address!=null and address != ''">AND ADDRESS like CONCAT(CONCAT('%',#{address}),'%')</if>
+    </select>
+
+    <update id="updateTest1">
+        UPDATE Customer SET city = #{city}
+        WHERE 1=1
+        <if test="name!=null and name != ''">AND NAME like CONCAT(CONCAT('%',#{name}),'%')</if>
+    </update>
 </mapper>

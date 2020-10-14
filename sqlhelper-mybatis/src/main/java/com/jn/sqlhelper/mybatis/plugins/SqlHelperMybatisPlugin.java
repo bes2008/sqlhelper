@@ -63,7 +63,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
             instrumentor.init();
             DebugHandler debugHandler = new DebugHandler();
             handlerRegistry.put("debug", debugHandler);
-            LikeParameterEscapeHandler likeParameterEscapeHandler = new LikeParameterEscapeHandler();
+            LikeParameterEscapeHandler likeParameterEscapeHandler = new LikeParameterEscapeHandler(instrumentor.getConfig().isEscapeLikeParameter());
             handlerRegistry.put("likeEscape", likeParameterEscapeHandler);
             PaginationHandler paginationHandler = new PaginationHandler();
             paginationHandler.setPaginationConfig(this.paginationConfig);
@@ -121,6 +121,9 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
                 }
             }
         }
+//        if("update".equals(executorInvocation.getMethodName())){
+//            handlers.add(handlerRegistry.get("likeEscape"));
+//        }
 
         DefaultPipeline<ExecutorInvocation> pipeline = Pipelines.newPipeline(debugHandler, sinkHandler, handlers);
         pipeline.bindTarget(executorInvocation);
@@ -191,6 +194,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         instrumentConfig.setInstrumentation(accessor.getString(instrumentorConfigPrefix + "instrumentation", instrumentConfig.getInstrumentation()));
         instrumentConfig.setDialectClassName(accessor.getString(instrumentorConfigPrefix + "dialectClassName", instrumentConfig.getDialectClassName()));
         instrumentConfig.setCacheInstrumentedSql(accessor.getBoolean(instrumentorConfigPrefix + "cacheInstruemtedSql", false));
+        instrumentConfig.setEscapeLikeParameter(accessor.getBoolean(instrumentorConfigPrefix + "escapeLikeParameter", false));
         return instrumentConfig;
     }
 }

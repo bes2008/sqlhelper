@@ -46,7 +46,7 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
     }
 
     public Boolean isEscapeLikeParameter() {
-        return escapeLikeParameter == Boolean.TRUE;
+        return escapeLikeParameter;
     }
 
 
