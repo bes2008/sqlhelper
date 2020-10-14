@@ -107,7 +107,11 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
             return escapeLikeParameter;
         } else {
             SqlRequest sqlRequest = sqlContext.getRequest();
-            return sqlRequest != null && sqlRequest.isEscapeLikeParameter();
+            if(sqlRequest.isEscapeLikeParameter() == null){
+                sqlRequest.setEscapeLikeParameter(escapeLikeParameter);
+                return escapeLikeParameter;
+            }
+            return  sqlRequest.isEscapeLikeParameter();
         }
     }
 
