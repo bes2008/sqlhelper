@@ -25,6 +25,7 @@ import com.jn.langx.util.Strings;
 import com.jn.langx.util.struct.Pair;
 import com.jn.sqlhelper.common.formatter.SqlDmlFormatter;
 import com.jn.sqlhelper.dialect.*;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscapers;
@@ -49,10 +50,19 @@ import java.util.List;
 public class LikeParameterEscapeHandler extends AbstractHandler {
     private static Logger logger = LoggerFactory.getLogger(LikeParameterEscapeHandler.class);
 
+    private SQLInstrumentorConfig instrumentorConfig = null;
+
+    public LikeParameterEscapeHandler(SQLInstrumentorConfig config) {
+        this.instrumentorConfig = config;
+    }
+
     @Override
     public void inbound(HandlerContext ctx) throws Throwable {
         ExecutorInvocation executorInvocation = (ExecutorInvocation) ctx.getPipeline().getTarget();
         MappedStatement mappedStatement = executorInvocation.getMappedStatement();
+
+        // check escape-like-parameter
+        checkEnableLikeEscape();
 
         if (!MybatisUtils.isQueryStatement(mappedStatement) || !MybatisUtils.isPreparedStatement(mappedStatement) || !isEnableLikeEscape()) {
             Pipelines.skipHandler(ctx, true);
@@ -88,6 +98,19 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
         sqlContext.set(MybatisSqlRequestContextKeys.LIKE_ESCAPE_PARAMETERS_INDEXES, pair.getKey());
         sqlContext.set(MybatisSqlRequestContextKeys.LIKE_ESCAPER, likeEscaper);
         Pipelines.inbound(ctx);
+    }
+
+
+    private void checkEnableLikeEscape() {
+        if(instrumentorConfig.isEscapeLikeParameter()) {// escapeLikeParameter: true
+            SqlRequestContext sqlContext = SqlRequestContextHolder.getInstance().get();
+            if (sqlContext == null) {
+                SqlRequestContextHolder.getInstance().setSqlRequest(new SqlRequest().setEscapeLikeParameter(true));
+            } else {
+                SqlRequest sqlRequest = sqlContext.getRequest();
+                sqlRequest.setEscapeLikeParameter(true);
+            }
+        }
     }
 
 

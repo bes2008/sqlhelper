@@ -30,6 +30,7 @@ public class SQLInstrumentorConfig {
     private String subqueryPagingStartFlag = "[PAGING_START]";
     private String subqueryPagingEndFlag = "[PAGING_END]";
     private String instrumentation = "jsqlparser";
+    private boolean escapeLikeParameter = false;
 
     public int getCacheInitialCapacity() {
         return cacheInitialCapacity;
@@ -121,5 +122,13 @@ public class SQLInstrumentorConfig {
 
     public void setInstrumentation(String instrumentation) {
         this.instrumentation = instrumentation;
+    }
+
+    public boolean isEscapeLikeParameter() {
+        return escapeLikeParameter;
+    }
+
+    public void setEscapeLikeParameter(boolean escapeLikeParameter) {
+        this.escapeLikeParameter = escapeLikeParameter;
     }
 }
