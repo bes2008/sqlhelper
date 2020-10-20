@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.common.resultset;
 
+import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.ThrowableFunction;
 import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Arrs;
@@ -16,45 +17,30 @@ import java.util.List;
 @SuppressWarnings({"unused"})
 public class ResultSetDescription {
     private static final Logger logger = LoggerFactory.getLogger(ResultSetDescription.class);
+    private ResultSetMetaData resultSetMetaData;
 
     public ResultSetDescription(final ResultSetMetaData resultSetMetaData) {
-        parseColumnCount(resultSetMetaData);
-        parseIsAutoIncrement(resultSetMetaData);
-        parseIsCaseSensitive(resultSetMetaData);
-        parseIsSearchable(resultSetMetaData);
-        parseIsCurrency(resultSetMetaData);
-        parseIsNullable(resultSetMetaData);
-        parseIsSigned(resultSetMetaData);
-        parseColumnDisplaySizes(resultSetMetaData);
-        parseColumnNames(resultSetMetaData);
-        parseColumnLabels(resultSetMetaData);
-        parsePrecisions(resultSetMetaData);
-        parseScales(resultSetMetaData);
-        parseSchemaNames(resultSetMetaData);
-        parseTableNames(resultSetMetaData);
-        parseCatalogNames(resultSetMetaData);
-        parseColumnTypes(resultSetMetaData);
-        parseColumnJdbcTypeNames(resultSetMetaData);
-        parseColumnClassNames(resultSetMetaData);
-        parseIsReadOnly(resultSetMetaData);
-        parseIsWritable(resultSetMetaData);
-        parseIsDefinitelyWritable(resultSetMetaData);
+        Preconditions.checkNotNull(resultSetMetaData);
+        this.resultSetMetaData = resultSetMetaData;
+        getColumnCount();
     }
 
-    private int columnCount;
+    private int columnCount = -1;
 
     public int getColumnCount() {
+        if (columnCount < 0) {
+            parseColumnCount();
+        }
         return columnCount;
     }
 
-    private void parseColumnCount(final ResultSetMetaData resultSetMetaData) {
+    private void parseColumnCount() {
         this.columnCount = Throwables.ignoreThrowable(logger, 0, new ThrowableFunction<Object, Integer>() {
             @Override
             public Integer doFun(Object o) throws Throwable {
                 return resultSetMetaData.getColumnCount();
             }
         }, resultSetMetaData);
-
     }
 
     private List<Boolean> isAutoIncrement;
@@ -66,10 +52,13 @@ public class ResultSetDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean isAutoIncrement(int column) {
+        if (isAutoIncrement == null) {
+            parseIsAutoIncrement();
+        }
         return isAutoIncrement.get(column - 1);
     }
 
-    private void parseIsAutoIncrement(final ResultSetMetaData resultSetMetaData) {
+    private void parseIsAutoIncrement() {
         final List<Boolean> isAutoIncrement = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -94,10 +83,13 @@ public class ResultSetDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean isCaseSensitive(int column) {
+        if (isCaseSensitive == null) {
+            parseIsCaseSensitive();
+        }
         return isCaseSensitive.get(column - 1);
     }
 
-    private void parseIsCaseSensitive(final ResultSetMetaData resultSetMetaData) {
+    private void parseIsCaseSensitive() {
         final List<Boolean> isCaseSensitive = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -122,10 +114,13 @@ public class ResultSetDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean isSearchable(int column) {
+        if (isSearchable == null) {
+            parseIsCaseSensitive();
+        }
         return isSearchable.get(column - 1);
     }
 
-    private void parseIsSearchable(final ResultSetMetaData resultSetMetaData) {
+    private void parseIsSearchable() {
         final List<Boolean> isSearchable = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -151,10 +146,13 @@ public class ResultSetDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean isCurrency(int column) {
+        if (isCurrency == null) {
+            parseIsCurrency();
+        }
         return isCurrency.get(column - 1);
     }
 
-    private void parseIsCurrency(final ResultSetMetaData resultSetMetaData) {
+    private void parseIsCurrency() {
         final List<Boolean> isCurrency = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -181,10 +179,13 @@ public class ResultSetDescription {
      * <code>columnNullable</code> or <code>columnNullableUnknown</code>
      */
     public int isNullable(int column) {
+        if (isNullable == null) {
+            parseIsNullable();
+        }
         return isNullable.get(column - 1);
     }
 
-    private void parseIsNullable(final ResultSetMetaData resultSetMetaData) {
+    private void parseIsNullable() {
         final List<Integer> isNullable = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -228,10 +229,13 @@ public class ResultSetDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean isSigned(int column) {
+        if (isSigned == null) {
+            parseIsSigned();
+        }
         return isSigned.get(column - 1);
     }
 
-    private void parseIsSigned(final ResultSetMetaData resultSetMetaData) {
+    private void parseIsSigned() {
         final List<Boolean> isSigned = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -258,10 +262,13 @@ public class ResultSetDescription {
      * of the designated column
      */
     public int getColumnDisplaySize(int column) {
+        if (columnDisplaySizes == null) {
+            parseColumnDisplaySizes();
+        }
         return columnDisplaySizes.get(column - 1);
     }
 
-    private void parseColumnDisplaySizes(final ResultSetMetaData resultSetMetaData) {
+    private void parseColumnDisplaySizes() {
         final List<Integer> columnDisplaySizes = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -291,10 +298,13 @@ public class ResultSetDescription {
      * @return the suggested column title
      */
     public String getColumnLabel(int column) {
+        if (columnLabels == null) {
+            parseColumnLabels();
+        }
         return columnLabels.get(column - 1);
     }
 
-    private void parseColumnLabels(final ResultSetMetaData resultSetMetaData) {
+    private void parseColumnLabels() {
         final List<String> columnLabels = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -320,10 +330,13 @@ public class ResultSetDescription {
      * @return column name
      */
     public String getColumnName(int column) {
+        if (columnNames == null) {
+            parseColumnNames();
+        }
         return columnNames.get(column - 1);
     }
 
-    private void parseColumnNames(final ResultSetMetaData resultSetMetaData) {
+    private void parseColumnNames() {
         final List<String> columnNames = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -352,10 +365,13 @@ public class ResultSetDescription {
      * @return schema name or "" if not applicable
      */
     public String getSchemaName(int column) {
+        if (schemaNames == null) {
+            parseSchemaNames();
+        }
         return schemaNames.get(column - 1);
     }
 
-    private void parseSchemaNames(final ResultSetMetaData resultSetMetaData) {
+    private void parseSchemaNames() {
         final List<String> schemaNames = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -386,10 +402,13 @@ public class ResultSetDescription {
      * @return precision
      */
     public int getPrecision(int column) {
+        if (precisions == null) {
+            parsePrecisions();
+        }
         return precisions.get(column - 1);
     }
 
-    private void parsePrecisions(final ResultSetMetaData resultSetMetaData) {
+    private void parsePrecisions() {
         final List<Integer> precisions = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -416,10 +435,13 @@ public class ResultSetDescription {
      * @return scale
      */
     public int getScale(int column) {
+        if (scales == null) {
+            parseScales();
+        }
         return scales.get(column - 1);
     }
 
-    private void parseScales(final ResultSetMetaData resultSetMetaData) {
+    private void parseScales() {
         final List<Integer> scales = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -445,10 +467,13 @@ public class ResultSetDescription {
      * @return table name or "" if not applicable
      */
     public String getTableName(int column) {
+        if (tableNames == null) {
+            parseTableNames();
+        }
         return tableNames.get(column - 1);
     }
 
-    private void parseTableNames(final ResultSetMetaData resultSetMetaData) {
+    private void parseTableNames() {
         final List<String> tableNames = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -474,10 +499,13 @@ public class ResultSetDescription {
      * appears or "" if not applicable
      */
     public String getCatalogName(int column) {
+        if (catalogNames == null) {
+            parseCatalogNames();
+        }
         return catalogNames.get(column - 1);
     }
 
-    private void parseCatalogNames(final ResultSetMetaData resultSetMetaData) {
+    private void parseCatalogNames() {
         final List<String> catalogNames = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -495,7 +523,8 @@ public class ResultSetDescription {
 
     private List<JdbcType> jdbcTypes;
 
-    private void parseColumnTypes(final ResultSetMetaData resultSetMetaData) {
+    private void parseColumnTypes() {
+
         final List<JdbcType> jdbcTypes = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -520,6 +549,9 @@ public class ResultSetDescription {
      * @see Types
      */
     public JdbcType getColumnType(int column) {
+        if (jdbcTypes == null) {
+            parseColumnTypes();
+        }
         return jdbcTypes.get(column - 1);
     }
 
@@ -534,10 +566,13 @@ public class ResultSetDescription {
      * a user-defined type, then a fully-qualified type name is returned.
      */
     public String getColumnTypeName(int column) {
+        if (columnJdbcTypeNames == null) {
+            parseColumnJdbcTypeNames();
+        }
         return columnJdbcTypeNames.get(column - 1);
     }
 
-    private void parseColumnJdbcTypeNames(final ResultSetMetaData resultSetMetaData) {
+    private void parseColumnJdbcTypeNames() {
         final List<String> columnJdbcTypeNames = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -562,10 +597,13 @@ public class ResultSetDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean isReadOnly(int column) {
+        if (isReadOnly == null) {
+            parseIsReadOnly();
+        }
         return isReadOnly.get(column - 1);
     }
 
-    private void parseIsReadOnly(final ResultSetMetaData resultSetMetaData) {
+    private void parseIsReadOnly() {
         final List<Boolean> isReadOnly = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -590,10 +628,13 @@ public class ResultSetDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean isWritable(int column) {
+        if (isWritable == null) {
+            parseIsWritable();
+        }
         return isWritable.get(column - 1);
     }
 
-    private void parseIsWritable(final ResultSetMetaData resultSetMetaData) {
+    private void parseIsWritable() {
         final List<Boolean> isWritable = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -618,10 +659,13 @@ public class ResultSetDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean isDefinitelyWritable(int column) {
+        if (isDefinitelyWritable == null) {
+            parseIsDefinitelyWritable();
+        }
         return isDefinitelyWritable.get(column - 1);
     }
 
-    private void parseIsDefinitelyWritable(final ResultSetMetaData resultSetMetaData) {
+    private void parseIsDefinitelyWritable() {
         final List<Boolean> isDefinitelyWritable = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
@@ -653,10 +697,13 @@ public class ResultSetDescription {
      * column. This is the class name used for custom mapping.
      */
     public String getColumnClassName(int column) {
+        if (columnClassNames == null) {
+            parseColumnClassNames();
+        }
         return columnClassNames.get(column - 1);
     }
 
-    private void parseColumnClassNames(final ResultSetMetaData resultSetMetaData) {
+    private void parseColumnClassNames() {
         final List<String> columnClassNames = Collects.emptyArrayList();
         Collects.forEach(Arrs.range(1, columnCount + 1), new Consumer<Integer>() {
             @Override
