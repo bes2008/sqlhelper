@@ -18,10 +18,10 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Emptys;
 import com.jn.sqlhelper.dialect.Dialect;
-import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.SqlRequest;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
+import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.session.Configuration;
@@ -70,10 +70,23 @@ public class MybatisUtils {
         return statement.getStatementType() == StatementType.CALLABLE;
     }
 
+    /**
+     * @deprecated 
+     * @see #getDatabaseId(SqlRequestContextHolder, SQLStatementInstrumentor, MappedStatement, Executor, boolean)
+     */
     public static String getDatabaseId(@Nullable SqlRequestContextHolder sqlRequestContextHolder,
                                        @Nullable SQLStatementInstrumentor instrumentor,
                                        @NonNull final MappedStatement ms, Executor executor) {
+        return getDatabaseId(sqlRequestContextHolder, instrumentor, ms, executor, true);
+    }
+
+    public static String getDatabaseId(@Nullable SqlRequestContextHolder sqlRequestContextHolder,
+                                       @Nullable SQLStatementInstrumentor instrumentor,
+                                       @NonNull final MappedStatement ms,
+                                       @Nullable Executor executor,
+                                       boolean autoExtractFromConfiguration) {
         String databaseId = null;
+        // 从 sql request 中获取
         if (sqlRequestContextHolder != null) {
             SqlRequestContext sqlRequestContext = sqlRequestContextHolder.get();
             if (sqlRequestContext != null) {
@@ -84,18 +97,22 @@ public class MybatisUtils {
             }
         }
 
+        // 从 mapped statement 中获取
         if (Emptys.isEmpty(databaseId)) {
             databaseId = ms.getDatabaseId();
         }
 
+        // 从 全局配置 中获取
         if (Emptys.isEmpty(databaseId) && instrumentor != null && instrumentor.getConfig() != null) {
             databaseId = instrumentor.getConfig().getDialect();
         }
 
-        if (Emptys.isEmpty(databaseId)) {
+        // 从 MyBatis Configuration 中获取
+        if (Emptys.isEmpty(databaseId) && autoExtractFromConfiguration) {
             databaseId = ms.getConfiguration().getDatabaseId();
         }
 
+        // 从连接的数据库中获取
         if (Emptys.isEmpty(databaseId) && executor != null) {
             Transaction tx = executor.getTransaction();
             try {
@@ -108,6 +125,7 @@ public class MybatisUtils {
         }
         return databaseId;
     }
+
 
     public static BoundSql rebuildBoundSql(String newSql, Configuration configuration, BoundSql boundSql) {
         BoundSql newBoundSql = new BoundSql(configuration, newSql, boundSql.getParameterMappings(), boundSql.getParameterObject());

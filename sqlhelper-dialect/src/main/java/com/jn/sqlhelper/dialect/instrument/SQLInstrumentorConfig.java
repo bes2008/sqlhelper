@@ -21,15 +21,54 @@ public class SQLInstrumentorConfig {
     public static final SQLInstrumentorConfig DEFAULT = new SQLInstrumentorConfig();
 
     private String name = "undefined";
+    /**
+     * 数据库方言，也是数据库标示符
+     */
     private String dialect;
+    /**
+     * 自定义数据库方言类
+     */
     private String dialectClassName;
+    /**
+     * 如果不配置dialect，会走自动提取数据源的逻辑 {MyBatis#getDatabaseId()}
+     * 其中有一个步骤是从 MyBatis Configuration中获取，
+     * 而Configuration中的database id 则是在初始化Configuration时，内部自己根据数据源获取的，
+     * 那么在多数据源的场景下，会出现获取的是第一个连接到的数据库。
+     *
+     * 加入该配置项的目的是，在多数据源的情况下，通过设置为 false，来禁用从Configuration中获取
+     */
+    private boolean extractDialectFromConfiguration = true;
+    /**
+     * 是否对修改后的SQL进行缓存
+     */
     private boolean cacheInstrumentedSql = false;
+    /**
+     * 缓存初始容量
+     */
     private int cacheInitialCapacity = 1000;
+    /**
+     * 缓存的最大容量
+     */
     private int cacheMaxCapacity = Integer.MAX_VALUE;
+    /**
+     * 缓存数据的默认过期时间
+     */
     private int cacheExpireAfterRead = 5 * 60; //unit: s
+    /**
+     * 如果有子查询分页的情形，分页部分的开始标记
+     */
     private String subqueryPagingStartFlag = "[PAGING_START]";
+    /**
+     * 如果有子查询分页的情形，分页部分的结束标记
+     */
     private String subqueryPagingEndFlag = "[PAGING_END]";
+    /**
+     * 修改SQL的实现库
+     */
     private String instrumentation = "jsqlparser";
+    /**
+     * 是否开启对 like 参数进行 % _ 转义
+     */
     private boolean escapeLikeParameter = false;
 
     public int getCacheInitialCapacity() {
@@ -81,6 +120,14 @@ public class SQLInstrumentorConfig {
     @Override
     public String toString() {
         return JSONBuilderProvider.create().serializeNulls(true).build().toJson(this);
+    }
+
+    public boolean isExtractDialectFromConfiguration() {
+        return extractDialectFromConfiguration;
+    }
+
+    public void setExtractDialectFromConfiguration(boolean extractDialectFromConfiguration) {
+        this.extractDialectFromConfiguration = extractDialectFromConfiguration;
     }
 
     public boolean isCacheInstrumentedSql() {

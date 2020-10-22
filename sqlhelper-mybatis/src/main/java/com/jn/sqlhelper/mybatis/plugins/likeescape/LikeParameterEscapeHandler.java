@@ -50,10 +50,24 @@ import java.util.List;
 public class LikeParameterEscapeHandler extends AbstractHandler {
     private static Logger logger = LoggerFactory.getLogger(LikeParameterEscapeHandler.class);
 
-    private boolean escapeLikeParameter = false;
+    /**
+     * @see SQLInstrumentorConfig#isEscapeLikeParameter()
+     */
+    private boolean escapeLikeParameter;
+    /**
+     * @see SQLInstrumentorConfig#isExtractDialectFromConfiguration()
+     */
+    private boolean extractDialectFromConfiguration;
 
-    public LikeParameterEscapeHandler(boolean escapeLikeParameter) {
+    public LikeParameterEscapeHandler() {
+    }
+
+    public void setEscapeLikeParameter(boolean escapeLikeParameter) {
         this.escapeLikeParameter = escapeLikeParameter;
+    }
+
+    public void setExtractDialectFromConfiguration(boolean extractDialectFromConfiguration) {
+        this.extractDialectFromConfiguration = extractDialectFromConfiguration;
     }
 
     @Override
@@ -122,7 +136,7 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
         }
         if (likeEscaper == null) {
             SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
-            String databaseId = MybatisUtils.getDatabaseId(SqlRequestContextHolder.getInstance(), instrumentor, ms, executorInvocation.getExecutor());
+            String databaseId = MybatisUtils.getDatabaseId(SqlRequestContextHolder.getInstance(), instrumentor, ms, executorInvocation.getExecutor(), extractDialectFromConfiguration);
             if (Strings.isNotBlank(databaseId)) {
                 likeEscaper = instrumentor.getDialectRegistry().getDialectByName(databaseId);
                 if (likeEscaper != null && sqlRequest != null) {
