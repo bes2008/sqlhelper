@@ -65,11 +65,11 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
             handlerRegistry.put("debug", debugHandler);
             LikeParameterEscapeHandler likeParameterEscapeHandler = new LikeParameterEscapeHandler();
             likeParameterEscapeHandler.setEscapeLikeParameter(instrumentor.getConfig().isEscapeLikeParameter());
-            likeParameterEscapeHandler.setExtractDialectFromConfiguration(instrumentor.getConfig().isExtractDialectFromConfiguration());
+            likeParameterEscapeHandler.setExtractDialectUseNativeEnabled(instrumentor.getConfig().isExtractDialectFromConfiguration());
             handlerRegistry.put("likeEscape", likeParameterEscapeHandler);
             PaginationHandler paginationHandler = new PaginationHandler();
             paginationHandler.setPaginationConfig(this.paginationConfig);
-            paginationHandler.setExtractDialectFromConfiguration(instrumentor.getConfig().isExtractDialectFromConfiguration());
+            paginationHandler.setExtractDialectUseNativeEnabled(instrumentor.getConfig().isExtractDialectFromConfiguration());
             paginationHandler.init();
             handlerRegistry.put("pagination", paginationHandler);
             if (paginationConfig.isPageHelperCompatible()) {
@@ -198,7 +198,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         instrumentConfig.setDialectClassName(accessor.getString(instrumentorConfigPrefix + "dialectClassName", instrumentConfig.getDialectClassName()));
         instrumentConfig.setCacheInstrumentedSql(accessor.getBoolean(instrumentorConfigPrefix + "cacheInstruemtedSql", false));
         instrumentConfig.setEscapeLikeParameter(accessor.getBoolean(instrumentorConfigPrefix + "escapeLikeParameter", false));
-        instrumentConfig.setExtractDialectFromConfiguration(accessor.getBoolean(instrumentorConfigPrefix+"extractDialectFromConfiguration", true));
+        instrumentConfig.setExtractDialectFromConfiguration(accessor.getBoolean(instrumentorConfigPrefix+"extractDialectUseNativeEnabled", true));
         return instrumentConfig;
     }
 }

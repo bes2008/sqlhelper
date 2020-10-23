@@ -84,7 +84,7 @@ public class MybatisUtils {
                                        @Nullable SQLStatementInstrumentor instrumentor,
                                        @NonNull final MappedStatement ms,
                                        @Nullable Executor executor,
-                                       boolean autoExtractFromConfiguration) {
+                                       boolean enableExtractDialectUseNative) {
         String databaseId = null;
         // 从 sql request 中获取
         if (sqlRequestContextHolder != null) {
@@ -108,7 +108,7 @@ public class MybatisUtils {
         }
 
         // 从 MyBatis Configuration 中获取
-        if (Emptys.isEmpty(databaseId) && autoExtractFromConfiguration) {
+        if (Emptys.isEmpty(databaseId) && enableExtractDialectUseNative) {
             databaseId = ms.getConfiguration().getDatabaseId();
         }
 

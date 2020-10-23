@@ -50,7 +50,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
     private String countSuffix = "_COUNT";
     private static final String ORDER_BY_SUFFIX = "_orderBy";
     private boolean inited = false;
-    private boolean extractDialectFromConfiguration = true;
+    private boolean extractDialectUseNativeEnabled = true;
 
     @Override
     public String toString() {
@@ -78,8 +78,8 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         this.paginationConfig = config;
     }
 
-    public void setExtractDialectFromConfiguration(boolean extractDialectFromConfiguration) {
-        this.extractDialectFromConfiguration = extractDialectFromConfiguration;
+    public void setExtractDialectUseNativeEnabled(boolean extractDialectUseNativeEnabled) {
+        this.extractDialectUseNativeEnabled = extractDialectUseNativeEnabled;
     }
 
     private boolean isUseLastPageIfPageOut(@NonNull PagingRequest request) {
@@ -278,7 +278,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             PAGING_CONTEXT.get().setString(MybatisSqlRequestContextKeys.QUERY_SQL_ID, statement.getId());
         }
         SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
-        final String databaseId = MybatisUtils.getDatabaseId(PAGING_CONTEXT, instrumentor, statement, executorInvocation.getExecutor(), extractDialectFromConfiguration);
+        final String databaseId = MybatisUtils.getDatabaseId(PAGING_CONTEXT, instrumentor, statement, executorInvocation.getExecutor(), extractDialectUseNativeEnabled);
         if(Strings.isEmpty(databaseId)){
             logger.error("can't find the dialect");
         }
