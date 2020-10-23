@@ -55,7 +55,7 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
      */
     private boolean escapeLikeParameter;
     /**
-     * @see SQLInstrumentorConfig#isExtractDialectFromConfiguration()
+     * @see SQLInstrumentorConfig#isExtractDialectUseNativeEnabled()
      */
     private boolean extractDialectUseNativeEnabled;
 

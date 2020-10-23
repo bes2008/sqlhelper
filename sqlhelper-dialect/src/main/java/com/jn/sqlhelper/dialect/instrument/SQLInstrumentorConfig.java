@@ -37,7 +37,7 @@ public class SQLInstrumentorConfig {
      *
      * 加入该配置项的目的是，在多数据源的情况下，通过设置为 false，来禁用从Configuration中获取
      */
-    private boolean extractDialectFromConfiguration = true;
+    private boolean extractDialectUseNativeEnabled = true;
     /**
      * 是否对修改后的SQL进行缓存
      */
@@ -122,12 +122,12 @@ public class SQLInstrumentorConfig {
         return JSONBuilderProvider.create().serializeNulls(true).build().toJson(this);
     }
 
-    public boolean isExtractDialectFromConfiguration() {
-        return extractDialectFromConfiguration;
+    public boolean isExtractDialectUseNativeEnabled() {
+        return extractDialectUseNativeEnabled;
     }
 
-    public void setExtractDialectFromConfiguration(boolean extractDialectFromConfiguration) {
-        this.extractDialectFromConfiguration = extractDialectFromConfiguration;
+    public void setExtractDialectUseNativeEnabled(boolean extractDialectUseNativeEnabled) {
+        this.extractDialectUseNativeEnabled = extractDialectUseNativeEnabled;
     }
 
     public boolean isCacheInstrumentedSql() {
