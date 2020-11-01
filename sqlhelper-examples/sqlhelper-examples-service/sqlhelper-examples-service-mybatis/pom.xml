@@ -40,7 +40,7 @@
         </dependency>
 
         <!-- startup mybatis -->
-
+        <!--
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
@@ -50,24 +50,27 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-autoconfigure</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
+        </dependency>
+        -->
         <!-- startup mybatis-plus -->
-        <!--
+
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
         </dependency>
+
+        <!--测试多数据源-->
+        <!--
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
             <version>3.2.1</version>
         </dependency>
         -->
-
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
-        </dependency>
-
 
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
@@ -92,6 +95,12 @@
             <groupId>com.github.fangjinuo.audit</groupId>
             <artifactId>audit-spring-boot-starter</artifactId>
             <version>${audit.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-autoconfigure</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>

@@ -15,6 +15,7 @@
 package com.jn.sqlhelper.mybatisplus.plugins.pagination;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
@@ -22,6 +23,7 @@ import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.mybatis.plugins.CustomMybatisParameterHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -44,7 +46,8 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
 
     public static Object processBatch(MappedStatement ms, Object parameterObject) {
         if (null != parameterObject && !ReflectionKit.isPrimitiveOrWrapper(parameterObject.getClass()) && parameterObject.getClass() != String.class) {
-            MetaObjectHandler metaObjectHandler = GlobalConfigUtils.getMetaObjectHandler(ms.getConfiguration());
+            GlobalConfig globalConfig =GlobalConfigUtils.getGlobalConfig(ms.getConfiguration());
+            MetaObjectHandler metaObjectHandler = globalConfig.getMetaObjectHandler();
             boolean isFill = false;
             boolean isInsert = false;
             if (ms.getSqlCommandType() == SqlCommandType.INSERT) {
@@ -126,7 +129,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
             return parameterObject;
         } else {
             MetaObject metaObject = ms.getConfiguration().newMetaObject(parameterObject);
-            if (isInsert && !StringUtils.isEmpty(tableInfo.getKeyProperty()) && null != tableInfo.getIdType() && tableInfo.getIdType().getKey() >= 3) {
+            if (isInsert && !Strings.isEmpty(tableInfo.getKeyProperty()) && null != tableInfo.getIdType() && tableInfo.getIdType().getKey() >= 3) {
                 Object idValue = metaObject.getValue(tableInfo.getKeyProperty());
                 if (StringUtils.checkValNull(idValue)) {
                     if (tableInfo.getIdType() == IdType.ID_WORKER) {
