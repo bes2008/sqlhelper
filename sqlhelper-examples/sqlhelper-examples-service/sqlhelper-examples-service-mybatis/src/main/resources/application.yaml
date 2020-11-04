@@ -26,6 +26,9 @@ logging:
           examples:
             common:
               dao: trace
+          mybatis:
+            plugins:
+              likeescape: debug
 
 operation:
   definition:

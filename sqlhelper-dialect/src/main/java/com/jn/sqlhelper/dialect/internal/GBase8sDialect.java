@@ -16,6 +16,7 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.dialect.internal.limit.SkipLimitHandler;
+import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 
 /**
  * https://www.it610.com/article/1281786034576703488.htm
@@ -24,6 +25,7 @@ import com.jn.sqlhelper.dialect.internal.limit.SkipLimitHandler;
 public class GBase8sDialect extends AbstractDialect {
     public GBase8sDialect(){
         setLimitHandler(new SkipLimitHandler());
+        setLikeEscaper(new BackslashStyleEscaper(false));
     }
 
     @Override

@@ -101,11 +101,11 @@ public class LikeEscapers {
     private static final List<String> keywordsAfterLikeClause = Collects.asList(
             "and", "or",
             "group", "order",
-            "limit","fetch","offset",
+            "limit", "fetch", "offset",
             "window", "union",
             "into",
             "using",
-            "plan","for","with");
+            "plan", "for", "with");
 
     /**
      * @return key: the parameters placeholder index: all will be escaped ? indexes
@@ -146,13 +146,16 @@ public class LikeEscapers {
                 segmentStartIndex = readedLength;
             } else if (inLikeClause && singleQuoteCount % 2 == 0 && keywordsAfterLikeClause.contains(token)) {
                 inLikeClause = false;
-                escapeDeclareSlotIndexes.add(readedLength);
+
                 String segment = sql.substring(segmentStartIndex, readedLength);
                 int parameterCountInLikeClause = SQLs.findPlaceholderParameterCount(segment);
-                for (int i = 0; i < parameterCountInLikeClause; i++) {
-                    parameterPlaceholderIndexes.add(readedParameterCount + i);
+                if (parameterCountInLikeClause > 0) {
+                    escapeDeclareSlotIndexes.add(readedLength);
+                    for (int i = 0; i < parameterCountInLikeClause; i++) {
+                        parameterPlaceholderIndexes.add(readedParameterCount + i);
+                    }
+                    readedParameterCount = readedParameterCount + parameterCountInLikeClause;
                 }
-                readedParameterCount = readedParameterCount + parameterCountInLikeClause;
                 segmentStartIndex = readedLength;
             } else {
                 readedLength = readedLength + token.length();
@@ -161,13 +164,16 @@ public class LikeEscapers {
 
         if (inLikeClause && singleQuoteCount % 2 == 0) {
             inLikeClause = false;
-            escapeDeclareSlotIndexes.add(readedLength);
+
             String segment = sql.substring(segmentStartIndex);
             int parameterCountInLikeClause = SQLs.findPlaceholderParameterCount(segment);
-            for (int i = 0; i < parameterCountInLikeClause; i++) {
-                parameterPlaceholderIndexes.add(readedParameterCount + i);
+            if (parameterCountInLikeClause > 0) {
+                escapeDeclareSlotIndexes.add(readedLength);
+                for (int i = 0; i < parameterCountInLikeClause; i++) {
+                    parameterPlaceholderIndexes.add(readedParameterCount + i);
+                }
+                readedParameterCount = readedParameterCount + parameterCountInLikeClause;
             }
-            readedParameterCount = readedParameterCount + parameterCountInLikeClause;
             segmentStartIndex = readedLength;
         }
 

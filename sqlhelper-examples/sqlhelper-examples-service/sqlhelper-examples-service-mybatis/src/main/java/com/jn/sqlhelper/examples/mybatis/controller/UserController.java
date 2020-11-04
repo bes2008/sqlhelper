@@ -95,6 +95,7 @@ public class UserController {
             @RequestParam(value = "useLastPageIfPageOut", required = false) boolean useLastPageIfPageOut,
             @RequestParam(value = "namelike", required = false) String namelike,
             @RequestParam(value = "namelikeNotUsingConcat", required = false, defaultValue = "false") boolean namelikeNotUsingConcat,
+            @RequestParam(value = "testNonParameterLike", required = false, defaultValue = "false") boolean testNonParameterLike,
             @RequestParam(value = "likeEscapeEnabled", required = false, defaultValue = "true") boolean likeEscapeEnabled,
             @RequestParam(value = "grateAge", required = false, defaultValue = "10") int age,
             @RequestParam(value = "testTenant", required = false, defaultValue = "false") boolean testTenant,
@@ -111,11 +112,14 @@ public class UserController {
         System.out.println(JSONBuilderProvider.simplest().toJson(request));
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
-
-        if (namelikeNotUsingConcat) {
-            users = userDao.selectByLimit_like2(queryCondition);
-        } else {
-            users = userDao.selectByLimit(queryCondition);
+        if(testNonParameterLike) {
+            users = userDao.selectByLimit_like3(queryCondition);
+        }else{
+            if (namelikeNotUsingConcat) {
+                users = userDao.selectByLimit_like2(queryCondition);
+            } else {
+                users = userDao.selectByLimit(queryCondition);
+            }
         }
         String json = JSONBuilderProvider.simplest().toJson(request.getResult());
         System.out.println(json);

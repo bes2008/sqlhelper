@@ -62,6 +62,16 @@
         <if test="age!=null and age gte 0">AND AGE > #{age}</if>
     </select>
 
+    <select id="selectByLimit_like3" parameterType="com.jn.sqlhelper.examples.model.User" resultMap="entity">
+        SELECT
+        <include refid="all_columns"/>
+        FROM USER
+        WHERE 1=1
+        <if test="id!=null and id != ''">AND ID = #{id}</if>
+        AND NAME like 'zhangsan%'
+        <if test="age!=null and age gte 0">AND AGE > #{age}</if>
+    </select>
+
     <select id="selectByLimit_like2" parameterType="com.jn.sqlhelper.examples.model.User" resultMap="entity">
         SELECT
         <include refid="all_columns"/>
