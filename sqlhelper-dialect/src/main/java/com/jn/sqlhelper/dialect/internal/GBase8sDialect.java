@@ -23,9 +23,9 @@ import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
  */
 @Name("gbase8s")
 public class GBase8sDialect extends AbstractDialect {
-    public GBase8sDialect(){
+    public GBase8sDialect() {
         setLimitHandler(new SkipLimitHandler());
-        setLikeEscaper(new BackslashStyleEscaper(false));
+        setLikeEscaper(new BackslashStyleEscaper(true));
     }
 
     @Override

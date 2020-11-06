@@ -18,6 +18,7 @@ import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
 import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
+import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 
 /**
  * http://www.gbase.cn/download/&pageNo=4&pageSize=10.html
@@ -30,6 +31,7 @@ public class GBaseDialect extends AbstractDialect {
     public GBaseDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
+        setLikeEscaper(new BackslashStyleEscaper(true));
     }
 
     @Override
