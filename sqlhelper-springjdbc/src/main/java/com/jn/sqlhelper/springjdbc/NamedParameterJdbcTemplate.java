@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.springjdbc;
 
+import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.springjdbc.statement.NamedParameterPreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -25,6 +26,20 @@ public class NamedParameterJdbcTemplate extends org.springframework.jdbc.core.na
      */
     public NamedParameterJdbcTemplate(JdbcOperations classicJdbcTemplate) {
         super(classicJdbcTemplate);
+    }
+
+    /**
+     * Expose the classic Spring {@link org.springframework.jdbc.core.JdbcTemplate} itself, if available,
+     * in particular for passing it on to other {@code JdbcTemplate} consumers.
+     * <p>If sufficient for the purposes at hand, {@link #getJdbcOperations()}
+     * is recommended over this variant.
+     *
+     * @since 3.2.5
+     */
+    public org.springframework.jdbc.core.JdbcTemplate getJdbcTemplate() {
+        JdbcOperations operations = getJdbcOperations();
+        Preconditions.checkArgument(operations instanceof org.springframework.jdbc.core.JdbcTemplate, "No JdbcTemplate available");
+        return (org.springframework.jdbc.core.JdbcTemplate) operations;
     }
 
     /**
