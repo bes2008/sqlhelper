@@ -20,6 +20,7 @@
         <module>sqlhelper-examples-service-apachedbutils</module>
         <module>sqlhelper-examples-service-springjdbc</module>
         <module>sqlhelper-examples-service-mybatis</module>
+        <module>sqlhelper-examples-service-mybatisplus_2x</module>
     </modules>
 
     <dependencies>

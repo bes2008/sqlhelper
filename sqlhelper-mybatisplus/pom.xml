@@ -13,9 +13,14 @@
     <artifactId>sqlhelper-mybatisplus</artifactId>
     <dependencies>
         <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis_jdk8.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-core</artifactId>
-            <version>${mybatis.plus.version}</version>
+            <version>${mybatis.plus_3x.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

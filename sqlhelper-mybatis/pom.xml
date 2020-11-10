@@ -19,6 +19,7 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
+            <version>${mybatis_jdk6_7.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
