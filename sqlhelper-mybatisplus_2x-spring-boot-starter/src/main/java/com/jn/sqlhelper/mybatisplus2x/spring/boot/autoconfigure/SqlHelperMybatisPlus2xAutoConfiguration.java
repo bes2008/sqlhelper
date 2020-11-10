@@ -28,12 +28,15 @@ import org.apache.ibatis.session.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 @org.springframework.context.annotation.Configuration
-@AutoConfigureBefore(MybatisPlusAutoConfiguration.class)
+@AutoConfigureAfter(DataSourceAutoConfiguration.class)
+@AutoConfigureBefore({MybatisPlusAutoConfiguration.class})
 public class SqlHelperMybatisPlus2xAutoConfiguration implements ConfigurationCustomizer {
     private static final Logger logger = LoggerFactory.getLogger(SqlHelperMybatisPlus2xAutoConfiguration.class);
 
@@ -60,7 +63,7 @@ public class SqlHelperMybatisPlus2xAutoConfiguration implements ConfigurationCus
 
     @Override
     public void customize(Configuration configuration) {
-        logger.info("Start to customize mybatis-plus configuration with mybatis-plus-boot-starter");
+        logger.info("Start to customize mybatis-plus 2.x configuration with mybatis-plus-boot-starter");
         configuration.setDefaultScriptingLanguage(CustomMybatisPlusScriptLanguageDriver.class);
 
         SqlHelperMybatisPlugin plugin = new SqlHelperMybatisPlugin();
@@ -68,8 +71,8 @@ public class SqlHelperMybatisPlus2xAutoConfiguration implements ConfigurationCus
         plugin.setInstrumentorConfig(sqlHelperMybatisProperties.getInstrumentor());
         plugin.init();
 
-        logger.info("Add interceptor {} to mybatis-plus configuration", plugin);
-        logger.info("The properties of the mybatis-plus plugin [{}] is: {}", Reflects.getFQNClassName(SqlHelperMybatisPlugin.class), sqlHelperMybatisProperties);
+        logger.info("Add interceptor {} to mybatis-plus 2.x configuration", plugin);
+        logger.info("The properties of the mybatis-plus 2.x plugin [{}] is: {}", Reflects.getFQNClassName(SqlHelperMybatisPlugin.class), sqlHelperMybatisProperties);
         configuration.addInterceptor(plugin);
     }
 
