@@ -24,7 +24,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.sqlhelper.mybatis.plugins.CustomMybatisParameterHandler;
-import com.jn.sqlhelper.mybatisplus.TableInfoHelpers;
+import com.jn.sqlhelper.mybatisplus.tableinfo.TableInfoHelpers;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;

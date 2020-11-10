@@ -36,28 +36,28 @@ Tutorial : https://fangjinuo.gitee.io/docs/index.html
 SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
 
 ## modules
-|   module         | sqlhelper version | JDK |  Description      |
-|------------------|-------------------|-----|-------------------|
-|sqlhelper-dialect | 1.0+              |1.6+ |  the core （绝大部分功能都离不开它）|
-|sqlhelper-cli | 2.0+              |1.8+ |  CLI 命令行工具 |
-|sqlhelper-cli-assembly | 2.0+              |1.8+ | 为 CLI 命令行工具 提供打包功能|
-|sqlhelper-mybatis | 1.0+              |1.6+ |  提供对MyBatis的支持 (主要包括：通用分页、通用批量操作) |
-|sqlhelper-mybatis-spring-boot | 1.0+  |1.6+ |  为MyBatis + SqlHelper 提供了Spring Boot 快速启动|
-|sqlhelper-mybatis-over-pagehelper|1.0+|1.6+ |  引入它就可以无缝的从 ***mybatis-pagehelper*** 迁移到 SqlHelper|
-|sqlhelper-jfinal  | 1.2+              |1.6+ |  对国产框架jfinal支持 (主要包括：通用分页) |
-|sqlhelper-ebean   | 1.2+              |1.6+ |  对 ebean 支持(主要包括：通用分页)  |
-|sqlhelper-hibernate| 1.2+             |1.6+ |  对 hibernate 支持(主要包括：通用分页) |
-|sqlhelper-mango   | 1.2+              |1.6+ |  对 mango 支持 支持(主要包括：通用分页) |
-|sqlhelper-batchinsert|1.2+            |1.6+ |  为了 **性能测试** 提供的批量入库工具 |
-|sqlhelper-springjdbc | 2.0.2+         |1.6+ |  对 spring-jdbc 支持 (主要包括：通用分页)|
-|sqlhelper-springjdbc-spring-boot| 2.0.2+|1.8+| 对 spring-jdbc 应用提供了 Spring Boot 快速启动|
-|sqlhelper-mybatisplus|2.0.7+         |1.6+ |  对 mybatis-plus 支持|
-|sqlhelper-mybatisplus-spring-boot|2.0.7+ |1.8+ | 对 mybatis-plus 应用提供了 Spring Boot 快速启动|
-|sqlhelper-tkmapper-spring-boot-starter|3.1.0+ |1.8+ | 对 tk.mybatis Mapper 应用提供了 Spring Boot 快速启动|
-|sqlhelper-dbutils | 2.2.0            |1.6+| 对 Apache Commons-DBUtils 支持 (主要包括：通用分页) |
-|sqlhelper-jsqlparser | 3.0.3          |1.6+| 对于要基于SQL Parser接口来完成的功能 由jsqlparser 这个库来实现|
-|sqlhelper-mybatis-solon-plugin|3.2.0|1.8+| 支持solon 框架|
-|sqlhelper-examples|1.0+               |1.8+ | 为这些工具提供 **测试用例** |
+|   module         | sqlhelper version | JDK | framework version| Description      |
+|------------------|-------------------|-----|------------------|------------------|
+|sqlhelper-dialect | 1.0+              |1.6+ |  |the core （绝大部分功能都离不开它）|
+|sqlhelper-cli | 2.0+                  |1.8+ | | CLI 命令行工具 |
+|sqlhelper-cli-assembly | 2.0+         |1.8+ | |为 CLI 命令行工具 提供打包功能|
+|sqlhelper-mybatis | 1.0+              |1.6+ | |提供对MyBatis的支持 (主要包括：通用分页、通用批量操作) |
+|sqlhelper-mybatis-spring-boot | 1.0+  |1.6+ | | 为MyBatis + SqlHelper 提供了Spring Boot 快速启动|
+|sqlhelper-mybatis-over-pagehelper|1.0+|1.6+ | | 引入它就可以无缝的从 ***mybatis-pagehelper*** 迁移到 SqlHelper|
+|sqlhelper-jfinal  | 1.2+              |1.6+ |4.3+ | 对国产框架jfinal支持 (主要包括：通用分页) |
+|sqlhelper-ebean   | 1.2+              |1.6+ | | 对 ebean 支持(主要包括：通用分页)  |
+|sqlhelper-hibernate| 1.2+             |1.6+ | | 对 hibernate 支持(主要包括：通用分页) |
+|sqlhelper-mango   | 1.2+              |1.6+ | | 对 mango 支持 支持(主要包括：通用分页) |
+|sqlhelper-batchinsert|1.2+            |1.6+ | | 为了 **性能测试** 提供的批量入库工具 |
+|sqlhelper-springjdbc | 2.0.2+         |1.6+ |spring 4.0+ | 对 spring-jdbc 支持 (主要包括：通用分页)|
+|sqlhelper-springjdbc-spring-boot| 2.0.2+|1.8+| |对 spring-jdbc 应用提供了 Spring Boot 快速启动|
+|sqlhelper-mybatisplus|2.0.7+         |1.6+ | mybatis-plus 3.2.0+ |对 mybatis-plus 支持|
+|sqlhelper-mybatisplus-spring-boot|2.0.7+ |1.8+ |mybatis-plus 3.2.0+  |对 mybatis-plus 应用提供了 Spring Boot 快速启动|
+|sqlhelper-tkmapper-spring-boot-starter|3.1.0+ |1.8+ | |对 tk.mybatis Mapper 应用提供了 Spring Boot 快速启动|
+|sqlhelper-dbutils | 2.2.0            |1.6+| |对 Apache Commons-DBUtils 支持 (主要包括：通用分页) |
+|sqlhelper-jsqlparser | 3.0.3          |1.6+| |对于要基于SQL Parser接口来完成的功能 由jsqlparser 这个库来实现|
+|sqlhelper-mybatis-solon-plugin|3.2.0|1.8+| |支持solon 框架|
+|sqlhelper-examples|1.0+               |1.8+ | |为这些工具提供 **测试用例** |
 
 
 ## tools usage
