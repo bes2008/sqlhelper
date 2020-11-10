@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.springjdbc.statement;
 
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
@@ -25,7 +26,6 @@ import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.pagination.QueryParameters;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.*;
-import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;

@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.springjdbc.statement;
 
 
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.collection.PrimitiveArrays;
@@ -14,7 +15,6 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.ParameterDisposer;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.StatementCreatorUtils;
-import org.springframework.lang.Nullable;
 
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;

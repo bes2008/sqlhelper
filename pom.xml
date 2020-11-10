@@ -78,11 +78,11 @@
 
         <mybatis.plus.version>3.2.0</mybatis.plus.version>
         <junit.version>4.12</junit.version>
-        <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
-        <spring.version>5.2.9.RELEASE</spring.version>
+        <spring.boot.version>1.5.22.RELEASE</spring.boot.version>
+        <spring.version>4.3.25.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>3.0.4</easyjson.version>
-        <langx-java.version>2.10.5</langx-java.version>
+        <langx-java.version>2.10.6</langx-java.version>
 
         <jfinal.version>4.9</jfinal.version>
         <solon.version>1.0.23</solon.version>
@@ -92,8 +92,8 @@
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.compilerVersion>1.6</maven.compiler.compilerVersion>
 
-        <project.major.version>3.2.1</project.major.version>
-        <project.internal.version>3.2.1</project.internal.version>
+        <project.major.version>${project.version}</project.major.version>
+        <project.internal.version>${project.version}</project.internal.version>
     </properties>
 
     <dependencyManagement>
