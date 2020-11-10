@@ -38,6 +38,7 @@
         <module>sqlhelper-batchinsert</module>
         <module>sqlhelper-mybatisplus_2x</module>
         <module>sqlhelper-mybatisplus_2x-spring-boot-starter</module>
+        <module>sqlhelper-mybatisplus-commons</module>
 
     </modules>
     <developers>
@@ -214,6 +215,11 @@
             </dependency>
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-mybatisplus-commons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatisplus</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -226,14 +232,17 @@
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
-                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-mybatisplus_2x-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-tkmapper-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>

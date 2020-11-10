@@ -9,9 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sqlhelper-examples-service-mybatis</artifactId>
-    <properties>
-        <swagger.version>2.9.2</swagger.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -29,7 +26,6 @@
             <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
             <artifactId>sqlhelper-examples-swagger</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
@@ -57,7 +53,6 @@
         </dependency>
         -->
         <!-- startup mybatis-plus -->
-
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>

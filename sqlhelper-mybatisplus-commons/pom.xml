@@ -23,24 +23,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sqlhelper-mybatisplus_2x</artifactId>
+    <artifactId>sqlhelper-mybatisplus-commons</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-core</artifactId>
-            <version>${mybatis.plus_2x.version}</version>
-        </dependency>
 
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatisplus-commons</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
 </project>
