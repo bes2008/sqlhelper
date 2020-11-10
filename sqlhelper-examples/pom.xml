@@ -22,7 +22,7 @@
     <properties>
         <swagger.version>2.9.2</swagger.version>
         <spring.plugin.version>1.2.0.RELEASE</spring.plugin.version>
-        <audit.version>2.0.2</audit.version>
+        <audit.version>2.0.3</audit.version>
         <jackson.version>2.11.0</jackson.version>
     </properties>
 
