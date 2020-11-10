@@ -9,6 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sqlhelper-examples-service-mybatis</artifactId>
+    <properties>
+        <swagger.version>2.9.2</swagger.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,18 +56,11 @@
             <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
         </dependency>
         -->
-        <!-- startup mybatis-plus 3.x -->
-        <!--
+        <!-- startup mybatis-plus -->
+
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
-        </dependency>
-        -->
-
-        <!-- startup mybatis-plus 2.x -->
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatisplus_2x-spring-boot-starter</artifactId>
         </dependency>
 
         <!--测试多数据源-->

@@ -12,7 +12,8 @@
 
     <artifactId>sqlhelper-examples-client-feign</artifactId>
     <properties>
-        <agileway.version>2.0.0</agileway.version>
+        <agileway.version>1.5.0</agileway.version>
+
     </properties>
     <dependencies>
 
