@@ -18,13 +18,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
-import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.sqlhelper.mybatis.plugins.CustomMybatisParameterHandler;
+import com.jn.sqlhelper.mybatisplus.TableInfoHelpers;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
@@ -45,7 +45,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
     }
 
     public static Object processBatch(MappedStatement ms, Object parameterObject) {
-        if (null != parameterObject && !ReflectionKit.isPrimitiveOrWrapper(parameterObject.getClass()) && parameterObject.getClass() != String.class) {
+        if (null != parameterObject && !Primitives.isPrimitiveOrPrimitiveWrapperType(parameterObject.getClass()) && parameterObject.getClass() != String.class) {
             GlobalConfig globalConfig =GlobalConfigUtils.getGlobalConfig(ms.getConfiguration());
             MetaObjectHandler metaObjectHandler = globalConfig.getMetaObjectHandler();
             boolean isFill = false;
@@ -66,7 +66,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
 
                     while (var10.hasNext()) {
                         et = var10.next();
-                        TableInfo tableInfo = TableInfoHelper.getTableInfo(et.getClass());
+                        TableInfo tableInfo = TableInfoHelpers.getTableInfo(et.getClass());
                         if (null != tableInfo) {
                             objList.add(populateKeys(metaObjectHandler, tableInfo, ms, et, isInsert));
                         } else {
@@ -85,15 +85,15 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
                                 if (et instanceof Map) {
                                     Map<?, ?> realEtMap = (Map) et;
                                     if (realEtMap.containsKey("MP_OPTLOCK_ET_ORIGINAL")) {
-                                        tableInfo = TableInfoHelper.getTableInfo(realEtMap.get("MP_OPTLOCK_ET_ORIGINAL").getClass());
+                                        tableInfo = TableInfoHelpers.getTableInfo(realEtMap.get("MP_OPTLOCK_ET_ORIGINAL").getClass());
                                     }
                                 } else {
-                                    tableInfo = TableInfoHelper.getTableInfo(et.getClass());
+                                    tableInfo = TableInfoHelpers.getTableInfo(et.getClass());
                                 }
                             }
                         }
                     } else {
-                        tableInfo = TableInfoHelper.getTableInfo(parameterObject.getClass());
+                        tableInfo = TableInfoHelpers.getTableInfo(parameterObject.getClass());
                     }
 
                     return populateKeys(metaObjectHandler, tableInfo, ms, parameterObject, isInsert);
