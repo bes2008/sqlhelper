@@ -46,7 +46,9 @@
 
 ```
 
+3、配置
 
+所有配置项参见 [configuration](../configuration.md)
  
 
 

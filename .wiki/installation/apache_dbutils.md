@@ -15,3 +15,6 @@
 
 参见用例：${sqlhelper-examples}/${sqlhelper-examples-service}/${sqlhelper-examples-service-apachedbutils}
 
+3、配置
+
+所有配置项参见 [configuration](../configuration.md) 

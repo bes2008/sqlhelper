@@ -27,3 +27,7 @@ public void configPlugin(Plugins me) {
     me.add(arp);
 }
 ```
+
+3、配置
+
+所有配置项参见 [configuration](../configuration.md)

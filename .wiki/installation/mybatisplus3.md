@@ -51,3 +51,8 @@ sqlhelper.mybatis.countSuffix=_COUNT
 4、使用
 
 参见用例：${sqlhelper-examples}/${sqlhelper-examples-service}/${sqlhelper-examples-service-mybatisplus_3x}
+
+
+5、配置
+
+所有配置项参见 [configuration](../configuration.md)

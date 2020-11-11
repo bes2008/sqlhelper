@@ -1,6 +1,6 @@
 # Work with mybatis、tk.mapper
 
-导入依赖：
+1、导入依赖：
 
 ```xml
 <dependency>
@@ -11,5 +11,9 @@
 
 ```
 
+
+2、配置
+
+所有配置项参见 [configuration](../configuration.md)
 
 
