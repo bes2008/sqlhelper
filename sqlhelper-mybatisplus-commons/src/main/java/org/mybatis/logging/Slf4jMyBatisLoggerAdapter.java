@@ -16,7 +16,7 @@ package org.mybatis.logging;
 
 import com.jn.langx.util.function.Supplier0;
 
-public class Slf4jMyBatisLoggerAdapter implements Logger {
+public class Slf4jMyBatisLoggerAdapter extends Logger {
     private org.slf4j.Logger logger;
 
     public Slf4jMyBatisLoggerAdapter(org.slf4j.Logger logger) {
