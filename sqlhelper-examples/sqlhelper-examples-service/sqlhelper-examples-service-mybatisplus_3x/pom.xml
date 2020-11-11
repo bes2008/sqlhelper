@@ -60,7 +60,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
     </dependencies>
     <build>
         <plugins>
@@ -87,7 +86,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.jn.sqlhelper.examples.mybatisplus3.MyBatisWithSpringBootTest</mainClass>
+                    <mainClass>com.jn.sqlhelper.examples.mybatisplus3.MyBatisPlus3WithSpringBootTest</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
             </plugin>

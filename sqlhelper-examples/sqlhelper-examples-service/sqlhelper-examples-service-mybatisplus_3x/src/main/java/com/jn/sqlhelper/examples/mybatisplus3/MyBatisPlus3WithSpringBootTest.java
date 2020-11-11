@@ -12,18 +12,18 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.examples.mybatis;
+package com.jn.sqlhelper.examples.mybatisplus3;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
-        "com.jn.sqlhelper.examples.mybatis",
+        "com.jn.sqlhelper.examples.mybatisplus3",
         "com.jn.sqlhelper.examples.db.config",
         "com.jn.sqlhelper.examples.swagger.config",
 })
-@MapperScan("com.jn.sqlhelper.examples.mybatis.dao")
+@MapperScan("com.jn.sqlhelper.examples.mybatisplus3.dao")
 public class MyBatisPlus3WithSpringBootTest {
     public static void main(String[] args) {
         SpringApplication.run(MyBatisPlus3WithSpringBootTest.class, args);
