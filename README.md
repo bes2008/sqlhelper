@@ -26,11 +26,11 @@
 [![maven](https://img.shields.io/badge/maven-v3.2.4-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:3.2.4)
 
 
-Tutorial : https://fangjinuo.gitee.io/docs/index.html
+
 
 ## [GitHub地址](https://github.com/fangjinuo)
 ## [Gitee地址](https://githee.com/fangjinuo)
-
+## [教程](./.wiki/index.md)
 
 # sqlhelper
 SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlStatementParser**, **WallFilter**, **BatchExecutor for Test**) based Java
