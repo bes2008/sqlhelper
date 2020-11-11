@@ -16,6 +16,8 @@ package org.mybatis.logging;
 
 import com.jn.langx.util.function.Supplier0;
 
+import java.util.function.Supplier;
+
 public class Slf4jMyBatisLoggerAdapter extends Logger {
     private org.slf4j.Logger logger;
 
@@ -88,6 +90,11 @@ public class Slf4jMyBatisLoggerAdapter extends Logger {
         logger.debug(msg, t);
     }
 
+    @Override
+    public void debug(Supplier<String> messageSupplier) {
+        debug(messageSupplier.get());
+    }
+
 
     @Override
     public boolean isInfoEnabled() {
@@ -150,6 +157,10 @@ public class Slf4jMyBatisLoggerAdapter extends Logger {
         logger.warn(msg, t);
     }
 
+    @Override
+    public void warn(Supplier<String> messageSupplier) {
+        warn(messageSupplier.get());
+    }
 
     @Override
     public boolean isErrorEnabled() {

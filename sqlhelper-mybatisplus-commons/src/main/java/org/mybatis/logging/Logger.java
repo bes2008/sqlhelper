@@ -17,6 +17,8 @@ package org.mybatis.logging;
 
 import com.jn.langx.util.function.Supplier0;
 
+import java.util.function.Supplier;
+
 public abstract class Logger {
 
 
@@ -36,7 +38,7 @@ public abstract class Logger {
      * Is the logger instance enabled for the TRACE level?
      *
      * @return True if this Logger is enabled for the TRACE level,
-     *         false otherwise.
+     * false otherwise.
      * @since 1.4
      */
     public abstract boolean isTraceEnabled();
@@ -106,12 +108,11 @@ public abstract class Logger {
     public abstract void trace(String msg, Throwable t);
 
 
-
     /**
      * Is the logger instance enabled for the DEBUG level?
      *
      * @return True if this Logger is enabled for the DEBUG level,
-     *         false otherwise.
+     * false otherwise.
      */
     public abstract boolean isDebugEnabled();
 
@@ -123,8 +124,8 @@ public abstract class Logger {
      */
     public abstract void debug(String msg);
 
-    public abstract void  debug(Supplier0<String> messageSupplier);
-
+    public abstract void debug(Supplier0<String> messageSupplier);
+    public abstract void debug(Supplier<String> messageSupplier);
 
     /**
      * Log a message at the DEBUG level according to the specified format
@@ -178,12 +179,11 @@ public abstract class Logger {
     public abstract void debug(String msg, Throwable t);
 
 
-
     /**
      * Is the logger instance enabled for the INFO level?
      *
      * @return True if this Logger is enabled for the INFO level,
-     *         false otherwise.
+     * false otherwise.
      */
     public abstract boolean isInfoEnabled();
 
@@ -248,12 +248,11 @@ public abstract class Logger {
     public abstract void info(String msg, Throwable t);
 
 
-
     /**
      * Is the logger instance enabled for the WARN level?
      *
      * @return True if this Logger is enabled for the WARN level,
-     *         false otherwise.
+     * false otherwise.
      */
     public abstract boolean isWarnEnabled();
 
@@ -276,7 +275,10 @@ public abstract class Logger {
      */
     public abstract void warn(String format, Object arg);
 
-    public abstract void  warn(Supplier0<String> messageSupplier);
+    public abstract void warn(Supplier<String> messageSupplier);
+
+    public abstract void warn(Supplier0<String> messageSupplier);
+
     /**
      * Log a message at the WARN level according to the specified format
      * and arguments.
@@ -320,7 +322,7 @@ public abstract class Logger {
      * Is the logger instance enabled for the ERROR level?
      *
      * @return True if this Logger is enabled for the ERROR level,
-     *         false otherwise.
+     * false otherwise.
      */
     public abstract boolean isErrorEnabled();
 
@@ -380,7 +382,6 @@ public abstract class Logger {
      * @param t   the exception (throwable) to log
      */
     public abstract void error(String msg, Throwable t);
-
 
 
 }
