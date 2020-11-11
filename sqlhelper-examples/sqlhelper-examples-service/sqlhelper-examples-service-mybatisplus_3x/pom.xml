@@ -27,16 +27,16 @@
             <artifactId>sqlhelper-examples-swagger</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>${mybatis_jdk8.version}</version>
-        </dependency>
-
         <!-- startup mybatis-plus 3.1.2+ jdk8 -->
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
+        </dependency>
+        <!--mybatis 需要在 3.5.1+ -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis_jdk8.version}</version>
         </dependency>
 
         <dependency>

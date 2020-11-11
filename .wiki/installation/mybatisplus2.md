@@ -1,6 +1,17 @@
 ## MyBatis Plus 2.x + Spring Boot 下安装
 
-1、 移除 mybatis-plus-boot-starter
+1、前置条件
+
+保证依赖在满足如下版本： 
+```yaml
++ mybatis 3.4.0+ (更低版本尚未测试，如有需要，自行测试即可)
++ JDK 1.7+
++ mybatis-plus 2.3.x (更低版本尚未测试，如有需要，自行测试即可)
+
+```
+
+2、 移除 mybatis-plus-boot-starter
+
 
 ```xml
 <dependency>
