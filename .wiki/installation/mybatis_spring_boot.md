@@ -1,0 +1,44 @@
+# Work with mybatis、Spring Boot
+
+## installation
+
+1、import dependencies:
+```xml
+<dependency>
+    <groupId>com.github.fangjinuo.sqlhelper</groupId>
+    <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
+    <version>${sqlhelper.version}</version>
+</dependency>
+```
+
+2、configure application.yml (Optional):
+
+```yaml
+sqlhelper:
+  mybatis:
+    instrumentor:
+      cache-instrumented-sql: true
+      subquery-paging-start-flag: "[PAGING_StART]"
+      subquery-paging-end-flag: "[PAGING_END]"
+    pagination:
+      count: true
+      default-page-size: 10
+      use-last-page-if-page-no-out: true
+      count-suffix: _COUNT
+```
+
+or configure application.properties (Optional):
+
+```properties
+sqlhelper.mybatis.instrumentor.cacheInstrumentedSql=true
+sqlhelper.mybatis.instrumentor.dialect=mysql
+sqlhelper.mybatis.instrumentor.subqueryPagingStartFlag=[PAGING_START]
+sqlhelper.mybatis.instrumentor.subqueryPagingEndFlag=[PAGING_END]
+sqlhelper.mybatis.count= true
+sqlhelper.mybatis.defaultPageSize= 10
+sqlhelper.mybatis.countSuffix=_COUNT
+```
+
+
+
+
