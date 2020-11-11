@@ -39,7 +39,7 @@ SQLHelper提供了如下功能:
   + 支持子查询分页（目前支持mybatis, mybatis-plus, spring-jdbc, apache commons-dbutils）
   + 支持分页条件中自定义 order by 
   + 支持从 PageHelper 无缝迁移
-  + 支持[110+ 数据库](./supported_dbs.md)，且支持绝大部分国产数据库。想要了解数据库排名，可以在[DB Engines](https://db-engines.com/en/ranking/relational+dbms)查看
+  + 支持[110+ 数据库](supported_dbs.md)，且支持绝大部分国产数据库。想要了解数据库排名，可以在[DB Engines](https://db-engines.com/en/ranking/relational+dbms)查看
       + AliSQL (阿里 MySQL)
       + AntDB (亚信)
       + CirroDB (东方国信 行云)

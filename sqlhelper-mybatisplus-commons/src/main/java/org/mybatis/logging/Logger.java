@@ -25,7 +25,7 @@ public abstract class Logger {
     /**
      * Case insensitive String constant used to retrieve the name of the root logger.
      *
-     * @since 1.3
+     * @since 3.3.0
      */
     final public String ROOT_LOGGER_NAME = "ROOT";
 
@@ -39,7 +39,7 @@ public abstract class Logger {
      *
      * @return True if this Logger is enabled for the TRACE level,
      * false otherwise.
-     * @since 1.4
+     * @since 3.3.0
      */
     public abstract boolean isTraceEnabled();
 
@@ -48,7 +48,7 @@ public abstract class Logger {
      * Log a message at the TRACE level.
      *
      * @param msg the message string to be logged
-     * @since 1.4
+     * @since 3.3.0
      */
     public abstract void trace(String msg);
 
@@ -62,7 +62,7 @@ public abstract class Logger {
      *
      * @param format the format string
      * @param arg    the argument
-     * @since 1.4
+     * @since 3.3.0
      */
     public abstract void trace(String format, Object arg);
 
@@ -77,7 +77,7 @@ public abstract class Logger {
      * @param format the format string
      * @param arg1   the first argument
      * @param arg2   the second argument
-     * @since 1.4
+     * @since 3.3.0
      */
     public abstract void trace(String format, Object arg1, Object arg2);
 
@@ -93,7 +93,7 @@ public abstract class Logger {
      *
      * @param format    the format string
      * @param arguments a list of 3 or more arguments
-     * @since 1.4
+     * @since 3.3.0
      */
     public abstract void trace(String format, Object... arguments);
 
@@ -103,7 +103,7 @@ public abstract class Logger {
      *
      * @param msg the message accompanying the exception
      * @param t   the exception (throwable) to log
-     * @since 1.4
+     * @since 3.3.0
      */
     public abstract void trace(String msg, Throwable t);
 
