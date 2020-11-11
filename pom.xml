@@ -29,15 +29,15 @@
         <module>sqlhelper-mybatis-over-pagehelper</module>
         <module>sqlhelper-mybatisplus</module>
         <module>sqlhelper-mybatisplus-spring-boot-starter</module>
+        <module>sqlhelper-mybatisplus_2x</module>
+        <module>sqlhelper-mybatisplus_2x-spring-boot-starter</module>
         <module>sqlhelper-tkmapper-spring-boot-starter</module>
         <module>sqlhelper-springjdbc</module>
         <module>sqlhelper-springjdbc-spring-boot-starter</module>
-        <module>sqlhelper-cli</module>
-        <module>sqlhelper-cli-assembly</module>
         <module>sqlhelper-examples</module>
         <module>sqlhelper-batchinsert</module>
-        <module>sqlhelper-mybatisplus_2x</module>
-        <module>sqlhelper-mybatisplus_2x-spring-boot-starter</module>
+        <module>sqlhelper-cli</module>
+        <module>sqlhelper-cli-assembly</module>
         <module>sqlhelper-mybatisplus-commons</module>
 
     </modules>
