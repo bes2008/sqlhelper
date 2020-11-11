@@ -102,7 +102,7 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
         sqlContext.getRequest().setLikeParameterIndexes(pair.getKey());
         if (logger.isDebugEnabled()) {
             SqlDmlFormatter sqlDmlFormatter = new SqlDmlFormatter();
-            logger.debug("After like escape, the sql \n---------------original sql---------------\n{} \n\n---------------become: ---------------\n{}", sqlDmlFormatter.format(sql), sqlDmlFormatter.format(newSql));
+            logger.debug("\n---------------original sql---------------\n{} \n\n---------------after like escapse: ---------------\n{}", sqlDmlFormatter.format(sql), sqlDmlFormatter.format(newSql));
         }
         // rebuild a BoundSql
         boundSql = MybatisUtils.rebuildBoundSql(newSql, mappedStatement.getConfiguration(), boundSql);

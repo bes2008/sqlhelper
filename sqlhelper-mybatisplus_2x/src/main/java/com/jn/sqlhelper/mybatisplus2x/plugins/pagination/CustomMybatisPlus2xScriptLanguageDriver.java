@@ -19,9 +19,9 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
 
-public class CustomMybatisPlusScriptLanguageDriver extends XMLLanguageDriver {
+public class CustomMybatisPlus2xScriptLanguageDriver extends XMLLanguageDriver {
     @Override
     public ParameterHandler createParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
-        return new CustomMybatisPlusParameterHandler(mappedStatement, parameterObject, boundSql);
+        return new CustomMybatisPlus2xParameterHandler(mappedStatement, parameterObject, boundSql);
     }
 }

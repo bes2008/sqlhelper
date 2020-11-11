@@ -22,7 +22,7 @@ import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.SqlHelperMybatisProperties;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
-import com.jn.sqlhelper.mybatisplus2x.plugins.pagination.CustomMybatisPlusScriptLanguageDriver;
+import com.jn.sqlhelper.mybatisplus2x.plugins.pagination.CustomMybatisPlus2xScriptLanguageDriver;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.session.Configuration;
 import org.slf4j.Logger;
@@ -64,7 +64,7 @@ public class SqlHelperMybatisPlus2xAutoConfiguration implements ConfigurationCus
     @Override
     public void customize(Configuration configuration) {
         logger.info("Start to customize mybatis-plus 2.x configuration with mybatis-plus-boot-starter");
-        configuration.setDefaultScriptingLanguage(CustomMybatisPlusScriptLanguageDriver.class);
+        configuration.setDefaultScriptingLanguage(CustomMybatisPlus2xScriptLanguageDriver.class);
 
         SqlHelperMybatisPlugin plugin = new SqlHelperMybatisPlugin();
         plugin.setPaginationConfig(sqlHelperMybatisProperties.getPagination());

@@ -32,6 +32,7 @@ logging:
           mybatis:
             plugins:
               likeescape: debug
+              pagination: debug
 
 operation:
   definition:

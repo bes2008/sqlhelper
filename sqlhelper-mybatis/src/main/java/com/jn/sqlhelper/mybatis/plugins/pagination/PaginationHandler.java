@@ -9,7 +9,6 @@ import com.jn.langx.pipeline.HandlerContext;
 import com.jn.langx.pipeline.Pipelines;
 import com.jn.langx.util.*;
 import com.jn.langx.util.collection.Collects;
-import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.pagination.*;
@@ -279,9 +278,6 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         }
         SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
         final String databaseId = MybatisUtils.getDatabaseId(PAGING_CONTEXT, instrumentor, statement, executorInvocation.getExecutor(), extractDialectUseNativeEnabled);
-        if(Strings.isEmpty(databaseId)){
-            logger.error("can't find the dialect");
-        }
         return instrumentor.beginIfSupportsLimit(databaseId);
     }
 
@@ -326,6 +322,9 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             PagingRequestContext ctx = PAGING_CONTEXT.get();
             ctx.setInteger(PagingRequestContext.BEFORE_SUBQUERY_PARAMETERS_COUNT, SqlPaginations.findPlaceholderParameterCount(beforeSubqueryPartition));
             ctx.setInteger(PagingRequestContext.AFTER_SUBQUERY_PARAMETERS_COUNT, SqlPaginations.findPlaceholderParameterCount(afterSubqueryPartition));
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("\n-------------after pagination ---------------:\n{}", pageSql);
         }
 
         final BoundSql pageBoundSql = MybatisUtils.rebuildBoundSql(pageSql, ms.getConfiguration(), boundSql);
@@ -377,6 +376,9 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
         MappedStatement orderByStatement = this.customOrderByStatement(ms, orderBySqlId);
         final CacheKey orderByCacheKey = executor.createCacheKey(orderByStatement, parameter, RowBounds.DEFAULT, boundSql);
         final String orderBySql = instrumentor.instrumentOrderBySql(boundSql.getSql(), orderBy);
+        if (logger.isDebugEnabled()) {
+            logger.debug("\n-------------after pagination ---------------:\n{}", orderBySql);
+        }
         BoundSql orderByBoundSql = MybatisUtils.rebuildBoundSql(orderBySql, orderByStatement.getConfiguration(), boundSql);
         return executor.query(orderByStatement, parameter, RowBounds.DEFAULT, resultHandler, orderByCacheKey, orderByBoundSql);
     }
