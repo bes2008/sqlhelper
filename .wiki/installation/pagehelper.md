@@ -15,3 +15,6 @@
 
 3. 其他的依赖请参考安装向导
 
+4、使用
+
+参见用例：${sqlhelper-examples}/${sqlhelper-examples-service}/${sqlhelper-examples-service-mybatis}

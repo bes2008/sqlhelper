@@ -39,6 +39,9 @@ sqlhelper.mybatis.defaultPageSize= 10
 sqlhelper.mybatis.countSuffix=_COUNT
 ```
 
+3、使用
+
+参见用例：${sqlhelper-examples}/${sqlhelper-examples-service}/${sqlhelper-examples-service-mybatis}
 
 
 
