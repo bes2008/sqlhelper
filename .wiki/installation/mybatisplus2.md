@@ -13,6 +13,7 @@
 
 2、 加入 sqlhelper-mybatisplus_2x-spring-boot-starter
 
+内部迁移了mybatis-plus-boot-starter的代码
 
 ```xml
 <dependency>
