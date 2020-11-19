@@ -87,7 +87,7 @@
         <spring.version>4.3.25.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>3.0.4</easyjson.version>
-        <langx-java.version>2.10.6</langx-java.version>
+        <langx-java.version>3.1.0</langx-java.version>
 
         <jfinal.version>4.9</jfinal.version>
         <solon.version>1.0.23</solon.version>
