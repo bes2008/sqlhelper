@@ -29,7 +29,7 @@
 
 
 ## [GitHub地址](https://github.com/fangjinuo)
-## [Gitee地址](https://githee.com/fangjinuo)
+## [Gitee地址](https://gitee.com/fangjinuo)
 ## [教程](./.wiki/index.md)
 
 # sqlhelper
