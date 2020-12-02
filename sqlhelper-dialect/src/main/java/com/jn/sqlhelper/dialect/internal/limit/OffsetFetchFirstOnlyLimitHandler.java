@@ -82,13 +82,13 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
         sql2.append(sql);
 
         if (getDialect().isUseLimitInVariableMode()) {
-            if (hasOffset) {
+            if (hasOffset || !supportSimplifyFirstOnly) {
                 sql2.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
             } else {
                 sql2.append(" FETCH FIRST ? ROWS ONLY");
             }
         } else {
-            if (hasOffset) {
+            if (hasOffset || !supportSimplifyFirstOnly) {
                 sql2.append(" OFFSET " + offset + " ROWS FETCH NEXT " + limit + " ROWS ONLY");
             } else {
                 sql2.append(" FETCH FIRST " + limit + " ROWS ONLY");
@@ -107,7 +107,7 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
     private boolean isSupportUsingIndexClauseInSelectEnd = false;
     private boolean supportForUpdate = true;
     private boolean supportWithInSelectEnd = true;
-
+    private boolean supportSimplifyFirstOnly = true;
     public boolean isSupportUsingIndexClauseInSelectEnd() {
         return isSupportUsingIndexClauseInSelectEnd;
     }
@@ -132,6 +132,15 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
 
     public OffsetFetchFirstOnlyLimitHandler setSupportWithInSelectEnd(boolean supportWithInSelectEnd) {
         this.supportWithInSelectEnd = supportWithInSelectEnd;
+        return this;
+    }
+
+    public boolean isSupportSimplifyFirstOnly() {
+        return supportSimplifyFirstOnly;
+    }
+
+    public OffsetFetchFirstOnlyLimitHandler setSupportSimplifyFirstOnly(boolean supportSimplifyFirstOnly) {
+        this.supportSimplifyFirstOnly = supportSimplifyFirstOnly;
         return this;
     }
 }

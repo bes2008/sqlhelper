@@ -108,6 +108,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
     public static class SQLServer2000Dialect extends AbstractTransactSQLDialect {
         public SQLServer2000Dialect() {
             setLimitHandler(new TopLimitHandler());
+            setDelegate(null);
         }
 
         @Override
@@ -140,6 +141,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
     public static class SQLServer2005Dialect extends AbstractTransactSQLDialect {
         public SQLServer2005Dialect() {
             setLimitHandler(new SQLServer2005LimitHandler());
+            setDelegate(null);
         }
 
         @Override
@@ -175,43 +177,18 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
 
     @Name("sqlserver2008")
     public static class SQLServer2008Dialect extends SQLServer2005Dialect {
-        public SQLServer2008Dialect() {
-            setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
-        }
-
-        @Override
-        public boolean isSupportsLimit() {
-            return true;
-        }
-
-        @Override
-        public boolean isUseMaxForLimit() {
-            return true;
-        }
-
-        @Override
-        public boolean isSupportsLimitOffset() {
-            return true;
-        }
-
-        @Override
-        public boolean isSupportsVariableLimit() {
-            return true;
-        }
-
-        @Override
-        public char getBeforeQuote() {
-            return '[';
-        }
-
-        @Override
-        public char getAfterQuote() {
-            return ']';
-        }
     }
 
     @Name("sqlserver2012")
     public static class SQLServer2012Dialect extends SQLServer2008Dialect {
+        public SQLServer2012Dialect() {
+            setLimitHandler(new OffsetFetchFirstOnlyLimitHandler().setSupportSimplifyFirstOnly(false));
+        }
+
+        @Override
+        public boolean isBindLimitParametersInReverseOrder() {
+            return false;
+        }
     }
 
     @Name("sqlserver2014")
