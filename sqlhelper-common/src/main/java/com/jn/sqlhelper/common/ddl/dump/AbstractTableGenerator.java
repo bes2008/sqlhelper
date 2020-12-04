@@ -39,7 +39,7 @@ public abstract class AbstractTableGenerator implements TableGenerator {
         return !isSupportsSetPrimaryKeyInTableDDL();
     }
 
-    private String generateAnyTableDDL(Table table) throws SQLException {
+    protected String generateAnyTableDDL(Table table) throws SQLException {
         TableType tableType = table.getTableType();
         if (tableType == TableType.SYSTEM_TABLE || tableType == TableType.TABLE || tableType == TableType.GLOBAL_TEMPORARY || tableType == TableType.LOCAL_TEMPORARY) {
             return buildTableDDL(table);
