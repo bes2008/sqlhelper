@@ -150,7 +150,7 @@ public class DatabaseDescription {
      * @return <code>true</code> if so; <code>false</code> otherwise
      */
     public boolean supportsCatalogsInTableDefinitions() {
-        if (supportsCatalogsInTableDefinitions) {
+        if (supportsCatalogsInTableDefinitions == null) {
             parseSupportsCatalogsInTableDefinitions();
         }
         return supportsCatalogsInTableDefinitions;
