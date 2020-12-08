@@ -20,7 +20,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.sqlhelper.mybatis.plugins.CustomMybatisParameterHandler;
@@ -33,17 +33,22 @@ import org.apache.ibatis.reflection.MetaObject;
 import java.util.*;
 
 public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHandler {
-    protected Object parameterObject;
+    protected Object originalParameterObject;
     public CustomMybatisPlusParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
         super(mappedStatement, processBatch(mappedStatement, parameterObject), boundSql);
-        this.parameterObject = parameterObject;
+        this.originalParameterObject = parameterObject;
     }
 
-    @Override
-    public Object getParameterObject() {
-        return parameterObject;
+    protected Object getOriginParameterObject(){
+        return this.originalParameterObject;
     }
 
+    /*
+     * 此逻辑自定义全局参数填充器 mybatis-plus的逻辑自定义完以后会修改父类的parameterObject.故必须重写setParameters中获取parameterObject方法
+     * e.g.
+     *  如果每个表都有一些公共字段创建.就可以使用此逻辑
+     *  实现MetaObjectHandler 接口即可
+     */
     public static Object processBatch(MappedStatement ms, Object parameterObject) {
         if (null != parameterObject && !Primitives.isPrimitiveOrPrimitiveWrapperType(parameterObject.getClass()) && parameterObject.getClass() != String.class) {
             GlobalConfig globalConfig =GlobalConfigUtils.getGlobalConfig(ms.getConfiguration());
@@ -117,7 +122,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
             } else if (parameterMap.containsKey("list")) {
                 parameters = (List) parameterMap.get("list");
             } else if (parameterMap.containsKey("array")) {
-                parameters = Arrays.asList((Object[]) ((Object[]) parameterMap.get("array")));
+                parameters = Arrays.asList((Object[]) parameterMap.get("array"));
             }
         }
 
@@ -131,7 +136,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
             MetaObject metaObject = ms.getConfiguration().newMetaObject(parameterObject);
             if (isInsert && !Strings.isEmpty(tableInfo.getKeyProperty()) && null != tableInfo.getIdType() && tableInfo.getIdType().getKey() >= 3) {
                 Object idValue = metaObject.getValue(tableInfo.getKeyProperty());
-                if (StringUtils.checkValNull(idValue)) {
+                if (Objs.isEmpty(idValue)) {
                     if (tableInfo.getIdType() == IdType.ID_WORKER) {
                         metaObject.setValue(tableInfo.getKeyProperty(), IdWorker.getId());
                     } else if (tableInfo.getIdType() == IdType.ID_WORKER_STR) {

@@ -4,13 +4,13 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objects;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
-import com.jn.sqlhelper.dialect.*;
+import com.jn.sqlhelper.dialect.SqlRequestContext;
+import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.pagination.PagedPreparedParameterSetter;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContext;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 import com.jn.sqlhelper.dialect.pagination.QueryParameters;
-import com.jn.sqlhelper.dialect.tenant.Tenant;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
@@ -52,6 +52,10 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
 
     @Override
     public Object getParameterObject() {
+        return this.parameterObject;
+    }
+
+    protected Object getOriginParameterObject() {
         return this.parameterObject;
     }
 
@@ -110,13 +114,6 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
         return this.boundSql.getParameterMappings().size();
     }
 
-    private Object getUniqueParameterObject(){
-        if(this.parameterObject==null){
-            return this.getParameterObject();
-        }
-        return this.parameterObject;
-    }
-
     private void setParameters(final PreparedStatement ps, List<ParameterMapping> parameterMappings, final int startIndex, List<Integer> escapeLikeParametersIndexes) {
         boolean needEscapeLikeParameters = Emptys.isNotEmpty(escapeLikeParametersIndexes);
         LikeEscaper likeEscaper = null;
@@ -130,10 +127,10 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
                 if (parameterMapping.getMode() != ParameterMode.OUT) {
                     final String propertyName = parameterMapping.getProperty();
                     Object value;
-                    Object parameterObject = getUniqueParameterObject();
+                    Object parameterObject = getOriginParameterObject();
                     if (this.boundSql.hasAdditionalParameter(propertyName)) {
                         value = this.boundSql.getAdditionalParameter(propertyName);
-                    } else if (parameterObject==null) {
+                    } else if (parameterObject == null) {
                         value = null;
                     } else if (this.typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
                         value = parameterObject;
