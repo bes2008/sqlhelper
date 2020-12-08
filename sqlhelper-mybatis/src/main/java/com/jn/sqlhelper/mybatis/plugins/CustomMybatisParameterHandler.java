@@ -38,6 +38,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
 
     protected final TypeHandlerRegistry typeHandlerRegistry;
     protected final MappedStatement mappedStatement;
+    //次此参数在mybaits传递过来的时候一般是map.
     protected Object parameterObject;
     protected final BoundSql boundSql;
     protected final Configuration configuration;
@@ -110,7 +111,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
         return this.boundSql.getParameterMappings().size();
     }
 
-    private Object getUniqueParameterObject(){
+    protected Object getUniqueParameterObject(){
         if(this.parameterObject==null){
             return this.getParameterObject();
         }

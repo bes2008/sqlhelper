@@ -34,7 +34,9 @@ import java.util.*;
 
 public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHandler {
     protected Object parameterObject;
+
     public CustomMybatisPlusParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
+        //由于传递父类的这个参数已经发生了改变.故必须重写setParameter中获取parameterObject的逻辑.
         super(mappedStatement, processBatch(mappedStatement, parameterObject), boundSql);
         this.parameterObject = parameterObject;
     }
@@ -44,9 +46,21 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
         return parameterObject;
     }
 
+
+    @Override
+    protected Object getUniqueParameterObject() {
+        return getParameterObject();
+    }
+
+    /*
+     * 此逻辑自定义全局参数填充器 mybatis-plus的逻辑自定义完以后会修改父类的parameterObject.故必须重写setParameters中获取parameterObject方法
+     * e.g.
+     *  如果每个表都有类似创建.就可以使用此逻辑
+     */
     public static Object processBatch(MappedStatement ms, Object parameterObject) {
         if (null != parameterObject && !Primitives.isPrimitiveOrPrimitiveWrapperType(parameterObject.getClass()) && parameterObject.getClass() != String.class) {
-            GlobalConfig globalConfig =GlobalConfigUtils.getGlobalConfig(ms.getConfiguration());
+            GlobalConfig globalConfig = GlobalConfigUtils.getGlobalConfig(ms.getConfiguration());
+            //这是一个全局填充器
             MetaObjectHandler metaObjectHandler = globalConfig.getMetaObjectHandler();
             boolean isFill = false;
             boolean isInsert = false;
@@ -105,7 +119,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
             return null;
         }
     }
-
+    
     public static Collection<Object> getParameters(Object parameter) {
         Collection<Object> parameters = null;
         if (parameter instanceof Collection) {
@@ -124,7 +138,8 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
         return (Collection) parameters;
     }
 
-    public static Object populateKeys(MetaObjectHandler metaObjectHandler, TableInfo tableInfo, MappedStatement ms, Object parameterObject, boolean isInsert) {
+    public static Object populateKeys(MetaObjectHandler metaObjectHandler, TableInfo tableInfo, MappedStatement
+            ms, Object parameterObject, boolean isInsert) {
         if (null == tableInfo) {
             return parameterObject;
         } else {
