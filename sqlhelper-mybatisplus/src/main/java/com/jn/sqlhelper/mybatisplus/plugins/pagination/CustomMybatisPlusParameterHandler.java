@@ -55,7 +55,8 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
     /*
      * 此逻辑自定义全局参数填充器 mybatis-plus的逻辑自定义完以后会修改父类的parameterObject.故必须重写setParameters中获取parameterObject方法
      * e.g.
-     *  如果每个表都有类似创建.就可以使用此逻辑
+     *  如果每个表都有一些公共字段创建.就可以使用此逻辑
+     *  实现MetaObjectHandler 接口即可
      */
     public static Object processBatch(MappedStatement ms, Object parameterObject) {
         if (null != parameterObject && !Primitives.isPrimitiveOrPrimitiveWrapperType(parameterObject.getClass()) && parameterObject.getClass() != String.class) {
@@ -119,7 +120,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
             return null;
         }
     }
-    
+
     public static Collection<Object> getParameters(Object parameter) {
         Collection<Object> parameters = null;
         if (parameter instanceof Collection) {
@@ -138,8 +139,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
         return (Collection) parameters;
     }
 
-    public static Object populateKeys(MetaObjectHandler metaObjectHandler, TableInfo tableInfo, MappedStatement
-            ms, Object parameterObject, boolean isInsert) {
+    public static Object populateKeys(MetaObjectHandler metaObjectHandler, TableInfo tableInfo, MappedStatement ms, Object parameterObject, boolean isInsert) {
         if (null == tableInfo) {
             return parameterObject;
         } else {
