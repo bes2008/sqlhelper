@@ -83,8 +83,6 @@ public abstract class AbstractDataSource implements DataSource {
     //---------------------------------------------------------------------
     // Implementation of JDBC 4.1's getParentLogger method
     //---------------------------------------------------------------------
-
-    @Override
     public java.util.logging.Logger getParentLogger() {
         return java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
     }

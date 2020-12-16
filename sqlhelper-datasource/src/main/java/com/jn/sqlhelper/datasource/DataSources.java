@@ -19,8 +19,8 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.datasource.factory.DataSourceProperties;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
@@ -29,7 +29,7 @@ import java.sql.SQLException;
 import java.util.Locale;
 
 public class DataSources {
-    private static final Log logger = LogFactory.getLog(DataSources.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataSources.class);
 
     public static final String DATASOURCE_IMPLEMENT_KEY_TOMCAT = "tomcat";
     public static final String DATASOURCE_IMPLEMENT_KEY_HIKARICP = "hikaricp";
