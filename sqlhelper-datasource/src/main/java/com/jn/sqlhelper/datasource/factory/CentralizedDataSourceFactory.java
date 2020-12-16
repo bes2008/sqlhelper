@@ -14,20 +14,19 @@
 
 package com.jn.sqlhelper.datasource.factory;
 
-import com.jn.sqlhelper.datasource.*;
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.datasource.*;
 
 import java.util.Properties;
 
 public class CentralizedDataSourceFactory implements DataSourceFactory {
-    private GroupedDataSourceRegistry registry;
+    private DataSourceRegistry registry;
 
-    public GroupedDataSourceRegistry getRegistry() {
+    public DataSourceRegistry getRegistry() {
         return registry;
     }
 
-    public void setRegistry(GroupedDataSourceRegistry registry) {
+    public void setRegistry(DataSourceRegistry registry) {
         this.registry = registry;
     }
 
@@ -45,7 +44,7 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
                 dataSource = delegate.get(dataSourceProperties);
             }
             if (dataSource != null) {
-                registry.register(dataSourceProperties.getGroup(), dataSource);
+                registry.register(new DataSourceKey(dataSourceProperties.getGroup(), dataSourceProperties.getName()), dataSource);
             }
         }
         return dataSource;
@@ -65,8 +64,10 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
                 dataSource = delegate.get(properties);
             }
             if (dataSource != null) {
-               String group =properties.getProperty(DataSources.DATASOURCE_GROUP, DataSources.DATASOURCE_GROUP_DEFAULT);
-                registry.register(group, dataSource);
+                String group = properties.getProperty(DataSources.DATASOURCE_GROUP, DataSources.DATASOURCE_GROUP_DEFAULT);
+                DataSourceKey key = new DataSourceKey(group, name);
+                registry.register(key, dataSource);
+                dataSource = registry.get(key);
             }
         }
         return dataSource;

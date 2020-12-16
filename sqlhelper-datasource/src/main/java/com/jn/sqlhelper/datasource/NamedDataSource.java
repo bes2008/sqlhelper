@@ -19,5 +19,9 @@ import com.jn.langx.Named;
 import javax.sql.DataSource;
 
 public interface NamedDataSource extends DataSource, Named {
+    String getGroup();
 
+    void setGroup(String group);
+
+    DataSourceKey getDataSourceKey();
 }

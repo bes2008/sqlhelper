@@ -15,11 +15,14 @@
 package com.jn.sqlhelper.datasource;
 
 public abstract class DataSourceSelector {
-    protected GroupedDataSourceRegistry registry;
+    protected DataSourceRegistry registry;
 
-    public void setDataSourceRegistry(GroupedDataSourceRegistry registry) {
+    public void setDataSourceRegistry(DataSourceRegistry registry) {
         this.registry = registry;
     }
 
-    public abstract void select();
+    /**
+     * 指定的group下，选择某个datasource, 返回的是
+     */
+    public abstract DataSourceKey select();
 }

@@ -23,54 +23,65 @@ import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.function.Supplier;
 import com.jn.langx.util.struct.Holder;
 
+import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GroupedDataSourceRegistry implements Registry<String, NamedDataSource> {
+public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
 
     /**
      * key: group
      * subKey: datasource name
      */
-    private ConcurrentHashMap<String, Map<String, NamedDataSource>> dataSourceRegistry = new ConcurrentHashMap<String, Map<String, NamedDataSource>>();
+    private ConcurrentHashMap<String, Map<String, DataSource>> dataSourceRegistry = new ConcurrentHashMap<String, Map<String, DataSource>>();
 
-    public void register(String group, NamedDataSource dataSource) {
-        Preconditions.checkNotEmpty(group, "the datasource group is null or empty");
+    public void register(DataSourceKey key, DataSource dataSource) {
+        Preconditions.checkNotEmpty(key, "the datasource key is null or empty");
         Preconditions.checkNotNull(dataSource);
 
-        Map<String, NamedDataSource> dataSources = Maps.putIfAbsent(dataSourceRegistry, group, new Supplier<String, Map<String, NamedDataSource>>() {
+        Map<String, DataSource> dataSources = Maps.putIfAbsent(dataSourceRegistry, key.getGroup(), new Supplier<String, Map<String, DataSource>>() {
             @Override
-            public Map<String, NamedDataSource> get(String input) {
-                return new HashMap<String, NamedDataSource>();
+            public Map<String, DataSource> get(String input) {
+                return new HashMap<String, DataSource>();
             }
         });
 
-        Maps.putIfAbsent(dataSources, dataSource.getName(), dataSource);
+        Maps.putIfAbsent(dataSources, key.getName(),  dataSource);
 
+    }
+
+
+    @Override
+    public NamedDataSource get(DataSourceKey key) {
+        Map<String, DataSource> dataSourceMap = dataSourceRegistry.get(key.getGroup());
+        if(dataSourceMap!=null){
+            return (NamedDataSource) dataSourceMap.get(key.getName());
+        }
+        return null;
     }
 
     @Override
-    public void register(NamedDataSource dataSource) {
-        register(DataSources.DATASOURCE_GROUP_DEFAULT, dataSource);
+    public void register(DataSource dataSource) {
+
     }
 
     public NamedDataSource get(final String dataSourceName) {
-        final Holder<NamedDataSource> dataSourceHolder = new Holder<NamedDataSource>();
-        Collects.forEach(dataSourceRegistry.values(), new Consumer<Map<String, NamedDataSource>>() {
+        final Holder<DataSource> dataSourceHolder = new Holder<DataSource>();
+        Collects.forEach(dataSourceRegistry.values(), new Consumer<Map<String, DataSource>>() {
             @Override
-            public void accept(Map<String, NamedDataSource> groupDSs) {
-                NamedDataSource dataSource = groupDSs.get(dataSourceName);
+            public void accept(Map<String, DataSource> groupDSs) {
+                DataSource dataSource = groupDSs.get(dataSourceName);
                 if (dataSource != null) {
                     dataSourceHolder.set(dataSource);
                 }
             }
-        }, new Predicate<Map<String, NamedDataSource>>() {
+        }, new Predicate<Map<String, DataSource>>() {
             @Override
-            public boolean test(Map<String, NamedDataSource> value) {
+            public boolean test(Map<String, DataSource> value) {
                 return dataSourceHolder.isNull();
             }
         });
-        return dataSourceHolder.get();
+        return (NamedDataSource) dataSourceHolder.get();
     }
 }

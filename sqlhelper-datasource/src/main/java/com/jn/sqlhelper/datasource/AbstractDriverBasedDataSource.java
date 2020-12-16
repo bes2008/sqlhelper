@@ -112,7 +112,6 @@ public abstract class AbstractDriverBasedDataSource extends AbstractDataSource {
     /**
      * Specify a database schema to be applied to each Connection.
      * @since 2.3.0
-     * @see Connection#setSchema
      */
     public void setSchema(String schema) {
         this.schema = schema;
@@ -195,7 +194,7 @@ public abstract class AbstractDriverBasedDataSource extends AbstractDataSource {
             con.setCatalog(this.catalog);
         }
         if (this.schema != null) {
-            con.setSchema(this.schema);
+            // con.setSchema(this.schema);
         }
         return con;
     }

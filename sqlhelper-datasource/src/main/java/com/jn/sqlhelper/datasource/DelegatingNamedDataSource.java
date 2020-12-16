@@ -27,7 +27,7 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<DataSource>, Initializable {
-    private String name;
+    private final DataSourceKey dataSourceKey = new DataSourceKey(DataSources.DATASOURCE_GROUP, "undefined");
     private DataSource delegate;
 
     @Override
@@ -118,20 +118,10 @@ public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<D
     // Implementation of JDBC 4.1's getParentLogger method
     //---------------------------------------------------------------------
 
-    @Override
     public Logger getParentLogger() {
         return Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return this.name;
-    }
 
 
     public static final DelegatingNamedDataSource of(@NonNull DataSource delegate, @NonNull String name){
@@ -141,5 +131,28 @@ public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<D
         dataSource.setDelegate(delegate);
         dataSource.setName(name);
         return dataSource;
+    }
+
+    public String getGroup() {
+        return dataSourceKey.getGroup();
+    }
+
+    public void setGroup(String group) {
+        this.dataSourceKey.setGroup(group);
+    }
+
+    @Override
+    public void setName(String name) {
+        this.dataSourceKey.setName(name);
+    }
+
+    @Override
+    public String getName() {
+        return this.dataSourceKey.getName();
+    }
+
+    @Override
+    public DataSourceKey getDataSourceKey() {
+        return this.dataSourceKey;
     }
 }

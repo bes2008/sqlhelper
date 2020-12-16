@@ -17,9 +17,10 @@ package com.jn.sqlhelper.datasource;
 import com.jn.sqlhelper.datasource.factory.DataSourceProperties;
 import com.jn.langx.factory.Factory;
 
+import javax.sql.DataSource;
 import java.util.Properties;
 
-public interface DataSourceFactory extends Factory<DataSourceProperties, NamedDataSource> {
+public interface DataSourceFactory extends Factory<DataSourceProperties, DataSource> {
     @Override
     NamedDataSource get(DataSourceProperties dataSourceProperties);
 

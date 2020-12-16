@@ -40,6 +40,7 @@
         <module>sqlhelper-cli-assembly</module>
         <module>sqlhelper-batchinsert</module>
         <module>sqlhelper-datasource</module>
+        <module>sqlhelper-mybatis-spring</module>
     </modules>
     <developers>
         <developer>
@@ -169,6 +170,11 @@
             </dependency>
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-datasource</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-jsqlparser</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -180,6 +186,11 @@
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <artifactId>sqlhelper-mybatis-spring</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
