@@ -6,7 +6,7 @@
 
     <groupId>com.github.fangjinuo.sqlhelper</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>3.3.2</version>
+    <version>3.4.0</version>
     <name>sqlhelper</name>
     <description>
         JDBC Extensions:
@@ -39,7 +39,7 @@
         <module>sqlhelper-cli</module>
         <module>sqlhelper-cli-assembly</module>
         <module>sqlhelper-batchinsert</module>
-
+        <module>sqlhelper-datasource</module>
     </modules>
     <developers>
         <developer>
