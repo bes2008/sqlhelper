@@ -14,7 +14,6 @@
 
 package com.jn.sqlhelper.datasource.factory.c3p0;
 
-import com.jn.sqlhelper.datasource.Jdbcs;
 import com.jn.sqlhelper.datasource.DataSourceFactory;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.DelegatingNamedDataSource;
@@ -34,7 +33,7 @@ import java.util.Properties;
 public class C3p0DataSourceFactory implements DataSourceFactory {
     @Override
     public NamedDataSource get(DataSourceProperties dataSourceProperties) {
-        if (Jdbcs.isImplementationKeyMatched(DataSources.DATASOURCE_IMPLEMENT_KEY_C3P0, dataSourceProperties)) {
+        if (DataSources.isImplementationKeyMatched(DataSources.DATASOURCE_IMPLEMENT_KEY_C3P0, dataSourceProperties)) {
             DataSource dataSource = C3p0DataSources.createDataSource(dataSourceProperties);
             String name = dataSourceProperties.getName();
             return DelegatingNamedDataSource.of(dataSource, name);

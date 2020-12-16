@@ -14,7 +14,6 @@
 
 package com.jn.sqlhelper.datasource.factory.hikaricp;
 
-import com.jn.sqlhelper.datasource.Jdbcs;
 import com.jn.sqlhelper.datasource.DataSourceFactory;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.DelegatingNamedDataSource;
@@ -34,7 +33,7 @@ import java.util.Properties;
 public class HikaricpDataSourceFactory implements DataSourceFactory {
     @Override
     public NamedDataSource get(DataSourceProperties dataSourceProperties) {
-        if (Jdbcs.isImplementationKeyMatched(DataSources.DATASOURCE_IMPLEMENT_KEY_HIKARICP, dataSourceProperties)) {
+        if (DataSources.isImplementationKeyMatched(DataSources.DATASOURCE_IMPLEMENT_KEY_HIKARICP, dataSourceProperties)) {
             DataSource dataSource = HikariDataSources.createDataSource(dataSourceProperties);
             String name = dataSourceProperties.getName();
             return DelegatingNamedDataSource.of(dataSource, name);

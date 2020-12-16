@@ -14,7 +14,6 @@
 
 package com.jn.sqlhelper.datasource.factory.tomcatjdbc;
 
-import com.jn.sqlhelper.datasource.Jdbcs;
 import com.jn.sqlhelper.datasource.DataSourceFactory;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.DelegatingNamedDataSource;
@@ -35,7 +34,7 @@ import java.util.Properties;
 public class TomcatJdbcDataSourceFactory implements DataSourceFactory {
     @Override
     public NamedDataSource get(DataSourceProperties dataSourceProperties) {
-        if (Jdbcs.isImplementationKeyMatched(DataSources.DATASOURCE_IMPLEMENT_KEY_TOMCAT, dataSourceProperties)) {
+        if (DataSources.isImplementationKeyMatched(DataSources.DATASOURCE_IMPLEMENT_KEY_TOMCAT, dataSourceProperties)) {
             DataSource dataSource = TomcatJdbcDataSources.createDataSource(dataSourceProperties);
             String name = dataSourceProperties.getName();
             return DelegatingNamedDataSource.of(dataSource, name);

@@ -24,6 +24,7 @@ import java.util.Properties;
 
 import static com.jn.sqlhelper.datasource.factory.dbcp2.Dbcp2PropertyNames.*;
 
+
 /**
  * http://commons.apache.org/proper/commons-dbcp/configuration.html
  */

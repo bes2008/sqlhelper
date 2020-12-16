@@ -24,6 +24,7 @@ import java.util.Properties;
 
 import static com.alibaba.druid.pool.DruidDataSourceFactory.*;
 
+
 public class AlibabaDruidDataSources {
     private AlibabaDruidDataSources() {
     }

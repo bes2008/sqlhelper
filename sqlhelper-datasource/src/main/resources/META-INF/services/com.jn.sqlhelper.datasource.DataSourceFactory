@@ -1,0 +1,5 @@
+com.jn.sqlhelper.datasource.factory.hikaricp.HikaricpDataSourceFactory
+com.jn.sqlhelper.datasource.factory.druid.AlibabaDruidDataSourceFactory
+com.jn.sqlhelper.datasource.factory.tomcatjdbc.TomcatJdbcDataSourceFactory
+com.jn.sqlhelper.datasource.factory.dbcp2.Dbcp2DataSourceFactory
+com.jn.sqlhelper.datasource.factory.c3p0.C3p0DataSourceFactory
