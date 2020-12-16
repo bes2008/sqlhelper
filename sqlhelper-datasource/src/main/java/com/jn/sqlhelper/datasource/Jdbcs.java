@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper;
+package com.jn.sqlhelper.datasource;
 
 import com.jn.sqlhelper.datasource.factory.DataSourceProperties;
 import com.jn.langx.annotation.NonNull;

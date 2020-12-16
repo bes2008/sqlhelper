@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper;
+package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Delegatable;
 

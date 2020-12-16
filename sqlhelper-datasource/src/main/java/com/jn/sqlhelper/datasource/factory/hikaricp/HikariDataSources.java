@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.datasource.factory.hikaricp;
 
-import com.jn.sqlhelper.Jdbcs;
+import com.jn.sqlhelper.datasource.Jdbcs;
 import com.jn.sqlhelper.datasource.factory.DataSourceProperties;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.reflect.Reflects;
