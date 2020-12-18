@@ -31,6 +31,7 @@ import java.util.Locale;
 public class DataSources {
     private static final Logger logger = LoggerFactory.getLogger(DataSources.class);
 
+
     public static final String DATASOURCE_IMPLEMENT_KEY_TOMCAT = "tomcat";
     public static final String DATASOURCE_IMPLEMENT_KEY_HIKARICP = "hikaricp";
     public static final String DATASOURCE_IMPLEMENT_KEY_DRUID = "druid";
@@ -148,4 +149,10 @@ public class DataSources {
         return implementationKeyMatched;
     }
 
+
+    private static final String DATASOURCE_ID_SEPARATOR = "SQLHelper.DynamicDataSource.ID.separator";
+
+    public static final String getDatasourceIdSeparator(){
+        return System.getProperty(DATASOURCE_ID_SEPARATOR, "/");
+    }
 }
