@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.datasource.factory.hikaricp;
 
 import com.jn.sqlhelper.datasource.DataSources;
-import com.jn.sqlhelper.datasource.definition.DataSourceDefinition;
+import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.reflect.Reflects;
 import com.zaxxer.hikari.HikariConfig;
@@ -32,7 +32,7 @@ public class HikariDataSources {
     private HikariDataSources() {
     }
 
-    public static DataSource createDataSource(final DataSourceDefinition props) {
+    public static DataSource createDataSource(final DataSourceProperties props) {
         Properties driverProps = props.getDriverProps();
         HikariConfig config = null;
         if (Emptys.isNotEmpty(driverProps)) {

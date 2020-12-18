@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.datasource.factory.c3p0;
 
-import com.jn.sqlhelper.datasource.definition.DataSourceDefinition;
+import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.langx.util.Maths;
 import com.jn.langx.util.Throwables;
 import com.mchange.v2.c3p0.DataSources;
@@ -32,7 +32,7 @@ public class C3p0DataSources {
     private C3p0DataSources() {
     }
 
-    public static DataSource createDataSource(final DataSourceDefinition properties) {
+    public static DataSource createDataSource(final DataSourceProperties properties) {
         try {
             DataSource ds_unpooled = DataSources.unpooledDataSource(properties.getUrl(), properties.getUsername(), properties.getPassword());
             Properties props = properties.getDriverProps();

@@ -17,7 +17,9 @@ package com.jn.sqlhelper.datasource.definition;
 
 import com.jn.langx.io.resource.Resource;
 
-public interface DataSourceDefinitionReader {
+import java.util.List;
+
+public interface DataSourcePropertiesReader {
 
     /**
      * Load bean definitions from the specified resource.
@@ -25,7 +27,7 @@ public interface DataSourceDefinitionReader {
      * @param resource the resource descriptor
      * @return the number of bean definitions found
      */
-    int loadBeanDefinitions(Resource resource);
+    List<DataSourceProperties> loadBeanDefinitions(Resource resource);
 
     /**
      * Load bean definitions from the specified resources.
@@ -33,7 +35,7 @@ public interface DataSourceDefinitionReader {
      * @param resources the resource descriptors
      * @return the number of bean definitions found
      */
-    int loadBeanDefinitions(Resource... resources);
+    List<DataSourceProperties> loadBeanDefinitions(Resource... resources);
 
     /**
      * Load bean definitions from the specified resource location.
@@ -44,7 +46,7 @@ public interface DataSourceDefinitionReader {
      *                 (or ResourcePatternResolver) of this bean definition reader
      * @return the number of bean definitions found
      */
-    int loadBeanDefinitions(String location);
+    List<DataSourceProperties> loadBeanDefinitions(String location);
 
     /**
      * Load bean definitions from the specified resource locations.
@@ -53,6 +55,6 @@ public interface DataSourceDefinitionReader {
      *                  (or ResourcePatternResolver) of this bean definition reader
      * @return the number of bean definitions found
      */
-    int loadBeanDefinitions(String... locations);
+    List<DataSourceProperties> loadBeanDefinitions(String... locations);
 
 }

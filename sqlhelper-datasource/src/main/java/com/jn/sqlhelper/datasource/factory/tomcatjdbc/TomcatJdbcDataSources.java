@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.datasource.factory.tomcatjdbc;
 
-import com.jn.sqlhelper.datasource.definition.DataSourceDefinition;
+import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.langx.util.Maths;
 import com.jn.langx.util.Throwables;
 import org.apache.tomcat.jdbc.pool.DataSourceFactory;
@@ -29,7 +29,7 @@ public class TomcatJdbcDataSources {
     private TomcatJdbcDataSources() {
     }
 
-    public static DataSource createDataSource(final DataSourceDefinition properties) {
+    public static DataSource createDataSource(final DataSourceProperties properties) {
         DataSourceFactory dsf = new DataSourceFactory();
         Properties props = properties.getDriverProps();
         if (props == null) {

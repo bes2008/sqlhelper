@@ -18,7 +18,7 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
-import com.jn.sqlhelper.datasource.definition.DataSourceDefinition;
+import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -137,7 +137,7 @@ public class DataSources {
         return -1;
     }
 
-    public static boolean isImplementationKeyMatched(@NonNull String expectedKey, DataSourceDefinition properties){
+    public static boolean isImplementationKeyMatched(@NonNull String expectedKey, DataSourceProperties properties){
         Preconditions.checkNotNull(expectedKey, "the expected jdbc datasource implementation key is null or empty");
         String implementationKey = properties.getImplementation();
         boolean implementationKeyMatched = true;

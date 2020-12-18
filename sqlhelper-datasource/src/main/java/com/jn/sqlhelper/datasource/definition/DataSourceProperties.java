@@ -21,7 +21,7 @@ import com.jn.sqlhelper.datasource.DataSources;
 
 import java.util.Properties;
 
-public class DataSourceDefinition implements Configuration {
+public class DataSourceProperties implements Configuration {
     /**
      * datasource:
      */
@@ -58,7 +58,7 @@ public class DataSourceDefinition implements Configuration {
 
     private Properties driverProps;
 
-    public DataSourceDefinition() {
+    public DataSourceProperties() {
         this.leakDetectionThresholdInMills = 0L;
         this.validationQuery = null;
         this.connectionTimeoutInMills = 30000L;
