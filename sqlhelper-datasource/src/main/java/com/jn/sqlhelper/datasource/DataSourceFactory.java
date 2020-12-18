@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.datasource;
 
-import com.jn.sqlhelper.datasource.factory.DataSourceProperties;
+import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.langx.factory.Factory;
 
 import javax.sql.DataSource;

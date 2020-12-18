@@ -16,6 +16,7 @@ package com.jn.sqlhelper.datasource.factory;
 
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.datasource.*;
+import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 
 import java.util.Properties;
 

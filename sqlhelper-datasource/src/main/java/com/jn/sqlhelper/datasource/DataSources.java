@@ -18,7 +18,7 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
-import com.jn.sqlhelper.datasource.factory.DataSourceProperties;
+import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

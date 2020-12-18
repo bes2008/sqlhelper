@@ -18,7 +18,7 @@ import com.jn.sqlhelper.datasource.DataSourceFactory;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.DelegatingNamedDataSource;
 import com.jn.sqlhelper.datasource.NamedDataSource;
-import com.jn.sqlhelper.datasource.factory.DataSourceProperties;
+import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.langx.annotation.Name;
 import com.jn.langx.annotation.OnClasses;
 import com.jn.langx.text.StringTemplates;
