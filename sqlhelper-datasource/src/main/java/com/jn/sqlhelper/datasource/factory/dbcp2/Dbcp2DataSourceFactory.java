@@ -18,7 +18,7 @@ import com.jn.sqlhelper.datasource.DataSourceFactory;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.DelegatingNamedDataSource;
 import com.jn.sqlhelper.datasource.NamedDataSource;
-import com.jn.sqlhelper.datasource.config.DataSourceProperties;
+import com.jn.sqlhelper.datasource.definition.DataSourceDefinition;
 import com.jn.langx.annotation.Name;
 import com.jn.langx.annotation.OnClasses;
 import com.jn.langx.text.StringTemplates;
@@ -33,7 +33,7 @@ import java.util.Properties;
 })
 public class Dbcp2DataSourceFactory implements DataSourceFactory {
     @Override
-    public NamedDataSource get(DataSourceProperties dataSourceProperties) {
+    public NamedDataSource get(DataSourceDefinition dataSourceProperties) {
         if (DataSources.isImplementationKeyMatched(DataSources.DATASOURCE_IMPLEMENT_KEY_DBCP2, dataSourceProperties)) {
             DataSource dataSource = Dbcp2DataSources.createDataSource(dataSourceProperties);
             String name = dataSourceProperties.getName();

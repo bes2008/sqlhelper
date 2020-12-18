@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.config;
+package com.jn.sqlhelper.datasource.definition;
 
 import com.jn.langx.configuration.Configuration;
 import com.jn.langx.text.StringTemplates;
@@ -21,7 +21,7 @@ import com.jn.sqlhelper.datasource.DataSources;
 
 import java.util.Properties;
 
-public class DataSourceProperties implements Configuration {
+public class DataSourceDefinition implements Configuration {
     /**
      * datasource:
      */
@@ -58,7 +58,7 @@ public class DataSourceProperties implements Configuration {
 
     private Properties driverProps;
 
-    public DataSourceProperties() {
+    public DataSourceDefinition() {
         this.leakDetectionThresholdInMills = 0L;
         this.validationQuery = null;
         this.connectionTimeoutInMills = 30000L;

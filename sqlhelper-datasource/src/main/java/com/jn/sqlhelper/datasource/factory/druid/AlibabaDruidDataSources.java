@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.datasource.factory.druid;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
-import com.jn.sqlhelper.datasource.config.DataSourceProperties;
+import com.jn.sqlhelper.datasource.definition.DataSourceDefinition;
 import com.jn.langx.util.Maths;
 import com.jn.langx.util.Throwables;
 
@@ -29,7 +29,7 @@ public class AlibabaDruidDataSources {
     private AlibabaDruidDataSources() {
     }
 
-    public static DataSource createDataSource(DataSourceProperties properties) {
+    public static DataSource createDataSource(DataSourceDefinition properties) {
         Properties props = properties.getDriverProps();
         if (props == null) {
             props = new Properties();

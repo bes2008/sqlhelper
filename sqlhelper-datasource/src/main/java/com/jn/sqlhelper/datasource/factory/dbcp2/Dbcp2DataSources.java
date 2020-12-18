@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.datasource.factory.dbcp2;
 
-import com.jn.sqlhelper.datasource.config.DataSourceProperties;
+import com.jn.sqlhelper.datasource.definition.DataSourceDefinition;
 import com.jn.langx.util.Maths;
 import com.jn.langx.util.Throwables;
 import org.apache.commons.dbcp2.BasicDataSourceFactory;
@@ -32,7 +32,7 @@ public class Dbcp2DataSources {
     private Dbcp2DataSources() {
     }
 
-    public static DataSource createDataSource(DataSourceProperties properties) {
+    public static DataSource createDataSource(DataSourceDefinition properties) {
         Properties props = properties.getDriverProps();
         if (props == null) {
             props = new Properties();

@@ -16,7 +16,7 @@ package com.jn.sqlhelper.datasource.factory;
 
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.datasource.*;
-import com.jn.sqlhelper.datasource.config.DataSourceProperties;
+import com.jn.sqlhelper.datasource.definition.DataSourceDefinition;
 
 import java.util.Properties;
 
@@ -32,7 +32,7 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
     }
 
     @Override
-    public NamedDataSource get(DataSourceProperties dataSourceProperties) {
+    public NamedDataSource get(DataSourceDefinition dataSourceProperties) {
         Preconditions.checkNotNull(registry);
         String name = dataSourceProperties.getName();
         Preconditions.checkNotNull(name, "the datasource name is null");
