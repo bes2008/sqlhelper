@@ -19,11 +19,13 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
+import com.jn.sqlhelper.mybatis.spring.DelegatingSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.DynamicSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.DynamicSqlSessionTemplate;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.MyBatisExceptionTranslator;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
@@ -44,6 +46,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.dao.support.PersistenceExceptionTranslator;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -87,8 +90,12 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                 public void accept(DataSource dataSource) {
                     NamedDataSource namedDataSource = registryProvider.getObject().wrap(dataSource);
                     try {
-                        SqlSessionFactory sqlSessionFactory = createSqlSessionFactory(dataSource, properties, interceptorsProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider);
-                        if (sqlSessionFactory != null) {
+                        SqlSessionFactory delegate = createSqlSessionFactory(dataSource, properties, interceptorsProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider);
+                        if (delegate != null) {
+                            DelegatingSqlSessionFactory sqlSessionFactory = new DelegatingSqlSessionFactory();
+                            sqlSessionFactory.setDelegate(delegate);
+                            PersistenceExceptionTranslator translator = new MyBatisExceptionTranslator(delegate.getConfiguration().getEnvironment().getDataSource(), true);
+                            sqlSessionFactory.setPersistenceExceptionTranslator(translator);
                             dynamicSqlSessionFactory.addSqlSessionFactory(namedDataSource.getDataSourceKey(), sqlSessionFactory);
                         }
                     } catch (Throwable ex) {

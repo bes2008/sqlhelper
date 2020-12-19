@@ -21,11 +21,9 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.MyBatisExceptionTranslator;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.SqlSessionUtils;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.dao.support.PersistenceExceptionTranslator;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -38,22 +36,11 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
     private final SqlSession sessionProxy;
 
     public DynamicSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
-        this(sqlSessionFactory, sqlSessionFactory.getConfiguration().getDefaultExecutorType());
+        this(sqlSessionFactory, null);
     }
 
-    /**
-     * Constructs a Spring managed SqlSession with the {@code SqlSessionFactory}
-     * provided as an argument and the given {@code ExecutorType}
-     * {@code ExecutorType} cannot be changed once the {@code SqlSessionTemplate}
-     * is constructed.
-     *
-     */
     public DynamicSqlSessionTemplate(SqlSessionFactory sqlSessionFactory, ExecutorType executorType) {
-        this(sqlSessionFactory, executorType,new MyBatisExceptionTranslator(sqlSessionFactory.getConfiguration().getEnvironment().getDataSource(), true));
-    }
-
-    public DynamicSqlSessionTemplate(SqlSessionFactory sqlSessionFactory, ExecutorType executorType, PersistenceExceptionTranslator exceptionTranslator) {
-        super(sqlSessionFactory, executorType, exceptionTranslator);
+        super(sqlSessionFactory, ExecutorType.SIMPLE, null);
         this.sessionProxy = (SqlSession) Proxy.newProxyInstance(
                 SqlSessionFactory.class.getClassLoader(),
                 new Class[]{SqlSession.class},
