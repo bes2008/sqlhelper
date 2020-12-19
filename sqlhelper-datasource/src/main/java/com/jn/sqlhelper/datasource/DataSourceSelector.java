@@ -14,6 +14,8 @@
 
 package com.jn.sqlhelper.datasource;
 
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
+
 public abstract class DataSourceSelector {
     protected DataSourceRegistry registry;
 

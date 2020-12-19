@@ -17,6 +17,7 @@ package com.jn.sqlhelper.datasource.factory;
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.datasource.*;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import java.util.Properties;
 
@@ -37,7 +38,7 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
         String name = dataSourceProperties.getName();
         Preconditions.checkNotNull(name, "the datasource name is null");
 
-        NamedDataSource dataSource = registry.get(name);
+        NamedDataSource dataSource = registry.get(dataSourceProperties.getDataSourceKey());
         if (dataSource == null) {
             String implementationKey = dataSourceProperties.getImplementation();
             DataSourceFactory delegate = DataSourceFactoryProvider.getInstance().get(implementationKey);
@@ -56,8 +57,10 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
         Preconditions.checkNotNull(registry);
         String name = properties.getProperty(DataSources.DATASOURCE_NAME);
         Preconditions.checkNotNull(name, "the datasource name is null");
+        String group = properties.getProperty(DataSources.DATASOURCE_GROUP, DataSources.DATASOURCE_GROUP_DEFAULT);
 
-        NamedDataSource dataSource = registry.get(name);
+        DataSourceKey key = new DataSourceKey(group, name);
+        NamedDataSource dataSource = registry.get(key);
         if (dataSource == null) {
             String implementationKey = properties.getProperty(DataSources.DATASOURCE_IMPLEMENT);
             DataSourceFactory delegate = DataSourceFactoryProvider.getInstance().get(implementationKey);
@@ -65,8 +68,7 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
                 dataSource = delegate.get(properties);
             }
             if (dataSource != null) {
-                String group = properties.getProperty(DataSources.DATASOURCE_GROUP, DataSources.DATASOURCE_GROUP_DEFAULT);
-                DataSourceKey key = new DataSourceKey(group, name);
+
                 registry.register(key, dataSource);
                 dataSource = registry.get(key);
             }

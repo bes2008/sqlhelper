@@ -16,7 +16,6 @@ package com.jn.sqlhelper.datasource.factory.c3p0;
 
 import com.jn.sqlhelper.datasource.DataSourceFactory;
 import com.jn.sqlhelper.datasource.DataSources;
-import com.jn.sqlhelper.datasource.DelegatingNamedDataSource;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.langx.annotation.Name;
@@ -36,7 +35,7 @@ public class C3p0DataSourceFactory implements DataSourceFactory {
         if (DataSources.isImplementationKeyMatched(DataSources.DATASOURCE_IMPLEMENT_KEY_C3P0, dataSourceProperties)) {
             DataSource dataSource = C3p0DataSources.createDataSource(dataSourceProperties);
             String name = dataSourceProperties.getName();
-            return DelegatingNamedDataSource.of(dataSource, name);
+            return DataSources.toNamedDataSource(dataSource, name);
         }
         throw new IllegalArgumentException(StringTemplates.formatWithPlaceholder("Illegal datasource implementationKey {}, expected key is {}", dataSourceProperties.getImplementation(), DataSources.DATASOURCE_IMPLEMENT_KEY_C3P0));
     }
@@ -45,6 +44,6 @@ public class C3p0DataSourceFactory implements DataSourceFactory {
     public NamedDataSource get(Properties properties) {
         DataSource dataSource = C3p0DataSources.createDataSource(properties);
         String name = properties.getProperty(DataSources.DATASOURCE_NAME);
-        return DelegatingNamedDataSource.of(dataSource, name);
+        return DataSources.toNamedDataSource(dataSource, name);
     }
 }

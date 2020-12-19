@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.mybatis.spring;
 
-import com.jn.sqlhelper.datasource.DataSourceKey;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.apache.ibatis.session.*;
 
 import java.sql.Connection;

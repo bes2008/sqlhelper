@@ -14,11 +14,15 @@
 
 package com.jn.sqlhelper.datasource;
 
+import com.jn.langx.Named;
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +31,7 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Locale;
+import java.util.UUID;
 
 public class DataSources {
     private static final Logger logger = LoggerFactory.getLogger(DataSources.class);
@@ -154,5 +159,47 @@ public class DataSources {
 
     public static final String getDatasourceIdSeparator(){
         return System.getProperty(DATASOURCE_ID_SEPARATOR, "/");
+    }
+
+
+    public static NamedDataSource toNamedDataSource(DataSource dataSource) {
+        if (dataSource instanceof NamedDataSource) {
+            return (NamedDataSource) dataSource;
+        }
+        String name = null;
+        if (dataSource instanceof Named) {
+            name = ((Named) dataSource).getName();
+        }
+        if (Strings.isBlank(name)) {
+            name = UUID.randomUUID().toString();
+        }
+        return toNamedDataSource(dataSource, name);
+    }
+
+    public static final NamedDataSource toNamedDataSource(@NonNull DataSource delegate, String name){
+        return toNamedDataSource(delegate, null, name);
+    }
+
+    public static NamedDataSource toNamedDataSource(DataSource dataSource, DataSourceKey dataSourceKey){
+        return toNamedDataSource(dataSource, dataSourceKey.getGroup(), dataSourceKey.getName());
+    }
+
+    public static final NamedDataSource toNamedDataSource(@NonNull DataSource delegate, @Nullable String group, @NonNull String name){
+        Preconditions.checkNotNull(delegate,"the delegate is null");
+        Preconditions.checkNotEmpty(name,"the name is null or empty");
+        group = Strings.useValueIfBlank(group, DataSources.DATASOURCE_GROUP_DEFAULT);
+
+        if(delegate instanceof NamedDataSource){
+            NamedDataSource namedDataSource = (NamedDataSource)delegate;
+            namedDataSource.setGroup(group);
+            namedDataSource.setName(name);
+            return namedDataSource;
+        }
+
+        DelegatingNamedDataSource dataSource = new DelegatingNamedDataSource();
+        dataSource.setDelegate(delegate);
+        dataSource.setName(name);
+        dataSource.setGroup(group);
+        return dataSource;
     }
 }

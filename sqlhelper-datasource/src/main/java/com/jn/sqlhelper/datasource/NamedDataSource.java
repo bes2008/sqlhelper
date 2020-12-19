@@ -15,6 +15,7 @@
 package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Named;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import javax.sql.DataSource;
 

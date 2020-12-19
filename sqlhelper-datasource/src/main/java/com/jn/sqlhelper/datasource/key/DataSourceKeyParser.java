@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource;
+package com.jn.sqlhelper.datasource.key;
 
 import com.jn.langx.Parser;
 
 import javax.sql.DataSource;
 
 public interface DataSourceKeyParser<DS extends DataSource> extends Parser<DS, DataSourceKey> {
-    DataSourceKey parser(DS dataSource);
+    DataSourceKey parse(DS dataSource);
 }

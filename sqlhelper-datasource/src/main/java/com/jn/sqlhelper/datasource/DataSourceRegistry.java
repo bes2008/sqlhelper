@@ -17,71 +17,72 @@ package com.jn.sqlhelper.datasource;
 import com.jn.langx.registry.Registry;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.collection.Maps;
-import com.jn.langx.util.function.Consumer;
-import com.jn.langx.util.function.Predicate;
-import com.jn.langx.util.function.Supplier;
+import com.jn.langx.util.function.Consumer2;
+import com.jn.langx.util.function.Predicate2;
 import com.jn.langx.util.struct.Holder;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
+import com.jn.sqlhelper.datasource.key.DataSourceKeyParser;
+import com.jn.sqlhelper.datasource.key.RandomDataSourceKeyParser;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
+public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, DataSourceKeyParser<DataSource> {
 
-    /**
-     * key: group
-     * subKey: datasource name
-     */
-    private ConcurrentHashMap<String, Map<String, DataSource>> dataSourceRegistry = new ConcurrentHashMap<String, Map<String, DataSource>>();
+    private ConcurrentHashMap<DataSourceKey, NamedDataSource> dataSourceRegistry = new ConcurrentHashMap<DataSourceKey, NamedDataSource>();
+    private DataSourceKeyParser keyParser = RandomDataSourceKeyParser.INSTANCE;
 
     public void register(DataSourceKey key, DataSource dataSource) {
         Preconditions.checkNotEmpty(key, "the datasource key is null or empty");
         Preconditions.checkNotNull(dataSource);
-
-        Map<String, DataSource> dataSources = Maps.putIfAbsent(dataSourceRegistry, key.getGroup(), new Supplier<String, Map<String, DataSource>>() {
-            @Override
-            public Map<String, DataSource> get(String input) {
-                return new HashMap<String, DataSource>();
-            }
-        });
-
-        Maps.putIfAbsent(dataSources, key.getName(),  dataSource);
-
+        dataSourceRegistry.put(key, DataSources.toNamedDataSource(dataSource, key));
     }
-
 
     @Override
     public NamedDataSource get(DataSourceKey key) {
-        Map<String, DataSource> dataSourceMap = dataSourceRegistry.get(key.getGroup());
-        if(dataSourceMap!=null){
-            return (NamedDataSource) dataSourceMap.get(key.getName());
-        }
-        return null;
+        return dataSourceRegistry.get(key);
     }
 
     @Override
     public void register(DataSource dataSource) {
-
+        DataSourceKey key = parse(dataSource);
+        if (key == null) {
+            if (keyParser != null) {
+                key = keyParser.parse(dataSource);
+            }
+        }
+        if (key == null) {
+            key = RandomDataSourceKeyParser.INSTANCE.parse(dataSource);
+        }
+        dataSourceRegistry.put(key, DataSources.toNamedDataSource(dataSource, key));
     }
 
-    public NamedDataSource get(final String dataSourceName) {
-        final Holder<DataSource> dataSourceHolder = new Holder<DataSource>();
-        Collects.forEach(dataSourceRegistry.values(), new Consumer<Map<String, DataSource>>() {
+    @Override
+    public DataSourceKey parse(DataSource dataSource) {
+        if (dataSource instanceof NamedDataSource) {
+            NamedDataSource namedDataSource = (NamedDataSource) dataSource;
+            return namedDataSource.getDataSourceKey();
+        }
+        final Holder<DataSourceKey> dataSourceKeyHolder = new Holder<DataSourceKey>();
+        Collects.forEach(dataSourceRegistry, new Consumer2<DataSourceKey, NamedDataSource>() {
             @Override
-            public void accept(Map<String, DataSource> groupDSs) {
-                DataSource dataSource = groupDSs.get(dataSourceName);
-                if (dataSource != null) {
-                    dataSourceHolder.set(dataSource);
-                }
+            public void accept(DataSourceKey key, NamedDataSource value) {
+
             }
-        }, new Predicate<Map<String, DataSource>>() {
+        }, new Predicate2<DataSourceKey, NamedDataSource>() {
             @Override
-            public boolean test(Map<String, DataSource> value) {
-                return dataSourceHolder.isNull();
+            public boolean test(DataSourceKey key, NamedDataSource value) {
+                return !dataSourceKeyHolder.isNull();
             }
         });
-        return (NamedDataSource) dataSourceHolder.get();
+        return dataSourceKeyHolder.get();
+    }
+
+    public DataSourceKeyParser getKeyParser() {
+        return keyParser;
+    }
+
+    public void setKeyParser(DataSourceKeyParser keyParser) {
+        this.keyParser = keyParser;
     }
 }

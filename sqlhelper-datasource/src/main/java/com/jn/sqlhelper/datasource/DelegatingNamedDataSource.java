@@ -15,15 +15,20 @@
 package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Delegatable;
+import com.jn.langx.Named;
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Strings;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<DataSource>, Initializable {
@@ -122,16 +127,6 @@ public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<D
         return Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
-
-
-    public static final DelegatingNamedDataSource of(@NonNull DataSource delegate, @NonNull String name){
-        Preconditions.checkNotNull(delegate,"the delegate is null");
-        Preconditions.checkNotEmpty(name,"the name is null or empty");
-        DelegatingNamedDataSource dataSource = new DelegatingNamedDataSource();
-        dataSource.setDelegate(delegate);
-        dataSource.setName(name);
-        return dataSource;
-    }
 
     public String getGroup() {
         return dataSourceKey.getGroup();

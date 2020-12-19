@@ -18,6 +18,7 @@ import com.jn.langx.configuration.Configuration;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.datasource.DataSources;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import java.util.Properties;
 
@@ -271,5 +272,9 @@ public class DataSourceProperties implements Configuration {
                 setName(name);
             }
         }
+    }
+
+    public DataSourceKey getDataSourceKey(){
+        return new DataSourceKey(group, name);
     }
 }

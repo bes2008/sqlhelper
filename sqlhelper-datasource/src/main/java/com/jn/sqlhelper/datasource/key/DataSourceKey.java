@@ -1,9 +1,9 @@
 /*
  * Copyright 2020 the original author or authors.
  *
- * Licensed under the LGPL, Version 3.0 (the "License");
+ * Licensed under the Apache, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at  http://www.gnu.org/licenses/lgpl-3.0.html
+ * You may obtain a copy of the License at  http://www.gnu.org/licenses/lgpl-2.0.html
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,26 +12,28 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource;
+package com.jn.sqlhelper.datasource.key;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.hash.HashCodeBuilder;
+import com.jn.sqlhelper.datasource.DataSources;
 
 public class DataSourceKey {
     @NonNull
-    private String group;
+    private String group = DataSources.DATASOURCE_GROUP_DEFAULT;
     @NonNull
     private String name;
 
-    public DataSourceKey(){}
-
-    public DataSourceKey(String group, String name) {
-        this.group = group;
-        this.name = name;
+    public DataSourceKey() {
     }
 
-    public boolean isAvailable(){
+    public DataSourceKey(String group, String name) {
+        setGroup(group);
+        setName(name);
+    }
+
+    public boolean isAvailable() {
         return Strings.isNotBlank(group) && Strings.isNotBlank(name);
     }
 
@@ -53,7 +55,9 @@ public class DataSourceKey {
     }
 
     public void setGroup(String group) {
-        this.group = group;
+        if (Strings.isNotBlank(group)) {
+            this.group = group;
+        }
     }
 
     public String getName() {
@@ -61,6 +65,8 @@ public class DataSourceKey {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if (Strings.isNotBlank(name)) {
+            this.name = name;
+        }
     }
 }
