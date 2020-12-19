@@ -17,6 +17,7 @@ package com.jn.sqlhelper.datasource.factory;
 import com.jn.langx.annotation.Name;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.OnClasses;
+import com.jn.langx.annotation.Singleton;
 import com.jn.langx.factory.Provider;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.util.ClassLoaders;
@@ -35,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Singleton
 public final class DataSourceFactoryProvider implements Provider<String, DataSourceFactory>, Supplier0<DataSourceFactory>, Initializable {
     private static final Logger logger = LoggerFactory.getLogger(DataSourceFactoryProvider.class);
     private static final ConcurrentHashMap<String, DataSourceFactory> registry = new ConcurrentHashMap<String, DataSourceFactory>();
