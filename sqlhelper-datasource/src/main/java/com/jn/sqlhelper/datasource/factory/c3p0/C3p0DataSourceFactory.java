@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.datasource.factory.c3p0;
 
-import com.jn.sqlhelper.datasource.DataSourceFactory;
+import com.jn.sqlhelper.datasource.factory.DataSourceFactory;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
