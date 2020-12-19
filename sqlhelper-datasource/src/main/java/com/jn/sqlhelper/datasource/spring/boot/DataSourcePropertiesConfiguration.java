@@ -12,22 +12,23 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.spring;
+package com.jn.sqlhelper.datasource.spring.boot;
 
-import com.jn.langx.Builder;
+import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
-import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-public class DataSourceBeanDefinitionBuilder implements Builder<BeanDefinition> {
-    private DataSourceProperties properties;
+import java.util.List;
 
-    public DataSourceBeanDefinitionBuilder dataSourceProperties(DataSourceProperties dataSourceProperties) {
-        this.properties = dataSourceProperties;
-        return this;
+@Configuration
+public class DataSourcePropertiesConfiguration {
+
+    @Bean
+    @ConfigurationProperties(prefix = "sqlhelper.dataSources")
+    public List<DataSourceProperties> dataSourcePropertiesList() {
+        return Collects.newArrayList();
     }
 
-    @Override
-    public BeanDefinition build() {
-        return null;
-    }
 }

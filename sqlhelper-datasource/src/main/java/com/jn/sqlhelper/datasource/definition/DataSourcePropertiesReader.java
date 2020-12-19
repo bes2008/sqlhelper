@@ -22,14 +22,6 @@ import java.util.List;
 public interface DataSourcePropertiesReader {
 
     /**
-     * Load bean definitions from the specified resource.
-     *
-     * @param resource the resource descriptor
-     * @return the number of bean definitions found
-     */
-    List<DataSourceProperties> loadBeanDefinitions(Resource resource);
-
-    /**
      * Load bean definitions from the specified resources.
      *
      * @param resources the resource descriptors
@@ -37,24 +29,5 @@ public interface DataSourcePropertiesReader {
      */
     List<DataSourceProperties> loadBeanDefinitions(Resource... resources);
 
-    /**
-     * Load bean definitions from the specified resource location.
-     * <p>The location can also be a location pattern, provided that the
-     * ResourceLoader of this bean definition reader is a ResourcePatternResolver.
-     *
-     * @param location the resource location, to be loaded with the ResourceLoader
-     *                 (or ResourcePatternResolver) of this bean definition reader
-     * @return the number of bean definitions found
-     */
-    List<DataSourceProperties> loadBeanDefinitions(String location);
-
-    /**
-     * Load bean definitions from the specified resource locations.
-     *
-     * @param locations the resource locations, to be loaded with the ResourceLoader
-     *                  (or ResourcePatternResolver) of this bean definition reader
-     * @return the number of bean definitions found
-     */
-    List<DataSourceProperties> loadBeanDefinitions(String... locations);
 
 }
