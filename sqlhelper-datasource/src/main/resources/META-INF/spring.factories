@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.jn.sqlhelper.datasource.spring.boot.NamedDataSourcesAutoConfiguration

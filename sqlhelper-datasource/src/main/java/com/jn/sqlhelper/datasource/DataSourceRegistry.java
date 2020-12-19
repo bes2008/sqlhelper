@@ -77,9 +77,6 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
         return dataSourceKeyHolder.get();
     }
 
-    public DataSourceKeyParser getKeyParser() {
-        return keyParser;
-    }
 
     public void setKeyParser(DataSourceKeyParser keyParser) {
         this.keyParser = keyParser;

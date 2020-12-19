@@ -32,8 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-public class NamedDataSourcesConfiguration {
-
+public class NamedDataSourcesAutoConfiguration {
 
     @Bean
     public DataSourceRegistry dataSourceRegistry(ObjectProvider<DataSourceKeyParser> dataSourceKeyParserProvider) {
