@@ -15,7 +15,6 @@
 package com.jn.sqlhelper.datasource.driver;
 
 
-import com.jn.sqlhelper.datasource.AbstractDriverBasedDataSource;
 import com.jn.langx.util.ClassLoaders;
 import com.jn.langx.util.Preconditions;
 

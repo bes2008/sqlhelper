@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.datasource.driver;
 
 
-import com.jn.sqlhelper.datasource.ConnectionProxy;
+import com.jn.sqlhelper.datasource.connection.ConnectionProxy;
 import com.jn.sqlhelper.datasource.SmartDataSource;
 import com.jn.langx.lifecycle.Destroyable;
 import com.jn.langx.util.Objs;
