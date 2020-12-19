@@ -17,8 +17,7 @@ package com.jn.sqlhelper.mybatis.spring.boot.autoconfigure;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
-import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.DataSourceKeyParser;
+import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.mybatis.spring.DynamicSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.DynamicSqlSessionTemplate;
@@ -57,7 +56,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
 
     @Bean("sqlhelperDynamicSqlSessionFactory")
     public DynamicSqlSessionFactory dynamicSqlSessionFactory(
-            ObjectProvider<DataSourceKeyParser> dataSourceKeyParserObjectProvider,
+            final DataSourceRegistry registry,
             ObjectProvider<List<DataSource>> dataSourcesProvider,
             final MybatisProperties properties,
             final ObjectProvider<Interceptor[]> interceptorsProvider,
@@ -65,27 +64,16 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
             final ObjectProvider<DatabaseIdProvider> databaseIdProvider,
             final ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) throws BeanCreationException {
         List<DataSource> dataSources = dataSourcesProvider.getIfAvailable();
-        final DataSourceKeyParser dataSourceKeyParser = dataSourceKeyParserObjectProvider.getIfAvailable();
         if (Emptys.isNotEmpty(dataSources)) {
             final DynamicSqlSessionFactory dynamicSqlSessionFactory = new DynamicSqlSessionFactory();
             Collects.forEach(dataSources, new Consumer<DataSource>() {
                 @Override
                 public void accept(DataSource dataSource) {
-                    DataSourceKey dataSourceKey = null;
-
-                    if (dataSource instanceof NamedDataSource) {
-                        dataSourceKey = ((NamedDataSource) dataSource).getDataSourceKey();
-                    } else if (dataSourceKeyParser != null) {
-                        dataSourceKey = dataSourceKeyParser.parser(dataSource);
-                    }
-                    if (dataSourceKey == null) {
-                        logger.error("Can't parse the datasource key for the datasource: {}", dataSource);
-                        return;
-                    }
+                    NamedDataSource namedDataSource = registry.wrap(dataSource);
                     try {
                         SqlSessionFactory sqlSessionFactory = createSqlSessionFactory(dataSource, properties, interceptorsProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider);
                         if (sqlSessionFactory != null) {
-                            dynamicSqlSessionFactory.addSqlSessionFactory(dataSourceKey, sqlSessionFactory);
+                            dynamicSqlSessionFactory.addSqlSessionFactory(namedDataSource.getDataSourceKey(), sqlSessionFactory);
                         }
                     } catch (Throwable ex) {
                         logger.error(ex.getMessage(), ex);

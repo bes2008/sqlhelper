@@ -14,10 +14,13 @@
 
 package com.jn.sqlhelper.datasource;
 
+import com.jn.langx.Delegatable;
+import com.jn.langx.annotation.NonNull;
 import com.jn.langx.registry.Registry;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
+import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.function.Predicate2;
 import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
@@ -25,6 +28,7 @@ import com.jn.sqlhelper.datasource.key.DataSourceKeyParser;
 import com.jn.sqlhelper.datasource.key.RandomDataSourceKeyParser;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
@@ -45,28 +49,60 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
 
     @Override
     public void register(DataSource dataSource) {
-        DataSourceKey key = parse(dataSource);
-        if (key == null) {
-            if (keyParser != null) {
-                key = keyParser.parse(dataSource);
-            }
-        }
-        if (key == null) {
-            key = RandomDataSourceKeyParser.INSTANCE.parse(dataSource);
-        }
-        dataSourceRegistry.put(key, DataSources.toNamedDataSource(dataSource, key));
+        NamedDataSource namedDataSource = wrap(dataSource);
+        dataSourceRegistry.put(namedDataSource.getDataSourceKey(), namedDataSource);
     }
 
-    private DataSourceKey parse(DataSource dataSource) {
-        if (dataSource instanceof NamedDataSource) {
-            NamedDataSource namedDataSource = (NamedDataSource) dataSource;
-            return namedDataSource.getDataSourceKey();
+    /**
+     * 只做从已经
+     *
+     * @param dataSource
+     * @return
+     */
+    private DataSourceKey intervalParse(@NonNull DataSource dataSource) {
+        final List<DataSource> toComparedDataSourceList = Collects.newArrayList();
+        DataSource tmpDs = dataSource;
+        while (tmpDs != null) {
+            if (tmpDs instanceof NamedDataSource) {
+                return ((NamedDataSource) tmpDs).getDataSourceKey();
+            }
+            toComparedDataSourceList.add(tmpDs);
+            if (tmpDs instanceof Delegatable) {
+                Object delegate = ((Delegatable) tmpDs).getDelegate();
+                if (delegate instanceof DataSource) {
+                    tmpDs = (DataSource) delegate;
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
         }
+
         final Holder<DataSourceKey> dataSourceKeyHolder = new Holder<DataSourceKey>();
         Collects.forEach(dataSourceRegistry, new Consumer2<DataSourceKey, NamedDataSource>() {
             @Override
-            public void accept(DataSourceKey key, NamedDataSource value) {
-
+            public void accept(DataSourceKey key, final NamedDataSource ds) {
+                if (Collects.anyMatch(toComparedDataSourceList, new Predicate<DataSource>() {
+                    @Override
+                    public boolean test(DataSource toCompared) {
+                        if (ds == toCompared) {
+                            return true;
+                        }
+                        if (ds instanceof Delegatable) {
+                            Object delegate = ((Delegatable) ds).getDelegate();
+                            if (delegate instanceof DataSource) {
+                                DataSource delegateDs = (DataSource) delegate;
+                                if (delegateDs == toCompared) {
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
+                    }
+                })) {
+                    dataSourceKeyHolder.set(key);
+                }
             }
         }, new Predicate2<DataSourceKey, NamedDataSource>() {
             @Override
@@ -80,5 +116,22 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
 
     public void setKeyParser(DataSourceKeyParser keyParser) {
         this.keyParser = keyParser;
+    }
+
+    public NamedDataSource wrap(DataSource dataSource) {
+        DataSourceKey key = null;
+        if (dataSource instanceof NamedDataSource) {
+            key = ((NamedDataSource) dataSource).getDataSourceKey();
+        }
+        if (key == null) {
+            key = intervalParse(dataSource);
+        }
+        if (key == null && keyParser != null) {
+            key = keyParser.parse(dataSource);
+        }
+        if (key == null) {
+            key = RandomDataSourceKeyParser.INSTANCE.parse(dataSource);
+        }
+        return DataSources.toNamedDataSource(dataSource, key);
     }
 }
