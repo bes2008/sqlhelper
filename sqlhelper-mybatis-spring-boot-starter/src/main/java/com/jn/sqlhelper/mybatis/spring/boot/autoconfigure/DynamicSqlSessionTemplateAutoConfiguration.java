@@ -31,6 +31,7 @@ import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -56,7 +57,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
 
     @Bean("sqlhelperDynamicSqlSessionFactory")
     public DynamicSqlSessionFactory dynamicSqlSessionFactory(
-            final DataSourceRegistry registry,
+            final ObjectProvider<DataSourceRegistry> registryProvider,
             ObjectProvider<List<DataSource>> dataSourcesProvider,
             final MybatisProperties properties,
             final ObjectProvider<Interceptor[]> interceptorsProvider,
@@ -65,11 +66,17 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
             final ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) throws BeanCreationException {
         List<DataSource> dataSources = dataSourcesProvider.getIfAvailable();
         if (Emptys.isNotEmpty(dataSources)) {
+            try {
+                registryProvider.getObject();
+            } catch (BeansException ex) {
+                logger.error("please check whether the sqlhelper-datasource.jar in the classpath or not");
+                throw ex;
+            }
             final DynamicSqlSessionFactory dynamicSqlSessionFactory = new DynamicSqlSessionFactory();
             Collects.forEach(dataSources, new Consumer<DataSource>() {
                 @Override
                 public void accept(DataSource dataSource) {
-                    NamedDataSource namedDataSource = registry.wrap(dataSource);
+                    NamedDataSource namedDataSource = registryProvider.getObject().wrap(dataSource);
                     try {
                         SqlSessionFactory sqlSessionFactory = createSqlSessionFactory(dataSource, properties, interceptorsProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider);
                         if (sqlSessionFactory != null) {
