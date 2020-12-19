@@ -15,15 +15,40 @@
 package com.jn.sqlhelper.datasource.spring.boot;
 
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.function.Function;
+import com.jn.sqlhelper.datasource.DataSourceRegistry;
+import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
+import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
+import com.jn.sqlhelper.datasource.key.DataSourceKeyParser;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
 public class DataSourcePropertiesConfiguration {
+
+
+    @Bean
+    public DataSourceRegistry dataSourceRegistry(ObjectProvider<DataSourceKeyParser> dataSourceKeyParserProvider) {
+        DataSourceRegistry dataSourceRegistry = new DataSourceRegistry();
+        DataSourceKeyParser dataSourceKeyParser = dataSourceKeyParserProvider.getIfAvailable();
+        dataSourceRegistry.setKeyParser(dataSourceKeyParser);
+        return dataSourceRegistry;
+    }
+
+    @Bean
+    public CentralizedDataSourceFactory centralizedDataSourceFactory(DataSourceRegistry dataSourceRegistry) {
+        CentralizedDataSourceFactory factory = new CentralizedDataSourceFactory();
+        factory.setRegistry(dataSourceRegistry);
+        return factory;
+    }
 
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.dataSources")
@@ -31,4 +56,19 @@ public class DataSourcePropertiesConfiguration {
         return Collects.newArrayList();
     }
 
+    @Bean
+    public ListFactoryBean dataSourcesFactoryBean(final CentralizedDataSourceFactory centralizedDataSourceFactory,
+                                                  ObjectProvider<List<DataSourceProperties>> dataSourcePropertiesListProvider) {
+        List<DataSourceProperties> dataSourcePropertiesList = dataSourcePropertiesListProvider.getIfAvailable();
+        List<NamedDataSource> dataSources = Pipeline.of(dataSourcePropertiesList).map(new Function<DataSourceProperties, NamedDataSource>() {
+            @Override
+            public NamedDataSource apply(DataSourceProperties dataSourceProperties) {
+                return centralizedDataSourceFactory.get(dataSourceProperties);
+            }
+        }).clearNulls().asList();
+        ListFactoryBean dataSourcesFactoryBean = new ListFactoryBean();
+        dataSourcesFactoryBean.setTargetListClass(ArrayList.class);
+        dataSourcesFactoryBean.setSourceList(dataSources);
+        return dataSourcesFactoryBean;
+    }
 }

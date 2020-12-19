@@ -27,7 +27,7 @@ import com.jn.sqlhelper.datasource.key.RandomDataSourceKeyParser;
 import javax.sql.DataSource;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, DataSourceKeyParser<DataSource> {
+public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
 
     private ConcurrentHashMap<DataSourceKey, NamedDataSource> dataSourceRegistry = new ConcurrentHashMap<DataSourceKey, NamedDataSource>();
     private DataSourceKeyParser keyParser = RandomDataSourceKeyParser.INSTANCE;
@@ -57,8 +57,7 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         dataSourceRegistry.put(key, DataSources.toNamedDataSource(dataSource, key));
     }
 
-    @Override
-    public DataSourceKey parse(DataSource dataSource) {
+    private DataSourceKey parse(DataSource dataSource) {
         if (dataSource instanceof NamedDataSource) {
             NamedDataSource namedDataSource = (NamedDataSource) dataSource;
             return namedDataSource.getDataSourceKey();
