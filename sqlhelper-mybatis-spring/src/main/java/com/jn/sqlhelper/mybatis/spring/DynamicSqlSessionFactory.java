@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.mybatis.spring;
 
+import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.apache.ibatis.session.*;
 
@@ -24,8 +25,12 @@ public class DynamicSqlSessionFactory implements SqlSessionFactory {
 
     private ConcurrentHashMap<DataSourceKey, SqlSessionFactory> factoryMap = new ConcurrentHashMap<DataSourceKey, SqlSessionFactory>();
 
-    public void addSqlSessionFactory(DataSourceKey key, SqlSessionFactory sessionFactory){
+    public void addSqlSessionFactory(DataSourceKey key, SqlSessionFactory sessionFactory) {
         factoryMap.putIfAbsent(key, sessionFactory);
+    }
+
+    public int size() {
+        return factoryMap.size();
     }
 
     @Override
@@ -70,7 +75,11 @@ public class DynamicSqlSessionFactory implements SqlSessionFactory {
 
     @Override
     public Configuration getConfiguration() {
-        return null;
+        if(size()==1){
+            return Collects.findFirst(factoryMap.values()).getConfiguration();
+        }
+        DataSourceKey key = null;
+        return factoryMap.get(key).getConfiguration();
     }
 
 

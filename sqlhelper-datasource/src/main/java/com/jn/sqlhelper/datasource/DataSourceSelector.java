@@ -16,6 +16,7 @@ package com.jn.sqlhelper.datasource;
 
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
+
 public abstract class DataSourceSelector {
     protected DataSourceRegistry registry;
 
@@ -26,5 +27,12 @@ public abstract class DataSourceSelector {
     /**
      * 指定的group下，选择某个datasource, 返回的是
      */
-    public abstract DataSourceKey select();
+    public final DataSourceKey select() {
+        if (registry.size() == 1) {
+            return registry.getDefaultKey();
+        }
+        return doSelect();
+    }
+
+    protected abstract DataSourceKey doSelect();
 }

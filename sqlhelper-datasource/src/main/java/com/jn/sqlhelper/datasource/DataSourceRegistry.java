@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
-
+    private volatile DataSourceKey defaultKey = null;
     private ConcurrentHashMap<DataSourceKey, NamedDataSource> dataSourceRegistry = new ConcurrentHashMap<DataSourceKey, NamedDataSource>();
     private DataSourceKeyParser keyParser = RandomDataSourceKeyParser.INSTANCE;
 
@@ -40,6 +40,9 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
         Preconditions.checkNotEmpty(key, "the datasource key is null or empty");
         Preconditions.checkNotNull(dataSource);
         dataSourceRegistry.put(key, DataSources.toNamedDataSource(dataSource, key));
+        if (defaultKey == null) {
+            defaultKey = key;
+        }
     }
 
     @Override
@@ -50,7 +53,7 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
     @Override
     public void register(DataSource dataSource) {
         NamedDataSource namedDataSource = wrap(dataSource);
-        dataSourceRegistry.put(namedDataSource.getDataSourceKey(), namedDataSource);
+        register(namedDataSource.getDataSourceKey(), namedDataSource);
     }
 
     /**
@@ -133,5 +136,13 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
             key = RandomDataSourceKeyParser.INSTANCE.parse(dataSource);
         }
         return DataSources.toNamedDataSource(dataSource, key);
+    }
+
+    public DataSourceKey getDefaultKey() {
+        return defaultKey;
+    }
+
+    public int size() {
+        return dataSourceRegistry.size();
     }
 }

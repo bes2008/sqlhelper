@@ -99,11 +99,21 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
         return this.sessionProxy.delete(statement, parameter);
     }
 
+    private DynamicSqlSessionFactory getDynamicSqlSessionFactory() {
+        return (DynamicSqlSessionFactory) this.getSqlSessionFactory();
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public <T> T getMapper(Class<T> type) {
+        DynamicSqlSessionFactory sessionFactory = getDynamicSqlSessionFactory();
+        if (sessionFactory.size() == 1) {
+            return getConfiguration().getMapper(type, this);
+        } else {
+
+        }
         return getConfiguration().getMapper(type, this);
     }
 
@@ -113,6 +123,11 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
     }
 
     public SqlSessionFactory getLocalSqlSessionFactory() {
+        DynamicSqlSessionFactory sessionFactory = getDynamicSqlSessionFactory();
+        if (sessionFactory.size() == 1) {
+            return sessionFactory;
+        }
+        // XXXXXXXXXXXXXXXXXXXXX
         return getSqlSessionFactory();
     }
 
@@ -121,6 +136,10 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
      */
     @Override
     public Configuration getConfiguration() {
+        DynamicSqlSessionFactory sessionFactory = getDynamicSqlSessionFactory();
+        if (sessionFactory.size() == 1) {
+            return sessionFactory.getConfiguration();
+        }
         return this.getLocalSqlSessionFactory().getConfiguration();
     }
 

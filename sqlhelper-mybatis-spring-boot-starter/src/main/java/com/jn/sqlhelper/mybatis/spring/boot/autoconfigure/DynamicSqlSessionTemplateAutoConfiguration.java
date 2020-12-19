@@ -60,7 +60,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(DynamicSqlSessionTemplateAutoConfiguration.class);
 
-    @Bean("sqlhelperDynamicSqlSessionFactory")
+    @Bean("sqlSessionFactory")
     public DynamicSqlSessionFactory dynamicSqlSessionFactory(
             final ObjectProvider<DataSourceRegistry> registryProvider,
             @Qualifier("dataSourcesFactoryBean")

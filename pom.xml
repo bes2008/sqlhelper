@@ -16,6 +16,8 @@
     <url>https://github.com/fangjinuo/sqlhelper</url>
     <modules>
         <module>sqlhelper-common</module>
+        <module>sqlhelper-datasource</module>
+        <module>sqlhelper-mybatis-spring</module>
         <module>sqlhelper-jsqlparser</module>
         <module>sqlhelper-dialect</module>
         <module>sqlhelper-dbutils</module>
@@ -39,8 +41,6 @@
         <module>sqlhelper-cli</module>
         <module>sqlhelper-cli-assembly</module>
         <module>sqlhelper-batchinsert</module>
-        <module>sqlhelper-datasource</module>
-        <module>sqlhelper-mybatis-spring</module>
     </modules>
     <developers>
         <developer>
