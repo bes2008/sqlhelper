@@ -14,10 +14,7 @@
 
 package com.jn.sqlhelper.datasource.factory;
 
-import com.jn.langx.annotation.Name;
-import com.jn.langx.annotation.NonNull;
-import com.jn.langx.annotation.OnClasses;
-import com.jn.langx.annotation.Singleton;
+import com.jn.langx.annotation.*;
 import com.jn.langx.factory.Provider;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.util.ClassLoaders;
@@ -30,6 +27,7 @@ import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.function.Supplier0;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.DataSources;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +55,7 @@ public final class DataSourceFactoryProvider implements Provider<String, DataSou
                 }
                 Class<? extends DataSourceFactory> dsClass = dataSourceFactory.getClass();
 
-                if (Reflects.isAnnotationPresent(dsClass, Name.class)) {
+                if (!Reflects.isAnnotationPresent(dsClass, Name.class)) {
                     logger.warn("Couldn't found the annotation com.jn.langx.annotation.@Name at the class {}", Reflects.getFQNClassName(dsClass));
                     return;
                 }
@@ -88,6 +86,7 @@ public final class DataSourceFactoryProvider implements Provider<String, DataSou
                 }
             }
         });
+
     }
 
     public static DataSourceFactoryProvider getInstance() {
@@ -98,10 +97,12 @@ public final class DataSourceFactoryProvider implements Provider<String, DataSou
         Preconditions.checkNotNull(implementationKey, "the jdbc datasource implementation key is empty or null");
         Preconditions.checkNotNull(implementationKey, "the jdbc datasource factory key is null");
         registry.putIfAbsent(implementationKey, dataSourceFactory);
+        logger.info("Register a jdbc dataSource factory: {}, {}", implementationKey, Reflects.getFQNClassName(dataSourceFactory.getClass()));
     }
 
     @Override
     public DataSourceFactory get(String implementationKey) {
+        Preconditions.checkNotNull(implementationKey, "the implementation is null");
         return registry.get(implementationKey);
     }
 
@@ -113,4 +114,39 @@ public final class DataSourceFactoryProvider implements Provider<String, DataSou
         return dataSourceFactory;
     }
 
+    public DataSourceFactory findSuitableDataSourceFactory(@Nullable String implementationKey) {
+        return findSuitableDataSourceFactory(implementationKey, null);
+    }
+
+    public DataSourceFactory findSuitableDataSourceFactory(@Nullable String implementationKey, @Nullable DataSourceKey key) {
+        DataSourceFactory delegate = null;
+
+        if (Emptys.isEmpty(implementationKey)) {
+            if (key != null) {
+                logger.warn("The 'implementation' property is not set for your jdbc datasource {}, so will select automation", key);
+            } else {
+                logger.warn("The 'implementation' property is not set for one of your jdbc datasources, so will select automation");
+            }
+        } else {
+            delegate = this.get(implementationKey);
+            if (delegate == null) {
+                logger.warn("Can't find the jdbc database factory: {}, so will select automation", implementationKey);
+            }
+        }
+
+        delegate = this.get();
+        if (delegate == null) {
+            logger.error("Can't find any jdbc database factory");
+            throw new IllegalStateException("Can't find any jdbc database factory, please check has any the supported database implementations in your classpath: " + IMPLEMENTATION_JARS);
+        }
+
+        return delegate;
+    }
+
+    private static final String IMPLEMENTATION_JARS = "\n" +
+            "\t1) HikariCP.jar" +
+            "\t2) tomcat-jdbc.jar" +
+            "\t3) commons-dbcp2.jar" +
+            "\t4) druid.jar" +
+            "\t5) c3p0.jar";
 }

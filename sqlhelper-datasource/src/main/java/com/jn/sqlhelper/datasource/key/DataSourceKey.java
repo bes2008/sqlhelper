@@ -69,4 +69,12 @@ public class DataSourceKey {
             this.name = name;
         }
     }
+
+    @Override
+    public String toString() {
+        return "DataSourceKey{" +
+                "group='" + group + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

@@ -34,8 +34,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -48,8 +50,8 @@ import java.util.List;
 
 @EnableConfigurationProperties(MybatisProperties.class)
 @ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class})
-@AutoConfigureBefore(MybatisAutoConfiguration.class)
-@AutoConfigureAfter(DataSourceAutoConfiguration.class)
+@AutoConfigureBefore({MybatisAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@ConditionalOnBean(name = "dataSourcesFactoryBean")
 @Configuration
 public class DynamicSqlSessionTemplateAutoConfiguration {
 
@@ -58,13 +60,20 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
     @Bean("sqlhelperDynamicSqlSessionFactory")
     public DynamicSqlSessionFactory dynamicSqlSessionFactory(
             final ObjectProvider<DataSourceRegistry> registryProvider,
-            ObjectProvider<List<DataSource>> dataSourcesProvider,
+            @Qualifier("dataSourcesFactoryBean")
+                    ListFactoryBean dataSourcesFactoryBean,
             final MybatisProperties properties,
             final ObjectProvider<Interceptor[]> interceptorsProvider,
             final ResourceLoader resourceLoader,
             final ObjectProvider<DatabaseIdProvider> databaseIdProvider,
             final ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) throws BeanCreationException {
-        List<DataSource> dataSources = dataSourcesProvider.getIfAvailable();
+        List<DataSource> dataSources = null;
+        try {
+            List ds = dataSourcesFactoryBean.getObject();
+            dataSources = (List<DataSource>) ds;
+        } catch (Throwable ex) {
+            logger.error(ex.getMessage(), ex);
+        }
         if (Emptys.isNotEmpty(dataSources)) {
             try {
                 registryProvider.getObject();

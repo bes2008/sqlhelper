@@ -15,13 +15,18 @@
 package com.jn.sqlhelper.datasource.factory;
 
 import com.jn.langx.util.Preconditions;
-import com.jn.sqlhelper.datasource.*;
+import com.jn.sqlhelper.datasource.DataSourceRegistry;
+import com.jn.sqlhelper.datasource.DataSources;
+import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
 public class CentralizedDataSourceFactory implements DataSourceFactory {
+    private static final Logger logger = LoggerFactory.getLogger(CentralizedDataSourceFactory.class);
     private DataSourceRegistry registry;
 
     public DataSourceRegistry getRegistry() {
@@ -38,19 +43,20 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
         String name = dataSourceProperties.getName();
         Preconditions.checkNotNull(name, "the datasource name is null");
 
+        DataSourceKey key = dataSourceProperties.getDataSourceKey();
         NamedDataSource dataSource = registry.get(dataSourceProperties.getDataSourceKey());
         if (dataSource == null) {
             String implementationKey = dataSourceProperties.getImplementation();
-            DataSourceFactory delegate = DataSourceFactoryProvider.getInstance().get(implementationKey);
-            if (delegate != null) {
-                dataSource = delegate.get(dataSourceProperties);
-            }
+            DataSourceFactory delegate = DataSourceFactoryProvider.getInstance().findSuitableDataSourceFactory(implementationKey, key);
+            dataSource = delegate.get(dataSourceProperties);
             if (dataSource != null) {
-                registry.register(new DataSourceKey(dataSourceProperties.getGroup(), dataSourceProperties.getName()), dataSource);
+                registry.register(key, dataSource);
+                dataSource = registry.get(key);
             }
         }
         return dataSource;
     }
+
 
     @Override
     public NamedDataSource get(Properties properties) {
@@ -63,12 +69,9 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
         NamedDataSource dataSource = registry.get(key);
         if (dataSource == null) {
             String implementationKey = properties.getProperty(DataSources.DATASOURCE_IMPLEMENT);
-            DataSourceFactory delegate = DataSourceFactoryProvider.getInstance().get(implementationKey);
-            if (delegate != null) {
-                dataSource = delegate.get(properties);
-            }
+            DataSourceFactory delegate = DataSourceFactoryProvider.getInstance().findSuitableDataSourceFactory(implementationKey, key);
+            dataSource = delegate.get(properties);
             if (dataSource != null) {
-
                 registry.register(key, dataSource);
                 dataSource = registry.get(key);
             }

@@ -14,12 +14,12 @@
 
 package com.jn.sqlhelper.datasource.spring.boot;
 
-import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Function;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
+import com.jn.sqlhelper.datasource.definition.NamedDataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.DataSourceKeyParser;
 import org.springframework.beans.factory.ObjectProvider;
@@ -50,15 +50,15 @@ public class NamedDataSourcesAutoConfiguration {
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "sqlhelper.dataSources")
-    public List<DataSourceProperties> dataSourcePropertiesList() {
-        return Collects.newArrayList();
+    @ConfigurationProperties(prefix = "sqlhelper.namedDataSources")
+    public NamedDataSourcesProperties namedDataSourcesProperties() {
+        return new NamedDataSourcesProperties();
     }
 
-    @Bean
+    @Bean(name = "dataSourcesFactoryBean")
     public ListFactoryBean dataSourcesFactoryBean(final CentralizedDataSourceFactory centralizedDataSourceFactory,
-                                                  ObjectProvider<List<DataSourceProperties>> dataSourcePropertiesListProvider) {
-        List<DataSourceProperties> dataSourcePropertiesList = dataSourcePropertiesListProvider.getIfAvailable();
+                                                  NamedDataSourcesProperties namedDataSourcesProperties) {
+        List<DataSourceProperties> dataSourcePropertiesList = namedDataSourcesProperties.getDataSources();
         List<NamedDataSource> dataSources = Pipeline.of(dataSourcePropertiesList).map(new Function<DataSourceProperties, NamedDataSource>() {
             @Override
             public NamedDataSource apply(DataSourceProperties dataSourceProperties) {
