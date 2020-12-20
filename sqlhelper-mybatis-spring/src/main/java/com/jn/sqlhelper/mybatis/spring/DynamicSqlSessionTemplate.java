@@ -14,6 +14,9 @@
 
 package com.jn.sqlhelper.mybatis.spring;
 
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer2;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.executor.BatchResult;
 import org.apache.ibatis.reflection.ExceptionUtil;
@@ -30,6 +33,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
 
 
 public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
@@ -103,18 +107,24 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
         return (DynamicSqlSessionFactory) this.getSqlSessionFactory();
     }
 
+
     /**
      * {@inheritDoc}
+     * 在初始化阶段，初始化 各种Mapper时调用该方法
      */
     @Override
-    public <T> T getMapper(Class<T> type) {
+    public <T> T getMapper(final Class<T> mapperInterface) {
         DynamicSqlSessionFactory sessionFactory = getDynamicSqlSessionFactory();
-        if (sessionFactory.size() == 1) {
-            return getConfiguration().getMapper(type, this);
-        } else {
-
-        }
-        return getConfiguration().getMapper(type, this);
+        final Map<DataSourceKey, Object> delegateMapperMap = Collects.emptyHashMap();
+        Collects.forEach(sessionFactory.getDelegates(), new Consumer2<DataSourceKey, SqlSessionFactory>() {
+            @Override
+            public void accept(DataSourceKey key, SqlSessionFactory delegateFactory) {
+                Object mybatisMapperProxy = delegateFactory.getConfiguration().getMapper(mapperInterface, DynamicSqlSessionTemplate.this);
+                delegateMapperMap.put(key, mybatisMapperProxy);
+            }
+        });
+        DynamicMapper mapper = new DynamicMapper(delegateMapperMap);
+        return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[]{mapperInterface}, mapper);
     }
 
     @Override
@@ -133,6 +143,9 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
 
     /**
      * {@inheritDoc}
+     * 如果只有一个数据源，则直接就是原始Configuration
+     * 如果有多个，并且未指定取哪个，则取 primary 数据源的
+     * 如果有多个，并且指定取了哪个，则取 指定的数据源的
      */
     @Override
     public Configuration getConfiguration() {

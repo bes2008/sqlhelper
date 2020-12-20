@@ -19,6 +19,7 @@ import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.apache.ibatis.session.*;
 
 import java.sql.Connection;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DynamicSqlSessionFactory implements SqlSessionFactory {
@@ -75,12 +76,15 @@ public class DynamicSqlSessionFactory implements SqlSessionFactory {
 
     @Override
     public Configuration getConfiguration() {
-        if(size()==1){
+        if (size() == 1) {
             return Collects.findFirst(factoryMap.values()).getConfiguration();
         }
         DataSourceKey key = null;
         return factoryMap.get(key).getConfiguration();
     }
 
+    public Map<DataSourceKey, SqlSessionFactory> getDelegates() {
+        return Collects.newHashMap(factoryMap);
+    }
 
 }
