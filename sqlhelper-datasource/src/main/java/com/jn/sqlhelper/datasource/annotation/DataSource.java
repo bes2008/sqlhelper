@@ -16,8 +16,24 @@ package com.jn.sqlhelper.datasource.annotation;
 
 import com.jn.sqlhelper.datasource.DataSources;
 
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({METHOD,TYPE})
+@Inherited
 public @interface DataSource {
     public String group() default DataSources.DATASOURCE_GROUP_DEFAULT;
 
-    public String name() default "";
+    /**
+     * the name
+     *
+     * @return
+     */
+    public String value() default DataSources.DATASOURCE_NAME_DEFAULT;
 }

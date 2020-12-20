@@ -21,7 +21,7 @@ import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.sqlhelper.datasource.definition.NamedDataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
-import com.jn.sqlhelper.datasource.key.DataSourceKeyParser;
+import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -35,9 +35,9 @@ import java.util.List;
 public class NamedDataSourcesAutoConfiguration {
 
     @Bean
-    public DataSourceRegistry dataSourceRegistry(ObjectProvider<DataSourceKeyParser> dataSourceKeyParserProvider) {
+    public DataSourceRegistry dataSourceRegistry(ObjectProvider<DataSourceKeyDataSourceParser> dataSourceKeyParserProvider) {
         DataSourceRegistry dataSourceRegistry = new DataSourceRegistry();
-        DataSourceKeyParser dataSourceKeyParser = dataSourceKeyParserProvider.getIfAvailable();
+        DataSourceKeyDataSourceParser dataSourceKeyParser = dataSourceKeyParserProvider.getIfAvailable();
         dataSourceRegistry.setKeyParser(dataSourceKeyParser);
         return dataSourceRegistry;
     }

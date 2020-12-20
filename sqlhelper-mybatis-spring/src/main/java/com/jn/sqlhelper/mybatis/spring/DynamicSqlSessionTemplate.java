@@ -123,7 +123,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
                 delegateMapperMap.put(key, mybatisMapperProxy);
             }
         });
-        DynamicMapper mapper = new DynamicMapper(delegateMapperMap);
+        DynamicMapper mapper = new DynamicMapper(mapperInterface, delegateMapperMap);
         return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[]{mapperInterface}, mapper);
     }
 

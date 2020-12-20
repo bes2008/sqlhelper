@@ -44,27 +44,28 @@ public class DataSources {
     public static final String DATASOURCE_IMPLEMENT_KEY_C3P0 = "c3p0";
 
     public static final String DATASOURCE_IMPLEMENT = "datasource.implementation_key";
-    public static final String DATASOURCE_GROUP= "datasource.group";
+    public static final String DATASOURCE_GROUP = "datasource.group";
     public static final String DATASOURCE_NAME = "datasource.name";
 
-    public static final String DATASOURCE_GROUP_DEFAULT ="DEFAULT";
+    public static final String DATASOURCE_GROUP_DEFAULT = "primary";
+    public static final String DATASOURCE_NAME_DEFAULT = "primary";
+    public static final String DATASOURCE_NAME_WILDCARD = "*";
 
     /**
      * Close the given Connection, obtained from the given DataSource,
      * if it is not managed externally (that is, not bound to the thread).
-     * @param con the Connection to close if necessary
-     * (if this is {@code null}, the call will be ignored)
+     *
+     * @param con        the Connection to close if necessary
+     *                   (if this is {@code null}, the call will be ignored)
      * @param dataSource the DataSource that the Connection was obtained from
-     * (may be {@code null})
+     *                   (may be {@code null})
      */
     public static void releaseConnection(Connection con, DataSource dataSource) {
         try {
             doReleaseConnection(con, dataSource);
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             logger.debug("Could not close JDBC Connection", ex);
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
             logger.debug("Unexpected exception on closing JDBC Connection", ex);
         }
     }
@@ -73,10 +74,10 @@ public class DataSources {
      * Actually close the given Connection, obtained from the given DataSource.
      * Same as {@link #releaseConnection}, but throwing the original SQLException.
      *
-     * @param con the Connection to close if necessary
-     * (if this is {@code null}, the call will be ignored)
+     * @param con        the Connection to close if necessary
+     *                   (if this is {@code null}, the call will be ignored)
      * @param dataSource the DataSource that the Connection was obtained from
-     * (may be {@code null})
+     *                   (may be {@code null})
      * @throws SQLException if thrown by JDBC methods
      */
     public static void doReleaseConnection(Connection con, DataSource dataSource) throws SQLException {
@@ -89,7 +90,8 @@ public class DataSources {
 
     /**
      * Close the Connection, unless a {@link SmartDataSource} doesn't want us to.
-     * @param con the Connection to close if necessary
+     *
+     * @param con        the Connection to close if necessary
      * @param dataSource the DataSource that the Connection was obtained from
      * @throws SQLException if thrown by JDBC methods
      * @see Connection#close()
@@ -105,14 +107,14 @@ public class DataSources {
      * A constant for SQL Server's Snapshot isolation level
      */
     private static final int SQL_SERVER_SNAPSHOT_ISOLATION_LEVEL = 4096;
+
     /**
      * Get the int value of a transaction isolation level by name.
      *
      * @param transactionIsolationName the name of the transaction isolation level
      * @return the int value of the isolation level or -1
      */
-    public static int getTransactionIsolation(final String transactionIsolationName)
-    {
+    public static int getTransactionIsolation(final String transactionIsolationName) {
         if (transactionIsolationName != null) {
             try {
                 // use the english locale to avoid the infamous turkish locale bug
@@ -133,8 +135,7 @@ public class DataSources {
                     default:
                         throw new IllegalArgumentException();
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new IllegalArgumentException("Invalid transaction isolation value: " + transactionIsolationName);
             }
         }
@@ -142,7 +143,7 @@ public class DataSources {
         return -1;
     }
 
-    public static boolean isImplementationKeyMatched(@NonNull String expectedKey, DataSourceProperties properties){
+    public static boolean isImplementationKeyMatched(@NonNull String expectedKey, DataSourceProperties properties) {
         Preconditions.checkNotNull(expectedKey, "the expected jdbc datasource implementation key is null or empty");
         String implementationKey = properties.getImplementation();
         boolean implementationKeyMatched = true;
@@ -157,7 +158,7 @@ public class DataSources {
 
     private static final String DATASOURCE_ID_SEPARATOR = "SQLHelper.DynamicDataSource.ID.separator";
 
-    public static final String getDatasourceIdSeparator(){
+    public static final String getDatasourceIdSeparator() {
         return System.getProperty(DATASOURCE_ID_SEPARATOR, "/");
     }
 
@@ -176,21 +177,21 @@ public class DataSources {
         return toNamedDataSource(dataSource, name);
     }
 
-    public static final NamedDataSource toNamedDataSource(@NonNull DataSource delegate, String name){
+    public static final NamedDataSource toNamedDataSource(@NonNull DataSource delegate, String name) {
         return toNamedDataSource(delegate, null, name);
     }
 
-    public static NamedDataSource toNamedDataSource(DataSource dataSource, DataSourceKey dataSourceKey){
+    public static NamedDataSource toNamedDataSource(DataSource dataSource, DataSourceKey dataSourceKey) {
         return toNamedDataSource(dataSource, dataSourceKey.getGroup(), dataSourceKey.getName());
     }
 
-    public static final NamedDataSource toNamedDataSource(@NonNull DataSource delegate, @Nullable String group, @NonNull String name){
-        Preconditions.checkNotNull(delegate,"the delegate is null");
-        Preconditions.checkNotEmpty(name,"the name is null or empty");
+    public static final NamedDataSource toNamedDataSource(@NonNull DataSource delegate, @Nullable String group, @NonNull String name) {
+        Preconditions.checkNotNull(delegate, "the delegate is null");
+        Preconditions.checkNotEmpty(name, "the name is null or empty");
         group = Strings.useValueIfBlank(group, DataSources.DATASOURCE_GROUP_DEFAULT);
 
-        if(delegate instanceof NamedDataSource){
-            NamedDataSource namedDataSource = (NamedDataSource)delegate;
+        if (delegate instanceof NamedDataSource) {
+            NamedDataSource namedDataSource = (NamedDataSource) delegate;
             namedDataSource.setGroup(group);
             namedDataSource.setName(name);
             return namedDataSource;
