@@ -12,13 +12,14 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.key;
+package com.jn.sqlhelper.datasource.key.parser;
 
 import com.jn.sqlhelper.datasource.DataSources;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import javax.sql.DataSource;
 
-public class RandomDataSourceKeyParser implements DataSourceKeyParser<DataSource> {
+public class RandomDataSourceKeyParser implements DataSourceKeyDataSourceParser<DataSource> {
     public static final RandomDataSourceKeyParser INSTANCE = new RandomDataSourceKeyParser();
 
     @Override

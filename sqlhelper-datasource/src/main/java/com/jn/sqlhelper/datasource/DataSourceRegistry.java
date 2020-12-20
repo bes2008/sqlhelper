@@ -17,43 +17,99 @@ package com.jn.sqlhelper.datasource;
 import com.jn.langx.Delegatable;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.registry.Registry;
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.function.Predicate2;
 import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.DataSourceKeyParser;
-import com.jn.sqlhelper.datasource.key.RandomDataSourceKeyParser;
+import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
+import com.jn.sqlhelper.datasource.key.parser.RandomDataSourceKeyParser;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.regex.Pattern;
 
 public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
-    private volatile DataSourceKey defaultKey = null;
+    private volatile DataSourceKey primary = null;
     private ConcurrentHashMap<DataSourceKey, NamedDataSource> dataSourceRegistry = new ConcurrentHashMap<DataSourceKey, NamedDataSource>();
-    private DataSourceKeyParser keyParser = RandomDataSourceKeyParser.INSTANCE;
+    private DataSourceKeyDataSourceParser keyParser = RandomDataSourceKeyParser.INSTANCE;
+    private Set<DataSourceKey> nonExistDSKeys = new CopyOnWriteArraySet<DataSourceKey>();
 
     public void register(DataSourceKey key, DataSource dataSource) {
-        Preconditions.checkNotEmpty(key, "the datasource key is null or empty");
+        Preconditions.checkNotEmpty(key, "the jdbc datasource key is null or empty");
+        Preconditions.checkArgument(key.isAvailable(), "the jdbc datasource key is invalid: {}", key);
         Preconditions.checkNotNull(dataSource);
-        dataSourceRegistry.put(key, DataSources.toNamedDataSource(dataSource, key));
-        if (defaultKey == null) {
-            defaultKey = key;
-        }
-    }
 
-    @Override
-    public NamedDataSource get(DataSourceKey key) {
-        return dataSourceRegistry.get(key);
+        dataSourceRegistry.put(key, DataSources.toNamedDataSource(dataSource, key));
+        if (primary == null && DataSources.DATASOURCE_GROUP_DEFAULT.equals(key.getGroup())) {
+            primary = key;
+        }
     }
 
     @Override
     public void register(DataSource dataSource) {
         NamedDataSource namedDataSource = wrap(dataSource);
         register(namedDataSource.getDataSourceKey(), namedDataSource);
+    }
+
+
+    @Override
+    public NamedDataSource get(DataSourceKey key) {
+        return dataSourceRegistry.get(key);
+    }
+
+    public List<DataSourceKey> findKey(DataSourceKey key) {
+        Preconditions.checkNotNull(key);
+        Preconditions.checkArgument(key.isAvailable(), "the key is invalid: {}", key);
+
+        NamedDataSource namedDataSource = get(key);
+        if (namedDataSource != null) {
+            return Collects.newArrayList(key);
+        }
+
+        // 已确定的不存在的
+        if (nonExistDSKeys.contains(key)) {
+            return Collections.emptyList();
+        }
+
+        String name = key.getName();
+        if (!name.contains(DataSources.DATASOURCE_NAME_WILDCARD)) {
+            nonExistDSKeys.add(key);
+            return Collections.emptyList();
+        } else {
+            // name 中的 . 就是 真实的 .
+            // name 中的 * 代表正则中的 .?
+            // name 中的 ** 代表正则中的 .*
+            name = name.replace(".", "\\.");
+            name = name.replace("**", ".*");
+            name = name.replace("*", ".?");
+        }
+        final Pattern namePattern = Pattern.compile(name);
+        final String group = key.getGroup();
+
+        List<DataSourceKey> matched = Pipeline.of(dataSourceRegistry.keySet()).filter(new Predicate<DataSourceKey>() {
+            @Override
+            public boolean test(DataSourceKey dataSourceKey) {
+                if (!dataSourceKey.getGroup().equals(group)) {
+                    return false;
+                }
+                return namePattern.matcher(dataSourceKey.getName()).matches();
+            }
+        }).asList();
+
+        if (Emptys.isNotEmpty(matched)) {
+            nonExistDSKeys.add(key);
+            return Collections.emptyList();
+        }
+        return matched;
     }
 
     /**
@@ -117,7 +173,7 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
     }
 
 
-    public void setKeyParser(DataSourceKeyParser keyParser) {
+    public void setKeyParser(DataSourceKeyDataSourceParser keyParser) {
         this.keyParser = keyParser;
     }
 
@@ -138,8 +194,8 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
         return DataSources.toNamedDataSource(dataSource, key);
     }
 
-    public DataSourceKey getDefaultKey() {
-        return defaultKey;
+    public DataSourceKey getPrimary() {
+        return primary;
     }
 
     public int size() {
