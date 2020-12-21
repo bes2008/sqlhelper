@@ -24,6 +24,7 @@ import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.function.Predicate2;
+import com.jn.langx.util.pattern.patternset.AntPathMatcher;
 import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
@@ -35,7 +36,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.regex.Pattern;
 
 public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
     private volatile DataSourceKey primary = null;
@@ -66,47 +66,41 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
         return dataSourceRegistry.get(key);
     }
 
-    public List<DataSourceKey> findKey(DataSourceKey key) {
-        Preconditions.checkNotNull(key);
-        Preconditions.checkArgument(key.isAvailable(), "the key is invalid: {}", key);
+    public List<DataSourceKey> findKeys(DataSourceKey keypattern) {
+        Preconditions.checkNotNull(keypattern);
+        Preconditions.checkArgument(keypattern.isAvailable(), "the key is invalid: {}", keypattern);
 
-        NamedDataSource namedDataSource = get(key);
+        NamedDataSource namedDataSource = get(keypattern);
         if (namedDataSource != null) {
-            return Collects.newArrayList(key);
+            return Collects.newArrayList(keypattern);
         }
 
         // 已确定的不存在的
-        if (nonExistDSKeys.contains(key)) {
+        if (nonExistDSKeys.contains(keypattern)) {
             return Collections.emptyList();
         }
 
-        String name = key.getName();
+        String name = keypattern.getName();
         if (!name.contains(DataSources.DATASOURCE_NAME_WILDCARD)) {
-            nonExistDSKeys.add(key);
+            nonExistDSKeys.add(keypattern);
             return Collections.emptyList();
-        } else {
-            // name 中的 . 就是 真实的 .
-            // name 中的 * 代表正则中的 .?
-            // name 中的 ** 代表正则中的 .*
-            name = name.replace(".", "\\.");
-            name = name.replace("**", ".*");
-            name = name.replace("*", ".?");
         }
-        final Pattern namePattern = Pattern.compile(name);
-        final String group = key.getGroup();
+        final AntPathMatcher antPathMatcher = new AntPathMatcher(name);
+        antPathMatcher.setGlobal(true);
 
+        final String group = keypattern.getGroup();
         List<DataSourceKey> matched = Pipeline.of(dataSourceRegistry.keySet()).filter(new Predicate<DataSourceKey>() {
             @Override
             public boolean test(DataSourceKey dataSourceKey) {
                 if (!dataSourceKey.getGroup().equals(group)) {
                     return false;
                 }
-                return namePattern.matcher(dataSourceKey.getName()).matches();
+                return antPathMatcher.match(dataSourceKey.getName());
             }
         }).asList();
 
         if (Emptys.isNotEmpty(matched)) {
-            nonExistDSKeys.add(key);
+            nonExistDSKeys.add(keypattern);
             return Collections.emptyList();
         }
         return matched;

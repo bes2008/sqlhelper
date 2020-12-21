@@ -120,7 +120,7 @@ public class DataSourceKeySelector {
         }, new Consumer<DataSourceKey>() {
             @Override
             public void accept(DataSourceKey dataSourceKey) {
-                List<DataSourceKey> matched = registry.findKey(dataSourceKey);
+                List<DataSourceKey> matched = registry.findKeys(dataSourceKey);
                 if (Emptys.isNotEmpty(matched)) {
                     dataSourceKeyList.set(matched);
                 }
