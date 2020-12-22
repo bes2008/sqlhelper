@@ -19,17 +19,20 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
-import com.jn.langx.util.collection.multivalue.LinkedMultiValueMap;
+import com.jn.langx.util.collection.multivalue.CommonMultiValueMap;
 import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.collection.stack.ListableStack;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
+import com.jn.langx.util.function.Supplier;
 import com.jn.langx.util.function.Supplier0;
 import com.jn.langx.util.struct.Holder;
 import com.jn.langx.util.struct.ThreadLocalHolder;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
 
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -46,7 +49,12 @@ public class DataSourceKeySelector {
 
     private DataSourceRegistry registry;
     // 初始化阶段初始化，后续只是使用
-    private MultiValueMap<String, DataSourceKeyFilter> groupToFiltersMap = new LinkedMultiValueMap<String, DataSourceKeyFilter>();
+    private MultiValueMap<String, DataSourceKeyFilter> groupToFiltersMap = new CommonMultiValueMap<String, DataSourceKeyFilter>(new LinkedHashMap<String, Collection<DataSourceKeyFilter>>(), new Supplier<String, Collection<DataSourceKeyFilter>>() {
+        @Override
+        public Collection<DataSourceKeyFilter> get(String group) {
+            return null;
+        }
+    });
 
     public void setDataSourceRegistry(DataSourceRegistry registry) {
         this.registry = registry;
@@ -149,7 +157,7 @@ public class DataSourceKeySelector {
             }
 
             // 指定的参数过滤不到的情况下，则基于 group filter
-            List<DataSourceKeyFilter> filters = groupToFiltersMap.get(keys.get(0).getGroup());
+            Collection<DataSourceKeyFilter> filters = groupToFiltersMap.get(keys.get(0).getGroup());
 
             Collects.forEach(filters, new Consumer<DataSourceKeyFilter>() {
                 @Override
