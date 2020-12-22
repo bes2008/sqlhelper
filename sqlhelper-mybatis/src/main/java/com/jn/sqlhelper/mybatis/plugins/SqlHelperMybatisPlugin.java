@@ -113,7 +113,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         } finally {
             requestContext = SqlRequestContextHolder.getInstance().get();
             if (requestContext != null) {
-                requestContext.set(MybatisSqlRequestContextKeys.SQLHELPER_HANDLED, null);
+                requestContext.set(MybatisSqlRequestContextKeys.SQLHELPER_HANDLED, false);
             }
             if (!NestedStatements.isNestedStatement(executorInvocation.getMappedStatement())) {
                 SqlRequestContextHolder.getInstance().clear();
