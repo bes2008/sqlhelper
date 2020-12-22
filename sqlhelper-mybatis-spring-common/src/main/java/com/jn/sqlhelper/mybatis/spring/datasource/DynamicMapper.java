@@ -60,7 +60,14 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         MethodInvocation methodInvocation = new GenericMethodInvocation(proxy, proxy, method, args);
-        return method.invoke(getMapperDelegate(methodInvocation), args);
+        Object mapper = getMapperDelegate(methodInvocation);
+        try {
+            return method.invoke(mapper, args);
+        }catch (Throwable ex){
+            throw ex;
+        }finally {
+            DataSourceKeySelector.removeChoice();
+        }
     }
 
     private Object getMapperDelegate(MethodInvocation methodInvocation) {

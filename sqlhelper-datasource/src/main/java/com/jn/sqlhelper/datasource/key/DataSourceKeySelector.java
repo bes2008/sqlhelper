@@ -110,9 +110,11 @@ public class DataSourceKeySelector {
      * 当离开具有 DataSourceKey 定义的方法时调用
      */
     public static void removeChoice() {
-        ListableStack<DataSourceKey> stack = DATA_SOURCE_KEY_HOLDER.get();
-        stack.pop();
         clearCurrent();
+        ListableStack<DataSourceKey> stack = DATA_SOURCE_KEY_HOLDER.get();
+        if (!stack.isEmpty()) {
+            stack.pop();
+        }
     }
 
     /**
