@@ -1,1 +1,1 @@
-provides: sqlhelper-mybatis, mapper-spring-boot-autoconfigure
+provides: sqlhelper-datasource,sqlhelper-mybatis-spring-common, mapper-spring-boot-autoconfigure
