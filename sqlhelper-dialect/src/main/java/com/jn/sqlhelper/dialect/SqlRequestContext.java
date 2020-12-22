@@ -63,4 +63,8 @@ public class SqlRequestContext<R extends SqlRequest> extends BasedStringAccessor
         request = null;
     }
 
+    @Override
+    public void remove(String key) {
+        getTarget().remove(key);
+    }
 }
