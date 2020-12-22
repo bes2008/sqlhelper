@@ -59,6 +59,8 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |sqlhelper-dbutils | 2.2.0            |1.6+| |对 Apache Commons-DBUtils 支持 (主要包括：通用分页) |
 |sqlhelper-jsqlparser | 3.0.3          |1.6+| |对于要基于SQL Parser接口来完成的功能 由jsqlparser 这个库来实现|
 |sqlhelper-mybatis-solon-plugin|3.2.0|1.8+| |支持solon 框架|
+|sqlhelper-datasource|3.4.0|1.6+||提供通用的多数据源配置、解析、路由框架|
+|sqlhelper-mybatis-spring-common|3.4.0|1.6+||提供mybatis + spring 环境下，通用的代码|
 |sqlhelper-examples|1.0+               |1.8+ | |为这些工具提供 **测试用例** |
 
 
