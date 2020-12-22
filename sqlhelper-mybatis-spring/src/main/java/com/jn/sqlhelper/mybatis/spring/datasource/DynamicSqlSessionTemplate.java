@@ -19,13 +19,11 @@ import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
+import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.executor.BatchResult;
 import org.apache.ibatis.reflection.ExceptionUtil;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.ExecutorType;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.*;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.SqlSessionUtils;
 import org.springframework.beans.factory.DisposableBean;
@@ -66,6 +64,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
     public void clearCache() {
         this.sessionProxy.clearCache();
     }
+
 
     /**
      * {@inheritDoc}
@@ -113,6 +112,79 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
     @Override
     public int delete(String statement, Object parameter) {
         return this.sessionProxy.delete(statement, parameter);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void select(String statement, ResultHandler handler) {
+        this.sessionProxy.select(statement, handler);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void select(String statement, Object parameter, ResultHandler handler) {
+        this.sessionProxy.select(statement, parameter, handler);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void select(String statement, Object parameter, RowBounds rowBounds, ResultHandler handler) {
+        this.sessionProxy.select(statement, parameter, rowBounds, handler);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> Cursor<T> selectCursor(String statement) {
+        return this.sessionProxy.selectCursor(statement);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> Cursor<T> selectCursor(String statement, Object parameter) {
+        return this.sessionProxy.selectCursor(statement, parameter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> Cursor<T> selectCursor(String statement, Object parameter, RowBounds rowBounds) {
+        return this.sessionProxy.selectCursor(statement, parameter, rowBounds);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <E> List<E> selectList(String statement) {
+        return this.sessionProxy.<E> selectList(statement);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <E> List<E> selectList(String statement, Object parameter) {
+        return this.sessionProxy.<E> selectList(statement, parameter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds) {
+        return this.sessionProxy.<E> selectList(statement, parameter, rowBounds);
     }
 
     private DynamicSqlSessionFactory getDynamicSqlSessionFactory() {

@@ -92,6 +92,7 @@ public class DynamicDataSourcesAutoConfiguration {
         selector.setDataSourceRegistry(registry);
         List<DataSourceKeyFilter> filters = filtersProvider.getIfAvailable();
         selector.addDataSourceKeyFilters(filters);
+        selector.setDataSourceKeyRegistry(keyRegistry);
         return selector;
     }
 

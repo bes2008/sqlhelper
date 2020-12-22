@@ -16,6 +16,8 @@ package com.jn.sqlhelper.mybatis.spring.datasource;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
+import com.jn.langx.invocation.GenericMethodInvocation;
+import com.jn.langx.invocation.MethodInvocation;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
@@ -57,11 +59,12 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        return method.invoke(getMapperDelegate(method), args);
+        MethodInvocation methodInvocation = new GenericMethodInvocation(proxy, proxy, method, args);
+        return method.invoke(getMapperDelegate(methodInvocation), args);
     }
 
-    private Object getMapperDelegate(Method method) {
-        DataSourceKey key = selector.getDataSourceKeyRegistry().get(method);
+    private Object getMapperDelegate(MethodInvocation methodInvocation) {
+        DataSourceKey key = selector.getDataSourceKeyRegistry().get(methodInvocation.getJoinPoint());
         if (key != null) {
             NamedDataSource dataSource = selector.getDataSourceRegistry().get(key);
             if (dataSource != null) {
@@ -71,14 +74,14 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         }
         key = DataSourceKeySelector.getCurrent();
         if (key == null) {
-            key = selector.select(dataSourceKeyFilter);
+            key = selector.select(dataSourceKeyFilter, methodInvocation);
             if (key != null) {
                 DataSourceKeySelector.addChoice(key);
                 DataSourceKeySelector.setCurrent(key);
             }
         }
         if (key == null) {
-            throw new IllegalStateException(StringTemplates.formatWithPlaceholder("Can't find a suitable jdbc datasource for method: {}", Reflects.getMethodString(method)));
+            throw new IllegalStateException(StringTemplates.formatWithPlaceholder("Can't find a suitable jdbc datasource for method: {}", Reflects.getMethodString(methodInvocation.getJoinPoint())));
         }
         return delegateMapperMap.get(key);
     }

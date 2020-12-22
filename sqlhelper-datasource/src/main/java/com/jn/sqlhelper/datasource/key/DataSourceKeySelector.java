@@ -16,6 +16,7 @@ package com.jn.sqlhelper.datasource.key;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
+import com.jn.langx.invocation.MethodInvocation;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
@@ -134,7 +135,7 @@ public class DataSourceKeySelector {
     /**
      * 指定的group下，选择某个datasource, 返回的是
      */
-    public final DataSourceKey select(@Nullable DataSourceKeyFilter filter) {
+    public final DataSourceKey select(@Nullable DataSourceKeyFilter filter, @Nullable final MethodInvocation methodInvocation) {
         Preconditions.checkArgument(dataSourceRegistry.size() > 0, "has no any datasource registered");
         if (dataSourceRegistry.size() == 1) {
             return dataSourceRegistry.getPrimary();
@@ -180,7 +181,7 @@ public class DataSourceKeySelector {
             // 如果匹配到的过多，则进行二次过滤
             final Holder<DataSourceKey> keyHolder = new Holder<DataSourceKey>();
             if (filter != null) {
-                keyHolder.set(filter.get(keys));
+                keyHolder.set(filter.apply(keys, methodInvocation));
             }
             if (!keyHolder.isNull()) {
                 return keyHolder.get();
@@ -192,7 +193,7 @@ public class DataSourceKeySelector {
             Collects.forEach(filters, new Consumer<DataSourceKeyFilter>() {
                 @Override
                 public void accept(DataSourceKeyFilter filter) {
-                    keyHolder.set(filter.get(keys));
+                    keyHolder.set(filter.apply(keys, methodInvocation));
                 }
             }, new Predicate<DataSourceKeyFilter>() {
                 @Override

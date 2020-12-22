@@ -16,6 +16,7 @@ package com.jn.sqlhelper.mybatis.spring.datasource;
 
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
+import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import org.apache.ibatis.session.*;
 
 import java.sql.Connection;
@@ -36,42 +37,42 @@ public class DynamicSqlSessionFactory implements SqlSessionFactory {
 
     @Override
     public SqlSession openSession() {
-        return null;
+        return getDelegatingSqlSessionFactory().openSession();
     }
 
     @Override
     public SqlSession openSession(boolean autoCommit) {
-        return null;
+        return getDelegatingSqlSessionFactory().openSession(autoCommit);
     }
 
     @Override
     public SqlSession openSession(Connection connection) {
-        return null;
+        return getDelegatingSqlSessionFactory().openSession(connection);
     }
 
     @Override
     public SqlSession openSession(TransactionIsolationLevel level) {
-        return null;
+        return getDelegatingSqlSessionFactory().openSession(level);
     }
 
     @Override
     public SqlSession openSession(ExecutorType execType) {
-        return null;
+        return getDelegatingSqlSessionFactory().openSession(execType);
     }
 
     @Override
     public SqlSession openSession(ExecutorType execType, boolean autoCommit) {
-        return null;
+        return getDelegatingSqlSessionFactory().openSession(execType, autoCommit);
     }
 
     @Override
     public SqlSession openSession(ExecutorType execType, TransactionIsolationLevel level) {
-        return null;
+        return getDelegatingSqlSessionFactory().openSession(execType, level);
     }
 
     @Override
     public SqlSession openSession(ExecutorType execType, Connection connection) {
-        return null;
+        return getDelegatingSqlSessionFactory().openSession(execType, connection);
     }
 
     @Override
@@ -79,12 +80,15 @@ public class DynamicSqlSessionFactory implements SqlSessionFactory {
         if (size() == 1) {
             return Collects.findFirst(factoryMap.values()).getConfiguration();
         }
-        DataSourceKey key = null;
-        return factoryMap.get(key).getConfiguration();
+        return getDelegatingSqlSessionFactory().getConfiguration();
     }
 
     public Map<DataSourceKey, SqlSessionFactory> getDelegates() {
         return Collects.newHashMap(factoryMap);
     }
 
+
+    private SqlSessionFactory getDelegatingSqlSessionFactory() {
+        return factoryMap.get(DataSourceKeySelector.getCurrent());
+    }
 }
