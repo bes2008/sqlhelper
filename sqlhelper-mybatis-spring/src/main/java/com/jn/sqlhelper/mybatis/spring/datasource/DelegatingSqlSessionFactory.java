@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.datasource;
+package com.jn.sqlhelper.mybatis.spring.datasource;
 
 import com.jn.langx.Delegatable;
 import org.apache.ibatis.session.*;
