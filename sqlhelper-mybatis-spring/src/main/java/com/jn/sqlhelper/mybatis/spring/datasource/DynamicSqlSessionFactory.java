@@ -79,6 +79,7 @@ public class DynamicSqlSessionFactory implements SqlSessionFactory {
     public Configuration getConfiguration() {
         SqlSessionFactory delegate = getDelegatingSqlSessionFactory();
         if (delegate == null) {
+            // 启动阶段，会走这里
             return Collects.findFirst(factoryMap.values()).getConfiguration();
         } else {
             return getDelegatingSqlSessionFactory().getConfiguration();
