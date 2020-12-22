@@ -33,10 +33,10 @@ public class SqlHelperTkMapperAutoConfiguration implements ConfigurationCustomiz
 
     @Override
     public void customize(Configuration configuration) {
-        logger.info("Start to customize mybatis configuration with sqlhelper-tkmapper-spring-boot-starter,tk.mybatis:mapper-spring-boot-starter");
+        logger.info("===[SQLHelper & tk.mapper]=== Start to customize mybatis configuration with sqlhelper-tkmapper-spring-boot-starter,tk.mybatis:mapper-spring-boot-starter");
         configuration.setDefaultScriptingLanguage(CustomScriptLanguageDriver.class);
         configuration.addInterceptor(plugin);
-        logger.info("Add interceptor {} to tk.mapper configuration", plugin);
+        logger.info("===[SQLHelper & tk.mapper]=== Add interceptor {} to tk.mapper configuration", plugin);
     }
 
     @Autowired

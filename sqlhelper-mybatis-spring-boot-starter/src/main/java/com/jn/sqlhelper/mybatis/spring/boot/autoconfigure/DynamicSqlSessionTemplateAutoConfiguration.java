@@ -86,7 +86,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
             try {
                 registryProvider.getObject();
             } catch (BeansException ex) {
-                logger.error("please check whether the sqlhelper-datasource.jar in the classpath or not");
+                logger.error("Please check whether the sqlhelper-datasource.jar in the classpath or not");
                 throw ex;
             }
             final DynamicSqlSessionFactory dynamicSqlSessionFactory = new DynamicSqlSessionFactory();
@@ -95,6 +95,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                 public void accept(DataSource dataSource) {
                     NamedDataSource namedDataSource = registryProvider.getObject().wrap(dataSource);
                     try {
+                        logger.info("===[SQLHelper & MyBatis]=== Create mybatis SqlSessionFactory instance for datasource {}", namedDataSource.getDataSourceKey());
                         SqlSessionFactory delegate = createSqlSessionFactory(dataSource, properties, interceptorsProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider);
                         if (delegate != null) {
                             DelegatingSqlSessionFactory sqlSessionFactory = new DelegatingSqlSessionFactory();
@@ -104,7 +105,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                             dynamicSqlSessionFactory.addSqlSessionFactory(namedDataSource.getDataSourceKey(), sqlSessionFactory);
                         }
                     } catch (Throwable ex) {
-                        logger.error(ex.getMessage(), ex);
+                        logger.error("Error occur when create SqlSessionFactory for datasource {}, error: {}", namedDataSource.getDataSourceKey(), ex.getMessage(), ex);
                     }
                 }
             });

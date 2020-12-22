@@ -97,6 +97,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                 public void accept(DataSource dataSource) {
                     NamedDataSource namedDataSource = registryProvider.getObject().wrap(dataSource);
                     try {
+                        logger.info("===[SQLHelper & tk.mapper]=== Create mybatis SqlSessionFactory instance for datasource {}", namedDataSource.getDataSourceKey());
                         SqlSessionFactory delegate = createSqlSessionFactory(dataSource, properties, interceptorsProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider);
                         if (delegate != null) {
                             DelegatingSqlSessionFactory sqlSessionFactory = new DelegatingSqlSessionFactory();
@@ -106,7 +107,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                             dynamicSqlSessionFactory.addSqlSessionFactory(namedDataSource.getDataSourceKey(), sqlSessionFactory);
                         }
                     } catch (Throwable ex) {
-                        logger.error(ex.getMessage(), ex);
+                        logger.error("Error occur when create SqlSessionFactory for datasource {}, error: {}", namedDataSource.getDataSourceKey(), ex.getMessage(), ex);
                     }
                 }
             });

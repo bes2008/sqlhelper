@@ -37,10 +37,10 @@ public class SqlHelperMybatisPlus2xAutoConfiguration implements ConfigurationCus
 
     @Override
     public void customize(Configuration configuration) {
-        logger.info("Start to customize mybatis-plus 2.x configuration with sqlhelper-mybatisplus_2x-spring-boot-starter,mybatis-plus-boot-starter");
+        logger.info("===[SQLHelper & MyBatis-Plus 2.x]=== Start to customize mybatis-plus 2.x configuration with sqlhelper-mybatisplus_2x-spring-boot-starter,mybatis-plus-boot-starter");
         configuration.setDefaultScriptingLanguage(CustomMybatisPlus2xScriptLanguageDriver.class);
         configuration.addInterceptor(plugin);
-        logger.info("Add interceptor {} to mybatis-plus 2.x configuration", plugin);
+        logger.info("===[SQLHelper & MyBatis-Plus 2.x]=== Add interceptor {} to mybatis-plus 2.x configuration", plugin);
     }
 
     @Autowired

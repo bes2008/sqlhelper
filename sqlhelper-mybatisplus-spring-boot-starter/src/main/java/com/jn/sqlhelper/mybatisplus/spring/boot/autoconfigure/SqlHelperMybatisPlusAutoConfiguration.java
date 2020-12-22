@@ -17,32 +17,27 @@ package com.jn.sqlhelper.mybatisplus.spring.boot.autoconfigure;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
-import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
-import com.jn.sqlhelper.mybatis.MybatisUtils;
-import com.jn.sqlhelper.mybatis.SqlHelperMybatisProperties;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
 import com.jn.sqlhelper.mybatisplus.plugins.pagination.CustomMybatisPlusScriptLanguageDriver;
-import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 
 @org.springframework.context.annotation.Configuration
 @AutoConfigureBefore(MybatisPlusAutoConfiguration.class)
 public class SqlHelperMybatisPlusAutoConfiguration implements ConfigurationCustomizer {
     private static final Logger logger = LoggerFactory.getLogger(SqlHelperMybatisPlusAutoConfiguration.class);
     private SqlHelperMybatisPlugin plugin;
+
     @Override
     public void customize(MybatisConfiguration configuration) {
-        logger.info("Start to customize mybatis-plus configuration with sqlhelper-mybatisplus-spring-boot-starter, mybatis-plus-boot-starter");
+        logger.info("===[SQLHelper & MyBatis-Plus 3.x]=== Start to customize mybatis-plus configuration with sqlhelper-mybatisplus-spring-boot-starter, mybatis-plus-boot-starter");
         configuration.setDefaultScriptingLanguage(CustomMybatisPlusScriptLanguageDriver.class);
         configuration.addInterceptor(plugin);
-        logger.info("Add interceptor {} to mybatis-plus 3.x configuration", plugin);
+        logger.info("===[SQLHelper & MyBatis-Plus 3.x]=== Add interceptor {} to mybatis-plus 3.x configuration", plugin);
     }
+
     @Autowired
     public void setPlugin(SqlHelperMybatisPlugin plugin) {
         this.plugin = plugin;
