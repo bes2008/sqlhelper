@@ -64,7 +64,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 
 ## tools usage
 ### 关键特性
-1. 支持 MyBatis, MyBatis-Plus, SpringJdbc, Apache Commons-DBUtils, JFinal, EBean, Mango, Hibernate 等众多对数据库操作的框架 
+1. 支持 MyBatis, MyBatis-Plus, Tk.Mapper, SpringJdbc, Apache Commons-DBUtils, JFinal, EBean, Mango, Hibernate 等众多对数据库操作的框架 
 2. 支持 110+ 数据库（所有功能均支持，不限于分页功能）, 支持的数据库列表参考： ***[here](https://github.com/f1194361820/sqlhelper/wiki/Pagination_Database)***. 如果你想了解这些数据库的排名，可以参考这里：[DB Engines](https://db-engines.com/en/ranking/relational+dbms).下面是所有支持的国产数据库:
   + AliSQL (阿里 MySQL)
   + AntDB (亚信)
@@ -104,7 +104,8 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 11. 支持 **Memory Pagination**
 12. 支持 SqlSymbolMapper, 可以使用它来自动映射数据库字段、表名等
 13. 支持 **Dump DDL**
-14. 支持 **like parameter escape [%]** : mybatis, mybatis-plus
+14. 支持 **like parameter escape [%]** : mybatis, mybatis-plus, tk.mapper 下使用
+15. 动态数据源 Dynamic DataSource，目前支持在 mybatis, mybatis-plus, tk.mapper 下使用 
 
 #### sqlhelper vs mybatis-pagehelper
 |  metric                  | mybatis-pagehelper |      sqlhelper    |
@@ -154,6 +155,56 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 
 
 
+# Dynamic DataSource
+目前针对动态（多）数据源这块，提供了方便的，易扩展的框架，可以基于此多数据源框架与各种ORM框架结合。
+此外目前内置对 MyBatis 系框架（ mybatis, mybatis-plus(2.x, 3.x), tk.mapper 等）做了内置的支持。提供了便利的 spring boot starter。
+
+## usage
+```yaml
+sqlhelper:
+  dynamicDataSource:
+    enabled: true
+    dataSources:
+      - group: A
+        name: master
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+      - group: A
+        name: slave-1
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+      - group: A
+        name: slave-2
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+      - group: B
+        name: mysql
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+      - group: C
+        name: oracle
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+      - group: C
+        name: xxxx
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+```
+
+
+
 # UrlParser
 Parse jdbc url.
 ## usage:
@@ -181,7 +232,7 @@ QQ 交流群: 750929088
 + [easyjson](https://github.com/fangjinuo/easyjson): 一个通用的JSON库门面，可以无缝的在各个JSON库之间切换，就像slf4j那样。
 + [sqlhelper](https://github.com/fangjinuo/sqlhelper): SQL工具套件（通用分页、DDL Dump、SQLParser、URL Parser、批量操作工具等）。
 + [esmvc](https://github.com/fangjinuo/es-mvc): ElasticSearch 通用客户端，就像MyBatis Mapper那样顺滑
-+ [redisclient](https://github.com/fangjinuo/redisclient): 基于Spring RestTemplate提供的客户端
++ [agileway](https://github.com/fangjinuo/agileway): 提供大量的框架扩展，方便日常开发
 + [audit](https://github.com/fangjinuo/audit)：通用的Java应用审计框架
 
 ## 鸣谢

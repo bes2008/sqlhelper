@@ -2,9 +2,10 @@
 
 SQLHelper提供了如下功能:
   1) Pagination （通用的分页插件，可应用于大部分数据库开发框架里）
-  2) URL Parser （用于解析连接数据库的url）
-  3) DDL Dumper （dump数据库的DDL，可以用于软件版本升级时验证SQL升级脚本的正确性，以及其他场景）
-  4) Batch Inserter （批量插入框架，用于做性能优化时批量插入数据）
+  2) Dynamic DataSource (动态数据源)
+  3) URL Parser （用于解析连接数据库的url）
+  4) DDL Dumper （dump数据库的DDL，可以用于软件版本升级时验证SQL升级脚本的正确性，以及其他场景）
+  5) Batch Inserter （批量插入框架，用于做性能优化时批量插入数据）
 
 # 模块说明
   |   module         | sqlhelper version | JDK |  Description      |
@@ -101,6 +102,55 @@ SQLHelper提供了如下功能:
 |  MyBatis-Plus            |         X          |         √         |   
 |  Apache Commons-DBUtils  |         X          |         √         |
 |  Subquery pagination     |         X          |         √         |  
+
+
+# 动态（多）数据源
+目前针对动态（多）数据源这块，提供了方便的，易扩展的框架，可以基于此多数据源框架与各种ORM框架结合。
+此外目前内置对 MyBatis 系框架（ mybatis, mybatis-plus(2.x, 3.x), tk.mapper 等）做了内置的支持。提供了便利的 spring boot starter。
+
+## usage
+```yaml
+sqlhelper:
+  dynamicDataSource:
+    enabled: true
+    dataSources:
+      - group: A
+        name: master
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+      - group: A
+        name: slave-1
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+      - group: A
+        name: slave-2
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+      - group: B
+        name: mysql
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+      - group: C
+        name: oracle
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+      - group: C
+        name: xxxx
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+```
 
 
 # UrlParser
