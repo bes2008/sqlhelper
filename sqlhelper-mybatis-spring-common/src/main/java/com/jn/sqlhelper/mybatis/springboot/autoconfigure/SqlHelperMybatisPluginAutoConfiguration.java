@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.spring.boot.autoconfigure;
+package com.jn.sqlhelper.mybatis.springboot.autoconfigure;
 
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
@@ -30,33 +30,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SqlHelperMybatisPluginAutoConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(SqlHelperMybatisPluginAutoConfiguration.class);
-    @Bean
-    @ConfigurationProperties(prefix = "sqlhelper.mybatis.instrumentor")
-    public SQLInstrumentorConfig sqlInstrumentConfig() {
-        return new SQLInstrumentorConfig();
-    }
-
-    @Bean
-    @ConfigurationProperties(prefix = "sqlhelper.mybatis.pagination")
-    public PaginationConfig paginationPluginConfig() {
-        return new PaginationConfig();
-    }
 
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.mybatis")
-    public SqlHelperMybatisProperties sqlHelperMybatisProperties(SQLInstrumentorConfig sqlInstrumentConfig, PaginationConfig paginationPluginConfig) {
+    public SqlHelperMybatisProperties sqlHelperMybatisProperties() {
         SqlHelperMybatisProperties p = new SqlHelperMybatisProperties();
-        p.setInstrumentor(sqlInstrumentConfig);
-        p.setPagination(paginationPluginConfig);
+        SQLInstrumentorConfig config = p.getInstrumentor();
+        config.setName("mybatis");
         return p;
     }
 
-    @Autowired
-    private SqlHelperMybatisProperties sqlHelperMybatisProperties;
-
     @Bean
     @ConditionalOnMissingBean
-    public SqlHelperMybatisPlugin sqlHelperMybatisPlugin(){
+    public SqlHelperMybatisPlugin sqlHelperMybatisPlugin(SqlHelperMybatisProperties sqlHelperMybatisProperties){
         SqlHelperMybatisPlugin plugin = new SqlHelperMybatisPlugin();
         plugin.setPaginationConfig(sqlHelperMybatisProperties.getPagination());
         plugin.setInstrumentorConfig(sqlHelperMybatisProperties.getInstrumentor());

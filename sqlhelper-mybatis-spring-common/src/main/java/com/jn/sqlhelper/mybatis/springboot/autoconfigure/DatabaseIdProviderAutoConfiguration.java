@@ -12,14 +12,10 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.spring.boot.autoconfigure;
+package com.jn.sqlhelper.mybatis.springboot.autoconfigure;
 
-import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
-import com.jn.sqlhelper.mybatis.SqlHelperMybatisProperties;
-import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,7 +25,5 @@ public class DatabaseIdProviderAutoConfiguration {
     public DatabaseIdProvider databaseIdProvider() {
         return MybatisUtils.vendorDatabaseIdProvider();
     }
-
-
 
 }

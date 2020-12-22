@@ -37,52 +37,17 @@ import tk.mybatis.mapper.autoconfigure.MapperAutoConfiguration;
 public class SqlHelperTkMapperAutoConfiguration implements ConfigurationCustomizer {
     private static final Logger logger = LoggerFactory.getLogger(SqlHelperTkMapperAutoConfiguration.class);
 
-    @Bean
-    public DatabaseIdProvider databaseIdProvider() {
-        return MybatisUtils.vendorDatabaseIdProvider();
-    }
-
-    @Bean
-    @ConfigurationProperties(prefix = "sqlhelper.mybatis.instrumentor")
-    public SQLInstrumentorConfig sqlInstrumentConfig() {
-        return new SQLInstrumentorConfig();
-    }
-
-    @Bean
-    @ConfigurationProperties(prefix = "sqlhelper.mybatis.pagination")
-    public PaginationConfig paginationPluginConfig() {
-        return new PaginationConfig();
-    }
-
-    @Bean
-    @ConfigurationProperties(prefix = "sqlhelper.mybatis")
-    public SqlHelperMybatisProperties sqlHelperMybatisProperties(SQLInstrumentorConfig sqlInstrumentConfig, PaginationConfig paginationPluginConfig) {
-        SqlHelperMybatisProperties p = new SqlHelperMybatisProperties();
-        p.setInstrumentor(sqlInstrumentConfig);
-        p.setPagination(paginationPluginConfig);
-        return p;
-    }
-
-    private SqlHelperMybatisProperties sqlHelperMybatisProperties;
-
-    @Autowired
-    public void setSqlHelperMybatisProperties(SqlHelperMybatisProperties sqlHelperMybatisProperties) {
-        this.sqlHelperMybatisProperties = sqlHelperMybatisProperties;
-    }
-
+    private SqlHelperMybatisPlugin plugin;
 
     @Override
     public void customize(Configuration configuration) {
         logger.info("Start to customize mybatis configuration with mybatis-spring-boot-autoconfigure");
         configuration.setDefaultScriptingLanguage(CustomScriptLanguageDriver.class);
-
-        SqlHelperMybatisPlugin plugin = new SqlHelperMybatisPlugin();
-        plugin.setPaginationConfig(sqlHelperMybatisProperties.getPagination());
-        plugin.setInstrumentorConfig(sqlHelperMybatisProperties.getInstrumentor());
-        plugin.init();
-
-        logger.info("Add interceptor {} to mybatis configuration", plugin);
-        logger.info("The properties of the mybatis plugin [{}] is: {}", Reflects.getFQNClassName(SqlHelperMybatisPlugin.class), sqlHelperMybatisProperties);
         configuration.addInterceptor(plugin);
+    }
+
+    @Autowired
+    public void setPlugin(SqlHelperMybatisPlugin plugin) {
+        this.plugin = plugin;
     }
 }

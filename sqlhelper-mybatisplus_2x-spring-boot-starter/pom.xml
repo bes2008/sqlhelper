@@ -22,6 +22,10 @@
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatisplus_2x</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-mybatis-spring-common</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>

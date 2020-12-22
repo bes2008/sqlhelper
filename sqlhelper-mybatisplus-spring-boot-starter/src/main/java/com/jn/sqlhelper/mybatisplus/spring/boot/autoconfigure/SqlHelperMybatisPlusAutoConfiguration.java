@@ -35,42 +35,16 @@ import org.springframework.context.annotation.Bean;
 @AutoConfigureBefore(MybatisPlusAutoConfiguration.class)
 public class SqlHelperMybatisPlusAutoConfiguration implements ConfigurationCustomizer {
     private static final Logger logger = LoggerFactory.getLogger(SqlHelperMybatisPlusAutoConfiguration.class);
-
-    @Bean
-    public DatabaseIdProvider databaseIdProvider() {
-        return MybatisUtils.vendorDatabaseIdProvider();
-    }
-
-    @Bean
-    @ConfigurationProperties(prefix = "sqlhelper.mybatis")
-    public SqlHelperMybatisProperties sqlHelperMybatisProperties() {
-        SqlHelperMybatisProperties properties = new SqlHelperMybatisProperties();
-        SQLInstrumentorConfig config = properties.getInstrumentor();
-        config.setName("mybatisplus");
-        return properties;
-    }
-
-    private SqlHelperMybatisProperties sqlHelperMybatisProperties;
-
-    @Autowired
-    public void setSqlHelperMybatisPlusProperties(SqlHelperMybatisProperties sqlHelperMybatisProperties) {
-        this.sqlHelperMybatisProperties = sqlHelperMybatisProperties;
-    }
-
+    private SqlHelperMybatisPlugin plugin;
     @Override
     public void customize(MybatisConfiguration configuration) {
         logger.info("Start to customize mybatis-plus configuration with mybatis-plus-boot-starter");
         configuration.setDefaultScriptingLanguage(CustomMybatisPlusScriptLanguageDriver.class);
-
-        SqlHelperMybatisPlugin plugin = new SqlHelperMybatisPlugin();
-        plugin.setPaginationConfig(sqlHelperMybatisProperties.getPagination());
-        plugin.setInstrumentorConfig(sqlHelperMybatisProperties.getInstrumentor());
-        plugin.init();
-
-        logger.info("Add interceptor {} to mybatis-plus configuration", plugin);
-        logger.info("The properties of the mybatis-plus plugin [{}] is: {}", Reflects.getFQNClassName(SqlHelperMybatisPlugin.class), sqlHelperMybatisProperties);
         configuration.addInterceptor(plugin);
     }
-
+    @Autowired
+    public void setPlugin(SqlHelperMybatisPlugin plugin) {
+        this.plugin = plugin;
+    }
 
 }

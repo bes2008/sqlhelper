@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.spring.boot.autoconfigure;
+package com.jn.sqlhelper.mybatis.springboot.autoconfigure;
 
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Emptys;

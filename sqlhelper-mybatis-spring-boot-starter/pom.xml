@@ -86,7 +86,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatis-spring</artifactId>
+            <artifactId>sqlhelper-mybatis-spring-common</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

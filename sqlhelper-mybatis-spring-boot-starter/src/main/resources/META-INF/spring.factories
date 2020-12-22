@@ -1,5 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.jn.sqlhelper.mybatis.spring.boot.autoconfigure.DatabaseIdProviderAutoConfiguration,\
-  com.jn.sqlhelper.mybatis.spring.boot.autoconfigure.SqlHelperMybatisPluginAutoConfiguration,\
-  com.jn.sqlhelper.mybatis.spring.boot.autoconfigure.SqlHelperMybatisAutoConfiguration,\
-  com.jn.sqlhelper.mybatis.spring.boot.autoconfigure.DynamicSqlSessionTemplateAutoConfiguration
+  com.jn.sqlhelper.mybatis.springboot.autoconfigure.SqlHelperMybatisAutoConfiguration,\
+  com.jn.sqlhelper.mybatis.springboot.autoconfigure.DynamicSqlSessionTemplateAutoConfiguration

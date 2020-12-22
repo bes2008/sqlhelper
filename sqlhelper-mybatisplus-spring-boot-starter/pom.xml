@@ -19,7 +19,6 @@
                 <artifactId>mybatis-spring</artifactId>
                 <version>${mybatis.spring.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot</artifactId>
@@ -61,10 +60,13 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatisplus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-mybatis-spring-common</artifactId>
         </dependency>
 
         <dependency>

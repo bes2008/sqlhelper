@@ -17,7 +17,6 @@
     <modules>
         <module>sqlhelper-common</module>
         <module>sqlhelper-datasource</module>
-        <module>sqlhelper-mybatis-spring</module>
         <module>sqlhelper-jsqlparser</module>
         <module>sqlhelper-dialect</module>
         <module>sqlhelper-dbutils</module>
@@ -27,6 +26,7 @@
         <module>sqlhelper-ebean</module>
         <module>sqlhelper-mybatis</module>
         <module>sqlhelper-mybatis-solon-plugin</module>
+        <module>sqlhelper-mybatis-spring-common</module>
         <module>sqlhelper-mybatis-spring-boot-starter</module>
         <module>sqlhelper-mybatis-over-pagehelper</module>
         <module>sqlhelper-mybatisplus-commons</module>
@@ -190,7 +190,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.fangjinuo.sqlhelper</groupId>
-                <artifactId>sqlhelper-mybatis-spring</artifactId>
+                <artifactId>sqlhelper-mybatis-spring-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
