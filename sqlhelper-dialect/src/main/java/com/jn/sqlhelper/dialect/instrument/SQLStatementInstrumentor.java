@@ -90,7 +90,7 @@ public class SQLStatementInstrumentor implements Initializable {
                 throw new IllegalStateException("the 'config' field is null");
             }
             setName(this.config.getName());
-            logger.info("Start to initial the {} SQLStatementInstrumentor with configuration{}", this.name, this.config);
+            logger.info("Start to initial the {} SQLStatementInstrumentor with configuration: {}", this.name, this.config);
             this.dialectRegistry = DialectRegistry.getInstance();
             inited = true;
             if (this.config.isCacheInstrumentedSql()) {
