@@ -31,7 +31,10 @@ import com.jn.langx.util.function.Supplier0;
 import com.jn.langx.util.struct.Holder;
 import com.jn.langx.util.struct.ThreadLocalHolder;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
+import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
@@ -39,6 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class DataSourceKeySelector {
+    private static final Logger logger = LoggerFactory.getLogger(DataSourceKeySelector.class);
     private static final ThreadLocalHolder<ListableStack<DataSourceKey>> DATA_SOURCE_KEY_HOLDER = new ThreadLocalHolder<ListableStack<DataSourceKey>>(
             new Supplier0<ListableStack<DataSourceKey>>() {
                 @Override
@@ -84,7 +88,7 @@ public class DataSourceKeySelector {
         });
     }
 
-    public void addDataSourceKeyFilters(List<DataSourceKeyFilter> filters){
+    public void addDataSourceKeyFilters(List<DataSourceKeyFilter> filters) {
         Collects.forEach(filters, new Consumer<DataSourceKeyFilter>() {
             @Override
             public void accept(DataSourceKeyFilter filter) {
@@ -119,7 +123,7 @@ public class DataSourceKeySelector {
         stack.clear();
     }
 
-    public static void setCurrent(DataSourceKey key){
+    public static void setCurrent(DataSourceKey key) {
         Preconditions.checkNotNull(key);
         CURRENT_SELECTED.set(key);
     }
@@ -132,10 +136,38 @@ public class DataSourceKeySelector {
         CURRENT_SELECTED.reset();
     }
 
+    public final DataSourceKey select(@Nullable DataSourceKeyFilter dataSourceKeyFilter, @Nullable final MethodInvocation methodInvocation) {
+        DataSourceKey key = this.dataSourceKeyRegistry.get(methodInvocation.getJoinPoint());
+        if (key != null) {
+            NamedDataSource dataSource = dataSourceRegistry.get(key);
+            if (dataSource != null) {
+                DataSourceKeySelector.addChoice(key);
+                DataSourceKeySelector.setCurrent(key);
+            }
+        }
+        key = DataSourceKeySelector.getCurrent();
+        if (key == null) {
+            key = doSelect(dataSourceKeyFilter, methodInvocation);
+            if (key != null) {
+                DataSourceKeySelector.addChoice(key);
+                DataSourceKeySelector.setCurrent(key);
+            }
+        }
+        if (key != null) {
+            NamedDataSource dataSource = dataSourceRegistry.get(key);
+            if (dataSource == null) {
+                logger.warn("Can't find a datasource named: {}", key);
+            }
+        }
+        return key;
+    }
+
     /**
-     * 指定的group下，选择某个datasource, 返回的是
+     * 指定的group下，选择某个datasource, 返回的是该组下的匹配到的 datasource key
+     * <p>
+     * 这里面不能去设置CURRENT_SELECTED
      */
-    public final DataSourceKey select(@Nullable DataSourceKeyFilter filter, @Nullable final MethodInvocation methodInvocation) {
+    protected DataSourceKey doSelect(@Nullable DataSourceKeyFilter filter, @Nullable final MethodInvocation methodInvocation) {
         Preconditions.checkArgument(dataSourceRegistry.size() > 0, "has no any datasource registered");
         if (dataSourceRegistry.size() == 1) {
             return dataSourceRegistry.getPrimary();
@@ -147,10 +179,11 @@ public class DataSourceKeySelector {
         }
 
         if (!CURRENT_SELECTED.isNull()) {
-            return CURRENT_SELECTED.get();
+            return getCurrent();
         }
 
         final Holder<List<DataSourceKey>> dataSourceKeyList = new Holder<List<DataSourceKey>>();
+        // 遍历 stack
         Collects.forEach(stack, new Predicate<DataSourceKey>() {
             @Override
             public boolean test(DataSourceKey dataSourceKey) {
@@ -202,7 +235,6 @@ public class DataSourceKeySelector {
                 }
             });
 
-            CURRENT_SELECTED.set(keyHolder.get());
             return keyHolder.get();
         }
 
