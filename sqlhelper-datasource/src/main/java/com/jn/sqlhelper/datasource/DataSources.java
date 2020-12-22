@@ -48,7 +48,7 @@ public class DataSources {
     public static final String DATASOURCE_NAME = "datasource.name";
 
     public static final String DATASOURCE_GROUP_DEFAULT = "primary";
-    public static final String DATASOURCE_NAME_DEFAULT = "primary";
+    public static final String DATASOURCE_PRIMARY = "primary";
     public static final String DATASOURCE_NAME_WILDCARD = "*";
 
     /**

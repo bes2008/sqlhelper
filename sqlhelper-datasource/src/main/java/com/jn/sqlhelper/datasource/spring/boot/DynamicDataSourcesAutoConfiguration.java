@@ -19,6 +19,7 @@ import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Function;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
+import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.sqlhelper.datasource.definition.NamedDataSourcesProperties;
@@ -35,6 +36,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,8 +66,11 @@ public class DynamicDataSourcesAutoConfiguration {
     }
 
     @Bean(name = "dataSourcesFactoryBean")
-    public ListFactoryBean dataSourcesFactoryBean(final CentralizedDataSourceFactory centralizedDataSourceFactory,
-                                                  NamedDataSourcesProperties namedDataSourcesProperties) {
+    public ListFactoryBean dataSourcesFactoryBean(
+            final CentralizedDataSourceFactory centralizedDataSourceFactory,
+            NamedDataSourcesProperties namedDataSourcesProperties,
+            // 该参数只是为了兼容Spring Boot 默认的 DataSource配置而已
+            ObjectProvider<DataSource> springBootOriginDataSourceProvider) {
         List<DataSourceProperties> dataSourcePropertiesList = namedDataSourcesProperties.getDataSources();
         List<NamedDataSource> dataSources = Pipeline.of(dataSourcePropertiesList).map(new Function<DataSourceProperties, NamedDataSource>() {
             @Override
@@ -73,6 +78,18 @@ public class DynamicDataSourcesAutoConfiguration {
                 return centralizedDataSourceFactory.get(dataSourceProperties);
             }
         }).clearNulls().asList();
+
+        // 处理 Spring Boot 默认数据源
+        DataSource springBootOriginDataSource = springBootOriginDataSourceProvider.getIfAvailable();
+        if (springBootOriginDataSource != null) {
+            NamedDataSource namedDataSource = DataSources.toNamedDataSource(springBootOriginDataSource);
+            if (dataSources.isEmpty()) {
+                namedDataSource.setName(DataSources.DATASOURCE_PRIMARY);
+            }
+            centralizedDataSourceFactory.getRegistry().register(namedDataSource);
+            dataSources.add(namedDataSource);
+        }
+
         ListFactoryBean dataSourcesFactoryBean = new ListFactoryBean();
         dataSourcesFactoryBean.setTargetListClass(ArrayList.class);
         dataSourcesFactoryBean.setSourceList(dataSources);
