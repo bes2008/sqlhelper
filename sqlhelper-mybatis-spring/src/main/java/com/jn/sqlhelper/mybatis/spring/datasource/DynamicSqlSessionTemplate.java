@@ -19,25 +19,22 @@ import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
-import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.executor.BatchResult;
 import org.apache.ibatis.reflection.ExceptionUtil;
-import org.apache.ibatis.session.*;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.SqlSessionUtils;
-import org.springframework.beans.factory.DisposableBean;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.sql.Connection;
-import java.util.List;
 import java.util.Map;
 
 
 public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
-    private final SqlSession sessionProxy;
     private DataSourceKeySelector selector;
     private DataSourceKeyFilter mapperDataSourceKeyFilter;
 
@@ -47,10 +44,6 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
 
     public DynamicSqlSessionTemplate(SqlSessionFactory sqlSessionFactory, ExecutorType executorType) {
         super(sqlSessionFactory, ExecutorType.SIMPLE, null);
-        this.sessionProxy = (SqlSession) Proxy.newProxyInstance(
-                SqlSessionFactory.class.getClassLoader(),
-                new Class[]{SqlSession.class},
-                new MultiDataSourceSqlSessionInterceptor());
     }
 
     public void setSelector(DataSourceKeySelector selector) {
@@ -59,132 +52,6 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
 
     public void setMapperDataSourceKeyFilter(DataSourceKeyFilter mapperDataSourceKeyFilter) {
         this.mapperDataSourceKeyFilter = mapperDataSourceKeyFilter;
-    }
-
-    public void clearCache() {
-        this.sessionProxy.clearCache();
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int insert(String statement) {
-        return this.sessionProxy.insert(statement);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int insert(String statement, Object parameter) {
-        return this.sessionProxy.insert(statement, parameter);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int update(String statement) {
-        return this.sessionProxy.update(statement);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int update(String statement, Object parameter) {
-        return this.sessionProxy.update(statement, parameter);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int delete(String statement) {
-        return this.sessionProxy.delete(statement);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int delete(String statement, Object parameter) {
-        return this.sessionProxy.delete(statement, parameter);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void select(String statement, ResultHandler handler) {
-        this.sessionProxy.select(statement, handler);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void select(String statement, Object parameter, ResultHandler handler) {
-        this.sessionProxy.select(statement, parameter, handler);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void select(String statement, Object parameter, RowBounds rowBounds, ResultHandler handler) {
-        this.sessionProxy.select(statement, parameter, rowBounds, handler);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> Cursor<T> selectCursor(String statement) {
-        return this.sessionProxy.selectCursor(statement);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> Cursor<T> selectCursor(String statement, Object parameter) {
-        return this.sessionProxy.selectCursor(statement, parameter);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> Cursor<T> selectCursor(String statement, Object parameter, RowBounds rowBounds) {
-        return this.sessionProxy.selectCursor(statement, parameter, rowBounds);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <E> List<E> selectList(String statement) {
-        return this.sessionProxy.<E> selectList(statement);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <E> List<E> selectList(String statement, Object parameter) {
-        return this.sessionProxy.<E> selectList(statement, parameter);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds) {
-        return this.sessionProxy.<E> selectList(statement, parameter, rowBounds);
     }
 
     private DynamicSqlSessionFactory getDynamicSqlSessionFactory() {
@@ -208,7 +75,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
             }
         });
         DynamicMapper mapper = new DynamicMapper(mapperInterface, delegateMapperMap, selector);
-        if(mapperDataSourceKeyFilter !=null){
+        if (mapperDataSourceKeyFilter != null) {
             mapper.setDataSourceKeyFilter(mapperDataSourceKeyFilter);
         }
         return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[]{mapperInterface}, mapper);
@@ -243,43 +110,6 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
         return this.getLocalSqlSessionFactory().getConfiguration();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Connection getConnection() {
-        return this.sessionProxy.getConnection();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.2
-     */
-    @Override
-    public List<BatchResult> flushStatements() {
-        return this.sessionProxy.flushStatements();
-    }
-
-    /**
-     * Allow gently dispose bean:
-     * <pre>
-     * {@code
-     *
-     * <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-     *  <constructor-arg index="0" ref="sqlSessionFactory" />
-     * </bean>
-     * }
-     * </pre>
-     * <p>
-     * The implementation of {@link DisposableBean} forces spring context to use {@link DisposableBean#destroy()} method instead of {@link SqlSessionTemplate#close()} to shutdown gently.
-     *
-     * @see SqlSessionTemplate#close()
-     */
-    @Override
-    public void destroy() throws Exception {
-        //This method forces spring disposer to avoid call of SqlSessionTemplate.close() which gives UnsupportedOperationException
-    }
 
     /**
      * Proxy needed to route MyBatis method calls to the proper SqlSession got
@@ -288,7 +118,6 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
      * pass a {@code PersistenceException} to the {@code PersistenceExceptionTranslator}.
      */
     private class MultiDataSourceSqlSessionInterceptor implements InvocationHandler {
-
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

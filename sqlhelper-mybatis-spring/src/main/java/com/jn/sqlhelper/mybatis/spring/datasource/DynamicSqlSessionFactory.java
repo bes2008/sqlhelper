@@ -77,10 +77,12 @@ public class DynamicSqlSessionFactory implements SqlSessionFactory {
 
     @Override
     public Configuration getConfiguration() {
-        if (size() == 1) {
+        SqlSessionFactory delegate = getDelegatingSqlSessionFactory();
+        if (delegate == null) {
             return Collects.findFirst(factoryMap.values()).getConfiguration();
+        } else {
+            return getDelegatingSqlSessionFactory().getConfiguration();
         }
-        return getDelegatingSqlSessionFactory().getConfiguration();
     }
 
     public Map<DataSourceKey, SqlSessionFactory> getDelegates() {
@@ -89,6 +91,9 @@ public class DynamicSqlSessionFactory implements SqlSessionFactory {
 
 
     private SqlSessionFactory getDelegatingSqlSessionFactory() {
-        return factoryMap.get(DataSourceKeySelector.getCurrent());
+        if (DataSourceKeySelector.getCurrent() != null) {
+            return factoryMap.get(DataSourceKeySelector.getCurrent());
+        }
+        return null;
     }
 }
