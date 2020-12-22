@@ -12,10 +12,11 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.springboot.autoconfigure;
+package com.jn.sqlhelper.mybatis.spring.boot.autoconfigure;
 
 import com.jn.sqlhelper.mybatis.plugins.CustomScriptLanguageDriver;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
+import com.jn.sqlhelper.mybatis.springboot.autoconfigure.SqlHelperMybatisPluginAutoConfiguration;
 import org.apache.ibatis.session.Configuration;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
