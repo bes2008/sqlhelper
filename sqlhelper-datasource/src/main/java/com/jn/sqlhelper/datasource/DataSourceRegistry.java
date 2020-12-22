@@ -17,8 +17,10 @@ package com.jn.sqlhelper.datasource;
 import com.jn.langx.Delegatable;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.registry.Registry;
+import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Consumer2;
@@ -189,7 +191,19 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
     }
 
     public DataSourceKey getPrimary() {
-        return primary;
+        if (primary == null) {
+            if (dataSourceRegistry.isEmpty()) {
+                throw new IllegalStateException("Can't find any valid jdbc datasource");
+            }
+            if (dataSourceRegistry.size() == 1) {
+                return Collects.findFirst(dataSourceRegistry.keySet());
+            } else {
+                throw new IllegalStateException(StringTemplates.formatWithPlaceholder("Can't find the primary jdbc datasource, all the registered dataSources: {}", Strings.join(", ", dataSourceRegistry.keySet())));
+            }
+        } else {
+            return primary;
+        }
+
     }
 
     public int size() {

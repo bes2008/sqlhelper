@@ -16,7 +16,10 @@ package com.jn.sqlhelper.mybatis.spring.datasource;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
+import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.reflect.Reflects;
+import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
@@ -58,9 +61,24 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
     }
 
     private Object getMapperDelegate(Method method) {
-        DataSourceKey key = DataSourceKeySelector.getCurrent();
+        DataSourceKey key = selector.getDataSourceKeyRegistry().get(method);
+        if (key != null) {
+            NamedDataSource dataSource = selector.getDataSourceRegistry().get(key);
+            if (dataSource != null) {
+                DataSourceKeySelector.addChoice(key);
+                DataSourceKeySelector.setCurrent(key);
+            }
+        }
+        key = DataSourceKeySelector.getCurrent();
         if (key == null) {
             key = selector.select(dataSourceKeyFilter);
+            if (key != null) {
+                DataSourceKeySelector.addChoice(key);
+                DataSourceKeySelector.setCurrent(key);
+            }
+        }
+        if (key == null) {
+            throw new IllegalStateException(StringTemplates.formatWithPlaceholder("Can't find a suitable jdbc datasource for method: {}", Reflects.getMethodString(method)));
         }
         return delegateMapperMap.get(key);
     }

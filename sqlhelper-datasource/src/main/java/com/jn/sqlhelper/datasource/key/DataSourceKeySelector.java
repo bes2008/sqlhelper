@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.datasource.key;
 
+import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
@@ -47,7 +48,10 @@ public class DataSourceKeySelector {
 
     private static final ThreadLocalHolder<DataSourceKey> CURRENT_SELECTED = new ThreadLocalHolder<DataSourceKey>();
 
-    private DataSourceRegistry registry;
+    @NonNull
+    private DataSourceKeyRegistry dataSourceKeyRegistry;
+    @NonNull
+    private DataSourceRegistry dataSourceRegistry;
     // 初始化阶段初始化，后续只是使用
     private MultiValueMap<String, DataSourceKeyFilter> groupToFiltersMap = new CommonMultiValueMap<String, DataSourceKeyFilter>(new ConcurrentHashMap<String, Collection<DataSourceKeyFilter>>(), new Supplier<String, Collection<DataSourceKeyFilter>>() {
         @Override
@@ -57,7 +61,15 @@ public class DataSourceKeySelector {
     });
 
     public void setDataSourceRegistry(DataSourceRegistry registry) {
-        this.registry = registry;
+        this.dataSourceRegistry = registry;
+    }
+
+    public DataSourceKeyRegistry getDataSourceKeyRegistry() {
+        return dataSourceKeyRegistry;
+    }
+
+    public void setDataSourceKeyRegistry(DataSourceKeyRegistry dataSourceKeyRegistry) {
+        this.dataSourceKeyRegistry = dataSourceKeyRegistry;
     }
 
     public void addDataSourceKeyFilter(final DataSourceKeyFilter filter) {
@@ -106,6 +118,11 @@ public class DataSourceKeySelector {
         stack.clear();
     }
 
+    public static void setCurrent(DataSourceKey key){
+        Preconditions.checkNotNull(key);
+        CURRENT_SELECTED.set(key);
+    }
+
     public static DataSourceKey getCurrent() {
         return CURRENT_SELECTED.get();
     }
@@ -118,14 +135,14 @@ public class DataSourceKeySelector {
      * 指定的group下，选择某个datasource, 返回的是
      */
     public final DataSourceKey select(@Nullable DataSourceKeyFilter filter) {
-        Preconditions.checkArgument(registry.size() > 0, "has no any datasource registered");
-        if (registry.size() == 1) {
-            return registry.getPrimary();
+        Preconditions.checkArgument(dataSourceRegistry.size() > 0, "has no any datasource registered");
+        if (dataSourceRegistry.size() == 1) {
+            return dataSourceRegistry.getPrimary();
         }
         // 从线程栈里过滤
         ListableStack<DataSourceKey> stack = DATA_SOURCE_KEY_HOLDER.get();
         if (Emptys.isEmpty(stack)) {
-            return registry.getPrimary();
+            return dataSourceRegistry.getPrimary();
         }
 
         if (!CURRENT_SELECTED.isNull()) {
@@ -141,7 +158,7 @@ public class DataSourceKeySelector {
         }, new Consumer<DataSourceKey>() {
             @Override
             public void accept(DataSourceKey dataSourceKey) {
-                List<DataSourceKey> matched = registry.findKeys(dataSourceKey);
+                List<DataSourceKey> matched = dataSourceRegistry.findKeys(dataSourceKey);
                 if (Emptys.isNotEmpty(matched)) {
                     dataSourceKeyList.set(matched);
                 }
@@ -189,5 +206,9 @@ public class DataSourceKeySelector {
         }
 
         return null;
+    }
+
+    public DataSourceRegistry getDataSourceRegistry() {
+        return dataSourceRegistry;
     }
 }
