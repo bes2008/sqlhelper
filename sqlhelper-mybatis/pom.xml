@@ -25,6 +25,10 @@
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-dialect</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-datasource</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

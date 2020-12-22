@@ -12,79 +12,77 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.spring;
+package com.jn.sqlhelper.mybatis.datasource;
 
-import com.jn.langx.util.collection.Collects;
-import com.jn.sqlhelper.datasource.key.DataSourceKey;
+import com.jn.langx.Delegatable;
 import org.apache.ibatis.session.*;
+import org.springframework.dao.support.PersistenceExceptionTranslator;
 
 import java.sql.Connection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class DynamicSqlSessionFactory implements SqlSessionFactory {
-
-    private ConcurrentHashMap<DataSourceKey, SqlSessionFactory> factoryMap = new ConcurrentHashMap<DataSourceKey, SqlSessionFactory>();
-
-    public void addSqlSessionFactory(DataSourceKey key, SqlSessionFactory sessionFactory) {
-        factoryMap.putIfAbsent(key, sessionFactory);
-    }
-
-    public int size() {
-        return factoryMap.size();
-    }
-
+public class DelegatingSqlSessionFactory implements SqlSessionFactory, Delegatable<SqlSessionFactory> {
+    private SqlSessionFactory delegate;
+    private PersistenceExceptionTranslator persistenceExceptionTranslator;
     @Override
     public SqlSession openSession() {
-        return null;
+        return delegate.openSession();
     }
 
     @Override
     public SqlSession openSession(boolean autoCommit) {
-        return null;
+        return delegate.openSession(autoCommit);
     }
 
     @Override
     public SqlSession openSession(Connection connection) {
-        return null;
+        return delegate.openSession(connection);
     }
 
     @Override
     public SqlSession openSession(TransactionIsolationLevel level) {
-        return null;
+        return delegate.openSession(level);
     }
 
     @Override
     public SqlSession openSession(ExecutorType execType) {
-        return null;
+        return delegate.openSession(execType);
     }
 
     @Override
     public SqlSession openSession(ExecutorType execType, boolean autoCommit) {
-        return null;
+        return delegate.openSession(execType, autoCommit);
     }
 
     @Override
     public SqlSession openSession(ExecutorType execType, TransactionIsolationLevel level) {
-        return null;
+        return delegate.openSession(execType, level);
     }
 
     @Override
     public SqlSession openSession(ExecutorType execType, Connection connection) {
-        return null;
+        return delegate.openSession(execType, connection);
     }
 
     @Override
     public Configuration getConfiguration() {
-        if (size() == 1) {
-            return Collects.findFirst(factoryMap.values()).getConfiguration();
-        }
-        DataSourceKey key = null;
-        return factoryMap.get(key).getConfiguration();
+        return delegate.getConfiguration();
     }
 
-    public Map<DataSourceKey, SqlSessionFactory> getDelegates() {
-        return Collects.newHashMap(factoryMap);
+    @Override
+    public SqlSessionFactory getDelegate() {
+        return delegate;
     }
 
+    @Override
+    public void setDelegate(SqlSessionFactory delegate) {
+        this.delegate = delegate;
+    }
+
+    public PersistenceExceptionTranslator getPersistenceExceptionTranslator() {
+        return persistenceExceptionTranslator;
+    }
+
+    public void setPersistenceExceptionTranslator(PersistenceExceptionTranslator persistenceExceptionTranslator) {
+        this.persistenceExceptionTranslator = persistenceExceptionTranslator;
+    }
 }

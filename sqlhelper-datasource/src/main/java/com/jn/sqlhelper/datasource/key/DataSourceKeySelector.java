@@ -32,8 +32,8 @@ import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class DataSourceKeySelector {
@@ -49,10 +49,10 @@ public class DataSourceKeySelector {
 
     private DataSourceRegistry registry;
     // 初始化阶段初始化，后续只是使用
-    private MultiValueMap<String, DataSourceKeyFilter> groupToFiltersMap = new CommonMultiValueMap<String, DataSourceKeyFilter>(new LinkedHashMap<String, Collection<DataSourceKeyFilter>>(), new Supplier<String, Collection<DataSourceKeyFilter>>() {
+    private MultiValueMap<String, DataSourceKeyFilter> groupToFiltersMap = new CommonMultiValueMap<String, DataSourceKeyFilter>(new ConcurrentHashMap<String, Collection<DataSourceKeyFilter>>(), new Supplier<String, Collection<DataSourceKeyFilter>>() {
         @Override
         public Collection<DataSourceKeyFilter> get(String group) {
-            return null;
+            return Collects.emptyArrayList();
         }
     });
 
@@ -73,10 +73,9 @@ public class DataSourceKeySelector {
 
     /**
      * 当进入具有 DataSourceKey 定义的方法时调用
-     *
-     * @param key
      */
-    public static final void addChoice(DataSourceKey key) {
+    public static void addChoice(DataSourceKey key) {
+        Preconditions.checkNotNull(key);
         ListableStack<DataSourceKey> stack = DATA_SOURCE_KEY_HOLDER.get();
         stack.push(key);
     }
@@ -84,21 +83,26 @@ public class DataSourceKeySelector {
     /**
      * 当离开具有 DataSourceKey 定义的方法时调用
      */
-    public static final void removeChoice() {
+    public static void removeChoice() {
         ListableStack<DataSourceKey> stack = DATA_SOURCE_KEY_HOLDER.get();
         stack.pop();
+        clearCurrent();
     }
 
     /**
      * 当离开根方法时调用
      */
-    public static final void clearChoices() {
+    public static void clearChoices() {
         ListableStack<DataSourceKey> stack = DATA_SOURCE_KEY_HOLDER.get();
         stack.clear();
     }
 
     public static DataSourceKey getCurrent() {
         return CURRENT_SELECTED.get();
+    }
+
+    public static void clearCurrent() {
+        CURRENT_SELECTED.reset();
     }
 
     /**
