@@ -14,11 +14,14 @@
 
 package com.jn.sqlhelper.mybatis.spring.boot.autoconfigure;
 
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
+import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
 import com.jn.sqlhelper.mybatis.spring.datasource.DelegatingSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.datasource.DynamicSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.datasource.DynamicSqlSessionTemplate;
@@ -122,8 +125,17 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
     }
 
     @Bean
-    public SqlSessionTemplate sqlSessionTemplate(MybatisProperties mybatisProperties, SqlSessionFactory sessionFactory) {
+    public SqlSessionTemplate sqlSessionTemplate(
+            MybatisProperties mybatisProperties,
+            SqlSessionFactory sessionFactory,
+            DataSourceKeySelector selector,
+            ObjectProvider<DataSourceKeyFilter> filtersProvider) {
         DynamicSqlSessionTemplate template = new DynamicSqlSessionTemplate(sessionFactory, mybatisProperties.getExecutorType());
+
+        template.setSelector(selector);
+        @Nullable
+        DataSourceKeyFilter filter = filtersProvider.getIfAvailable();
+        template.setMapperDataSourceKeyFilter(filter);
         return template;
     }
 }

@@ -21,6 +21,8 @@ import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.sqlhelper.datasource.definition.NamedDataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
+import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.ListFactoryBean;
@@ -32,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-public class NamedDataSourcesAutoConfiguration {
+public class DynamicDataSourcesAutoConfiguration {
 
     @Bean
     public DataSourceRegistry dataSourceRegistry(ObjectProvider<DataSourceKeyDataSourceParser> dataSourceKeyParserProvider) {
@@ -70,4 +72,14 @@ public class NamedDataSourcesAutoConfiguration {
         dataSourcesFactoryBean.setSourceList(dataSources);
         return dataSourcesFactoryBean;
     }
+
+    @Bean
+    public DataSourceKeySelector dataSourceKeySelector(DataSourceRegistry registry, ObjectProvider<List<DataSourceKeyFilter>> filtersProvider) {
+        DataSourceKeySelector selector = new DataSourceKeySelector();
+        selector.setDataSourceRegistry(registry);
+        List<DataSourceKeyFilter> filters = filtersProvider.getIfAvailable();
+        selector.addDataSourceKeyFilters(filters);
+        return selector;
+    }
+
 }

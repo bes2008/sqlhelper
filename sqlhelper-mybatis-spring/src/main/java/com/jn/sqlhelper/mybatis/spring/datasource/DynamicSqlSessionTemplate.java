@@ -17,6 +17,8 @@ package com.jn.sqlhelper.mybatis.spring.datasource;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
+import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.executor.BatchResult;
 import org.apache.ibatis.reflection.ExceptionUtil;
@@ -38,6 +40,8 @@ import java.util.Map;
 
 public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
     private final SqlSession sessionProxy;
+    private DataSourceKeySelector selector;
+    private DataSourceKeyFilter mapperDataSourceKeyFilter;
 
     public DynamicSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
         this(sqlSessionFactory, null);
@@ -49,6 +53,14 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
                 SqlSessionFactory.class.getClassLoader(),
                 new Class[]{SqlSession.class},
                 new MultiDataSourceSqlSessionInterceptor());
+    }
+
+    public void setSelector(DataSourceKeySelector selector) {
+        this.selector = selector;
+    }
+
+    public void setMapperDataSourceKeyFilter(DataSourceKeyFilter mapperDataSourceKeyFilter) {
+        this.mapperDataSourceKeyFilter = mapperDataSourceKeyFilter;
     }
 
     public void clearCache() {
@@ -123,7 +135,10 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
                 delegateMapperMap.put(key, mybatisMapperProxy);
             }
         });
-        DynamicMapper mapper = new DynamicMapper(mapperInterface, delegateMapperMap);
+        DynamicMapper mapper = new DynamicMapper(mapperInterface, delegateMapperMap, selector);
+        if(mapperDataSourceKeyFilter !=null){
+            mapper.setDataSourceKeyFilter(mapperDataSourceKeyFilter);
+        }
         return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[]{mapperInterface}, mapper);
     }
 

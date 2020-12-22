@@ -11,7 +11,6 @@ import java.util.List;
 public interface DataSourceKeyFilter extends Supplier<List<DataSourceKey>, DataSourceKey>, Named, Ordered {
     /**
      * 可应用与哪些 group
-     * @return
      */
     @NonNull
     List<String> applyTo();

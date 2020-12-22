@@ -71,6 +71,15 @@ public class DataSourceKeySelector {
         });
     }
 
+    public void addDataSourceKeyFilters(List<DataSourceKeyFilter> filters){
+        Collects.forEach(filters, new Consumer<DataSourceKeyFilter>() {
+            @Override
+            public void accept(DataSourceKeyFilter filter) {
+                addDataSourceKeyFilter(filter);
+            }
+        });
+    }
+
     /**
      * 当进入具有 DataSourceKey 定义的方法时调用
      */

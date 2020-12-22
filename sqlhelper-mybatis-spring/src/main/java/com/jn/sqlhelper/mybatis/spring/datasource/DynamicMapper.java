@@ -14,9 +14,12 @@
 
 package com.jn.sqlhelper.mybatis.spring.datasource;
 
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -34,12 +37,19 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
      * 值为按照 Mybatis的规则创建的 mapper proxy对象.
      * 该字段在DynamicMapper创建时即完成，后面只是使用，所以不存在并发修改现象，故而只需要普通的map。
      */
+    @NonNull
     private Class<MAPPER> mapperInterface;
+    @NonNull
     private Map<DataSourceKey, MAPPER> delegateMapperMap = Collects.<DataSourceKey, MAPPER>emptyHashMap();
+    @NonNull
+    private DataSourceKeySelector selector;
+    @Nullable
+    private DataSourceKeyFilter dataSourceKeyFilter;
 
-    public DynamicMapper(Class<MAPPER> mapperInterface, Map<DataSourceKey, MAPPER> delegateMapperMap) {
+    public DynamicMapper(Class<MAPPER> mapperInterface, Map<DataSourceKey, MAPPER> delegateMapperMap, DataSourceKeySelector selector) {
         this.mapperInterface = mapperInterface;
         this.delegateMapperMap.putAll(delegateMapperMap);
+        setSelector(selector);
     }
 
     @Override
@@ -49,6 +59,25 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
 
     private Object getMapperDelegate(Method method) {
         DataSourceKey key = DataSourceKeySelector.getCurrent();
+        if (key == null) {
+            key = selector.select(dataSourceKeyFilter);
+        }
         return delegateMapperMap.get(key);
+    }
+
+    public DataSourceKeySelector getSelector() {
+        return selector;
+    }
+
+    public void setSelector(DataSourceKeySelector selector) {
+        this.selector = selector;
+    }
+
+    public DataSourceKeyFilter getDataSourceKeyFilter() {
+        return dataSourceKeyFilter;
+    }
+
+    public void setDataSourceKeyFilter(DataSourceKeyFilter dataSourceKeyFilter) {
+        this.dataSourceKeyFilter = dataSourceKeyFilter;
     }
 }
