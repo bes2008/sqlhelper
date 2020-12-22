@@ -21,6 +21,7 @@ import com.jn.langx.text.properties.PropertiesAccessor;
 import com.jn.langx.util.ClassLoaders;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.sqlhelper.dialect.SqlRequestContext;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
@@ -91,8 +92,18 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
+
+        SqlRequestContext requestContext = SqlRequestContextHolder.getInstance().get();
+        if (requestContext == null) {
+            return invocation.proceed();
+        }
+        // 由于各种handler有可能触发新的请求，导致避免重复进入
+        if (requestContext.getBoolean(MybatisSqlRequestContextKeys.SQLHELPER_HANDLED, false)) {
+            return invocation.proceed();
+        }
         ExecutorInvocation executorInvocation = new ExecutorInvocation(invocation);
         try {
+            requestContext.setBoolean(MybatisSqlRequestContextKeys.SQLHELPER_HANDLED, true);
             Pipeline<ExecutorInvocation> pipeline = createPipeline(executorInvocation);
             pipeline.inbound();
             if (!pipeline.hadOutbound()) {
@@ -100,6 +111,10 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
             }
             return executorInvocation.getResult();
         } finally {
+            requestContext = SqlRequestContextHolder.getInstance().get();
+            if (requestContext != null) {
+                requestContext.set(MybatisSqlRequestContextKeys.SQLHELPER_HANDLED, null);
+            }
             if (!NestedStatements.isNestedStatement(executorInvocation.getMappedStatement())) {
                 SqlRequestContextHolder.getInstance().clear();
             }
@@ -198,7 +213,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
         instrumentConfig.setDialectClassName(accessor.getString(instrumentorConfigPrefix + "dialectClassName", instrumentConfig.getDialectClassName()));
         instrumentConfig.setCacheInstrumentedSql(accessor.getBoolean(instrumentorConfigPrefix + "cacheInstruemtedSql", false));
         instrumentConfig.setEscapeLikeParameter(accessor.getBoolean(instrumentorConfigPrefix + "escapeLikeParameter", false));
-        instrumentConfig.setExtractDialectUseNativeEnabled(accessor.getBoolean(instrumentorConfigPrefix+"extractDialectUseNativeEnabled", true));
+        instrumentConfig.setExtractDialectUseNativeEnabled(accessor.getBoolean(instrumentorConfigPrefix + "extractDialectUseNativeEnabled", true));
         return instrumentConfig;
     }
 }

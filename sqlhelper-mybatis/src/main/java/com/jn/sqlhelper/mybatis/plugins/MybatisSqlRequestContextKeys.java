@@ -27,4 +27,6 @@ public class MybatisSqlRequestContextKeys {
     public static final String LIKE_ESCAPE_PARAMETERS_INDEXES = "LIKE_ESCAPE_PARAMETERS_INDEXES";
 
     public static final String LIKE_ESCAPER = "LIKE_ESCAPER";
+
+    public static final String SQLHELPER_HANDLED = "SQLHELPER_HANDLED";
 }
