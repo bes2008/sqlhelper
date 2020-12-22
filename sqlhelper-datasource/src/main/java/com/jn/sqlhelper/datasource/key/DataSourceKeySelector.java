@@ -32,7 +32,7 @@ import com.jn.langx.util.struct.Holder;
 import com.jn.langx.util.struct.ThreadLocalHolder;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
-import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
+import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,9 +58,9 @@ public class DataSourceKeySelector {
     @NonNull
     private DataSourceRegistry dataSourceRegistry;
     // 初始化阶段初始化，后续只是使用
-    private MultiValueMap<String, DataSourceKeyFilter> groupToFiltersMap = new CommonMultiValueMap<String, DataSourceKeyFilter>(new ConcurrentHashMap<String, Collection<DataSourceKeyFilter>>(), new Supplier<String, Collection<DataSourceKeyFilter>>() {
+    private MultiValueMap<String, DataSourceKeyRouter> groupToRoutersMap = new CommonMultiValueMap<String, DataSourceKeyRouter>(new ConcurrentHashMap<String, Collection<DataSourceKeyRouter>>(), new Supplier<String, Collection<DataSourceKeyRouter>>() {
         @Override
-        public Collection<DataSourceKeyFilter> get(String group) {
+        public Collection<DataSourceKeyRouter> get(String group) {
             return Collects.emptyArrayList();
         }
     });
@@ -77,22 +77,22 @@ public class DataSourceKeySelector {
         this.dataSourceKeyRegistry = dataSourceKeyRegistry;
     }
 
-    public void addDataSourceKeyFilter(final DataSourceKeyFilter filter) {
-        Preconditions.checkNotNull(filter);
-        List<String> groups = Pipeline.of(filter.applyTo()).clearNulls().asList();
+    public void addDataSourceKeyRouter(final DataSourceKeyRouter router) {
+        Preconditions.checkNotNull(router);
+        List<String> groups = Pipeline.of(router.applyTo()).clearNulls().asList();
         Collects.forEach(groups, new Consumer<String>() {
             @Override
             public void accept(String group) {
-                groupToFiltersMap.add(group, filter);
+                groupToRoutersMap.add(group, router);
             }
         });
     }
 
-    public void addDataSourceKeyFilters(List<DataSourceKeyFilter> filters) {
-        Collects.forEach(filters, new Consumer<DataSourceKeyFilter>() {
+    public void addDataSourceKeyRouters(List<DataSourceKeyRouter> routers) {
+        Collects.forEach(routers, new Consumer<DataSourceKeyRouter>() {
             @Override
-            public void accept(DataSourceKeyFilter filter) {
-                addDataSourceKeyFilter(filter);
+            public void accept(DataSourceKeyRouter router) {
+                addDataSourceKeyRouter(router);
             }
         });
     }
@@ -138,7 +138,7 @@ public class DataSourceKeySelector {
         CURRENT_SELECTED.reset();
     }
 
-    public final DataSourceKey select(@Nullable DataSourceKeyFilter dataSourceKeyFilter, @Nullable final MethodInvocation methodInvocation) {
+    public final DataSourceKey select(@Nullable DataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
         DataSourceKey key = this.dataSourceKeyRegistry.get(methodInvocation.getJoinPoint());
         if (key != null) {
             NamedDataSource dataSource = dataSourceRegistry.get(key);
@@ -149,7 +149,7 @@ public class DataSourceKeySelector {
         }
         key = DataSourceKeySelector.getCurrent();
         if (key == null) {
-            key = doSelect(dataSourceKeyFilter, methodInvocation);
+            key = doSelect(router, methodInvocation);
             if (key != null) {
                 DataSourceKeySelector.addChoice(key);
                 DataSourceKeySelector.setCurrent(key);
@@ -169,7 +169,7 @@ public class DataSourceKeySelector {
      * <p>
      * 这里面不能去设置CURRENT_SELECTED
      */
-    protected DataSourceKey doSelect(@Nullable DataSourceKeyFilter filter, @Nullable final MethodInvocation methodInvocation) {
+    protected DataSourceKey doSelect(@Nullable DataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
         Preconditions.checkArgument(dataSourceRegistry.size() > 0, "has no any datasource registered");
         if (dataSourceRegistry.size() == 1) {
             return dataSourceRegistry.getPrimary();
@@ -215,24 +215,24 @@ public class DataSourceKeySelector {
 
             // 如果匹配到的过多，则进行二次过滤
             final Holder<DataSourceKey> keyHolder = new Holder<DataSourceKey>();
-            if (filter != null) {
-                keyHolder.set(filter.apply(keys, methodInvocation));
+            if (router != null) {
+                keyHolder.set(router.apply(keys, methodInvocation));
             }
             if (!keyHolder.isNull()) {
                 return keyHolder.get();
             }
 
-            // 指定的参数过滤不到的情况下，则基于 group filter
-            Collection<DataSourceKeyFilter> filters = groupToFiltersMap.get(keys.get(0).getGroup());
+            // 指定的参数过滤不到的情况下，则基于 group router
+            Collection<DataSourceKeyRouter> routers = groupToRoutersMap.get(keys.get(0).getGroup());
 
-            Collects.forEach(filters, new Consumer<DataSourceKeyFilter>() {
+            Collects.forEach(routers, new Consumer<DataSourceKeyRouter>() {
                 @Override
-                public void accept(DataSourceKeyFilter filter) {
-                    keyHolder.set(filter.apply(keys, methodInvocation));
+                public void accept(DataSourceKeyRouter groupRouter) {
+                    keyHolder.set(groupRouter.apply(keys, methodInvocation));
                 }
-            }, new Predicate<DataSourceKeyFilter>() {
+            }, new Predicate<DataSourceKeyRouter>() {
                 @Override
-                public boolean test(DataSourceKeyFilter filter) {
+                public boolean test(DataSourceKeyRouter filter) {
                     return !keyHolder.isNull();
                 }
             });

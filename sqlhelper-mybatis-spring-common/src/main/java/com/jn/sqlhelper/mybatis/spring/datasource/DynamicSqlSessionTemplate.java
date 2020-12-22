@@ -18,7 +18,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
-import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
+import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.reflection.ExceptionUtil;
 import org.apache.ibatis.session.Configuration;
@@ -36,7 +36,7 @@ import java.util.Map;
 
 public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
     private DataSourceKeySelector selector;
-    private DataSourceKeyFilter mapperDataSourceKeyFilter;
+    private DataSourceKeyRouter mapperDataSourceKeyRouter;
 
     public DynamicSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
         this(sqlSessionFactory, null);
@@ -50,8 +50,8 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
         this.selector = selector;
     }
 
-    public void setMapperDataSourceKeyFilter(DataSourceKeyFilter mapperDataSourceKeyFilter) {
-        this.mapperDataSourceKeyFilter = mapperDataSourceKeyFilter;
+    public void setMapperDataSourceKeyRouter(DataSourceKeyRouter mapperDataSourceKeyRouter) {
+        this.mapperDataSourceKeyRouter = mapperDataSourceKeyRouter;
     }
 
     private DynamicSqlSessionFactory getDynamicSqlSessionFactory() {
@@ -75,8 +75,8 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
             }
         });
         DynamicMapper mapper = new DynamicMapper(mapperInterface, delegateMapperMap, selector);
-        if (mapperDataSourceKeyFilter != null) {
-            mapper.setDataSourceKeyFilter(mapperDataSourceKeyFilter);
+        if (mapperDataSourceKeyRouter != null) {
+            mapper.setRouter(mapperDataSourceKeyRouter);
         }
         return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[]{mapperInterface}, mapper);
     }

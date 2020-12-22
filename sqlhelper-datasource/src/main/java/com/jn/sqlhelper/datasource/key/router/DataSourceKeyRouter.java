@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.datasource.key.filter;
+package com.jn.sqlhelper.datasource.key.router;
 
 import com.jn.langx.Named;
 import com.jn.langx.Ordered;
@@ -9,7 +9,7 @@ import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import java.util.List;
 
-public interface DataSourceKeyFilter extends Function2<List<DataSourceKey>, MethodInvocation, DataSourceKey>, Named, Ordered {
+public interface DataSourceKeyRouter extends Function2<List<DataSourceKey>, MethodInvocation, DataSourceKey>, Named, Ordered {
     /**
      * 可应用与哪些 group
      */

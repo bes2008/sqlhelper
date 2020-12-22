@@ -24,7 +24,7 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
-import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
+import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -49,7 +49,7 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
     @NonNull
     private DataSourceKeySelector selector;
     @Nullable
-    private DataSourceKeyFilter dataSourceKeyFilter;
+    private DataSourceKeyRouter router;
 
     public DynamicMapper(Class<MAPPER> mapperInterface, Map<DataSourceKey, MAPPER> delegateMapperMap, DataSourceKeySelector selector) {
         this.mapperInterface = mapperInterface;
@@ -81,7 +81,7 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         }
         key = DataSourceKeySelector.getCurrent();
         if (key == null) {
-            key = selector.select(dataSourceKeyFilter, methodInvocation);
+            key = selector.select(router, methodInvocation);
             if (key != null) {
                 DataSourceKeySelector.addChoice(key);
                 DataSourceKeySelector.setCurrent(key);
@@ -93,19 +93,15 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         return delegateMapperMap.get(key);
     }
 
-    public DataSourceKeySelector getSelector() {
-        return selector;
-    }
-
     public void setSelector(DataSourceKeySelector selector) {
         this.selector = selector;
     }
 
-    public DataSourceKeyFilter getDataSourceKeyFilter() {
-        return dataSourceKeyFilter;
+    public DataSourceKeyRouter getRouter() {
+        return router;
     }
 
-    public void setDataSourceKeyFilter(DataSourceKeyFilter dataSourceKeyFilter) {
-        this.dataSourceKeyFilter = dataSourceKeyFilter;
+    public void setRouter(DataSourceKeyRouter router) {
+        this.router = router;
     }
 }

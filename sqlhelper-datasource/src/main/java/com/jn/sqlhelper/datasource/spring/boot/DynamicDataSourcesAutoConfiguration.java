@@ -26,7 +26,7 @@ import com.jn.sqlhelper.datasource.definition.NamedDataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.DataSourceKeyRegistry;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
-import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
+import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyAnnotationParser;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
 import org.springframework.beans.factory.ObjectProvider;
@@ -113,11 +113,11 @@ public class DynamicDataSourcesAutoConfiguration {
     public DataSourceKeySelector dataSourceKeySelector(
             DataSourceRegistry registry,
             DataSourceKeyRegistry keyRegistry,
-            ObjectProvider<List<DataSourceKeyFilter>> filtersProvider) {
+            ObjectProvider<List<DataSourceKeyRouter>> routersProvider) {
         DataSourceKeySelector selector = new DataSourceKeySelector();
         selector.setDataSourceRegistry(registry);
-        List<DataSourceKeyFilter> filters = filtersProvider.getIfAvailable();
-        selector.addDataSourceKeyFilters(filters);
+        List<DataSourceKeyRouter> routers = routersProvider.getIfAvailable();
+        selector.addDataSourceKeyRouters(routers);
         selector.setDataSourceKeyRegistry(keyRegistry);
         return selector;
     }
