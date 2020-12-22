@@ -14,21 +14,13 @@
 
 package com.jn.sqlhelper.tkmapper.spring.boot.autoconfigure;
 
-import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
-import com.jn.sqlhelper.mybatis.MybatisUtils;
-import com.jn.sqlhelper.mybatis.SqlHelperMybatisProperties;
 import com.jn.sqlhelper.mybatis.plugins.CustomScriptLanguageDriver;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
-import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
-import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.session.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import tk.mybatis.mapper.autoconfigure.ConfigurationCustomizer;
 import tk.mybatis.mapper.autoconfigure.MapperAutoConfiguration;
 
@@ -41,9 +33,10 @@ public class SqlHelperTkMapperAutoConfiguration implements ConfigurationCustomiz
 
     @Override
     public void customize(Configuration configuration) {
-        logger.info("Start to customize mybatis configuration with mybatis-spring-boot-autoconfigure");
+        logger.info("Start to customize mybatis configuration with sqlhelper-tkmapper-spring-boot-starter,tk.mybatis:mapper-spring-boot-starter");
         configuration.setDefaultScriptingLanguage(CustomScriptLanguageDriver.class);
         configuration.addInterceptor(plugin);
+        logger.info("Add interceptor {} to tk.mapper configuration", plugin);
     }
 
     @Autowired

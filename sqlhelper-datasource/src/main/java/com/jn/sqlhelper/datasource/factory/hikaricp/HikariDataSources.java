@@ -14,10 +14,11 @@
 
 package com.jn.sqlhelper.datasource.factory.hikaricp;
 
+import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Strings;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
-import com.jn.langx.util.Emptys;
-import com.jn.langx.util.reflect.Reflects;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
@@ -58,7 +59,9 @@ public class HikariDataSources {
         config.setAutoCommit(props.isAutoCommit());
         int txIsoLevel = -1;
         try {
-            txIsoLevel = DataSources.getTransactionIsolation(props.getTransactionIsolationName());
+            if (Strings.isBlank(props.getTransactionIsolationName())) {
+                txIsoLevel = DataSources.getTransactionIsolation(props.getTransactionIsolationName());
+            }
         } catch (Throwable t) {
             logger.error("parse jdbc transaction isolation fail: {}", t.getMessage(), t);
         } finally {
