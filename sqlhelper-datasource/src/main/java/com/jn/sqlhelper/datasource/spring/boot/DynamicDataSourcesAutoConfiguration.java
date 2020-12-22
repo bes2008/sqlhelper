@@ -14,7 +14,9 @@
 
 package com.jn.sqlhelper.datasource.spring.boot;
 
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Function;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
@@ -24,11 +26,11 @@ import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.DataSourceKeyRegistry;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.filter.DataSourceKeyFilter;
-import com.jn.sqlhelper.datasource.key.parser.DataSourceAnnotationParser;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyAnnotationParser;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.ListFactoryBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +38,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 
+@ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
 @Configuration
 public class DynamicDataSourcesAutoConfiguration {
 
@@ -55,7 +58,7 @@ public class DynamicDataSourcesAutoConfiguration {
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "sqlhelper.namedDataSources")
+    @ConfigurationProperties(prefix = "sqlhelper.dynamicDataSource")
     public NamedDataSourcesProperties namedDataSourcesProperties() {
         return new NamedDataSourcesProperties();
     }
@@ -77,9 +80,15 @@ public class DynamicDataSourcesAutoConfiguration {
     }
 
     @Bean
-    public DataSourceKeyRegistry dataSourceKeyRegistry(ObjectProvider<List<DataSourceKeyAnnotationParser>> dataSourceKeyAnnotationParser){
-        DataSourceKeyRegistry registry = new DataSourceKeyRegistry();
-
+    public DataSourceKeyRegistry dataSourceKeyRegistry(ObjectProvider<List<DataSourceKeyAnnotationParser>> dataSourceKeyAnnotationParsersProvider) {
+        final DataSourceKeyRegistry registry = new DataSourceKeyRegistry();
+        List<DataSourceKeyAnnotationParser> parsers = dataSourceKeyAnnotationParsersProvider.getIfAvailable();
+        Collects.forEach(parsers, new Consumer<DataSourceKeyAnnotationParser>() {
+            @Override
+            public void accept(DataSourceKeyAnnotationParser dataSourceKeyAnnotationParser) {
+                registry.registerDataSourceKeyParser(dataSourceKeyAnnotationParser);
+            }
+        });
         return registry;
     }
 

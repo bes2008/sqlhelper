@@ -14,7 +14,7 @@ mybatis:
 #    password: 123456
 
 sqlhelper:
-  namedDataSources:
+  dynamicDataSource:
     # https://h2database.com/
     enabled: true
     dataSources:

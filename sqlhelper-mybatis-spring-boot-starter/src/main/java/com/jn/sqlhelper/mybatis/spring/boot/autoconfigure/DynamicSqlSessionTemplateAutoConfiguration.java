@@ -44,6 +44,7 @@ import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -54,10 +55,11 @@ import org.springframework.dao.support.PersistenceExceptionTranslator;
 import javax.sql.DataSource;
 import java.util.List;
 
-@EnableConfigurationProperties(MybatisProperties.class)
-@ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class})
-@AutoConfigureBefore({MybatisAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class, DynamicSqlSessionFactory.class})
 @ConditionalOnBean(name = "dataSourcesFactoryBean")
+@EnableConfigurationProperties(MybatisProperties.class)
+@AutoConfigureBefore({MybatisAutoConfiguration.class, DataSourceAutoConfiguration.class})
 @Configuration
 public class DynamicSqlSessionTemplateAutoConfiguration {
 
