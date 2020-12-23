@@ -125,6 +125,10 @@ public class DataSourceKeySelector {
         }
     }
 
+    public static ListableStack<DataSourceKey> getChoices(){
+        return DATA_SOURCE_KEY_HOLDER.get();
+    }
+
     /**
      * 当离开根方法时调用
      */

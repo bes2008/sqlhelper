@@ -69,6 +69,24 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.fangjinuo.agileway</groupId>
+            <artifactId>agileway-spring</artifactId>
+            <version>${agileway.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.fangjinuo.audit</groupId>
             <artifactId>audit-spring-boot-starter</artifactId>
             <version>${audit.version}</version>

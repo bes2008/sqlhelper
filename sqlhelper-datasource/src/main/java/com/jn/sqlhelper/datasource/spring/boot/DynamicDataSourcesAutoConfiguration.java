@@ -75,7 +75,11 @@ public class DynamicDataSourcesAutoConfiguration {
         if (Strings.isNotBlank(keyChoicesPointcutExpression)) {
             String requiredClass = "com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorProperties";
             if (!ClassLoaders.hasClass(requiredClass, this.getClass().getClassLoader())) {
-                logger.warn("The configuration property 'sqlhelper.dynamicDataSource.key-choices-pointcut.expression' has specified, but can't find the class: '{}', you should import com.github.fangjinuo.agilway:agileway-spring:${VERSION}.jar to you classpath", requiredClass);
+                StringBuilder log = new StringBuilder("The configuration property 'sqlhelper.dynamicDataSource.key-choices-pointcut.expression' has specified, but can't find the class: '" + "com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorProperties" + "', you should import the following jars to your classpath:\n")
+                        .append("\t1) com.github.fangjinuo.agilway:agileway-spring:${agileway.version}.jar\n")
+                        .append("\t2) org.springframework:spring-aop:${spring.version}.jar\n")
+                        .append("\t3) org.aspectj:aspectjweaver:${aspectj.version}.jar\n");
+                logger.warn(log.toString());
             }
         }
         return new NamedDataSourcesProperties();

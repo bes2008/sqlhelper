@@ -24,6 +24,7 @@ import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,7 +35,7 @@ public class DynamicDataSourcesKeyChoicesAutoConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourcesKeyChoicesAutoConfiguration.class);
 
     @Bean("aspectJExpressionPointcutAdvisorProperties")
-    @ConditionalOnProperty(prefix = "sqlhelper.dynamicDataSource.key-choices-pointcut", name = "expression")
+    @ConfigurationProperties(prefix = "sqlhelper.dynamicDataSource.key-choices-pointcut")
     public AspectJExpressionPointcutAdvisorProperties aspectJExpressionPointcutAdvisorProperties() {
         return new AspectJExpressionPointcutAdvisorProperties();
     }

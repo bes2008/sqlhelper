@@ -83,7 +83,6 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         if (key == null) {
             key = selector.select(router, methodInvocation);
             if (key != null) {
-                DataSourceKeySelector.addChoice(key);
                 DataSourceKeySelector.setCurrent(key);
             }
         }
