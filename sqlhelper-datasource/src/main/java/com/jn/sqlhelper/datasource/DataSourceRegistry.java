@@ -26,11 +26,15 @@ import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.function.Predicate2;
+import com.jn.langx.util.logging.Level;
+import com.jn.langx.util.logging.Loggers;
 import com.jn.langx.util.pattern.patternset.AntPathMatcher;
 import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
 import com.jn.sqlhelper.datasource.key.parser.RandomDataSourceKeyParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.util.Collections;
@@ -40,10 +44,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
+    private static final Logger logger = LoggerFactory.getLogger(DataSourceRegistry.class);
     private volatile DataSourceKey primary = null;
     private ConcurrentHashMap<DataSourceKey, NamedDataSource> dataSourceRegistry = new ConcurrentHashMap<DataSourceKey, NamedDataSource>();
     private DataSourceKeyDataSourceParser keyParser = RandomDataSourceKeyParser.INSTANCE;
+
+    /**
+     * 用户在使用时，可能用一些不存在的Key
+     */
     private Set<DataSourceKey> nonExistDSKeys = new CopyOnWriteArraySet<DataSourceKey>();
+
+    /**
+     *
+     */
+    private Set<DataSourceKey> failKeys = new CopyOnWriteArraySet<DataSourceKey>();
 
     public void register(DataSourceKey key, DataSource dataSource) {
         Preconditions.checkNotEmpty(key, "the jdbc datasource key is null or empty");
@@ -68,29 +82,29 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
         return dataSourceRegistry.get(key);
     }
 
-    public List<DataSourceKey> findKeys(DataSourceKey keypattern) {
-        Preconditions.checkNotNull(keypattern);
-        Preconditions.checkArgument(keypattern.isAvailable(), "the key is invalid: {}", keypattern);
+    public List<DataSourceKey> findKeys(DataSourceKey keyPattern) {
+        Preconditions.checkNotNull(keyPattern);
+        Preconditions.checkArgument(keyPattern.isAvailable(), "the key is invalid: {}", keyPattern);
 
-        NamedDataSource namedDataSource = get(keypattern);
+        NamedDataSource namedDataSource = get(keyPattern);
         if (namedDataSource != null) {
-            return Collects.newArrayList(keypattern);
+            return Collects.newArrayList(keyPattern);
         }
 
         // 已确定的不存在的
-        if (nonExistDSKeys.contains(keypattern)) {
+        if (nonExistDSKeys.contains(keyPattern)) {
             return Collections.emptyList();
         }
 
-        String name = keypattern.getName();
+        String name = keyPattern.getName();
         if (!name.contains(DataSources.DATASOURCE_NAME_WILDCARD)) {
-            nonExistDSKeys.add(keypattern);
+            addNonExistsDataSourceKey(keyPattern);
             return Collections.emptyList();
         }
         final AntPathMatcher antPathMatcher = new AntPathMatcher(name);
         antPathMatcher.setGlobal(true);
 
-        final String group = keypattern.getGroup();
+        final String group = keyPattern.getGroup();
         List<DataSourceKey> matched = Pipeline.of(dataSourceRegistry.keySet()).filter(new Predicate<DataSourceKey>() {
             @Override
             public boolean test(DataSourceKey dataSourceKey) {
@@ -102,10 +116,15 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
         }).asList();
 
         if (Emptys.isNotEmpty(matched)) {
-            nonExistDSKeys.add(keypattern);
+            addNonExistsDataSourceKey(keyPattern);
             return Collections.emptyList();
         }
         return matched;
+    }
+
+    private void addNonExistsDataSourceKey(DataSourceKey keyPattern) {
+        Loggers.log(3, logger, Level.WARN, null, "Using a key that is not exist: {}", keyPattern);
+        nonExistDSKeys.add(keyPattern);
     }
 
     /**
