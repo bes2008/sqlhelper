@@ -32,6 +32,7 @@ import com.jn.langx.util.function.Supplier0;
 import com.jn.langx.util.struct.Holder;
 import com.jn.langx.util.struct.ThreadLocalHolder;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
+import com.jn.sqlhelper.datasource.DataSourceRegistryAware;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 import org.slf4j.Logger;
@@ -42,7 +43,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
-public class DataSourceKeySelector {
+public class DataSourceKeySelector implements DataSourceRegistryAware {
     private static final Logger logger = LoggerFactory.getLogger(DataSourceKeySelector.class);
     private static final ThreadLocalHolder<ListableStack<DataSourceKey>> DATA_SOURCE_KEY_HOLDER = new ThreadLocalHolder<ListableStack<DataSourceKey>>(
             new Supplier0<ListableStack<DataSourceKey>>() {
@@ -78,8 +79,10 @@ public class DataSourceKeySelector {
         this.dataSourceKeyRegistry = dataSourceKeyRegistry;
     }
 
-    public void addDataSourceKeyRouter(final DataSourceKeyRouter router) {
+    public void registerRouter(final DataSourceKeyRouter router) {
         Preconditions.checkNotNull(router);
+        Preconditions.checkNotNull(dataSourceRegistry, "please set dataSourceRegister");
+        router.setDataSourceRegistry(this.dataSourceRegistry);
         List<String> groups = Pipeline.of(router.applyTo()).clearNulls().asList();
         Collects.forEach(groups, new Consumer<String>() {
             @Override
@@ -89,11 +92,11 @@ public class DataSourceKeySelector {
         });
     }
 
-    public void addDataSourceKeyRouters(List<DataSourceKeyRouter> routers) {
+    public void registerRouters(List<DataSourceKeyRouter> routers) {
         Collects.forEach(routers, new Consumer<DataSourceKeyRouter>() {
             @Override
             public void accept(DataSourceKeyRouter router) {
-                addDataSourceKeyRouter(router);
+                registerRouter(router);
             }
         });
     }
@@ -125,7 +128,7 @@ public class DataSourceKeySelector {
         }
     }
 
-    public static ListableStack<DataSourceKey> getChoices(){
+    public static ListableStack<DataSourceKey> getChoices() {
         return DATA_SOURCE_KEY_HOLDER.get();
     }
 

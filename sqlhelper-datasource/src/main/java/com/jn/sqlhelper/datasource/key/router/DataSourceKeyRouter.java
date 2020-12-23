@@ -5,11 +5,13 @@ import com.jn.langx.Ordered;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.langx.util.function.Function2;
+import com.jn.sqlhelper.datasource.DataSourceRegistryAware;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import java.util.List;
 
-public interface DataSourceKeyRouter extends Function2<List<DataSourceKey>, MethodInvocation, DataSourceKey>, Named, Ordered {
+public interface DataSourceKeyRouter extends Function2<List<DataSourceKey>, MethodInvocation, DataSourceKey>, Named, Ordered, DataSourceRegistryAware {
+
     /**
      * 可应用与哪些 group
      */

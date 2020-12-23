@@ -152,7 +152,7 @@ public class DynamicDataSourcesAutoConfiguration {
         DataSourceKeySelector selector = new DataSourceKeySelector();
         selector.setDataSourceRegistry(registry);
         List<DataSourceKeyRouter> routers = routersProvider.getIfAvailable();
-        selector.addDataSourceKeyRouters(routers);
+        selector.registerRouters(routers);
         selector.setDataSourceKeyRegistry(keyRegistry);
         return selector;
     }
