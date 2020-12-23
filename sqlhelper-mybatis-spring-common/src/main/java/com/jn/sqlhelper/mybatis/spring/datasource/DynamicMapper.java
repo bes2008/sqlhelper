@@ -66,7 +66,7 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         }catch (Throwable ex){
             throw ex;
         }finally {
-            DataSourceKeySelector.removeChoice();
+            DataSourceKeySelector.removeCurrent();
         }
     }
 

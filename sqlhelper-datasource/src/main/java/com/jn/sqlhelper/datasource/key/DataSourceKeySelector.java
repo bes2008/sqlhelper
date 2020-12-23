@@ -109,11 +109,18 @@ public class DataSourceKeySelector {
     /**
      * 当离开具有 DataSourceKey 定义的方法时调用
      */
-    public static void removeChoice() {
-        clearCurrent();
+    public static void removeChoice(@Nullable DataSourceKey key) {
         ListableStack<DataSourceKey> stack = DATA_SOURCE_KEY_HOLDER.get();
         if (!stack.isEmpty()) {
-            stack.pop();
+            if (key != null) {
+                if (key == stack.peek()) {
+                    stack.pop();
+                } else {
+                    logger.warn("the datasource key {} will been removed is not equals the stack top :{}", key, stack.peek());
+                }
+            } else {
+                stack.pop();
+            }
         }
     }
 
@@ -125,17 +132,26 @@ public class DataSourceKeySelector {
         stack.clear();
     }
 
+    /**
+     * 在最里层的， 最直接的使用DataSource 的方法调用后执行该方法
+     */
     public static void setCurrent(DataSourceKey key) {
         Preconditions.checkNotNull(key);
         CURRENT_SELECTED.set(key);
+        addChoice(key);
     }
 
     public static DataSourceKey getCurrent() {
         return CURRENT_SELECTED.get();
     }
 
-    public static void clearCurrent() {
+    /**
+     * 在最里层的， 最直接的使用DataSource 的方法调用后执行该方法
+     */
+    public static void removeCurrent() {
+        DataSourceKey current = getCurrent();
         CURRENT_SELECTED.reset();
+        removeChoice(current);
     }
 
     public final DataSourceKey select(@Nullable DataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
@@ -143,7 +159,6 @@ public class DataSourceKeySelector {
         if (key != null) {
             NamedDataSource dataSource = dataSourceRegistry.get(key);
             if (dataSource != null) {
-                DataSourceKeySelector.addChoice(key);
                 DataSourceKeySelector.setCurrent(key);
             }
         }
@@ -151,7 +166,6 @@ public class DataSourceKeySelector {
         if (key == null) {
             key = doSelect(router, methodInvocation);
             if (key != null) {
-                DataSourceKeySelector.addChoice(key);
                 DataSourceKeySelector.setCurrent(key);
             }
         }
