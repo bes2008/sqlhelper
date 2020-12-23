@@ -16,9 +16,22 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 该类有两个作用：
+ * 1）自动的解析出要执行的方法是在哪个数据源上。执行过程：对于要执行的方法，解析它或者它所在的类，或者接口上上声明的用于决定使用哪种数据源的注解。
+ * 2）对解析过的方法，进行cache, 避免二次解析。
+ */
 public class DataSourceKeyRegistry implements Registry<Method, DataSourceKey> {
 
+    /**
+     * 这里的 DataSourceKey，可以是一个确切的 key，也可以是个 keyPattern。
+     * 不论是确切的key，还是个keyPattern，在DataSourceRegister里进行pattern匹配的。
+     */
     private final ConcurrentHashMap<Method, Holder<DataSourceKey>> methodDataSourceKeyCache = new ConcurrentHashMap<Method, Holder<DataSourceKey>>();
+
+    /**
+     * parser 缓存
+     */
     private Map<Class<? extends Annotation>, DataSourceKeyAnnotationParser> annotationParserMap = new LinkedHashMap<Class<? extends Annotation>, DataSourceKeyAnnotationParser>();
 
     public DataSourceKeyRegistry() {
