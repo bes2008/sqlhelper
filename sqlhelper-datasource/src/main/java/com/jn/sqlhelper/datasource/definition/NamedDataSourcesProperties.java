@@ -14,7 +14,6 @@
 
 package com.jn.sqlhelper.datasource.definition;
 
-import com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorProperties;
 import com.jn.langx.util.collection.Collects;
 
 import java.util.List;
@@ -22,7 +21,6 @@ import java.util.List;
 public class NamedDataSourcesProperties {
     private boolean enabled;
     private List<DataSourceProperties> dataSources = Collects.emptyArrayList();
-    private AspectJExpressionPointcutAdvisorProperties keyChoicesPointcut;
 
     public boolean isEnabled() {
         return enabled;
@@ -38,13 +36,5 @@ public class NamedDataSourcesProperties {
 
     public void setDataSources(List<DataSourceProperties> dataSources) {
         this.dataSources = dataSources;
-    }
-
-    public AspectJExpressionPointcutAdvisorProperties getKeyChoicesPointcut() {
-        return keyChoicesPointcut;
-    }
-
-    public void setKeyChoicesPointcut(AspectJExpressionPointcutAdvisorProperties keyChoicesPointcut) {
-        this.keyChoicesPointcut = keyChoicesPointcut;
     }
 }
