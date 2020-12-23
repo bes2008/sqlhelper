@@ -106,7 +106,7 @@ public class DynamicDataSourcesAutoConfiguration {
         if (springBootOriginDataSource != null) {
             NamedDataSource namedDataSource = DataSources.toNamedDataSource(springBootOriginDataSource);
             if (dataSources.isEmpty()) {
-                namedDataSource.setName(DataSources.DATASOURCE_PRIMARY);
+                namedDataSource.setName(DataSources.DATASOURCE_PRIMARY_NAME);
             }
             centralizedDataSourceFactory.getRegistry().register(namedDataSource);
             dataSources.add(namedDataSource);

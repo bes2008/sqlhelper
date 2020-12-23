@@ -35,5 +35,5 @@ public @interface DataSource {
      *
      * @return
      */
-    public String value() default DataSources.DATASOURCE_PRIMARY;
+    public String value() default DataSources.DATASOURCE_PRIMARY_NAME;
 }
