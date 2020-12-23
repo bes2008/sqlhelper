@@ -40,8 +40,12 @@ public class DataSourceKey {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         DataSourceKey that = (DataSourceKey) o;
         return group.equals(that.group) && name.equals(that.name);
     }
@@ -73,6 +77,6 @@ public class DataSourceKey {
 
     @Override
     public String toString() {
-        return StringTemplates.formatWithPlaceholder("group: {}, name: {}", group, name) ;
+        return StringTemplates.formatWithPlaceholder("group: {}, name: {}", group, name);
     }
 }

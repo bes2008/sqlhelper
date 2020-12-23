@@ -46,6 +46,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
     private static final Logger logger = LoggerFactory.getLogger(DataSourceRegistry.class);
     private volatile DataSourceKey primary = null;
+    /**
+     * 这里的Key 最好是确切的key，不建议使用key Pattern
+     */
     private ConcurrentHashMap<DataSourceKey, NamedDataSource> dataSourceRegistry = new ConcurrentHashMap<DataSourceKey, NamedDataSource>();
     private DataSourceKeyDataSourceParser keyParser = RandomDataSourceKeyParser.INSTANCE;
 
@@ -66,6 +69,9 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
 
         dataSourceRegistry.put(key, DataSources.toNamedDataSource(dataSource, key));
         if (primary == null && DataSources.DATASOURCE_GROUP_DEFAULT.equals(key.getGroup())) {
+            primary = key;
+        }
+        if (DataSources.DATASOURCE_PRIMARY.equals(key)) {
             primary = key;
         }
     }
