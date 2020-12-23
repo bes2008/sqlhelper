@@ -14,20 +14,22 @@
 
 package com.jn.sqlhelper.datasource.spring.aop;
 
-import com.jn.agileway.aop.adapter.aopalliance.MethodInvocationAdapter;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
+import com.jn.sqlhelper.datasource.key.DataSourceKeyRegistry;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
+/**
+ * 只是用来解析注解，不能调用select方法
+ */
 public class DataSourceKeyChoicesAnnotationMethodInterceptor implements MethodInterceptor {
 
-    private DataSourceKeySelector keySelector;
+    private DataSourceKeyRegistry keyRegistry;
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        com.jn.langx.invocation.MethodInvocation ivk = new MethodInvocationAdapter(invocation);
-        DataSourceKey key = keySelector.select(null, ivk);
+        DataSourceKey key = keyRegistry.get(invocation.getMethod());
         if (key != null) {
             DataSourceKeySelector.addChoice(key);
             try {
@@ -40,7 +42,7 @@ public class DataSourceKeyChoicesAnnotationMethodInterceptor implements MethodIn
         }
     }
 
-    public void setKeySelector(DataSourceKeySelector keySelector) {
-        this.keySelector = keySelector;
+    public void setKeyRegistry(DataSourceKeyRegistry keyRegistry) {
+        this.keyRegistry = keyRegistry;
     }
 }

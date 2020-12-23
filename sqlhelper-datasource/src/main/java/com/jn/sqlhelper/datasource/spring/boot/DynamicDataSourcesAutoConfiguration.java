@@ -127,9 +127,9 @@ public class DynamicDataSourcesAutoConfiguration {
     }
 
     @Bean
-    public DataSourceKeyChoicesAnnotationMethodInterceptor interceptor(DataSourceKeySelector dataSourceKeySelector) {
+    public DataSourceKeyChoicesAnnotationMethodInterceptor interceptor(DataSourceKeyRegistry keyRegistry) {
         DataSourceKeyChoicesAnnotationMethodInterceptor interceptor = new DataSourceKeyChoicesAnnotationMethodInterceptor();
-        interceptor.setKeySelector(dataSourceKeySelector);
+        interceptor.setKeyRegistry(keyRegistry);
         return interceptor;
     }
 

@@ -155,8 +155,18 @@ public class DataSourceKeySelector {
         removeChoice(current);
     }
 
+    /**
+     * 在真正的调用的地方调用即可
+     *
+     * @param router
+     * @param methodInvocation
+     * @return
+     */
     public final DataSourceKey select(@Nullable DataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
-        DataSourceKey key = this.dataSourceKeyRegistry.get(methodInvocation.getJoinPoint());
+        DataSourceKey key = null;
+        if (methodInvocation != null) {
+            key = this.dataSourceKeyRegistry.get(methodInvocation.getJoinPoint());
+        }
         if (key != null) {
             NamedDataSource dataSource = dataSourceRegistry.get(key);
             if (dataSource != null) {
