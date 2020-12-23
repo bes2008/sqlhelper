@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.datasource.spring.boot;
 
+import com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorBuilder;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Consumer;
@@ -26,11 +27,14 @@ import com.jn.sqlhelper.datasource.definition.NamedDataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.DataSourceKeyRegistry;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
-import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyAnnotationParser;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
+import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
+import com.jn.sqlhelper.datasource.spring.aop.DataSourceKeyChoicesAnnotationMethodInterceptor;
+import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.ListFactoryBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -120,6 +124,25 @@ public class DynamicDataSourcesAutoConfiguration {
         selector.addDataSourceKeyRouters(routers);
         selector.setDataSourceKeyRegistry(keyRegistry);
         return selector;
+    }
+
+    @Bean
+    public DataSourceKeyChoicesAnnotationMethodInterceptor interceptor(DataSourceKeySelector dataSourceKeySelector) {
+        DataSourceKeyChoicesAnnotationMethodInterceptor interceptor = new DataSourceKeyChoicesAnnotationMethodInterceptor();
+        interceptor.setKeySelector(dataSourceKeySelector);
+        return interceptor;
+    }
+
+    @Bean("annotationKeyChoicesAdvisor")
+    @ConditionalOnMissingBean(name = "annotationKeyChoicesAdvisor")
+    @ConditionalOnProperty(prefix = "sqlhelper.dynamicDataSource", name = "key-choices-pointcut")
+    public AspectJExpressionPointcutAdvisor keyChoicesAdvisor(
+            NamedDataSourcesProperties namedDataSourcesProperties,
+            DataSourceKeyChoicesAnnotationMethodInterceptor interceptor) {
+        return new AspectJExpressionPointcutAdvisorBuilder()
+                .properties(namedDataSourcesProperties.getKeyChoicesPointcut())
+                .interceptor(interceptor)
+                .build();
     }
 
 }

@@ -16,6 +16,7 @@ package com.jn.sqlhelper.datasource.key;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
+import com.jn.langx.annotation.Singleton;
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
@@ -40,7 +41,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+@Singleton
 public class DataSourceKeySelector {
     private static final Logger logger = LoggerFactory.getLogger(DataSourceKeySelector.class);
     private static final ThreadLocalHolder<ListableStack<DataSourceKey>> DATA_SOURCE_KEY_HOLDER = new ThreadLocalHolder<ListableStack<DataSourceKey>>(
