@@ -29,14 +29,6 @@
             <artifactId>spring-boot-starter</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.fangjinuo.agileway</groupId>
-            <artifactId>agileway-aop</artifactId>
-            <version>${agileway.version}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>com.github.fangjinuo.agileway</groupId>
             <artifactId>agileway-spring</artifactId>

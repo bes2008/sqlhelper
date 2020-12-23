@@ -14,6 +14,8 @@
 
 package com.jn.sqlhelper.datasource.spring.boot;
 
+import com.jn.langx.util.ClassLoaders;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Consumer;
@@ -24,25 +26,32 @@ import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.sqlhelper.datasource.definition.NamedDataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeyRegistry;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyAnnotationParser;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
 import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
 @Configuration
 public class DynamicDataSourcesAutoConfiguration {
+    private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourcesAutoConfiguration.class);
+
 
     @Bean
     public DataSourceRegistry dataSourceRegistry(ObjectProvider<DataSourceKeyDataSourceParser> dataSourceKeyParserProvider) {
@@ -61,7 +70,14 @@ public class DynamicDataSourcesAutoConfiguration {
 
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.dynamicDataSource")
-    public NamedDataSourcesProperties namedDataSourcesProperties() {
+    public NamedDataSourcesProperties namedDataSourcesProperties(Environment environment) {
+        String keyChoicesPointcutExpression = environment.getProperty("sqlhelper.dynamicDataSource.key-choices-pointcut.expression");
+        if (Strings.isNotBlank(keyChoicesPointcutExpression)) {
+            String requiredClass = "com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorProperties";
+            if (!ClassLoaders.hasClass(requiredClass, this.getClass().getClassLoader())) {
+                logger.warn("The configuration property 'sqlhelper.dynamicDataSource.key-choices-pointcut.expression' has specified, but can't find the class: '{}', you should import com.github.fangjinuo.agilway:agileway-spring:${VERSION}.jar to you classpath", requiredClass);
+            }
+        }
         return new NamedDataSourcesProperties();
     }
 
@@ -71,6 +87,8 @@ public class DynamicDataSourcesAutoConfiguration {
             NamedDataSourcesProperties namedDataSourcesProperties,
             // 该参数只是为了兼容Spring Boot 默认的 DataSource配置而已
             ObjectProvider<DataSource> springBootOriginDataSourceProvider) {
+        logger.info("===[SQLHelper & Dynamic DataSource]=== the dynamic datasource is enabled");
+
         List<DataSourceProperties> dataSourcePropertiesList = namedDataSourcesProperties.getDataSources();
         List<NamedDataSource> dataSources = Pipeline.of(dataSourcePropertiesList).map(new Function<DataSourceProperties, NamedDataSource>() {
             @Override
@@ -88,6 +106,19 @@ public class DynamicDataSourcesAutoConfiguration {
             }
             centralizedDataSourceFactory.getRegistry().register(namedDataSource);
             dataSources.add(namedDataSource);
+        }
+
+        if (logger.isInfoEnabled() && !dataSources.isEmpty()) {
+            StringBuilder log = new StringBuilder(256);
+            log.append("===[SQLHelper & Dynamic DataSource]=== will load dataSources:\n\t");
+            Collection<DataSourceKey> keys = Collects.map(dataSources, new Function<NamedDataSource, DataSourceKey>() {
+                @Override
+                public DataSourceKey apply(NamedDataSource namedDataSource) {
+                    return namedDataSource.getDataSourceKey();
+                }
+            });
+            log.append(Strings.join("\n\t", keys));
+            logger.info(log.toString());
         }
 
         ListFactoryBean dataSourcesFactoryBean = new ListFactoryBean();

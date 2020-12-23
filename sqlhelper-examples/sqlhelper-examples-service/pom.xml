@@ -29,5 +29,10 @@
             <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
             <artifactId>sqlhelper-examples-model</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.agileway</groupId>
+            <artifactId>agileway-spring</artifactId>
+            <version>${agileway.version}</version>
+        </dependency>
     </dependencies>
 </project>
