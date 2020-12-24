@@ -22,11 +22,7 @@ import java.util.List;
 public class RandomRouter extends DataSourceKeyRouter {
     @Override
     public DataSourceKey apply(List<DataSourceKey> dataSourceKeys, MethodInvocation methodInvocation) {
-        return null;
-    }
 
-    @Override
-    public List<String> applyTo() {
         return null;
     }
 }

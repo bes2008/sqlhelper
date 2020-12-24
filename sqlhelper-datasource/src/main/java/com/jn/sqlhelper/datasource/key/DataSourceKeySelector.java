@@ -83,7 +83,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
         Preconditions.checkNotNull(router);
         Preconditions.checkNotNull(dataSourceRegistry, "please set dataSourceRegister");
         router.setDataSourceRegistry(this.dataSourceRegistry);
-        List<String> groups = Pipeline.of(router.applyTo()).clearNulls().asList();
+        List<String> groups = Pipeline.of(router.getApplyGroups()).clearNulls().asList();
         Collects.forEach(groups, new Consumer<String>() {
             @Override
             public void accept(String group) {
@@ -204,6 +204,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
     protected DataSourceKey doSelect(@Nullable DataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
         Preconditions.checkArgument(dataSourceRegistry.size() > 0, "has no any datasource registered");
         if (dataSourceRegistry.size() == 1) {
+            // 此情况下，不会去考虑DataSource是否出现故障了
             return dataSourceRegistry.getPrimary();
         }
         // 从线程栈里过滤
