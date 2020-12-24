@@ -15,23 +15,27 @@
 package com.jn.sqlhelper.datasource.spring.boot;
 
 import com.jn.langx.util.ClassLoaders;
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.function.Consumer;
+import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Function;
+import com.jn.langx.util.function.Predicate;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
-import com.jn.sqlhelper.datasource.definition.NamedDataSourcesProperties;
+import com.jn.sqlhelper.datasource.definition.DataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeyRegistry;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyAnnotationParser;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
-import com.jn.sqlhelper.datasource.key.router.AbstractDataSourceKeyRouter;
+import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -70,7 +74,7 @@ public class DynamicDataSourcesAutoConfiguration {
 
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.dynamicDataSource")
-    public NamedDataSourcesProperties namedDataSourcesProperties(Environment environment) {
+    public DataSourcesProperties namedDataSourcesProperties(Environment environment) {
         String keyChoicesPointcutExpression = environment.getProperty("sqlhelper.dynamicDataSource.key-choices-pointcut.expression");
         if (Strings.isNotBlank(keyChoicesPointcutExpression)) {
             String requiredClass = "com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorProperties";
@@ -82,13 +86,13 @@ public class DynamicDataSourcesAutoConfiguration {
                 logger.warn(log.toString());
             }
         }
-        return new NamedDataSourcesProperties();
+        return new DataSourcesProperties();
     }
 
     @Bean(name = "dataSourcesFactoryBean")
     public ListFactoryBean dataSourcesFactoryBean(
             final CentralizedDataSourceFactory centralizedDataSourceFactory,
-            NamedDataSourcesProperties namedDataSourcesProperties,
+            DataSourcesProperties namedDataSourcesProperties,
             // 该参数只是为了兼容Spring Boot 默认的 DataSource配置而已
             ObjectProvider<DataSource> springBootOriginDataSourceProvider) {
         logger.info("===[SQLHelper & Dynamic DataSource]=== the dynamic datasource is enabled");
@@ -146,16 +150,43 @@ public class DynamicDataSourcesAutoConfiguration {
 
     @Bean
     public DataSourceKeySelector dataSourceKeySelector(
-            DataSourceRegistry registry,
+            final DataSourceRegistry registry,
             DataSourceKeyRegistry keyRegistry,
-            ObjectProvider<List<AbstractDataSourceKeyRouter>> routersProvider) {
-        DataSourceKeySelector selector = new DataSourceKeySelector();
-        selector.setDataSourceRegistry(registry);
-        List<AbstractDataSourceKeyRouter> routers = routersProvider.getIfAvailable();
-        selector.registerRouters(routers);
+            ObjectProvider<List<DataSourceKeyRouter>> routersProvider,
+            DataSourcesProperties dataSourcesProperties) {
+
+        final DataSourceKeySelector selector = new DataSourceKeySelector();
+
         selector.setDataSourceKeyRegistry(keyRegistry);
+        selector.setDataSourceRegistry(registry);
+
+        List<DataSourceKeyRouter> routers = routersProvider.getIfAvailable();
+        selector.registerRouters(routers);
+
+        // 处理 default router
+        final String defaultRouterName = dataSourcesProperties.getDefaultRouter();
+        if (Emptys.isNotEmpty(defaultRouterName)) {
+            DataSourceKeyRouter defaultRouter = Collects.findFirst(routers, new Predicate<DataSourceKeyRouter>() {
+                @Override
+                public boolean test(DataSourceKeyRouter dataSourceKeyRouter) {
+                    return defaultRouterName.equals(dataSourceKeyRouter.getName());
+                }
+            });
+            if (defaultRouter != null) {
+                selector.setDefaultRouter(defaultRouter);
+            }
+        }
+
+        // 指定分配关系
+        MultiValueMap<String, String> groupToRoutersMap = dataSourcesProperties.getGroupRouters();
+        Collects.forEach(groupToRoutersMap, new Consumer2<String, Collection<String>>() {
+            @Override
+            public void accept(String group, Collection<String> routers) {
+                selector.allocateRouters(group, routers);
+            }
+        });
+
         return selector;
     }
-
 
 }

@@ -25,16 +25,15 @@ import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.collection.multivalue.CommonMultiValueMap;
 import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.collection.stack.ListableStack;
-import com.jn.langx.util.function.Consumer;
-import com.jn.langx.util.function.Predicate;
-import com.jn.langx.util.function.Supplier;
-import com.jn.langx.util.function.Supplier0;
+import com.jn.langx.util.function.*;
 import com.jn.langx.util.struct.Holder;
 import com.jn.langx.util.struct.ThreadLocalHolder;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.DataSourceRegistryAware;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.router.AbstractDataSourceKeyRouter;
+import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
+import com.jn.sqlhelper.datasource.key.router.FirstRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,13 +65,27 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
     private DataSourceRegistry dataSourceRegistry;
 
 
-    // 初始化阶段初始化，后续只是使用
-    private MultiValueMap<String, AbstractDataSourceKeyRouter> groupToRoutersMap = new CommonMultiValueMap<String, AbstractDataSourceKeyRouter>(new ConcurrentHashMap<String, Collection<AbstractDataSourceKeyRouter>>(), new Supplier<String, Collection<AbstractDataSourceKeyRouter>>() {
+    private DataSourceKeyRouter defaultRouter;
+    /**
+     * 缓存所有的Router。
+     * key: route name
+     * value: router
+     */
+    private ConcurrentHashMap<String, DataSourceKeyRouter> routerMap = new ConcurrentHashMap<String, DataSourceKeyRouter>();
+    /**
+     * 缓存 group所用的 routers
+     * key: group
+     */
+    private MultiValueMap<String, String> groupToRoutersMap = new CommonMultiValueMap<String, String>(new ConcurrentHashMap<String, Collection<String>>(), new Supplier<String, Collection<String>>() {
         @Override
-        public Collection<AbstractDataSourceKeyRouter> get(String group) {
-            return Collects.emptyArrayList();
+        public Collection<String> get(String group) {
+            return Collects.newArrayList();
         }
     });
+
+    public DataSourceKeySelector() {
+        this.defaultRouter = new FirstRouter();
+    }
 
     public void setDataSourceRegistry(DataSourceRegistry registry) {
         this.dataSourceRegistry = registry;
@@ -86,24 +99,55 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
         this.dataSourceKeyRegistry = dataSourceKeyRegistry;
     }
 
-    public void registerRouter(final AbstractDataSourceKeyRouter router) {
+    public void setDefaultRouter(DataSourceKeyRouter router) {
+        this.defaultRouter = router;
+    }
+
+    public void registerRouter(final DataSourceKeyRouter router) {
+        registerRouter(router, false);
+    }
+
+    public void registerRouter(final DataSourceKeyRouter router, boolean asDefault) {
         Preconditions.checkNotNull(router);
-        List<String> groups = Pipeline.of(router.getApplyGroups()).clearNulls().asList();
-        Collects.forEach(groups, new Consumer<String>() {
+        Preconditions.checkNotEmpty(router.getName(), "the router name is null or empty");
+        routerMap.put(router.getName(), router);
+        if (asDefault) {
+            setDefaultRouter(router);
+        }
+    }
+
+    public void registerRouters(List<DataSourceKeyRouter> routers) {
+        Collects.forEach(routers, new Consumer<DataSourceKeyRouter>() {
             @Override
-            public void accept(String group) {
-                groupToRoutersMap.add(group, router);
+            public void accept(DataSourceKeyRouter router) {
+                registerRouter(router);
             }
         });
     }
 
-    public void registerRouters(List<AbstractDataSourceKeyRouter> routers) {
-        Collects.forEach(routers, new Consumer<AbstractDataSourceKeyRouter>() {
+
+    /**
+     * 为 group 划分 routers
+     *
+     * @param group
+     * @param routerNames
+     */
+    public void allocateRouters(final String group, Collection<String> routerNames) {
+        Collects.forEach(routerNames, new Consumer<String>() {
             @Override
-            public void accept(AbstractDataSourceKeyRouter router) {
-                registerRouter(router);
+            public void accept(String routerName) {
+                groupToRoutersMap.addIfAbsent(group, routerName);
             }
         });
+    }
+
+    public List<DataSourceKeyRouter> getRouters(String group) {
+        return Pipeline.of(groupToRoutersMap.get(group)).map(new Function<String, DataSourceKeyRouter>() {
+            @Override
+            public DataSourceKeyRouter apply(String routerName) {
+                return routerMap.get(routerName);
+            }
+        }).clearNulls().asList();
     }
 
     /**
@@ -261,16 +305,18 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
             }
 
             // 指定的参数过滤不到的情况下，则基于 group router
-            Collection<AbstractDataSourceKeyRouter> routers = groupToRoutersMap.get(keys.get(0).getGroup());
+            Collection<DataSourceKeyRouter> routers = getRouters(keys.get(0).getGroup());
+            if (Emptys.isEmpty(routers)) {
 
-            Collects.forEach(routers, new Consumer<AbstractDataSourceKeyRouter>() {
+            }
+            Collects.forEach(routers, new Consumer<DataSourceKeyRouter>() {
                 @Override
-                public void accept(AbstractDataSourceKeyRouter groupRouter) {
+                public void accept(DataSourceKeyRouter groupRouter) {
                     keyHolder.set(groupRouter.apply(keys, methodInvocation));
                 }
-            }, new Predicate<AbstractDataSourceKeyRouter>() {
+            }, new Predicate<DataSourceKeyRouter>() {
                 @Override
-                public boolean test(AbstractDataSourceKeyRouter filter) {
+                public boolean test(DataSourceKeyRouter groupRouter) {
                     return !keyHolder.isNull();
                 }
             });
