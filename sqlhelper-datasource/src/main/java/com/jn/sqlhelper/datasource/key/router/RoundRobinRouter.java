@@ -14,19 +14,13 @@
 
 package com.jn.sqlhelper.datasource.key.router;
 
+import com.jn.langx.algorithm.loadbalance.RoundRobinLoadBalanceStrategy;
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
-import java.util.List;
-
-public class RoundRobinRouter extends AbstractDataSourceKeyRouter {
-
+public class RoundRobinRouter extends RoundRobinLoadBalanceStrategy<DataSourceKey, MethodInvocation> implements DataSourceKeyRouter {
     public RoundRobinRouter() {
         setName("roundrobin");
     }
 
-    @Override
-    public DataSourceKey apply(List<DataSourceKey> dataSourceKeys, MethodInvocation methodInvocation) {
-        return null;
-    }
 }

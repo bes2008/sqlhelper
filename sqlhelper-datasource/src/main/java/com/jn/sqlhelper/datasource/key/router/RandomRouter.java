@@ -14,20 +14,12 @@
 
 package com.jn.sqlhelper.datasource.key.router;
 
+import com.jn.langx.algorithm.loadbalance.RandomLoadBalanceStrategy;
 import com.jn.langx.invocation.MethodInvocation;
-import com.jn.langx.util.random.ThreadLocalRandom;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
-import java.util.List;
-
-public class RandomRouter extends AbstractDataSourceKeyRouter {
+public class RandomRouter extends RandomLoadBalanceStrategy<DataSourceKey, MethodInvocation> implements DataSourceKeyRouter {
     public RandomRouter() {
         this.setName("random");
-    }
-
-    @Override
-    public DataSourceKey apply(List<DataSourceKey> dataSourceKeys, MethodInvocation methodInvocation) {
-        int index = ThreadLocalRandom.current().nextInt(dataSourceKeys.size());
-        return dataSourceKeys.get(index);
     }
 }
