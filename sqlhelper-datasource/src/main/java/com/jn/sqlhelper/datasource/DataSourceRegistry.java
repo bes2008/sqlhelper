@@ -112,6 +112,8 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
             addNonExistsDataSourceKey(keyPattern);
             return Collections.emptyList();
         }
+
+        // 针对 key pattern 进行匹配
         final AntPathMatcher antPathMatcher = new AntPathMatcher(name);
         antPathMatcher.setGlobal(true);
 
@@ -126,6 +128,7 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
             }
         }).asList();
 
+        // 如果没有匹配到任何数据源，则加入不存在的 key pattern 序列
         if (Emptys.isEmpty(matched)) {
             addNonExistsDataSourceKey(keyPattern);
             return Collections.emptyList();
