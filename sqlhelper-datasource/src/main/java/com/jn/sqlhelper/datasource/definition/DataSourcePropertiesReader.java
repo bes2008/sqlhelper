@@ -27,7 +27,7 @@ public interface DataSourcePropertiesReader {
      * @param resources the resource descriptors
      * @return the number of bean definitions found
      */
-    List<DataSourceProperties> loadBeanDefinitions(Resource... resources);
+    List<DataSourceProperties> loadDefinitions(Resource... resources);
 
 
 }
