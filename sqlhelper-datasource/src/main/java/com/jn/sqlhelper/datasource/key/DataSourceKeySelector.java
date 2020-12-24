@@ -33,7 +33,7 @@ import com.jn.sqlhelper.datasource.DataSourceRegistryAware;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.router.AbstractDataSourceKeyRouter;
 import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
-import com.jn.sqlhelper.datasource.key.router.FirstRouter;
+import com.jn.sqlhelper.datasource.key.router.RandomRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,7 +84,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
     });
 
     public DataSourceKeySelector() {
-        this.defaultRouter = new FirstRouter();
+        this.defaultRouter = new RandomRouter();
     }
 
     public void setDataSourceRegistry(DataSourceRegistry registry) {
