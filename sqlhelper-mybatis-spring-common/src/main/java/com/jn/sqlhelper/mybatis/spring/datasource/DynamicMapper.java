@@ -75,7 +75,6 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         if (key != null) {
             NamedDataSource dataSource = selector.getDataSourceRegistry().get(key);
             if (dataSource != null) {
-                DataSourceKeySelector.addChoice(key);
                 DataSourceKeySelector.setCurrent(key);
             }
         }
