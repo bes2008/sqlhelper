@@ -40,7 +40,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 @Singleton
 public class DataSourceKeySelector implements DataSourceRegistryAware {
@@ -59,6 +61,18 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
     private DataSourceKeyRegistry dataSourceKeyRegistry;
     @NonNull
     private DataSourceRegistry dataSourceRegistry;
+
+
+    /**
+     * 是否开启故障转移功能
+     */
+    private volatile boolean failover = true;
+
+    /**
+     * 故障的key
+     */
+    private Set<DataSourceKey> failKeys = new CopyOnWriteArraySet<DataSourceKey>();
+
     // 初始化阶段初始化，后续只是使用
     private MultiValueMap<String, AbstractDataSourceKeyRouter> groupToRoutersMap = new CommonMultiValueMap<String, AbstractDataSourceKeyRouter>(new ConcurrentHashMap<String, Collection<AbstractDataSourceKeyRouter>>(), new Supplier<String, Collection<AbstractDataSourceKeyRouter>>() {
         @Override
@@ -227,7 +241,19 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
             public void accept(DataSourceKey dataSourceKey) {
                 List<DataSourceKey> matched = dataSourceRegistry.findKeys(dataSourceKey);
                 if (Emptys.isNotEmpty(matched)) {
-                    dataSourceKeyList.set(matched);
+
+                    if (failover) {
+                        matched = Pipeline.of(matched).filter(new Predicate<DataSourceKey>() {
+                            @Override
+                            public boolean test(DataSourceKey dataSourceKey) {
+                                return !failKeys.contains(dataSourceKey);
+                            }
+                        }).asList();
+                    }
+
+                    if (Emptys.isNotEmpty(matched)) {
+                        dataSourceKeyList.set(matched);
+                    }
                 }
             }
         }, new Predicate<DataSourceKey>() {
@@ -276,5 +302,13 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
 
     public DataSourceRegistry getDataSourceRegistry() {
         return dataSourceRegistry;
+    }
+
+    public boolean isFailover() {
+        return failover;
+    }
+
+    public void setFailover(boolean failover) {
+        this.failover = failover;
     }
 }

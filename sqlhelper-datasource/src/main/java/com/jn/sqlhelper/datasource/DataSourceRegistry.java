@@ -57,14 +57,6 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
      */
     private Set<DataSourceKey> nonExistDSKeys = new CopyOnWriteArraySet<DataSourceKey>();
 
-    /**
-     * 是否开启故障转移功能
-     */
-    private volatile boolean failover = true;
-    /**
-     * 故障的key
-     */
-    private Set<DataSourceKey> failKeys = new CopyOnWriteArraySet<DataSourceKey>();
 
     public void register(DataSourceKey key, DataSource dataSource) {
         Preconditions.checkNotEmpty(key, "the jdbc datasource key is null or empty");
@@ -130,14 +122,6 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
             return Collections.emptyList();
         }
 
-        if (failover) {
-            Pipeline.of(matched).filter(new Predicate<DataSourceKey>() {
-                @Override
-                public boolean test(DataSourceKey dataSourceKey) {
-                    return !failKeys.contains(dataSourceKey);
-                }
-            });
-        }
         return matched;
     }
 
@@ -248,11 +232,5 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
         return dataSourceRegistry.size();
     }
 
-    public boolean isFailover() {
-        return failover;
-    }
 
-    public void setFailover(boolean failover) {
-        this.failover = failover;
-    }
 }
