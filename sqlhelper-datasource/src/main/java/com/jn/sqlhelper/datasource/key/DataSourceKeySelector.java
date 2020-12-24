@@ -81,8 +81,6 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
 
     public void registerRouter(final DataSourceKeyRouter router) {
         Preconditions.checkNotNull(router);
-        Preconditions.checkNotNull(dataSourceRegistry, "please set dataSourceRegister");
-        router.setDataSourceRegistry(this.dataSourceRegistry);
         List<String> groups = Pipeline.of(router.getApplyGroups()).clearNulls().asList();
         Collects.forEach(groups, new Consumer<String>() {
             @Override
