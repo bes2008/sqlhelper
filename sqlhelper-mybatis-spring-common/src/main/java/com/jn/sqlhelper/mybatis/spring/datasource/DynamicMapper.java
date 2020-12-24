@@ -24,7 +24,7 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
-import com.jn.sqlhelper.datasource.key.router.AbstractDataSourceKeyRouter;
+import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -49,7 +49,7 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
     @NonNull
     private DataSourceKeySelector selector;
     @Nullable
-    private AbstractDataSourceKeyRouter router;
+    private DataSourceKeyRouter router;
 
     public DynamicMapper(Class<MAPPER> mapperInterface, Map<DataSourceKey, MAPPER> delegateMapperMap, DataSourceKeySelector selector) {
         this.mapperInterface = mapperInterface;
@@ -95,11 +95,11 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         this.selector = selector;
     }
 
-    public AbstractDataSourceKeyRouter getRouter() {
+    public DataSourceKeyRouter getRouter() {
         return router;
     }
 
-    public void setRouter(AbstractDataSourceKeyRouter router) {
+    public void setRouter(DataSourceKeyRouter router) {
         this.router = router;
     }
 }

@@ -31,7 +31,6 @@ import com.jn.langx.util.struct.ThreadLocalHolder;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.DataSourceRegistryAware;
 import com.jn.sqlhelper.datasource.NamedDataSource;
-import com.jn.sqlhelper.datasource.key.router.AbstractDataSourceKeyRouter;
 import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 import com.jn.sqlhelper.datasource.key.router.RandomRouter;
 import org.slf4j.Logger;
@@ -218,7 +217,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
      * @param methodInvocation
      * @return
      */
-    public final DataSourceKey select(@Nullable AbstractDataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
+    public final DataSourceKey select(@Nullable DataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
         DataSourceKey key = null;
         if (methodInvocation != null) {
             key = this.dataSourceKeyRegistry.get(methodInvocation.getJoinPoint());
@@ -250,7 +249,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
      * <p>
      * 这里面不能去设置CURRENT_SELECTED
      */
-    protected DataSourceKey doSelect(@Nullable AbstractDataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
+    protected DataSourceKey doSelect(@Nullable DataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
         Preconditions.checkArgument(dataSourceRegistry.size() > 0, "has no any datasource registered");
         if (dataSourceRegistry.size() == 1) {
             // 此情况下，不会去考虑DataSource是否出现故障了
@@ -298,7 +297,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
             // 如果匹配到的过多，则进行二次过滤
             final Holder<DataSourceKey> keyHolder = new Holder<DataSourceKey>();
             if (router != null) {
-                keyHolder.set(router.apply(keys, methodInvocation));
+                keyHolder.set(router.select(keys, methodInvocation));
             }
             if (!keyHolder.isNull()) {
                 return keyHolder.get();
@@ -312,7 +311,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
             Collects.forEach(routers, new Consumer<DataSourceKeyRouter>() {
                 @Override
                 public void accept(DataSourceKeyRouter groupRouter) {
-                    keyHolder.set(groupRouter.apply(keys, methodInvocation));
+                    keyHolder.set(groupRouter.select(keys, methodInvocation));
                 }
             }, new Predicate<DataSourceKeyRouter>() {
                 @Override

@@ -18,7 +18,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
-import com.jn.sqlhelper.datasource.key.router.AbstractDataSourceKeyRouter;
+import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.reflection.ExceptionUtil;
 import org.apache.ibatis.session.Configuration;
@@ -36,7 +36,7 @@ import java.util.Map;
 
 public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
     private DataSourceKeySelector selector;
-    private AbstractDataSourceKeyRouter mapperDataSourceKeyRouter;
+    private DataSourceKeyRouter mapperDataSourceKeyRouter;
 
     public DynamicSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
         this(sqlSessionFactory, null);
@@ -50,7 +50,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
         this.selector = selector;
     }
 
-    public void setMapperDataSourceKeyRouter(AbstractDataSourceKeyRouter mapperDataSourceKeyRouter) {
+    public void setMapperDataSourceKeyRouter(DataSourceKeyRouter mapperDataSourceKeyRouter) {
         this.mapperDataSourceKeyRouter = mapperDataSourceKeyRouter;
     }
 
