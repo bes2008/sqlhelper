@@ -15,7 +15,6 @@
 package com.jn.sqlhelper.datasource.key.router;
 
 import com.jn.langx.Named;
-import com.jn.langx.Ordered;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.invocation.MethodInvocation;
@@ -24,7 +23,7 @@ import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import java.util.List;
 
-public interface DataSourceKeyRouter extends Function2<List<DataSourceKey>, MethodInvocation, DataSourceKey>, Named, Ordered {
+public interface DataSourceKeyRouter extends Function2<List<DataSourceKey>, MethodInvocation, DataSourceKey>, Named {
     /**
      * @param dataSourceKeys 该参数为经过筛选后的 key，筛选过程可以参见 {@link com.jn.sqlhelper.datasource.key.DataSourceKeySelector#select(AbstractDataSourceKeyRouter, MethodInvocation)}
      *                       如果开起了故障转移，则在筛选时，会自动的移除掉故障的。
@@ -33,5 +32,4 @@ public interface DataSourceKeyRouter extends Function2<List<DataSourceKey>, Meth
     @Override
     DataSourceKey apply(@NonNull List<DataSourceKey> dataSourceKeys, @Nullable MethodInvocation methodInvocation);
 
-    List<String> getApplyGroups();
 }

@@ -21,6 +21,10 @@ import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import java.util.List;
 
 public class RandomRouter extends AbstractDataSourceKeyRouter {
+    public RandomRouter() {
+        this.setName("random");
+    }
+
     @Override
     public DataSourceKey apply(List<DataSourceKey> dataSourceKeys, MethodInvocation methodInvocation) {
         int index = ThreadLocalRandom.current().nextInt(dataSourceKeys.size());
