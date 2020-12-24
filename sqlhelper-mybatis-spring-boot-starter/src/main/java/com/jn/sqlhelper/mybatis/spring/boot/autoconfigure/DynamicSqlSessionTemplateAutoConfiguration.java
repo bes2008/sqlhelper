@@ -21,7 +21,7 @@ import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
-import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
+import com.jn.sqlhelper.datasource.key.router.AbstractDataSourceKeyRouter;
 import com.jn.sqlhelper.mybatis.spring.datasource.DelegatingSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.datasource.DynamicSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.datasource.DynamicSqlSessionTemplate;
@@ -132,11 +132,11 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
             MybatisProperties mybatisProperties,
             SqlSessionFactory sessionFactory,
             DataSourceKeySelector selector,
-            ObjectProvider<DataSourceKeyRouter> mapperLevelRouterProvider) {
+            ObjectProvider<AbstractDataSourceKeyRouter> mapperLevelRouterProvider) {
         DynamicSqlSessionTemplate template = new DynamicSqlSessionTemplate(sessionFactory, mybatisProperties.getExecutorType());
         template.setSelector(selector);
         @Nullable
-        DataSourceKeyRouter router = mapperLevelRouterProvider.getIfAvailable();
+        AbstractDataSourceKeyRouter router = mapperLevelRouterProvider.getIfAvailable();
         template.setMapperDataSourceKeyRouter(router);
         return template;
     }

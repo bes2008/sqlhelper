@@ -19,7 +19,7 @@ import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import java.util.List;
 
-public class RandomRouter extends DataSourceKeyRouter {
+public class RandomRouter extends AbstractDataSourceKeyRouter {
     @Override
     public DataSourceKey apply(List<DataSourceKey> dataSourceKeys, MethodInvocation methodInvocation) {
 

@@ -34,7 +34,7 @@ import com.jn.langx.util.struct.ThreadLocalHolder;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.DataSourceRegistryAware;
 import com.jn.sqlhelper.datasource.NamedDataSource;
-import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
+import com.jn.sqlhelper.datasource.key.router.AbstractDataSourceKeyRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,9 +60,9 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
     @NonNull
     private DataSourceRegistry dataSourceRegistry;
     // 初始化阶段初始化，后续只是使用
-    private MultiValueMap<String, DataSourceKeyRouter> groupToRoutersMap = new CommonMultiValueMap<String, DataSourceKeyRouter>(new ConcurrentHashMap<String, Collection<DataSourceKeyRouter>>(), new Supplier<String, Collection<DataSourceKeyRouter>>() {
+    private MultiValueMap<String, AbstractDataSourceKeyRouter> groupToRoutersMap = new CommonMultiValueMap<String, AbstractDataSourceKeyRouter>(new ConcurrentHashMap<String, Collection<AbstractDataSourceKeyRouter>>(), new Supplier<String, Collection<AbstractDataSourceKeyRouter>>() {
         @Override
-        public Collection<DataSourceKeyRouter> get(String group) {
+        public Collection<AbstractDataSourceKeyRouter> get(String group) {
             return Collects.emptyArrayList();
         }
     });
@@ -79,7 +79,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
         this.dataSourceKeyRegistry = dataSourceKeyRegistry;
     }
 
-    public void registerRouter(final DataSourceKeyRouter router) {
+    public void registerRouter(final AbstractDataSourceKeyRouter router) {
         Preconditions.checkNotNull(router);
         List<String> groups = Pipeline.of(router.getApplyGroups()).clearNulls().asList();
         Collects.forEach(groups, new Consumer<String>() {
@@ -90,10 +90,10 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
         });
     }
 
-    public void registerRouters(List<DataSourceKeyRouter> routers) {
-        Collects.forEach(routers, new Consumer<DataSourceKeyRouter>() {
+    public void registerRouters(List<AbstractDataSourceKeyRouter> routers) {
+        Collects.forEach(routers, new Consumer<AbstractDataSourceKeyRouter>() {
             @Override
-            public void accept(DataSourceKeyRouter router) {
+            public void accept(AbstractDataSourceKeyRouter router) {
                 registerRouter(router);
             }
         });
@@ -167,7 +167,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
      * @param methodInvocation
      * @return
      */
-    public final DataSourceKey select(@Nullable DataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
+    public final DataSourceKey select(@Nullable AbstractDataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
         DataSourceKey key = null;
         if (methodInvocation != null) {
             key = this.dataSourceKeyRegistry.get(methodInvocation.getJoinPoint());
@@ -199,7 +199,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
      * <p>
      * 这里面不能去设置CURRENT_SELECTED
      */
-    protected DataSourceKey doSelect(@Nullable DataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
+    protected DataSourceKey doSelect(@Nullable AbstractDataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
         Preconditions.checkArgument(dataSourceRegistry.size() > 0, "has no any datasource registered");
         if (dataSourceRegistry.size() == 1) {
             // 此情况下，不会去考虑DataSource是否出现故障了
@@ -254,16 +254,16 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
             }
 
             // 指定的参数过滤不到的情况下，则基于 group router
-            Collection<DataSourceKeyRouter> routers = groupToRoutersMap.get(keys.get(0).getGroup());
+            Collection<AbstractDataSourceKeyRouter> routers = groupToRoutersMap.get(keys.get(0).getGroup());
 
-            Collects.forEach(routers, new Consumer<DataSourceKeyRouter>() {
+            Collects.forEach(routers, new Consumer<AbstractDataSourceKeyRouter>() {
                 @Override
-                public void accept(DataSourceKeyRouter groupRouter) {
+                public void accept(AbstractDataSourceKeyRouter groupRouter) {
                     keyHolder.set(groupRouter.apply(keys, methodInvocation));
                 }
-            }, new Predicate<DataSourceKeyRouter>() {
+            }, new Predicate<AbstractDataSourceKeyRouter>() {
                 @Override
-                public boolean test(DataSourceKeyRouter filter) {
+                public boolean test(AbstractDataSourceKeyRouter filter) {
                     return !keyHolder.isNull();
                 }
             });
