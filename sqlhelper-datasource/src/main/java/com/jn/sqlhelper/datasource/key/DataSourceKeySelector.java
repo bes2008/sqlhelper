@@ -351,11 +351,6 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
     }
 
     @Override
-    public DataSourceKey chooseNode(MethodInvocation methodInvocation) {
-        return select(methodInvocation);
-    }
-
-    @Override
     public boolean isEmpty() {
         return dataSourceRegistry.size() == 0;
     }

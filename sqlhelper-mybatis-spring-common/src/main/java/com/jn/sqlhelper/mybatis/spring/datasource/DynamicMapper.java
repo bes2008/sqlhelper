@@ -63,9 +63,9 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         Object mapper = getMapperDelegate(methodInvocation);
         try {
             return method.invoke(mapper, args);
-        }catch (Throwable ex){
+        } catch (Throwable ex) {
             throw ex;
-        }finally {
+        } finally {
             DataSourceKeySelector.removeCurrent();
         }
     }
