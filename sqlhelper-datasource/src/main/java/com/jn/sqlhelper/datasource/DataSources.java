@@ -21,6 +21,7 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -108,6 +110,10 @@ public class DataSources {
      * A constant for SQL Server's Snapshot isolation level
      */
     private static final int SQL_SERVER_SNAPSHOT_ISOLATION_LEVEL = 4096;
+
+    public static List<String> TRANSACTION_ISOLATION_NAMES = Collects.newArrayList(
+            "NONE", "READ_COMMITTED", "READ_UNCOMMITTED", "REPEATABLE_READ", "SERIALIZABLE"
+    );
 
     /**
      * Get the int value of a transaction isolation level by name.

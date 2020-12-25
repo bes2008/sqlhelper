@@ -14,12 +14,15 @@
 
 package com.jn.sqlhelper.datasource.factory.tomcatjdbc;
 
-import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.langx.util.Maths;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
+import com.jn.sqlhelper.datasource.DataSources;
+import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import org.apache.tomcat.jdbc.pool.DataSourceFactory;
 
 import javax.sql.DataSource;
+import java.util.Locale;
 import java.util.Properties;
 
 import static com.jn.sqlhelper.datasource.factory.tomcatjdbc.TomcatJdbcDataSourcePropertyNames.*;
@@ -89,6 +92,25 @@ public class TomcatJdbcDataSources {
         } catch (Exception ex) {
             throw Throwables.wrapAsRuntimeException(ex);
         }
+    }
+
+    public static String getTransactionIsolation(String transactionIsolationName) {
+        if (Strings.isBlank(transactionIsolationName)) {
+            return "NONE";
+        }
+        transactionIsolationName = Strings.upperCase(transactionIsolationName, Locale.ENGLISH);
+
+        if (transactionIsolationName.startsWith("TRANSACTION_")) {
+            transactionIsolationName = Strings.subSequence(transactionIsolationName, "TRANSACTION_".length()).toString();
+        }
+
+        if (Strings.isBlank(transactionIsolationName)) {
+            return "NONE";
+        }
+        if (DataSources.TRANSACTION_ISOLATION_NAMES.contains(transactionIsolationName)) {
+            return transactionIsolationName;
+        }
+        return "NONE";
     }
 
 }

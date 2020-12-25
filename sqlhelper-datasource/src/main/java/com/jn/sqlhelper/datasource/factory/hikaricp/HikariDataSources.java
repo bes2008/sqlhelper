@@ -59,7 +59,7 @@ public class HikariDataSources {
         config.setAutoCommit(props.isAutoCommit());
         int txIsoLevel = -1;
         try {
-            if (Strings.isBlank(props.getTransactionIsolationName())) {
+            if (Strings.isNotBlank(props.getTransactionIsolationName())) {
                 txIsoLevel = DataSources.getTransactionIsolation(props.getTransactionIsolationName());
             }
         } catch (Throwable t) {

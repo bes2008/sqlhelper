@@ -133,8 +133,9 @@ public final class DataSourceFactoryProvider implements Provider<String, DataSou
                 logger.warn("Can't find the jdbc database factory: {}, so will select automation", implementationKey);
             }
         }
-
-        delegate = this.get();
+        if (delegate == null) {
+            delegate = this.get();
+        }
         if (delegate == null) {
             logger.error("Can't find any jdbc database factory");
             throw new IllegalStateException("Can't find any jdbc database factory, please check has any the supported database implementations in your classpath: " + IMPLEMENTATION_JARS);

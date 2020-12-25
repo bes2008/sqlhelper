@@ -15,6 +15,7 @@
 package com.jn.sqlhelper.datasource.factory;
 
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.NamedDataSource;
@@ -48,6 +49,7 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
         if (dataSource == null) {
             String implementationKey = dataSourceProperties.getImplementation();
             DataSourceFactory delegate = DataSourceFactoryProvider.getInstance().findSuitableDataSourceFactory(implementationKey, key);
+            logger.info("Create jdbc datasource {} with the factory: {}", key, Reflects.getFQNClassName(delegate.getClass()));
             dataSource = delegate.get(dataSourceProperties);
             if (dataSource != null) {
                 registry.register(key, dataSource);
