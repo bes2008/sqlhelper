@@ -59,3 +59,5 @@ audit:
   http-interceptor-patterns:
     - /consumers/**
     - /users/**
+  advisor-pointcut:
+    expression: execution(public * com.jn.sqlhelper.examples.mybatis.controller.*Controller.*(..))

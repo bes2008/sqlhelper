@@ -15,11 +15,7 @@
 package com.jn.sqlhelper.datasource.spring.boot;
 
 import com.jn.langx.invocation.MethodInvocation;
-import com.jn.langx.util.Emptys;
-import com.jn.langx.util.Objs;
-import com.jn.sqlhelper.datasource.definition.DataSourcesProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.router.DataSourceWeighter;
 import com.jn.sqlhelper.datasource.key.router.RandomRouter;
 import com.jn.sqlhelper.datasource.key.router.RoundRobinRouter;
@@ -34,8 +30,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @AutoConfigureAfter(DynamicDataSourcesAutoConfiguration.class)
 public class DynamicDataSourceLoadBalanceRoutersAutoconfiguration {
-    @Bean
-    @ConditionalOnMissingBean
+    @Bean(name = "dataSourceRoundRobinWeighter")
+    @ConditionalOnMissingBean(name = "dataSourceRoundRobinWeighter")
     public DataSourceWeighter dataSourceRoundRobinWeighter() {
         return new DataSourceWeighter() {
             @Override
@@ -48,23 +44,16 @@ public class DynamicDataSourceLoadBalanceRoutersAutoconfiguration {
     @Bean
     @ConditionalOnMissingBean
     public RoundRobinRouter roundRobinRouter(
-            DataSourceKeySelector selector,
-            @Qualifier("dataSourceRandomWeighter") DataSourceWeighter weighter,
-            DataSourcesProperties dataSourcesProperties) {
+            @Qualifier("dataSourceRoundRobinWeighter") DataSourceWeighter weighter) {
         RoundRobinRouter router = new RoundRobinRouter();
         router.setWeighter(weighter);
 
-        boolean isDefault = false;
-        if (Emptys.isNotEmpty(dataSourcesProperties.getDefaultRouter()) && Objs.equals(dataSourcesProperties.getDefaultRouter(), router.getName())) {
-            isDefault = true;
-        }
-        selector.registerRouter(router, isDefault);
         return router;
 
     }
 
-    @Bean
-    @ConditionalOnMissingBean
+    @Bean(name = "dataSourceRandomWeighter")
+    @ConditionalOnMissingBean(name = "dataSourceRandomWeighter")
     public DataSourceWeighter dataSourceRandomWeighter() {
         return new DataSourceWeighter() {
             @Override
@@ -77,17 +66,9 @@ public class DynamicDataSourceLoadBalanceRoutersAutoconfiguration {
     @Bean
     @ConditionalOnMissingBean
     public RandomRouter dataSourceRandomRouter(
-            DataSourceKeySelector selector,
-            @Qualifier("dataSourceRandomWeighter") DataSourceWeighter weighter,
-            DataSourcesProperties dataSourcesProperties) {
+            @Qualifier("dataSourceRandomWeighter") DataSourceWeighter weighter) {
         RandomRouter router = new RandomRouter();
         router.setWeighter(weighter);
-
-        boolean isDefault = false;
-        if (Emptys.isNotEmpty(dataSourcesProperties.getDefaultRouter()) && Objs.equals(dataSourcesProperties.getDefaultRouter(), router.getName())) {
-            isDefault = true;
-        }
-        selector.registerRouter(router, isDefault);
         return router;
     }
 }
