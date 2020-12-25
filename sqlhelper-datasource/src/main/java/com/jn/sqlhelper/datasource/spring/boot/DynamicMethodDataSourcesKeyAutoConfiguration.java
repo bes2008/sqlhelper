@@ -31,8 +31,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true")
 @ConditionalOnClass(AspectJExpressionPointcutAdvisorProperties.class)
-public class DynamicDataSourcesKeyChoicesAutoConfiguration {
-    private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourcesKeyChoicesAutoConfiguration.class);
+public class DynamicMethodDataSourcesKeyAutoConfiguration {
+    private static final Logger logger = LoggerFactory.getLogger(DynamicMethodDataSourcesKeyAutoConfiguration.class);
 
     @Bean("aspectJExpressionPointcutAdvisorProperties")
     @ConfigurationProperties(prefix = "sqlhelper.dynamicDataSource.key-choices-pointcut")
