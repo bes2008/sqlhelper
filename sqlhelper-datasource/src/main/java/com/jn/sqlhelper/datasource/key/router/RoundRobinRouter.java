@@ -19,8 +19,5 @@ import com.jn.langx.invocation.MethodInvocation;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 public class RoundRobinRouter extends RoundRobinLoadBalanceStrategy<DataSourceKey, MethodInvocation> implements DataSourceKeyRouter {
-    public RoundRobinRouter() {
-        setName("roundrobin");
-    }
 
 }

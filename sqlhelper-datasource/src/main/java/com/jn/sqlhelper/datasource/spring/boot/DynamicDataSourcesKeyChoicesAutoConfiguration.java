@@ -16,7 +16,7 @@ package com.jn.sqlhelper.datasource.spring.boot;
 
 import com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorBuilder;
 import com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorProperties;
-import com.jn.sqlhelper.datasource.key.DataSourceKeyRegistry;
+import com.jn.sqlhelper.datasource.key.MethodDataSourceKeyRegistry;
 import com.jn.sqlhelper.datasource.spring.aop.DataSourceKeyChoicesAnnotationMethodInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,7 @@ public class DynamicDataSourcesKeyChoicesAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = "sqlhelper.dynamicDataSource.key-choices-pointcut", name = "expression")
-    public DataSourceKeyChoicesAnnotationMethodInterceptor interceptor(DataSourceKeyRegistry keyRegistry) {
+    public DataSourceKeyChoicesAnnotationMethodInterceptor interceptor(MethodDataSourceKeyRegistry keyRegistry) {
         DataSourceKeyChoicesAnnotationMethodInterceptor interceptor = new DataSourceKeyChoicesAnnotationMethodInterceptor();
         interceptor.setKeyRegistry(keyRegistry);
         return interceptor;

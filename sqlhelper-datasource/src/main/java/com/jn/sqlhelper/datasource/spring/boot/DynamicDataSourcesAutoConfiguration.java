@@ -31,7 +31,7 @@ import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.sqlhelper.datasource.definition.DataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.DataSourceKeyRegistry;
+import com.jn.sqlhelper.datasource.key.MethodDataSourceKeyRegistry;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyAnnotationParser;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
@@ -136,8 +136,8 @@ public class DynamicDataSourcesAutoConfiguration {
     }
 
     @Bean
-    public DataSourceKeyRegistry dataSourceKeyRegistry(ObjectProvider<List<DataSourceKeyAnnotationParser>> dataSourceKeyAnnotationParsersProvider) {
-        final DataSourceKeyRegistry registry = new DataSourceKeyRegistry();
+    public MethodDataSourceKeyRegistry dataSourceKeyRegistry(ObjectProvider<List<DataSourceKeyAnnotationParser>> dataSourceKeyAnnotationParsersProvider) {
+        final MethodDataSourceKeyRegistry registry = new MethodDataSourceKeyRegistry();
         List<DataSourceKeyAnnotationParser> parsers = dataSourceKeyAnnotationParsersProvider.getIfAvailable();
         Collects.forEach(parsers, new Consumer<DataSourceKeyAnnotationParser>() {
             @Override
@@ -151,7 +151,7 @@ public class DynamicDataSourcesAutoConfiguration {
     @Bean
     public DataSourceKeySelector dataSourceKeySelector(
             final DataSourceRegistry registry,
-            DataSourceKeyRegistry keyRegistry,
+            MethodDataSourceKeyRegistry keyRegistry,
             ObjectProvider<List<DataSourceKeyRouter>> routersProvider,
             DataSourcesProperties dataSourcesProperties) {
 

@@ -19,7 +19,4 @@ import com.jn.langx.invocation.MethodInvocation;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 public class RandomRouter extends RandomLoadBalanceStrategy<DataSourceKey, MethodInvocation> implements DataSourceKeyRouter {
-    public RandomRouter() {
-        this.setName("random");
-    }
 }

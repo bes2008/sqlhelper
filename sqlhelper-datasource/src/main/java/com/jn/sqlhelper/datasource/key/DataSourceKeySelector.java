@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.datasource.key;
 
+import com.jn.langx.algorithm.loadbalance.LoadBalancer;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.annotation.Singleton;
@@ -41,12 +42,13 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 用于处理负载均衡
  * 该类的职责：
  * 1、添加、释放当前业务处理的可选 DataSourceKeys
  * 2、在真正的数据源调用时，筛选合适的数据源
  */
 @Singleton
-public class DataSourceKeySelector implements DataSourceRegistryAware {
+public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalancer<DataSourceKey, MethodInvocation> {
     private static final Logger logger = LoggerFactory.getLogger(DataSourceKeySelector.class);
     private static final ThreadLocalHolder<ListableStack<DataSourceKey>> DATA_SOURCE_KEY_HOLDER = new ThreadLocalHolder<ListableStack<DataSourceKey>>(
             new Supplier0<ListableStack<DataSourceKey>>() {
@@ -59,7 +61,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
     private static final ThreadLocalHolder<DataSourceKey> CURRENT_SELECTED = new ThreadLocalHolder<DataSourceKey>();
 
     @NonNull
-    private DataSourceKeyRegistry dataSourceKeyRegistry;
+    private MethodDataSourceKeyRegistry dataSourceKeyRegistry;
     @NonNull
     private DataSourceRegistry dataSourceRegistry;
 
@@ -88,13 +90,14 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
 
     public void setDataSourceRegistry(DataSourceRegistry registry) {
         this.dataSourceRegistry = registry;
+        this.dataSourceRegistry.setLoadBalancer(this);
     }
 
-    public DataSourceKeyRegistry getDataSourceKeyRegistry() {
+    public MethodDataSourceKeyRegistry getDataSourceKeyRegistry() {
         return dataSourceKeyRegistry;
     }
 
-    public void setDataSourceKeyRegistry(DataSourceKeyRegistry dataSourceKeyRegistry) {
+    public void setDataSourceKeyRegistry(MethodDataSourceKeyRegistry dataSourceKeyRegistry) {
         this.dataSourceKeyRegistry = dataSourceKeyRegistry;
     }
 
@@ -275,7 +278,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
         }, new Consumer<DataSourceKey>() {
             @Override
             public void accept(DataSourceKey dataSourceKey) {
-                List<DataSourceKey> matched = dataSourceRegistry.findKeys(dataSourceKey);
+                List<DataSourceKey> matched = dataSourceRegistry.selectKeys(dataSourceKey);
                 if (Emptys.isNotEmpty(matched)) {
                     dataSourceKeyList.set(matched);
                 }
@@ -306,7 +309,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
             // 指定的参数过滤不到的情况下，则基于 group router
             Collection<DataSourceKeyRouter> routers = getRouters(keys.get(0).getGroup());
             if (Emptys.isEmpty(routers)) {
-
+                return null;
             }
             Collects.forEach(routers, new Consumer<DataSourceKeyRouter>() {
                 @Override
@@ -330,4 +333,43 @@ public class DataSourceKeySelector implements DataSourceRegistryAware {
         return dataSourceRegistry;
     }
 
+    @Override
+    public void addNode(DataSourceKey node) {
+        // NOOP
+    }
+
+    @Override
+    public void removeNode(DataSourceKey key) {
+        // NOOP
+    }
+
+    @Override
+    public boolean hasNode(DataSourceKey key) {
+        return dataSourceRegistry.get(key) != null;
+    }
+
+    @Override
+    public void markDown(DataSourceKey key) {
+
+    }
+
+    @Override
+    public List<DataSourceKey> getNodes() {
+        return dataSourceRegistry.allKeys();
+    }
+
+    @Override
+    public List<DataSourceKey> getNodes(Predicate<DataSourceKey> predicate) {
+        return Pipeline.of(getNodes()).filter(predicate).asList();
+    }
+
+    @Override
+    public DataSourceKey chooseNode(MethodInvocation methodInvocation) {
+        return select(null, methodInvocation);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return dataSourceRegistry.size() == 0;
+    }
 }

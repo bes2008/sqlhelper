@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.datasource.spring.aop;
 
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.DataSourceKeyRegistry;
+import com.jn.sqlhelper.datasource.key.MethodDataSourceKeyRegistry;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -25,7 +25,7 @@ import org.aopalliance.intercept.MethodInvocation;
  */
 public class DataSourceKeyChoicesAnnotationMethodInterceptor implements MethodInterceptor {
 
-    private DataSourceKeyRegistry keyRegistry;
+    private MethodDataSourceKeyRegistry keyRegistry;
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -42,7 +42,7 @@ public class DataSourceKeyChoicesAnnotationMethodInterceptor implements MethodIn
         }
     }
 
-    public void setKeyRegistry(DataSourceKeyRegistry keyRegistry) {
+    public void setKeyRegistry(MethodDataSourceKeyRegistry keyRegistry) {
         this.keyRegistry = keyRegistry;
     }
 }
