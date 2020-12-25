@@ -80,7 +80,7 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         }
         key = DataSourceKeySelector.getCurrent();
         if (key == null) {
-            key = selector.select(router, methodInvocation);
+            key = selector.select(methodInvocation);
             if (key != null) {
                 DataSourceKeySelector.setCurrent(key);
             }
@@ -93,13 +93,5 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
 
     public void setSelector(DataSourceKeySelector selector) {
         this.selector = selector;
-    }
-
-    public DataSourceKeyRouter getRouter() {
-        return router;
-    }
-
-    public void setRouter(DataSourceKeyRouter router) {
-        this.router = router;
     }
 }

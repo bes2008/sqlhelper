@@ -130,9 +130,6 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
 
     /**
      * 为 group 划分 routers
-     *
-     * @param group
-     * @param routerNames
      */
     public void allocateRouters(final String group, Collection<String> routerNames) {
         Collects.forEach(routerNames, new Consumer<String>() {
@@ -216,11 +213,8 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
     /**
      * 在真正的调用的地方调用即可
      *
-     * @param router
-     * @param methodInvocation
-     * @return
      */
-    public final DataSourceKey select(@Nullable DataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
+    public final DataSourceKey select(@Nullable final MethodInvocation methodInvocation) {
         DataSourceKey key = null;
         if (methodInvocation != null) {
             key = this.dataSourceKeyRegistry.get(methodInvocation.getJoinPoint());
@@ -233,7 +227,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
         }
         key = DataSourceKeySelector.getCurrent();
         if (key == null) {
-            key = doSelect(router, methodInvocation);
+            key = doSelect(methodInvocation);
             if (key != null) {
                 DataSourceKeySelector.setCurrent(key);
             }
@@ -252,7 +246,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
      * <p>
      * 这里面不能去设置CURRENT_SELECTED
      */
-    protected DataSourceKey doSelect(@Nullable DataSourceKeyRouter router, @Nullable final MethodInvocation methodInvocation) {
+    protected DataSourceKey doSelect(@Nullable final MethodInvocation methodInvocation) {
         Preconditions.checkArgument(dataSourceRegistry.size() > 0, "has no any datasource registered");
         if (dataSourceRegistry.size() == 1) {
             // 此情况下，不会去考虑DataSource是否出现故障了
@@ -299,17 +293,10 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
 
             // 如果匹配到的过多，则进行二次过滤
             final Holder<DataSourceKey> keyHolder = new Holder<DataSourceKey>();
-            if (router != null) {
-                keyHolder.set(router.select(keys, methodInvocation));
-            }
-            if (!keyHolder.isNull()) {
-                return keyHolder.get();
-            }
-
             // 指定的参数过滤不到的情况下，则基于 group router
             Collection<DataSourceKeyRouter> routers = getRouters(keys.get(0).getGroup());
-            if (Emptys.isEmpty(routers)) {
-                return null;
+            if (Emptys.isEmpty(routers) && defaultRouter != null) {
+                routers = Collects.asList(defaultRouter);
             }
             Collects.forEach(routers, new Consumer<DataSourceKeyRouter>() {
                 @Override
@@ -365,7 +352,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
 
     @Override
     public DataSourceKey chooseNode(MethodInvocation methodInvocation) {
-        return select(null, methodInvocation);
+        return select(methodInvocation);
     }
 
     @Override

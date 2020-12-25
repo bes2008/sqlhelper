@@ -20,5 +20,5 @@ import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 public interface DataSourceWeighter extends Weighter<DataSourceKey, MethodInvocation> {
     @Override
-    int getWeight(DataSourceKey node, MethodInvocation methodInvocation);
+    int getWeight(DataSourceKey key, MethodInvocation methodInvocation);
 }

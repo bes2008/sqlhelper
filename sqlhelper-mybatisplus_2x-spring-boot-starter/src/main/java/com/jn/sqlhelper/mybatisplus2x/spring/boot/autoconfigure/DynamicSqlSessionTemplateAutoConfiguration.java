@@ -135,13 +135,9 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
     public SqlSessionTemplate sqlSessionTemplate(
             MybatisPlusProperties mybatisProperties,
             SqlSessionFactory sessionFactory,
-            DataSourceKeySelector selector,
-            ObjectProvider<DataSourceKeyRouter> mapperLevelRouterProvider) {
+            DataSourceKeySelector selector) {
         DynamicSqlSessionTemplate template = new DynamicSqlSessionTemplate(sessionFactory, mybatisProperties.getExecutorType());
         template.setSelector(selector);
-        @Nullable
-        DataSourceKeyRouter router = mapperLevelRouterProvider.getIfAvailable();
-        template.setMapperDataSourceKeyRouter(router);
         return template;
     }
 }
