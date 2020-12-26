@@ -63,7 +63,7 @@ public class TomcatJdbcDataSources {
 
         props.setProperty(PROP_AUTO_COMMIT, "" + properties.isAutoCommit());
         props.setProperty(PROP_READONLY, "" + properties.isReadOnly());
-        String transactionIsolation = getTransactionIsolation(properties.getTransactionIsolationName());
+        String transactionIsolation = DataSources.getTransactionIsolation(properties.getTransactionIsolationName());
         props.setProperty(PROP_TRANSACTION_ISOLATION, transactionIsolation);
 
         String catalog = properties.getCatalog();
@@ -97,23 +97,5 @@ public class TomcatJdbcDataSources {
         }
     }
 
-    private static String getTransactionIsolation(String transactionIsolationName) {
-        if (Strings.isBlank(transactionIsolationName)) {
-            return "NONE";
-        }
-        transactionIsolationName = Strings.upperCase(transactionIsolationName, Locale.ENGLISH);
-
-        if (transactionIsolationName.startsWith("TRANSACTION_")) {
-            transactionIsolationName = Strings.subSequence(transactionIsolationName, "TRANSACTION_".length()).toString();
-        }
-
-        if (Strings.isBlank(transactionIsolationName)) {
-            return "NONE";
-        }
-        if (DataSources.TRANSACTION_ISOLATION_NAMES.contains(transactionIsolationName)) {
-            return transactionIsolationName;
-        }
-        return "NONE";
-    }
 
 }

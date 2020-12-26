@@ -57,19 +57,11 @@ public class HikariDataSources {
         config.setMaximumPoolSize(props.getMaxPoolSize());
         config.setMinimumIdle(props.getMinIdle());
         config.setAutoCommit(props.isAutoCommit());
-        int txIsoLevel = -1;
-        try {
-            if (Strings.isNotBlank(props.getTransactionIsolationName())) {
-                txIsoLevel = DataSources.getTransactionIsolation(props.getTransactionIsolationName());
-            }
-        } catch (Throwable t) {
-            logger.error("parse jdbc transaction isolation fail: {}", t.getMessage(), t);
-        } finally {
-            if (txIsoLevel == -1) {
-                props.setTransactionIsolationName("TRANSACTION_READ_COMMITTED");
-            }
+        String transactionIsolation = DataSources.getTransactionIsolation(props.getTransactionIsolationName());
+        if (Strings.isNotBlank(transactionIsolation)) {
+            config.setTransactionIsolation("TRANSACTION_" + transactionIsolation);
         }
-        config.setTransactionIsolation(props.getTransactionIsolationName());
+
         config.setReadOnly(props.isReadOnly());
         return new HikariDataSource(config);
     }

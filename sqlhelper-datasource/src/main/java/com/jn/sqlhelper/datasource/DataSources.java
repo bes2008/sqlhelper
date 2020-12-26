@@ -115,13 +115,32 @@ public class DataSources {
             "NONE", "READ_COMMITTED", "READ_UNCOMMITTED", "REPEATABLE_READ", "SERIALIZABLE"
     );
 
+    public static String getTransactionIsolation(String transactionIsolationName) {
+        if (Strings.isBlank(transactionIsolationName)) {
+            return null;
+        }
+        transactionIsolationName = Strings.upperCase(transactionIsolationName, Locale.ENGLISH);
+
+        if (transactionIsolationName.startsWith("TRANSACTION_")) {
+            transactionIsolationName = Strings.subSequence(transactionIsolationName, "TRANSACTION_".length()).toString();
+        }
+
+        if (Strings.isBlank(transactionIsolationName)) {
+            return null;
+        }
+        if (DataSources.TRANSACTION_ISOLATION_NAMES.contains(transactionIsolationName)) {
+            return transactionIsolationName;
+        }
+        return null;
+    }
+
     /**
      * Get the int value of a transaction isolation level by name.
      *
      * @param transactionIsolationName the name of the transaction isolation level
      * @return the int value of the isolation level or -1
      */
-    public static int getTransactionIsolation(final String transactionIsolationName) {
+    public static int getTransactionIsolationInt(final String transactionIsolationName) {
         if (transactionIsolationName != null) {
             try {
                 // use the english locale to avoid the infamous turkish locale bug
