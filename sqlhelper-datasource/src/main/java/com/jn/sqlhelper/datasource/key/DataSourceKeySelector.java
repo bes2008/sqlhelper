@@ -85,7 +85,9 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
     });
 
     public DataSourceKeySelector() {
-        this.defaultRouter = new RandomRouter();
+        RandomRouter r = new RandomRouter();
+        r.setLoadBalancer(this);
+        this.defaultRouter = r;
     }
 
     public void setDataSourceRegistry(DataSourceRegistry registry) {
@@ -113,6 +115,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
         Preconditions.checkNotNull(router);
         Preconditions.checkNotEmpty(router.getName(), "the router name is null or empty");
         routerMap.put(router.getName(), router);
+        router.setLoadBalancer(this);
         if (asDefault) {
             setDefaultRouter(router);
         }
@@ -212,7 +215,6 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
 
     /**
      * 在真正的调用的地方调用即可
-     *
      */
     public final DataSourceKey select(@Nullable final MethodInvocation methodInvocation) {
         DataSourceKey key = null;
@@ -247,43 +249,49 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
      * 这里面不能去设置CURRENT_SELECTED
      */
     protected DataSourceKey doSelect(@Nullable final MethodInvocation methodInvocation) {
+        if (!CURRENT_SELECTED.isNull()) {
+            return getCurrent();
+        }
+
         Preconditions.checkArgument(dataSourceRegistry.size() > 0, "has no any datasource registered");
         if (dataSourceRegistry.size() == 1) {
             // 此情况下，不会去考虑DataSource是否出现故障了
             return dataSourceRegistry.getPrimary();
         }
-        // 从线程栈里过滤
-        ListableStack<DataSourceKey> stack = DATA_SOURCE_KEY_HOLDER.get();
-        if (Emptys.isEmpty(stack)) {
-            return dataSourceRegistry.getPrimary();
-        }
-
-        if (!CURRENT_SELECTED.isNull()) {
-            return getCurrent();
-        }
 
         final Holder<List<DataSourceKey>> dataSourceKeyList = new Holder<List<DataSourceKey>>();
-        // 遍历 stack
-        Collects.forEach(stack, new Predicate<DataSourceKey>() {
-            @Override
-            public boolean test(DataSourceKey dataSourceKey) {
-                return dataSourceKey != null;
-            }
-        }, new Consumer<DataSourceKey>() {
-            @Override
-            public void accept(DataSourceKey dataSourceKey) {
-                List<DataSourceKey> matched = dataSourceRegistry.selectKeys(dataSourceKey);
+
+        if (dataSourceKeyList.isEmpty()) {
+            // 从线程栈里过滤
+            ListableStack<DataSourceKey> stack = DATA_SOURCE_KEY_HOLDER.get();
+            if (Emptys.isEmpty(stack)) {
+                List<DataSourceKey> matched = dataSourceRegistry.findKeys(dataSourceRegistry.getPrimary());
                 if (Emptys.isNotEmpty(matched)) {
                     dataSourceKeyList.set(matched);
                 }
+            } else {
+                // 遍历 stack
+                Collects.forEach(stack, new Predicate<DataSourceKey>() {
+                    @Override
+                    public boolean test(DataSourceKey dataSourceKey) {
+                        return dataSourceKey != null;
+                    }
+                }, new Consumer<DataSourceKey>() {
+                    @Override
+                    public void accept(DataSourceKey dataSourceKey) {
+                        List<DataSourceKey> matched = dataSourceRegistry.findKeys(dataSourceKey);
+                        if (Emptys.isNotEmpty(matched)) {
+                            dataSourceKeyList.set(matched);
+                        }
+                    }
+                }, new Predicate<DataSourceKey>() {
+                    @Override
+                    public boolean test(DataSourceKey dataSourceKey) {
+                        return !dataSourceKeyList.isEmpty();
+                    }
+                });
             }
-        }, new Predicate<DataSourceKey>() {
-            @Override
-            public boolean test(DataSourceKey dataSourceKey) {
-                return !dataSourceKeyList.isEmpty();
-            }
-        });
-
+        }
         if (!dataSourceKeyList.isEmpty()) {
             // keys 必然是同一个group下的
             final List<DataSourceKey> keys = dataSourceKeyList.get();

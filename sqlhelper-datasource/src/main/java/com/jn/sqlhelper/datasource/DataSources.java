@@ -49,9 +49,9 @@ public class DataSources {
     public static final String DATASOURCE_GROUP = "datasource.group";
     public static final String DATASOURCE_NAME = "datasource.name";
 
-    public static final String DATASOURCE_GROUP_DEFAULT = "primary";
+    public static final String DATASOURCE_PRIMARY_GROUP = "primary";
     public static final String DATASOURCE_PRIMARY_NAME = "primary";
-    public static final DataSourceKey DATASOURCE_PRIMARY = new DataSourceKey(DATASOURCE_GROUP_DEFAULT, DATASOURCE_PRIMARY_NAME);
+    public static final DataSourceKey DATASOURCE_PRIMARY = new DataSourceKey(DATASOURCE_PRIMARY_GROUP, DATASOURCE_PRIMARY_NAME);
     public static final String DATASOURCE_NAME_WILDCARD = "*";
 
     /**
@@ -214,7 +214,7 @@ public class DataSources {
     public static final NamedDataSource toNamedDataSource(@NonNull DataSource delegate, @Nullable String group, @NonNull String name) {
         Preconditions.checkNotNull(delegate, "the delegate is null");
         Preconditions.checkNotEmpty(name, "the name is null or empty");
-        group = Strings.useValueIfBlank(group, DataSources.DATASOURCE_GROUP_DEFAULT);
+        group = Strings.useValueIfBlank(group, DataSources.DATASOURCE_PRIMARY_GROUP);
 
         if (delegate instanceof NamedDataSource) {
             NamedDataSource namedDataSource = (NamedDataSource) delegate;

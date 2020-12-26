@@ -28,7 +28,7 @@ import static java.lang.annotation.ElementType.TYPE;
 @Target({METHOD,TYPE})
 @Inherited
 public @interface DataSource {
-    public String group() default DataSources.DATASOURCE_GROUP_DEFAULT;
+    public String group() default DataSources.DATASOURCE_PRIMARY_GROUP;
 
     /**
      * the name

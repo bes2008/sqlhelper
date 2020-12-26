@@ -41,13 +41,12 @@ public class DynamicDataSourceLoadBalanceRoutersAutoconfiguration {
         };
     }
 
-    @Bean
-    @ConditionalOnMissingBean
+    @Bean(name="roundRobinRouter")
+    @ConditionalOnMissingBean(name="roundRobinRouter")
     public RoundRobinRouter roundRobinRouter(
             @Qualifier("dataSourceRoundRobinWeighter") DataSourceWeighter weighter) {
         RoundRobinRouter router = new RoundRobinRouter();
         router.setWeighter(weighter);
-
         return router;
 
     }
@@ -63,8 +62,8 @@ public class DynamicDataSourceLoadBalanceRoutersAutoconfiguration {
         };
     }
 
-    @Bean
-    @ConditionalOnMissingBean
+    @Bean("dataSourceRandomRouter")
+    @ConditionalOnMissingBean(name="dataSourceRandomRouter")
     public RandomRouter dataSourceRandomRouter(
             @Qualifier("dataSourceRandomWeighter") DataSourceWeighter weighter) {
         RandomRouter router = new RandomRouter();

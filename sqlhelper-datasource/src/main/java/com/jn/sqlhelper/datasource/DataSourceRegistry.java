@@ -47,6 +47,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, LoadBalancerAware {
     private static final Logger logger = LoggerFactory.getLogger(DataSourceRegistry.class);
+    /**
+     * 可能是确切的值，也可能是个key pattern
+     */
     private volatile DataSourceKey primary = null;
     /**
      * 这里的Key 最好是确切的key，不建议使用key Pattern
@@ -76,12 +79,18 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         Preconditions.checkNotNull(dataSource);
 
         dataSourceRegistry.put(key, DataSources.toNamedDataSource(dataSource, key));
-        if (primary == null && DataSources.DATASOURCE_GROUP_DEFAULT.equals(key.getGroup())) {
+        if (primary == null && DataSources.DATASOURCE_PRIMARY_GROUP.equals(key.getGroup())) {
             primary = key;
         }
-        if (DataSources.DATASOURCE_PRIMARY.equals(key)) {
-            primary = key;
+        if (primary != null) {
+            if (DataSources.DATASOURCE_PRIMARY.equals(key)) {
+                primary = key;
+            }
+            if (!DataSources.DATASOURCE_PRIMARY.equals(primary)) {
+                primary = new DataSourceKey(DataSources.DATASOURCE_PRIMARY_GROUP, "*");
+            }
         }
+
     }
 
     @Override
@@ -96,7 +105,7 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         return dataSourceRegistry.get(key);
     }
 
-    public List<DataSourceKey> selectKeys(DataSourceKey keyPattern) {
+    public List<DataSourceKey> findKeys(DataSourceKey keyPattern) {
         Preconditions.checkNotNull(keyPattern);
         Preconditions.checkArgument(keyPattern.isAvailable(), "the key is invalid: {}", keyPattern);
 
@@ -117,8 +126,9 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         }
 
         // 针对 key pattern 进行匹配
-        final AntPathMatcher antPathMatcher = new AntPathMatcher(name);
+        final AntPathMatcher antPathMatcher = new AntPathMatcher(null);
         antPathMatcher.setGlobal(true);
+        antPathMatcher.setPatternExpression(name);
 
         final String group = keyPattern.getGroup();
         List<DataSourceKey> matched = Pipeline.of(dataSourceRegistry.keySet()).filter(new Predicate<DataSourceKey>() {

@@ -65,7 +65,7 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
         Preconditions.checkNotNull(registry);
         String name = properties.getProperty(DataSources.DATASOURCE_NAME);
         Preconditions.checkNotNull(name, "the datasource name is null");
-        String group = properties.getProperty(DataSources.DATASOURCE_GROUP, DataSources.DATASOURCE_GROUP_DEFAULT);
+        String group = properties.getProperty(DataSources.DATASOURCE_GROUP, DataSources.DATASOURCE_PRIMARY_GROUP);
 
         DataSourceKey key = new DataSourceKey(group, name);
         NamedDataSource dataSource = registry.get(key);

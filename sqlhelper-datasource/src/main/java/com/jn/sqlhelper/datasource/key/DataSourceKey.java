@@ -23,7 +23,7 @@ import com.jn.sqlhelper.datasource.DataSources;
 
 public class DataSourceKey implements Node {
     @NonNull
-    private String group = DataSources.DATASOURCE_GROUP_DEFAULT;
+    private String group = DataSources.DATASOURCE_PRIMARY_GROUP;
     @NonNull
     private String name;
 
