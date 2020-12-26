@@ -24,6 +24,8 @@ import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Function;
 import com.jn.langx.util.function.Predicate;
+import com.jn.langx.util.io.IOs;
+import com.jn.sqlhelper.common.utils.Connections;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.NamedDataSource;
@@ -31,8 +33,8 @@ import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.sqlhelper.datasource.definition.DataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.MethodDataSourceKeyRegistry;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.MethodDataSourceKeyRegistry;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyAnnotationParser;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
 import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
@@ -47,6 +49,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -108,12 +111,35 @@ public class DynamicDataSourcesAutoConfiguration {
         // 处理 Spring Boot 默认数据源
         DataSource springBootOriginDataSource = springBootOriginDataSourceProvider.getIfAvailable();
         if (springBootOriginDataSource != null) {
-            NamedDataSource namedDataSource = DataSources.toNamedDataSource(springBootOriginDataSource);
-            if (dataSources.isEmpty()) {
-                namedDataSource.setName(DataSources.DATASOURCE_PRIMARY_NAME);
+
+            Connection conn = null;
+            try {
+                conn = springBootOriginDataSource.getConnection();
+            } catch (Throwable ex) {
+                logger.error("Can't connect the spring boot jdbc datasource, error: {}", ex.getMessage(), ex);
             }
-            centralizedDataSourceFactory.getRegistry().register(namedDataSource);
-            dataSources.add(namedDataSource);
+            boolean isTestDB = true;
+            if (conn != null) {
+                try {
+                    String catalog = Connections.getCatalog(conn);
+                    String schema = Connections.getSchema(conn);
+                    if (!Strings.equalsIgnoreCase("testdb", catalog) && !Strings.equalsIgnoreCase("testdb", schema)) {
+                        isTestDB = false;
+                    }
+                } catch (Throwable ex) {
+                    // ignore
+                } finally {
+                    IOs.close(conn);
+                }
+            }
+            if (!isTestDB) {
+                NamedDataSource namedDataSource = DataSources.toNamedDataSource(springBootOriginDataSource);
+                if (dataSources.isEmpty()) {
+                    namedDataSource.setName(DataSources.DATASOURCE_PRIMARY_NAME);
+                }
+                centralizedDataSourceFactory.getRegistry().register(namedDataSource);
+                dataSources.add(namedDataSource);
+            }
         }
 
         if (logger.isInfoEnabled() && !dataSources.isEmpty()) {
