@@ -87,7 +87,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
     public DataSourceKeySelector() {
         RandomRouter r = new RandomRouter();
         r.setLoadBalancer(this);
-        this.defaultRouter = r;
+        registerRouter(r, true);
     }
 
     public void setDataSourceRegistry(DataSourceRegistry registry) {
