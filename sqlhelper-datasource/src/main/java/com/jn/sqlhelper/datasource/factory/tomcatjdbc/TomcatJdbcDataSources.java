@@ -27,7 +27,9 @@ import java.util.Properties;
 
 import static com.jn.sqlhelper.datasource.factory.tomcatjdbc.TomcatJdbcDataSourcePropertyNames.*;
 
-
+/**
+ * ref: http://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html
+ */
 public class TomcatJdbcDataSources {
     private TomcatJdbcDataSources() {
     }
@@ -56,27 +58,28 @@ public class TomcatJdbcDataSources {
 
         String driverClassName = properties.getDriverClassName();
         if (driverClassName != null) {
-            props.setProperty(PROP_DRIVERCLASSNAME, driverClassName);
+            props.setProperty(PROP_DRIVER_CLASSNAME, driverClassName);
         }
 
-        props.setProperty(PROP_DEFAULTAUTOCOMMIT, "" + properties.isAutoCommit());
-        props.setProperty(PROP_DEFAULTREADONLY, "" + properties.isReadOnly());
-        props.setProperty(PROP_DEFAULTTRANSACTIONISOLATION, properties.getTransactionIsolationName());
+        props.setProperty(PROP_AUTO_COMMIT, "" + properties.isAutoCommit());
+        props.setProperty(PROP_READONLY, "" + properties.isReadOnly());
+        String transactionIsolation = getTransactionIsolation(properties.getTransactionIsolationName());
+        props.setProperty(PROP_TRANSACTION_ISOLATION, transactionIsolation);
 
         String catalog = properties.getCatalog();
         if (catalog != null) {
-            props.setProperty(PROP_DEFAULTCATALOG, catalog);
+            props.setProperty(PROP_CATALOG, catalog);
         }
 
-        props.setProperty(PROP_INITIALSIZE, "" + properties.getInitialSize());
-        props.setProperty(PROP_MINIDLE, "" + properties.getMinIdle());
-        props.setProperty(PROP_MAXIDLE, "" + Maths.max(8, properties.getMinIdle()));
-        props.setProperty(PROP_MAXACTIVE, "" + Maths.max(8, properties.getMaxPoolSize()));
+        props.setProperty(PROP_INITIAL_SIZE, "" + properties.getInitialSize());
+        props.setProperty(PROP_MIN_IDLE, "" + properties.getMinIdle());
+        props.setProperty(PROP_MAX_IDLE, "" + Maths.max(8, properties.getMinIdle()));
+        props.setProperty(PROP_MAX_ACTIVE, "" + Maths.max(8, properties.getMaxPoolSize()));
 
 
         String validationQuery = properties.getValidationQuery();
         if (validationQuery != null) {
-            props.setProperty(PROP_VALIDATIONQUERY, validationQuery);
+            props.setProperty(PROP_VALIDATION_QUERY, validationQuery);
         }
         try {
             return dsf.createDataSource(props);
@@ -94,7 +97,7 @@ public class TomcatJdbcDataSources {
         }
     }
 
-    public static String getTransactionIsolation(String transactionIsolationName) {
+    private static String getTransactionIsolation(String transactionIsolationName) {
         if (Strings.isBlank(transactionIsolationName)) {
             return "NONE";
         }

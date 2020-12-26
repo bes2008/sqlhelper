@@ -43,6 +43,16 @@ public class DataSourceProperties implements Configuration {
 
     private boolean isReadOnly;
     private boolean isAutoCommit;
+    /**
+     * 可选值:
+     * <pre>
+     *      NONE,
+     *      READ_COMMITTED,
+     *      READ_UNCOMMITTED,
+     *      REPEATABLE_READ,
+     *      SERIALIZABLE
+     * </pre>
+     */
     private String transactionIsolationName;
 
     private long leakDetectionThresholdInMills;

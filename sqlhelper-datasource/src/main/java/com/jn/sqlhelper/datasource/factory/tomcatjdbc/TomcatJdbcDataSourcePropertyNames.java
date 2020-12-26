@@ -14,22 +14,44 @@
 
 package com.jn.sqlhelper.datasource.factory.tomcatjdbc;
 
+/**
+ * ref: http://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html
+ */
 public class TomcatJdbcDataSourcePropertyNames {
-    public static final String PROP_DEFAULTAUTOCOMMIT = "defaultAutoCommit";
-    public static final String PROP_DEFAULTREADONLY = "defaultReadOnly";
-    public static final String PROP_DEFAULTTRANSACTIONISOLATION = "defaultTransactionIsolation";
-    public static final String PROP_DEFAULTCATALOG = "defaultCatalog";
-    public static final String PROP_DRIVERCLASSNAME = "driverClassName";
+    /**
+     * <pre>
+     *     (boolean) The default auto-commit state of connections created by this pool.
+     *     If not set, default is JDBC driver default (If not set then the setAutoCommit method will not be called.)
+     * </pre>
+     */
+    public static final String PROP_AUTO_COMMIT = "defaultAutoCommit";
+    public static final String PROP_READONLY = "defaultReadOnly";
+
+    /**
+     * <pre>
+     * (String) The default TransactionIsolation state of connections created by this pool. One of the following: (see javadoc )
+     *
+     * NONE
+     * READ_COMMITTED
+     * READ_UNCOMMITTED
+     * REPEATABLE_READ
+     * SERIALIZABLE
+     * If not set, the method will not be called and it defaults to the JDBC driver.
+     * </pre>
+     */
+    public static final String PROP_TRANSACTION_ISOLATION = "defaultTransactionIsolation";
+    public static final String PROP_CATALOG = "defaultCatalog";
+    public static final String PROP_DRIVER_CLASSNAME = "driverClassName";
 
     public static final String PROP_PASSWORD = "password";
     public static final String PROP_URL = "url";
     public static final String PROP_USERNAME = "username";
 
-    public static final String PROP_MAXACTIVE = "maxActive";
-    public static final String PROP_MAXIDLE = "maxIdle";
-    public static final String PROP_MINIDLE = "minIdle";
-    public static final String PROP_INITIALSIZE = "initialSize";
-    public static final String PROP_VALIDATIONQUERY = "validationQuery";
+    public static final String PROP_MAX_ACTIVE = "maxActive";
+    public static final String PROP_MAX_IDLE = "maxIdle";
+    public static final String PROP_MIN_IDLE = "minIdle";
+    public static final String PROP_INITIAL_SIZE = "initialSize";
+    public static final String PROP_VALIDATION_QUERY = "validationQuery";
 
 
 }
