@@ -53,7 +53,7 @@ public class DataSourceProperties implements Configuration {
      *      SERIALIZABLE
      * </pre>
      */
-    private String transactionIsolationName;
+    private String transactionIsolation;
 
     private long leakDetectionThresholdInMills;
     private String validationQuery;
@@ -80,7 +80,6 @@ public class DataSourceProperties implements Configuration {
         this.minIdle = 10;
         this.isAutoCommit = true;
         this.isReadOnly = false;
-        this.transactionIsolationName = "TRANSACTION_READ_COMMITTED";
     }
 
     public String getGroup() {
@@ -235,12 +234,12 @@ public class DataSourceProperties implements Configuration {
         this.isReadOnly = readOnly;
     }
 
-    public String getTransactionIsolationName() {
-        return this.transactionIsolationName;
+    public String getTransactionIsolation() {
+        return this.transactionIsolation;
     }
 
-    public void setTransactionIsolationName(final String transactionIsolationName) {
-        this.transactionIsolationName = Strings.getNullIfEmpty(transactionIsolationName);
+    public void setTransactionIsolation(final String transactionIsolation) {
+        this.transactionIsolation = Strings.getNullIfEmpty(transactionIsolation);
     }
 
     public Properties getDriverProps() {
@@ -284,7 +283,7 @@ public class DataSourceProperties implements Configuration {
         }
     }
 
-    public DataSourceKey getDataSourceKey(){
+    public DataSourceKey getDataSourceKey() {
         return new DataSourceKey(group, name);
     }
 }

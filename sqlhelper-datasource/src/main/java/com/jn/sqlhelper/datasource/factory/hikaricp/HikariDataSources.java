@@ -57,7 +57,7 @@ public class HikariDataSources {
         config.setMaximumPoolSize(props.getMaxPoolSize());
         config.setMinimumIdle(props.getMinIdle());
         config.setAutoCommit(props.isAutoCommit());
-        String transactionIsolation = DataSources.getTransactionIsolation(props.getTransactionIsolationName());
+        String transactionIsolation = DataSources.getTransactionIsolation(props.getTransactionIsolation());
         if (Strings.isNotBlank(transactionIsolation)) {
             config.setTransactionIsolation("TRANSACTION_" + transactionIsolation);
         }

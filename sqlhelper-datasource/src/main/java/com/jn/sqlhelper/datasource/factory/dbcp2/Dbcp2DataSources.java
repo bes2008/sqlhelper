@@ -63,7 +63,7 @@ public class Dbcp2DataSources {
 
         props.setProperty(PROP_DEFAULT_AUTO_COMMIT, "" + properties.isAutoCommit());
         props.setProperty(PROP_DEFAULT_READ_ONLY, "" + properties.isReadOnly());
-        String transactionIsolation = DataSources.getTransactionIsolation(properties.getTransactionIsolationName());
+        String transactionIsolation = DataSources.getTransactionIsolation(properties.getTransactionIsolation());
         if (Strings.isNotBlank(transactionIsolation)) {
             props.setProperty(PROP_DEFAULT_TRANSACTION_ISOLATION, transactionIsolation);
         }

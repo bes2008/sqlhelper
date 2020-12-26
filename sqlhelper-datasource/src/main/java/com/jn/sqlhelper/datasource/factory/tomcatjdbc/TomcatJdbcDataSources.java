@@ -62,7 +62,7 @@ public class TomcatJdbcDataSources {
 
         props.setProperty(PROP_AUTO_COMMIT, "" + properties.isAutoCommit());
         props.setProperty(PROP_READONLY, "" + properties.isReadOnly());
-        String transactionIsolation = DataSources.getTransactionIsolation(properties.getTransactionIsolationName());
+        String transactionIsolation = DataSources.getTransactionIsolation(properties.getTransactionIsolation());
         if (Strings.isNotBlank(transactionIsolation)) {
             props.setProperty(PROP_TRANSACTION_ISOLATION, transactionIsolation);
         }

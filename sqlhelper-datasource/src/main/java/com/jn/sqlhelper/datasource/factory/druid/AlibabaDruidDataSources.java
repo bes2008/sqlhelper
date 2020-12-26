@@ -61,7 +61,7 @@ public class AlibabaDruidDataSources {
 
         props.setProperty(PROP_DEFAULTAUTOCOMMIT, "" + properties.isAutoCommit());
         props.setProperty(PROP_DEFAULTREADONLY, "" + properties.isReadOnly());
-        String transactionIsolation = DataSources.getTransactionIsolation(properties.getTransactionIsolationName());
+        String transactionIsolation = DataSources.getTransactionIsolation(properties.getTransactionIsolation());
         if (Strings.isNotBlank(transactionIsolation)) {
             props.setProperty(PROP_DEFAULTTRANSACTIONISOLATION, transactionIsolation);
         }
