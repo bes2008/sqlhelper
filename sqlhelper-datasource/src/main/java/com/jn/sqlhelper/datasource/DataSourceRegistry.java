@@ -15,8 +15,8 @@
 package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Delegatable;
-import com.jn.langx.algorithm.loadbalance.LoadBalancer;
-import com.jn.langx.algorithm.loadbalance.LoadBalancerAware;
+import com.jn.langx.cluster.loadbalance.LoadBalancer;
+import com.jn.langx.cluster.loadbalance.LoadBalancerAware;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.registry.Registry;
 import com.jn.langx.text.StringTemplates;

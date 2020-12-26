@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.datasource.key.router;
 
-import com.jn.langx.algorithm.loadbalance.LoadBalanceStrategy;
+import com.jn.langx.cluster.loadbalance.LoadBalanceStrategy;
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
