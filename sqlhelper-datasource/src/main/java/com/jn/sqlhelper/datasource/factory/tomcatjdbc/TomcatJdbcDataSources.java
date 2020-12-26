@@ -22,7 +22,6 @@ import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import org.apache.tomcat.jdbc.pool.DataSourceFactory;
 
 import javax.sql.DataSource;
-import java.util.Locale;
 import java.util.Properties;
 
 import static com.jn.sqlhelper.datasource.factory.tomcatjdbc.TomcatJdbcDataSourcePropertyNames.*;
@@ -64,8 +63,9 @@ public class TomcatJdbcDataSources {
         props.setProperty(PROP_AUTO_COMMIT, "" + properties.isAutoCommit());
         props.setProperty(PROP_READONLY, "" + properties.isReadOnly());
         String transactionIsolation = DataSources.getTransactionIsolation(properties.getTransactionIsolationName());
-        props.setProperty(PROP_TRANSACTION_ISOLATION, transactionIsolation);
-
+        if (Strings.isNotBlank(transactionIsolation)) {
+            props.setProperty(PROP_TRANSACTION_ISOLATION, transactionIsolation);
+        }
         String catalog = properties.getCatalog();
         if (catalog != null) {
             props.setProperty(PROP_CATALOG, catalog);

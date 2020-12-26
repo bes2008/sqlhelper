@@ -15,16 +15,20 @@
 package com.jn.sqlhelper.datasource.factory.druid;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
-import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.langx.util.Maths;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
+import com.jn.sqlhelper.datasource.DataSources;
+import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 import static com.alibaba.druid.pool.DruidDataSourceFactory.*;
 
-
+/**
+ * https://github.com/alibaba/druid/wiki/DruidDataSource%E9%85%8D%E7%BD%AE%E5%B1%9E%E6%80%A7%E5%88%97%E8%A1%A8
+ */
 public class AlibabaDruidDataSources {
     private AlibabaDruidDataSources() {
     }
@@ -57,7 +61,10 @@ public class AlibabaDruidDataSources {
 
         props.setProperty(PROP_DEFAULTAUTOCOMMIT, "" + properties.isAutoCommit());
         props.setProperty(PROP_DEFAULTREADONLY, "" + properties.isReadOnly());
-        props.setProperty(PROP_DEFAULTTRANSACTIONISOLATION, properties.getTransactionIsolationName());
+        String transactionIsolation = DataSources.getTransactionIsolation(properties.getTransactionIsolationName());
+        if (Strings.isNotBlank(transactionIsolation)) {
+            props.setProperty(PROP_DEFAULTTRANSACTIONISOLATION, transactionIsolation);
+        }
 
         String catalog = properties.getCatalog();
         if (catalog != null) {
