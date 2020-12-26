@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
 @Configuration
 @AutoConfigureAfter(DynamicDataSourcesAutoConfiguration.class)
-public class DynamicDataSourceLoadBalanceRoutersAutoconfiguration {
+public class DynamicDataSourceLoadBalanceAutoConfiguration {
     @Bean(name = "dataSourceRoundRobinWeighter")
     @ConditionalOnMissingBean(name = "dataSourceRoundRobinWeighter")
     public DataSourceWeighter dataSourceRoundRobinWeighter() {
