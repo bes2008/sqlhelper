@@ -15,9 +15,9 @@
 package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Delegatable;
+import com.jn.langx.annotation.NonNull;
 import com.jn.langx.cluster.loadbalance.LoadBalancer;
 import com.jn.langx.cluster.loadbalance.LoadBalancerAware;
-import com.jn.langx.annotation.NonNull;
 import com.jn.langx.registry.Registry;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
@@ -102,6 +102,9 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
 
     @Override
     public NamedDataSource get(DataSourceKey key) {
+        if (key == null) {
+            return null;
+        }
         return dataSourceRegistry.get(key);
     }
 
