@@ -18,6 +18,6 @@ import com.jn.langx.Delegatable;
 
 import java.sql.Connection;
 
-public interface ConnectionProxy extends Connection, Delegatable<Connection> {
+interface ConnectionProxy extends Connection, Delegatable<Connection> {
 
 }
