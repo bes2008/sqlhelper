@@ -167,12 +167,6 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         nonExistDSKeys.add(keyPattern);
     }
 
-    /**
-     * 只做从已经
-     *
-     * @param dataSource
-     * @return
-     */
     private DataSourceKey intervalParse(@NonNull DataSource dataSource) {
         final List<DataSource> toComparedDataSourceList = Collects.newArrayList();
         DataSource tmpDs = dataSource;
