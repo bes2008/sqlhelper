@@ -15,20 +15,15 @@
 package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Delegatable;
-import com.jn.langx.Named;
-import com.jn.langx.annotation.NonNull;
-import com.jn.langx.annotation.Nullable;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.util.Preconditions;
-import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<DataSource>, Initializable {
@@ -55,6 +50,7 @@ public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<D
 
     /**
      * Create a new DelegatingDataSource.
+     *
      * @param targetDataSource the target DataSource
      */
     public DelegatingNamedDataSource(DataSource targetDataSource) {
@@ -62,7 +58,7 @@ public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<D
     }
 
 
-    public void init() throws InitializationException{
+    public void init() throws InitializationException {
         if (getDelegate() == null) {
             throw new InitializationException("Property 'targetDataSource' is required");
         }
