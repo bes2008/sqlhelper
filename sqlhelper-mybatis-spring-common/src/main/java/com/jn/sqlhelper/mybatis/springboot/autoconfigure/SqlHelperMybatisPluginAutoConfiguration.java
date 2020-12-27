@@ -18,10 +18,8 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.mybatis.SqlHelperMybatisProperties;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
-import com.jn.sqlhelper.mybatis.plugins.pagination.PaginationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -42,7 +40,7 @@ public class SqlHelperMybatisPluginAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SqlHelperMybatisPlugin sqlHelperMybatisPlugin(SqlHelperMybatisProperties sqlHelperMybatisProperties){
+    public SqlHelperMybatisPlugin sqlHelperMybatisPlugin(SqlHelperMybatisProperties sqlHelperMybatisProperties) {
         SqlHelperMybatisPlugin plugin = new SqlHelperMybatisPlugin();
         plugin.setPaginationConfig(sqlHelperMybatisProperties.getPagination());
         plugin.setInstrumentorConfig(sqlHelperMybatisProperties.getInstrumentor());
