@@ -4,7 +4,6 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyAnnotationParser;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
