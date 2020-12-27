@@ -44,7 +44,7 @@ public class TomcatJdbcDataSourceFactory implements DataSourceFactory {
     @Override
     public NamedDataSource get(Properties properties) {
         DataSource dataSource = TomcatJdbcDataSources.createDataSource(properties);
-        String name = properties.getProperty(DataSources.DATASOURCE_NAME);
+        String name = properties.getProperty(DataSources.DATASOURCE_PROP_NAME);
         return DataSources.toNamedDataSource(dataSource, name);
     }
 }

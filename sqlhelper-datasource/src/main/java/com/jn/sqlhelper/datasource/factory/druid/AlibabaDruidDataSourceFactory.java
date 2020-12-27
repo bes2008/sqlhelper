@@ -44,7 +44,7 @@ public class AlibabaDruidDataSourceFactory implements DataSourceFactory {
     @Override
     public NamedDataSource get(Properties properties) {
         DataSource dataSource = AlibabaDruidDataSources.createDataSource(properties);
-        String name = properties.getProperty(DataSources.DATASOURCE_NAME);
+        String name = properties.getProperty(DataSources.DATASOURCE_PROP_NAME);
         return DataSources.toNamedDataSource(dataSource, name);
     }
 }

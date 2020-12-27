@@ -45,9 +45,9 @@ public class DataSources {
     public static final String DATASOURCE_IMPLEMENT_KEY_DBCP2 = "dbcp2";
     public static final String DATASOURCE_IMPLEMENT_KEY_C3P0 = "c3p0";
 
-    public static final String DATASOURCE_IMPLEMENT = "datasource.implementation_key";
-    public static final String DATASOURCE_GROUP = "datasource.group";
-    public static final String DATASOURCE_NAME = "datasource.name";
+    public static final String DATASOURCE_PROP_IMPLEMENTATION = "datasource.implementation";
+    public static final String DATASOURCE_PROP_GROUP = "datasource.group";
+    public static final String DATASOURCE_PROP_NAME = "datasource.name";
 
     public static final String DATASOURCE_PRIMARY_GROUP = "primary";
     public static final String DATASOURCE_PRIMARY_NAME = "primary";

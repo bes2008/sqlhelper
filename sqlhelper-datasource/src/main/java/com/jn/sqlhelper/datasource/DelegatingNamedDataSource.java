@@ -27,7 +27,7 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<DataSource>, Initializable {
-    private final DataSourceKey dataSourceKey = new DataSourceKey(DataSources.DATASOURCE_GROUP, "undefined");
+    private final DataSourceKey dataSourceKey = new DataSourceKey(DataSources.DATASOURCE_PRIMARY_GROUP, "undefined");
     private DataSource delegate;
 
     @Override

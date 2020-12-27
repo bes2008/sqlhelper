@@ -43,7 +43,7 @@ public class C3p0DataSourceFactory implements DataSourceFactory {
     @Override
     public NamedDataSource get(Properties properties) {
         DataSource dataSource = C3p0DataSources.createDataSource(properties);
-        String name = properties.getProperty(DataSources.DATASOURCE_NAME);
+        String name = properties.getProperty(DataSources.DATASOURCE_PROP_NAME);
         return DataSources.toNamedDataSource(dataSource, name);
     }
 }

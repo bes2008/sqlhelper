@@ -26,7 +26,7 @@ public class DataSourceProperties implements Configuration {
     /**
      * datasource:
      */
-    private String group = DataSources.DATASOURCE_GROUP;
+    private String group = DataSources.DATASOURCE_PRIMARY_GROUP;
     private String name;
     private String implementation;
 

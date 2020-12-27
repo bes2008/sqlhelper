@@ -63,14 +63,14 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
     @Override
     public NamedDataSource get(Properties properties) {
         Preconditions.checkNotNull(registry);
-        String name = properties.getProperty(DataSources.DATASOURCE_NAME);
+        String name = properties.getProperty(DataSources.DATASOURCE_PROP_NAME);
         Preconditions.checkNotNull(name, "the datasource name is null");
-        String group = properties.getProperty(DataSources.DATASOURCE_GROUP, DataSources.DATASOURCE_PRIMARY_GROUP);
+        String group = properties.getProperty(DataSources.DATASOURCE_PROP_GROUP, DataSources.DATASOURCE_PRIMARY_GROUP);
 
         DataSourceKey key = new DataSourceKey(group, name);
         NamedDataSource dataSource = registry.get(key);
         if (dataSource == null) {
-            String implementationKey = properties.getProperty(DataSources.DATASOURCE_IMPLEMENT);
+            String implementationKey = properties.getProperty(DataSources.DATASOURCE_PROP_IMPLEMENTATION);
             DataSourceFactory delegate = DataSourceFactoryProvider.getInstance().findSuitableDataSourceFactory(implementationKey, key);
             dataSource = delegate.get(properties);
             if (dataSource != null) {
