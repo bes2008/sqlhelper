@@ -23,6 +23,10 @@ spring:
     username: sa
     password: 123456
 
+sqlhelper:
+  dynamicDataSource:
+    enabled: true
+
 logging:
   level:
     root: info
@@ -49,3 +53,5 @@ audit:
   http-interceptor-patterns:
     - /consumers/**
     - /users/**
+  advisor-pointcut:
+    expression: execution(public * com.jn.sqlhelper.examples.mybatis.tkmapper.controller.*Controller.*(..))

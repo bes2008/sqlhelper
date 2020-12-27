@@ -58,7 +58,7 @@ logging:
 operation:
   definition:
     location: classpath:/operation.yml
-    reload-interval-in-seconds: 0
+    reload-interval-in-seconds: -1
 audit:
   enabled: true
   debug-consumer-enabled: true

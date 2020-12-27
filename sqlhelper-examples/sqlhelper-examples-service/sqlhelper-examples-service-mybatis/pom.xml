@@ -73,7 +73,6 @@
             <artifactId>agileway-spring</artifactId>
             <version>${agileway.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>

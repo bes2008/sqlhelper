@@ -26,3 +26,7 @@ logging:
           examples:
             common:
               dao: trace
+
+sqlhelper:
+  dynamicDataSource:
+    enabled: true

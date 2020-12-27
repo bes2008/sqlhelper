@@ -37,6 +37,10 @@ logging:
             plugins:
               likeescape: debug
 
+sqlhelper:
+  dynamicDataSource:
+    enabled: true
+
 operation:
   definition:
     location: classpath:/operation.yml
@@ -53,3 +57,5 @@ audit:
   http-interceptor-patterns:
     - /consumers/**
     - /users/**
+  advisor-pointcut:
+    expression: execution(public * com.jn.sqlhelper.examples.mybatisplus3.controller.*Controller.*(..))

@@ -16,6 +16,10 @@ spring:
     username: sa
     password: 123456
 
+sqlhelper:
+  dynamicDataSource:
+    enabled: true
+
 swagger:
   base-package: com.jn.sqlhelper.examples.mybatisplus_2x.controller
   application-title: SQLHelper + MyBatisPlus_2x
@@ -50,3 +54,5 @@ audit:
   http-interceptor-patterns:
     - /consumers/**
     - /users/**
+  advisor-pointcut:
+    expression: execution(public * com.jn.sqlhelper.examples.mybatisplus_2x.controller.*Controller.*(..))
