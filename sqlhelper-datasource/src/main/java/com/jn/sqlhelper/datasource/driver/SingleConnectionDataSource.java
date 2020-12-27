@@ -45,8 +45,6 @@ import java.sql.SQLException;
  * In contrast to {@link com.jn.sqlhelper.datasource.driver.DriverManagerDataSource}, it reuses the same Connection
  * all the time, avoiding excessive creation of physical Connections.
  *
- * @author Rod Johnson
- * @author Juergen Hoeller
  * @see #getConnection()
  * @see java.sql.Connection#close()
  */

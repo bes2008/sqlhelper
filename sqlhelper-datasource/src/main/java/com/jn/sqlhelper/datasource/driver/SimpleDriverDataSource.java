@@ -45,8 +45,6 @@ import java.util.Properties;
  * connection pool beans, supporting the same basic properties as this class
  * plus specific settings (such as minimal/maximal pool size etc).
  *
- * @author Juergen Hoeller
- * @since 2.5.5
  * @see DriverManagerDataSource
  */
 public class SimpleDriverDataSource extends AbstractDriverBasedDataSource {
