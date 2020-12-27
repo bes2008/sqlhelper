@@ -26,7 +26,28 @@ spring:
 sqlhelper:
   dynamicDataSource:
     enabled: true
-
+    key-choices-pointcut:
+      expression: execution(public * com.jn.sqlhelper.examples.mybatis.tkmapper.controller.*Controller.*(..))
+    dataSources:
+      # https://h2database.com/
+      - group: primary
+        name: master
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+      - group: primary
+        name: slave1
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
+      - group: primary
+        name: slave2
+        url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: 123456
 logging:
   level:
     root: info
