@@ -99,6 +99,11 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         register(namedDataSource.getDataSourceKey(), namedDataSource);
     }
 
+    public NamedDataSource get(String keyString) {
+        DataSourceKey key = DataSources.buildDataSourceKey(keyString);
+        return get(key);
+    }
+
 
     @Override
     public NamedDataSource get(DataSourceKey key) {

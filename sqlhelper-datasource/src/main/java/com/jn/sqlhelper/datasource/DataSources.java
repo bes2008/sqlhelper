@@ -17,6 +17,8 @@ package com.jn.sqlhelper.datasource;
 import com.jn.langx.Named;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
+import com.jn.langx.exception.IllegalPropertyException;
+import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
@@ -228,5 +230,23 @@ public class DataSources {
         dataSource.setName(name);
         dataSource.setGroup(group);
         return dataSource;
+    }
+
+    public static DataSourceKey buildDataSourceKey(String idString) {
+        String separator = DataSources.getDatasourceIdSeparator();
+        if (!Strings.contains(idString, separator)) {
+            throw new IllegalArgumentException(StringTemplates.formatWithPlaceholder("Illegal datasource id: {}", "/"));
+        }
+
+        int index = idString.indexOf(separator);
+        if (index > 0) {
+            String group = idString.substring(0, index);
+            String name = idString.substring(index + separator.length());
+            if (Emptys.isNoneEmpty(group, name)) {
+                return new DataSourceKey(group, name);
+            }
+            throw new IllegalPropertyException("group or name is empty or null");
+        }
+        throw new IllegalPropertyException("group or name is empty or null");
     }
 }

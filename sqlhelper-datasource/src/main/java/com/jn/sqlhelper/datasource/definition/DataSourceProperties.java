@@ -15,7 +15,6 @@
 package com.jn.sqlhelper.datasource.definition;
 
 import com.jn.langx.configuration.Configuration;
-import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
@@ -265,22 +264,9 @@ public class DataSourceProperties implements Configuration {
 
     @Override
     public void setId(String idString) {
-        String separator = DataSources.getDatasourceIdSeparator();
-        if (!Strings.contains(idString, separator)) {
-            throw new IllegalArgumentException(StringTemplates.formatWithPlaceholder("Illegal datasource id: {}", "/"));
-        }
-
-        int index = idString.indexOf(separator);
-        if (index > 0) {
-            String group = idString.substring(0, index);
-            String name = idString.substring(index + separator.length());
-            if (Strings.isNotBlank(group)) {
-                setGroup(group);
-            }
-            if (Strings.isNotBlank(name)) {
-                setName(name);
-            }
-        }
+        DataSourceKey dataSourceKey = DataSources.buildDataSourceKey(idString);
+        setGroup(dataSourceKey.getGroup());
+        setName(dataSourceKey.getName());
     }
 
     public DataSourceKey getDataSourceKey() {
