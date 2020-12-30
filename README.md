@@ -205,6 +205,13 @@ sqlhelper:
         password: 123456
 ```
 
+## 事务控制：
+
+```
+目前做法：
+    针对每一个数据源，都添加一个 TransactionManager。各自控制自己的。
+```
+
 ## Dynamic DataSource - 开发计划
 + [ ] 通用框架
     + [X] 连接池实现
@@ -224,10 +231,10 @@ sqlhelper:
         + [X] 可自定义AOP拦截位置。
     + [ ] Router
         + [ ] 路由算法
-            + [ ] 随机路由
+            + [X] 随机路由
             + [ ] 粘性会话路由
             + [ ] 读写分离路由
-            + [ ] 负载均衡路由
+            + [X] 负载均衡路由
         + [ ] 故障转移
 + [ ] 框架支持
     + [X] mybatis & spring boot 应用
