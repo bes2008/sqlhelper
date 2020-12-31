@@ -18,6 +18,10 @@ import com.jn.langx.cluster.loadbalance.LoadBalanceStrategy;
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
+/**
+ * Router 只针对 slave 节点、查询操作
+ * master或者primary, 只用于写数据，不需要使用 router
+ */
 public interface DataSourceKeyRouter extends LoadBalanceStrategy<DataSourceKey, MethodInvocation> {
 
 }

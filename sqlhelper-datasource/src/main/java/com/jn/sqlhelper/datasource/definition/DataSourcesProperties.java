@@ -14,29 +14,17 @@
 
 package com.jn.sqlhelper.datasource.definition;
 
-import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.collection.multivalue.CommonMultiValueMap;
-import com.jn.langx.util.collection.multivalue.MultiValueMap;
-import com.jn.langx.util.function.Consumer2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.jn.langx.util.function.Function;
 
 import java.util.List;
 import java.util.Map;
 
 public class DataSourcesProperties {
-    private static final Logger logger = LoggerFactory.getLogger(DataSourcesProperties.class);
     private boolean enabled;
-
     private List<DataSourceProperties> dataSources = Collects.emptyArrayList();
     private String defaultRouter;
-    /**
-     * 配置每个group 的 slaves 节点采用的router算法
-     * key: group name
-     * value: routers
-     */
-    private MultiValueMap<String, String> groupRouters;
+    private List<DataSourceGroupProperties> groups = Collects.emptyArrayList();
 
     public boolean isEnabled() {
         return enabled;
@@ -62,21 +50,39 @@ public class DataSourcesProperties {
         this.defaultRouter = defaultRouter;
     }
 
-    public void setGroupRouters(Map<String, String> mapping) {
-        this.groupRouters = new CommonMultiValueMap<String, String>();
-        Collects.forEach(mapping, new Consumer2<String, String>() {
-            @Override
-            public void accept(String group, String routerString) {
-                if (Strings.isBlank(routerString)) {
-                    logger.warn("the routers string is blank for the group: {}", group);
-                } else {
-                    groupRouters.addAll(group, Collects.asList(Strings.split(routerString, ",")));
-                }
-            }
-        });
+    public void setGroups(List<DataSourceGroupProperties> groups) {
+        this.groups = groups;
     }
 
-    public MultiValueMap<String, String> getGroupRouters() {
-        return groupRouters;
+    public List<DataSourceGroupProperties> getGroups() {
+        return groups;
+    }
+
+    public Map<String, String> getGroupRouters() {
+        return Collects.collect(groups, Collects.toHashMap(new Function<DataSourceGroupProperties, String>() {
+            @Override
+            public String apply(DataSourceGroupProperties dataSourceGroupProperties) {
+                return dataSourceGroupProperties.getName();
+            }
+        }, new Function<DataSourceGroupProperties, String>() {
+            @Override
+            public String apply(DataSourceGroupProperties dataSourceGroupProperties) {
+                return dataSourceGroupProperties.getRouter();
+            }
+        }, true));
+    }
+
+    public Map<String, String> getGroupWriterPatternMap() {
+        return Collects.collect(groups, Collects.toHashMap(new Function<DataSourceGroupProperties, String>() {
+            @Override
+            public String apply(DataSourceGroupProperties dataSourceGroupProperties) {
+                return dataSourceGroupProperties.getName();
+            }
+        }, new Function<DataSourceGroupProperties, String>() {
+            @Override
+            public String apply(DataSourceGroupProperties dataSourceGroupProperties) {
+                return dataSourceGroupProperties.getWritePattern();
+            }
+        }, true));
     }
 }

@@ -15,9 +15,12 @@
 package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Delegatable;
+import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
@@ -28,8 +31,11 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<DataSource>, Initializable {
+    @NonNull
     private final DataSourceKey dataSourceKey = new DataSourceKey(DataSources.DATASOURCE_PRIMARY_GROUP, "undefined");
+    @NonNull
     private DataSource delegate;
+    @Nullable
     private DataSourceProperties properties;
 
     @Override
@@ -43,6 +49,21 @@ public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<D
         this.delegate = delegate;
     }
 
+    @Override
+    public boolean isSlave() {
+        if (properties != null) {
+            if (properties.isReadOnly() || !properties.isPrimary()) {
+                return true;
+            }
+            return false;
+        } else {
+            String name = getName();
+            if (Strings.contains(name, "primary", true) || Strings.contains(name, "master", true)) {
+                return false;
+            }
+            return true;
+        }
+    }
 
     /**
      * Create a new DelegatingDataSource.

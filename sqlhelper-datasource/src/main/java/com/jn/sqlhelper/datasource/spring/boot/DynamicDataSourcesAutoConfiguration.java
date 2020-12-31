@@ -19,7 +19,6 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
-import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Function;
@@ -35,6 +34,7 @@ import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.MethodDataSourceKeyRegistry;
+import com.jn.sqlhelper.datasource.key.WriteOperationMethodMatcher;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyAnnotationParser;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
 import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
@@ -53,6 +53,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
 @Configuration
@@ -204,13 +205,24 @@ public class DynamicDataSourcesAutoConfiguration {
         }
 
         // 指定分配关系
-        MultiValueMap<String, String> groupToRoutersMap = dataSourcesProperties.getGroupRouters();
-        Collects.forEach(groupToRoutersMap, new Consumer2<String, Collection<String>>() {
+        Map<String, String> groupToRoutersMap = dataSourcesProperties.getGroupRouters();
+        Collects.forEach(groupToRoutersMap, new Consumer2<String, String>() {
             @Override
-            public void accept(String group, Collection<String> routers) {
-                selector.allocateRouters(group, routers);
+            public void accept(String group, String router) {
+                selector.allocateRouter(group, router);
             }
         });
+
+        final Map<String, String> groupToWritePattern = dataSourcesProperties.getGroupWriterPatternMap();
+        Collects.forEach(groupToWritePattern, new Consumer2<String, String>() {
+            @Override
+            public void accept(String group, String writePattern) {
+                WriteOperationMethodMatcher writeOperationMethodMatcher = new WriteOperationMethodMatcher(writePattern);
+                selector.allocateWriteMatcher(group, writeOperationMethodMatcher);
+            }
+        });
+
+        selector.init();
 
         return selector;
     }

@@ -90,6 +90,14 @@ public class DataSourceProperties implements Configuration {
         this.group = group;
     }
 
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(boolean primary) {
+        this.primary = primary;
+    }
+
     public String getCatalog() {
         return this.catalog;
     }
@@ -271,7 +279,7 @@ public class DataSourceProperties implements Configuration {
     }
 
     public DataSourceKey getDataSourceKey() {
-        return new DataSourceKey(group, name, isReadOnly || !primary);
+        return new DataSourceKey(group, name);
     }
 
 

@@ -5,12 +5,12 @@ mybatis:
   type-aliases-package: com.jn.sqlhelper.examples.model
   mapper-locations: classpath*:mapper/*.xml
 
-#spring:
-#  datasource:
-#    url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
-#    driver-class-name: org.h2.Driver
-#    username: sa
-#    password: 123456
+spring:
+  datasource:
+    url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 123456
 
 sqlhelper:
   dynamicDataSource:
@@ -21,6 +21,7 @@ sqlhelper:
       # https://h2database.com/
       - group: primary
         name: master
+        primary: true
         url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
         driver-class-name: org.h2.Driver
         username: sa
@@ -54,6 +55,9 @@ logging:
           mybatis:
             plugins:
               likeescape: debug
+          datasource:
+            key:
+              DataSourceKeySelector: debug
 
 operation:
   definition:

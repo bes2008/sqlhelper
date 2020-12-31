@@ -14,8 +14,8 @@
 
 package com.jn.sqlhelper.datasource.key;
 
-import com.jn.langx.cluster.loadbalance.Node;
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.cluster.loadbalance.Node;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.hash.HashCodeBuilder;
@@ -29,6 +29,7 @@ public class DataSourceKey implements Node {
 
     public DataSourceKey() {
     }
+
 
     public DataSourceKey(String group, String name) {
         setGroup(group);

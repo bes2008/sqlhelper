@@ -32,4 +32,5 @@ public interface NamedDataSource extends DataSource, Named {
 
     void setDataSourceProperties(@Nullable DataSourceProperties properties);
 
+    boolean isSlave();
 }
