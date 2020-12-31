@@ -14,10 +14,14 @@
 
 package com.jn.sqlhelper.datasource.connection;
 
-import com.jn.langx.Delegatable;
+import com.jn.langx.invocation.proxy.sparse.SparseMethodInvocationHandler;
 
 import java.sql.Connection;
 
-interface ConnectionProxy extends Connection, Delegatable<Connection> {
+class ConnectionProxyHandler extends SparseMethodInvocationHandler<Connection> {
+
+    public ConnectionProxyHandler(Connection target) {
+        super(target);
+    }
 
 }
