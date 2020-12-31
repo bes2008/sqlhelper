@@ -16,7 +16,6 @@ package com.jn.sqlhelper.datasource.key;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.cluster.loadbalance.Node;
-import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.hash.HashCodeBuilder;
 import com.jn.sqlhelper.datasource.DataSources;
@@ -79,7 +78,7 @@ public class DataSourceKey implements Node {
 
     @Override
     public String toString() {
-        return StringTemplates.formatWithPlaceholder("group: {}, name: {}", group, name);
+        return getId();
     }
 
     @Override

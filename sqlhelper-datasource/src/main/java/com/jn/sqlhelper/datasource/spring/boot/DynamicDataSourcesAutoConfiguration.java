@@ -143,6 +143,7 @@ public class DynamicDataSourcesAutoConfiguration {
             if (dataSources.isEmpty()) {
                 namedDataSource.setName(DataSources.DATASOURCE_PRIMARY_NAME);
             }
+            logger.info("===[SQLHelper & Dynamic DataSource]=== register spring boot datasource {} to datasource registry", namedDataSource.getDataSourceKey());
             centralizedDataSourceFactory.getRegistry().register(namedDataSource);
             dataSources.add(namedDataSource);
         }
