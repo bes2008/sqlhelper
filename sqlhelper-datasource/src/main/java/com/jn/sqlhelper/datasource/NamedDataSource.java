@@ -15,6 +15,7 @@
 package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Named;
+import com.jn.langx.annotation.Nullable;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
@@ -29,6 +30,6 @@ public interface NamedDataSource extends DataSource, Named {
 
     DataSourceProperties getDataSourceProperties();
 
-    void setDataSourceProperties(DataSourceProperties properties);
+    void setDataSourceProperties(@Nullable DataSourceProperties properties);
 
 }

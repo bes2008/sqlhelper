@@ -36,7 +36,7 @@ public class TomcatJdbcDataSourceFactory implements DataSourceFactory {
         if (DataSources.isImplementationKeyMatched(DataSources.DATASOURCE_IMPLEMENT_KEY_TOMCAT, dataSourceProperties)) {
             DataSource dataSource = TomcatJdbcDataSources.createDataSource(dataSourceProperties);
             String name = dataSourceProperties.getName();
-            return DataSources.toNamedDataSource(dataSource, name);
+            return DataSources.toNamedDataSource(dataSource, name, dataSourceProperties);
         }
         throw new IllegalArgumentException(StringTemplates.formatWithPlaceholder("Illegal datasource implementationKey {}, expected key is {}", dataSourceProperties.getImplementation(), DataSources.DATASOURCE_IMPLEMENT_KEY_TOMCAT));
     }
@@ -45,8 +45,7 @@ public class TomcatJdbcDataSourceFactory implements DataSourceFactory {
     public NamedDataSource get(Properties properties) {
         DataSource dataSource = TomcatJdbcDataSources.createDataSource(properties);
         String name = properties.getProperty(DataSources.DATASOURCE_PROP_NAME);
-        NamedDataSource namedDataSource = DataSources.toNamedDataSource(dataSource, name);
-        namedDataSource.setDataSourceProperties(TomcatJdbcDataSources.toDataSourceProperties(properties));
-        return namedDataSource;
+        DataSourceProperties dataSourceProperties = TomcatJdbcDataSources.toDataSourceProperties(properties);
+        return DataSources.toNamedDataSource(dataSource, name, dataSourceProperties);
     }
 }

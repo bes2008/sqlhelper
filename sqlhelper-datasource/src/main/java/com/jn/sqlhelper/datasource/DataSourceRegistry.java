@@ -25,6 +25,7 @@ import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.concurrent.clhm.ConcurrentLinkedHashMap;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.function.Predicate2;
@@ -42,7 +43,7 @@ import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, LoadBalancerAware {
@@ -54,7 +55,11 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
     /**
      * 这里的Key 最好是确切的key，不建议使用key Pattern
      */
-    private ConcurrentHashMap<DataSourceKey, NamedDataSource> dataSourceRegistry = new ConcurrentHashMap<DataSourceKey, NamedDataSource>();
+    private ConcurrentMap<DataSourceKey, NamedDataSource> dataSourceRegistry = new ConcurrentLinkedHashMap.Builder<DataSourceKey, NamedDataSource>()
+            .concurrencyLevel(Runtime.getRuntime().availableProcessors())
+            .initialCapacity(16)
+            .maximumWeightedCapacity(1000)
+            .build();
     private DataSourceKeyDataSourceParser keyParser = RandomDataSourceKeyParser.INSTANCE;
     private LoadBalancer loadBalancer;
 
@@ -78,7 +83,7 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         Preconditions.checkArgument(key.isAvailable(), "the jdbc datasource key is invalid: {}", key);
         Preconditions.checkNotNull(dataSource);
 
-        dataSourceRegistry.put(key, DataSources.toNamedDataSource(dataSource, key));
+        dataSourceRegistry.put(key, DataSources.toNamedDataSource(dataSource, key, null));
         if (primary == null && DataSources.DATASOURCE_PRIMARY_GROUP.equals(key.getGroup())) {
             primary = key;
         }
@@ -113,23 +118,24 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         return dataSourceRegistry.get(key);
     }
 
-    public List<DataSourceKey> findKeys(DataSourceKey keyPattern) {
-        Preconditions.checkNotNull(keyPattern);
-        Preconditions.checkArgument(keyPattern.isAvailable(), "the key is invalid: {}", keyPattern);
 
-        NamedDataSource namedDataSource = get(keyPattern);
+    public List<DataSourceKey> findKeys(DataSourceKey groupKeyPattern) {
+        Preconditions.checkNotNull(groupKeyPattern);
+        Preconditions.checkArgument(groupKeyPattern.isAvailable(), "the key is invalid: {}", groupKeyPattern);
+
+        NamedDataSource namedDataSource = get(groupKeyPattern);
         if (namedDataSource != null) {
-            return Collects.newArrayList(keyPattern);
+            return Collects.newArrayList(groupKeyPattern);
         }
 
         // 已确定的不存在的
-        if (nonExistDSKeys.contains(keyPattern)) {
+        if (nonExistDSKeys.contains(groupKeyPattern)) {
             return Collections.emptyList();
         }
 
-        String name = keyPattern.getName();
+        String name = groupKeyPattern.getName();
         if (!name.contains(DataSources.DATASOURCE_NAME_WILDCARD)) {
-            addNonExistsDataSourceKey(keyPattern);
+            addNonExistsDataSourceKey(groupKeyPattern);
             return Collections.emptyList();
         }
 
@@ -138,7 +144,7 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         antPathMatcher.setGlobal(true);
         antPathMatcher.setPatternExpression(name);
 
-        final String group = keyPattern.getGroup();
+        final String group = groupKeyPattern.getGroup();
         List<DataSourceKey> matched = Pipeline.of(dataSourceRegistry.keySet()).filter(new Predicate<DataSourceKey>() {
             @Override
             public boolean test(DataSourceKey dataSourceKey) {
@@ -151,7 +157,7 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
 
         // 如果没有匹配到任何数据源，则加入不存在的 key pattern 序列
         if (Emptys.isEmpty(matched)) {
-            addNonExistsDataSourceKey(keyPattern);
+            addNonExistsDataSourceKey(groupKeyPattern);
             return Collections.emptyList();
         }
 
@@ -245,7 +251,7 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         if (key == null) {
             key = RandomDataSourceKeyParser.INSTANCE.parse(dataSource);
         }
-        return DataSources.toNamedDataSource(dataSource, key);
+        return DataSources.toNamedDataSource(dataSource, key, null);
     }
 
     public DataSourceKey getPrimary() {

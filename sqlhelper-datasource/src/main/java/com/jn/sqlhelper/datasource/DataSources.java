@@ -202,18 +202,18 @@ public class DataSources {
         if (Strings.isBlank(name)) {
             name = UUID.randomUUID().toString();
         }
-        return toNamedDataSource(dataSource, name);
+        return toNamedDataSource(dataSource, name, null);
     }
 
-    public static NamedDataSource toNamedDataSource(@NonNull DataSource delegate, String name) {
-        return toNamedDataSource(delegate, null, name);
+    public static NamedDataSource toNamedDataSource(@NonNull DataSource delegate, String name, DataSourceProperties dataSourceProperties) {
+        return toNamedDataSource(delegate, null, name, dataSourceProperties);
     }
 
-    public static NamedDataSource toNamedDataSource(DataSource dataSource, DataSourceKey dataSourceKey) {
-        return toNamedDataSource(dataSource, dataSourceKey.getGroup(), dataSourceKey.getName());
+    public static NamedDataSource toNamedDataSource(DataSource dataSource, DataSourceKey dataSourceKey, DataSourceProperties dataSourceProperties) {
+        return toNamedDataSource(dataSource, dataSourceKey.getGroup(), dataSourceKey.getName(), dataSourceProperties);
     }
 
-    public static NamedDataSource toNamedDataSource(@NonNull DataSource delegate, @Nullable String group, @NonNull String name) {
+    public static NamedDataSource toNamedDataSource(@NonNull DataSource delegate, @Nullable String group, @NonNull String name, DataSourceProperties dataSourceProperties) {
         Preconditions.checkNotNull(delegate, "the delegate is null");
         Preconditions.checkNotEmpty(name, "the name is null or empty");
         group = Strings.useValueIfBlank(group, DataSources.DATASOURCE_PRIMARY_GROUP);
@@ -229,6 +229,7 @@ public class DataSources {
         dataSource.setDelegate(delegate);
         dataSource.setName(name);
         dataSource.setGroup(group);
+        dataSource.setDataSourceProperties(dataSourceProperties);
         return dataSource;
     }
 

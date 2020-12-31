@@ -32,6 +32,7 @@ public class DataSourcesProperties {
     private List<DataSourceProperties> dataSources = Collects.emptyArrayList();
     private String defaultRouter;
     /**
+     * 配置每个group 的 slaves 节点采用的router算法
      * key: group name
      * value: routers
      */

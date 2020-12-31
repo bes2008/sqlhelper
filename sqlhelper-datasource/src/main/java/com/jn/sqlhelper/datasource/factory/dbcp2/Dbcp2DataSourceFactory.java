@@ -36,7 +36,7 @@ public class Dbcp2DataSourceFactory implements DataSourceFactory {
         if (DataSources.isImplementationKeyMatched(DataSources.DATASOURCE_IMPLEMENT_KEY_DBCP2, dataSourceProperties)) {
             DataSource dataSource = Dbcp2DataSources.createDataSource(dataSourceProperties);
             String name = dataSourceProperties.getName();
-            return DataSources.toNamedDataSource(dataSource, name);
+            return DataSources.toNamedDataSource(dataSource, name, dataSourceProperties);
         }
         throw new IllegalArgumentException(StringTemplates.formatWithPlaceholder("Illegal datasource implementationKey {}, expected key is {}", dataSourceProperties.getImplementation(), DataSources.DATASOURCE_IMPLEMENT_KEY_DBCP2));
     }
@@ -45,8 +45,7 @@ public class Dbcp2DataSourceFactory implements DataSourceFactory {
     public NamedDataSource get(Properties properties) {
         DataSource dataSource = Dbcp2DataSources.createDataSource(properties);
         String name = properties.getProperty(DataSources.DATASOURCE_PROP_NAME);
-        NamedDataSource namedDataSource = DataSources.toNamedDataSource(dataSource, name);
-        namedDataSource.setDataSourceProperties(Dbcp2DataSources.toDataSourceProperties(properties));
-        return namedDataSource;
+        DataSourceProperties dataSourceProperties = Dbcp2DataSources.toDataSourceProperties(properties);
+        return DataSources.toNamedDataSource(dataSource, name, dataSourceProperties);
     }
 }
