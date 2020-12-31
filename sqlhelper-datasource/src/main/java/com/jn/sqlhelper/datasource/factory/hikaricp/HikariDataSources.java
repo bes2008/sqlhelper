@@ -18,6 +18,7 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.DataSources;
+import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -69,5 +70,9 @@ public class HikariDataSources {
     public static DataSource createDataSource(final Properties props) {
         return new HikariDataSource(new HikariConfig(props));
     }
-
+    public static DataSourceProperties toDataSourceProperties(Properties properties) {
+        DataSourceProperties dataSourceProperties = new DataSourceProperties();
+        dataSourceProperties.setDriverProps(properties);
+        return dataSourceProperties;
+    }
 }

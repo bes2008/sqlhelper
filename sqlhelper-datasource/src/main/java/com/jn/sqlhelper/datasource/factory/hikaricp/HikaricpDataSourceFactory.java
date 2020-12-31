@@ -44,6 +44,8 @@ public class HikaricpDataSourceFactory implements DataSourceFactory {
     public NamedDataSource get(Properties properties) {
         DataSource dataSource = HikariDataSources.createDataSource(properties);
         String name = properties.getProperty(DataSources.DATASOURCE_PROP_NAME);
-        return DataSources.toNamedDataSource(dataSource, name);
+        NamedDataSource namedDataSource = DataSources.toNamedDataSource(dataSource, name);
+        namedDataSource.setDataSourceProperties(HikariDataSources.toDataSourceProperties(properties));
+        return namedDataSource;
     }
 }

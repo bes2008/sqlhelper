@@ -28,6 +28,7 @@ public class DataSourceProperties implements Configuration {
     private String group = DataSources.DATASOURCE_PRIMARY_GROUP;
     private String name;
     private String implementation;
+    private boolean primary = false;
 
     /**
      * driver properties:
@@ -270,6 +271,35 @@ public class DataSourceProperties implements Configuration {
     }
 
     public DataSourceKey getDataSourceKey() {
-        return new DataSourceKey(group, name);
+        return new DataSourceKey(group, name, isReadOnly || !primary);
+    }
+
+
+    @Override
+    public String toString() {
+        return "DataSourceProperties{" +
+                "group='" + group + '\'' +
+                ", name='" + name + '\'' +
+                ", implementation='" + implementation + '\'' +
+                ", driverClassName='" + driverClassName + '\'' +
+                ", url='" + url + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", catalog='" + catalog + '\'' +
+                ", schema='" + schema + '\'' +
+                ", isReadOnly=" + isReadOnly +
+                ", isAutoCommit=" + isAutoCommit +
+                ", transactionIsolation='" + transactionIsolation + '\'' +
+                ", leakDetectionThresholdInMills=" + leakDetectionThresholdInMills +
+                ", validationQuery='" + validationQuery + '\'' +
+                ", connectionTimeoutInMills=" + connectionTimeoutInMills +
+                ", validationTimeoutInMills=" + validationTimeoutInMills +
+                ", idleTimeoutInMills=" + idleTimeoutInMills +
+                ", maxLifetimeInMills=" + maxLifetimeInMills +
+                ", maxPoolSize=" + maxPoolSize +
+                ", initialSize=" + initialSize +
+                ", minIdle=" + minIdle +
+                ", driverProps=" + driverProps +
+                '}';
     }
 }

@@ -44,6 +44,8 @@ public class C3p0DataSourceFactory implements DataSourceFactory {
     public NamedDataSource get(Properties properties) {
         DataSource dataSource = C3p0DataSources.createDataSource(properties);
         String name = properties.getProperty(DataSources.DATASOURCE_PROP_NAME);
-        return DataSources.toNamedDataSource(dataSource, name);
+        NamedDataSource namedDataSource = DataSources.toNamedDataSource(dataSource, name);
+        namedDataSource.setDataSourceProperties(C3p0DataSources.toDataSourceProperties(properties));
+        return namedDataSource;
     }
 }

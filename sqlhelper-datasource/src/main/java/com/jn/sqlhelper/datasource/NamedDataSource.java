@@ -15,6 +15,7 @@
 package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Named;
+import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import javax.sql.DataSource;
@@ -25,4 +26,9 @@ public interface NamedDataSource extends DataSource, Named {
     void setGroup(String group);
 
     DataSourceKey getDataSourceKey();
+
+    DataSourceProperties getDataSourceProperties();
+
+    void setDataSourceProperties(DataSourceProperties properties);
+
 }

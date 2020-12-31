@@ -18,6 +18,7 @@ import com.jn.langx.Delegatable;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.util.Preconditions;
+import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import javax.sql.DataSource;
@@ -29,6 +30,7 @@ import java.util.logging.Logger;
 public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<DataSource>, Initializable {
     private final DataSourceKey dataSourceKey = new DataSourceKey(DataSources.DATASOURCE_PRIMARY_GROUP, "undefined");
     private DataSource delegate;
+    private DataSourceProperties properties;
 
     @Override
     public DataSource getDelegate() {
@@ -64,6 +66,15 @@ public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<D
         }
     }
 
+    @Override
+    public DataSourceProperties getDataSourceProperties() {
+        return properties;
+    }
+
+    @Override
+    public void setDataSourceProperties(DataSourceProperties properties) {
+        this.properties = properties;
+    }
 
     @Override
     public Connection getConnection() throws SQLException {
@@ -145,5 +156,14 @@ public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<D
     @Override
     public DataSourceKey getDataSourceKey() {
         return this.dataSourceKey;
+    }
+
+    @Override
+    public String toString() {
+        return "NamedDataSource{" +
+                "dataSourceKey=" + dataSourceKey +
+                ", delegate=" + delegate +
+                ", properties=" + properties +
+                '}';
     }
 }

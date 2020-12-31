@@ -106,4 +106,10 @@ public class Dbcp2DataSources {
             throw Throwables.wrapAsRuntimeException(ex);
         }
     }
+
+    public static DataSourceProperties toDataSourceProperties(Properties properties) {
+        DataSourceProperties p = new DataSourceProperties();
+        p.setDriverProps(properties);
+        return p;
+    }
 }

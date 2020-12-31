@@ -14,13 +14,13 @@
 
 package com.jn.sqlhelper.datasource.factory.tomcatjdbc;
 
-import com.jn.sqlhelper.datasource.factory.DataSourceFactory;
-import com.jn.sqlhelper.datasource.DataSources;
-import com.jn.sqlhelper.datasource.NamedDataSource;
-import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
 import com.jn.langx.annotation.Name;
 import com.jn.langx.annotation.OnClasses;
 import com.jn.langx.text.StringTemplates;
+import com.jn.sqlhelper.datasource.DataSources;
+import com.jn.sqlhelper.datasource.NamedDataSource;
+import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
+import com.jn.sqlhelper.datasource.factory.DataSourceFactory;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -45,6 +45,8 @@ public class TomcatJdbcDataSourceFactory implements DataSourceFactory {
     public NamedDataSource get(Properties properties) {
         DataSource dataSource = TomcatJdbcDataSources.createDataSource(properties);
         String name = properties.getProperty(DataSources.DATASOURCE_PROP_NAME);
-        return DataSources.toNamedDataSource(dataSource, name);
+        NamedDataSource namedDataSource = DataSources.toNamedDataSource(dataSource, name);
+        namedDataSource.setDataSourceProperties(TomcatJdbcDataSources.toDataSourceProperties(properties));
+        return namedDataSource;
     }
 }

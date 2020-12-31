@@ -96,4 +96,10 @@ public class AlibabaDruidDataSources {
             throw Throwables.wrapAsRuntimeException(ex);
         }
     }
+
+    public static DataSourceProperties toDataSourceProperties(Properties properties) {
+        DataSourceProperties dataSourceProperties = new DataSourceProperties();
+        dataSourceProperties.setDriverProps(properties);
+        return dataSourceProperties;
+    }
 }

@@ -52,6 +52,7 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
             logger.info("Create jdbc datasource {} with the factory: {}", key, Reflects.getFQNClassName(delegate.getClass()));
             dataSource = delegate.get(dataSourceProperties);
             if (dataSource != null) {
+                dataSource.setDataSourceProperties(dataSourceProperties);
                 registry.register(key, dataSource);
                 dataSource = registry.get(key);
             }

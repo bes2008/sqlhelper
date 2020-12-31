@@ -53,7 +53,7 @@ public class DataSources {
 
     public static final String DATASOURCE_PRIMARY_GROUP = "primary";
     public static final String DATASOURCE_PRIMARY_NAME = "primary";
-    public static final DataSourceKey DATASOURCE_PRIMARY = new DataSourceKey(DATASOURCE_PRIMARY_GROUP, DATASOURCE_PRIMARY_NAME);
+    public static final DataSourceKey DATASOURCE_PRIMARY = new DataSourceKey(DATASOURCE_PRIMARY_GROUP, DATASOURCE_PRIMARY_NAME, true);
     public static final String DATASOURCE_NAME_WILDCARD = "*";
 
     /**
@@ -186,7 +186,7 @@ public class DataSources {
 
     private static final String DATASOURCE_ID_SEPARATOR = "SQLHelper.DynamicDataSource.ID.separator";
 
-    public static final String getDatasourceIdSeparator() {
+    public static String getDatasourceIdSeparator() {
         return System.getProperty(DATASOURCE_ID_SEPARATOR, "/");
     }
 
@@ -205,7 +205,7 @@ public class DataSources {
         return toNamedDataSource(dataSource, name);
     }
 
-    public static final NamedDataSource toNamedDataSource(@NonNull DataSource delegate, String name) {
+    public static NamedDataSource toNamedDataSource(@NonNull DataSource delegate, String name) {
         return toNamedDataSource(delegate, null, name);
     }
 
@@ -213,7 +213,7 @@ public class DataSources {
         return toNamedDataSource(dataSource, dataSourceKey.getGroup(), dataSourceKey.getName());
     }
 
-    public static final NamedDataSource toNamedDataSource(@NonNull DataSource delegate, @Nullable String group, @NonNull String name) {
+    public static NamedDataSource toNamedDataSource(@NonNull DataSource delegate, @Nullable String group, @NonNull String name) {
         Preconditions.checkNotNull(delegate, "the delegate is null");
         Preconditions.checkNotEmpty(name, "the name is null or empty");
         group = Strings.useValueIfBlank(group, DataSources.DATASOURCE_PRIMARY_GROUP);
