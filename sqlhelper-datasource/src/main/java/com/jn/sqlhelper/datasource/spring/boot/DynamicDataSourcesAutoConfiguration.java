@@ -98,7 +98,9 @@ public class DynamicDataSourcesAutoConfiguration {
             final CentralizedDataSourceFactory centralizedDataSourceFactory,
             DataSourcesProperties namedDataSourcesProperties,
             // 该参数只是为了兼容Spring Boot 默认的 DataSource配置而已
-            ObjectProvider<DataSource> springBootOriginDataSourceProvider) {
+            ObjectProvider<DataSource> springBootOriginDataSourceProvider,
+            ObjectProvider<org.springframework.boot.autoconfigure.jdbc.DataSourceProperties> builtInDataSourceProperties) {
+
         logger.info("===[SQLHelper & Dynamic DataSource]=== the dynamic datasource is enabled");
 
         List<DataSourceProperties> dataSourcePropertiesList = namedDataSourcesProperties.getDataSources();
@@ -134,7 +136,8 @@ public class DynamicDataSourcesAutoConfiguration {
                 }
             }
             if (!isTestDB) {
-                NamedDataSource namedDataSource = DataSources.toNamedDataSource(springBootOriginDataSource);
+                DataSourceProperties dataSourceProperties = SpringDataSourcePropertiesAdapter.adapt(builtInDataSourceProperties.getObject());
+                NamedDataSource namedDataSource = DataSources.toNamedDataSource(springBootOriginDataSource, dataSourceProperties.getName(), dataSourceProperties);
                 if (dataSources.isEmpty()) {
                     namedDataSource.setName(DataSources.DATASOURCE_PRIMARY_NAME);
                 }
