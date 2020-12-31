@@ -17,13 +17,16 @@ package com.jn.sqlhelper.examples.mybatis;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication(scanBasePackages = {
         "com.jn.sqlhelper.examples.mybatis",
         "com.jn.sqlhelper.examples.db.config",
         "com.jn.sqlhelper.examples.swagger.config",
+        "com.jn.agileway.spring.utils"
 })
 @MapperScan("com.jn.sqlhelper.examples.mybatis.dao")
+@ImportResource(locations = "classpath:/applicationContext-tx.xml")
 public class MyBatisWithSpringBootTest {
     public static void main(String[] args) {
         SpringApplication.run(MyBatisWithSpringBootTest.class, args);

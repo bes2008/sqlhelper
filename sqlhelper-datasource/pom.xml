@@ -30,10 +30,6 @@
             <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-common</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.github.fangjinuo.agileway</groupId>
             <artifactId>agileway-spring</artifactId>
             <version>${agileway.version}</version>

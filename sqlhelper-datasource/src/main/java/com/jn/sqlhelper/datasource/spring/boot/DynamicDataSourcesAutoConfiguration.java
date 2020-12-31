@@ -16,6 +16,7 @@ package com.jn.sqlhelper.datasource.spring.boot;
 
 import com.jn.langx.util.ClassLoaders;
 import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
@@ -23,8 +24,6 @@ import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Function;
 import com.jn.langx.util.function.Predicate;
-import com.jn.langx.util.io.IOs;
-import com.jn.sqlhelper.common.utils.Connections;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.NamedDataSource;
@@ -42,14 +41,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.ListFactoryBean;
+import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -93,57 +93,53 @@ public class DynamicDataSourcesAutoConfiguration {
         return new DataSourcesProperties();
     }
 
+    // 把数据源放到Spring容器中
+    //public GenericBeanDefinition
+
+
     @Bean(name = "dataSourcesFactoryBean")
     public ListFactoryBean dataSourcesFactoryBean(
             final CentralizedDataSourceFactory centralizedDataSourceFactory,
             DataSourcesProperties namedDataSourcesProperties,
             // 该参数只是为了兼容Spring Boot 默认的 DataSource配置而已
             ObjectProvider<DataSource> springBootOriginDataSourceProvider,
-            ObjectProvider<org.springframework.boot.autoconfigure.jdbc.DataSourceProperties> builtInDataSourceProperties) {
+            ObjectProvider<org.springframework.boot.autoconfigure.jdbc.DataSourceProperties> builtInDataSourceProperties,
+            final ApplicationContext applicationContext) {
 
         logger.info("===[SQLHelper & Dynamic DataSource]=== the dynamic datasource is enabled");
 
-        List<DataSourceProperties> dataSourcePropertiesList = namedDataSourcesProperties.getDataSources();
-        List<NamedDataSource> dataSources = Pipeline.of(dataSourcePropertiesList).map(new Function<DataSourceProperties, NamedDataSource>() {
-            @Override
-            public NamedDataSource apply(DataSourceProperties dataSourceProperties) {
-                return centralizedDataSourceFactory.get(dataSourceProperties);
-            }
-        }).clearNulls().asList();
-
+        final List<NamedDataSource> dataSources = Collects.emptyArrayList();
         // 处理 Spring Boot 默认数据源
         DataSource springBootOriginDataSource = springBootOriginDataSourceProvider.getIfAvailable();
+        boolean isTestDB = true;
         if (springBootOriginDataSource != null) {
+            org.springframework.boot.autoconfigure.jdbc.DataSourceProperties properties = builtInDataSourceProperties.getObject();
+            if (Objs.equals(properties.determineUrl(), properties.getUrl())) {
+                isTestDB = false;
+            }
+        }
 
-            Connection conn = null;
-            try {
-                conn = springBootOriginDataSource.getConnection();
-            } catch (Throwable ex) {
-                logger.error("Can't connect the spring boot jdbc datasource, error: {}", ex.getMessage(), ex);
-            }
-            boolean isTestDB = true;
-            if (conn != null) {
-                try {
-                    String catalog = Connections.getCatalog(conn);
-                    String schema = Connections.getSchema(conn);
-                    if (!Strings.equalsIgnoreCase("testdb", catalog) && !Strings.equalsIgnoreCase("testdb", schema)) {
-                        isTestDB = false;
-                    }
-                } catch (Throwable ex) {
-                    // ignore
-                } finally {
-                    IOs.close(conn);
+        List<DataSourceProperties> dataSourcePropertiesList = namedDataSourcesProperties.getDataSources();
+        Pipeline.of(dataSourcePropertiesList).forEach(new Consumer<DataSourceProperties>() {
+            @Override
+            public void accept(DataSourceProperties dataSourceProperties) {
+                NamedDataSource namedDataSource = centralizedDataSourceFactory.get(dataSourceProperties);
+                if (namedDataSource != null) {
+                    // 注册 DataSource对象到 Spring 容器中
+                    ((AbstractAutowireCapableBeanFactory) applicationContext.getAutowireCapableBeanFactory()).registerSingleton(namedDataSource.getDataSourceKey().getId(), namedDataSource);
+                    dataSources.add(namedDataSource);
                 }
             }
-            if (!isTestDB) {
-                DataSourceProperties dataSourceProperties = SpringDataSourcePropertiesAdapter.adapt(builtInDataSourceProperties.getObject());
-                NamedDataSource namedDataSource = DataSources.toNamedDataSource(springBootOriginDataSource, dataSourceProperties.getName(), dataSourceProperties);
-                if (dataSources.isEmpty()) {
-                    namedDataSource.setName(DataSources.DATASOURCE_PRIMARY_NAME);
-                }
-                centralizedDataSourceFactory.getRegistry().register(namedDataSource);
-                dataSources.add(namedDataSource);
+        });
+
+        if (!isTestDB) {
+            DataSourceProperties dataSourceProperties = SpringDataSourcePropertiesAdapter.adapt(builtInDataSourceProperties.getObject());
+            NamedDataSource namedDataSource = DataSources.toNamedDataSource(springBootOriginDataSource, dataSourceProperties.getName(), dataSourceProperties);
+            if (dataSources.isEmpty()) {
+                namedDataSource.setName(DataSources.DATASOURCE_PRIMARY_NAME);
             }
+            centralizedDataSourceFactory.getRegistry().register(namedDataSource);
+            dataSources.add(namedDataSource);
         }
 
         if (logger.isInfoEnabled() && !dataSources.isEmpty()) {
