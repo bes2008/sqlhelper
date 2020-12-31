@@ -120,13 +120,18 @@ public class DynamicDataSourcesAutoConfiguration {
         }
 
         List<DataSourceProperties> dataSourcePropertiesList = namedDataSourcesProperties.getDataSources();
+
+        // spring bean factory
+        final AbstractAutowireCapableBeanFactory beanFactory = ((AbstractAutowireCapableBeanFactory) applicationContext.getAutowireCapableBeanFactory());
         Pipeline.of(dataSourcePropertiesList).forEach(new Consumer<DataSourceProperties>() {
             @Override
             public void accept(DataSourceProperties dataSourceProperties) {
                 NamedDataSource namedDataSource = centralizedDataSourceFactory.get(dataSourceProperties);
                 if (namedDataSource != null) {
                     // 注册 DataSource对象到 Spring 容器中
-                    ((AbstractAutowireCapableBeanFactory) applicationContext.getAutowireCapableBeanFactory()).registerSingleton(namedDataSource.getDataSourceKey().getId(), namedDataSource);
+                    String beanName = namedDataSource.getDataSourceKey().getId();
+                    beanFactory.registerSingleton(beanName, namedDataSource);
+                    logger.info("===[SQLHelper & Dynamic DataSource]=== register jdbc datasource bean {} to spring bean factory", beanName);
                     dataSources.add(namedDataSource);
                 }
             }
