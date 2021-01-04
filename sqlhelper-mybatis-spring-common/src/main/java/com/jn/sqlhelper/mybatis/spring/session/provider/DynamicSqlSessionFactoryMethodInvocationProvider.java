@@ -35,7 +35,7 @@ public class DynamicSqlSessionFactoryMethodInvocationProvider implements SqlSess
     public SqlSessionFactory get(MethodInvocation invocation) {
         boolean needClear = false;
         if (DataSourceKeySelector.getCurrent() == null) {
-            keySelector.select(null);
+            keySelector.select(invocation);
             needClear = true;
         }
 
