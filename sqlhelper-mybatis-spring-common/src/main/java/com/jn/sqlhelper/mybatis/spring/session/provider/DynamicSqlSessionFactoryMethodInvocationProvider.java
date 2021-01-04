@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.spring.datasource.provider;
+package com.jn.sqlhelper.mybatis.spring.session.provider;
 
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
