@@ -1,8 +1,12 @@
-package com.jn.sqlhelper.datasource.transaction;
+package com.jn.sqlhelper.common.transaction;
 
 import java.sql.SQLException;
 
 public interface Transaction {
+    TransactionDefinition getTransactionDefinition();
+
+    TransactionManager getTransactionManager();
+
     void commit() throws SQLException;
 
     void rollback() throws SQLException;

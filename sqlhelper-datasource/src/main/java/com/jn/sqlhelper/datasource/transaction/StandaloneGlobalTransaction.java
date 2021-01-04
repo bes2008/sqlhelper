@@ -4,6 +4,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.multivalue.CommonMultiValueMap;
 import com.jn.langx.util.collection.multivalue.MultiValueMap;
 import com.jn.langx.util.function.Supplier;
+import com.jn.sqlhelper.common.transaction.AbstractTransaction;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import java.sql.Connection;
@@ -15,7 +16,7 @@ import java.util.Map;
 /**
  * 单JVM多数据源事务
  */
-public class LocalizeGlobalTransaction implements Transaction {
+public class StandaloneGlobalTransaction extends AbstractTransaction {
     private MultiValueMap<DataSourceKey, Connection> connectionMap = new CommonMultiValueMap<DataSourceKey, Connection>(new LinkedHashMap<DataSourceKey, Collection<Connection>>(), new Supplier<DataSourceKey, Collection<Connection>>() {
         @Override
         public Collection<Connection> get(DataSourceKey key) {
@@ -23,7 +24,6 @@ public class LocalizeGlobalTransaction implements Transaction {
         }
     });
 
-    private boolean rollbackOnly = false;
 
     public void add(DataSourceKey key, Connection connection) {
         this.connectionMap.add(key, connection);
@@ -56,13 +56,4 @@ public class LocalizeGlobalTransaction implements Transaction {
         }
     }
 
-    @Override
-    public boolean isRollbackOnly() {
-        return rollbackOnly;
-    }
-
-    @Override
-    public void setRollbackOnly() {
-        this.rollbackOnly = true;
-    }
 }
