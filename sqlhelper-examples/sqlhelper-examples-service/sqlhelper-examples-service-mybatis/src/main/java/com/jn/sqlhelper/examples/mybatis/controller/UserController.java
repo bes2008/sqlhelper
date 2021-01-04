@@ -18,6 +18,8 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingResult;
 import com.jn.sqlhelper.dialect.pagination.SqlPaginations;
@@ -97,9 +99,8 @@ public class UserController {
             @RequestParam(value = "namelikeNotUsingConcat", required = false, defaultValue = "false") boolean namelikeNotUsingConcat,
             @RequestParam(value = "testNonParameterLike", required = false, defaultValue = "false") boolean testNonParameterLike,
             @RequestParam(value = "likeEscapeEnabled", required = false, defaultValue = "true") boolean likeEscapeEnabled,
-            @RequestParam(value = "grateAge", required = false, defaultValue = "10") int age,
-            @RequestParam(value = "testTenant", required = false, defaultValue = "false") boolean testTenant,
-            @RequestParam(value = "tenantId", required = false, defaultValue = "1") String tenantId) {
+            @RequestParam(value = "grateAge", required = false, defaultValue = "10") int age
+    ) {
         User queryCondition = new User();
         queryCondition.setAge(age);
         queryCondition.setName(namelike);
@@ -112,9 +113,9 @@ public class UserController {
         System.out.println(JSONBuilderProvider.simplest().toJson(request));
         request.setCount(count);
         request.setUseLastPageIfPageOut(useLastPageIfPageOut);
-        if(testNonParameterLike) {
+        if (testNonParameterLike) {
             users = userDao.selectByLimit_like3(queryCondition);
-        }else{
+        } else {
             if (namelikeNotUsingConcat) {
                 users = userDao.selectByLimit_like2(queryCondition);
             } else {
@@ -157,5 +158,34 @@ public class UserController {
         return userDao.selectById(id);
     }
 
+
+    @GetMapping("/_ageIncrement")
+    public PagingResult ageIncrement(
+            @RequestParam(name = "pageNo", required = false) Integer pageNo,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name = "sort", required = false) String sort,
+            @RequestParam(value = "count", required = false) boolean count,
+            @RequestParam(value = "useLastPageIfPageOut", required = false) boolean useLastPageIfPageOut,
+            @RequestParam(value = "namelike", required = false) String namelike,
+            @RequestParam(value = "namelikeNotUsingConcat", required = false, defaultValue = "false") boolean namelikeNotUsingConcat,
+            @RequestParam(value = "testNonParameterLike", required = false, defaultValue = "false") boolean testNonParameterLike,
+            @RequestParam(value = "likeEscapeEnabled", required = false, defaultValue = "true") boolean likeEscapeEnabled,
+            @RequestParam(value = "grateAge", required = false, defaultValue = "10") int age
+    ) {
+        PagingResult list = list_useMyBatis(pageNo, pageSize, sort, count, useLastPageIfPageOut, namelike, namelikeNotUsingConcat, testNonParameterLike, likeEscapeEnabled, age);
+
+        // age increment
+        List<User> items = list.getItems();
+        Collects.forEach(items, new Consumer<User>() {
+            @Override
+            public void accept(User user) {
+                user.setAge(user.getAge() + 1);
+                update(user.getId(), user);
+            }
+        });
+
+        list = list_useMyBatis(pageNo, pageSize, sort, count, useLastPageIfPageOut, namelike, namelikeNotUsingConcat, testNonParameterLike, likeEscapeEnabled, age);
+        return list;
+    }
 
 }

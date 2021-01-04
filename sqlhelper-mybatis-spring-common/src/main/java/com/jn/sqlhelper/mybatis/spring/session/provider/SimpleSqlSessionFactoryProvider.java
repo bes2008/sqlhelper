@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2021 the original author or authors.
  *
  * Licensed under the Apache, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,12 +12,19 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.connection;
+package com.jn.sqlhelper.mybatis.spring.session.provider;
 
-import com.jn.langx.Delegatable;
+import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.sql.Connection;
+public class SimpleSqlSessionFactoryProvider implements SqlSessionFactoryProvider<Object> {
+    private SqlSessionFactory sessionFactory;
 
-interface ConnectionProxy extends Connection, Delegatable<Connection> {
+    public SimpleSqlSessionFactoryProvider(SqlSessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
+    @Override
+    public SqlSessionFactory get(Object invocation) {
+        return this.sessionFactory;
+    }
 }
