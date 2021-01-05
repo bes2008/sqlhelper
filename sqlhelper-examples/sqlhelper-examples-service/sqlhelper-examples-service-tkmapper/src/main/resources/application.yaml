@@ -26,7 +26,7 @@ spring:
 sqlhelper:
   dynamicDataSource:
     enabled: true
-    key-choices-pointcut:
+    key-choices:
       expression: execution(public * com.jn.sqlhelper.examples.mybatis.tkmapper.controller.*Controller.*(..))
     dataSources:
       # https://h2database.com/

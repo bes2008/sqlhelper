@@ -14,6 +14,8 @@
 
 package com.jn.sqlhelper.datasource.config;
 
+import com.jn.langx.invocation.aop.expression.AspectJExpressionPointcutAdvisorProperties;
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Function;
 
@@ -25,6 +27,8 @@ public class DataSourcesProperties {
     private List<DataSourceProperties> dataSources = Collects.emptyArrayList();
     private String defaultRouter;
     private List<DataSourceGroupProperties> groups = Collects.emptyArrayList();
+    private AspectJExpressionPointcutAdvisorProperties keyChoices = new AspectJExpressionPointcutAdvisorProperties();
+    private AspectJExpressionPointcutAdvisorProperties transaction = new AspectJExpressionPointcutAdvisorProperties();
 
     public boolean isEnabled() {
         return enabled;
@@ -84,5 +88,25 @@ public class DataSourcesProperties {
                 return dataSourceGroupProperties.getWritePattern();
             }
         }, true));
+    }
+
+    public AspectJExpressionPointcutAdvisorProperties getKeyChoices() {
+        return keyChoices;
+    }
+
+    public void setKeyChoices(AspectJExpressionPointcutAdvisorProperties keyChoices) {
+        this.keyChoices = keyChoices;
+    }
+
+    public AspectJExpressionPointcutAdvisorProperties getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(AspectJExpressionPointcutAdvisorProperties transaction) {
+        this.transaction = transaction;
+    }
+
+    public boolean isTransactionEnabled() {
+        return this.transaction != null && Emptys.isNotEmpty(transaction.getExpression());
     }
 }
