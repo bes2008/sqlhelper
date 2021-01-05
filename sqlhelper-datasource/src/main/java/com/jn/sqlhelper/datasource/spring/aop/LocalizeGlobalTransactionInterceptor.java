@@ -47,10 +47,12 @@ public class LocalizeGlobalTransactionInterceptor implements MethodInterceptor {
             // 接下来是要提交事务了
 
             // 但是发现了内层事务被回滚了。
-            if (transaction.isRollbackOnly()) {
-                transactionManager.rollback(transaction);
-            } else {
-                transactionManager.commit(transaction);
+            if (!nested) {
+                if (transaction.isRollbackOnly()) {
+                    transactionManager.rollback(transaction);
+                } else {
+                    transactionManager.commit(transaction);
+                }
             }
             return ret;
         } catch (Throwable ex) {
