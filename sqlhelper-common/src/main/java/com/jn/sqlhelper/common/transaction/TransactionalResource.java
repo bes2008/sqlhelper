@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2021 the original author or authors.
  *
  * Licensed under the Apache, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,17 +12,18 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.transaction;
+package com.jn.sqlhelper.common.transaction;
 
-import com.jn.langx.util.collection.buffer.ArrayBuffer;
-import com.jn.sqlhelper.datasource.key.DataSourceKey;
+import com.jn.langx.Named;
 
-import java.sql.Connection;
+import java.sql.SQLException;
 
-class LocalizeXATransaction {
-    private ArrayBuffer connections = new ArrayBuffer(1024);
+/**
+ * JDBC Connection, MyBatis SqlSession, Hibernate Session 等等
+ */
+public interface TransactionalResource extends Named {
 
-    public void addBranch(DataSourceKey key, Connection conn) {
-        //connections. new Entry<DataSourceKey, Connection>(key, conn);
-    }
+    void commit() throws SQLException;
+
+    void rollback() throws SQLException;
 }
