@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.common.transaction;
 
+import com.jn.langx.util.enums.Enums;
 import com.jn.langx.util.struct.ThreadLocalHolder;
 
 public class Transactions {
@@ -43,5 +44,26 @@ public class Transactions {
         }
         transaction.bindResource(key, resource);
         return true;
+    }
+
+    public static boolean unbindTransactionResource(Object key) {
+        Transaction transaction = get();
+        if (transaction == null) {
+            return false;
+        }
+        transaction.unbindResource(key);
+        return true;
+    }
+
+
+    public static final Isolation getTransactionIsolation(String transactionIsolationName) {
+        Isolation isolation = Enums.ofDisplayText(Isolation.class, transactionIsolationName);
+        if (isolation == null || isolation == Isolation.DEFAULT) {
+            isolation = Enums.ofName(Isolation.class, transactionIsolationName);
+        }
+        if (isolation == null) {
+            isolation = Isolation.DEFAULT;
+        }
+        return isolation;
     }
 }

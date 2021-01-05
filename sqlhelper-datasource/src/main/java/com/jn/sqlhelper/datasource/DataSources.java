@@ -24,17 +24,16 @@ import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
+import com.jn.sqlhelper.common.transaction.Transactions;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 public class DataSources {
@@ -117,23 +116,9 @@ public class DataSources {
             "NONE", "READ_COMMITTED", "READ_UNCOMMITTED", "REPEATABLE_READ", "SERIALIZABLE"
     );
 
+
     public static String getTransactionIsolation(String transactionIsolationName) {
-        if (Strings.isBlank(transactionIsolationName)) {
-            return null;
-        }
-        transactionIsolationName = Strings.upperCase(transactionIsolationName, Locale.ENGLISH);
-
-        if (transactionIsolationName.startsWith("TRANSACTION_")) {
-            transactionIsolationName = Strings.subSequence(transactionIsolationName, "TRANSACTION_".length()).toString();
-        }
-
-        if (Strings.isBlank(transactionIsolationName)) {
-            return null;
-        }
-        if (DataSources.TRANSACTION_ISOLATION_NAMES.contains(transactionIsolationName)) {
-            return transactionIsolationName;
-        }
-        return null;
+        return Transactions.getTransactionIsolation(transactionIsolationName).name();
     }
 
     /**
@@ -143,32 +128,7 @@ public class DataSources {
      * @return the int value of the isolation level or -1
      */
     public static int getTransactionIsolationInt(final String transactionIsolationName) {
-        if (transactionIsolationName != null) {
-            try {
-                // use the english locale to avoid the infamous turkish locale bug
-                final String upperName = transactionIsolationName.toUpperCase(Locale.ENGLISH);
-                if (upperName.startsWith("TRANSACTION_")) {
-                    Field field = Connection.class.getField(upperName);
-                    return field.getInt(null);
-                }
-                final int level = Integer.parseInt(transactionIsolationName);
-                switch (level) {
-                    case Connection.TRANSACTION_READ_UNCOMMITTED:
-                    case Connection.TRANSACTION_READ_COMMITTED:
-                    case Connection.TRANSACTION_REPEATABLE_READ:
-                    case Connection.TRANSACTION_SERIALIZABLE:
-                    case Connection.TRANSACTION_NONE:
-                    case SQL_SERVER_SNAPSHOT_ISOLATION_LEVEL: // a specific isolation level for SQL server only
-                        return level;
-                    default:
-                        throw new IllegalArgumentException();
-                }
-            } catch (Exception e) {
-                throw new IllegalArgumentException("Invalid transaction isolation value: " + transactionIsolationName);
-            }
-        }
-
-        return -1;
+        return Transactions.getTransactionIsolation(transactionIsolationName).getCode();
     }
 
     public static boolean isImplementationKeyMatched(@NonNull String expectedKey, DataSourceProperties properties) {
