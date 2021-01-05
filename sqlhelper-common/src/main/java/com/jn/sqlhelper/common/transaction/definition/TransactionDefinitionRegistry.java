@@ -70,13 +70,13 @@ public class TransactionDefinitionRegistry implements Registry<Method, Transacti
         }
     }
 
-    public void registerTransactionAnnotationParser(TransactionDefinitionAnnotationParser transactionDefinitionAnnotationParser) {
+    private void registerTransactionAnnotationParser(TransactionDefinitionAnnotationParser transactionDefinitionAnnotationParser) {
         if (transactionDefinitionAnnotationParser != null && transactionDefinitionAnnotationParser.getAnnotation() != null) {
             annotationParserMap.put(transactionDefinitionAnnotationParser.getAnnotation(), transactionDefinitionAnnotationParser);
         }
     }
 
-    public void registerNamedTransactionParser(NamedTransactionDefinitionParser transactionDefinitionParser) {
+    private void registerNamedTransactionParser(NamedTransactionDefinitionParser transactionDefinitionParser) {
         namedTransactionDefinitionParserMap.put(transactionDefinitionParser.getName(), transactionDefinitionParser);
     }
 
