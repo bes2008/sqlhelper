@@ -21,6 +21,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Predicate2;
 import com.jn.langx.util.struct.Holder;
+import com.jn.sqlhelper.common.transaction.definition.parser.NamedTransactionDefinitionParser;
 import com.jn.sqlhelper.common.transaction.definition.parser.TransactionDefinitionAnnotationParser;
 import com.jn.sqlhelper.common.transaction.definition.parser.TransactionalAnnotationParser;
 
@@ -41,6 +42,9 @@ public class TransactionDefinitionRegistry implements Registry<Method, Transacti
      * parser 缓存
      */
     private Map<Class<? extends Annotation>, TransactionDefinitionAnnotationParser> annotationParserMap = new LinkedHashMap<Class<? extends Annotation>, TransactionDefinitionAnnotationParser>();
+
+    private Map<String, NamedTransactionDefinitionParser> namedTransactionDefinitionParserMap = new LinkedHashMap<String, NamedTransactionDefinitionParser>();
+
 
     public TransactionDefinitionRegistry() {
         registerTransactionAnnotationParser(new TransactionalAnnotationParser());
@@ -63,6 +67,10 @@ public class TransactionDefinitionRegistry implements Registry<Method, Transacti
         }
     }
 
+    public void registerNamedTransactionParser(NamedTransactionDefinitionParser transactionDefinitionParser) {
+        namedTransactionDefinitionParserMap.put(transactionDefinitionParser.getName(), transactionDefinitionParser);
+    }
+
     @Override
     @NonNull
     public TransactionDefinition get(final Method method) {
@@ -71,6 +79,8 @@ public class TransactionDefinitionRegistry implements Registry<Method, Transacti
             // 第一次用到该方法
             synchronized (this) {
                 final Holder<TransactionDefinition> holder0 = new Holder<TransactionDefinition>();
+
+                // 优先使用注解
                 Collects.forEach(annotationParserMap, new Consumer2<Class<? extends Annotation>, TransactionDefinitionAnnotationParser>() {
                     @Override
                     public void accept(Class<? extends Annotation> annotationClass, TransactionDefinitionAnnotationParser parser) {
@@ -85,6 +95,23 @@ public class TransactionDefinitionRegistry implements Registry<Method, Transacti
                         return !holder0.isNull();
                     }
                 });
+
+                // 再用 named transaction parser
+                Collects.forEach(namedTransactionDefinitionParserMap, new Consumer2<String, NamedTransactionDefinitionParser>() {
+                    @Override
+                    public void accept(String parserName, NamedTransactionDefinitionParser parser) {
+                        TransactionDefinition key = parser.parse(method);
+                        if (key != null) {
+                            holder0.set(key);
+                        }
+                    }
+                }, new Predicate2<String, NamedTransactionDefinitionParser>() {
+                    @Override
+                    public boolean test(String parserName, NamedTransactionDefinitionParser value) {
+                        return !holder0.isNull();
+                    }
+                });
+
                 methodDataSourceKeyCache.putIfAbsent(method, holder0);
                 holder = methodDataSourceKeyCache.get(method);
             }

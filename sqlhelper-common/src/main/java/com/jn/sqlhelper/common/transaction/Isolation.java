@@ -21,36 +21,12 @@ import com.jn.langx.util.enums.base.EnumDelegate;
 import java.sql.Connection;
 
 public enum Isolation implements CommonEnum, Delegatable<EnumDelegate> {
-    /**
-     * Read Committed Isolation level. This is typically the default for most
-     * configurations.
-     */
     READ_COMMITED(Connection.TRANSACTION_READ_COMMITTED, "READ_COMMITTED", "TRANSACTION_READ_COMMITTED"),
-
-    /**
-     * Read uncommitted Isolation level.
-     */
     READ_UNCOMMITTED(Connection.TRANSACTION_READ_UNCOMMITTED, "READ_UNCOMMITTED", "TRANSACTION_READ_UNCOMMITTED"),
-
-    /**
-     * Repeatable Read Isolation level.
-     */
     REPEATABLE_READ(Connection.TRANSACTION_REPEATABLE_READ, "REPEATABLE_READ", "TRANSACTION_REPEATABLE_READ"),
-
-    /**
-     * Serializable Isolation level.
-     */
     SERIALIZABLE(Connection.TRANSACTION_SERIALIZABLE, "SERIALIZABLE", "TRANSACTION_SERIALIZABLE"),
-
-    /**
-     * No Isolation level.
-     */
     NONE(Connection.TRANSACTION_NONE, "NONE", "TRANSACTION_NONE"),
 
-    /**
-     * The default isolation level. This typically means the default that the
-     * DataSource is using or configured to use.
-     */
     DEFAULT(-1, "DEFAULT", "DEFAULT");
     private EnumDelegate delegate;
 
