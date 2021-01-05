@@ -1,12 +1,9 @@
 package com.jn.sqlhelper.common.transaction;
 
-import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.collection.multivalue.CommonMultiValueMap;
-import com.jn.langx.util.collection.multivalue.MultiValueMap;
-import com.jn.langx.util.function.Supplier;
+import com.jn.sqlhelper.common.transaction.definition.TransactionDefinition;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * <pre>
@@ -18,12 +15,7 @@ public class Transaction {
     private TransactionManager transactionManager;
     private TransactionDefinition definition;
     private boolean rollbackOnly = false;
-    private final MultiValueMap<Object, TransactionalResource> resources = new CommonMultiValueMap<Object, TransactionalResource>(new LinkedHashMap<Object, Collection<TransactionalResource>>(), new Supplier<Object, Collection<TransactionalResource>>() {
-        @Override
-        public Collection<TransactionalResource> get(Object key) {
-            return Collects.emptyHashSet(true);
-        }
-    });
+    private final Map<Object, TransactionalResource> resources = new LinkedHashMap<Object, TransactionalResource>();
 
     public Transaction(TransactionManager transactionManager, TransactionDefinition definition) {
         this.setDefinition(definition);
@@ -58,7 +50,7 @@ public class Transaction {
         if (key == null) {
             return;
         }
-        this.resources.add(key, transactionalResource);
+        this.resources.put(key, transactionalResource);
     }
 
     public boolean hasResource(Object key) {
@@ -68,7 +60,7 @@ public class Transaction {
         return resources.containsKey(key);
     }
 
-    public void clearResource(Object key) {
+    public void unbindResource(Object key) {
         if (key != null) {
             resources.remove(key);
         }
@@ -78,7 +70,7 @@ public class Transaction {
         resources.clear();
     }
 
-    public MultiValueMap<Object, TransactionalResource> getResources() {
+    public Map<Object, TransactionalResource> getResources() {
         return this.resources;
     }
 

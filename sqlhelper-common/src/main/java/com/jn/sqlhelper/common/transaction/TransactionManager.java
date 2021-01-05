@@ -1,5 +1,7 @@
 package com.jn.sqlhelper.common.transaction;
 
+import com.jn.sqlhelper.common.transaction.definition.TransactionDefinition;
+
 import java.sql.SQLException;
 
 public interface TransactionManager {

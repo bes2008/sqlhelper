@@ -14,13 +14,12 @@
 
 package com.jn.sqlhelper.common.transaction;
 
-import com.jn.langx.util.collection.multivalue.MultiValueMap;
+import com.jn.sqlhelper.common.transaction.definition.TransactionDefinition;
 
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.Map;
 
-public abstract class AbstractTransactionManager implements TransactionManager {
+public class DefaultTransactionManager implements TransactionManager {
     @Override
     public Transaction createTransaction(TransactionDefinition transactionDefinition) {
         return new Transaction(this, transactionDefinition);
@@ -32,23 +31,19 @@ public abstract class AbstractTransactionManager implements TransactionManager {
             rollback(transaction);
             return;
         }
-        MultiValueMap<Object, TransactionalResource> resourceMap = transaction.getResources();
-        for (Map.Entry<Object, Collection<TransactionalResource>> resourceEntry : resourceMap.entrySet()) {
-            Collection<TransactionalResource> resources = resourceEntry.getValue();
-            for (TransactionalResource resource : resources) {
-                resource.commit();
-            }
+        Map<Object, TransactionalResource> resourceMap = transaction.getResources();
+        for (Map.Entry<Object, TransactionalResource> resourceEntry : resourceMap.entrySet()) {
+            TransactionalResource resource = resourceEntry.getValue();
+            resource.commit();
         }
     }
 
     @Override
     public void rollback(Transaction transaction) throws SQLException {
-        MultiValueMap<Object, TransactionalResource> resourceMap = transaction.getResources();
-        for (Map.Entry<Object, Collection<TransactionalResource>> resourceEntry : resourceMap.entrySet()) {
-            Collection<TransactionalResource> resources = resourceEntry.getValue();
-            for (TransactionalResource resource : resources) {
-                resource.rollback();
-            }
+        Map<Object, TransactionalResource> resourceMap = transaction.getResources();
+        for (Map.Entry<Object, TransactionalResource> resourceEntry : resourceMap.entrySet()) {
+            TransactionalResource resource = resourceEntry.getValue();
+            resource.rollback();
         }
     }
 }
