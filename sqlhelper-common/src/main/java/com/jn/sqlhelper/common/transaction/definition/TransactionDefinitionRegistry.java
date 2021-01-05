@@ -23,6 +23,7 @@ import com.jn.langx.util.function.Predicate2;
 import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.common.transaction.definition.parser.NamedTransactionDefinitionParser;
 import com.jn.sqlhelper.common.transaction.definition.parser.TransactionDefinitionAnnotationParser;
+import com.jn.sqlhelper.common.transaction.definition.parser.TransactionDefinitionParser;
 import com.jn.sqlhelper.common.transaction.definition.parser.TransactionalAnnotationParser;
 
 import java.lang.annotation.Annotation;
@@ -59,6 +60,14 @@ public class TransactionDefinitionRegistry implements Registry<Method, Transacti
     public void register(Method method, TransactionDefinition dataSourceKey) {
         Preconditions.checkNotNull(dataSourceKey);
         methodDataSourceKeyCache.putIfAbsent(method, new Holder<TransactionDefinition>(dataSourceKey));
+    }
+
+    public void register(TransactionDefinitionParser parser) {
+        if (parser instanceof TransactionDefinitionAnnotationParser) {
+            registerTransactionAnnotationParser((TransactionDefinitionAnnotationParser) parser);
+        } else if (parser instanceof NamedTransactionDefinitionParser) {
+            registerNamedTransactionParser((NamedTransactionDefinitionParser) parser);
+        }
     }
 
     public void registerTransactionAnnotationParser(TransactionDefinitionAnnotationParser transactionDefinitionAnnotationParser) {
