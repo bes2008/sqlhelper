@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.github.fangjinuo.sqlhelper</groupId>
         <artifactId>sqlhelper</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.1</version>
     </parent>
     <artifactId>sqlhelper-mybatis</artifactId>
     <packaging>jar</packaging>
