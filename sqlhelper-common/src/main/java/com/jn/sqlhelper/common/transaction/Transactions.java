@@ -14,8 +14,10 @@
 
 package com.jn.sqlhelper.common.transaction;
 
+import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.enums.Enums;
 import com.jn.langx.util.struct.ThreadLocalHolder;
+import com.jn.sqlhelper.common.transaction.definition.TransactionDefinition;
 
 public class Transactions {
     private Transactions() {
@@ -66,4 +68,9 @@ public class Transactions {
         }
         return isolation;
     }
+
+    public static boolean willRollback(@NonNull Throwable ex, @NonNull TransactionDefinition definition) {
+        return false;
+    }
+
 }

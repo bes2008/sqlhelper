@@ -14,6 +14,11 @@ import java.util.Map;
 public class Transaction {
     private TransactionManager transactionManager;
     private TransactionDefinition definition;
+    /**
+     * https://zhuanlan.zhihu.com/p/32720499
+     * <p>
+     * 通常在内层事务中，来标记全局事务是否要rollback
+     */
     private boolean rollbackOnly = false;
     private final Map<Object, TransactionalResource> resources = new LinkedHashMap<Object, TransactionalResource>();
 
