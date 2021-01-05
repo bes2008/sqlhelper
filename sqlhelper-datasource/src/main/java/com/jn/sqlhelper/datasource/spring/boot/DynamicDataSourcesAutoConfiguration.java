@@ -79,14 +79,15 @@ public class DynamicDataSourcesAutoConfiguration {
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.dynamicDataSource")
     public DataSourcesProperties namedDataSourcesProperties(Environment environment) {
-        String keyChoicesPointcutExpression = environment.getProperty("sqlhelper.dynamicDataSource.key-choices-pointcut.expression");
+        String keyChoicesPointcutExpression = environment.getProperty("sqlhelper.dynamicDataSource.keyChoices.expression");
         if (Strings.isNotBlank(keyChoicesPointcutExpression)) {
-            String requiredClass = "com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorProperties";
+            String requiredClass = "com.jn.langx.invocation.aop.expression.AspectJExpressionPointcutAdvisorProperties";
             if (!ClassLoaders.hasClass(requiredClass, this.getClass().getClassLoader())) {
-                StringBuilder log = new StringBuilder("The configuration property 'sqlhelper.dynamicDataSource.key-choices-pointcut.expression' has specified, but can't find the class: '" + "com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorProperties" + "', you should import the following jars to your classpath:\n")
+                StringBuilder log = new StringBuilder("The configuration property 'sqlhelper.dynamicDataSource.key-choices.expression' has specified, but can't find the class: '" + requiredClass + "', you should import the following jars to your classpath:\n")
                         .append("\t1) com.github.fangjinuo.agilway:agileway-spring:${agileway.version}.jar\n")
                         .append("\t2) org.springframework:spring-aop:${spring.version}.jar\n")
-                        .append("\t3) org.aspectj:aspectjweaver:${aspectj.version}.jar\n");
+                        .append("\t3) org.aspectj:aspectjweaver:${aspectj.version}.jar\n")
+                        .append("\t4) com.github.fangjinuo.langx:langx-java:${langx-java.version}.jar\n");
                 logger.warn(log.toString());
             }
         }
