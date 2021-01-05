@@ -21,7 +21,7 @@ import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
-import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
+import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import javax.sql.DataSource;

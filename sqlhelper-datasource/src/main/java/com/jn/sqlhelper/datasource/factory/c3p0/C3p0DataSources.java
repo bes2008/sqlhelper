@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.datasource.factory.c3p0;
 
-import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
+import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.langx.util.Maths;
 import com.jn.langx.util.Throwables;
 import com.mchange.v2.c3p0.DataSources;

@@ -16,7 +16,7 @@ package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Named;
 import com.jn.langx.annotation.Nullable;
-import com.jn.sqlhelper.datasource.definition.DataSourceProperties;
+import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import javax.sql.DataSource;

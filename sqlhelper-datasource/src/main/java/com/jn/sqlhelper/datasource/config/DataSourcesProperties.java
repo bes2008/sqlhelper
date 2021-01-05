@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.definition;
+package com.jn.sqlhelper.datasource.config;
 
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Function;

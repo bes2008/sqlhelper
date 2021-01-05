@@ -18,8 +18,8 @@ package com.jn.sqlhelper.datasource.spring.boot;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
 public class SpringDataSourcePropertiesAdapter {
-    public static com.jn.sqlhelper.datasource.definition.DataSourceProperties adapt(DataSourceProperties properties) {
-        com.jn.sqlhelper.datasource.definition.DataSourceProperties dataSourceProperties = new com.jn.sqlhelper.datasource.definition.DataSourceProperties();
+    public static com.jn.sqlhelper.datasource.config.DataSourceProperties adapt(DataSourceProperties properties) {
+        com.jn.sqlhelper.datasource.config.DataSourceProperties dataSourceProperties = new com.jn.sqlhelper.datasource.config.DataSourceProperties();
         dataSourceProperties.setUsername(properties.getUsername());
         dataSourceProperties.setPassword(properties.getPassword());
         dataSourceProperties.setDriverClassName(properties.getDriverClassName());
