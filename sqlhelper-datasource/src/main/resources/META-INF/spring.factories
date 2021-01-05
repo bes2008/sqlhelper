@@ -1,4 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.jn.sqlhelper.datasource.spring.boot.DynamicDataSourceLoadBalanceAutoConfiguration,\
   com.jn.sqlhelper.datasource.spring.boot.DynamicDataSourcesAutoConfiguration,\
-  com.jn.sqlhelper.datasource.spring.boot.DynamicMethodDataSourcesKeyAutoConfiguration
+  com.jn.sqlhelper.datasource.spring.boot.DynamicMethodDataSourcesKeyAutoConfiguration,\
+  com.jn.sqlhelper.datasource.spring.boot.DynamicTransactionAutoConfiguration
