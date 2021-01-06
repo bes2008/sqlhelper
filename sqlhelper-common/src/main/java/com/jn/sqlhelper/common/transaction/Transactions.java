@@ -15,13 +15,18 @@
 package com.jn.sqlhelper.common.transaction;
 
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
+import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.enums.Enums;
 import com.jn.langx.util.struct.ThreadLocalHolder;
-import com.jn.sqlhelper.common.transaction.definition.TransactionDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Transactions {
     private Transactions() {
     }
+
+    private static final Logger logger = LoggerFactory.getLogger(Transactions.class);
 
     private static final ThreadLocalHolder<Transaction> TRANSACTION_HOLDER = new ThreadLocalHolder<Transaction>();
 
@@ -57,20 +62,26 @@ public class Transactions {
         return true;
     }
 
+    public static final int getTransactionIsolationLevel(@NonNull String transactionIsolationName) {
+        Isolation isolation = getTransactionIsolation(transactionIsolationName);
+        return isolation.getCode();
+    }
 
-    public static final Isolation getTransactionIsolation(String transactionIsolationName) {
+    public static final Isolation getTransactionIsolation(@NonNull String transactionIsolationName) {
+        return getTransactionIsolation(transactionIsolationName, Isolation.DEFAULT);
+    }
+
+    public static final Isolation getTransactionIsolation(@NonNull String transactionIsolationName, @Nullable Isolation ifNull) {
+        Preconditions.checkNotEmpty(transactionIsolationName, "the transaction isolation level name is null or empty");
         Isolation isolation = Enums.ofDisplayText(Isolation.class, transactionIsolationName);
         if (isolation == null || isolation == Isolation.DEFAULT) {
             isolation = Enums.ofName(Isolation.class, transactionIsolationName);
         }
         if (isolation == null) {
-            isolation = Isolation.DEFAULT;
+            logger.warn("the transactionIsolationName is invalid: {}", transactionIsolationName);
+            isolation = ifNull;
         }
         return isolation;
-    }
-
-    public static boolean willRollback(@NonNull Throwable ex, @NonNull TransactionDefinition definition) {
-        return false;
     }
 
 }

@@ -24,6 +24,11 @@ import org.slf4j.LoggerFactory;
 public class TransactionAops {
     private static final Logger logger = LoggerFactory.getLogger(TransactionAops.class);
 
+    public static boolean willRollback(@NonNull Throwable ex, @NonNull TransactionDefinition definition) {
+        return false;
+    }
+
+
     public static Object invoke(@NonNull TransactionManager transactionManager, @NonNull TransactionDefinition definition, @NonNull MethodInvocation invocation) throws Throwable {
         Preconditions.checkNotNull(transactionManager, "the transaction manager is null");
         Preconditions.checkNotNull(definition, "the transaction definition is null");
@@ -56,7 +61,7 @@ public class TransactionAops {
         } catch (Throwable ex) {
             boolean rollback = transaction.isRollbackOnly();
             if (!rollback) {
-                rollback = Transactions.willRollback(ex, definition);
+                rollback = willRollback(ex, definition);
             }
             if (!rollback) {
                 if (nested) {

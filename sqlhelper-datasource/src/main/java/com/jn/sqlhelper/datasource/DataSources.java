@@ -107,30 +107,6 @@ public class DataSources {
         }
     }
 
-    /**
-     * A constant for SQL Server's Snapshot isolation level
-     */
-    private static final int SQL_SERVER_SNAPSHOT_ISOLATION_LEVEL = 4096;
-
-    public static List<String> TRANSACTION_ISOLATION_NAMES = Collects.newArrayList(
-            "NONE", "READ_COMMITTED", "READ_UNCOMMITTED", "REPEATABLE_READ", "SERIALIZABLE"
-    );
-
-
-    public static String getTransactionIsolation(String transactionIsolationName) {
-        return Transactions.getTransactionIsolation(transactionIsolationName).name();
-    }
-
-    /**
-     * Get the int value of a transaction isolation level by name.
-     *
-     * @param transactionIsolationName the name of the transaction isolation level
-     * @return the int value of the isolation level or -1
-     */
-    public static int getTransactionIsolationInt(final String transactionIsolationName) {
-        return Transactions.getTransactionIsolation(transactionIsolationName).getCode();
-    }
-
     public static boolean isImplementationKeyMatched(@NonNull String expectedKey, DataSourceProperties properties) {
         Preconditions.checkNotNull(expectedKey, "the expected jdbc datasource implementation key is null or empty");
         String implementationKey = properties.getImplementation();
