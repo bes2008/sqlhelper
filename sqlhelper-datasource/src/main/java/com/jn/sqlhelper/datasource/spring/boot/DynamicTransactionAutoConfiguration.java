@@ -16,18 +16,28 @@ package com.jn.sqlhelper.datasource.spring.boot;
 
 import com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorBuilder;
 import com.jn.langx.invocation.aop.expression.AspectJExpressionPointcutAdvisorProperties;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.common.transaction.DefaultTransactionManager;
 import com.jn.sqlhelper.common.transaction.TransactionManager;
+import com.jn.sqlhelper.common.transaction.definition.TransactionDefinitionRegistry;
+import com.jn.sqlhelper.common.transaction.definition.parser.TransactionDefinitionParser;
 import com.jn.sqlhelper.datasource.config.DataSourcesProperties;
 import com.jn.sqlhelper.datasource.spring.aop.LocalizeGlobalTransactionInterceptor;
+import com.jn.sqlhelper.datasource.spring.transaction.definition.SpringTransactionalAnnotationParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import java.util.List;
 
 @Configuration
 @ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true")
@@ -35,21 +45,47 @@ import org.springframework.context.annotation.Configuration;
 public class DynamicTransactionAutoConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourcesAutoConfiguration.class);
 
+    @Bean
     @ConditionalOnProperty(prefix = "sqlhelper.dynamicDataSource.transaction", name = "expression")
     public TransactionManager transactionManager() {
         DefaultTransactionManager transactionManager = new DefaultTransactionManager();
         return transactionManager;
     }
 
+
+    @Bean
+    @ConditionalOnBean(PlatformTransactionManager.class)
+    public SpringTransactionalAnnotationParser springTransactionalAnnotationParser() {
+        return new SpringTransactionalAnnotationParser();
+    }
+
+
+    @Bean
+    @ConditionalOnProperty(prefix = "sqlhelper.dynamicDataSource.transaction", name = "expression")
+    public TransactionDefinitionRegistry transactionDefinitionRegistry(ObjectProvider<List<TransactionDefinitionParser>> parserProvider) {
+        final TransactionDefinitionRegistry registry = new TransactionDefinitionRegistry();
+        List<TransactionDefinitionParser> parsers = parserProvider.getIfAvailable();
+        Collects.forEach(parsers, new Consumer<TransactionDefinitionParser>() {
+            @Override
+            public void accept(TransactionDefinitionParser parser) {
+                registry.register(parser);
+            }
+        });
+        return registry;
+    }
+
+
     @Bean("dynamicDataSourceTransactionAdvisor")
     @ConditionalOnProperty(prefix = "sqlhelper.dynamicDataSource.transaction", name = "expression")
     @ConditionalOnMissingBean(name = "dynamicDataSourceTransactionAdvisor")
     public AspectJExpressionPointcutAdvisor dynamicDataSourceTransactionAdvisor(
             DataSourcesProperties properties,
-            TransactionManager transactionManager) {
+            TransactionManager transactionManager,
+            TransactionDefinitionRegistry registry) {
 
         LocalizeGlobalTransactionInterceptor interceptor = new LocalizeGlobalTransactionInterceptor();
         interceptor.setTransactionManager(transactionManager);
+        interceptor.setDefinitionRegistry(registry);
 
         AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisorBuilder()
                 .properties(properties.getTransaction())
