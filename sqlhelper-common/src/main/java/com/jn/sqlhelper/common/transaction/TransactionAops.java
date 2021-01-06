@@ -17,6 +17,7 @@ package com.jn.sqlhelper.common.transaction;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.transaction.definition.TransactionDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,7 @@ public class TransactionAops {
             if (!nested) {
                 if (transaction.isRollbackOnly()) {
                     // do log
+                    logger.warn("will rollback a invocation with the transaction is marked as rollback-only: {} ", Reflects.getMethodString(invocation.getJoinPoint()));
                     transactionManager.rollback(transaction);
                 } else {
                     transactionManager.commit(transaction);
