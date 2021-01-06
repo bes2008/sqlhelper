@@ -14,9 +14,8 @@
 
 package com.jn.sqlhelper.common.transaction;
 
-import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
-import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.enums.Enums;
 import com.jn.langx.util.struct.ThreadLocalHolder;
 import org.slf4j.Logger;
@@ -62,21 +61,24 @@ public class Transactions {
         return true;
     }
 
-    public static final int getTransactionIsolationLevel(@NonNull String transactionIsolationName) {
+    public static final int getTransactionIsolationLevel(@Nullable String transactionIsolationName) {
         Isolation isolation = getTransactionIsolation(transactionIsolationName);
         return isolation.getCode();
     }
 
-    public static final Isolation getTransactionIsolation(@NonNull String transactionIsolationName) {
+    public static final Isolation getTransactionIsolation(@Nullable String transactionIsolationName) {
         return getTransactionIsolation(transactionIsolationName, Isolation.DEFAULT);
     }
 
-    public static final Isolation getTransactionIsolation(@NonNull String transactionIsolationName, @Nullable Isolation ifNull) {
-        Preconditions.checkNotEmpty(transactionIsolationName, "the transaction isolation level name is null or empty");
-        Isolation isolation = Enums.ofDisplayText(Isolation.class, transactionIsolationName);
-        if (isolation == null || isolation == Isolation.DEFAULT) {
-            isolation = Enums.ofName(Isolation.class, transactionIsolationName);
+    public static final Isolation getTransactionIsolation(@Nullable String transactionIsolationName, @Nullable Isolation ifNull) {
+        Isolation isolation = null;
+        if (Emptys.isNotEmpty(transactionIsolationName)) {
+            isolation = Enums.ofDisplayText(Isolation.class, transactionIsolationName);
+            if (isolation == null) {
+                isolation = Enums.ofName(Isolation.class, transactionIsolationName);
+            }
         }
+
         if (isolation == null) {
             logger.warn("the transactionIsolationName is invalid: {}", transactionIsolationName);
             isolation = ifNull;

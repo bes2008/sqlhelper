@@ -42,7 +42,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -55,8 +57,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-@ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
+
 @Configuration
+@AutoConfigureAfter(DataSourceAutoConfiguration.class)
+@ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
 public class DynamicDataSourcesAutoConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourcesAutoConfiguration.class);
 
@@ -93,9 +97,6 @@ public class DynamicDataSourcesAutoConfiguration {
         }
         return new DataSourcesProperties();
     }
-
-    // 把数据源放到Spring容器中
-    //public GenericBeanDefinition
 
 
     @Bean(name = "dataSourcesFactoryBean")

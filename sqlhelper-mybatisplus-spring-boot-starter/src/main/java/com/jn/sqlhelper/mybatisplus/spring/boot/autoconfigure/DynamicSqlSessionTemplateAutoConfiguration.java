@@ -45,9 +45,9 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ResourceLoader;
@@ -60,13 +60,17 @@ import java.util.List;
 @ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class, DynamicSqlSessionFactory.class})
 @ConditionalOnBean(name = "dataSourcesFactoryBean")
 @EnableConfigurationProperties(MybatisPlusProperties.class)
-@AutoConfigureBefore({MybatisPlusAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@AutoConfigureBefore({MybatisPlusAutoConfiguration.class})
 @Configuration
-public class DynamicSqlSessionTemplateAutoConfiguration {
+public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationContextAware {
 
     private static final Logger logger = LoggerFactory.getLogger(DynamicSqlSessionTemplateAutoConfiguration.class);
     private ApplicationContext applicationContext;
 
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @Bean("sqlSessionFactory")
     public DynamicSqlSessionFactory dynamicSqlSessionFactory(
@@ -78,8 +82,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
             final ResourceLoader resourceLoader,
             final ObjectProvider<DatabaseIdProvider> databaseIdProvider,
             final ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider,
-            final ObjectProvider<List<MybatisPlusPropertiesCustomizer>> mybatisPlusPropertiesCustomizerProvider,
-            final ApplicationContext applicationContext) throws BeanCreationException {
+            final ObjectProvider<List<MybatisPlusPropertiesCustomizer>> mybatisPlusPropertiesCustomizerProvider) throws BeanCreationException {
         List<DataSource> dataSources = null;
         try {
             List ds = dataSourcesFactoryBean.getObject();
@@ -101,7 +104,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                     NamedDataSource namedDataSource = registryProvider.getObject().wrap(dataSource);
                     try {
                         logger.info("===[SQLHelper & MyBatis-Plus 3.x]=== Create mybatis SqlSessionFactory instance for datasource {}", namedDataSource.getDataSourceKey());
-                        SqlSessionFactory delegate = createSqlSessionFactory(dataSource, properties, interceptorsProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider, mybatisPlusPropertiesCustomizerProvider, applicationContext);
+                        SqlSessionFactory delegate = createSqlSessionFactory(dataSource, properties, interceptorsProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider, mybatisPlusPropertiesCustomizerProvider);
                         if (delegate != null) {
                             DelegatingSqlSessionFactory sqlSessionFactory = new DelegatingSqlSessionFactory();
                             sqlSessionFactory.setDelegate(delegate);
@@ -127,8 +130,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                                                       ResourceLoader resourceLoader,
                                                       ObjectProvider<DatabaseIdProvider> databaseIdProviderObjectProvider,
                                                       ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider,
-                                                      ObjectProvider<List<MybatisPlusPropertiesCustomizer>> mybatisPlusPropertiesCustomizerProvider,
-                                                      ApplicationContext applicationContext) throws Exception {
+                                                      ObjectProvider<List<MybatisPlusPropertiesCustomizer>> mybatisPlusPropertiesCustomizerProvider) throws Exception {
         MybatisPlusAutoConfiguration mybatisAutoConfiguration = new MybatisPlusAutoConfiguration(properties, interceptorsProvider, resourceLoader, databaseIdProviderObjectProvider, configurationCustomizersProvider, mybatisPlusPropertiesCustomizerProvider, this.applicationContext);
         mybatisAutoConfiguration.afterPropertiesSet();
         return mybatisAutoConfiguration.sqlSessionFactory(dataSource);

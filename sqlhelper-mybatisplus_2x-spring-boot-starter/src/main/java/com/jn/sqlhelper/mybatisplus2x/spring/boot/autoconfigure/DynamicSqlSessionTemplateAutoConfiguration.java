@@ -59,7 +59,7 @@ import java.util.List;
 @ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class, DynamicSqlSessionFactory.class})
 @ConditionalOnBean(name = "dataSourcesFactoryBean")
 @EnableConfigurationProperties(MybatisPlusProperties.class)
-@AutoConfigureBefore({MybatisPlusAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@AutoConfigureBefore({MybatisPlusAutoConfiguration.class})
 @Configuration
 public class DynamicSqlSessionTemplateAutoConfiguration {
 

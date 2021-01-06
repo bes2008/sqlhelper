@@ -20,6 +20,7 @@ import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.spring.boot.DynamicDataSourcesAutoConfiguration;
 import com.jn.sqlhelper.mybatis.spring.datasource.DelegatingSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.datasource.DynamicSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.datasource.DynamicSqlSessionTemplate;
@@ -39,6 +40,7 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ListFactoryBean;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -54,10 +56,11 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
-@ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class, DynamicSqlSessionFactory.class})
+@ConditionalOnClass({DynamicDataSourcesAutoConfiguration.class,SqlSessionFactory.class, SqlSessionFactoryBean.class, DynamicSqlSessionFactory.class})
 @ConditionalOnBean(name = "dataSourcesFactoryBean")
 @EnableConfigurationProperties(MybatisProperties.class)
-@AutoConfigureBefore({MybatisAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@AutoConfigureBefore({MybatisAutoConfiguration.class})
+@AutoConfigureAfter(DynamicDataSourcesAutoConfiguration.class)
 @Configuration
 public class DynamicSqlSessionTemplateAutoConfiguration {
 
