@@ -26,7 +26,7 @@ import org.springframework.context.annotation.ImportResource;
         "com.jn.agileway.spring.utils"
 })
 @MapperScan("com.jn.sqlhelper.examples.mybatis.dao")
-//@ImportResource(locations = "classpath:/applicationContext-tx.xml")
+@ImportResource(locations = "classpath:/applicationContext-tx.xml")
 public class MyBatisWithSpringBootTest {
     public static void main(String[] args) {
         SpringApplication.run(MyBatisWithSpringBootTest.class, args);

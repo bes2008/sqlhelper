@@ -18,16 +18,11 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.common.transaction.definition.TransactionDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TransactionAops {
     private static final Logger logger = LoggerFactory.getLogger(TransactionAops.class);
-
-    public static boolean willRollback(@NonNull Throwable ex, @NonNull TransactionDefinition definition) {
-        return false;
-    }
 
 
     public static Object invoke(@NonNull TransactionManager transactionManager, @NonNull TransactionDefinition definition, @NonNull MethodInvocation invocation) throws Throwable {
@@ -63,7 +58,7 @@ public class TransactionAops {
         } catch (Throwable ex) {
             boolean rollback = transaction.isRollbackOnly();
             if (!rollback) {
-                rollback = willRollback(ex, definition);
+                rollback = definition.rollbackOn(ex);
             }
             if (!rollback) {
                 if (nested) {

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.transaction.definition;
+package com.jn.sqlhelper.common.transaction;
 
 import com.jn.langx.Named;
 
@@ -21,7 +21,5 @@ public interface TransactionDefinition extends Named {
 
     boolean isReadonly();
 
-    Class<? extends Throwable>[] getRollbackFor();
-
-    Class<? extends Throwable>[] getNoRollbackFor();
+    boolean rollbackOn(Throwable ex);
 }

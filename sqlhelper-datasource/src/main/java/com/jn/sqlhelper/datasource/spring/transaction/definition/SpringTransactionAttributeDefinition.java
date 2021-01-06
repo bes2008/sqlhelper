@@ -12,38 +12,28 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.transaction.definition;
+package com.jn.sqlhelper.datasource.spring.transaction.definition;
 
-import com.jn.sqlhelper.common.transaction.Isolation;
+import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.common.transaction.TransactionDefinition;
+import org.springframework.transaction.interceptor.TransactionAttribute;
 
-public class DefaultTransactionDefinition implements TransactionDefinition {
+public class SpringTransactionAttributeDefinition implements TransactionDefinition {
+    private TransactionAttribute attribute;
     private String name;
-    private boolean isReadonly = false;
-    private Isolation isolation = Isolation.DEFAULT;
+
+    public SpringTransactionAttributeDefinition(TransactionAttribute attribute) {
+        this.attribute = attribute;
+    }
 
     @Override
     public int getIsolationLevel() {
-        return isolation.getCode();
-    }
-
-    public Isolation getIsolation() {
-        return isolation;
-    }
-
-    public void setIsolation(Isolation isolation) {
-        if (isolation != null) {
-            this.isolation = isolation;
-        }
+        return attribute.getIsolationLevel();
     }
 
     @Override
     public boolean isReadonly() {
-        return isReadonly;
-    }
-
-    public void setReadonly(boolean readonly) {
-        isReadonly = readonly;
+        return attribute.isReadOnly();
     }
 
     @Override
@@ -53,11 +43,11 @@ public class DefaultTransactionDefinition implements TransactionDefinition {
 
     @Override
     public String getName() {
-        return name;
+        return Strings.useValueIfEmpty(name, attribute.getName());
     }
 
     @Override
     public boolean rollbackOn(Throwable ex) {
-        return (ex instanceof RuntimeException || ex instanceof Error);
+        return attribute.rollbackOn(ex);
     }
 }

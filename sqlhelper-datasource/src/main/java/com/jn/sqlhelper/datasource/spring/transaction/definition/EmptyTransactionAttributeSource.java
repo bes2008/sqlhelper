@@ -12,12 +12,16 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.transaction.definition.parser;
+package com.jn.sqlhelper.datasource.spring.transaction.definition;
 
-import com.jn.langx.Parser;
-import com.jn.sqlhelper.common.transaction.TransactionDefinition;
+import org.springframework.transaction.interceptor.TransactionAttribute;
+import org.springframework.transaction.interceptor.TransactionAttributeSource;
 
-public interface TransactionDefinitionParser<I> extends Parser<I, TransactionDefinition> {
+import java.lang.reflect.Method;
+
+public class EmptyTransactionAttributeSource implements TransactionAttributeSource {
     @Override
-    TransactionDefinition parse(I i);
+    public TransactionAttribute getTransactionAttribute(Method method, Class<?> targetClass) {
+        return null;
+    }
 }

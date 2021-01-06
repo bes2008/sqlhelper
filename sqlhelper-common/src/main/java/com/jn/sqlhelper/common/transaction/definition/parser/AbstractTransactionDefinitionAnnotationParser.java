@@ -17,7 +17,7 @@ package com.jn.sqlhelper.common.transaction.definition.parser;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.common.transaction.definition.TransactionDefinition;
+import com.jn.sqlhelper.common.transaction.TransactionDefinition;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;

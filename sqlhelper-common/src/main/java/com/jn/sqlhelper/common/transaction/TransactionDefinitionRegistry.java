@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.transaction.definition;
+package com.jn.sqlhelper.common.transaction;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.registry.Registry;

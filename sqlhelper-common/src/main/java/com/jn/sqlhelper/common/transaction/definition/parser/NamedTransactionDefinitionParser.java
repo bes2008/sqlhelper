@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.common.transaction.definition.parser;
 
 import com.jn.langx.Named;
-import com.jn.sqlhelper.common.transaction.definition.TransactionDefinition;
+import com.jn.sqlhelper.common.transaction.TransactionDefinition;
 
 public interface NamedTransactionDefinitionParser<I> extends TransactionDefinitionParser<I>, Named {
     @Override

@@ -1,7 +1,5 @@
 package com.jn.sqlhelper.common.transaction;
 
-import com.jn.sqlhelper.common.transaction.definition.TransactionDefinition;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
