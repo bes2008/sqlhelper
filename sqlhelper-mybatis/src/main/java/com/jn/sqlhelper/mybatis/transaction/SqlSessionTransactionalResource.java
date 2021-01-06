@@ -60,4 +60,9 @@ public class SqlSessionTransactionalResource implements TransactionalResource {
     public String getName() {
         return name;
     }
+
+    @Override
+    public boolean isClosed() {
+        return session == null;
+    }
 }

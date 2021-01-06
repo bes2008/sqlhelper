@@ -59,4 +59,13 @@ public class ConnectionTransactionalResource implements TransactionalResource {
     public String toString() {
         return this.getName();
     }
+
+    @Override
+    public boolean isClosed() {
+        try {
+            return connection == null || connection.isClosed();
+        } catch (Throwable ex) {
+            return false;
+        }
+    }
 }

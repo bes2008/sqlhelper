@@ -32,7 +32,9 @@ public class DefaultTransactionManager implements TransactionManager {
         Map<Object, TransactionalResource> resourceMap = transaction.getResources();
         for (Map.Entry<Object, TransactionalResource> resourceEntry : resourceMap.entrySet()) {
             TransactionalResource resource = resourceEntry.getValue();
-            resource.commit();
+            if (!resource.isClosed()) {
+                resource.commit();
+            }
         }
     }
 
@@ -41,7 +43,9 @@ public class DefaultTransactionManager implements TransactionManager {
         Map<Object, TransactionalResource> resourceMap = transaction.getResources();
         for (Map.Entry<Object, TransactionalResource> resourceEntry : resourceMap.entrySet()) {
             TransactionalResource resource = resourceEntry.getValue();
-            resource.rollback();
+            if (!resource.isClosed()) {
+                resource.rollback();
+            }
         }
     }
 }

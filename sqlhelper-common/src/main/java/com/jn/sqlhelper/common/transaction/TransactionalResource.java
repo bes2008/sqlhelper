@@ -26,4 +26,7 @@ public interface TransactionalResource extends Named {
     void commit() throws SQLException;
 
     void rollback() throws SQLException;
+
+    boolean isClosed();
+
 }

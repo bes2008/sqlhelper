@@ -16,10 +16,12 @@ package com.jn.sqlhelper.mybatis.spring.datasource;
 
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.transaction.Transaction;
 import com.jn.sqlhelper.common.transaction.Transactions;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.mybatis.transaction.SqlSessionTransactionalResource;
 import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.executor.BatchResult;
@@ -124,15 +126,21 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
             PersistenceExceptionTranslator exceptionTranslator = DynamicSqlSessionTemplate.this.getPersistenceExceptionTranslator();
             // 这个是实际的 sqlSession
             SqlSession sqlSession = getSqlSession(sqlSessionFactory, executorType, exceptionTranslator);
+
+            DataSourceKey key = DataSourceKeySelector.getCurrent();
+            if (key != null) {
+                Transactions.bindTransactionResource(key, new SqlSessionTransactionalResource(Reflects.getMethodString(method), sqlSession, sqlSessionFactory));
+            }
+            // 判断 sqlSession 是否使用了事务管理
+            boolean isSqlSessionTransactional = false;
             try {
                 Object result = method.invoke(sqlSession, args);
-                // 判断 sqlSession 是否使用了事务管理
-                boolean isSqlSessionTransactional = false;
+
                 // 判断 sqlSession 是否使用了Spring 事务管理
                 isSqlSessionTransactional = isSqlSessionTransactional(sqlSession, sqlSessionFactory);
                 if (!isSqlSessionTransactional) {
                     // 判断 sqlSession 是否使用了 SqlHelper DynamicDataSource 事务管理
-                    DataSourceKey key = DataSourceKeySelector.getCurrent();
+
                     if (key != null) {
                         Transaction transaction = Transactions.get();
                         if (transaction != null) {
@@ -157,7 +165,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
                 }
                 throw unwrapped;
             } finally {
-                if (sqlSession != null) {
+                if (sqlSession != null && !isSqlSessionTransactional) {
                     closeSqlSession(sqlSession, sqlSessionFactory);
                 }
             }
