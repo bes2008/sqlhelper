@@ -12,13 +12,12 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.spring.session.factory;
+package com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource;
 
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.mybatis.session.factory.SqlSessionFactoryProvider;
-import com.jn.sqlhelper.mybatis.spring.datasource.DynamicSqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.Map;
