@@ -128,7 +128,9 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
             SqlSession sqlSession = getSqlSession(sqlSessionFactory, executorType, exceptionTranslator);
 
             DataSourceKey key = DataSourceKeySelector.getCurrent();
-            if (key != null) {
+            Transaction transaction = Transactions.get();
+            // 当改调用发生在sqlhelper transaction manager 范围内时，需要注册
+            if (key != null && transaction != null) {
                 Transactions.bindTransactionResource(key, new SqlSessionTransactionalResource(Reflects.getMethodString(method), sqlSession, sqlSessionFactory));
             }
             // 判断 sqlSession 是否使用了事务管理
@@ -142,7 +144,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
                     // 判断 sqlSession 是否使用了 SqlHelper DynamicDataSource 事务管理
 
                     if (key != null) {
-                        Transaction transaction = Transactions.get();
+
                         if (transaction != null) {
                             isSqlSessionTransactional = transaction.hasResource(key);
                         }

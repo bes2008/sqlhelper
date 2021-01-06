@@ -23,6 +23,7 @@ import java.sql.Connection;
 public class DelegatingSqlSessionFactory implements SqlSessionFactory, Delegatable<SqlSessionFactory> {
     private SqlSessionFactory delegate;
     private PersistenceExceptionTranslator persistenceExceptionTranslator;
+
     @Override
     public SqlSession openSession() {
         return delegate.openSession();
