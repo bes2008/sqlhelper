@@ -12,19 +12,11 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.spring.session.provider;
+package com.jn.sqlhelper.mybatis.session.factory;
 
+import com.jn.langx.factory.Provider;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-public class SimpleSqlSessionFactoryProvider implements SqlSessionFactoryProvider<Object> {
-    private SqlSessionFactory sessionFactory;
+public interface SqlSessionFactoryProvider<I> extends Provider<I, SqlSessionFactory> {
 
-    public SimpleSqlSessionFactoryProvider(SqlSessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    @Override
-    public SqlSessionFactory get(Object invocation) {
-        return this.sessionFactory;
-    }
 }

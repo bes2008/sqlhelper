@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.transaction;
+package com.jn.sqlhelper.mybatis.session.transaction;
 
 import com.jn.sqlhelper.common.transaction.TransactionalResource;
 import org.apache.ibatis.session.SqlSession;

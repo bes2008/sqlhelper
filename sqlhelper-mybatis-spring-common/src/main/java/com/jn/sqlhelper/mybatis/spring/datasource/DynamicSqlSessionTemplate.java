@@ -21,7 +21,7 @@ import com.jn.sqlhelper.common.transaction.Transaction;
 import com.jn.sqlhelper.common.transaction.Transactions;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
-import com.jn.sqlhelper.mybatis.transaction.SqlSessionTransactionalResource;
+import com.jn.sqlhelper.mybatis.session.transaction.SqlSessionTransactionalResource;
 import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.executor.BatchResult;
