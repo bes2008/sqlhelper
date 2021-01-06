@@ -15,7 +15,6 @@
 package com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource;
 
 import com.jn.langx.annotation.NonNull;
-import com.jn.langx.annotation.Nullable;
 import com.jn.langx.invocation.GenericMethodInvocation;
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.langx.text.StringTemplates;
@@ -24,7 +23,6 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
-import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -48,8 +46,6 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
     private Map<DataSourceKey, MAPPER> delegateMapperMap = Collects.<DataSourceKey, MAPPER>emptyHashMap();
     @NonNull
     private DataSourceKeySelector selector;
-    @Nullable
-    private DataSourceKeyRouter router;
 
     public DynamicMapper(Class<MAPPER> mapperInterface, Map<DataSourceKey, MAPPER> delegateMapperMap, DataSourceKeySelector selector) {
         this.mapperInterface = mapperInterface;
