@@ -40,7 +40,9 @@ logging:
 sqlhelper:
   dynamicDataSource:
     enabled: true
-    key-choices:
+    transaction:
+      expression: execution(public * com.jn.sqlhelper.examples.mybatisplus3.dao.*Dao.*(..))
+    keyChoices:
       expression: execution(public * com.jn.sqlhelper.examples.mybatisplus3.controller.*Controller.*(..))
     dataSources:
       # https://h2database.com/

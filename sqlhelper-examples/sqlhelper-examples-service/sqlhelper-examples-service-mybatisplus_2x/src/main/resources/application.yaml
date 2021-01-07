@@ -19,8 +19,10 @@ spring:
 sqlhelper:
   dynamicDataSource:
     enabled: true
-    key-choices:
+    keyChoices:
       expression: execution(public * com.jn.sqlhelper.examples.mybatisplus_2x.controller.*Controller.*(..))
+    transaction:
+      expression: execution(public * com.jn.sqlhelper.examples.mybatisplus_2x.dao.*Dao.*(..))
     dataSources:
       # https://h2database.com/
       - group: primary
