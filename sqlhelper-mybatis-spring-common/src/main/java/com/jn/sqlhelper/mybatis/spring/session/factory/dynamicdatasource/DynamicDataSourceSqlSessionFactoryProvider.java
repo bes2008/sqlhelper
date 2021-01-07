@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource;
 
-import com.jn.sqlhelper.datasource.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.mybatis.session.factory.SqlSessionFactoryProvider;
 import org.apache.ibatis.session.SqlSessionFactory;

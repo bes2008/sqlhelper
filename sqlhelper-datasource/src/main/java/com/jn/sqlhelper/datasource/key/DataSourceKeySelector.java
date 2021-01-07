@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2021 the original author or authors.
  *
  * Licensed under the Apache, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,16 +12,14 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.connection;
+package com.jn.sqlhelper.datasource.key;
 
-import com.jn.langx.invocation.proxy.sparse.SparseMethodInvocationHandler;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
-import java.sql.Connection;
-
-class ConnectionProxyHandler extends SparseMethodInvocationHandler<Connection> {
-
-    public ConnectionProxyHandler(Connection target) {
-        super(target);
-    }
-
+/**
+ * 用于基于 参数 I 进行 数据源的筛选
+ * @param <I>
+ */
+public interface DataSourceKeySelector<I> {
+    DataSourceKey select(I input);
 }

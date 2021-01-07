@@ -30,6 +30,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+/**
+ * NamedDataSource 的一个默认实现
+ */
 public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<DataSource>, Initializable {
     @NonNull
     private final DataSourceKey dataSourceKey = new DataSourceKey(DataSources.DATASOURCE_PRIMARY_GROUP, "undefined");

@@ -16,8 +16,6 @@ package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Delegatable;
 import com.jn.langx.annotation.NonNull;
-import com.jn.langx.cluster.loadbalance.LoadBalancer;
-import com.jn.langx.cluster.loadbalance.LoadBalancerAware;
 import com.jn.langx.registry.Registry;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
@@ -46,7 +44,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, LoadBalancerAware {
+/**
+ * 这是一个支持 负载均衡的 DataSource 容器
+ */
+public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
     private static final Logger logger = LoggerFactory.getLogger(DataSourceRegistry.class);
     /**
      * 可能是确切的值，也可能是个key pattern
@@ -61,7 +62,6 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
             .maximumWeightedCapacity(1000)
             .build();
     private DataSourceKeyDataSourceParser keyParser = RandomDataSourceKeyParser.INSTANCE;
-    private LoadBalancer loadBalancer;
 
     /**
      * 用户在使用时，可能用一些不存在的Key
@@ -282,15 +282,6 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         this.failover = failover;
     }
 
-    @Override
-    public LoadBalancer getLoadBalancer() {
-        return loadBalancer;
-    }
-
-    @Override
-    public void setLoadBalancer(LoadBalancer loadBalancer) {
-        this.loadBalancer = loadBalancer;
-    }
 
     public List<DataSourceKey> allKeys() {
         return Collects.asList(dataSourceRegistry.keySet());

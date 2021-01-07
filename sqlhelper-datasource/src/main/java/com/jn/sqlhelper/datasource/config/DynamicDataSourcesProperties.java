@@ -22,12 +22,30 @@ import com.jn.langx.util.function.Function;
 import java.util.List;
 import java.util.Map;
 
-public class DataSourcesProperties {
+public class DynamicDataSourcesProperties {
+    /**
+     * 是否启用动态数据源特性
+     */
     private boolean enabled;
+    /**
+     * 所有的数据源配置
+     */
     private List<DataSourceProperties> dataSources = Collects.emptyArrayList();
+    /**
+     * 默认的 slave 路由名称
+     */
     private String defaultRouter;
+    /**
+     * 数据源组配置
+     */
     private List<DataSourceGroupProperties> groups = Collects.emptyArrayList();
+    /**
+     * 整个工程中，能够决定 数据源 key的 方法的拦截器 expression。所有 配置了 @DataSource的地方，都要加上
+     */
     private AspectJExpressionPointcutAdvisorProperties keyChoices = new AspectJExpressionPointcutAdvisorProperties();
+    /**
+     * 整个工程中，需要启用自动化事务管理的地方，都有包含在此拦截器里
+     */
     private AspectJExpressionPointcutAdvisorProperties transaction = new AspectJExpressionPointcutAdvisorProperties();
 
     public boolean isEnabled() {

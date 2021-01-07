@@ -33,7 +33,6 @@ import com.jn.langx.util.function.Supplier0;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.struct.Holder;
 import com.jn.langx.util.struct.ThreadLocalHolder;
-import com.jn.sqlhelper.datasource.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.DataSourceRegistryAware;
 import com.jn.sqlhelper.datasource.NamedDataSource;
@@ -112,7 +111,6 @@ public class MethodInvocationDataSourceKeySelector implements DataSourceRegistry
 
     public void setDataSourceRegistry(DataSourceRegistry registry) {
         this.dataSourceRegistry = registry;
-        this.dataSourceRegistry.setLoadBalancer(this);
     }
 
     public MethodDataSourceKeyRegistry getDataSourceKeyRegistry() {

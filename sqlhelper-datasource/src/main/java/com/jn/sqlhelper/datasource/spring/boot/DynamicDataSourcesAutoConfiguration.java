@@ -28,7 +28,7 @@ import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
-import com.jn.sqlhelper.datasource.config.DataSourcesProperties;
+import com.jn.sqlhelper.datasource.config.DynamicDataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
@@ -82,7 +82,7 @@ public class DynamicDataSourcesAutoConfiguration {
 
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.dynamicDataSource")
-    public DataSourcesProperties namedDataSourcesProperties(Environment environment) {
+    public DynamicDataSourcesProperties namedDataSourcesProperties(Environment environment) {
         String keyChoicesPointcutExpression = environment.getProperty("sqlhelper.dynamicDataSource.keyChoices.expression");
         if (Strings.isNotBlank(keyChoicesPointcutExpression)) {
             String requiredClass = "com.jn.langx.invocation.aop.expression.AspectJExpressionPointcutAdvisorProperties";
@@ -95,14 +95,14 @@ public class DynamicDataSourcesAutoConfiguration {
                 logger.warn(log.toString());
             }
         }
-        return new DataSourcesProperties();
+        return new DynamicDataSourcesProperties();
     }
 
 
     @Bean(name = "dataSourcesFactoryBean")
     public ListFactoryBean dataSourcesFactoryBean(
             final CentralizedDataSourceFactory centralizedDataSourceFactory,
-            DataSourcesProperties namedDataSourcesProperties,
+            DynamicDataSourcesProperties namedDataSourcesProperties,
             // 该参数只是为了兼容Spring Boot 默认的 DataSource配置而已
             ObjectProvider<DataSource> springBootOriginDataSourceProvider,
             ObjectProvider<org.springframework.boot.autoconfigure.jdbc.DataSourceProperties> builtInDataSourceProperties,
@@ -187,7 +187,7 @@ public class DynamicDataSourcesAutoConfiguration {
             final DataSourceRegistry registry,
             MethodDataSourceKeyRegistry keyRegistry,
             ObjectProvider<List<DataSourceKeyRouter>> routersProvider,
-            DataSourcesProperties dataSourcesProperties) {
+            DynamicDataSourcesProperties dataSourcesProperties) {
 
         final MethodInvocationDataSourceKeySelector selector = new MethodInvocationDataSourceKeySelector();
 

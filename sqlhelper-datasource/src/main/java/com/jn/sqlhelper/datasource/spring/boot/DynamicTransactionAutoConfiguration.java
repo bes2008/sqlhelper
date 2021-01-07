@@ -26,7 +26,7 @@ import com.jn.sqlhelper.common.transaction.TransactionDefinitionRegistry;
 import com.jn.sqlhelper.common.transaction.TransactionManager;
 import com.jn.sqlhelper.common.transaction.definition.parser.NamedTransactionDefinitionParser;
 import com.jn.sqlhelper.common.transaction.definition.parser.TransactionDefinitionParser;
-import com.jn.sqlhelper.datasource.config.DataSourcesProperties;
+import com.jn.sqlhelper.datasource.config.DynamicDataSourcesProperties;
 import com.jn.sqlhelper.datasource.spring.aop.LocalizeGlobalTransactionInterceptor;
 import com.jn.sqlhelper.datasource.spring.transaction.definition.EmptyTransactionAttributeSource;
 import com.jn.sqlhelper.datasource.spring.transaction.definition.SpringTransactionAttributeSourceAdapter;
@@ -115,7 +115,7 @@ public class DynamicTransactionAutoConfiguration {
     @ConditionalOnProperty(prefix = "sqlhelper.dynamicDataSource.transaction", name = "expression")
     @ConditionalOnMissingBean(name = "dynamicDataSourceTransactionAdvisor")
     public AspectJExpressionPointcutAdvisor dynamicDataSourceTransactionAdvisor(
-            DataSourcesProperties properties,
+            DynamicDataSourcesProperties properties,
             TransactionManager transactionManager,
             TransactionDefinitionRegistry registry) {
 

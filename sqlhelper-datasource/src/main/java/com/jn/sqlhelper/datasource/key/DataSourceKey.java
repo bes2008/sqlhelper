@@ -20,6 +20,9 @@ import com.jn.langx.util.Strings;
 import com.jn.langx.util.hash.HashCodeBuilder;
 import com.jn.sqlhelper.datasource.DataSources;
 
+/**
+ * 代表了数据源的 唯一key
+ */
 public class DataSourceKey implements Node {
     @NonNull
     private String group = DataSources.DATASOURCE_PRIMARY_GROUP;

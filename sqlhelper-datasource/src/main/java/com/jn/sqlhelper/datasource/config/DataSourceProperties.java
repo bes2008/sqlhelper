@@ -21,9 +21,12 @@ import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import java.util.Properties;
 
+/**
+ * 配置单个数据源
+ */
 public class DataSourceProperties implements Configuration {
     /**
-     * datasource:
+     * datasource properties:
      */
     private String group = DataSources.DATASOURCE_PRIMARY_GROUP;
     private String name;
@@ -31,7 +34,7 @@ public class DataSourceProperties implements Configuration {
     private boolean primary = false;
 
     /**
-     * driver properties:
+     * common driver properties:
      */
     private String driverClassName;
     private String url;
@@ -67,6 +70,9 @@ public class DataSourceProperties implements Configuration {
     private int initialSize = 0;
     private int minIdle;
 
+    /**
+     * custom driver properties:
+     */
     private Properties driverProps;
 
     public DataSourceProperties() {

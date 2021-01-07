@@ -21,6 +21,9 @@ import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
 import javax.sql.DataSource;
 
+/**
+ * 为数据源提供 name, properties 属性
+ */
 public interface NamedDataSource extends DataSource, Named {
     String getGroup();
 
