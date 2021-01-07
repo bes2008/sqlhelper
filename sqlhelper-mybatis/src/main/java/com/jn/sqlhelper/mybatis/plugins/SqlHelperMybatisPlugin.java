@@ -61,7 +61,7 @@ public class SqlHelperMybatisPlugin implements Interceptor, Initializable {
     @Override
     public void init() throws InitializationException {
         if (!inited) {
-            logger.info("===[SQLHelper]=== Initial SQLHelper MyBatis Plugin");
+            logger.info("===[SQLHelper & MyBatis]=== Initial SQLHelper MyBatis Plugin");
             instrumentor.init();
             DebugHandler debugHandler = new DebugHandler();
             handlerRegistry.put("debug", debugHandler);

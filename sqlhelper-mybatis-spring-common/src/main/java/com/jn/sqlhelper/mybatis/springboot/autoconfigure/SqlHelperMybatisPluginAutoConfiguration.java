@@ -45,7 +45,7 @@ public class SqlHelperMybatisPluginAutoConfiguration {
         plugin.setPaginationConfig(sqlHelperMybatisProperties.getPagination());
         plugin.setInstrumentorConfig(sqlHelperMybatisProperties.getInstrumentor());
         plugin.init();
-        logger.info("===[SQLHelper]=== The properties of the mybatis plugin [{}] is: {}", Reflects.getFQNClassName(SqlHelperMybatisPlugin.class), sqlHelperMybatisProperties);
+        logger.info("===[SQLHelper & MyBatis]=== The properties of the mybatis plugin [{}] is: {}", Reflects.getFQNClassName(SqlHelperMybatisPlugin.class), sqlHelperMybatisProperties);
         return plugin;
     }
 

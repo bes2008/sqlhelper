@@ -48,7 +48,7 @@ swagger:
 
 logging:
   level:
-    root: debug
+    root: info
     com:
       jn:
         sqlhelper:
