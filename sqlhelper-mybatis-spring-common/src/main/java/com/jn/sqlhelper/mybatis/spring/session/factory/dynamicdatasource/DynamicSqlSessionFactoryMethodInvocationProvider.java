@@ -22,11 +22,9 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import java.util.Map;
 
 public class DynamicSqlSessionFactoryMethodInvocationProvider extends DynamicDataSourceSqlSessionFactoryProvider<MethodInvocation> {
-    private MethodInvocationDataSourceKeySelector keySelector;
-    private DynamicSqlSessionFactory dynamicSqlSessionFactory;
 
     public DynamicSqlSessionFactoryMethodInvocationProvider(DynamicSqlSessionFactory dynamicSqlSessionFactory, MethodInvocationDataSourceKeySelector keySelector) {
-        setSelector(selector);
+        setSelector(keySelector);
         setDynamicSqlSessionFactory(dynamicSqlSessionFactory);
     }
 
@@ -34,7 +32,7 @@ public class DynamicSqlSessionFactoryMethodInvocationProvider extends DynamicDat
     public SqlSessionFactory get(MethodInvocation invocation) {
         boolean needClear = false;
         if (MethodInvocationDataSourceKeySelector.getCurrent() == null) {
-            keySelector.select(invocation);
+            selector.select(invocation);
             needClear = true;
         }
 
