@@ -25,6 +25,11 @@ import com.jn.langx.text.StringTemplates;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * 提供基于 hikaricp 连接池的 DataSource Factory
+ *
+ * @since 3.4.0
+ */
 @Name(DataSources.DATASOURCE_IMPLEMENT_KEY_HIKARICP)
 @OnClasses({
         "com.zaxxer.hikari.HikariDataSource"

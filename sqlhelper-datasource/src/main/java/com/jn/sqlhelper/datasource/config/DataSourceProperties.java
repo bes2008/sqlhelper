@@ -23,10 +23,13 @@ import java.util.Properties;
 
 /**
  * 配置单个数据源
+ * @since 3.4.0
  */
 public class DataSourceProperties implements Configuration {
     /**
      * datasource properties:
+     *
+     * @see DataSourceGroupProperties#setName(String)
      */
     private String group = DataSources.DATASOURCE_PRIMARY_GROUP;
     private String name;

@@ -24,7 +24,11 @@ import com.jn.sqlhelper.datasource.factory.DataSourceFactory;
 
 import javax.sql.DataSource;
 import java.util.Properties;
-
+/**
+ * 提供基于 dbcp2.0 连接池的 DataSource Factory
+ *
+ * @since 3.4.0
+ */
 @Name(DataSources.DATASOURCE_IMPLEMENT_KEY_DBCP2)
 @OnClasses({
         "org.apache.commons.dbcp2.BasicDataSource",

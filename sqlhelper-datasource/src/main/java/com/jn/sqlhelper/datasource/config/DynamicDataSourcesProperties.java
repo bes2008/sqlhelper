@@ -22,6 +22,11 @@ import com.jn.langx.util.function.Function;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 动态数据源特性的所有配置
+ *
+ * @since 3.4.1
+ */
 public class DynamicDataSourcesProperties {
     /**
      * 是否启用动态数据源特性

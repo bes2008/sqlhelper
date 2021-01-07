@@ -26,6 +26,9 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * 提供基于 hikaricp 的DataSource 构建工具
+ */
 public class HikariDataSources {
     private static final Logger logger = LoggerFactory.getLogger(HikariDataSources.class);
 

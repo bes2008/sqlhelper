@@ -14,9 +14,9 @@
 
 package com.jn.sqlhelper.datasource.factory.c3p0;
 
-import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.langx.util.Maths;
 import com.jn.langx.util.Throwables;
+import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.mchange.v2.c3p0.DataSources;
 
 import javax.sql.DataSource;
@@ -26,6 +26,7 @@ import static com.jn.sqlhelper.datasource.factory.c3p0.C3p0PropertyNames.*;
 
 
 /**
+ * 提供基于 hikaricp 的DataSource 构建工具
  * https://www.mchange.com/projects/c3p0/#using_datasources_factory
  */
 public class C3p0DataSources {

@@ -18,7 +18,6 @@ import com.jn.langx.util.Maths;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
 import com.jn.sqlhelper.common.transaction.Transactions;
-import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import org.apache.commons.dbcp2.BasicDataSourceFactory;
 
@@ -29,6 +28,7 @@ import static com.jn.sqlhelper.datasource.factory.dbcp2.Dbcp2PropertyNames.*;
 
 
 /**
+ * 提供基于 hikaricp 的DataSource 构建工具
  * http://commons.apache.org/proper/commons-dbcp/configuration.html
  */
 public class Dbcp2DataSources {

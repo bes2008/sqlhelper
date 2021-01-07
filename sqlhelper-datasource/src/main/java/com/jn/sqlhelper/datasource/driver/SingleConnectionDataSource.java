@@ -47,6 +47,7 @@ import java.sql.SQLException;
  *
  * @see #getConnection()
  * @see java.sql.Connection#close()
+ * @since 3.4.0
  */
 public class SingleConnectionDataSource extends DriverManagerDataSource implements SmartDataSource, Destroyable {
 

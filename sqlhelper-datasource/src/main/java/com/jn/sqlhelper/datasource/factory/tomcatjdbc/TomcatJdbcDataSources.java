@@ -28,6 +28,7 @@ import java.util.Properties;
 import static com.jn.sqlhelper.datasource.factory.tomcatjdbc.TomcatJdbcDataSourcePropertyNames.*;
 
 /**
+ * 提供基于 tomcat jdbc pool 的DataSource 构建工具
  * ref: http://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html
  */
 public class TomcatJdbcDataSources {

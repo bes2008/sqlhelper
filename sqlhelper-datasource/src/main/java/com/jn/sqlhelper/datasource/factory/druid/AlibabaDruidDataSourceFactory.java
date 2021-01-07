@@ -24,7 +24,11 @@ import com.jn.sqlhelper.datasource.factory.DataSourceFactory;
 
 import javax.sql.DataSource;
 import java.util.Properties;
-
+/**
+ * 提供基于 druid 连接池的 DataSource Factory
+ *
+ * @since 3.4.0
+ */
 @Name(DataSources.DATASOURCE_IMPLEMENT_KEY_DRUID)
 @OnClasses({
         "com.alibaba.druid.pool.DruidDataSource",

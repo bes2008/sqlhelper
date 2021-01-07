@@ -14,14 +14,24 @@
 
 package com.jn.sqlhelper.datasource.config;
 
+/**
+ * 数据源组的配置
+ *
+ * @since 3.4.1
+ */
 public class DataSourceGroupProperties {
+    /**
+     * 数据源组名称
+     */
     private String name;
     /**
      * @see com.jn.sqlhelper.datasource.key.WriteOperationMethodMatcher
+     * 提供哪些方法是要进行写的，将会自动的视为使用master datasource
      */
     private String writePattern;
     /**
      * @see com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter
+     * 组内 slave 节点的 负责均衡算法
      */
     private String router;
 

@@ -14,17 +14,22 @@
 
 package com.jn.sqlhelper.datasource.factory.c3p0;
 
-import com.jn.sqlhelper.datasource.factory.DataSourceFactory;
-import com.jn.sqlhelper.datasource.DataSources;
-import com.jn.sqlhelper.datasource.NamedDataSource;
-import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.langx.annotation.Name;
 import com.jn.langx.annotation.OnClasses;
 import com.jn.langx.text.StringTemplates;
+import com.jn.sqlhelper.datasource.DataSources;
+import com.jn.sqlhelper.datasource.NamedDataSource;
+import com.jn.sqlhelper.datasource.config.DataSourceProperties;
+import com.jn.sqlhelper.datasource.factory.DataSourceFactory;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * 提供基于 C3p0 连接池的 DataSource Factory
+ *
+ * @since 3.4.0
+ */
 @Name(DataSources.DATASOURCE_IMPLEMENT_KEY_C3P0)
 @OnClasses({
         "com.mchange.v2.c3p0.WrapperConnectionPoolDataSource",
