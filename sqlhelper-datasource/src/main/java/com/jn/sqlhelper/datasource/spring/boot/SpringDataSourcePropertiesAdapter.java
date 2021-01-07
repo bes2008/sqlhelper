@@ -17,6 +17,10 @@ package com.jn.sqlhelper.datasource.spring.boot;
 
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
+/**
+ * 兼容Spring DataSourceProperties 配置，将其适配为 sqlhelper-datasource 里的DataSourceProperties
+ * @since 3.4.1
+ */
 public class SpringDataSourcePropertiesAdapter {
     public static com.jn.sqlhelper.datasource.config.DataSourceProperties adapt(DataSourceProperties properties) {
         com.jn.sqlhelper.datasource.config.DataSourceProperties dataSourceProperties = new com.jn.sqlhelper.datasource.config.DataSourceProperties();

@@ -28,6 +28,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @since 3.4.0
+ */
 @Configuration
 @ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true")
 @ConditionalOnClass(AspectJExpressionPointcutAdvisorProperties.class)

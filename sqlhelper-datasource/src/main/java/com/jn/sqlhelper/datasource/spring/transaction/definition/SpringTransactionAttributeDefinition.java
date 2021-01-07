@@ -18,6 +18,10 @@ import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.common.transaction.TransactionDefinition;
 import org.springframework.transaction.interceptor.TransactionAttribute;
 
+/**
+ * 通过兼容Spring里的 TransactionAttribute来达到兼容Spring 事务定义的目的
+ * @since 3.4.1
+ */
 public class SpringTransactionAttributeDefinition implements TransactionDefinition {
     private TransactionAttribute attribute;
     private String name;

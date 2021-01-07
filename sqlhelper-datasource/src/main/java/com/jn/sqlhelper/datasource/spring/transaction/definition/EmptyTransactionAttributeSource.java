@@ -19,6 +19,10 @@ import org.springframework.transaction.interceptor.TransactionAttributeSource;
 
 import java.lang.reflect.Method;
 
+/**
+ * 用于替换Spring 内置拦截器里的 TransactionAttributeSource
+ * @since 3.4.1
+ */
 public class EmptyTransactionAttributeSource implements TransactionAttributeSource {
     @Override
     public TransactionAttribute getTransactionAttribute(Method method, Class<?> targetClass) {

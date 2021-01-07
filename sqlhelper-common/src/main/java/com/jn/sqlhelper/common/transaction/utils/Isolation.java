@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.transaction;
+package com.jn.sqlhelper.common.transaction.utils;
 
 import com.jn.langx.Delegatable;
 import com.jn.langx.util.enums.base.CommonEnum;

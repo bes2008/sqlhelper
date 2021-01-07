@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.common.annotation;
 
-import com.jn.sqlhelper.common.transaction.Isolation;
+import com.jn.sqlhelper.common.transaction.utils.Isolation;
 
 public @interface Transactional {
     int timeout() default -1; // units: second

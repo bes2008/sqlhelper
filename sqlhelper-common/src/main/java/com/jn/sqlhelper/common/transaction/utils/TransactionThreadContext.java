@@ -12,21 +12,14 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.transaction;
+package com.jn.sqlhelper.common.transaction.utils;
 
-import com.jn.langx.annotation.Nullable;
-import com.jn.langx.util.Emptys;
-import com.jn.langx.util.enums.Enums;
 import com.jn.langx.util.struct.ThreadLocalHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.jn.sqlhelper.common.transaction.Transaction;
+import com.jn.sqlhelper.common.transaction.TransactionalResource;
 
-public class Transactions {
-    private Transactions() {
-    }
-
-    private static final Logger logger = LoggerFactory.getLogger(Transactions.class);
-
+public class TransactionThreadContext {
+    private TransactionThreadContext(){}
     private static final ThreadLocalHolder<Transaction> TRANSACTION_HOLDER = new ThreadLocalHolder<Transaction>();
 
     public static void bind(Transaction transaction) {
@@ -59,31 +52,6 @@ public class Transactions {
         }
         transaction.unbindResource(key);
         return true;
-    }
-
-    public static final int getTransactionIsolationLevel(@Nullable String transactionIsolationName) {
-        Isolation isolation = getTransactionIsolation(transactionIsolationName);
-        return isolation.getCode();
-    }
-
-    public static final Isolation getTransactionIsolation(@Nullable String transactionIsolationName) {
-        return getTransactionIsolation(transactionIsolationName, Isolation.DEFAULT);
-    }
-
-    public static final Isolation getTransactionIsolation(@Nullable String transactionIsolationName, @Nullable Isolation ifNull) {
-        Isolation isolation = null;
-        if (Emptys.isNotEmpty(transactionIsolationName)) {
-            isolation = Enums.ofDisplayText(Isolation.class, transactionIsolationName);
-            if (isolation == null) {
-                isolation = Enums.ofName(Isolation.class, transactionIsolationName);
-            }
-        }
-
-        if (isolation == null) {
-            logger.warn("the transactionIsolationName is invalid: {}", transactionIsolationName);
-            isolation = ifNull;
-        }
-        return isolation;
     }
 
 }

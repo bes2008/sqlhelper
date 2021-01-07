@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.common.transaction.definition;
 
-import com.jn.sqlhelper.common.transaction.Isolation;
+import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.TransactionDefinition;
 
 public class DefaultTransactionDefinition implements TransactionDefinition {

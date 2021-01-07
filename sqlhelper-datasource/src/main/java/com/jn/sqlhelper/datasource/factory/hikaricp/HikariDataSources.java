@@ -16,7 +16,7 @@ package com.jn.sqlhelper.datasource.factory.hikaricp;
 
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.common.transaction.Transactions;
+import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

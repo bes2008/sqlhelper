@@ -57,7 +57,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * @since 3.4.0
+ */
 @Configuration
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 @ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)

@@ -22,6 +22,10 @@ import org.springframework.transaction.interceptor.TransactionAttributeSource;
 
 import java.lang.reflect.Method;
 
+/**
+ * 用于兼容Spring Transaction 定义
+ * @since 3.4.1
+ */
 public class SpringTransactionAttributeSourceAdapter implements NamedTransactionDefinitionParser<Method> {
     private String name;
     private TransactionAttributeSource source;

@@ -22,6 +22,7 @@ import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * 只是用来解析注解，不能调用select方法
+ * @since 3.4.0
  */
 public class DataSourceKeyChoicesAnnotationMethodInterceptor implements MethodInterceptor {
 

@@ -16,6 +16,8 @@ package com.jn.sqlhelper.common.transaction.definition;
 
 
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +30,8 @@ import java.util.List;
  * should cause transaction rollback by applying a number of rollback rules,
  * both positive and negative. If no rules are relevant to the exception, it
  * behaves like DefaultTransactionAttribute (rolling back on runtime exceptions).
+ * <p>
+ * 这部分是从Spring迁移过来的，为了兼容Spring 事务定义的配置
  */
 public class RuleBasedTransactionDefinition extends DefaultTransactionDefinition implements Serializable {
 
@@ -308,4 +312,22 @@ public class RuleBasedTransactionDefinition extends DefaultTransactionDefinition
 
     }
 
+
+    public static final List<RollbackRuleAttribute> buildRules(Class[] rollbackFor, Class[] noRollbackFor) {
+        final List<RuleBasedTransactionDefinition.RollbackRuleAttribute> rules = Collects.emptyArrayList();
+        Collects.forEach(noRollbackFor, new Consumer<Class>() {
+            @Override
+            public void accept(Class aClass) {
+                rules.add(new RuleBasedTransactionDefinition.NoRollbackRuleAttribute(aClass));
+            }
+        });
+
+        Collects.forEach(rollbackFor, new Consumer<Class>() {
+            @Override
+            public void accept(Class aClass) {
+                rules.add(new RuleBasedTransactionDefinition.RollbackRuleAttribute(aClass));
+            }
+        });
+        return rules;
+    }
 }

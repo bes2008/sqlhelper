@@ -17,8 +17,7 @@ package com.jn.sqlhelper.datasource.factory.tomcatjdbc;
 import com.jn.langx.util.Maths;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
-import com.jn.sqlhelper.common.transaction.Transactions;
-import com.jn.sqlhelper.datasource.DataSources;
+import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import org.apache.tomcat.jdbc.pool.DataSourceFactory;
 

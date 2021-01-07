@@ -18,7 +18,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.transaction.Transaction;
-import com.jn.sqlhelper.common.transaction.Transactions;
+import com.jn.sqlhelper.common.transaction.utils.TransactionThreadContext;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 import com.jn.sqlhelper.mybatis.session.transaction.SqlSessionTransactionalResource;
@@ -128,10 +128,10 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
             SqlSession sqlSession = getSqlSession(sqlSessionFactory, executorType, exceptionTranslator);
 
             DataSourceKey key = MethodInvocationDataSourceKeySelector.getCurrent();
-            Transaction transaction = Transactions.get();
+            Transaction transaction = TransactionThreadContext.get();
             // 当改调用发生在sqlhelper transaction manager 范围内时，需要注册
             if (key != null && transaction != null) {
-                Transactions.bindTransactionResource(key, new SqlSessionTransactionalResource(Reflects.getMethodString(method), sqlSession, sqlSessionFactory));
+                TransactionThreadContext.bindTransactionResource(key, new SqlSessionTransactionalResource(Reflects.getMethodString(method), sqlSession, sqlSessionFactory));
             }
             // 判断 sqlSession 是否使用了事务管理
             boolean isSqlSessionTransactional = false;

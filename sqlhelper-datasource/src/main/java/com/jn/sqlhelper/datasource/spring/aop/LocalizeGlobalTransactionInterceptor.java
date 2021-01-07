@@ -2,15 +2,19 @@ package com.jn.sqlhelper.datasource.spring.aop;
 
 import com.jn.agileway.aop.adapter.aopalliance.MethodInvocationAdapter;
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.common.transaction.TransactionAops;
-import com.jn.sqlhelper.common.transaction.TransactionManager;
 import com.jn.sqlhelper.common.transaction.TransactionDefinition;
 import com.jn.sqlhelper.common.transaction.TransactionDefinitionRegistry;
+import com.jn.sqlhelper.common.transaction.TransactionManager;
+import com.jn.sqlhelper.common.transaction.utils.TransactionAops;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 提供了动态数据源 本地化的全局事务拦截器
+ * @since 3.4.1
+ */
 public class LocalizeGlobalTransactionInterceptor implements MethodInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(LocalizeGlobalTransactionInterceptor.class);
     private TransactionManager transactionManager;
@@ -49,6 +53,6 @@ public class LocalizeGlobalTransactionInterceptor implements MethodInterceptor {
         }
 
         MethodInvocationAdapter adapter = new MethodInvocationAdapter(invocation);
-        return TransactionAops.invoke(transactionManager, definition, adapter);
+        return TransactionAops.invoke(logger, transactionManager, definition, adapter);
     }
 }

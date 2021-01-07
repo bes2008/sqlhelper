@@ -15,19 +15,20 @@
 package com.jn.sqlhelper.datasource.spring.transaction.definition;
 
 import com.jn.langx.util.Strings;
-import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.enums.Enums;
-import com.jn.langx.util.function.Consumer;
-import com.jn.sqlhelper.common.transaction.Isolation;
-import com.jn.sqlhelper.common.transaction.definition.DefaultTransactionDefinition;
 import com.jn.sqlhelper.common.transaction.TransactionDefinition;
 import com.jn.sqlhelper.common.transaction.definition.RuleBasedTransactionDefinition;
 import com.jn.sqlhelper.common.transaction.definition.parser.AbstractTransactionDefinitionAnnotationParser;
+import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.List;
 
+/**
+ * 解析 Spring的 Transactional 注解
+ * @since 3.4.1
+ */
 public class SpringTransactionalAnnotationParser extends AbstractTransactionDefinitionAnnotationParser<Transactional> {
     @Override
     protected TransactionDefinition internalParse(AnnotatedElement annotatedElement, Transactional transactional) {
@@ -35,27 +36,7 @@ public class SpringTransactionalAnnotationParser extends AbstractTransactionDefi
         txDef.setName(Strings.join(",", new String[]{transactional.propagation().name(), transactional.isolation().name(), "Readonly=" + transactional.readOnly()}));
         txDef.setReadonly(transactional.readOnly());
         txDef.setIsolation(Enums.ofCode(Isolation.class, transactional.isolation().value()));
-
-        Class[] noRollbackFor = transactional.noRollbackFor();
-        Class[] rollbackFor = transactional.rollbackFor();
-
-        final List<RuleBasedTransactionDefinition.RollbackRuleAttribute> attributes = Collects.emptyArrayList();
-        Collects.forEach(noRollbackFor, new Consumer<Class>() {
-            @Override
-            public void accept(Class aClass) {
-                attributes.add(new RuleBasedTransactionDefinition.NoRollbackRuleAttribute(aClass));
-            }
-        });
-
-        Collects.forEach(rollbackFor, new Consumer<Class>() {
-            @Override
-            public void accept(Class aClass) {
-                attributes.add(new RuleBasedTransactionDefinition.RollbackRuleAttribute(aClass));
-            }
-        });
-
-        txDef.setRollbackRules(attributes);
-
+        txDef.setRollbackRules(RuleBasedTransactionDefinition.buildRules(transactional.rollbackFor(), transactional.noRollbackFor()));
         return txDef;
     }
 

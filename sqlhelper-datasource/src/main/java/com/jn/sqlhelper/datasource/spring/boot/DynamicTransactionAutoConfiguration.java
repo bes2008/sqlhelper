@@ -48,6 +48,9 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import java.util.List;
 
+/**
+ * @since 3.4.1
+ */
 @Configuration
 @AutoConfigureAfter(DynamicDataSourcesAutoConfiguration.class)
 @ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true")

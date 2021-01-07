@@ -14,8 +14,6 @@
 
 package com.jn.sqlhelper.common.transaction.definition.parser;
 
-import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.annotation.Transactional;
 import com.jn.sqlhelper.common.transaction.TransactionDefinition;
@@ -23,7 +21,6 @@ import com.jn.sqlhelper.common.transaction.definition.RuleBasedTransactionDefini
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
-import java.util.List;
 
 public class TransactionalAnnotationParser extends AbstractTransactionDefinitionAnnotationParser<Transactional> {
     @Override
@@ -39,25 +36,7 @@ public class TransactionalAnnotationParser extends AbstractTransactionDefinition
         txDef.setReadonly(transactional.readOnly());
         txDef.setIsolation(transactional.isolation());
 
-        Class[] noRollbackFor = transactional.noRollbackFor();
-        Class[] rollbackFor = transactional.rollbackFor();
-
-        final List<RuleBasedTransactionDefinition.RollbackRuleAttribute> attributes = Collects.emptyArrayList();
-        Collects.forEach(noRollbackFor, new Consumer<Class>() {
-            @Override
-            public void accept(Class aClass) {
-                attributes.add(new RuleBasedTransactionDefinition.NoRollbackRuleAttribute(aClass));
-            }
-        });
-
-        Collects.forEach(rollbackFor, new Consumer<Class>() {
-            @Override
-            public void accept(Class aClass) {
-                attributes.add(new RuleBasedTransactionDefinition.RollbackRuleAttribute(aClass));
-            }
-        });
-
-        txDef.setRollbackRules(attributes);
+        txDef.setRollbackRules(RuleBasedTransactionDefinition.buildRules(transactional.rollbackFor(), transactional.noRollbackFor()));
 
         return txDef;
     }

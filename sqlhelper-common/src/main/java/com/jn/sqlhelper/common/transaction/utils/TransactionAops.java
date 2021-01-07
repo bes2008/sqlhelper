@@ -12,24 +12,24 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.transaction;
+package com.jn.sqlhelper.common.transaction.utils;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.sqlhelper.common.transaction.Transaction;
+import com.jn.sqlhelper.common.transaction.TransactionDefinition;
+import com.jn.sqlhelper.common.transaction.TransactionManager;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TransactionAops {
-    private static final Logger logger = LoggerFactory.getLogger(TransactionAops.class);
 
-
-    public static Object invoke(@NonNull TransactionManager transactionManager, @NonNull TransactionDefinition definition, @NonNull MethodInvocation invocation) throws Throwable {
+    public static Object invoke(Logger logger, @NonNull TransactionManager transactionManager, @NonNull TransactionDefinition definition, @NonNull MethodInvocation invocation) throws Throwable {
         Preconditions.checkNotNull(transactionManager, "the transaction manager is null");
         Preconditions.checkNotNull(definition, "the transaction definition is null");
 
-        Transaction transaction = Transactions.get();
+        Transaction transaction = TransactionThreadContext.get();
 
         // 是否嵌入在一个已有事务内部
         boolean nested = transaction != null;
@@ -38,7 +38,7 @@ public class TransactionAops {
         if (!nested) {
             transaction = transactionManager.createTransaction(definition);
         }
-        Transactions.bind(transaction);
+        TransactionThreadContext.bind(transaction);
 
         try {
             Object ret = invocation.proceed();
@@ -77,7 +77,7 @@ public class TransactionAops {
         } finally {
             if (!nested) {
                 transaction.clearResources();
-                Transactions.unbind();
+                TransactionThreadContext.unbind();
             }
         }
     }
