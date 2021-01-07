@@ -16,7 +16,7 @@ package com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource;
 
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 import org.apache.ibatis.session.*;
 
 import java.sql.Connection;
@@ -92,8 +92,8 @@ public class DynamicSqlSessionFactory implements SqlSessionFactory {
 
 
     private SqlSessionFactory getDelegatingSqlSessionFactory() {
-        if (DataSourceKeySelector.getCurrent() != null) {
-            return factoryMap.get(DataSourceKeySelector.getCurrent());
+        if (MethodInvocationDataSourceKeySelector.getCurrent() != null) {
+            return factoryMap.get(MethodInvocationDataSourceKeySelector.getCurrent());
         }
         return null;
     }

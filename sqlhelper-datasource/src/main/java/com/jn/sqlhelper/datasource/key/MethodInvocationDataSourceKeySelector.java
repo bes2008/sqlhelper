@@ -33,6 +33,7 @@ import com.jn.langx.util.function.Supplier0;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.struct.Holder;
 import com.jn.langx.util.struct.ThreadLocalHolder;
+import com.jn.sqlhelper.datasource.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.DataSourceRegistryAware;
 import com.jn.sqlhelper.datasource.NamedDataSource;
@@ -52,8 +53,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * 2、在真正的数据源调用时，筛选合适的数据源
  */
 @Singleton
-public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalancer<DataSourceKey, MethodInvocation>, Initializable {
-    private static final Logger logger = LoggerFactory.getLogger(DataSourceKeySelector.class);
+public class MethodInvocationDataSourceKeySelector implements DataSourceRegistryAware, LoadBalancer<DataSourceKey, MethodInvocation>, DataSourceKeySelector<MethodInvocation>, Initializable {
+    private static final Logger logger = LoggerFactory.getLogger(MethodInvocationDataSourceKeySelector.class);
     private static final ThreadLocalHolder<ListableStack<DataSourceKey>> DATA_SOURCE_KEY_HOLDER = new ThreadLocalHolder<ListableStack<DataSourceKey>>(
             new Supplier0<ListableStack<DataSourceKey>>() {
                 @Override
@@ -94,7 +95,7 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
      */
     private final Map<String, MethodMatcher> groupToWriteMatcherMap = new ConcurrentHashMap<String, MethodMatcher>();
 
-    public DataSourceKeySelector() {
+    public MethodInvocationDataSourceKeySelector() {
         RandomRouter r = new RandomRouter();
         r.setLoadBalancer(this);
         registerRouter(r, true);
@@ -261,14 +262,14 @@ public class DataSourceKeySelector implements DataSourceRegistryAware, LoadBalan
         if (key != null) {
             NamedDataSource dataSource = dataSourceRegistry.get(key);
             if (dataSource != null) {
-                DataSourceKeySelector.setCurrent(key);
+                MethodInvocationDataSourceKeySelector.setCurrent(key);
             }
         }
-        key = DataSourceKeySelector.getCurrent();
+        key = MethodInvocationDataSourceKeySelector.getCurrent();
         if (key == null) {
             key = doSelect(methodInvocation);
             if (key != null) {
-                DataSourceKeySelector.setCurrent(key);
+                MethodInvocationDataSourceKeySelector.setCurrent(key);
             }
         }
         if (key != null) {

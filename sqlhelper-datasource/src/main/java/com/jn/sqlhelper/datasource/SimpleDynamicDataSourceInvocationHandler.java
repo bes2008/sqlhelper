@@ -4,7 +4,7 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.invocation.proxy.Proxys;
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 
 import javax.sql.DataSource;
 import java.lang.reflect.InvocationHandler;
@@ -33,7 +33,7 @@ public class SimpleDynamicDataSourceInvocationHandler implements InvocationHandl
     }
 
     private DataSource getDelegateDataSource(boolean throwIfNotFound) {
-        DataSourceKey key = DataSourceKeySelector.getCurrent();
+        DataSourceKey key = MethodInvocationDataSourceKeySelector.getCurrent();
         if (key == null) {
             key = registry.getPrimary();
         }

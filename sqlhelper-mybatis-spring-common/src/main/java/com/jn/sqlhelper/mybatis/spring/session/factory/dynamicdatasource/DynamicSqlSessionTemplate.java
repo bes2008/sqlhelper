@@ -20,7 +20,7 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.transaction.Transaction;
 import com.jn.sqlhelper.common.transaction.Transactions;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 import com.jn.sqlhelper.mybatis.session.transaction.SqlSessionTransactionalResource;
 import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -42,7 +42,7 @@ import static org.mybatis.spring.SqlSessionUtils.*;
 
 
 public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
-    private DataSourceKeySelector selector;
+    private MethodInvocationDataSourceKeySelector selector;
     private SqlSession sessionProxy;
 
     public DynamicSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
@@ -61,7 +61,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
                 new SqlSessionTransactionInterceptor());
     }
 
-    public void setSelector(DataSourceKeySelector selector) {
+    public void setSelector(MethodInvocationDataSourceKeySelector selector) {
         this.selector = selector;
     }
 
@@ -127,7 +127,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
             // 这个是实际的 sqlSession
             SqlSession sqlSession = getSqlSession(sqlSessionFactory, executorType, exceptionTranslator);
 
-            DataSourceKey key = DataSourceKeySelector.getCurrent();
+            DataSourceKey key = MethodInvocationDataSourceKeySelector.getCurrent();
             Transaction transaction = Transactions.get();
             // 当改调用发生在sqlhelper transaction manager 范围内时，需要注册
             if (key != null && transaction != null) {

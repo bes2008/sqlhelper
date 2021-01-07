@@ -16,17 +16,17 @@ package com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource;
 
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 import com.jn.sqlhelper.mybatis.session.factory.SqlSessionFactoryProvider;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.Map;
 
 public class DynamicSqlSessionFactoryMethodInvocationProvider implements SqlSessionFactoryProvider<MethodInvocation> {
-    private DataSourceKeySelector keySelector;
+    private MethodInvocationDataSourceKeySelector keySelector;
     private DynamicSqlSessionFactory dynamicSqlSessionFactory;
 
-    public DynamicSqlSessionFactoryMethodInvocationProvider(DynamicSqlSessionFactory dynamicSqlSessionFactory, DataSourceKeySelector keySelector) {
+    public DynamicSqlSessionFactoryMethodInvocationProvider(DynamicSqlSessionFactory dynamicSqlSessionFactory, MethodInvocationDataSourceKeySelector keySelector) {
         this.keySelector = keySelector;
         this.dynamicSqlSessionFactory = dynamicSqlSessionFactory;
     }
@@ -34,16 +34,16 @@ public class DynamicSqlSessionFactoryMethodInvocationProvider implements SqlSess
     @Override
     public SqlSessionFactory get(MethodInvocation invocation) {
         boolean needClear = false;
-        if (DataSourceKeySelector.getCurrent() == null) {
+        if (MethodInvocationDataSourceKeySelector.getCurrent() == null) {
             keySelector.select(invocation);
             needClear = true;
         }
 
-        if (DataSourceKeySelector.getCurrent() != null) {
+        if (MethodInvocationDataSourceKeySelector.getCurrent() != null) {
             Map<DataSourceKey, SqlSessionFactory> factoryMap = dynamicSqlSessionFactory.getDelegates();
-            SqlSessionFactory delegate = factoryMap.get(DataSourceKeySelector.getCurrent());
+            SqlSessionFactory delegate = factoryMap.get(MethodInvocationDataSourceKeySelector.getCurrent());
             if (needClear) {
-                DataSourceKeySelector.removeCurrent();
+                MethodInvocationDataSourceKeySelector.removeCurrent();
             }
             return delegate;
         }

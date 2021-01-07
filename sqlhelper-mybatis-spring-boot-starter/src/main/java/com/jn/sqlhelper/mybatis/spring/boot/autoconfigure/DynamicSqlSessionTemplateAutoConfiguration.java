@@ -19,7 +19,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
-import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 import com.jn.sqlhelper.datasource.spring.boot.DynamicDataSourcesAutoConfiguration;
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DelegatingSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DynamicSqlSessionFactory;
@@ -131,7 +131,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
     public SqlSessionTemplate sqlSessionTemplate(
             MybatisProperties mybatisProperties,
             SqlSessionFactory sessionFactory,
-            DataSourceKeySelector selector) {
+            MethodInvocationDataSourceKeySelector selector) {
         DynamicSqlSessionTemplate template = new DynamicSqlSessionTemplate(sessionFactory, mybatisProperties.getExecutorType());
         template.setSelector(selector);
         return template;

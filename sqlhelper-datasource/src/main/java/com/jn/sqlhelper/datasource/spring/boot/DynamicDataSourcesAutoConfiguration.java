@@ -31,7 +31,7 @@ import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.config.DataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.MethodDataSourceKeyRegistry;
 import com.jn.sqlhelper.datasource.key.WriteOperationMethodMatcher;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyAnnotationParser;
@@ -183,13 +183,13 @@ public class DynamicDataSourcesAutoConfiguration {
     }
 
     @Bean
-    public DataSourceKeySelector dataSourceKeySelector(
+    public MethodInvocationDataSourceKeySelector dataSourceKeySelector(
             final DataSourceRegistry registry,
             MethodDataSourceKeyRegistry keyRegistry,
             ObjectProvider<List<DataSourceKeyRouter>> routersProvider,
             DataSourcesProperties dataSourcesProperties) {
 
-        final DataSourceKeySelector selector = new DataSourceKeySelector();
+        final MethodInvocationDataSourceKeySelector selector = new MethodInvocationDataSourceKeySelector();
 
         selector.setDataSourceKeyRegistry(keyRegistry);
         selector.setDataSourceRegistry(registry);

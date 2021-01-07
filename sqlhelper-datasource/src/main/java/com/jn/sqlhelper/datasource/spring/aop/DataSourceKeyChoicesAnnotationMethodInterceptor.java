@@ -16,7 +16,7 @@ package com.jn.sqlhelper.datasource.spring.aop;
 
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.MethodDataSourceKeyRegistry;
-import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -31,11 +31,11 @@ public class DataSourceKeyChoicesAnnotationMethodInterceptor implements MethodIn
     public Object invoke(MethodInvocation invocation) throws Throwable {
         DataSourceKey key = keyRegistry.get(invocation.getMethod());
         if (key != null) {
-            DataSourceKeySelector.addChoice(key);
+            MethodInvocationDataSourceKeySelector.addChoice(key);
             try {
                 return invocation.proceed();
             } finally {
-                DataSourceKeySelector.removeChoice(key);
+                MethodInvocationDataSourceKeySelector.removeChoice(key);
             }
         } else {
             return invocation.proceed();

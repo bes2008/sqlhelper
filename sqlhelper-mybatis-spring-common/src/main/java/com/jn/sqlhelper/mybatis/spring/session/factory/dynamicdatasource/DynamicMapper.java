@@ -22,7 +22,7 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
+import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -45,9 +45,9 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
     @NonNull
     private Map<DataSourceKey, MAPPER> delegateMapperMap = Collects.<DataSourceKey, MAPPER>emptyHashMap();
     @NonNull
-    private DataSourceKeySelector selector;
+    private MethodInvocationDataSourceKeySelector selector;
 
-    public DynamicMapper(Class<MAPPER> mapperInterface, Map<DataSourceKey, MAPPER> delegateMapperMap, DataSourceKeySelector selector) {
+    public DynamicMapper(Class<MAPPER> mapperInterface, Map<DataSourceKey, MAPPER> delegateMapperMap, MethodInvocationDataSourceKeySelector selector) {
         this.mapperInterface = mapperInterface;
         this.delegateMapperMap.putAll(delegateMapperMap);
         setSelector(selector);
@@ -62,7 +62,7 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         } catch (Throwable ex) {
             throw ex;
         } finally {
-            DataSourceKeySelector.removeCurrent();
+            MethodInvocationDataSourceKeySelector.removeCurrent();
         }
     }
 
@@ -71,14 +71,14 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         if (key != null) {
             NamedDataSource dataSource = selector.getDataSourceRegistry().get(key);
             if (dataSource != null) {
-                DataSourceKeySelector.setCurrent(key);
+                MethodInvocationDataSourceKeySelector.setCurrent(key);
             }
         }
-        key = DataSourceKeySelector.getCurrent();
+        key = MethodInvocationDataSourceKeySelector.getCurrent();
         if (key == null) {
             key = selector.select(methodInvocation);
             if (key != null) {
-                DataSourceKeySelector.setCurrent(key);
+                MethodInvocationDataSourceKeySelector.setCurrent(key);
             }
         }
         if (key == null) {
@@ -87,7 +87,7 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         return delegateMapperMap.get(key);
     }
 
-    public void setSelector(DataSourceKeySelector selector) {
+    public void setSelector(MethodInvocationDataSourceKeySelector selector) {
         this.selector = selector;
     }
 }
