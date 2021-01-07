@@ -17,13 +17,13 @@ package com.jn.sqlhelper.mybatis.batch;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
-import com.jn.langx.util.Emptys;
-import com.jn.langx.util.Objs;
-import com.jn.langx.util.Preconditions;
-import com.jn.langx.util.Strings;
+import com.jn.langx.util.*;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.concurrent.completion.CompletableFuture;
 import com.jn.langx.util.function.Consumer2;
+import com.jn.langx.util.function.Function;
 import com.jn.langx.util.function.Supplier;
+import com.jn.langx.util.function.Supplier0;
 import com.jn.sqlhelper.common.batch.BatchMode;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.dialect.Dialect;
@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class MybatisBatchUpdaters {
     private static final Logger logger = LoggerFactory.getLogger(MybatisBatchUpdaters.class);
@@ -81,8 +82,25 @@ public class MybatisBatchUpdaters {
                                                  @NonNull String statementIdFQN,
                                                  @Nullable BatchMode batchMode,
                                                  List<E> entities) throws SQLException {
-        final MybatisBatchStatement statement = new MybatisBatchStatement(batchMode, statementIdFQN);
-        return batch(sessionFactory, batchMode, statement, entities);
+        return batchUpdate(sessionFactory, statementIdFQN, batchMode, entities, 100, null);
+    }
+
+
+    public static <E> BatchResult<E> batchUpdate(@NonNull SqlSessionFactory sessionFactory,
+                                                 @NonNull String statementIdFQN,
+                                                 @Nullable BatchMode batchMode,
+                                                 List<E> entities,
+                                                 int batchSize,
+                                                 ExecutorService executor) throws SQLException {
+        return batchUpdate(sessionFactory, batchMode, new MybatisBatchStatement(batchMode, statementIdFQN), entities, batchSize, executor);
+    }
+
+    public static <E> BatchResult<E> batchUpdate(@NonNull SqlSessionFactory sessionFactory,
+                                                 @NonNull Class mapperClass,
+                                                 @NonNull String statementId,
+                                                 @Nullable BatchMode batchMode,
+                                                 List<E> entities) throws SQLException {
+        return batchUpdate(sessionFactory, mapperClass, statementId, batchMode, entities, 100, null);
     }
 
 
@@ -90,10 +108,83 @@ public class MybatisBatchUpdaters {
                                                  @NonNull Class mapperClass,
                                                  @NonNull String statementId,
                                                  @Nullable BatchMode batchMode,
-                                                 List<E> entities) throws SQLException {
-        final MybatisBatchStatement statement = new MybatisBatchStatement(batchMode, mapperClass, statementId);
-        return batch(sessionFactory, batchMode, statement, entities);
+                                                 List<E> entities,
+                                                 int batchSize,
+                                                 @Nullable ExecutorService executor) throws SQLException {
+        return batchUpdate(sessionFactory, batchMode, new MybatisBatchStatement(batchMode, mapperClass, statementId), entities, batchSize, executor);
     }
+
+    public static <E> BatchResult<E> batchUpdate(@NonNull final SqlSessionFactory sessionFactory,
+                                                 @Nullable final BatchMode batchMode,
+                                                 @NonNull final MybatisBatchStatement statement,
+                                                 List<E> entities,
+                                                 int batchSize,
+                                                 @Nullable ExecutorService executor) throws SQLException {
+
+        batchSize = batchSize < 1 ? 100 : batchSize;
+        final BatchResult<E> result = new BatchResult<E>();
+        result.setStatement(statement);
+        result.setParameters(entities);
+        result.setRowsAffected(0);
+        if (Emptys.isAnyEmpty(entities, statement, sessionFactory)) {
+            return result;
+        }
+
+        List<List<E>> entitiesList = Collects.partitionBySize(entities, batchSize);
+
+        List<CompletableFuture<BatchResult<E>>> futures = Collects.emptyArrayList();
+
+        for (List<E> es : entitiesList) {
+            final List<E> segment = es;
+            futures.add(
+                    (executor == null ? CompletableFuture.supplyAsync(new Supplier0<BatchResult<E>>() {
+                        @Override
+                        public BatchResult<E> get() {
+                            try {
+                                return batch(sessionFactory, batchMode, statement, segment);
+                            } catch (SQLException e) {
+                                throw Throwables.wrapAsRuntimeException(e);
+                            }
+                        }
+                    }) : CompletableFuture.supplyAsync(new Supplier0<BatchResult<E>>() {
+                        @Override
+                        public BatchResult<E> get() {
+                            try {
+                                return batch(sessionFactory, batchMode, statement, segment);
+                            } catch (SQLException e) {
+                                throw Throwables.wrapAsRuntimeException(e);
+                            }
+                        }
+                    }, executor))
+                            .exceptionally(new Function<Throwable, BatchResult<E>>() {
+                                @Override
+                                public BatchResult<E> apply(Throwable throwable) {
+                                    BatchResult<E> result = new BatchResult<E>();
+                                    result.setParameters(segment);
+                                    result.setRowsAffected(0);
+                                    result.setStatement(statement);
+                                    result.setThrowables(Collects.newArrayList(throwable));
+                                    return result;
+                                }
+                            })
+                            .whenCompleteAsync(new Consumer2<BatchResult<E>, Throwable>() {
+                                @Override
+                                public void accept(BatchResult<E> batchResult0, Throwable throwable) {
+                                    if (batchResult0 != null) {
+                                        result.setRowsAffected(result.getRowsAffected() + batchResult0.getRowsAffected());
+                                        result.getThrowables().addAll(batchResult0.getThrowables());
+                                    }
+                                    if (throwable != null) {
+                                        result.getThrowables().add(throwable);
+                                    }
+                                }
+                            }));
+        }
+
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()])).join();
+        return result;
+    }
+
 
     /**
      * @param sessionFactory 这个sessionFactory 不能是 DynamicSqlSessionFactory, 如果是你拿到的是DynamicSqlSessionFactory，可以基于 SqlSessionFactoryProvider来进行帮忙获取真实的session factory
