@@ -18,7 +18,7 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
@@ -71,7 +71,7 @@ public class MybatisBatchUpdaters {
                     break;
             }
         }
-        if (Objects.isNotNull(updater)) {
+        if (Objs.isNotNull(updater)) {
             updater.setSessionFactory(sessionFactory);
         }
         return updater;
@@ -95,6 +95,15 @@ public class MybatisBatchUpdaters {
         return batch(sessionFactory, batchMode, statement, entities);
     }
 
+    /**
+     * @param sessionFactory 这个sessionFactory 不能是 DynamicSqlSessionFactory, 如果是你拿到的是DynamicSqlSessionFactory，可以基于 SqlSessionFactoryProvider来进行帮忙获取真实的session factory
+     * @param batchMode
+     * @param statement
+     * @param entities
+     * @param <E>
+     * @return
+     * @throws SQLException
+     */
     private static <E> BatchResult<E> batch(@NonNull SqlSessionFactory sessionFactory,
                                             @Nullable BatchMode batchMode,
                                             final MybatisBatchStatement statement,
@@ -120,7 +129,7 @@ public class MybatisBatchUpdaters {
         if (!Strings.isEmpty(databaseId)) {
             dialect = DialectRegistry.getInstance().getDialectByName(databaseId);
         }
-        if (Objects.isNull(dialect)) {
+        if (Objs.isNull(dialect)) {
             SqlSession session = sessionFactory.openSession();
             Connection connection = session.getConnection();
             dialect = DialectRegistry.getInstance().getDialectByDatabaseMetadata(connection.getMetaData());

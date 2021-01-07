@@ -17,6 +17,17 @@ package com.jn.sqlhelper.mybatis.session.factory;
 import com.jn.langx.factory.Provider;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+/**
+ * 默认的动态数据源自动获取是基于 MyBatis Mapper 做的，这个能解决大部分场景，但是不能解决全部的场景。
+ * 在使用MyBatis时，很多情况下，是可以直接使用SqlSessionFactory的，例如 {@linkplain com.jn.sqlhelper.mybatis.batch.MybatisBatchUpdaters}
+ * <p>
+ * 当使用 动态数据源时，往Spring容器里注入的 SqlSessionFactory其实是 DynamicSqlSessionFactory，如何获取到真是的 SQLSessionFactory呢？
+ * <p>
+ * 这个设计就是为了解决这个问题的。
+ *
+ * @param <I>
+ */
+
 public interface SqlSessionFactoryProvider<I> extends Provider<I, SqlSessionFactory> {
 
 }
