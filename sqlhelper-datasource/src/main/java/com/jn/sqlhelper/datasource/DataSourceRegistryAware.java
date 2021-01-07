@@ -14,6 +14,9 @@
 
 package com.jn.sqlhelper.datasource;
 
+/**
+ * @since 3.4.0
+ */
 public interface DataSourceRegistryAware {
     void setDataSourceRegistry(DataSourceRegistry registry);
 }

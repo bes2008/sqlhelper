@@ -33,6 +33,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.UUID;
 
+/**
+ * @since 3.4.0
+ */
 public class DataSources {
     private static final Logger logger = LoggerFactory.getLogger(DataSources.class);
 

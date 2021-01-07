@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
  *     handler.setDataSourceRegistry(registry);
  *     Proxy.newProxyInstance(classLoader, handler, new Class[]{DataSource.class});
  * </pre>
+ * @since 3.4.0
  */
 public class SimpleDynamicDataSourceInvocationHandler implements InvocationHandler, DataSourceRegistryAware {
     private DataSourceRegistry registry;

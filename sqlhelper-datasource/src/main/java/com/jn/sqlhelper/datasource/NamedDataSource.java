@@ -23,6 +23,7 @@ import javax.sql.DataSource;
 
 /**
  * 为数据源提供 name, properties 属性
+ * @since 3.4.0
  */
 public interface NamedDataSource extends DataSource, Named {
     String getGroup();
@@ -31,6 +32,9 @@ public interface NamedDataSource extends DataSource, Named {
 
     DataSourceKey getDataSourceKey();
 
+    /**
+     * @since 3.4.1
+     */
     DataSourceProperties getDataSourceProperties();
 
     void setDataSourceProperties(@Nullable DataSourceProperties properties);

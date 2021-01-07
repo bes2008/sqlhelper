@@ -24,6 +24,7 @@ import java.sql.Connection;
  * <p>Classes using this interface can query whether or not the Connection
  * should be closed after an operation. Spring's DataSourceUtils and
  * JdbcTemplate classes automatically perform such a check.
+ * @since 3.4.0
  **/
 public interface SmartDataSource extends DataSource {
 

@@ -32,12 +32,16 @@ import java.util.logging.Logger;
 
 /**
  * NamedDataSource 的一个默认实现
+ * @since 3.4.0
  */
 public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<DataSource>, Initializable {
     @NonNull
     private final DataSourceKey dataSourceKey = new DataSourceKey(DataSources.DATASOURCE_PRIMARY_GROUP, "undefined");
     @NonNull
     private DataSource delegate;
+    /**
+     * @since 3.4.1
+     */
     @Nullable
     private DataSourceProperties properties;
 
