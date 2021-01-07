@@ -17,18 +17,17 @@ package com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource;
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
-import com.jn.sqlhelper.mybatis.session.factory.SqlSessionFactoryProvider;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.Map;
 
-public class DynamicSqlSessionFactoryMethodInvocationProvider implements SqlSessionFactoryProvider<MethodInvocation> {
+public class DynamicSqlSessionFactoryMethodInvocationProvider extends DynamicDataSourceSqlSessionFactoryProvider<MethodInvocation> {
     private MethodInvocationDataSourceKeySelector keySelector;
     private DynamicSqlSessionFactory dynamicSqlSessionFactory;
 
     public DynamicSqlSessionFactoryMethodInvocationProvider(DynamicSqlSessionFactory dynamicSqlSessionFactory, MethodInvocationDataSourceKeySelector keySelector) {
-        this.keySelector = keySelector;
-        this.dynamicSqlSessionFactory = dynamicSqlSessionFactory;
+        setSelector(selector);
+        setDynamicSqlSessionFactory(dynamicSqlSessionFactory);
     }
 
     @Override
