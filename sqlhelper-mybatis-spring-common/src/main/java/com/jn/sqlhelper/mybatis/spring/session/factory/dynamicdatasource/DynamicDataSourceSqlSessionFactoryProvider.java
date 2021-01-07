@@ -14,14 +14,17 @@
 
 package com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource;
 
-import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
+import com.jn.sqlhelper.datasource.key.DataSourceKeySelector;
 import com.jn.sqlhelper.mybatis.session.factory.SqlSessionFactoryProvider;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class DynamicDataSourceSqlSessionFactoryProvider<I> implements SqlSessionFactoryProvider<I> {
+    private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourceSqlSessionFactoryProvider.class);
     protected DataSourceKeySelector<I> selector;
     protected DynamicSqlSessionFactory dynamicSqlSessionFactory;
 
@@ -41,7 +44,10 @@ public class DynamicDataSourceSqlSessionFactoryProvider<I> implements SqlSession
     protected SqlSessionFactory doGet(I i) {
         Map<DataSourceKey, SqlSessionFactory> factoryMap = dynamicSqlSessionFactory.getDelegates();
         DataSourceKey key = selector.select(i);
-        SqlSessionFactory delegate = factoryMap.get(key);
-        return delegate;
+        if (key == null || !key.isAvailable()) {
+            logger.warn("the datasource key is null or not available");
+            return null;
+        }
+        return factoryMap.get(key);
     }
 }
