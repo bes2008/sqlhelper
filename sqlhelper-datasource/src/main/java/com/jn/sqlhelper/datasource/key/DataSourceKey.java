@@ -86,6 +86,6 @@ public class DataSourceKey implements Node {
 
     @Override
     public String getId() {
-        return group + "::" + name;
+        return group + DataSources.getDatasourceIdSeparator() + name;
     }
 }

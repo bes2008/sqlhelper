@@ -123,7 +123,7 @@ public class DataSources {
     private static final String DATASOURCE_ID_SEPARATOR = "SQLHelper.DynamicDataSource.ID.separator";
 
     public static String getDatasourceIdSeparator() {
-        return System.getProperty(DATASOURCE_ID_SEPARATOR, "/");
+        return System.getProperty(DATASOURCE_ID_SEPARATOR, "::");
     }
 
 

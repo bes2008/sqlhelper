@@ -16,7 +16,7 @@ package com.jn.sqlhelper.mybatis.session.factory;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 
-public class SimpleSqlSessionFactoryProvider implements SqlSessionFactoryProvider<Object> {
+public class SimpleSqlSessionFactoryProvider<I> implements SqlSessionFactoryProvider<I> {
     private SqlSessionFactory sessionFactory;
 
     public SimpleSqlSessionFactoryProvider(SqlSessionFactory sessionFactory) {
@@ -24,7 +24,7 @@ public class SimpleSqlSessionFactoryProvider implements SqlSessionFactoryProvide
     }
 
     @Override
-    public SqlSessionFactory get(Object invocation) {
+    public SqlSessionFactory get(I invocation) {
         return this.sessionFactory;
     }
 }
