@@ -14,13 +14,13 @@ spring:
     name: slave3
 
 sqlhelper:
-  dynamicDataSource:
+  dynamic-data-source:
     enabled: true
     transaction:
       expression: execution(public * com.jn.sqlhelper.examples.mybatis.dao.*Dao.*(..))
-    keyChoices:
+    key-choices:
       expression: execution(public * com.jn.sqlhelper.examples.mybatis.controller.*Controller.*(..))
-    dataSources:
+    data-sources:
       # https://h2database.com/
       - group: primary
         name: master
@@ -48,7 +48,7 @@ swagger:
 
 logging:
   level:
-    root: info
+    root: debug
     com:
       jn:
         sqlhelper:

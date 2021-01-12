@@ -32,14 +32,14 @@ import org.springframework.context.annotation.Configuration;
  * @since 3.4.0
  */
 @Configuration
-@ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true")
+@ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true")
 @ConditionalOnClass(AspectJExpressionPointcutAdvisorProperties.class)
 public class DynamicMethodDataSourcesKeyAutoConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DynamicMethodDataSourcesKeyAutoConfiguration.class);
 
 
     @Bean("annotationKeyChoicesAdvisor")
-    @ConditionalOnProperty(prefix = "sqlhelper.dynamicDataSource.keyChoices", name = "expression")
+    @ConditionalOnProperty(prefix = "sqlhelper.dynamic-datasource.keyChoices", name = "expression")
     @ConditionalOnMissingBean(name = "annotationKeyChoicesAdvisor")
     public AspectJExpressionPointcutAdvisor keyChoicesAdvisor(
             DynamicDataSourcesProperties namedDataSourcesProperties,

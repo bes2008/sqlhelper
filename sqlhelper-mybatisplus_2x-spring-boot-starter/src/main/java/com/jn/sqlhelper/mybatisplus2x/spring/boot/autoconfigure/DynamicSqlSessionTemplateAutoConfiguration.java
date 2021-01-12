@@ -54,7 +54,7 @@ import org.springframework.dao.support.PersistenceExceptionTranslator;
 import javax.sql.DataSource;
 import java.util.List;
 
-@ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
 @ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class, DynamicSqlSessionFactory.class})
 @ConditionalOnBean(name = "dataSourcesFactoryBean")
 @EnableConfigurationProperties(MybatisPlusProperties.class)

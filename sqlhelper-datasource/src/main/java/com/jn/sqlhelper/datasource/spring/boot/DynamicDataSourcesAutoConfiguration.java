@@ -62,7 +62,7 @@ import java.util.Map;
  */
 @Configuration
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
-@ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
 public class DynamicDataSourcesAutoConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourcesAutoConfiguration.class);
 
@@ -83,9 +83,9 @@ public class DynamicDataSourcesAutoConfiguration {
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "sqlhelper.dynamicDataSource")
+    @ConfigurationProperties(prefix = "sqlhelper.dynamic-datasource")
     public DynamicDataSourcesProperties namedDataSourcesProperties(Environment environment) {
-        String keyChoicesPointcutExpression = environment.getProperty("sqlhelper.dynamicDataSource.keyChoices.expression");
+        String keyChoicesPointcutExpression = environment.getProperty("sqlhelper.dynamic-datasource.key-choices.expression");
         if (Strings.isNotBlank(keyChoicesPointcutExpression)) {
             String requiredClass = "com.jn.langx.invocation.aop.expression.AspectJExpressionPointcutAdvisorProperties";
             if (!ClassLoaders.hasClass(requiredClass, this.getClass().getClassLoader())) {

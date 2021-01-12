@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @since 3.4.1
  */
-@ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
 @Configuration
 @AutoConfigureAfter(DynamicDataSourcesAutoConfiguration.class)
 public class DynamicDataSourceLoadBalanceAutoConfiguration {

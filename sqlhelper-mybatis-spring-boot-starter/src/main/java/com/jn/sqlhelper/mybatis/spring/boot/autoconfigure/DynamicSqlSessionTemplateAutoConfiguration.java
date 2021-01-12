@@ -15,8 +15,10 @@
 package com.jn.sqlhelper.mybatis.spring.boot.autoconfigure;
 
 import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
@@ -26,7 +28,9 @@ import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.Dynamic
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DynamicSqlSessionTemplate;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.TypeHandler;
 import org.mybatis.spring.MyBatisExceptionTranslator;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -52,10 +56,11 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 
 import javax.sql.DataSource;
+import java.lang.reflect.Constructor;
 import java.util.List;
 
-@ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
-@ConditionalOnClass({DynamicDataSourcesAutoConfiguration.class,SqlSessionFactory.class, SqlSessionFactoryBean.class, DynamicSqlSessionFactory.class})
+@ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnClass({DynamicDataSourcesAutoConfiguration.class, SqlSessionFactory.class, SqlSessionFactoryBean.class, DynamicSqlSessionFactory.class})
 @ConditionalOnBean(name = "dataSourcesFactoryBean")
 @EnableConfigurationProperties(MybatisProperties.class)
 @AutoConfigureBefore({MybatisAutoConfiguration.class})
@@ -72,8 +77,11 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                     ListFactoryBean dataSourcesFactoryBean,
             final MybatisProperties properties,
             final ObjectProvider<Interceptor[]> interceptorsProvider,
+            final ObjectProvider<TypeHandler[]> typeHandlerProvider,
+            final ObjectProvider<LanguageDriver[]> languageDriverProvider,
             final ResourceLoader resourceLoader,
             final ObjectProvider<DatabaseIdProvider> databaseIdProvider,
+
             final ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) throws BeanCreationException {
         List<DataSource> dataSources = null;
         try {
@@ -96,7 +104,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                     NamedDataSource namedDataSource = registryProvider.getObject().wrap(dataSource);
                     try {
                         logger.info("===[SQLHelper & MyBatis]=== Create mybatis SqlSessionFactory instance for datasource {}", namedDataSource.getDataSourceKey());
-                        SqlSessionFactory delegate = createSqlSessionFactory(dataSource, properties, interceptorsProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider);
+                        SqlSessionFactory delegate = createSqlSessionFactory(dataSource, properties, interceptorsProvider, typeHandlerProvider, languageDriverProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider);
                         if (delegate != null) {
                             DelegatingSqlSessionFactory sqlSessionFactory = new DelegatingSqlSessionFactory();
                             sqlSessionFactory.setDelegate(delegate);
@@ -119,10 +127,85 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
     private SqlSessionFactory createSqlSessionFactory(DataSource dataSource,
                                                       MybatisProperties properties,
                                                       ObjectProvider<Interceptor[]> interceptorsProvider,
+                                                      ObjectProvider<TypeHandler[]> typeHandlerProvider,
+                                                      ObjectProvider<LanguageDriver[]> languageDriverProvider,
                                                       ResourceLoader resourceLoader,
                                                       ObjectProvider<DatabaseIdProvider> databaseIdProviderObjectProvider,
                                                       ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) throws Exception {
-        MybatisAutoConfiguration mybatisAutoConfiguration = new MybatisAutoConfiguration(properties, interceptorsProvider, resourceLoader, databaseIdProviderObjectProvider, configurationCustomizersProvider);
+        // mybatis-spring-boot-starter 在不同版本，构造器会有变化
+
+        MybatisAutoConfiguration mybatisAutoConfiguration = null;
+        Constructor constructor = Reflects.getConstructor(MybatisAutoConfiguration.class,
+                MybatisProperties.class,
+                ObjectProvider.class,
+                ResourceLoader.class,
+                ObjectProvider.class,
+                ObjectProvider.class
+        );
+        if (constructor != null) {
+            // 1.3.0 ~ 2.0.1 （1.3.0 之前的版本没有去关注）
+            // MybatisProperties properties,
+            // ObjectProvider<Interceptor[]> interceptorsProvider,
+            // ResourceLoader resourceLoader,
+            // ObjectProvider<DatabaseIdProvider> databaseIdProvider,
+            // ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider
+
+            mybatisAutoConfiguration = Reflects.newInstance(MybatisAutoConfiguration.class,
+                    new Class[]{MybatisProperties.class,
+                            ObjectProvider.class,
+                            ResourceLoader.class,
+                            ObjectProvider.class,
+                            ObjectProvider.class
+                    },
+                    new Object[]{
+                            properties,
+                            interceptorsProvider,
+                            resourceLoader,
+                            databaseIdProviderObjectProvider,
+                            configurationCustomizersProvider
+                    });
+        } else {
+            // 2.1.0 ~ 2.14
+            // MybatisProperties properties,
+            // ObjectProvider<Interceptor[]> interceptorsProvider,
+            // ObjectProvider<TypeHandler[]> typeHandlersProvider,
+            // ObjectProvider<LanguageDriver[]> languageDriversProvider,
+            // ResourceLoader resourceLoader,
+            // ObjectProvider<DatabaseIdProvider> databaseIdProvider,
+            // ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider
+
+            constructor = Reflects.getConstructor(MybatisAutoConfiguration.class,
+                    MybatisProperties.class,
+                    ObjectProvider.class,
+                    ObjectProvider.class,
+                    ObjectProvider.class,
+                    ResourceLoader.class,
+                    ObjectProvider.class,
+                    ObjectProvider.class
+            );
+            if (constructor != null) {
+                mybatisAutoConfiguration = Reflects.newInstance(MybatisAutoConfiguration.class,
+                        new Class[]{
+                                MybatisProperties.class,
+                                ObjectProvider.class,
+                                ObjectProvider.class,
+                                ObjectProvider.class,
+                                ResourceLoader.class,
+                                ObjectProvider.class,
+                                ObjectProvider.class
+                        },
+                        new Object[]{
+                                properties,
+                                interceptorsProvider,
+                                typeHandlerProvider,
+                                languageDriverProvider,
+                                resourceLoader,
+                                databaseIdProviderObjectProvider,
+                                configurationCustomizersProvider
+                        });
+            }
+        }
+        Preconditions.checkNotNull(mybatisAutoConfiguration, "the mybatis autoconfiguration is null");
         mybatisAutoConfiguration.afterPropertiesSet();
         return mybatisAutoConfiguration.sqlSessionFactory(dataSource);
     }

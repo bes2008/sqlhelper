@@ -53,13 +53,13 @@ import java.util.List;
  */
 @Configuration
 @AutoConfigureAfter(DynamicDataSourcesAutoConfiguration.class)
-@ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true")
+@ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true")
 @ConditionalOnClass(AspectJExpressionPointcutAdvisorProperties.class)
 public class DynamicTransactionAutoConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourcesAutoConfiguration.class);
 
     @Bean
-    @ConditionalOnProperty(prefix = "sqlhelper.dynamicDataSource.transaction", name = "expression")
+    @ConditionalOnProperty(prefix = "sqlhelper.dynamic-datasource.transaction", name = "expression")
     public TransactionManager dynamicTransactionManager() {
         DefaultTransactionManager transactionManager = new DefaultTransactionManager();
         Loggers.log(3, logger, Level.INFO, null, "===[SQLHelper & Dynamic Transaction]=== the sqlhelper dynamic datasource transaction manager is enabled with the configuration: sqlhelper.dynamicDataSource.transaction, so you should make sure the spring transaction manager is not enabled");
@@ -68,14 +68,14 @@ public class DynamicTransactionAutoConfiguration {
 
 
     @Bean
-    @ConditionalOnProperty(prefix = "sqlhelper.dynamicDataSource.transaction", name = "expression")
+    @ConditionalOnProperty(prefix = "sqlhelper.dynamic-datasource.transaction", name = "expression")
     public SpringTransactionalAnnotationParser springTransactionalAnnotationParser() {
         return new SpringTransactionalAnnotationParser();
     }
 
 
     @Bean
-    @ConditionalOnProperty(prefix = "sqlhelper.dynamicDataSource.transaction", name = "expression")
+    @ConditionalOnProperty(prefix = "sqlhelper.dynamic-datasource.transaction", name = "expression")
     public TransactionDefinitionRegistry transactionDefinitionRegistry(ObjectProvider<List<TransactionDefinitionParser>> parserProvider,
                                                                        /**
                                                                         * 该变量在方法内部不会用到，但是不能删除，为了保证注入顺序
@@ -115,7 +115,7 @@ public class DynamicTransactionAutoConfiguration {
 
 
     @Bean("dynamicDataSourceTransactionAdvisor")
-    @ConditionalOnProperty(prefix = "sqlhelper.dynamicDataSource.transaction", name = "expression")
+    @ConditionalOnProperty(prefix = "sqlhelper.dynamic-datasource.transaction", name = "expression")
     @ConditionalOnMissingBean(name = "dynamicDataSourceTransactionAdvisor")
     public AspectJExpressionPointcutAdvisor dynamicDataSourceTransactionAdvisor(
             DynamicDataSourcesProperties properties,

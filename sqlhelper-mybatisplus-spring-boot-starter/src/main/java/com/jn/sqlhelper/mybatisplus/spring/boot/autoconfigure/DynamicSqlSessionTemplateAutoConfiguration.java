@@ -25,6 +25,7 @@ import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
+import com.jn.sqlhelper.datasource.spring.boot.DynamicDataSourcesAutoConfiguration;
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DelegatingSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DynamicSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DynamicSqlSessionTemplate;
@@ -41,6 +42,7 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ListFactoryBean;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -56,10 +58,11 @@ import org.springframework.dao.support.PersistenceExceptionTranslator;
 import javax.sql.DataSource;
 import java.util.List;
 
-@ConditionalOnProperty(name = "sqlhelper.dynamicDataSource.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
 @ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class, DynamicSqlSessionFactory.class})
 @ConditionalOnBean(name = "dataSourcesFactoryBean")
 @EnableConfigurationProperties(MybatisPlusProperties.class)
+@AutoConfigureAfter(DynamicDataSourcesAutoConfiguration.class)
 @AutoConfigureBefore({MybatisPlusAutoConfiguration.class})
 @Configuration
 public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationContextAware {
@@ -72,7 +75,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
         this.applicationContext = applicationContext;
     }
 
-    @Bean("sqlSessionFactory")
+    @Bean(name = "sqlSessionFactory")
     public DynamicSqlSessionFactory dynamicSqlSessionFactory(
             final ObjectProvider<DataSourceRegistry> registryProvider,
             @Qualifier("dataSourcesFactoryBean")
