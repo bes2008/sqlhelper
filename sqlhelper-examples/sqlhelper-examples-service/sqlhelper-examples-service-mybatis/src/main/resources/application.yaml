@@ -59,6 +59,11 @@ logging:
           mybatis:
             plugins:
               likeescape: debug
+            spring:
+              session:
+                factory:
+                  dynamicdatasource:
+                    DynamicDataSourceManagedTransaction: debug
           datasource:
             key:
               DataSourceKeySelector: debug

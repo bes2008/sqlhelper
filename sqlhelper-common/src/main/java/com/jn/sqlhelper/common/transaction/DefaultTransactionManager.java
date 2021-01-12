@@ -30,22 +30,43 @@ public class DefaultTransactionManager implements TransactionManager {
             return;
         }
         Map<Object, TransactionalResource> resourceMap = transaction.getResources();
+        SQLException exception = null;
         for (Map.Entry<Object, TransactionalResource> resourceEntry : resourceMap.entrySet()) {
             TransactionalResource resource = resourceEntry.getValue();
             if (!resource.isClosed()) {
-                resource.commit();
+                try {
+                    resource.commit(true);
+                } catch (SQLException ex) {
+                    exception = ex;
+                } finally {
+                    resource.close();
+                }
             }
+        }
+        if (exception != null) {
+            throw exception;
         }
     }
 
     @Override
     public void rollback(Transaction transaction) throws SQLException {
         Map<Object, TransactionalResource> resourceMap = transaction.getResources();
+
+        SQLException exception = null;
         for (Map.Entry<Object, TransactionalResource> resourceEntry : resourceMap.entrySet()) {
             TransactionalResource resource = resourceEntry.getValue();
             if (!resource.isClosed()) {
-                resource.rollback();
+                try {
+                    resource.rollback();
+                } catch (SQLException ex) {
+                    exception = ex;
+                } finally {
+                    resource.close();
+                }
             }
+        }
+        if (exception != null) {
+            throw exception;
         }
     }
 }

@@ -18,6 +18,8 @@ import com.jn.sqlhelper.common.transaction.TransactionalResource;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class SqlSessionTransactionalResource implements TransactionalResource {
@@ -40,8 +42,8 @@ public class SqlSessionTransactionalResource implements TransactionalResource {
     }
 
     @Override
-    public void commit() throws SQLException {
-        session.commit();
+    public void commit(boolean force) throws SQLException {
+        session.commit(force);
     }
 
     @Override
@@ -64,5 +66,12 @@ public class SqlSessionTransactionalResource implements TransactionalResource {
     @Override
     public boolean isClosed() {
         return session == null;
+    }
+
+    @Override
+    public void close() throws SQLException {
+        if(session!=null){
+            session.close();
+        }
     }
 }

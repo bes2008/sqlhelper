@@ -36,13 +36,17 @@ public class ConnectionTransactionalResource implements TransactionalResource {
     }
 
     @Override
-    public void commit() throws SQLException {
-        this.connection.commit();
+    public void commit(boolean force) throws SQLException {
+        if (this.connection != null && !this.connection.isClosed() && force) {
+            this.connection.commit();
+        }
     }
 
     @Override
     public void rollback() throws SQLException {
-        this.connection.rollback();
+        if (this.connection != null && !this.connection.isClosed()) {
+            this.connection.rollback();
+        }
     }
 
     @Override
@@ -66,6 +70,13 @@ public class ConnectionTransactionalResource implements TransactionalResource {
             return connection == null || connection.isClosed();
         } catch (Throwable ex) {
             return false;
+        }
+    }
+
+    @Override
+    public void close() throws SQLException {
+        if (this.connection != null && !this.connection.isClosed()) {
+            this.connection.close();
         }
     }
 }

@@ -18,6 +18,7 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
+import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
@@ -81,7 +82,6 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
             final ObjectProvider<LanguageDriver[]> languageDriverProvider,
             final ResourceLoader resourceLoader,
             final ObjectProvider<DatabaseIdProvider> databaseIdProvider,
-
             final ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) throws BeanCreationException {
         List<DataSource> dataSources = null;
         try {
@@ -97,6 +97,15 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                 logger.error("Please check whether the sqlhelper-datasource.jar in the classpath or not");
                 throw ex;
             }
+
+            List<ConfigurationCustomizer> customizers = configurationCustomizersProvider.getIfAvailable();
+            final ConfigurationCustomizer transactionEnvironmentCustomizer = Collects.findFirst(customizers, new Predicate<ConfigurationCustomizer>() {
+                @Override
+                public boolean test(ConfigurationCustomizer customizer) {
+                    return customizer instanceof DynamicDataSourceEnvironmentConfigurationCustomizer;
+                }
+            });
+
             final DynamicSqlSessionFactory dynamicSqlSessionFactory = new DynamicSqlSessionFactory();
             Collects.forEach(dataSources, new Consumer<DataSource>() {
                 @Override
@@ -106,6 +115,10 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                         logger.info("===[SQLHelper & MyBatis]=== Create mybatis SqlSessionFactory instance for datasource {}", namedDataSource.getDataSourceKey());
                         SqlSessionFactory delegate = createSqlSessionFactory(dataSource, properties, interceptorsProvider, typeHandlerProvider, languageDriverProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider);
                         if (delegate != null) {
+                            if(transactionEnvironmentCustomizer!=null){
+                                transactionEnvironmentCustomizer.customize(delegate.getConfiguration());
+                            }
+
                             DelegatingSqlSessionFactory sqlSessionFactory = new DelegatingSqlSessionFactory();
                             sqlSessionFactory.setDelegate(delegate);
                             PersistenceExceptionTranslator translator = new MyBatisExceptionTranslator(delegate.getConfiguration().getEnvironment().getDataSource(), true);

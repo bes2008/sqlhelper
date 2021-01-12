@@ -16,6 +16,8 @@ package com.jn.sqlhelper.common.transaction;
 
 import com.jn.langx.Named;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.SQLException;
 
 /**
@@ -23,10 +25,11 @@ import java.sql.SQLException;
  */
 public interface TransactionalResource extends Named {
 
-    void commit() throws SQLException;
+    void commit(boolean force) throws SQLException;
 
     void rollback() throws SQLException;
 
     boolean isClosed();
 
+    void close() throws SQLException;
 }

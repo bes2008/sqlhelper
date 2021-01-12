@@ -76,9 +76,9 @@ public class TransactionAops {
             return ex;
         } finally {
             if (!nested) {
-                transaction.clearResources();
                 TransactionThreadContext.unbind();
             }
+            transaction.clearResources();
         }
     }
 
