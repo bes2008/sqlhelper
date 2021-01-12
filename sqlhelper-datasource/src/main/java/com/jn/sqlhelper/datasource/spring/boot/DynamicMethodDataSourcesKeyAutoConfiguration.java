@@ -39,7 +39,7 @@ public class DynamicMethodDataSourcesKeyAutoConfiguration {
 
 
     @Bean("annotationKeyChoicesAdvisor")
-    @ConditionalOnProperty(prefix = "sqlhelper.dynamic-datasource.keyChoices", name = "expression")
+    @ConditionalOnProperty(prefix = "sqlhelper.dynamic-datasource.key-choices", name = "expression")
     @ConditionalOnMissingBean(name = "annotationKeyChoicesAdvisor")
     public AspectJExpressionPointcutAdvisor keyChoicesAdvisor(
             DynamicDataSourcesProperties namedDataSourcesProperties,

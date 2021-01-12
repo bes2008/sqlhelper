@@ -24,13 +24,13 @@ spring:
     password: 123456
 
 sqlhelper:
-  dynamicDataSource:
+  dynamic-datasource:
     enabled: true
     transaction:
       expression: execution(public * com.jn.sqlhelper.examples.mybatis.tkmapper.dao.*Dao.*(..))
-    keyChoices:
+    key-choices:
       expression: execution(public * com.jn.sqlhelper.examples.mybatis.tkmapper.controller.*Controller.*(..))
-    dataSources:
+    datasources:
       # https://h2database.com/
       - group: primary
         name: master

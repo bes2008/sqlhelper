@@ -38,13 +38,13 @@ logging:
               likeescape: debug
 
 sqlhelper:
-  dynamicDataSource:
+  dynamic-datasource:
     enabled: true
     transaction:
       expression: execution(public * com.jn.sqlhelper.examples.mybatisplus3.dao.*Dao.*(..))
-    keyChoices:
+    key-choices:
       expression: execution(public * com.jn.sqlhelper.examples.mybatisplus3.controller.*Controller.*(..))
-    dataSources:
+    datasources:
       # https://h2database.com/
       - group: primary
         name: master
