@@ -15,10 +15,14 @@
 package com.jn.sqlhelper.datasource.spring.boot;
 
 
+import com.jn.langx.util.Emptys;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+
+import java.util.UUID;
 
 /**
  * 兼容Spring DataSourceProperties 配置，将其适配为 sqlhelper-datasource 里的DataSourceProperties
+ *
  * @since 3.4.1
  */
 public class SpringDataSourcePropertiesAdapter {
@@ -27,7 +31,11 @@ public class SpringDataSourcePropertiesAdapter {
         dataSourceProperties.setUsername(properties.getUsername());
         dataSourceProperties.setPassword(properties.getPassword());
         dataSourceProperties.setDriverClassName(properties.getDriverClassName());
-        dataSourceProperties.setName(properties.getName());
+        String name = properties.getName();
+        if (Emptys.isEmpty(name)) {
+            name = UUID.randomUUID().toString();
+        }
+        dataSourceProperties.setName(name);
         dataSourceProperties.setUrl(properties.getUrl());
         return dataSourceProperties;
     }
