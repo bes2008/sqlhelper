@@ -123,7 +123,7 @@ public class DynamicDataSourcesAutoConfiguration {
             }
         }
 
-        List<DataSourceProperties> dataSourcePropertiesList = namedDataSourcesProperties.getDataSources();
+        List<DataSourceProperties> dataSourcePropertiesList = namedDataSourcesProperties.getDatasources();
 
         // spring bean factory
         final AbstractAutowireCapableBeanFactory beanFactory = ((AbstractAutowireCapableBeanFactory) applicationContext.getAutowireCapableBeanFactory());

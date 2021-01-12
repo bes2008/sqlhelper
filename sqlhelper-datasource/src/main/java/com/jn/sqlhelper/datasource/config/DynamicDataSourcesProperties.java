@@ -35,7 +35,7 @@ public class DynamicDataSourcesProperties {
     /**
      * 所有的数据源配置
      */
-    private List<DataSourceProperties> dataSources = Collects.emptyArrayList();
+    private List<DataSourceProperties> datasources = Collects.emptyArrayList();
     /**
      * 默认的 slave 路由名称
      */
@@ -61,12 +61,12 @@ public class DynamicDataSourcesProperties {
         this.enabled = enabled;
     }
 
-    public List<DataSourceProperties> getDataSources() {
-        return dataSources;
+    public List<DataSourceProperties> getDatasources() {
+        return datasources;
     }
 
-    public void setDataSources(List<DataSourceProperties> dataSources) {
-        this.dataSources = dataSources;
+    public void setDatasources(List<DataSourceProperties> dataSources) {
+        this.datasources = dataSources;
     }
 
     public String getDefaultRouter() {
