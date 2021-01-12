@@ -16,6 +16,8 @@ package com.jn.sqlhelper.datasource.factory.c3p0;
 
 import com.jn.langx.util.Maths;
 import com.jn.langx.util.Throwables;
+import com.jn.sqlhelper.common.transaction.utils.Isolation;
+import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.mchange.v2.c3p0.DataSources;
 
@@ -65,7 +67,10 @@ public class C3p0DataSources {
 
             props.setProperty(PROP_DEFAULT_AUTO_COMMIT, "" + properties.isAutoCommit());
             props.setProperty(PROP_DEFAULT_READ_ONLY, "" + properties.isReadOnly());
-            props.setProperty(PROP_DEFAULT_TRANSACTION_ISOLATION, properties.getTransactionIsolation());
+            Isolation isolation = Transactions.getTransactionIsolation(properties.getTransactionIsolation());
+            if (Transactions.isValidIsolation(isolation)) {
+                props.setProperty(PROP_DEFAULT_TRANSACTION_ISOLATION, properties.getTransactionIsolation());
+            }
 
             String catalog = properties.getCatalog();
             if (catalog != null) {

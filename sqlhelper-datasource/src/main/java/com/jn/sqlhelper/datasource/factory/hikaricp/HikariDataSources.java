@@ -16,6 +16,7 @@ package com.jn.sqlhelper.datasource.factory.hikaricp;
 
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.zaxxer.hikari.HikariConfig;
@@ -59,8 +60,10 @@ public class HikariDataSources {
         config.setMaximumPoolSize(props.getMaxPoolSize());
         config.setMinimumIdle(props.getMinIdle());
         config.setAutoCommit(props.isAutoCommit());
-        String transactionIsolation = Transactions.getTransactionIsolation(props.getTransactionIsolation()).getDisplayText();
-        config.setTransactionIsolation(transactionIsolation);
+        Isolation isolation = Transactions.getTransactionIsolation(props.getTransactionIsolation());
+        if (Transactions.isValidIsolation(isolation)) {
+            config.setTransactionIsolation(isolation.getDisplayText());
+        }
 
         config.setReadOnly(props.isReadOnly());
         return new HikariDataSource(config);

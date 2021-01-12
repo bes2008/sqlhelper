@@ -15,8 +15,8 @@
 package com.jn.sqlhelper.datasource.factory.tomcatjdbc;
 
 import com.jn.langx.util.Maths;
-import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
+import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import org.apache.tomcat.jdbc.pool.DataSourceFactory;
@@ -63,9 +63,9 @@ public class TomcatJdbcDataSources {
 
         props.setProperty(PROP_AUTO_COMMIT, "" + properties.isAutoCommit());
         props.setProperty(PROP_READONLY, "" + properties.isReadOnly());
-        String transactionIsolation = Transactions.getTransactionIsolation(properties.getTransactionIsolation()).getName();
-        if (Strings.isNotBlank(transactionIsolation)) {
-            props.setProperty(PROP_TRANSACTION_ISOLATION, transactionIsolation);
+        Isolation isolation = Transactions.getTransactionIsolation(properties.getTransactionIsolation());
+        if (Transactions.isValidIsolation(isolation)) {
+            props.setProperty(PROP_TRANSACTION_ISOLATION, isolation.getName());
         }
         String catalog = properties.getCatalog();
         if (catalog != null) {
@@ -97,6 +97,7 @@ public class TomcatJdbcDataSources {
             throw Throwables.wrapAsRuntimeException(ex);
         }
     }
+
     public static DataSourceProperties toDataSourceProperties(Properties properties) {
         DataSourceProperties dataSourceProperties = new DataSourceProperties();
         dataSourceProperties.setDriverProps(properties);

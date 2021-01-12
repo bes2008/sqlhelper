@@ -26,13 +26,17 @@ public class Transactions {
 
     private static final Logger logger = LoggerFactory.getLogger(Transactions.class);
 
+    public static boolean isValidIsolation(Isolation isolation) {
+        return isolation != null && isolation != Isolation.DEFAULT;
+    }
+
     public static final int getTransactionIsolationLevel(@Nullable String transactionIsolationName) {
         Isolation isolation = getTransactionIsolation(transactionIsolationName);
         return isolation.getCode();
     }
 
     public static final Isolation getTransactionIsolation(@Nullable String transactionIsolationName) {
-        return getTransactionIsolation(transactionIsolationName, null);
+        return getTransactionIsolation(transactionIsolationName, Isolation.DEFAULT);
     }
 
     public static final Isolation getTransactionIsolation(@Nullable String transactionIsolationName, @Nullable Isolation ifNull) {
