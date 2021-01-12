@@ -99,10 +99,10 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
             }
 
             List<ConfigurationCustomizer> customizers = configurationCustomizersProvider.getIfAvailable();
-            final ConfigurationCustomizer transactionEnvironmentCustomizer = Collects.findFirst(customizers, new Predicate<ConfigurationCustomizer>() {
+            final ConfigurationCustomizer transactionFactoryCustomizer = Collects.findFirst(customizers, new Predicate<ConfigurationCustomizer>() {
                 @Override
                 public boolean test(ConfigurationCustomizer customizer) {
-                    return customizer instanceof DynamicDataSourceEnvironmentConfigurationCustomizer;
+                    return customizer instanceof DynamicDataSourceTransactionFactoryCustomizer;
                 }
             });
 
@@ -115,8 +115,8 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                         logger.info("===[SQLHelper & MyBatis]=== Create mybatis SqlSessionFactory instance for datasource {}", namedDataSource.getDataSourceKey());
                         SqlSessionFactory delegate = createSqlSessionFactory(dataSource, properties, interceptorsProvider, typeHandlerProvider, languageDriverProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider);
                         if (delegate != null) {
-                            if(transactionEnvironmentCustomizer!=null){
-                                transactionEnvironmentCustomizer.customize(delegate.getConfiguration());
+                            if (transactionFactoryCustomizer != null) {
+                                transactionFactoryCustomizer.customize(delegate.getConfiguration());
                             }
 
                             DelegatingSqlSessionFactory sqlSessionFactory = new DelegatingSqlSessionFactory();

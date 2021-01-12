@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.jn.sqlhelper.mybatisplus.spring.boot.autoconfigure.SqlHelperMybatisPlusAutoConfiguration,\
+  com.jn.sqlhelper.mybatisplus.spring.boot.autoconfigure.DynamicDataSourceTransactionFactoryCustomizer,\
   com.jn.sqlhelper.mybatisplus.spring.boot.autoconfigure.DynamicSqlSessionTemplateAutoConfiguration

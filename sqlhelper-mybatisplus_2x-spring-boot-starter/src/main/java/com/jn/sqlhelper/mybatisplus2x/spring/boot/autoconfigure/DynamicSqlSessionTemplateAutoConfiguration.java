@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.spring.boot.starter.MybatisPlusProperties;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
+import com.jn.langx.util.function.Predicate;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
@@ -90,6 +91,15 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                 logger.error("please check whether the sqlhelper-datasource.jar in the classpath or not");
                 throw ex;
             }
+
+            List<ConfigurationCustomizer> customizers = configurationCustomizersProvider.getIfAvailable();
+            final ConfigurationCustomizer transactionFactoryCustomizer = Collects.findFirst(customizers, new Predicate<ConfigurationCustomizer>() {
+                @Override
+                public boolean test(ConfigurationCustomizer customizer) {
+                    return customizer instanceof DynamicDataSourceTransactionFactoryCustomizer;
+                }
+            });
+
             final DynamicSqlSessionFactory dynamicSqlSessionFactory = new DynamicSqlSessionFactory();
             Collects.forEach(dataSources, new Consumer<DataSource>() {
                 @Override
@@ -99,6 +109,10 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                         logger.info("===[SQLHelper & MyBatis-Plus 2.x]=== Create mybatis SqlSessionFactory instance for datasource {}", namedDataSource.getDataSourceKey());
                         SqlSessionFactory delegate = createSqlSessionFactory(dataSource, properties, interceptorsProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider, applicationContext);
                         if (delegate != null) {
+                            if (transactionFactoryCustomizer != null) {
+                                transactionFactoryCustomizer.customize(delegate.getConfiguration());
+                            }
+
                             DelegatingSqlSessionFactory sqlSessionFactory = new DelegatingSqlSessionFactory();
                             sqlSessionFactory.setDelegate(delegate);
                             PersistenceExceptionTranslator translator = new MyBatisExceptionTranslator(delegate.getConfiguration().getEnvironment().getDataSource(), true);

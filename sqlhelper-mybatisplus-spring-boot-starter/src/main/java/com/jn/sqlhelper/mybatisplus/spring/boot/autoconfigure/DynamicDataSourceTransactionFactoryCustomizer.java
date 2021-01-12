@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.spring.boot.autoconfigure;
+package com.jn.sqlhelper.mybatisplus.spring.boot.autoconfigure;
 
+import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DynamicDataSourceManagedTransactionFactory;
 import org.apache.ibatis.mapping.Environment;
-import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.transaction.TransactionFactory;
-import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
-import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -30,10 +30,10 @@ import javax.sql.DataSource;
 @org.springframework.context.annotation.Configuration
 @ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
 @ConditionalOnBean(name = "dynamicDataSourceTransactionAdvisor")
-@AutoConfigureBefore(MybatisAutoConfiguration.class)
-public class DynamicDataSourceEnvironmentConfigurationCustomizer implements ConfigurationCustomizer {
+@AutoConfigureBefore(MybatisPlusAutoConfiguration.class)
+public class DynamicDataSourceTransactionFactoryCustomizer implements ConfigurationCustomizer {
     @Override
-    public void customize(Configuration configuration) {
+    public void customize(MybatisConfiguration configuration) {
         Environment oldEnv = configuration.getEnvironment();
         if (oldEnv != null) {
             String id = oldEnv.getId();
