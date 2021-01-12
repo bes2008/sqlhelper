@@ -32,7 +32,7 @@ public class Transactions {
     }
 
     public static final Isolation getTransactionIsolation(@Nullable String transactionIsolationName) {
-        return getTransactionIsolation(transactionIsolationName, Isolation.DEFAULT);
+        return getTransactionIsolation(transactionIsolationName, null);
     }
 
     public static final Isolation getTransactionIsolation(@Nullable String transactionIsolationName, @Nullable Isolation ifNull) {

@@ -62,7 +62,7 @@ public class DataSourceProperties implements Configuration {
     private String transactionIsolation;
 
     private long leakDetectionThresholdInMills;
-    private String validationQuery;
+    private String validationQuery = "select 1";
 
     private long connectionTimeoutInMills;
     private long validationTimeoutInMills;
