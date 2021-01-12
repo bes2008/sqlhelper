@@ -121,13 +121,17 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
     private class SqlSessionTransactionInterceptor implements InvocationHandler {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            SqlSessionFactory sqlSessionFactory = DynamicSqlSessionTemplate.this.getSqlSessionFactory();
-            ExecutorType executorType = DynamicSqlSessionTemplate.this.getExecutorType();
-            PersistenceExceptionTranslator exceptionTranslator = DynamicSqlSessionTemplate.this.getPersistenceExceptionTranslator();
+            DynamicSqlSessionFactory dynamicSqlSessionFactory = DynamicSqlSessionTemplate.this.getDynamicSqlSessionFactory();
+
+            DataSourceKey key = MethodInvocationDataSourceKeySelector.getCurrent();
+
+            DelegatingSqlSessionFactory sqlSessionFactory = dynamicSqlSessionFactory.getDelegatingSqlSessionFactory();
+            ExecutorType executorType = sqlSessionFactory.getConfiguration().getDefaultExecutorType();
+            PersistenceExceptionTranslator exceptionTranslator = sqlSessionFactory.getPersistenceExceptionTranslator();
             // 这个是实际的 sqlSession
             SqlSession sqlSession = getSqlSession(sqlSessionFactory, executorType, exceptionTranslator);
 
-            DataSourceKey key = MethodInvocationDataSourceKeySelector.getCurrent();
+
             Transaction transaction = TransactionThreadContext.get();
             // 当改调用发生在sqlhelper transaction manager 范围内时，需要注册
             if (key != null && transaction != null) {

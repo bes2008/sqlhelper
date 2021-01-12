@@ -14,9 +14,10 @@ spring:
     name: slave3
 
 sqlhelper:
-  dynamic-data-source:
+  dynamic-datasource:
     enabled: true
     transaction:
+     # expression: execution(public * com.jn.sqlhelper.examples.mybatis.controller.*Controller.*(..))
       expression: execution(public * com.jn.sqlhelper.examples.mybatis.dao.*Dao.*(..))
     key-choices:
       expression: execution(public * com.jn.sqlhelper.examples.mybatis.controller.*Controller.*(..))
@@ -48,7 +49,7 @@ swagger:
 
 logging:
   level:
-    root: debug
+    root: info
     com:
       jn:
         sqlhelper:

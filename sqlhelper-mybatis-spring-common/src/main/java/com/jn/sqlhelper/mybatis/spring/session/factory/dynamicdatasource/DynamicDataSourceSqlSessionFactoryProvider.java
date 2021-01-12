@@ -42,7 +42,7 @@ public class DynamicDataSourceSqlSessionFactoryProvider<I> implements SqlSession
     }
 
     protected SqlSessionFactory doGet(I i) {
-        Map<DataSourceKey, SqlSessionFactory> factoryMap = dynamicSqlSessionFactory.getDelegates();
+        Map<DataSourceKey, DelegatingSqlSessionFactory> factoryMap = dynamicSqlSessionFactory.getDelegates();
         DataSourceKey key = selector.select(i);
         if (key == null || !key.isAvailable()) {
             logger.warn("the datasource key is null or not available");

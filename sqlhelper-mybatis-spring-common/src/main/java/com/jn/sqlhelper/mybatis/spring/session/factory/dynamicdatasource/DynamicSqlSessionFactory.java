@@ -26,9 +26,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DynamicSqlSessionFactory implements SqlSessionFactory {
 
-    private ConcurrentHashMap<DataSourceKey, SqlSessionFactory> factoryMap = new ConcurrentHashMap<DataSourceKey, SqlSessionFactory>();
+    private ConcurrentHashMap<DataSourceKey, DelegatingSqlSessionFactory> factoryMap = new ConcurrentHashMap<DataSourceKey, DelegatingSqlSessionFactory>();
 
-    public void addSqlSessionFactory(DataSourceKey key, SqlSessionFactory sessionFactory) {
+    public void addSqlSessionFactory(DataSourceKey key, DelegatingSqlSessionFactory sessionFactory) {
         factoryMap.putIfAbsent(key, sessionFactory);
     }
 
@@ -92,12 +92,12 @@ public class DynamicSqlSessionFactory implements SqlSessionFactory {
         }
     }
 
-    public Map<DataSourceKey, SqlSessionFactory> getDelegates() {
+    public Map<DataSourceKey, DelegatingSqlSessionFactory> getDelegates() {
         return Collects.newHashMap(factoryMap);
     }
 
 
-    private SqlSessionFactory getDelegatingSqlSessionFactory() {
+    public DelegatingSqlSessionFactory getDelegatingSqlSessionFactory() {
         if (MethodInvocationDataSourceKeySelector.getCurrent() != null) {
             return factoryMap.get(MethodInvocationDataSourceKeySelector.getCurrent());
         }

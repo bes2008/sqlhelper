@@ -11,10 +11,12 @@
     <artifactId>sqlhelper-examples-service-mybatis</artifactId>
     <properties>
         <!-- 测试 Spring 1.x 时， 注掉这部分内容即可-->
+        <!--
         <spring.version>5.2.9.RELEASE</spring.version>
         <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
         <mybatis.spring.version>2.0.6</mybatis.spring.version>
         <mybatis.springboot.version>2.1.4</mybatis.springboot.version>
+        -->
     </properties>
     <dependencies>
 

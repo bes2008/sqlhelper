@@ -37,7 +37,7 @@ public class DynamicSqlSessionFactoryMethodInvocationProvider extends DynamicDat
         }
 
         if (MethodInvocationDataSourceKeySelector.getCurrent() != null) {
-            Map<DataSourceKey, SqlSessionFactory> factoryMap = dynamicSqlSessionFactory.getDelegates();
+            Map<DataSourceKey, DelegatingSqlSessionFactory> factoryMap = dynamicSqlSessionFactory.getDelegates();
             SqlSessionFactory delegate = factoryMap.get(MethodInvocationDataSourceKeySelector.getCurrent());
             if (needClear) {
                 MethodInvocationDataSourceKeySelector.removeCurrent();

@@ -5,7 +5,6 @@
         <id property="id" column="ID" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result property="name" column="NAME" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result property="age" column="AGE" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-        <result property="tenantId" column="TENANTID" javaType="java.lang.String" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="all_columns">
