@@ -95,6 +95,7 @@ public interface DataSourceKeySelector<I> {
 ## Configuration
 
 ```yaml
+
 sqlhelper:
   dynamic-datasource: # 该节点下为动态数据源的配置
     enabled: true # 动态数据源的开关
@@ -107,7 +108,7 @@ sqlhelper:
         driver-class-name: org.h2.Driver
         url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
         username: sa
-        password: 123456 
+        password: 123456
       - group: primary # {required} the group
         name: slave-1 # {required} the name 
         implementation: # {optional} the datasource pool implementation, options: c3p0, dbcp2, druid, hikaricp, tomcat
@@ -121,15 +122,9 @@ sqlhelper:
         write-pattern: save*;insert*;add*;delete*;remove*;update*;modify*; # 配置那些方法名是写操作，对于写操作会自动选择组内的 master，读操作会采用负载算法。
     key-choices: # {optional} 用于定义可以从哪些类、方法上来提取@DataSource注解等，其中expression是Spring集成 Aspectj时，配置的基于 expression 的pointcut
       expression:
-    transaction: # {optional} 用于定义可以从哪些类、方法上会启用 @Transactional 注解，可以用Spring 的@Transactional注解，也可以用 SQLHelper的 @Transactional 注解
+    transaction: # {optional} 用于定义可以从哪些类、方法上会启用 @Transactional 注解，可以用Spring 的@Transactional注解，也可以用 SQLHelper的 @Transactional 注解. 另外需要注意，该配置需谨慎，
       expression: execution(public * com.jn.sqlhelper.examples.mybatis.controller.*Controller.*(..))
+
 ```
-
-
- 
-
-
-
-
 
     
