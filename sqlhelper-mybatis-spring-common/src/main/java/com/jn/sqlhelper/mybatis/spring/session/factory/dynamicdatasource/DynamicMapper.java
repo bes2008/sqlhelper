@@ -23,6 +23,8 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -36,6 +38,7 @@ import java.util.Map;
  * @param <MAPPER>
  */
 public class DynamicMapper<MAPPER> implements InvocationHandler {
+    private static final Logger logger = LoggerFactory.getLogger(DynamicMapper.class);
     /**
      * 值为按照 Mybatis的规则创建的 mapper proxy对象.
      * 该字段在DynamicMapper创建时即完成，后面只是使用，所以不存在并发修改现象，故而只需要普通的map。
@@ -58,7 +61,8 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         MethodInvocation methodInvocation = new GenericMethodInvocation(proxy, proxy, method, args);
         Object mapper = getMapperDelegate(methodInvocation);
         try {
-            return method.invoke(mapper, args);
+            Object obj = method.invoke(mapper, args);
+            return obj;
         } catch (Throwable ex) {
             throw ex;
         } finally {
