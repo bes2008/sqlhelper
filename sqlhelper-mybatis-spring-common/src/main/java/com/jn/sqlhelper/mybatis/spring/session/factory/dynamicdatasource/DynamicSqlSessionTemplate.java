@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource;
 
+import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.reflect.Reflects;
@@ -122,7 +123,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             DynamicSqlSessionFactory dynamicSqlSessionFactory = DynamicSqlSessionTemplate.this.getDynamicSqlSessionFactory();
-
+            @NonNull
             DataSourceKey key = MethodInvocationDataSourceKeySelector.getCurrent();
 
             DelegatingSqlSessionFactory sqlSessionFactory = dynamicSqlSessionFactory.getDelegatingSqlSessionFactory();

@@ -20,7 +20,8 @@ sqlhelper:
      # expression: execution(public * com.jn.sqlhelper.examples.mybatis.controller.*Controller.*(..))
       expression: execution(public * com.jn.sqlhelper.examples.mybatis.dao.*Dao.*(..))
     key-choices:
-      expression: execution(public * com.jn.sqlhelper.examples.mybatis.controller.*Controller.*(..))
+      expression: execution(public * com.jn.sqlhelper.examples.mybatis.dao.*Dao.*(..))
+     # expression: execution(public * com.jn.sqlhelper.examples.mybatis.controller.*Controller.*(..))
     datasources:
       # https://h2database.com/
       - group: primary
