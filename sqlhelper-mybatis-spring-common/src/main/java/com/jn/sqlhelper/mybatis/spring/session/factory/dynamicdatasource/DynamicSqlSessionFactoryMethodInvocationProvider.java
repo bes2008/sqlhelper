@@ -19,8 +19,6 @@ import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.util.Map;
-
 public class DynamicSqlSessionFactoryMethodInvocationProvider extends DynamicDataSourceSqlSessionFactoryProvider<MethodInvocation> {
 
     public DynamicSqlSessionFactoryMethodInvocationProvider(DynamicSqlSessionFactory dynamicSqlSessionFactory, MethodInvocationDataSourceKeySelector keySelector) {
@@ -30,20 +28,11 @@ public class DynamicSqlSessionFactoryMethodInvocationProvider extends DynamicDat
 
     @Override
     public SqlSessionFactory get(MethodInvocation invocation) {
-        boolean needClear = false;
-        if (MethodInvocationDataSourceKeySelector.getCurrent() == null) {
-            selector.select(invocation);
-            needClear = true;
+        SqlSessionFactory factory = dynamicSqlSessionFactory.getDelegatingSqlSessionFactory();
+        if (factory != null) {
+            return factory;
         }
-
-        if (MethodInvocationDataSourceKeySelector.getCurrent() != null) {
-            Map<DataSourceKey, DelegatingSqlSessionFactory> factoryMap = dynamicSqlSessionFactory.getDelegates();
-            SqlSessionFactory delegate = factoryMap.get(MethodInvocationDataSourceKeySelector.getCurrent());
-            if (needClear) {
-                MethodInvocationDataSourceKeySelector.removeCurrent();
-            }
-            return delegate;
-        }
-        return null;
+        DataSourceKey key = selector.select(invocation);
+        return dynamicSqlSessionFactory.getDelegatingSqlSessionFactory(key);
     }
 }

@@ -17,7 +17,6 @@ package com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource;
 import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
-import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.*;
 
 import java.sql.Connection;
@@ -81,10 +80,10 @@ public class DynamicSqlSessionFactory implements SqlSessionFactory {
         SqlSessionFactory delegate = getDelegatingSqlSessionFactory();
         if (delegate == null) {
             // 启动阶段，会走这里
-            if(factoryMap.isEmpty()){
-                Configuration configuration =  new Configuration();
+            if (factoryMap.isEmpty()) {
+                Configuration configuration = new Configuration();
                 return configuration;
-            }else {
+            } else {
                 return Collects.findFirst(factoryMap.values()).getConfiguration();
             }
         } else {
@@ -98,8 +97,12 @@ public class DynamicSqlSessionFactory implements SqlSessionFactory {
 
 
     public DelegatingSqlSessionFactory getDelegatingSqlSessionFactory() {
-        if (MethodInvocationDataSourceKeySelector.getCurrent() != null) {
-            return factoryMap.get(MethodInvocationDataSourceKeySelector.getCurrent());
+        return getDelegatingSqlSessionFactory(MethodInvocationDataSourceKeySelector.getCurrent());
+    }
+
+    public DelegatingSqlSessionFactory getDelegatingSqlSessionFactory(DataSourceKey key) {
+        if (key != null) {
+            return factoryMap.get(key);
         }
         return null;
     }
