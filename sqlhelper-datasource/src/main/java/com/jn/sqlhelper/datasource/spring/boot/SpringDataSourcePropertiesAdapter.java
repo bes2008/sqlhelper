@@ -16,6 +16,8 @@ package com.jn.sqlhelper.datasource.spring.boot;
 
 
 import com.jn.langx.util.Emptys;
+import com.jn.sqlhelper.datasource.DataSources;
+import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
 import java.util.UUID;
@@ -34,6 +36,20 @@ public class SpringDataSourcePropertiesAdapter {
         String name = properties.getName();
         if (Emptys.isEmpty(name)) {
             name = UUID.randomUUID().toString();
+        } else {
+            DataSourceKey key = null;
+            try {
+                key = DataSources.buildDataSourceKey(name);
+
+            } catch (Throwable ex) {
+                // ignore it
+            }
+            if (key != null) {
+                dataSourceProperties.setGroup(key.getGroup());
+                dataSourceProperties.setName(key.getName());
+            } else {
+                dataSourceProperties.setName(name);
+            }
         }
         dataSourceProperties.setName(name);
         dataSourceProperties.setUrl(properties.getUrl());
