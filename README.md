@@ -164,9 +164,9 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 ## usage
 ```yaml
 sqlhelper:
-  dynamicDataSource:
+  dynamic-datasource:
     enabled: true
-    dataSources:
+    datasources:
       - group: A
         name: master
         url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
@@ -230,16 +230,15 @@ sqlhelper:
         + [X] 支持多层嵌套。
         + [X] 可自定义AOP拦截位置。
     + [ ] Router
-        + [ ] master, slave 识别
-          + [ ] 基于 readonly 确定是否必定为slave
-          + [ ] 基于 primary 判断
-          + [ ] 如果没有primary属性则 基于 name 判断 
-        + [ ] master 路由算法
-          + [ ] first，即只取第一个
-        + [ ] slave 路由算法
+        + [X] master, slave 识别
+          + [X] 基于 readonly 确定是否必定为slave
+          + [X] 基于 primary 判断
+          + [X] 如果没有primary属性则 基于 name 判断 
+        + [X] master 路由算法
+          + [X] first，即只取第一个
+        + [X] slave 路由算法
           + [X] 随机路由
-          + [ ] 粘性会话路由
-          + [ ] 读写分离路由
+          + [X] 读写分离路由
           + [X] 负载均衡路由
         + [ ] 故障转移
 + [ ] 框架支持
