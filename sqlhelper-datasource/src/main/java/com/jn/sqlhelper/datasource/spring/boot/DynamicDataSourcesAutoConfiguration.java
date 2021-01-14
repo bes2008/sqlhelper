@@ -104,7 +104,7 @@ public class DynamicDataSourcesAutoConfiguration {
     @Bean(name = "dataSourcesFactoryBean")
     public ListFactoryBean dataSourcesFactoryBean(
             final CentralizedDataSourceFactory centralizedDataSourceFactory,
-            DynamicDataSourcesProperties namedDataSourcesProperties,
+            DynamicDataSourcesProperties dynamicDataSourcesProperties,
             // 该参数只是为了兼容Spring Boot 默认的 DataSource配置而已
             ObjectProvider<DataSource> springBootOriginDataSourceProvider,
             ObjectProvider<org.springframework.boot.autoconfigure.jdbc.DataSourceProperties> builtInDataSourceProperties,
@@ -123,7 +123,7 @@ public class DynamicDataSourcesAutoConfiguration {
             }
         }
 
-        List<DataSourceProperties> dataSourcePropertiesList = namedDataSourcesProperties.getDatasources();
+        List<DataSourceProperties> dataSourcePropertiesList = dynamicDataSourcesProperties.getDatasources();
 
         // spring bean factory
         final AbstractAutowireCapableBeanFactory beanFactory = ((AbstractAutowireCapableBeanFactory) applicationContext.getAutowireCapableBeanFactory());

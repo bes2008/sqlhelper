@@ -28,6 +28,7 @@ import java.util.UUID;
  * @since 3.4.1
  */
 public class SpringDataSourcePropertiesAdapter {
+
     public static com.jn.sqlhelper.datasource.config.DataSourceProperties adapt(DataSourceProperties properties) {
         com.jn.sqlhelper.datasource.config.DataSourceProperties dataSourceProperties = new com.jn.sqlhelper.datasource.config.DataSourceProperties();
         dataSourceProperties.setUsername(properties.getUsername());
