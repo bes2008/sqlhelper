@@ -47,7 +47,7 @@ public class DataSourceProperties implements Configuration {
     private String catalog;
     private String schema;
 
-    private boolean isReadOnly;
+    private boolean isReadonly;
     private boolean isAutoCommit;
     /**
      * 可选值:
@@ -88,7 +88,7 @@ public class DataSourceProperties implements Configuration {
         this.maxPoolSize = 10;
         this.minIdle = 10;
         this.isAutoCommit = true;
-        this.isReadOnly = false;
+        this.isReadonly = false;
     }
 
     public String getGroup() {
@@ -243,12 +243,12 @@ public class DataSourceProperties implements Configuration {
         this.validationQuery = Strings.getNullIfEmpty(validationQuery);
     }
 
-    public boolean isReadOnly() {
-        return this.isReadOnly;
+    public boolean isReadonly() {
+        return this.isReadonly;
     }
 
-    public void setReadOnly(final boolean readOnly) {
-        this.isReadOnly = readOnly;
+    public void setReadonly(final boolean readonly) {
+        this.isReadonly = readonly;
     }
 
     public String getTransactionIsolation() {
@@ -304,7 +304,7 @@ public class DataSourceProperties implements Configuration {
                 ", password='" + password + '\'' +
                 ", catalog='" + catalog + '\'' +
                 ", schema='" + schema + '\'' +
-                ", isReadOnly=" + isReadOnly +
+                ", isReadOnly=" + isReadonly +
                 ", isAutoCommit=" + isAutoCommit +
                 ", transactionIsolation='" + transactionIsolation + '\'' +
                 ", leakDetectionThresholdInMills=" + leakDetectionThresholdInMills +

@@ -16,7 +16,6 @@ package com.jn.sqlhelper.datasource.factory.druid;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.jn.langx.util.Maths;
-import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
@@ -62,7 +61,7 @@ public class AlibabaDruidDataSources {
         }
 
         props.setProperty(PROP_DEFAULTAUTOCOMMIT, "" + properties.isAutoCommit());
-        props.setProperty(PROP_DEFAULTREADONLY, "" + properties.isReadOnly());
+        props.setProperty(PROP_DEFAULTREADONLY, "" + properties.isReadonly());
         Isolation isolation = Transactions.getTransactionIsolation(properties.getTransactionIsolation());
         if (Transactions.isValidIsolation(isolation)) {
             props.setProperty(PROP_DEFAULTTRANSACTIONISOLATION, isolation.getName());

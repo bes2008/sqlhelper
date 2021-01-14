@@ -65,7 +65,7 @@ public class HikariDataSources {
             config.setTransactionIsolation(isolation.getDisplayText());
         }
 
-        config.setReadOnly(props.isReadOnly());
+        config.setReadOnly(props.isReadonly());
         return new HikariDataSource(config);
     }
 

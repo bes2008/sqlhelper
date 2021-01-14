@@ -59,7 +59,7 @@ public class DelegatingNamedDataSource implements NamedDataSource, Delegatable<D
     @Override
     public boolean isSlave() {
         if (properties != null) {
-            if (properties.isReadOnly() || !properties.isPrimary()) {
+            if (properties.isReadonly() || !properties.isPrimary()) {
                 return true;
             }
             return false;

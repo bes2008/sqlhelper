@@ -66,7 +66,7 @@ public class C3p0DataSources {
             }
 
             props.setProperty(PROP_DEFAULT_AUTO_COMMIT, "" + properties.isAutoCommit());
-            props.setProperty(PROP_DEFAULT_READ_ONLY, "" + properties.isReadOnly());
+            props.setProperty(PROP_DEFAULT_READ_ONLY, "" + properties.isReadonly());
             Isolation isolation = Transactions.getTransactionIsolation(properties.getTransactionIsolation());
             if (Transactions.isValidIsolation(isolation)) {
                 props.setProperty(PROP_DEFAULT_TRANSACTION_ISOLATION, properties.getTransactionIsolation());

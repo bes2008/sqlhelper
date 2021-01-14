@@ -15,7 +15,6 @@
 package com.jn.sqlhelper.datasource.factory.dbcp2;
 
 import com.jn.langx.util.Maths;
-import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
@@ -64,7 +63,7 @@ public class Dbcp2DataSources {
         }
 
         props.setProperty(PROP_DEFAULT_AUTO_COMMIT, "" + properties.isAutoCommit());
-        props.setProperty(PROP_DEFAULT_READ_ONLY, "" + properties.isReadOnly());
+        props.setProperty(PROP_DEFAULT_READ_ONLY, "" + properties.isReadonly());
         Isolation isolation = Transactions.getTransactionIsolation(properties.getTransactionIsolation());
         if (Transactions.isValidIsolation(isolation)) {
             props.setProperty(PROP_DEFAULT_TRANSACTION_ISOLATION, isolation.getName());
