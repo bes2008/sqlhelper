@@ -41,7 +41,7 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |sqlhelper-dialect | 1.0+              |1.6+ |  |the core （绝大部分功能都离不开它）|
 |sqlhelper-cli | 2.0+                  |1.8+ | | CLI 命令行工具 |
 |sqlhelper-cli-assembly | 2.0+         |1.8+ | |为 CLI 命令行工具 提供打包功能|
-|sqlhelper-mybatis | 1.0+              |1.6+ | |提供对MyBatis的支持 (主要包括：通用分页、通用批量操作) |
+|sqlhelper-mybatis | 1.0+              |1.6+ | |提供对MyBatis的支持 (主要包括：通用分页、通用批量操作、多数据源) |
 |sqlhelper-mybatis-spring-boot | 1.0+  |1.6+ | | 为MyBatis + SqlHelper 提供了Spring Boot 快速启动|
 |sqlhelper-mybatis-over-pagehelper|1.0+|1.6+ | | 引入它就可以无缝的从 ***mybatis-pagehelper*** 迁移到 SqlHelper|
 |sqlhelper-jfinal  | 1.2+              |1.6+ |4.3+ | 对国产框架jfinal支持 (主要包括：通用分页) |
