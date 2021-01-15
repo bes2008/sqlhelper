@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.ebean;
 
+import com.jn.langx.util.Numbers;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.DialectRegistry;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
@@ -55,7 +56,7 @@ public class EBeanCommonSqlLimiter implements SqlLimiter {
         sb.append(dbSql);
 
         RowSelection rowSelection = new RowSelection();
-        rowSelection.setOffset(Long.valueOf(request.getFirstRow()));
+        rowSelection.setOffset(Numbers.toLong(request.getFirstRow()));
         rowSelection.setLimit(request.getMaxRows());
         String sql = instrumentor.instrumentLimitSql(dialect, sb.toString(), rowSelection);
         sql = request.getDbPlatform().completeSql(sql, request.getOrmQuery());

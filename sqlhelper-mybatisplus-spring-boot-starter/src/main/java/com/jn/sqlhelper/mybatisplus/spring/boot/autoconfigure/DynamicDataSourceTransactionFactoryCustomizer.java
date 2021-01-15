@@ -18,9 +18,11 @@ import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.jn.sqlhelper.datasource.NamedDataSource;
+import com.jn.sqlhelper.datasource.spring.boot.DynamicTransactionAutoConfiguration;
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DynamicDataSourceManagedTransactionFactory;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.transaction.TransactionFactory;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -28,8 +30,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import javax.sql.DataSource;
 
 @org.springframework.context.annotation.Configuration
-@ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true")
 @ConditionalOnBean(name = "dynamicDataSourceTransactionAdvisor")
+@AutoConfigureAfter(DynamicTransactionAutoConfiguration.class)
 @AutoConfigureBefore(MybatisPlusAutoConfiguration.class)
 public class DynamicDataSourceTransactionFactoryCustomizer implements ConfigurationCustomizer {
     @Override

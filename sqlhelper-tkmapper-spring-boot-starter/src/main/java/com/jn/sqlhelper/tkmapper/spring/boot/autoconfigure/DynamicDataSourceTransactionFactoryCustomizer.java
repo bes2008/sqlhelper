@@ -15,10 +15,12 @@
 package com.jn.sqlhelper.tkmapper.spring.boot.autoconfigure;
 
 import com.jn.sqlhelper.datasource.NamedDataSource;
+import com.jn.sqlhelper.datasource.spring.boot.DynamicTransactionAutoConfiguration;
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DynamicDataSourceManagedTransactionFactory;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.transaction.TransactionFactory;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -32,6 +34,7 @@ import javax.sql.DataSource;
 @ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
 @ConditionalOnBean(name = "dynamicDataSourceTransactionAdvisor")
 @AutoConfigureBefore(MapperAutoConfiguration.class)
+@AutoConfigureAfter(DynamicTransactionAutoConfiguration.class)
 public class DynamicDataSourceTransactionFactoryCustomizer implements ConfigurationCustomizer {
     @Override
     public void customize(Configuration configuration) {
