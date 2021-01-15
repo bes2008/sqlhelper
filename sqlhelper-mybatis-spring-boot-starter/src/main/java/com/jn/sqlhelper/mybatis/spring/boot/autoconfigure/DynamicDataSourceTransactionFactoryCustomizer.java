@@ -36,15 +36,20 @@ public class DynamicDataSourceTransactionFactoryCustomizer implements Configurat
     public void customize(Configuration configuration) {
         Environment oldEnv = configuration.getEnvironment();
         if (oldEnv != null) {
-            String id = oldEnv.getId();
-            DataSource dataSource = oldEnv.getDataSource();
-            if (dataSource instanceof NamedDataSource) {
-                id = ((NamedDataSource) dataSource).getDataSourceKey().getId();
-            }
 
-            TransactionFactory transactionFactory = new DynamicDataSourceManagedTransactionFactory();
-            Environment newEnv = new Environment(id, transactionFactory, dataSource);
-            configuration.setEnvironment(newEnv);
+            boolean replaceIt = oldEnv.getTransactionFactory() == null || !(oldEnv.getTransactionFactory() instanceof DynamicDataSourceManagedTransactionFactory);
+            if (replaceIt) {
+
+                String id = oldEnv.getId();
+                DataSource dataSource = oldEnv.getDataSource();
+                if (dataSource instanceof NamedDataSource) {
+                    id = ((NamedDataSource) dataSource).getDataSourceKey().getId();
+                }
+
+                TransactionFactory transactionFactory = new DynamicDataSourceManagedTransactionFactory();
+                Environment newEnv = new Environment(id, transactionFactory, dataSource);
+                configuration.setEnvironment(newEnv);
+            }
         }
     }
 }
