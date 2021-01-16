@@ -90,7 +90,7 @@
         <spring.boot.version>1.5.22.RELEASE</spring.boot.version>
         <spring.version>4.3.25.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
-        <easyjson.version>3.0.4</easyjson.version>
+        <easyjson.version>3.1.1</easyjson.version>
         <langx-java.version>3.3.2</langx-java.version>
         <agileway.version>2.2.6</agileway.version>
 
@@ -143,6 +143,7 @@
                 <groupId>com.github.fangjinuo.easyjson</groupId>
                 <artifactId>easyjson-core</artifactId>
                 <version>${easyjson.version}</version>
+                <scope>provided</scope>
                 <exclusions>
                     <exclusion>
                         <groupId>com.github.fangjinuo.langx</groupId>
@@ -154,6 +155,7 @@
                 <groupId>com.github.fangjinuo.easyjson</groupId>
                 <artifactId>easyjson-jackson</artifactId>
                 <version>${easyjson.version}</version>
+                <scope>provided</scope>
                 <exclusions>
                     <exclusion>
                         <groupId>com.fasterxml.jackson.core</groupId>
@@ -276,6 +278,7 @@
                 <groupId>com.github.fangjinuo.langx</groupId>
                 <artifactId>langx-java</artifactId>
                 <version>${langx-java.version}</version>
+                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -288,11 +291,13 @@
         <dependency>
             <groupId>com.github.fangjinuo.easyjson</groupId>
             <artifactId>easyjson-core</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.github.fangjinuo.langx</groupId>
             <artifactId>langx-java</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
