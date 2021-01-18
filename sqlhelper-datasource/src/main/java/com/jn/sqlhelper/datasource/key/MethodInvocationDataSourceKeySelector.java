@@ -225,12 +225,15 @@ public class MethodInvocationDataSourceKeySelector implements DataSourceRegistry
      */
     public static void setCurrent(DataSourceKey key) {
         Preconditions.checkNotNull(key);
+        logger.warn("set {}", key);
         CURRENT_SELECTED.set(key);
         addChoice(key);
     }
 
     public static DataSourceKey getCurrent() {
-        return CURRENT_SELECTED.get();
+        DataSourceKey key = CURRENT_SELECTED.get();
+        logger.warn("get {}", key);
+        return key;
     }
 
     /**
@@ -238,6 +241,7 @@ public class MethodInvocationDataSourceKeySelector implements DataSourceRegistry
      */
     public static void removeCurrent() {
         DataSourceKey current = getCurrent();
+        logger.warn("remove {}", current);
         CURRENT_SELECTED.reset();
         removeChoice(current);
     }
