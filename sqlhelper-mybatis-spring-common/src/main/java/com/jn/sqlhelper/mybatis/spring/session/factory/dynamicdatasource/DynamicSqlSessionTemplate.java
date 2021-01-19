@@ -15,6 +15,7 @@
 package com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource;
 
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.reflect.Reflects;
@@ -125,7 +126,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
             DynamicSqlSessionFactory dynamicSqlSessionFactory = DynamicSqlSessionTemplate.this.getDynamicSqlSessionFactory();
             @NonNull
             DataSourceKey key = MethodInvocationDataSourceKeySelector.getCurrent();
-
+            Preconditions.checkNotNull(key, "the selected datasource key is null");
             DelegatingSqlSessionFactory sqlSessionFactory = dynamicSqlSessionFactory.getDelegatingSqlSessionFactory();
             ExecutorType executorType = sqlSessionFactory.getConfiguration().getDefaultExecutorType();
             PersistenceExceptionTranslator exceptionTranslator = sqlSessionFactory.getPersistenceExceptionTranslator();
@@ -147,7 +148,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
                 sqlSession = getSqlSession(sqlSessionFactory, executorType, exceptionTranslator);
 
                 // 当改调用发生在sqlhelper transaction manager 范围内时，需要注册
-                if (key != null && transaction != null) {
+                if (transaction != null) {
                     TransactionThreadContext.bindTransactionResource(key, new SqlSessionTransactionalResource(Reflects.getMethodString(method), sqlSession, sqlSessionFactory));
                 }
             }
