@@ -129,15 +129,29 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
             DelegatingSqlSessionFactory sqlSessionFactory = dynamicSqlSessionFactory.getDelegatingSqlSessionFactory();
             ExecutorType executorType = sqlSessionFactory.getConfiguration().getDefaultExecutorType();
             PersistenceExceptionTranslator exceptionTranslator = sqlSessionFactory.getPersistenceExceptionTranslator();
-            // 这个是实际的 sqlSession
-            SqlSession sqlSession = getSqlSession(sqlSessionFactory, executorType, exceptionTranslator);
 
 
             Transaction transaction = TransactionThreadContext.get();
-            // 当改调用发生在sqlhelper transaction manager 范围内时，需要注册
-            if (key != null && transaction != null) {
-                TransactionThreadContext.bindTransactionResource(key, new SqlSessionTransactionalResource(Reflects.getMethodString(method), sqlSession, sqlSessionFactory));
+
+            // 这个是实际的 sqlSession
+            SqlSession sqlSession = null;
+
+            // 优先从当前事务里获取连接
+            if (transaction != null) {
+                SqlSessionTransactionalResource resource = (SqlSessionTransactionalResource) transaction.getResource(key);
+                if (resource != null) {
+                    sqlSession = resource.getSession();
+                }
             }
+            if (sqlSession == null) {
+                sqlSession = getSqlSession(sqlSessionFactory, executorType, exceptionTranslator);
+
+                // 当改调用发生在sqlhelper transaction manager 范围内时，需要注册
+                if (key != null && transaction != null) {
+                    TransactionThreadContext.bindTransactionResource(key, new SqlSessionTransactionalResource(Reflects.getMethodString(method), sqlSession, sqlSessionFactory));
+                }
+            }
+
             // 判断 sqlSession 是否使用了事务管理
             boolean isSqlSessionTransactional = false;
             try {
@@ -149,7 +163,6 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
                     // 判断 sqlSession 是否使用了 SqlHelper DynamicDataSource 事务管理
 
                     if (key != null) {
-
                         if (transaction != null) {
                             isSqlSessionTransactional = transaction.hasResource(key);
                         }

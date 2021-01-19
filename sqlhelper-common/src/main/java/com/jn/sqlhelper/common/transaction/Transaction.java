@@ -77,6 +77,10 @@ public class Transaction {
         return this.resources;
     }
 
+    public TransactionalResource getResource(Object key) {
+        return this.resources.get(key);
+    }
+
     @Override
     public String toString() {
         return this.definition.toString();

@@ -56,6 +56,7 @@ public class TransactionAops {
             }
             return ret;
         } catch (Throwable ex) {
+            logger.error(ex.getMessage(), ex);
             boolean rollback = transaction.isRollbackOnly();
             if (!rollback) {
                 rollback = definition.rollbackOn(ex);
@@ -77,8 +78,8 @@ public class TransactionAops {
         } finally {
             if (!nested) {
                 TransactionThreadContext.unbind();
+                transaction.clearResources();
             }
-            transaction.clearResources();
         }
     }
 
