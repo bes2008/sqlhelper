@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.datasource.config;
 
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.invocation.aop.expression.AspectJExpressionPointcutAdvisorProperties;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.collection.Collects;
@@ -52,6 +53,27 @@ public class DynamicDataSourcesProperties {
      * 整个工程中，需要启用自动化事务管理的地方，都有包含在此拦截器里
      */
     private AspectJExpressionPointcutAdvisorProperties transaction = new AspectJExpressionPointcutAdvisorProperties();
+
+    @Nullable
+    private String publicKey;
+    @Nullable
+    private String privateKey;
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
 
     public boolean isEnabled() {
         return enabled;
