@@ -19,13 +19,14 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.NotEmpty;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.exception.IllegalPropertyException;
+import com.jn.langx.security.exception.SecurityException;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
+import com.jn.sqlhelper.common.security.DataSourcePropertiesCipherer;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
-import com.jn.sqlhelper.datasource.config.DataSourcePropertiesCipherer;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -206,6 +207,10 @@ public class DataSources {
         }
     }
 
+    public static String decrypt(@Nullable DataSourcePropertiesCipherer cipherer, @NotEmpty String encryptedBase64Text) {
+        return decrypt(cipherer, encryptedBase64Text, false);
+    }
+
     /**
      * 用于对 username, password 解密
      *
@@ -214,7 +219,7 @@ public class DataSources {
      * @return
      * @since 3.4.5
      */
-    public static String decrypt(@Nullable DataSourcePropertiesCipherer cipherer, @NotEmpty String encryptedBase64Text) {
+    public static String decrypt(@Nullable DataSourcePropertiesCipherer cipherer, @NotEmpty String encryptedBase64Text, boolean loggerError) {
         if (Strings.isBlank(encryptedBase64Text)) {
             return null;
         }
@@ -224,9 +229,14 @@ public class DataSources {
         try {
             return cipherer.decrypt(encryptedBase64Text);
         } catch (IllegalArgumentException ex) {
+            if (loggerError) {
+                logger.warn(ex.getMessage(), ex);
+            }
             return encryptedBase64Text;
         } catch (SecurityException ex) {
-            logger.warn(ex.getMessage(), ex);
+            if (loggerError) {
+                logger.warn(ex.getMessage(), ex);
+            }
             return encryptedBase64Text;
         }
     }

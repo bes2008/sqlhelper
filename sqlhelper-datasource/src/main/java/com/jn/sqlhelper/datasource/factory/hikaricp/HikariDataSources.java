@@ -22,7 +22,7 @@ import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
-import com.jn.sqlhelper.datasource.config.DataSourcePropertiesCipherer;
+import com.jn.sqlhelper.common.security.DataSourcePropertiesCipherer;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;

@@ -37,6 +37,11 @@
             <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.fangjinuo.agileway</groupId>
             <artifactId>agileway-aop</artifactId>
             <version>${agileway.version}</version>

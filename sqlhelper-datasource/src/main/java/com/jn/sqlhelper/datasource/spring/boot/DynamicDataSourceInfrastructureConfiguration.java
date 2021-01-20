@@ -16,9 +16,11 @@ package com.jn.sqlhelper.datasource.spring.boot;
 
 import com.jn.langx.util.ClassLoaders;
 import com.jn.langx.util.Strings;
+import com.jn.sqlhelper.common.security.DataSourcePropertiesCipherer;
+import com.jn.sqlhelper.common.security.DataSourcePropertiesRsaCipherer;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
-import com.jn.sqlhelper.datasource.config.DataSourcePropertiesCipherer;
-import com.jn.sqlhelper.datasource.config.DataSourcePropertiesRsaCipherer;
+import com.jn.sqlhelper.datasource.DataSources;
+import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.config.DynamicDataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
@@ -29,18 +31,21 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+
+import java.util.List;
 
 /**
  * @since 3.4.5
  */
 @Configuration
+@EnableConfigurationProperties(org.springframework.boot.autoconfigure.jdbc.DataSourceProperties.class)
 @AutoConfigureBefore(DataSourceAutoConfiguration.class)
 public class DynamicDataSourceInfrastructureConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourceInfrastructureConfiguration.class);
-
 
     /**
      * @since 3.4.0
@@ -68,7 +73,8 @@ public class DynamicDataSourceInfrastructureConfiguration {
      */
     @Bean
     @ConfigurationProperties(prefix = "sqlhelper.dynamic-datasource")
-    public DynamicDataSourcesProperties namedDataSourcesProperties(Environment environment) {
+    public DynamicDataSourcesProperties namedDataSourcesProperties(Environment environment,
+                                                                   org.springframework.boot.autoconfigure.jdbc.DataSourceProperties dataSourceProperties) {
         String keyChoicesPointcutExpression = environment.getProperty("sqlhelper.dynamic-datasource.key-choices.expression");
         if (Strings.isNotBlank(keyChoicesPointcutExpression)) {
             String requiredClass = "com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorBuilder";
@@ -89,9 +95,15 @@ public class DynamicDataSourceInfrastructureConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public DataSourcePropertiesCipherer dataSourcePropertiesCipherer(ObjectProvider<DynamicDataSourcesProperties> dynamicDataSourcesPropertiesProvider) {
+    public DataSourcePropertiesCipherer dataSourcePropertiesCipherer(
+            ObjectProvider<DynamicDataSourcesProperties> dynamicDataSourcesPropertiesObjectProvider,
+            // 由于 Spring 的构建顺序的原因，这里不能去直接使用 Spring Boot 里的DataSourceProperties, 用了也没有意义
+            ObjectProvider<org.springframework.boot.autoconfigure.jdbc.DataSourceProperties> dataSourcePropertiesObjectProvider) {
+
         DataSourcePropertiesRsaCipherer cipherer = new DataSourcePropertiesRsaCipherer();
-        DynamicDataSourcesProperties dynamicDataSourcesProperties = dynamicDataSourcesPropertiesProvider.getIfAvailable();
+
+
+        DynamicDataSourcesProperties dynamicDataSourcesProperties = dynamicDataSourcesPropertiesObjectProvider.getIfAvailable();
         if (dynamicDataSourcesProperties != null) {
             if (Strings.isNotBlank(dynamicDataSourcesProperties.getPublicKey())) {
                 cipherer.setPublicKey(dynamicDataSourcesProperties.getPublicKey());
@@ -99,7 +111,41 @@ public class DynamicDataSourceInfrastructureConfiguration {
             if (Strings.isNotBlank(dynamicDataSourcesProperties.getPrivateKey())) {
                 cipherer.setPrivateKey(dynamicDataSourcesProperties.getPrivateKey());
             }
+
+            // 直接就开始进行 解密操作
+            List<DataSourceProperties> dataSourcePropertiesList = dynamicDataSourcesProperties.getDatasources();
+            if (dataSourcePropertiesList != null && !dataSourcePropertiesList.isEmpty()) {
+                for (DataSourceProperties dataSourceProperties : dataSourcePropertiesList) {
+                    String username = dataSourceProperties.getUsername();
+                    if (Strings.isNotBlank(username)) {
+                        username = DataSources.decrypt(cipherer, username);
+                        dataSourceProperties.setUsername(username);
+                    }
+                    String password = dataSourceProperties.getPassword();
+                    if (Strings.isNotBlank(password)) {
+                        password = DataSources.decrypt(cipherer, password);
+                        dataSourceProperties.setPassword(password);
+                    }
+                }
+            }
+
         }
+
+        // 对Spring内置属性进行解密操作
+        org.springframework.boot.autoconfigure.jdbc.DataSourceProperties springBuiltinDataSourceProperties = dataSourcePropertiesObjectProvider.getIfAvailable();
+        if (springBuiltinDataSourceProperties != null) {
+            String username = springBuiltinDataSourceProperties.getUsername();
+            if (Strings.isNotBlank(username)) {
+                username = DataSources.decrypt(cipherer, username);
+                springBuiltinDataSourceProperties.setUsername(username);
+            }
+            String password = springBuiltinDataSourceProperties.getPassword();
+            if (Strings.isNotBlank(password)) {
+                password = DataSources.decrypt(cipherer, password);
+                springBuiltinDataSourceProperties.setPassword(password);
+            }
+        }
+
         return cipherer;
     }
 

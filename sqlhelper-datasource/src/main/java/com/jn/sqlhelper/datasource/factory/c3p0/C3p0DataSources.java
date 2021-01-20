@@ -20,7 +20,7 @@ import com.jn.langx.util.Throwables;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
-import com.jn.sqlhelper.datasource.config.DataSourcePropertiesCipherer;
+import com.jn.sqlhelper.common.security.DataSourcePropertiesCipherer;
 import com.mchange.v2.c3p0.DataSources;
 
 import javax.sql.DataSource;

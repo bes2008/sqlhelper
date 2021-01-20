@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import com.jn.sqlhelper.datasource.config.DataSourcePropertiesRsaCipherer;
+import com.jn.sqlhelper.common.security.DataSourcePropertiesRsaCipherer;
 import org.junit.Assert;
 import org.junit.Test;
 

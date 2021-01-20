@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.config;
+package com.jn.sqlhelper.common.security;
 
 import com.jn.langx.annotation.NotEmpty;
 import com.jn.langx.codec.base64.Base64;
@@ -92,6 +92,9 @@ public class DataSourcePropertiesRsaCipherer implements DataSourcePropertiesCiph
     @Override
     public String encrypt(@NotEmpty String text) {
         Preconditions.checkNotEmpty(text);
+        if (publicKey == null) {
+            init();
+        }
         Cipher cipher = Ciphers.createCipher(Ciphers.createAlgorithmTransformation(transformation), null, Cipher.ENCRYPT_MODE, publicKey, null);
         byte[] encrypted = Ciphers.encrypt(cipher, text.getBytes(Charsets.UTF_8));
         return Base64.encodeBase64String(encrypted);
@@ -100,6 +103,9 @@ public class DataSourcePropertiesRsaCipherer implements DataSourcePropertiesCiph
     @Override
     public String decrypt(@NotEmpty String encryptedBase64Text) {
         Preconditions.checkNotEmpty(encryptedBase64Text);
+        if (privateKey == null) {
+            init();
+        }
         Cipher cipher = Ciphers.createCipher(Ciphers.createAlgorithmTransformation(transformation), null, Cipher.DECRYPT_MODE, privateKey, null);
         byte[] originData = Ciphers.decrypt(cipher, Base64.decodeBase64(encryptedBase64Text));
         return new String(originData, Charsets.UTF_8);

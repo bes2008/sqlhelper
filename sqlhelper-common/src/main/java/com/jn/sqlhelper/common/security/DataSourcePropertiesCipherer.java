@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.config;
+package com.jn.sqlhelper.common.security;
 
 
 import com.jn.langx.security.cipher.StringCipherer;
