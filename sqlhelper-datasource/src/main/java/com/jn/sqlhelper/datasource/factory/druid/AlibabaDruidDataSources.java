@@ -16,6 +16,7 @@ package com.jn.sqlhelper.datasource.factory.druid;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.jn.langx.util.Maths;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
@@ -41,12 +42,12 @@ public class AlibabaDruidDataSources {
         }
 
         String username = properties.getUsername();
-        if (username != null) {
+        if (Strings.isNotBlank(username)) {
             props.setProperty(PROP_USERNAME, username);
         }
 
         String password = properties.getPassword();
-        if (password != null) {
+        if (Strings.isNotBlank(password)) {
             props.setProperty(PROP_PASSWORD, password);
         }
 

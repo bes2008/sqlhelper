@@ -15,6 +15,7 @@
 package com.jn.sqlhelper.datasource.factory.hikaricp;
 
 import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
@@ -46,8 +47,14 @@ public class HikariDataSources {
         }
         config.setDriverClassName(props.getDriverClassName());
         config.setJdbcUrl(props.getUrl());
-        config.setUsername(props.getUsername());
-        config.setPassword(props.getPassword());
+        String username = props.getUsername();
+        if (Strings.isNotBlank(username)) {
+            config.setUsername(username);
+        }
+        String password = props.getPassword();
+        if (Strings.isNotBlank(password)) {
+            config.setPassword(password);
+        }
         config.setPoolName(props.getName());
         config.setCatalog(props.getCatalog());
         Reflects.invokePublicMethod(config, "setSchema", new Class[]{String.class}, new Object[]{props.getSchema()}, true, false);
