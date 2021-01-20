@@ -21,6 +21,7 @@ import com.jn.sqlhelper.datasource.key.router.RandomRouter;
 import com.jn.sqlhelper.datasource.key.router.RoundRobinRouter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +32,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
 @Configuration
-@AutoConfigureAfter(DynamicDataSourcesAutoConfiguration.class)
+@AutoConfigureBefore(DynamicDataSourcesAutoConfiguration.class)
 public class DynamicDataSourceLoadBalanceAutoConfiguration {
     @Bean(name = "dataSourceRoundRobinWeighter")
     @ConditionalOnMissingBean(name = "dataSourceRoundRobinWeighter")

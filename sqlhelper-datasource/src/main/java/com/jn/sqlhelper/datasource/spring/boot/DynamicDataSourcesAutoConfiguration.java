@@ -14,7 +14,6 @@
 
 package com.jn.sqlhelper.datasource.spring.boot;
 
-import com.jn.langx.util.ClassLoaders;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
@@ -31,11 +30,10 @@ import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.config.DynamicDataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
-import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.MethodDataSourceKeyRegistry;
+import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 import com.jn.sqlhelper.datasource.key.WriteOperationMethodMatcher;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyAnnotationParser;
-import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
 import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,11 +43,9 @@ import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFact
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -61,46 +57,14 @@ import java.util.Map;
  * @since 3.4.0
  */
 @Configuration
-@AutoConfigureAfter(DataSourceAutoConfiguration.class)
+@AutoConfigureAfter({DynamicDataSourceInfrastructureConfiguration.class, DataSourceAutoConfiguration.class, DynamicDataSourceLoadBalanceAutoConfiguration.class})
 @ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
 public class DynamicDataSourcesAutoConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourcesAutoConfiguration.class);
 
-
-    @Bean
-    public DataSourceRegistry dataSourceRegistry(ObjectProvider<DataSourceKeyDataSourceParser> dataSourceKeyParserProvider) {
-        DataSourceRegistry dataSourceRegistry = new DataSourceRegistry();
-        DataSourceKeyDataSourceParser dataSourceKeyParser = dataSourceKeyParserProvider.getIfAvailable();
-        dataSourceRegistry.setKeyParser(dataSourceKeyParser);
-        return dataSourceRegistry;
-    }
-
-    @Bean
-    public CentralizedDataSourceFactory centralizedDataSourceFactory(DataSourceRegistry dataSourceRegistry) {
-        CentralizedDataSourceFactory factory = new CentralizedDataSourceFactory();
-        factory.setRegistry(dataSourceRegistry);
-        return factory;
-    }
-
-    @Bean
-    @ConfigurationProperties(prefix = "sqlhelper.dynamic-datasource")
-    public DynamicDataSourcesProperties namedDataSourcesProperties(Environment environment) {
-        String keyChoicesPointcutExpression = environment.getProperty("sqlhelper.dynamic-datasource.key-choices.expression");
-        if (Strings.isNotBlank(keyChoicesPointcutExpression)) {
-            String requiredClass = "com.jn.langx.invocation.aop.expression.AspectJExpressionPointcutAdvisorProperties";
-            if (!ClassLoaders.hasClass(requiredClass, this.getClass().getClassLoader())) {
-                StringBuilder log = new StringBuilder("The configuration property 'sqlhelper.dynamicDataSource.key-choices.expression' has specified, but can't find the class: '" + requiredClass + "', you should import the following jars to your classpath:\n")
-                        .append("\t1) com.github.fangjinuo.agilway:agileway-spring:${agileway.version}.jar\n")
-                        .append("\t2) org.springframework:spring-aop:${spring.version}.jar\n")
-                        .append("\t3) org.aspectj:aspectjweaver:${aspectj.version}.jar\n")
-                        .append("\t4) com.github.fangjinuo.langx:langx-java:${langx-java.version}.jar\n");
-                logger.warn(log.toString());
-            }
-        }
-        return new DynamicDataSourcesProperties();
-    }
-
-
+    /**
+     * @since 3.4.0
+     */
     @Bean(name = "dataSourcesFactoryBean")
     public ListFactoryBean dataSourcesFactoryBean(
             final CentralizedDataSourceFactory centralizedDataSourceFactory,
@@ -170,6 +134,7 @@ public class DynamicDataSourcesAutoConfiguration {
         dataSourcesFactoryBean.setSourceList(dataSources);
         return dataSourcesFactoryBean;
     }
+
 
     @Bean
     public MethodDataSourceKeyRegistry dataSourceKeyRegistry(ObjectProvider<List<DataSourceKeyAnnotationParser>> dataSourceKeyAnnotationParsersProvider) {
