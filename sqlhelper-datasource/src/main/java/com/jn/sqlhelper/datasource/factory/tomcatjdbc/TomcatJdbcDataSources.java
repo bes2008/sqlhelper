@@ -14,12 +14,15 @@
 
 package com.jn.sqlhelper.datasource.factory.tomcatjdbc;
 
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Maths;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
+import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
+import com.jn.sqlhelper.datasource.config.DataSourcePropertiesCipherer;
 import org.apache.tomcat.jdbc.pool.DataSourceFactory;
 
 import javax.sql.DataSource;
@@ -30,12 +33,21 @@ import static com.jn.sqlhelper.datasource.factory.tomcatjdbc.TomcatJdbcDataSourc
 /**
  * 提供基于 tomcat jdbc pool 的DataSource 构建工具
  * ref: http://tomcat.apache.org/tomcat-8.5-doc/jdbc-pool.html
+ *
+ * @since 3.4.0
  */
 public class TomcatJdbcDataSources {
     private TomcatJdbcDataSources() {
     }
 
     public static DataSource createDataSource(final DataSourceProperties properties) {
+        return createDataSource(properties, null);
+    }
+
+    /**
+     * @since 3.4.5
+     */
+    public static DataSource createDataSource(final DataSourceProperties properties, DataSourcePropertiesCipherer cipherer) {
         DataSourceFactory dsf = new DataSourceFactory();
         Properties props = properties.getDriverProps();
         if (props == null) {
@@ -44,11 +56,13 @@ public class TomcatJdbcDataSources {
 
         String username = properties.getUsername();
         if (Strings.isNotBlank(username)) {
+            username = DataSources.decrypt(cipherer, username);
             props.setProperty(PROP_USERNAME, username);
         }
 
         String password = properties.getPassword();
         if (Strings.isNotBlank(password)) {
+            password = DataSources.decrypt(cipherer, password);
             props.setProperty(PROP_PASSWORD, password);
         }
 
@@ -91,8 +105,16 @@ public class TomcatJdbcDataSources {
     }
 
     public static DataSource createDataSource(Properties properties) {
+        return createDataSource(properties, null);
+    }
+
+    /**
+     * @since 3.4.5
+     */
+    public static DataSource createDataSource(Properties properties, @Nullable DataSourcePropertiesCipherer cipherer) {
         try {
             DataSourceFactory dsf = new DataSourceFactory();
+            DataSources.decryptUsernamePassword(properties, cipherer);
             return dsf.createDataSource(properties);
         } catch (Exception ex) {
             throw Throwables.wrapAsRuntimeException(ex);

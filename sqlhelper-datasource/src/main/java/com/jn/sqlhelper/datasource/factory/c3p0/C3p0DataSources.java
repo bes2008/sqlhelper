@@ -20,6 +20,7 @@ import com.jn.langx.util.Throwables;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
+import com.jn.sqlhelper.datasource.config.DataSourcePropertiesCipherer;
 import com.mchange.v2.c3p0.DataSources;
 
 import javax.sql.DataSource;
@@ -37,6 +38,13 @@ public class C3p0DataSources {
     }
 
     public static DataSource createDataSource(final DataSourceProperties properties) {
+        return createDataSource(properties, null);
+    }
+
+    /**
+     * @since 3.4.5
+     */
+    public static DataSource createDataSource(final DataSourceProperties properties, DataSourcePropertiesCipherer cipherer) {
         try {
             DataSource ds_unpooled = DataSources.unpooledDataSource(properties.getUrl(), properties.getUsername(), properties.getPassword());
             Properties props = properties.getDriverProps();
@@ -48,11 +56,13 @@ public class C3p0DataSources {
 
             String username = properties.getUsername();
             if (Strings.isNotBlank(username)) {
+                username = com.jn.sqlhelper.datasource.DataSources.decrypt(cipherer, username);
                 props.setProperty(PROP_USER_NAME, username);
             }
 
             String password = properties.getPassword();
             if (Strings.isNotBlank(password)) {
+                password = com.jn.sqlhelper.datasource.DataSources.decrypt(cipherer, password);
                 props.setProperty(PROP_PASSWORD, password);
             }
 
@@ -93,8 +103,16 @@ public class C3p0DataSources {
     }
 
     public static DataSource createDataSource(Properties properties) {
+        return createDataSource(properties, null);
+    }
+
+    /**
+     * @since 3.4.5
+     */
+    public static DataSource createDataSource(Properties properties, DataSourcePropertiesCipherer cipherer) {
         try {
             DataSource ds_unpooled = DataSources.unpooledDataSource();
+            com.jn.sqlhelper.datasource.DataSources.decryptUsernamePassword(properties, cipherer);
             return DataSources.pooledDataSource(ds_unpooled, properties);
         } catch (Exception ex) {
             throw Throwables.wrapAsRuntimeException(ex);

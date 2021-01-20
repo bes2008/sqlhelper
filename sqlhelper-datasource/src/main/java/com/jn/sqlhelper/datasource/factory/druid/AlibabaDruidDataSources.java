@@ -20,7 +20,9 @@ import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
+import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
+import com.jn.sqlhelper.datasource.config.DataSourcePropertiesCipherer;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -30,12 +32,21 @@ import static com.alibaba.druid.pool.DruidDataSourceFactory.*;
 /**
  * 提供基于 hikaricp 的DataSource 构建工具
  * https://github.com/alibaba/druid/wiki/DruidDataSource%E9%85%8D%E7%BD%AE%E5%B1%9E%E6%80%A7%E5%88%97%E8%A1%A8
+ *
+ * @since 3.4.0
  */
 public class AlibabaDruidDataSources {
     private AlibabaDruidDataSources() {
     }
 
     public static DataSource createDataSource(DataSourceProperties properties) {
+        return createDataSource(properties, null);
+    }
+
+    /**
+     * @since 3.4.5
+     */
+    public static DataSource createDataSource(DataSourceProperties properties, DataSourcePropertiesCipherer cipherer) {
         Properties props = properties.getDriverProps();
         if (props == null) {
             props = new Properties();
@@ -43,11 +54,13 @@ public class AlibabaDruidDataSources {
 
         String username = properties.getUsername();
         if (Strings.isNotBlank(username)) {
+            username = DataSources.decrypt(cipherer, username);
             props.setProperty(PROP_USERNAME, username);
         }
 
         String password = properties.getPassword();
         if (Strings.isNotBlank(password)) {
+            password = DataSources.decrypt(cipherer, password);
             props.setProperty(PROP_PASSWORD, password);
         }
 
@@ -92,7 +105,16 @@ public class AlibabaDruidDataSources {
     }
 
     public static DataSource createDataSource(Properties properties) {
+        return createDataSource(properties, null);
+    }
+
+
+    /**
+     * @since 3.4.5
+     */
+    public static DataSource createDataSource(Properties properties, DataSourcePropertiesCipherer cipherer) {
         try {
+            DataSources.decryptUsernamePassword(properties, cipherer);
             return DruidDataSourceFactory.createDataSource(properties);
         } catch (Exception ex) {
             throw Throwables.wrapAsRuntimeException(ex);

@@ -19,7 +19,9 @@ import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
+import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
+import com.jn.sqlhelper.datasource.config.DataSourcePropertiesCipherer;
 import org.apache.commons.dbcp2.BasicDataSourceFactory;
 
 import javax.sql.DataSource;
@@ -37,19 +39,27 @@ public class Dbcp2DataSources {
     }
 
     public static DataSource createDataSource(DataSourceProperties properties) {
+        return createDataSource(properties,null);
+    }
+
+    /**
+     * @since 3.4.5
+     */
+    public static DataSource createDataSource(DataSourceProperties properties, DataSourcePropertiesCipherer cipherer) {
         Properties props = properties.getDriverProps();
         if (props == null) {
             props = new Properties();
         }
 
-
         String username = properties.getUsername();
         if (Strings.isNotBlank(username)) {
+            username = DataSources.decrypt(cipherer, username);
             props.setProperty(PROP_USER_NAME, username);
         }
 
         String password = properties.getPassword();
         if (Strings.isNotBlank(password)) {
+            password = DataSources.decrypt(cipherer, password);
             props.setProperty(PROP_PASSWORD, password);
         }
 
@@ -101,9 +111,17 @@ public class Dbcp2DataSources {
         }
     }
 
-    public static DataSource createDataSource(Properties props) {
+    public static DataSource createDataSource(Properties properties) {
+        return createDataSource(properties, null);
+    }
+
+    /**
+     * @since 3.4.5
+     */
+    public static DataSource createDataSource(Properties properties, DataSourcePropertiesCipherer cipherer) {
         try {
-            return BasicDataSourceFactory.createDataSource(props);
+            DataSources.decryptUsernamePassword(properties, cipherer);
+            return BasicDataSourceFactory.createDataSource(properties);
         } catch (Exception ex) {
             throw Throwables.wrapAsRuntimeException(ex);
         }

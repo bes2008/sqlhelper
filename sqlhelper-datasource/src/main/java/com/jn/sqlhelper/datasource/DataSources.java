@@ -16,6 +16,7 @@ package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Named;
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.NotEmpty;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.exception.IllegalPropertyException;
 import com.jn.langx.text.StringTemplates;
@@ -24,6 +25,7 @@ import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
+import com.jn.sqlhelper.datasource.config.DataSourcePropertiesCipherer;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.UUID;
 
 /**
@@ -185,5 +188,46 @@ public class DataSources {
             throw new IllegalPropertyException("group or name is empty or null");
         }
         throw new IllegalPropertyException("group or name is empty or null");
+    }
+
+    public static void decryptUsernamePassword(Properties driverProperties, @Nullable DataSourcePropertiesCipherer cipherer) {
+        if (cipherer == null) {
+            return;
+        }
+        String username = driverProperties.getProperty("username");
+        if (Strings.isNotBlank(username)) {
+            username = DataSources.decrypt(cipherer, username);
+            driverProperties.setProperty("username", username);
+        }
+        String password = driverProperties.getProperty("password");
+        if (Strings.isNotBlank(password)) {
+            password = DataSources.decrypt(cipherer, password);
+            driverProperties.setProperty("password", password);
+        }
+    }
+
+    /**
+     * 用于对 username, password 解密
+     *
+     * @param cipherer
+     * @param encryptedBase64Text
+     * @return
+     * @since 3.4.5
+     */
+    public static String decrypt(@Nullable DataSourcePropertiesCipherer cipherer, @NotEmpty String encryptedBase64Text) {
+        if (Strings.isBlank(encryptedBase64Text)) {
+            return null;
+        }
+        if (cipherer == null) {
+            return encryptedBase64Text;
+        }
+        try {
+            return cipherer.decrypt(encryptedBase64Text);
+        } catch (IllegalArgumentException ex) {
+            return encryptedBase64Text;
+        } catch (SecurityException ex) {
+            logger.warn(ex.getMessage(), ex);
+            return encryptedBase64Text;
+        }
     }
 }

@@ -14,12 +14,15 @@
 
 package com.jn.sqlhelper.datasource.factory.hikaricp;
 
+import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
+import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
+import com.jn.sqlhelper.datasource.config.DataSourcePropertiesCipherer;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
@@ -30,6 +33,7 @@ import java.util.Properties;
 
 /**
  * 提供基于 hikaricp 的DataSource 构建工具
+ * @since 3.4.0
  */
 public class HikariDataSources {
     private static final Logger logger = LoggerFactory.getLogger(HikariDataSources.class);
@@ -38,6 +42,13 @@ public class HikariDataSources {
     }
 
     public static DataSource createDataSource(final DataSourceProperties props) {
+        return createDataSource(props, null);
+    }
+
+    /**
+     * @since 3.4.5
+     */
+    public static DataSource createDataSource(final DataSourceProperties props, @Nullable DataSourcePropertiesCipherer cipherer) {
         Properties driverProps = props.getDriverProps();
         HikariConfig config = null;
         if (Emptys.isNotEmpty(driverProps)) {
@@ -49,10 +60,12 @@ public class HikariDataSources {
         config.setJdbcUrl(props.getUrl());
         String username = props.getUsername();
         if (Strings.isNotBlank(username)) {
+            username = DataSources.decrypt(cipherer, username);
             config.setUsername(username);
         }
         String password = props.getPassword();
         if (Strings.isNotBlank(password)) {
+            password = DataSources.decrypt(cipherer, password);
             config.setPassword(password);
         }
         config.setPoolName(props.getName());
@@ -77,8 +90,17 @@ public class HikariDataSources {
     }
 
     public static DataSource createDataSource(final Properties props) {
-        return new HikariDataSource(new HikariConfig(props));
+        return createDataSource(props, null);
     }
+
+    /**
+     * @since 3.4.5
+     */
+    public static DataSource createDataSource(final Properties properties, DataSourcePropertiesCipherer cipherer) {
+        DataSources.decryptUsernamePassword(properties, cipherer);
+        return new HikariDataSource(new HikariConfig(properties));
+    }
+
 
     public static DataSourceProperties toDataSourceProperties(Properties properties) {
         DataSourceProperties dataSourceProperties = new DataSourceProperties();
