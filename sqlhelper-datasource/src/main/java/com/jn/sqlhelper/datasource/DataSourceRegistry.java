@@ -16,21 +16,24 @@ package com.jn.sqlhelper.datasource;
 
 import com.jn.langx.Delegatable;
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.lifecycle.Initializable;
+import com.jn.langx.lifecycle.InitializationException;
 import com.jn.langx.registry.Registry;
 import com.jn.langx.text.StringTemplates;
-import com.jn.langx.util.Emptys;
-import com.jn.langx.util.Preconditions;
-import com.jn.langx.util.Strings;
+import com.jn.langx.util.*;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.concurrent.CommonThreadFactory;
 import com.jn.langx.util.concurrent.clhm.ConcurrentLinkedHashMap;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.function.Predicate2;
+import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.logging.Level;
 import com.jn.langx.util.logging.Loggers;
 import com.jn.langx.util.pattern.patternset.AntPathMatcher;
 import com.jn.langx.util.struct.Holder;
+import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
 import com.jn.sqlhelper.datasource.key.parser.RandomDataSourceKeyParser;
@@ -38,16 +41,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.util.Collections;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.*;
 
 /**
  * 这是一个支持 负载均衡的 DataSource 容器
  */
-public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
+public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, Initializable {
     private static final Logger logger = LoggerFactory.getLogger(DataSourceRegistry.class);
     /**
      * 可能是确切的值，也可能是个key pattern
@@ -66,24 +72,38 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
     /**
      * 用户在使用时，可能用一些不存在的Key
      */
-    private Set<DataSourceKey> nonExistDSKeys = new CopyOnWriteArraySet<DataSourceKey>();
-
-    /**
-     * 是否开启故障转移功能
-     */
-    private volatile boolean failover = true;
+    private final Set<DataSourceKey> nonExistDSKeys = new CopyOnWriteArraySet<DataSourceKey>();
 
     /**
      * 故障的key
      */
-    private Set<DataSourceKey> failKeys = new CopyOnWriteArraySet<DataSourceKey>();
+    private final Set<DataSourceKey> failKeys = new CopyOnWriteArraySet<DataSourceKey>();
+
+    private final ScheduledExecutorService healthCheckExecutor = new ScheduledThreadPoolExecutor(16, new CommonThreadFactory("SQLHelper-DataSource-HealthChecker", true));
+    private final Map<DataSourceKey, Future> healthCheckTaskTraceMap = new ConcurrentHashMap<DataSourceKey, Future>();
+    /**
+     * TimeUnit: seconds
+     * 健康检查的周期。
+     * <p>
+     * 如果大于0，则至少30。
+     * 如果小于等于0，则代表不开启健康检查
+     */
+    private int healthCheckTimeout = 30;
+    private boolean inited = false;
+
+    @Override
+    public void init() throws InitializationException {
+        this.inited = true;
+    }
 
     public void register(DataSourceKey key, DataSource dataSource) {
         Preconditions.checkNotEmpty(key, "the jdbc datasource key is null or empty");
         Preconditions.checkArgument(key.isAvailable(), "the jdbc datasource key is invalid: {}", key);
         Preconditions.checkNotNull(dataSource);
 
-        dataSourceRegistry.put(key, DataSources.toNamedDataSource(dataSource, key, null));
+        NamedDataSource namedDataSource = DataSources.toNamedDataSource(dataSource, key, null);
+        dataSourceRegistry.put(key, namedDataSource);
+
         if (primary == null && DataSources.DATASOURCE_PRIMARY_GROUP.equals(key.getGroup())) {
             primary = key;
         }
@@ -96,7 +116,43 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
             }
         }
 
+        enableHealthCheck(namedDataSource);
     }
+
+    private void enableHealthCheck(NamedDataSource namedDataSource) {
+        DataSourceKey key = namedDataSource.getDataSourceKey();
+        if (healthCheckTimeout > 0) {
+            // 此时认为数据源有变化
+            if (healthCheckTaskTraceMap.containsKey(key)) {
+                Future future = healthCheckTaskTraceMap.remove(key);
+                future.cancel(true);
+            }
+
+            Future future = healthCheckExecutor.scheduleWithFixedDelay(new HealthCheck(namedDataSource), healthCheckTimeout, healthCheckTimeout, TimeUnit.SECONDS);
+            healthCheckTaskTraceMap.put(key, future);
+        }
+    }
+
+    public void setHealthCheckTimeout(int healthCheckTimeout) {
+        Preconditions.checkState(!inited);
+        if (healthCheckTimeout > 0) {
+            this.healthCheckTimeout = Maths.max(30, healthCheckTimeout);
+        } else {
+            this.healthCheckTimeout = -1;
+        }
+    }
+
+    public int getHealthCheckTimeout() {
+        return healthCheckTimeout;
+    }
+
+    /**
+     * 是否开启故障转移功能
+     */
+    public boolean isFailoverEnabled() {
+        return this.healthCheckTimeout > 0;
+    }
+
 
     @Override
     public void register(DataSource dataSource) {
@@ -130,13 +186,13 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
 
         // 已确定的不存在的
         if (nonExistDSKeys.contains(groupKeyPattern)) {
-            return Collections.emptyList();
+            return Collects.emptyArrayList();
         }
 
         String name = groupKeyPattern.getName();
         if (!name.contains(DataSources.DATASOURCE_NAME_WILDCARD)) {
             addNonExistsDataSourceKey(groupKeyPattern);
-            return Collections.emptyList();
+            return Collects.emptyArrayList();
         }
 
         // 针对 key pattern 进行匹配
@@ -158,10 +214,10 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
         // 如果没有匹配到任何数据源，则加入不存在的 key pattern 序列
         if (Emptys.isEmpty(matched)) {
             addNonExistsDataSourceKey(groupKeyPattern);
-            return Collections.emptyList();
+            return Collects.emptyArrayList();
         }
 
-        if (failover) {
+        if (isFailoverEnabled()) {
             matched = Pipeline.of(matched).filter(new Predicate<DataSourceKey>() {
                 @Override
                 public boolean test(DataSourceKey dataSourceKey) {
@@ -234,7 +290,8 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
 
 
     public void setKeyParser(DataSourceKeyDataSourceParser keyParser) {
-        this.keyParser = keyParser;
+        Preconditions.checkState(!inited);
+        this.keyParser = Objs.useValueIfNull(keyParser, this.keyParser);
     }
 
     public NamedDataSource wrap(DataSource dataSource) {
@@ -274,17 +331,82 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource> {
         return dataSourceRegistry.size();
     }
 
-    public boolean isFailover() {
-        return failover;
-    }
-
-    public void setFailover(boolean failover) {
-        this.failover = failover;
-    }
-
 
     public List<DataSourceKey> allKeys() {
         return Collects.asList(dataSourceRegistry.keySet());
     }
 
+
+    /**
+     * 对数据源进行健康检查
+     *
+     * @param dataSource 要检查的数据源
+     * @return 是否正常
+     * @since 3.4.5
+     */
+    private boolean checkHealth(DataSource dataSource) {
+        boolean success = true;
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        boolean isAutoCommit = true;
+        try {
+            connection = dataSource.getConnection();
+            isAutoCommit = connection.getAutoCommit();
+            statement = connection.createStatement();
+            String validationQuery = "select 1";
+            if (dataSource instanceof NamedDataSource) {
+                DataSourceProperties dataSourceProperties = ((NamedDataSource) dataSource).getDataSourceProperties();
+                if (dataSourceProperties != null) {
+                    validationQuery = Strings.useValueIfBlank(dataSourceProperties.getValidationQuery(), validationQuery);
+                }
+            }
+            resultSet = statement.executeQuery(validationQuery);
+            if (!isAutoCommit) {
+                connection.commit();
+            }
+        } catch (SQLException exception) {
+            logger.error(exception.getMessage(), exception);
+            success = false;
+        } catch (Throwable ex) {
+            success = false;
+        } finally {
+            if (!success && connection != null && !isAutoCommit) {
+                try {
+                    connection.rollback();
+                } catch (Throwable ex) {
+                    logger.error(ex.getMessage(), ex);
+                }
+            }
+        }
+
+        if (resultSet != null) {
+            IOs.close(resultSet);
+        }
+        if (statement != null) {
+            IOs.close(statement);
+        }
+        if (connection != null) {
+            IOs.close(connection);
+        }
+        return success;
+    }
+
+    private class HealthCheck implements Runnable {
+        private NamedDataSource dataSource;
+
+        HealthCheck(NamedDataSource namedDataSource) {
+            this.dataSource = namedDataSource;
+        }
+
+        @Override
+        public void run() {
+            boolean health = checkHealth(dataSource);
+            if (health) {
+                failKeys.remove(dataSource.getDataSourceKey());
+            } else {
+                failKeys.add(dataSource.getDataSourceKey());
+            }
+        }
+    }
 }

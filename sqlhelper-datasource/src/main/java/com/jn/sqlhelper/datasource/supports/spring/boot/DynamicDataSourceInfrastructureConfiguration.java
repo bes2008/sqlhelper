@@ -51,17 +51,6 @@ public class DynamicDataSourceInfrastructureConfiguration {
      * @since 3.4.0
      */
     @Bean
-    public DataSourceRegistry dataSourceRegistry(ObjectProvider<DataSourceKeyDataSourceParser> dataSourceKeyParserProvider) {
-        DataSourceRegistry dataSourceRegistry = new DataSourceRegistry();
-        DataSourceKeyDataSourceParser dataSourceKeyParser = dataSourceKeyParserProvider.getIfAvailable();
-        dataSourceRegistry.setKeyParser(dataSourceKeyParser);
-        return dataSourceRegistry;
-    }
-
-    /**
-     * @since 3.4.0
-     */
-    @Bean
     public CentralizedDataSourceFactory centralizedDataSourceFactory(DataSourceRegistry dataSourceRegistry) {
         CentralizedDataSourceFactory factory = new CentralizedDataSourceFactory();
         factory.setRegistry(dataSourceRegistry);
@@ -89,6 +78,21 @@ public class DynamicDataSourceInfrastructureConfiguration {
         }
         return new DynamicDataSourcesProperties();
     }
+
+
+    /**
+     * @since 3.4.0
+     */
+    @Bean
+    public DataSourceRegistry dataSourceRegistry(ObjectProvider<DataSourceKeyDataSourceParser> dataSourceKeyParserProvider, DynamicDataSourcesProperties dynamicDataSourcesProperties) {
+        DataSourceRegistry dataSourceRegistry = new DataSourceRegistry();
+        DataSourceKeyDataSourceParser dataSourceKeyParser = dataSourceKeyParserProvider.getIfAvailable();
+        dataSourceRegistry.setKeyParser(dataSourceKeyParser);
+        dataSourceRegistry.setHealthCheckTimeout(dynamicDataSourcesProperties.getHealthCheckTimeout());
+        dataSourceRegistry.init();
+        return dataSourceRegistry;
+    }
+
 
     /**
      * @since 3.4.5

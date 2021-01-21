@@ -26,38 +26,66 @@ import java.util.Map;
 /**
  * 动态数据源特性的所有配置
  *
- * @since 3.4.1
+ * @since 3.4.0
  */
 public class DynamicDataSourcesProperties {
     /**
      * 是否启用动态数据源特性
+     *
+     * @since 3.4.0
      */
     private boolean enabled;
     /**
      * 所有的数据源配置
+     *
+     * @since 3.4.0
      */
     private List<DataSourceProperties> datasources = Collects.emptyArrayList();
     /**
      * 默认的 slave 路由名称
+     *
+     * @since 3.4.3
      */
     private String defaultRouter;
     /**
      * 数据源组配置
+     * @since 3.4.3
      */
     private List<DataSourceGroupProperties> groups = Collects.emptyArrayList();
     /**
      * 整个工程中，能够决定 数据源 key的 方法的拦截器 expression。所有 配置了 @DataSource的地方，都要加上
+     * @since 3.4.3
      */
     private AspectJExpressionPointcutAdvisorProperties keyChoices = new AspectJExpressionPointcutAdvisorProperties();
     /**
      * 整个工程中，需要启用自动化事务管理的地方，都有包含在此拦截器里
+     * @since 3.4.3
      */
     private AspectJExpressionPointcutAdvisorProperties transaction = new AspectJExpressionPointcutAdvisorProperties();
 
+    /**
+     * 用户名、密码的解密 key
+     *
+     * @since 3.4.5
+     */
     @Nullable
     private String publicKey;
+
+    /**
+     * @since 3.4.5
+     */
     @Nullable
     private String privateKey;
+
+    /**
+     * 健康检查周期， 单位：秒
+     * 如果 <=0, 怎认为关闭健康检查。
+     * 如果 > 0, 内部会保证最小为 30
+     * 只能在初始化前可变更。
+     *
+     * @since 3.4.5
+     */
+    private int healthCheckTimeout = 120;
 
     public String getPublicKey() {
         return publicKey;
@@ -153,5 +181,13 @@ public class DynamicDataSourcesProperties {
 
     public boolean isTransactionEnabled() {
         return this.transaction != null && Emptys.isNotEmpty(transaction.getExpression());
+    }
+
+    public int getHealthCheckTimeout() {
+        return healthCheckTimeout;
+    }
+
+    public void setHealthCheckTimeout(int healthCheckTimeout) {
+        this.healthCheckTimeout = healthCheckTimeout;
     }
 }
