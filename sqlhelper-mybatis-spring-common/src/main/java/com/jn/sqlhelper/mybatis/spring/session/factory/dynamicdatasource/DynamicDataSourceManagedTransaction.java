@@ -30,6 +30,11 @@ public class DynamicDataSourceManagedTransaction implements Transaction {
     private final DataSource dataSource;
 
     private Connection connection;
+
+    /**
+     * @since 3.4.5
+     * 需要根据事务自动提交与否进行控制
+     */
     private boolean autoCommit = false;
 
 
