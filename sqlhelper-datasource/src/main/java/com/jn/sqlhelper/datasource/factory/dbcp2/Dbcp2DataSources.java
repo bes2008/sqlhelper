@@ -21,7 +21,7 @@ import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
-import com.jn.sqlhelper.common.security.DataSourcePropertiesCipherer;
+import com.jn.sqlhelper.common.security.DriverPropertiesCipherer;
 import org.apache.commons.dbcp2.BasicDataSourceFactory;
 
 import javax.sql.DataSource;
@@ -45,7 +45,7 @@ public class Dbcp2DataSources {
     /**
      * @since 3.4.5
      */
-    public static DataSource createDataSource(DataSourceProperties properties, DataSourcePropertiesCipherer cipherer) {
+    public static DataSource createDataSource(DataSourceProperties properties, DriverPropertiesCipherer cipherer) {
         Properties props = properties.getDriverProps();
         if (props == null) {
             props = new Properties();
@@ -118,7 +118,7 @@ public class Dbcp2DataSources {
     /**
      * @since 3.4.5
      */
-    public static DataSource createDataSource(Properties properties, DataSourcePropertiesCipherer cipherer) {
+    public static DataSource createDataSource(Properties properties, DriverPropertiesCipherer cipherer) {
         try {
             DataSources.decryptUsernamePassword(properties, cipherer);
             return BasicDataSourceFactory.createDataSource(properties);

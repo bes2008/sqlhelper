@@ -19,7 +19,7 @@ import com.jn.langx.security.JCAEStandardName;
 import com.jn.langx.security.PKIs;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
-import com.jn.sqlhelper.common.security.DataSourcePropertiesRsaCipherer;
+import com.jn.sqlhelper.common.security.DriverPropertiesRsaCipherer;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -42,7 +42,7 @@ public class SecurityCommands {
     public String encrypt(
             @ShellOption(defaultValue = "__NULL__") String publicKey,
             String text) {
-        DataSourcePropertiesRsaCipherer cipherer = new DataSourcePropertiesRsaCipherer();
+        DriverPropertiesRsaCipherer cipherer = new DriverPropertiesRsaCipherer();
         if (Emptys.isNotEmpty(publicKey)) {
             cipherer.setPublicKey(publicKey);
         }

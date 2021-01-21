@@ -22,7 +22,7 @@ import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
-import com.jn.sqlhelper.common.security.DataSourcePropertiesCipherer;
+import com.jn.sqlhelper.common.security.DriverPropertiesCipherer;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class HikariDataSources {
     /**
      * @since 3.4.5
      */
-    public static DataSource createDataSource(final DataSourceProperties props, @Nullable DataSourcePropertiesCipherer cipherer) {
+    public static DataSource createDataSource(final DataSourceProperties props, @Nullable DriverPropertiesCipherer cipherer) {
         Properties driverProps = props.getDriverProps();
         HikariConfig config = null;
         if (Emptys.isNotEmpty(driverProps)) {
@@ -96,7 +96,7 @@ public class HikariDataSources {
     /**
      * @since 3.4.5
      */
-    public static DataSource createDataSource(final Properties properties, DataSourcePropertiesCipherer cipherer) {
+    public static DataSource createDataSource(final Properties properties, DriverPropertiesCipherer cipherer) {
         DataSources.decryptUsernamePassword(properties, cipherer);
         return new HikariDataSource(new HikariConfig(properties));
     }

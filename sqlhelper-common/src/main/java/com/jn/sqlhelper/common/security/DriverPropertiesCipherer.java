@@ -17,5 +17,5 @@ package com.jn.sqlhelper.common.security;
 
 import com.jn.langx.security.cipher.StringCipherer;
 
-public interface DataSourcePropertiesCipherer extends StringCipherer {
+public interface DriverPropertiesCipherer extends StringCipherer {
 }
