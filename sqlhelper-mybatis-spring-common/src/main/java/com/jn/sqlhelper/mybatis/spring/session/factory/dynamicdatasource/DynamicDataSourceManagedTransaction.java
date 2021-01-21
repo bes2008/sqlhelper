@@ -30,6 +30,7 @@ public class DynamicDataSourceManagedTransaction implements Transaction {
     private final DataSource dataSource;
 
     private Connection connection;
+    private boolean autoCommit = false;
 
 
     public DynamicDataSourceManagedTransaction(DataSource dataSource) {
@@ -61,6 +62,7 @@ public class DynamicDataSourceManagedTransaction implements Transaction {
      */
     private void openConnection() throws SQLException {
         this.connection = this.dataSource.getConnection();
+        this.autoCommit = this.connection.getAutoCommit();
     }
 
     /**
@@ -68,7 +70,7 @@ public class DynamicDataSourceManagedTransaction implements Transaction {
      */
     @Override
     public void commit() throws SQLException {
-        if (connection != null && !connection.isClosed()) {
+        if (connection != null && !connection.isClosed() && !autoCommit) {
             connection.commit();
         }
     }
@@ -78,7 +80,7 @@ public class DynamicDataSourceManagedTransaction implements Transaction {
      */
     @Override
     public void rollback() throws SQLException {
-        if (connection != null && !connection.isClosed()) {
+        if (connection != null && !connection.isClosed() && !autoCommit) {
             connection.rollback();
         }
     }
