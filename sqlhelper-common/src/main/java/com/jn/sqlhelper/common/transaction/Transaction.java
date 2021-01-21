@@ -8,6 +8,7 @@ import java.util.Map;
  * 1. 该对象将被放到 ThreadLocal中
  * 2. 该对象只能由TransactionManager来创建
  * </pre>
+ * @since 3.4.3
  */
 public class Transaction {
     private TransactionManager transactionManager;

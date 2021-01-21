@@ -17,6 +17,10 @@ package com.jn.sqlhelper.common.transaction;
 import java.sql.SQLException;
 import java.util.Map;
 
+/**
+ * 提供事务管理功能
+ * @since 3.4.3
+ */
 public class DefaultTransactionManager implements TransactionManager {
     @Override
     public Transaction createTransaction(TransactionDefinition transactionDefinition) {

@@ -32,6 +32,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 事务定义Registry
+ * @since 3.4.3
+ */
 public class TransactionDefinitionRegistry implements Registry<Method, TransactionDefinition> {
     /**
      * 这里的 DataSourceKey，可以是一个确切的 key，也可以是个 keyPattern。

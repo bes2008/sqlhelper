@@ -22,6 +22,7 @@ import java.sql.SQLException;
 
 /**
  * JDBC Connection, MyBatis SqlSession, Hibernate Session 等等
+ * @since 3.4.3
  */
 public interface TransactionalResource extends Named {
 

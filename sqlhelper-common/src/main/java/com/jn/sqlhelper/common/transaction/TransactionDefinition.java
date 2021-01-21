@@ -16,6 +16,10 @@ package com.jn.sqlhelper.common.transaction;
 
 import com.jn.langx.Named;
 
+/**
+ * 定义事务
+ * @since 3.4.3
+ */
 public interface TransactionDefinition extends Named {
     int getIsolationLevel();
 
