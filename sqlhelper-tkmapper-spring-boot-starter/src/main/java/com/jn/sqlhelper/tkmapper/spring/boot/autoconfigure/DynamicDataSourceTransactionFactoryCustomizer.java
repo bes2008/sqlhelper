@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.tkmapper.spring.boot.autoconfigure;
 
 import com.jn.sqlhelper.datasource.NamedDataSource;
-import com.jn.sqlhelper.datasource.spring.boot.DynamicTransactionAutoConfiguration;
+import com.jn.sqlhelper.datasource.supports.spring.boot.DynamicTransactionAutoConfiguration;
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DynamicDataSourceManagedTransactionFactory;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;

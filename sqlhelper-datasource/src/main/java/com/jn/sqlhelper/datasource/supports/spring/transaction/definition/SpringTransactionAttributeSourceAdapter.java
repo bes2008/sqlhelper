@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.spring.transaction.definition;
+package com.jn.sqlhelper.datasource.supports.spring.transaction.definition;
 
 import com.jn.langx.util.Objs;
 import com.jn.sqlhelper.common.transaction.TransactionDefinition;

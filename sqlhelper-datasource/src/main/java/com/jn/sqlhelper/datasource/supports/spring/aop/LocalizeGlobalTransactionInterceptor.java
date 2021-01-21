@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.datasource.spring.aop;
+package com.jn.sqlhelper.datasource.supports.spring.aop;
 
 import com.jn.agileway.aop.adapter.aopalliance.MethodInvocationAdapter;
 import com.jn.langx.util.reflect.Reflects;

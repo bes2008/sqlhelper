@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.spring.boot;
+package com.jn.sqlhelper.datasource.supports.spring.boot;
 
 
 import com.jn.langx.util.Emptys;

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.spring.aop;
+package com.jn.sqlhelper.datasource.supports.spring.aop;
 
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.MethodDataSourceKeyRegistry;

@@ -23,7 +23,7 @@ import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
-import com.jn.sqlhelper.datasource.spring.boot.DynamicDataSourcesAutoConfiguration;
+import com.jn.sqlhelper.datasource.supports.spring.boot.DynamicDataSourcesAutoConfiguration;
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DelegatingSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DynamicSqlSessionFactory;
 import com.jn.sqlhelper.mybatis.spring.session.factory.dynamicdatasource.DynamicSqlSessionTemplate;

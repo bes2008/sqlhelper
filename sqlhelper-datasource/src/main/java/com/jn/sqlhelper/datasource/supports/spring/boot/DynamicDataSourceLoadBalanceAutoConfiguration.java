@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.spring.boot;
+package com.jn.sqlhelper.datasource.supports.spring.boot;
 
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
@@ -20,7 +20,6 @@ import com.jn.sqlhelper.datasource.key.router.DataSourceWeighter;
 import com.jn.sqlhelper.datasource.key.router.RandomRouter;
 import com.jn.sqlhelper.datasource.key.router.RoundRobinRouter;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

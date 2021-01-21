@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.spring.transaction.definition;
+package com.jn.sqlhelper.datasource.supports.spring.transaction.definition;
 
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.enums.Enums;
@@ -23,7 +23,6 @@ import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.AnnotatedElement;
-import java.util.List;
 
 /**
  * 解析 Spring的 Transactional 注解
