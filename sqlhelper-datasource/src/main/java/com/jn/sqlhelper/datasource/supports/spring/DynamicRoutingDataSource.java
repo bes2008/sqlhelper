@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.datasource.supports.spring.impl;
+package com.jn.sqlhelper.datasource.supports.spring;
 
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
