@@ -154,11 +154,14 @@
                 <groupId>com.github.fangjinuo.easyjson</groupId>
                 <artifactId>easyjson-jackson</artifactId>
                 <version>${easyjson.version}</version>
-                <scope>provided</scope>
                 <exclusions>
                     <exclusion>
                         <groupId>com.fasterxml.jackson.core</groupId>
                         <artifactId>jackson-databind</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.github.fangjinuo.langx</groupId>
+                        <artifactId>langx-java</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -277,7 +280,6 @@
                 <groupId>com.github.fangjinuo.langx</groupId>
                 <artifactId>langx-java</artifactId>
                 <version>${langx-java.version}</version>
-                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -296,7 +298,6 @@
         <dependency>
             <groupId>com.github.fangjinuo.langx</groupId>
             <artifactId>langx-java</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

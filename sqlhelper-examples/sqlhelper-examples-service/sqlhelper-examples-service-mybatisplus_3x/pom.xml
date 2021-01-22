@@ -61,15 +61,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.fangjinuo.easyjson</groupId>
-            <artifactId>easyjson-jackson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
-            <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.github.fangjinuo.audit</groupId>
             <artifactId>audit-spring-boot-starter</artifactId>
             <version>${audit.version}</version>
@@ -99,7 +90,10 @@
         <dependency>
             <groupId>com.github.fangjinuo.langx</groupId>
             <artifactId>langx-java8</artifactId>
-            <version>${langx-java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
         </dependency>
     </dependencies>
     <build>

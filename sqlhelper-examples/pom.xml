@@ -275,11 +275,6 @@
 
             <dependency>
                 <groupId>com.github.fangjinuo.langx</groupId>
-                <artifactId>langx-java</artifactId>
-                <version>${langx-java.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.fangjinuo.langx</groupId>
                 <artifactId>langx-java8</artifactId>
                 <version>${langx-java.version}</version>
             </dependency>
@@ -298,7 +293,10 @@
             <artifactId>h2</artifactId>
             <version>1.4.199</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-jackson</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

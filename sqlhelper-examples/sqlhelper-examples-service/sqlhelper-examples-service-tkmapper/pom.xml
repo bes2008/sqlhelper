@@ -35,10 +35,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.fangjinuo.easyjson</groupId>
-            <artifactId>easyjson-jackson</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
         </dependency>
