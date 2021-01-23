@@ -59,12 +59,17 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         MethodInvocation methodInvocation = new GenericMethodInvocation(proxy, proxy, method, args);
+        DataSourceKey key = null;
         try {
             Object mapper = getMapperDelegate(methodInvocation);
+            key = MethodInvocationDataSourceKeySelector.getCurrent();
+            if (mapper == null) {
+                logger.error("Can't find a mybatis mapper for {}", key);
+            }
             Object obj = method.invoke(mapper, args);
             return obj;
         } catch (Throwable ex) {
-            logger.error("method {} call error: {}, ",method.getName(), ex.getMessage(), ex);
+            logger.error("method {} call error: {}, ", method.getName(), ex.getMessage(), ex);
             throw ex;
         } finally {
             MethodInvocationDataSourceKeySelector.removeCurrent();
