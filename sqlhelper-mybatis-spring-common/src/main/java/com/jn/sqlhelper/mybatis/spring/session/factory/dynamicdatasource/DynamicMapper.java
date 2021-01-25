@@ -61,11 +61,7 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         MethodInvocation methodInvocation = new GenericMethodInvocation(proxy, proxy, method, args);
         try {
             Object mapper = getMapperDelegate(methodInvocation);
-            Object obj = method.invoke(mapper, args);
-            return obj;
-        } catch (Throwable ex) {
-            logger.error("method {} call error: {}, ",method.getName(), ex.getMessage(), ex);
-            throw ex;
+            return method.invoke(mapper, args);
         } finally {
             MethodInvocationDataSourceKeySelector.removeCurrent();
         }
@@ -89,7 +85,11 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         if (key == null) {
             throw new IllegalStateException(StringTemplates.formatWithPlaceholder("Can't find a suitable jdbc datasource for method: {}", Reflects.getMethodString(methodInvocation.getJoinPoint())));
         }
-        return delegateMapperMap.get(key);
+        Object mapper = delegateMapperMap.get(key);
+        if (mapper == null) {
+            throw new IllegalStateException(StringTemplates.formatWithPlaceholder("Can't find a suitable jdbc datasource for method: {}", Reflects.getMethodString(methodInvocation.getJoinPoint())));
+        }
+        return mapper;
     }
 
     public void setSelector(MethodInvocationDataSourceKeySelector selector) {
