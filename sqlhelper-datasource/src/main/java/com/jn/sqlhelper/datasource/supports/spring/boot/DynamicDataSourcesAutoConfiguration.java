@@ -29,6 +29,7 @@ import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.config.DynamicDataSourcesProperties;
+import com.jn.sqlhelper.datasource.config.DynamicDataSourcesPropertiesCustomizer;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.MethodDataSourceKeyRegistry;
@@ -59,7 +60,7 @@ import java.util.Map;
  * @since 3.4.0
  */
 @Configuration
-@Import({DynamicDataSourceInfrastructureConfiguration.class,DynamicDataSourceLoadBalanceAutoConfiguration.class})
+@Import({DynamicDataSourceInfrastructureConfiguration.class, DynamicDataSourceLoadBalanceAutoConfiguration.class})
 @AutoConfigureAfter({DataSourceAutoConfiguration.class})
 @ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
 public class DynamicDataSourcesAutoConfiguration {
@@ -73,7 +74,8 @@ public class DynamicDataSourcesAutoConfiguration {
             // 这里不用，只是为了控制 该类要在 Spring 内置数据源初始化之前执行
             DriverPropertiesCipherer cipherer,
             final CentralizedDataSourceFactory centralizedDataSourceFactory,
-            DynamicDataSourcesProperties dynamicDataSourcesProperties,
+            final DynamicDataSourcesProperties dynamicDataSourcesProperties,
+            final ObjectProvider<List<DynamicDataSourcesPropertiesCustomizer>> customizersObjectProvider,
             // 该参数只是为了兼容Spring Boot 默认的 DataSource配置而已
             ObjectProvider<DataSource> springBootOriginDataSourceProvider,
             ObjectProvider<org.springframework.boot.autoconfigure.jdbc.DataSourceProperties> builtInDataSourceProperties,
@@ -92,8 +94,17 @@ public class DynamicDataSourcesAutoConfiguration {
             }
         }
 
-        List<DataSourceProperties> dataSourcePropertiesList = dynamicDataSourcesProperties.getDatasources();
+        // 自定义数据源配置  @since 3.4.6
+        final List<DynamicDataSourcesPropertiesCustomizer> customizers = customizersObjectProvider.getIfAvailable();
+        Collects.forEach(customizers, new Consumer<DynamicDataSourcesPropertiesCustomizer>() {
+            @Override
+            public void accept(DynamicDataSourcesPropertiesCustomizer customizer) {
+                customizer.customize(dynamicDataSourcesProperties);
+            }
+        });
 
+        // create datasource
+        List<DataSourceProperties> dataSourcePropertiesList = dynamicDataSourcesProperties.getDatasources();
         // spring bean factory
         final AbstractAutowireCapableBeanFactory beanFactory = ((AbstractAutowireCapableBeanFactory) applicationContext.getAutowireCapableBeanFactory());
         Pipeline.of(dataSourcePropertiesList).forEach(new Consumer<DataSourceProperties>() {

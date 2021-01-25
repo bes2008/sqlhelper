@@ -297,6 +297,7 @@ public class DataSourceProperties implements Configuration {
 
     @Override
     public String toString() {
+        // @since 3.4.6
         final StringBuilder driverPropsString = new StringBuilder(256);
 
         Collects.forEach(Collects.propertiesToStringMap(driverProps), new Consumer2<String, String>() {

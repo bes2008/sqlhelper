@@ -16,6 +16,9 @@ package com.jn.sqlhelper.datasource.config;
 
 import com.jn.langx.Customizer;
 
+/**
+ * @since 3.4.6
+ */
 public interface DynamicDataSourcesPropertiesCustomizer extends Customizer<DynamicDataSourcesProperties> {
     @Override
     void customize(DynamicDataSourcesProperties properties);
