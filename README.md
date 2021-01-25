@@ -124,12 +124,14 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |  Mango                   |         X          |         √         |
 |  EBean                   |         X          |         √         | 
 |  国产数据库               |         X          | √ （参见上述列表）  |
-|  Spring JDBC             |         X          | 2.x,3.x,4.x,5.x   | 
+|  Spring JDBC             |         X          | √ 2.x,3.x,4.x,5.x   | 
 |  SqlSymbol Mapping       |         X          |         √         |
-|  MyBatis-Plus            |         X          |         √         |   
+|  MyBatis-Plus            |         X          |         √         |
+|  tk.mapper               |         √          |         √         |   
 |  Apache Commons-DBUtils  |         X          |         √         |
 |  Subquery pagination     |         X          |         √         |  
 |  solon                   |         X          |         √         |
+|  多数据源                 |         X          |         √         |
                      
 
 
