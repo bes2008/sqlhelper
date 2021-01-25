@@ -47,6 +47,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -58,7 +59,8 @@ import java.util.Map;
  * @since 3.4.0
  */
 @Configuration
-@AutoConfigureAfter({DynamicDataSourceInfrastructureConfiguration.class, DataSourceAutoConfiguration.class, DynamicDataSourceLoadBalanceAutoConfiguration.class})
+@Import({DynamicDataSourceInfrastructureConfiguration.class,DynamicDataSourceLoadBalanceAutoConfiguration.class})
+@AutoConfigureAfter({DataSourceAutoConfiguration.class})
 @ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
 public class DynamicDataSourcesAutoConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DynamicDataSourcesAutoConfiguration.class);

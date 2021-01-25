@@ -27,11 +27,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * @since 3.4.0
  */
 @Configuration
+@Import({DynamicDataSourceInfrastructureConfiguration.class, DynamicDataSourcesAutoConfiguration.class})
 @ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true")
 @ConditionalOnClass(AspectJExpressionPointcutAdvisorProperties.class)
 public class DynamicMethodDataSourcesKeyAutoConfiguration {

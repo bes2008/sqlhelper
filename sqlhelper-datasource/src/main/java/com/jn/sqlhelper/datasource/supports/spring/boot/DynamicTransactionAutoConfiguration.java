@@ -43,6 +43,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.interceptor.TransactionAttributeSource;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
@@ -52,6 +53,7 @@ import java.util.List;
  * @since 3.4.1
  */
 @Configuration
+@Import(DynamicDataSourcesAutoConfiguration.class)
 @AutoConfigureAfter(DynamicDataSourcesAutoConfiguration.class)
 @ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true")
 @ConditionalOnClass(AspectJExpressionPointcutAdvisorProperties.class)
