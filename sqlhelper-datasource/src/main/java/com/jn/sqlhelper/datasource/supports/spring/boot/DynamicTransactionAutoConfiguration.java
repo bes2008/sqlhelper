@@ -120,6 +120,9 @@ public class DynamicTransactionAutoConfiguration {
     @ConditionalOnProperty(prefix = "sqlhelper.dynamic-datasource.transaction", name = "expression")
     @ConditionalOnMissingBean(name = "dynamicDataSourceTransactionAdvisor")
     public AspectJExpressionPointcutAdvisor dynamicDataSourceTransactionAdvisor(
+            // 用于控制在 DataSource初始化之后来执行
+            @Qualifier("dataSourcesFactoryBean")
+                    ListFactoryBean dataSourcesFactoryBean,
             DynamicDataSourcesProperties properties,
             TransactionManager transactionManager,
             TransactionDefinitionRegistry registry) {

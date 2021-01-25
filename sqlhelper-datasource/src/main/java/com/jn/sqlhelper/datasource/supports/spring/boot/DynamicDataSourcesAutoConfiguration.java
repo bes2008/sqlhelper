@@ -40,6 +40,7 @@ import com.jn.sqlhelper.datasource.key.router.DataSourceKeyRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -170,7 +171,10 @@ public class DynamicDataSourcesAutoConfiguration {
             final DataSourceRegistry registry,
             MethodDataSourceKeyRegistry keyRegistry,
             ObjectProvider<List<DataSourceKeyRouter>> routersProvider,
-            DynamicDataSourcesProperties dataSourcesProperties) {
+            DynamicDataSourcesProperties dataSourcesProperties,
+            // 用于控制在 DataSource初始化之后来执行
+            @Qualifier("dataSourcesFactoryBean")
+            ListFactoryBean dataSourcesFactoryBean) {
 
         final MethodInvocationDataSourceKeySelector selector = new MethodInvocationDataSourceKeySelector();
 
