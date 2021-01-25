@@ -297,19 +297,7 @@ public class DataSourceProperties implements Configuration {
 
     @Override
     public String toString() {
-        // @since 3.4.6
-        final StringBuilder driverPropsString = new StringBuilder(256);
-
-        Collects.forEach(Collects.propertiesToStringMap(driverProps), new Consumer2<String, String>() {
-            @Override
-            public void accept(String key, String value) {
-                if ("password".equals(key)) {
-                    driverPropsString.append(key + "='*******',");
-                } else {
-                    driverPropsString.append(key + "='" + value + "',");
-                }
-            }
-        });
+        final String driverPropsString = DataSources.getDriverPropertiesForLog(this.driverProps);
 
         return "DataSourceProperties{" +
                 "group='" + group + '\'' +
