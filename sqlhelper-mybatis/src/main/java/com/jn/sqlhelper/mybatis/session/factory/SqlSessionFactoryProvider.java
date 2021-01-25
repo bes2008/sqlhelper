@@ -29,5 +29,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
  */
 
 public interface SqlSessionFactoryProvider<I> extends Provider<I, SqlSessionFactory> {
-
+    @Override
+    SqlSessionFactory get(I input);
 }

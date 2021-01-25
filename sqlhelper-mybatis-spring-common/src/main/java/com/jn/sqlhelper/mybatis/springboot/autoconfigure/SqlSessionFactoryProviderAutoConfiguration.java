@@ -35,10 +35,8 @@ public class SqlSessionFactoryProviderAutoConfiguration {
             SqlSessionFactory sessionFactory) {
         if (sessionFactory instanceof DynamicSqlSessionFactory) {
             MethodInvocationDataSourceKeySelector selector = selectorObjectProvider.getObject();
-            if (selector != null) {
-                DynamicSqlSessionFactoryMethodInvocationProvider provider = new DynamicSqlSessionFactoryMethodInvocationProvider((DynamicSqlSessionFactory) sessionFactory, selector);
-                return provider;
-            }
+            DynamicSqlSessionFactoryMethodInvocationProvider provider = new DynamicSqlSessionFactoryMethodInvocationProvider((DynamicSqlSessionFactory) sessionFactory, selector);
+            return provider;
         }
         return new SimpleSqlSessionFactoryProvider(sessionFactory);
     }
