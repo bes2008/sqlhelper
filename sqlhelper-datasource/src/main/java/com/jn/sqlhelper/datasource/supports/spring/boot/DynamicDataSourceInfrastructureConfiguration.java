@@ -61,6 +61,7 @@ public class DynamicDataSourceInfrastructureConfiguration {
      * @since 3.4.0
      */
     @Bean
+    @ConditionalOnMissingBean
     @ConfigurationProperties(prefix = "sqlhelper.dynamic-datasource")
     public DynamicDataSourcesProperties namedDataSourcesProperties(Environment environment,
                                                                    org.springframework.boot.autoconfigure.jdbc.DataSourceProperties dataSourceProperties) {
