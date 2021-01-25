@@ -62,7 +62,7 @@ public class DynamicTransactionAutoConfiguration {
     @ConditionalOnProperty(prefix = "sqlhelper.dynamic-datasource.transaction", name = "expression")
     public TransactionManager dynamicTransactionManager() {
         DefaultTransactionManager transactionManager = new DefaultTransactionManager();
-        Loggers.log(3, logger, Level.INFO, null, "===[SQLHelper & Dynamic Transaction]=== the sqlhelper dynamic datasource transaction manager is enabled with the configuration: sqlhelper.dynamicDataSource.transaction, so you should make sure the spring transaction manager is not enabled");
+        Loggers.log(3, logger, Level.INFO, null, "===[SQLHelper & Dynamic Transaction]=== the sqlhelper dynamic datasource transaction manager is enabled with the configuration: sqlhelper.dynamic-datasource.transaction, so you should make sure the spring transaction manager is not enabled");
         return transactionManager;
     }
 
