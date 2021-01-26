@@ -25,6 +25,8 @@ import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.common.security.DriverPropertiesCipherer;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
@@ -239,5 +241,29 @@ public class DataSources {
             }
             return encryptedBase64Text;
         }
+    }
+
+    /**
+     * 获取DataSource配置项
+     *
+     * @param driverProps
+     * @return
+     * @since 3.4.6
+     */
+    public static String getDriverPropertiesForLog(Properties driverProps) {
+        final StringBuilder driverPropsString = new StringBuilder(256);
+
+        Collects.forEach(Collects.propertiesToStringMap(driverProps), new Consumer2<String, String>() {
+            @Override
+            public void accept(String key, String value) {
+                if ("password".equals(key)) {
+                    driverPropsString.append(key + "='*******',");
+                } else {
+                    driverPropsString.append(key + "='" + value + "',");
+                }
+            }
+        });
+
+        return driverPropsString.toString();
     }
 }

@@ -16,6 +16,8 @@ package com.jn.sqlhelper.datasource.config;
 
 import com.jn.langx.configuration.Configuration;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
@@ -23,6 +25,7 @@ import java.util.Properties;
 
 /**
  * 配置单个数据源
+ *
  * @since 3.4.0
  */
 public class DataSourceProperties implements Configuration {
@@ -294,6 +297,8 @@ public class DataSourceProperties implements Configuration {
 
     @Override
     public String toString() {
+        final String driverPropsString = DataSources.getDriverPropertiesForLog(this.driverProps);
+
         return "DataSourceProperties{" +
                 "group='" + group + '\'' +
                 ", name='" + name + '\'' +
@@ -301,7 +306,7 @@ public class DataSourceProperties implements Configuration {
                 ", driverClassName='" + driverClassName + '\'' +
                 ", url='" + url + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", password='******'" +
                 ", catalog='" + catalog + '\'' +
                 ", schema='" + schema + '\'' +
                 ", isReadOnly=" + isReadonly +
@@ -316,7 +321,7 @@ public class DataSourceProperties implements Configuration {
                 ", maxPoolSize=" + maxPoolSize +
                 ", initialSize=" + initialSize +
                 ", minIdle=" + minIdle +
-                ", driverProps=" + driverProps +
+                ", driverProps=" + driverPropsString.toString() +
                 '}';
     }
 }

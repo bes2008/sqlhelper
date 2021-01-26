@@ -43,6 +43,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.interceptor.TransactionAttributeSource;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
@@ -52,6 +53,7 @@ import java.util.List;
  * @since 3.4.1
  */
 @Configuration
+@Import(DynamicDataSourcesAutoConfiguration.class)
 @AutoConfigureAfter(DynamicDataSourcesAutoConfiguration.class)
 @ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true")
 @ConditionalOnClass(AspectJExpressionPointcutAdvisorProperties.class)
@@ -62,7 +64,7 @@ public class DynamicTransactionAutoConfiguration {
     @ConditionalOnProperty(prefix = "sqlhelper.dynamic-datasource.transaction", name = "expression")
     public TransactionManager dynamicTransactionManager() {
         DefaultTransactionManager transactionManager = new DefaultTransactionManager();
-        Loggers.log(3, logger, Level.INFO, null, "===[SQLHelper & Dynamic Transaction]=== the sqlhelper dynamic datasource transaction manager is enabled with the configuration: sqlhelper.dynamicDataSource.transaction, so you should make sure the spring transaction manager is not enabled");
+        Loggers.log(3, logger, Level.INFO, null, "===[SQLHelper & Dynamic Transaction]=== the sqlhelper dynamic datasource transaction manager is enabled with the configuration: sqlhelper.dynamic-datasource.transaction, so you should make sure the spring transaction manager is not enabled");
         return transactionManager;
     }
 
@@ -118,6 +120,9 @@ public class DynamicTransactionAutoConfiguration {
     @ConditionalOnProperty(prefix = "sqlhelper.dynamic-datasource.transaction", name = "expression")
     @ConditionalOnMissingBean(name = "dynamicDataSourceTransactionAdvisor")
     public AspectJExpressionPointcutAdvisor dynamicDataSourceTransactionAdvisor(
+            // 用于控制在 DataSource初始化之后来执行
+            @Qualifier("dataSourcesFactoryBean")
+                    ListFactoryBean dataSourcesFactoryBean,
             DynamicDataSourcesProperties properties,
             TransactionManager transactionManager,
             TransactionDefinitionRegistry registry) {

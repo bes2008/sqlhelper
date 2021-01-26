@@ -50,6 +50,7 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
             String implementationKey = dataSourceProperties.getImplementation();
             DataSourceFactory delegate = DataSourceFactoryProvider.getInstance().findSuitableDataSourceFactory(implementationKey, key);
             logger.info("Create jdbc datasource {} with the factory: {}", key, Reflects.getFQNClassName(delegate.getClass()));
+            logger.info("JDBC DataSource {} properties: {}", key, dataSourceProperties);
             dataSource = delegate.get(dataSourceProperties);
             if (dataSource != null) {
                 registry.register(key, dataSource);
@@ -72,6 +73,8 @@ public class CentralizedDataSourceFactory implements DataSourceFactory {
         if (dataSource == null) {
             String implementationKey = properties.getProperty(DataSources.DATASOURCE_PROP_IMPLEMENTATION);
             DataSourceFactory delegate = DataSourceFactoryProvider.getInstance().findSuitableDataSourceFactory(implementationKey, key);
+            logger.info("Create jdbc datasource {} with the factory: {}", key, Reflects.getFQNClassName(delegate.getClass()));
+            logger.info("JDBC DataSource {} properties: {}", key, properties);
             dataSource = delegate.get(properties);
             if (dataSource != null) {
                 registry.register(key, dataSource);

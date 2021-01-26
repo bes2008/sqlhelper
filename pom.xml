@@ -6,7 +6,7 @@
 
     <groupId>com.github.fangjinuo.sqlhelper</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>3.4.5</version>
+    <version>3.4.6</version>
     <name>sqlhelper</name>
     <description>
         JDBC Extensions:
@@ -91,7 +91,7 @@
         <spring.version>4.3.25.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>3.1.1</easyjson.version>
-        <langx-java.version>3.3.3</langx-java.version>
+        <langx-java.version>3.3.4</langx-java.version>
         <agileway.version>2.2.6</agileway.version>
 
         <jfinal.version>4.9</jfinal.version>

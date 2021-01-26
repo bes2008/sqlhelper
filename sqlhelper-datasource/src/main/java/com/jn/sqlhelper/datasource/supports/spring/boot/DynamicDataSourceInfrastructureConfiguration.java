@@ -24,6 +24,7 @@ import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.config.DynamicDataSourcesProperties;
 import com.jn.sqlhelper.datasource.factory.CentralizedDataSourceFactory;
 import com.jn.sqlhelper.datasource.key.parser.DataSourceKeyDataSourceParser;
+import com.jn.sqlhelper.datasource.supports.spring.config.DynamicDataSourcesPropertiesFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -63,8 +64,10 @@ public class DynamicDataSourceInfrastructureConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConfigurationProperties(prefix = "sqlhelper.dynamic-datasource")
-    public DynamicDataSourcesProperties namedDataSourcesProperties(Environment environment,
-                                                                   org.springframework.boot.autoconfigure.jdbc.DataSourceProperties dataSourceProperties) {
+    public DynamicDataSourcesProperties namedDataSourcesProperties(
+            ObjectProvider<DynamicDataSourcesPropertiesFactoryBean> dataSourcesPropertiesFactoryBeanProvider,
+            Environment environment) {
+
         String keyChoicesPointcutExpression = environment.getProperty("sqlhelper.dynamic-datasource.key-choices.expression");
         if (Strings.isNotBlank(keyChoicesPointcutExpression)) {
             String requiredClass = "com.jn.agileway.spring.aop.AspectJExpressionPointcutAdvisorBuilder";
@@ -77,6 +80,16 @@ public class DynamicDataSourceInfrastructureConfiguration {
                 logger.warn(log.toString());
             }
         }
+
+        DynamicDataSourcesPropertiesFactoryBean factoryBean = dataSourcesPropertiesFactoryBeanProvider.getIfAvailable();
+        if (factoryBean != null) {
+            try {
+                return factoryBean.getObject();
+            } catch (Throwable ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+        }
+
         return new DynamicDataSourcesProperties();
     }
 

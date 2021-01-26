@@ -23,7 +23,7 @@
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-1.x-green.svg)](https://spring.io/projects/spring-boot/)
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-2.x-green.svg)](https://spring.io/projects/spring-boot/)
 
-[![maven](https://img.shields.io/badge/maven-v3.4.2-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:3.4.2)
+[![maven](https://img.shields.io/badge/maven-v3.4.6-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:3.4.6)
 
 
 
@@ -124,12 +124,14 @@ SQL Tools ( **Dialect**, **Pagination**, **DDL Dump**, **UrlParser**, **SqlState
 |  Mango                   |         X          |         √         |
 |  EBean                   |         X          |         √         | 
 |  国产数据库               |         X          | √ （参见上述列表）  |
-|  Spring JDBC             |         X          | 2.x,3.x,4.x,5.x   | 
+|  Spring JDBC             |         X          | √ 2.x,3.x,4.x,5.x   | 
 |  SqlSymbol Mapping       |         X          |         √         |
-|  MyBatis-Plus            |         X          |         √         |   
+|  MyBatis-Plus            |         X          |         √         |
+|  tk.mapper               |         √          |         √         |   
 |  Apache Commons-DBUtils  |         X          |         √         |
 |  Subquery pagination     |         X          |         √         |  
 |  solon                   |         X          |         √         |
+|  多数据源                 |         X          |         √         |
                      
 
 

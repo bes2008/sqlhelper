@@ -22,16 +22,20 @@ import com.jn.sqlhelper.datasource.supports.spring.aop.DataSourceKeyChoicesAnnot
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ListFactoryBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * @since 3.4.0
  */
 @Configuration
+@Import({DynamicDataSourceInfrastructureConfiguration.class, DynamicDataSourcesAutoConfiguration.class})
 @ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true")
 @ConditionalOnClass(AspectJExpressionPointcutAdvisorProperties.class)
 public class DynamicMethodDataSourcesKeyAutoConfiguration {
@@ -42,6 +46,9 @@ public class DynamicMethodDataSourcesKeyAutoConfiguration {
     @ConditionalOnProperty(prefix = "sqlhelper.dynamic-datasource.key-choices", name = "expression")
     @ConditionalOnMissingBean(name = "annotationKeyChoicesAdvisor")
     public AspectJExpressionPointcutAdvisor keyChoicesAdvisor(
+            // 用于控制在 DataSource初始化之后来执行
+            @Qualifier("dataSourcesFactoryBean")
+                    ListFactoryBean dataSourcesFactoryBean,
             DynamicDataSourcesProperties namedDataSourcesProperties,
             MethodDataSourceKeyRegistry keyRegistry) {
 

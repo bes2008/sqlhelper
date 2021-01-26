@@ -87,8 +87,7 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
         }
         Object mapper = delegateMapperMap.get(key);
         if (mapper == null) {
-            String errorMessage = StringTemplates.formatWithPlaceholder("Can't find a mybatis mapper for {}", key);
-            throw new IllegalStateException(errorMessage);
+            throw new IllegalStateException(StringTemplates.formatWithPlaceholder("Can't find a suitable jdbc datasource for method: {}", Reflects.getMethodString(methodInvocation.getJoinPoint())));
         }
         return mapper;
     }
