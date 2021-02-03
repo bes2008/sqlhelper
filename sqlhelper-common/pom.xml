@@ -17,6 +17,15 @@
             <artifactId>persistence-api</artifactId>
             <version>1.0</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <artifactId>easyjson-core</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 
 </project>

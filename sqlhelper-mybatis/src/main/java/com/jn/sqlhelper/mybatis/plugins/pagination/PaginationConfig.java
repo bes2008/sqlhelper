@@ -1,6 +1,5 @@
 package com.jn.sqlhelper.mybatis.plugins.pagination;
 
-import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.sqlhelper.dialect.pagination.PaginationProperties;
 
 public class PaginationConfig extends PaginationProperties {
@@ -30,7 +29,14 @@ public class PaginationConfig extends PaginationProperties {
 
     @Override
     public String toString() {
-        return JSONBuilderProvider.create().serializeNulls(true).build().toJson(this);
+        return "PaginationConfig{" +
+                "countCacheInitCapacity=" + countCacheInitCapacity +
+                ", countCacheMaxCapacity=" + countCacheMaxCapacity +
+                ", countSuffix='" + countSuffix + '\'' +
+                ", countCacheExpireInSeconds=" + countCacheExpireInSeconds +
+                ", pageHelperCompatible=" + pageHelperCompatible +
+                ", pageHelperHandlerClass='" + pageHelperHandlerClass + '\'' +
+                '}';
     }
 
     public int getCountCacheInitCapacity() {

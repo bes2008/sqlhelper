@@ -14,7 +14,6 @@
 
 package com.jn.sqlhelper.mybatis.batch;
 
-import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.common.batch.BatchMode;
 import com.jn.sqlhelper.common.batch.BatchResult;
@@ -66,7 +65,7 @@ public class JdbcBatchUpdater<E> extends MybatisBatchUpdater<E> {
                         session.update(statementIdFQN, entity);
                     }
                 } catch (Exception ex) {
-                    logger.error("Error occur when execute batch statement: {} with parameter: {}", statementIdFQN, JSONBuilderProvider.simplest().toJson(entity));
+                    logger.error("Error occur when execute batch statement: {} with parameter: {}", statementIdFQN, entity.toString());
                     result.addThrowable(ex);
                 }
                 affectedRows = affectedRows + 1;

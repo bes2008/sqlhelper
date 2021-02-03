@@ -14,7 +14,6 @@
 
 package com.jn.sqlhelper.dialect.pagination;
 
-import com.jn.easyjson.core.JSONBuilderProvider;
 
 public class PaginationProperties {
     /**
@@ -63,6 +62,10 @@ public class PaginationProperties {
 
     @Override
     public String toString() {
-        return JSONBuilderProvider.create().serializeNulls(true).build().toJson(this);
+        return "PaginationProperties{" +
+                "count=" + count +
+                ", defaultPageSize=" + defaultPageSize +
+                ", useLastPageIfPageOut=" + useLastPageIfPageOut +
+                '}';
     }
 }

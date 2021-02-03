@@ -15,7 +15,6 @@
 
 package com.jn.sqlhelper.dialect.instrument;
 
-import com.jn.easyjson.core.JSONBuilderProvider;
 
 public class SQLInstrumentorConfig {
     public static final SQLInstrumentorConfig DEFAULT = new SQLInstrumentorConfig();
@@ -119,7 +118,20 @@ public class SQLInstrumentorConfig {
 
     @Override
     public String toString() {
-        return JSONBuilderProvider.create().serializeNulls(true).build().toJson(this);
+        return "SQLInstrumentorConfig{" +
+                "name='" + name + '\'' +
+                ", dialect='" + dialect + '\'' +
+                ", dialectClassName='" + dialectClassName + '\'' +
+                ", extractDialectUseNativeEnabled=" + extractDialectUseNativeEnabled +
+                ", cacheInstrumentedSql=" + cacheInstrumentedSql +
+                ", cacheInitialCapacity=" + cacheInitialCapacity +
+                ", cacheMaxCapacity=" + cacheMaxCapacity +
+                ", cacheExpireAfterRead=" + cacheExpireAfterRead +
+                ", subqueryPagingStartFlag='" + subqueryPagingStartFlag + '\'' +
+                ", subqueryPagingEndFlag='" + subqueryPagingEndFlag + '\'' +
+                ", instrumentation='" + instrumentation + '\'' +
+                ", escapeLikeParameter=" + escapeLikeParameter +
+                '}';
     }
 
     public boolean isExtractDialectUseNativeEnabled() {

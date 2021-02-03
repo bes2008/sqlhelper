@@ -290,12 +290,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.fangjinuo.easyjson</groupId>
-            <artifactId>easyjson-core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.github.fangjinuo.langx</groupId>
             <artifactId>langx-java</artifactId>
         </dependency>

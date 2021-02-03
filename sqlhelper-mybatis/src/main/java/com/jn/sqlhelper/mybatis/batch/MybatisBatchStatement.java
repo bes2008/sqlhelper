@@ -14,7 +14,6 @@
 
 package com.jn.sqlhelper.mybatis.batch;
 
-import com.jn.easyjson.core.JSONBuilderProvider;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Preconditions;
@@ -92,6 +91,10 @@ public class MybatisBatchStatement implements BatchStatement {
 
     @Override
     public String toString() {
-        return JSONBuilderProvider.simplest().toJson(this);
+        return "MybatisBatchStatement{" +
+                "batchMode=" + batchMode +
+                ", statementId='" + statementId + '\'' +
+                ", statementIdFQN='" + statementIdFQN + '\'' +
+                '}';
     }
 }

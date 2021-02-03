@@ -75,6 +75,7 @@ public class HikariDataSources {
         config.setConnectionTimeout(props.getConnectionTimeoutInMills());
         config.setValidationTimeout(props.getValidationTimeoutInMills());
         config.setConnectionInitSql(props.getValidationQuery());
+        config.setConnectionTestQuery(props.getValidationQuery());
         config.setIdleTimeout(props.getIdleTimeoutInMills());
         config.setMaxLifetime(props.getMaxLifetimeInMills());
         config.setMaximumPoolSize(props.getMaxPoolSize());
