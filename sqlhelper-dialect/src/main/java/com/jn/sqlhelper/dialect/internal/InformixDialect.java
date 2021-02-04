@@ -108,11 +108,6 @@ public class InformixDialect extends AbstractDialect {
         }
 
         @Override
-        public boolean isUseMaxForLimit() {
-            return false;
-        }
-
-        @Override
         public boolean isSupportsLimitOffset() {
             return true;
         }

@@ -16,6 +16,9 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;
 
+/**
+ * 浪潮 k-db
+ */
 public class KDBDialect extends AbstractDialect {
     public KDBDialect() {
         super();

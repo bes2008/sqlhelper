@@ -37,8 +37,4 @@ public class HiveDialect extends AbstractDialect {
         return true;
     }
 
-    @Override
-    public boolean isUseMaxForLimit() {
-        return false;
-    }
 }

@@ -59,8 +59,4 @@ public class DerbyDialect extends AbstractDialect {
         return false;
     }
 
-    @Override
-    public boolean isUseMaxForLimit() {
-        return true;
-    }
 }

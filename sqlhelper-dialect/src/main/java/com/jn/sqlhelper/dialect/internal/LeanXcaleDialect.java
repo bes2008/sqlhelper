@@ -37,8 +37,4 @@ public class LeanXcaleDialect extends AbstractDialect {
         return true;
     }
 
-    @Override
-    public boolean isUseMaxForLimit() {
-        return true;
-    }
 }

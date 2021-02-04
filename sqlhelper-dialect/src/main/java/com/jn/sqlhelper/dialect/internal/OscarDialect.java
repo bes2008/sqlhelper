@@ -34,11 +34,6 @@ public class OscarDialect extends AbstractDialect {
     }
 
     @Override
-    public boolean isUseMaxForLimit() {
-        return true;
-    }
-
-    @Override
     public boolean isSupportsLimitOffset() {
         return true;
     }
