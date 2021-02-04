@@ -30,9 +30,4 @@ public class KingbaseDialect extends AbstractDialect {
     public boolean isBindLimitParametersInReverseOrder() {
         return true;
     }
-
-    @Override
-    public boolean isUseMaxForLimit() {
-        return true;
-    }
 }
