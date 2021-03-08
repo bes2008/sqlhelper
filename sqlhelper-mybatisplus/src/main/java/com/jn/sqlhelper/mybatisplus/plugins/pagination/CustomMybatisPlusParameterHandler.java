@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.sqlhelper.mybatis.plugins.CustomMybatisParameterHandler;
 import com.jn.sqlhelper.mybatisplus.tableinfo.TableInfoHelpers;
@@ -34,12 +35,13 @@ import java.util.*;
 
 public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHandler {
     protected Object originalParameterObject;
+
     public CustomMybatisPlusParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
         super(mappedStatement, processBatch(mappedStatement, parameterObject), boundSql);
         this.originalParameterObject = parameterObject;
     }
 
-    protected Object getOriginParameterObject(){
+    protected Object getOriginParameterObject() {
         return this.originalParameterObject;
     }
 
@@ -51,7 +53,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
      */
     public static Object processBatch(MappedStatement ms, Object parameterObject) {
         if (null != parameterObject && !Primitives.isPrimitiveOrPrimitiveWrapperType(parameterObject.getClass()) && parameterObject.getClass() != String.class) {
-            GlobalConfig globalConfig =GlobalConfigUtils.getGlobalConfig(ms.getConfiguration());
+            GlobalConfig globalConfig = GlobalConfigUtils.getGlobalConfig(ms.getConfiguration());
             MetaObjectHandler metaObjectHandler = globalConfig.getMetaObjectHandler();
             boolean isFill = false;
             boolean isInsert = false;
@@ -126,7 +128,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
             }
         }
 
-        return (Collection) parameters;
+        return parameters;
     }
 
     public static Object populateKeys(MetaObjectHandler metaObjectHandler, TableInfo tableInfo, MappedStatement ms, Object parameterObject, boolean isInsert) {
@@ -134,15 +136,21 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
             return parameterObject;
         } else {
             MetaObject metaObject = ms.getConfiguration().newMetaObject(parameterObject);
-            if (isInsert && !Strings.isEmpty(tableInfo.getKeyProperty()) && null != tableInfo.getIdType() && tableInfo.getIdType().getKey() >= 3) {
+            String keyProperty = tableInfo.getKeyProperty();
+            if (isInsert && !Strings.isEmpty(keyProperty) && null != tableInfo.getIdType() && tableInfo.getIdType().getKey() >= 3) {
                 Object idValue = metaObject.getValue(tableInfo.getKeyProperty());
                 if (Objs.isEmpty(idValue)) {
                     if (tableInfo.getIdType() == IdType.ID_WORKER) {
-                        metaObject.setValue(tableInfo.getKeyProperty(), IdWorker.getId());
+                        // 最新版本里，这里加了个 ASSIGN_ID:3， ID_WORKER:3 ID_WORKER_STR:3
+                        if (Reflects.isSubClassOrEquals(Number.class, tableInfo.getKeyType())) {
+                            metaObject.setValue(keyProperty, IdWorker.getId());
+                        } else {
+                            metaObject.setValue(keyProperty, IdWorker.getIdStr());
+                        }
                     } else if (tableInfo.getIdType() == IdType.ID_WORKER_STR) {
-                        metaObject.setValue(tableInfo.getKeyProperty(), IdWorker.getIdStr());
+                        metaObject.setValue(keyProperty, IdWorker.getIdStr());
                     } else if (tableInfo.getIdType() == IdType.UUID) {
-                        metaObject.setValue(tableInfo.getKeyProperty(), IdWorker.get32UUID());
+                        metaObject.setValue(keyProperty, IdWorker.get32UUID());
                     }
                 }
             }
