@@ -141,7 +141,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
                 Object idValue = metaObject.getValue(tableInfo.getKeyProperty());
                 if (Objs.isEmpty(idValue)) {
                     if (tableInfo.getIdType().getKey() == IdType.ID_WORKER.getKey()) {
-                        // 最新版本里，这里加了个 ASSIGN_ID:3， ID_WORKER:3 ID_WORKER_STR:3
+                        // 最新版本里，这里加了个 ASSIGN_ID:3， 并把原来的 进行了调整：ID_WORKER:3 ID_WORKER_STR:3
                         if (Reflects.isSubClassOrEquals(Number.class, tableInfo.getKeyType())) {
                             metaObject.setValue(keyProperty, IdWorker.getId());
                         } else {
