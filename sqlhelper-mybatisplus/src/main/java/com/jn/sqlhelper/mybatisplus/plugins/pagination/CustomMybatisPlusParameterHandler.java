@@ -69,10 +69,10 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
                 Object et;
                 if (null != parameters) {
                     List<Object> objList = new ArrayList();
-                    Iterator var10 = parameters.iterator();
+                    Iterator iter = parameters.iterator();
 
-                    while (var10.hasNext()) {
-                        et = var10.next();
+                    while (iter.hasNext()) {
+                        et = iter.next();
                         TableInfo tableInfo = TableInfoHelpers.getTableInfo(et.getClass());
                         if (null != tableInfo) {
                             objList.add(populateKeys(metaObjectHandler, tableInfo, ms, et, isInsert));
