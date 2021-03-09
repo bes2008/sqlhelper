@@ -140,16 +140,16 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
             if (isInsert && !Strings.isEmpty(keyProperty) && null != tableInfo.getIdType() && tableInfo.getIdType().getKey() >= 3) {
                 Object idValue = metaObject.getValue(tableInfo.getKeyProperty());
                 if (Objs.isEmpty(idValue)) {
-                    if (tableInfo.getIdType() == IdType.ID_WORKER) {
+                    if (tableInfo.getIdType().getKey() == IdType.ID_WORKER.getKey()) {
                         // 最新版本里，这里加了个 ASSIGN_ID:3， ID_WORKER:3 ID_WORKER_STR:3
                         if (Reflects.isSubClassOrEquals(Number.class, tableInfo.getKeyType())) {
                             metaObject.setValue(keyProperty, IdWorker.getId());
                         } else {
                             metaObject.setValue(keyProperty, IdWorker.getIdStr());
                         }
-                    } else if (tableInfo.getIdType() == IdType.ID_WORKER_STR) {
+                    } else if (tableInfo.getIdType().getKey() == IdType.ID_WORKER_STR.getKey()) {
                         metaObject.setValue(keyProperty, IdWorker.getIdStr());
-                    } else if (tableInfo.getIdType() == IdType.UUID) {
+                    } else if (tableInfo.getIdType().getKey() == IdType.UUID.getKey()) {
                         metaObject.setValue(keyProperty, IdWorker.get32UUID());
                     }
                 }
