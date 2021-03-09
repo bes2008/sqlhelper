@@ -20,7 +20,6 @@ import com.jn.langx.invocation.MethodInvocation;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import com.jn.sqlhelper.datasource.key.MethodInvocationDataSourceKeySelector;
 import org.slf4j.Logger;
@@ -68,14 +67,7 @@ public class DynamicMapper<MAPPER> implements InvocationHandler {
     }
 
     private Object getMapperDelegate(MethodInvocation methodInvocation) {
-        DataSourceKey key = selector.getDataSourceKeyRegistry().get(methodInvocation.getJoinPoint());
-        if (key != null) {
-            NamedDataSource dataSource = selector.getDataSourceRegistry().get(key);
-            if (dataSource != null) {
-                MethodInvocationDataSourceKeySelector.setCurrent(key);
-            }
-        }
-        key = MethodInvocationDataSourceKeySelector.getCurrent();
+        DataSourceKey key = MethodInvocationDataSourceKeySelector.getCurrent();
         if (key == null) {
             key = selector.select(methodInvocation);
             if (key != null) {
