@@ -16,6 +16,7 @@ package com.jn.sqlhelper.mybatisplus2x.spring.boot.autoconfigure;
 
 
 import com.baomidou.mybatisplus.spring.boot.starter.ConfigurationCustomizer;
+import com.baomidou.mybatisplus.spring.boot.starter.GlobalConfig;
 import com.baomidou.mybatisplus.spring.boot.starter.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.spring.boot.starter.MybatisPlusProperties;
 import com.jn.langx.util.Emptys;
@@ -66,6 +67,31 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DynamicSqlSessionTemplateAutoConfiguration.class);
 
 
+    private MybatisPlusProperties cloneMybatisPlusProperties(MybatisPlusProperties properties) {
+        MybatisPlusProperties props = new MybatisPlusProperties();
+        props.setCheckConfigLocation(properties.isCheckConfigLocation());
+        props.setConfigLocation(properties.getConfigLocation());
+        props.setConfigurationProperties(properties.getConfigurationProperties());
+        props.setExecutorType(properties.getExecutorType());
+        props.setMapperLocations(properties.getMapperLocations());
+        props.setTypeAliasesPackage(properties.getTypeAliasesPackage());
+        props.setTypeEnumsPackage(properties.getTypeEnumsPackage());
+        props.setTypeHandlersPackage(properties.getTypeHandlersPackage());
+
+        GlobalConfig gc = properties.getGlobalConfig();
+        if (gc != null) {
+            GlobalConfig globalConfig = new GlobalConfig();
+            globalConfig.setDatacenterId(gc.getDatacenterId());
+            globalConfig.setMetaObjectHandler(gc.getMetaObjectHandler());
+            globalConfig.setSqlInjector(gc.getSqlInjector());
+            globalConfig.setWorkerId(gc.getWorkerId());
+            globalConfig.setSqlParserCache(gc.getSqlParserCache());
+
+            props.setGlobalConfig(globalConfig);
+        }
+        return props;
+    }
+
     @Bean("sqlSessionFactory")
     public DynamicSqlSessionFactory dynamicSqlSessionFactory(
             final ObjectProvider<DataSourceRegistry> registryProvider,
@@ -107,7 +133,8 @@ public class DynamicSqlSessionTemplateAutoConfiguration {
                     NamedDataSource namedDataSource = registryProvider.getObject().wrap(dataSource);
                     try {
                         logger.info("===[SQLHelper & MyBatis-Plus 2.x]=== Create mybatis SqlSessionFactory instance for datasource {}", namedDataSource.getDataSourceKey());
-                        SqlSessionFactory delegate = createSqlSessionFactory(dataSource, properties, interceptorsProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider, applicationContext);
+                        MybatisPlusProperties newProperties = cloneMybatisPlusProperties(properties);
+                        SqlSessionFactory delegate = createSqlSessionFactory(dataSource, newProperties, interceptorsProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider, applicationContext);
                         if (delegate != null) {
                             if (transactionFactoryCustomizer != null) {
                                 transactionFactoryCustomizer.customize(delegate.getConfiguration());
