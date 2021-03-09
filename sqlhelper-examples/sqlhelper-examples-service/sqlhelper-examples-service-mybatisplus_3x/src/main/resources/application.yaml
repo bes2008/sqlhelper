@@ -33,21 +33,21 @@ logging:
             plugins:
               likeescape: debug
 
-# sqlhelper:
-  # dynamic-datasource:
-   # enabled: true
-    #transaction:
+sqlhelper:
+  dynamic-datasource:
+    enabled: true
+    # transaction:
     #  expression: execution(public * com.jn.sqlhelper.examples.mybatisplus3.dao.*Dao.*(..))
     #key-choices:
     #  expression: execution(public * com.jn.sqlhelper.examples.mybatisplus3.controller.*Controller.*(..))
-    # datasources:
+    datasources:
       # https://h2database.com/
-      # - group: primary
-      #  name: master
-      #  url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
-      #  driver-class-name: org.h2.Driver
-      #  username: sa
-      #  password: 123456
+    - group: primary
+      name: master
+      url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+      driver-class-name: org.h2.Driver
+      username: sa
+      password: 123456
     #  - group: primary
     #    name: slave1
     #    url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test

@@ -20,6 +20,8 @@ import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
@@ -62,6 +64,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 
 import javax.sql.DataSource;
+import java.util.HashSet;
 import java.util.List;
 
 @ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
@@ -79,6 +82,38 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+    }
+
+    public MybatisPlusProperties cloneMybatisPlusProperties(@NonNull MybatisPlusProperties properties) {
+        MybatisPlusProperties props = new MybatisPlusProperties();
+        props.setCheckConfigLocation(properties.isCheckConfigLocation());
+        props.setConfigLocation(properties.getConfigLocation());
+        props.setConfigurationProperties(properties.getConfigurationProperties());
+        props.setExecutorType(properties.getExecutorType());
+        props.setMapperLocations(properties.getMapperLocations());
+        props.setTypeAliasesPackage(properties.getTypeAliasesPackage());
+        props.setTypeAliasesSuperType(properties.getTypeAliasesSuperType());
+        props.setTypeEnumsPackage(properties.getTypeEnumsPackage());
+        props.setTypeHandlersPackage(properties.getTypeHandlersPackage());
+
+        GlobalConfig gc = properties.getGlobalConfig();
+        if (gc != null) {
+            GlobalConfig globalConfig = new GlobalConfig();
+            globalConfig.setBanner(gc.isBanner());
+            globalConfig.setDatacenterId(gc.getDatacenterId());
+            globalConfig.setDbConfig(gc.getDbConfig());
+            globalConfig.setEnableSqlRunner(gc.isEnableSqlRunner());
+            globalConfig.setMapperRegistryCache(new HashSet<String>(gc.getMapperRegistryCache()));
+            globalConfig.setMetaObjectHandler(gc.getMetaObjectHandler());
+            globalConfig.setSqlInjector(gc.getSqlInjector());
+            globalConfig.setSuperMapperClass(gc.getSuperMapperClass());
+            globalConfig.setWorkerId(gc.getWorkerId());
+            globalConfig.setSqlParserCache(gc.isSqlParserCache());
+
+            props.setGlobalConfig(globalConfig);
+        }
+
+        return props;
     }
 
     @Bean(name = "sqlSessionFactory")
@@ -125,7 +160,8 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
                     NamedDataSource namedDataSource = registryProvider.getObject().wrap(dataSource);
                     try {
                         logger.info("===[SQLHelper & MyBatis-Plus 3.x]=== Create mybatis SqlSessionFactory instance for datasource {}", namedDataSource.getDataSourceKey());
-                        SqlSessionFactory delegate = createSqlSessionFactory(dataSource, properties, interceptorsProvider, typeHandlerProvider, languageDriverProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider, mybatisPlusPropertiesCustomizerProvider);
+                        MybatisPlusProperties newProperties = cloneMybatisPlusProperties(properties);
+                        SqlSessionFactory delegate = createSqlSessionFactory(dataSource, newProperties, interceptorsProvider, typeHandlerProvider, languageDriverProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider, mybatisPlusPropertiesCustomizerProvider);
                         if (delegate != null) {
 
                             if (transactionFactoryCustomizer != null) {
