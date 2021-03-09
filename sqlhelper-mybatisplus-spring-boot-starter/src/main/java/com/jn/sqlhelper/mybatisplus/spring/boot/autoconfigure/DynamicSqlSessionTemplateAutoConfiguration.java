@@ -108,7 +108,8 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
             globalConfig.setSqlInjector(gc.getSqlInjector());
             globalConfig.setSuperMapperClass(gc.getSuperMapperClass());
             globalConfig.setWorkerId(gc.getWorkerId());
-            globalConfig.setSqlParserCache(gc.isSqlParserCache());
+            // mybatis-plus高版本移除了 setSqlParserCache(), isSqlParserCache()
+            // globalConfig.setSqlParserCache(gc.isSqlParserCache());
 
             props.setGlobalConfig(globalConfig);
         }
