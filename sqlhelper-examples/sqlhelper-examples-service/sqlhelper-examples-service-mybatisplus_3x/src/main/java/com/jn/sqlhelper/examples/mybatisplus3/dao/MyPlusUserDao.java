@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.examples.mybatisplus3.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jn.sqlhelper.examples.model.MyPlusUser;
+import com.jn.sqlhelper.examples.mybatisplus3.model.MyPlusUser;
 import org.springframework.stereotype.Repository;
 
 /**

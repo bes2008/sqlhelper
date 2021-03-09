@@ -17,7 +17,7 @@ package com.jn.sqlhelper.examples.mybatisplus3.controller;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jn.sqlhelper.examples.model.MyPlusUser;
+import com.jn.sqlhelper.examples.mybatisplus3.model.MyPlusUser;
 import com.jn.sqlhelper.examples.mybatisplus3.dao.MyPlusUserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
