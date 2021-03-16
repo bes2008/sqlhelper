@@ -103,6 +103,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
             globalConfig.setDatacenterId(gc.getDatacenterId());
             globalConfig.setDbConfig(gc.getDbConfig());
             globalConfig.setEnableSqlRunner(gc.isEnableSqlRunner());
+            // 该字段必须保证，每个数据源一份
             globalConfig.setMapperRegistryCache(new HashSet<String>(gc.getMapperRegistryCache()));
             globalConfig.setMetaObjectHandler(gc.getMetaObjectHandler());
             globalConfig.setSqlInjector(gc.getSqlInjector());
@@ -112,6 +113,59 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
             // globalConfig.setSqlParserCache(gc.isSqlParserCache());
 
             props.setGlobalConfig(globalConfig);
+        }
+
+        MybatisConfiguration configurationPrototype = properties.getConfiguration();
+        if (configurationPrototype != null) {
+            MybatisConfiguration configuration = new MybatisConfiguration();
+            configuration.setGlobalConfig(gc);
+
+
+            configuration.setAggressiveLazyLoading(configurationPrototype.isAggressiveLazyLoading());
+            configuration.setAutoMappingBehavior(configurationPrototype.getAutoMappingBehavior());
+            configuration.setAutoMappingUnknownColumnBehavior(configurationPrototype.getAutoMappingUnknownColumnBehavior());
+
+            configuration.setCacheEnabled(configurationPrototype.isCacheEnabled());
+            configuration.setCallSettersOnNulls(configurationPrototype.isCallSettersOnNulls());
+            configuration.setConfigurationFactory(configurationPrototype.getConfigurationFactory());
+
+            configuration.setDatabaseId(configurationPrototype.getDatabaseId());
+            configuration.setDefaultScriptingLanguage(configurationPrototype.getDefaultScriptingLanuageInstance().getClass());
+
+
+            configuration.setDefaultExecutorType(configurationPrototype.getDefaultExecutorType());
+            configuration.setDefaultFetchSize(configurationPrototype.getDefaultFetchSize());
+            configuration.setDefaultStatementTimeout(configurationPrototype.getDefaultStatementTimeout());
+
+            configuration.setJdbcTypeForNull(configurationPrototype.getJdbcTypeForNull());
+
+            configuration.setLazyLoadingEnabled(configurationPrototype.isLazyLoadingEnabled());
+            configuration.setLazyLoadTriggerMethods(configurationPrototype.getLazyLoadTriggerMethods());
+            configuration.setLocalCacheScope(configurationPrototype.getLocalCacheScope());
+            configuration.setLogImpl(configurationPrototype.getLogImpl());
+            configuration.setLogPrefix(configurationPrototype.getLogPrefix());
+
+            configuration.setMapUnderscoreToCamelCase(configurationPrototype.isMapUnderscoreToCamelCase());
+            configuration.setMultipleResultSetsEnabled(configurationPrototype.isMultipleResultSetsEnabled());
+
+            configuration.setObjectFactory(configurationPrototype.getObjectFactory());
+            configuration.setObjectWrapperFactory(configurationPrototype.getObjectWrapperFactory());
+
+            configuration.setProxyFactory(configurationPrototype.getProxyFactory());
+
+            configuration.setReflectorFactory(configurationPrototype.getReflectorFactory());
+
+            configuration.setSafeResultHandlerEnabled(configurationPrototype.isSafeResultHandlerEnabled());
+            configuration.setSafeRowBoundsEnabled(configurationPrototype.isSafeRowBoundsEnabled());
+
+            configuration.setUseGeneratedShortKey(configurationPrototype.isUseGeneratedShortKey());
+            configuration.setUseColumnLabel(configurationPrototype.isUseColumnLabel());
+            configuration.setUseGeneratedKeys(configurationPrototype.isUseGeneratedKeys());
+
+            configuration.setVariables(configurationPrototype.getVariables());
+            configuration.setVfsImpl(configurationPrototype.getVfsImpl());
+
+            props.setConfiguration(configuration);
         }
 
         return props;

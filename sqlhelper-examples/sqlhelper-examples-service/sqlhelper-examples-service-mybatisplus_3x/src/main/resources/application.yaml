@@ -9,29 +9,7 @@ spring:
     username: sa
     password: 123456
 
-swagger:
-  base-package: com.jn.sqlhelper.examples.mybatisplus3.controller
-  application-title: SQLHelper + MyBatis
 
-mybatis-plus:
-  type-aliases-package: com.jn.sqlhelper.examples.model, com.jn.sqlhelper.examples.mybatisplus3.model
-  mapper-locations: classpath*:mapper/*.xml
-  global-config:
-    db-column-underline: true
-    jdbc-type-for-null: 'null'
-
-logging:
-  level:
-    root: info
-    com:
-      jn:
-        sqlhelper:
-          examples:
-            common:
-              dao: trace
-          mybatis:
-            plugins:
-              likeescape: debug
 
 sqlhelper:
   dynamic-datasource:
@@ -78,3 +56,29 @@ audit:
     - /users/**
   advisor-pointcut:
     expression: execution(public * com.jn.sqlhelper.examples.mybatisplus3.controller.*Controller.*(..))
+
+swagger:
+  base-package: com.jn.sqlhelper.examples.mybatisplus3.controller
+  application-title: SQLHelper + MyBatis
+
+mybatis-plus:
+  type-aliases-package: com.jn.sqlhelper.examples.model, com.jn.sqlhelper.examples.mybatisplus3.model
+  mapper-locations: classpath*:mapper/*.xml
+  global-config:
+    db-config:
+      db-column-underline: true
+  configuration:
+    jdbc-type-for-null: 'null'
+
+logging:
+  level:
+    root: info
+    com:
+      jn:
+        sqlhelper:
+          examples:
+            common:
+              dao: trace
+          mybatis:
+            plugins:
+              likeescape: debug
