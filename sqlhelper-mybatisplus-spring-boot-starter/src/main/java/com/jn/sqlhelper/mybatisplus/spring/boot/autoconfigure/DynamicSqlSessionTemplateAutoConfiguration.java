@@ -64,6 +64,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 
 import javax.sql.DataSource;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
 
@@ -158,7 +159,12 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
             configuration.setSafeResultHandlerEnabled(configurationPrototype.isSafeResultHandlerEnabled());
             configuration.setSafeRowBoundsEnabled(configurationPrototype.isSafeRowBoundsEnabled());
 
-            configuration.setUseGeneratedShortKey(configurationPrototype.isUseGeneratedShortKey());
+            Method setUseGeneratedShortKey = Reflects.getPublicMethod(configuration.getClass(), "setUseGeneratedShortKey", boolean.class);
+            if (setUseGeneratedShortKey != null) {
+                boolean isUseGeneratedShortKey = Reflects.invokePublicMethod(configurationPrototype, "isUseGeneratedShortKey", new Class[0], new Object[0], true, false);
+                Reflects.invoke(setUseGeneratedShortKey, configuration, new Object[]{isUseGeneratedShortKey}, true, false);
+            }
+
             configuration.setUseColumnLabel(configurationPrototype.isUseColumnLabel());
             configuration.setUseGeneratedKeys(configurationPrototype.isUseGeneratedKeys());
 
