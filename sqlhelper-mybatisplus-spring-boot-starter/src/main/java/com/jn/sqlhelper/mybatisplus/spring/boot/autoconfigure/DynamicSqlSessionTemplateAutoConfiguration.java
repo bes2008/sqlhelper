@@ -98,14 +98,15 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
         props.setTypeHandlersPackage(properties.getTypeHandlersPackage());
 
         GlobalConfig gc = properties.getGlobalConfig();
+        GlobalConfig globalConfig = null;
         if (gc != null) {
-            GlobalConfig globalConfig = new GlobalConfig();
+            globalConfig = new GlobalConfig();
             globalConfig.setBanner(gc.isBanner());
             globalConfig.setDatacenterId(gc.getDatacenterId());
             globalConfig.setDbConfig(gc.getDbConfig());
             globalConfig.setEnableSqlRunner(gc.isEnableSqlRunner());
             // 该字段必须保证，每个数据源一份
-            globalConfig.setMapperRegistryCache(new HashSet<String>(gc.getMapperRegistryCache()));
+            globalConfig.setMapperRegistryCache(new HashSet<String>());
             globalConfig.setMetaObjectHandler(gc.getMetaObjectHandler());
             globalConfig.setSqlInjector(gc.getSqlInjector());
             globalConfig.setSuperMapperClass(gc.getSuperMapperClass());
@@ -119,8 +120,9 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
         MybatisConfiguration configurationPrototype = properties.getConfiguration();
         if (configurationPrototype != null) {
             MybatisConfiguration configuration = new MybatisConfiguration();
-            configuration.setGlobalConfig(gc);
-
+            if (globalConfig != null) {
+                configuration.setGlobalConfig(globalConfig);
+            }
 
             configuration.setAggressiveLazyLoading(configurationPrototype.isAggressiveLazyLoading());
             configuration.setAutoMappingBehavior(configurationPrototype.getAutoMappingBehavior());

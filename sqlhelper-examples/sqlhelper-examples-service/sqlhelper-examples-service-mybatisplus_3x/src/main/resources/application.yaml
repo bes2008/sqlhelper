@@ -82,3 +82,6 @@ logging:
           mybatis:
             plugins:
               likeescape: debug
+      baomidou:
+        mybatisplus:
+          core: debug
