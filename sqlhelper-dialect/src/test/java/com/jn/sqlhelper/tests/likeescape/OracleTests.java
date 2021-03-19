@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.mybatis.tests.like;
+package com.jn.sqlhelper.tests.likeescape;
 
 import com.jn.langx.util.struct.Pair;
 import com.jn.sqlhelper.dialect.internal.OracleDialect;
@@ -82,10 +82,25 @@ public class OracleTests {
         doTest(sql);
     }
 
+
+    @Test
+    public void test5() {
+        String sql = "select *\n" +
+                "from (\n" +
+                "     select ID_, SOFTWARE_ID_\n" +
+                "     from TM_SOFTWARE_INSTANCE\n" +
+                "    where 1 =1 and \n" +
+                "        lower(NAME_) like CONCAT(CONCAT('%',?),'%')\n" +
+                "        or lower(VERSION_) like '%?%'";
+        doTest(sql);
+    }
+
     private void doTest( String sql) {
         System.out.println("\n\n=================\n");
         Pair<List<Integer>, List<Integer>> pair = LikeEscapers.findEscapedSlots(sql);
         String newSql = LikeEscapers.insertLikeEscapeDeclares(sql, pair.getValue(), likeEscaper);
+        System.out.println(sql);
+        System.out.println("\n===>\n");
         System.out.println(newSql);
     }
 
