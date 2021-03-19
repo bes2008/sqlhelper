@@ -30,8 +30,8 @@ public class OracleTests {
     public void test1() {
         String sql = "select *\n" +
                 "from (\n" +
-                "     select ID_, SOFTWARE_ID_\n" +
-                "     from TM_SOFTWARE_INSTANCE\n" +
+                "    select ID_, SOFTWARE_ID_\n" +
+                "    from TM_SOFTWARE_INSTANCE\n" +
                 "    where 1 =1 and (\n" +
                 "        lower(NAME_) like CONCAT(CONCAT('%',?),'%')\n" +
                 "        or lower(VERSION_) like CONCAT(CONCAT('%',?),'%')\n" +
@@ -45,8 +45,8 @@ public class OracleTests {
     public void test2() {
         String sql = "select *\n" +
                 "from (\n" +
-                "     select ID_, SOFTWARE_ID_\n" +
-                "     from TM_SOFTWARE_INSTANCE\n" +
+                "    select ID_, SOFTWARE_ID_\n" +
+                "    from TM_SOFTWARE_INSTANCE\n" +
                 "    where 1 =1 and \n" +
                 "        lower(NAME_) like CONCAT(CONCAT('%',?),'%')\n" +
                 "        or lower(VERSION_) like CONCAT(CONCAT('%',?),'%') order by NAME_\n" +
@@ -59,8 +59,8 @@ public class OracleTests {
     public void test3() {
         String sql = "select *\n" +
                 "from (\n" +
-                "     select ID_, SOFTWARE_ID_\n" +
-                "     from TM_SOFTWARE_INSTANCE\n" +
+                "    select ID_, SOFTWARE_ID_\n" +
+                "    from TM_SOFTWARE_INSTANCE\n" +
                 "    where 1 =1 and \n" +
                 "        lower(NAME_) like CONCAT(CONCAT('%',?),'%')\n" +
                 "        or lower(VERSION_) like CONCAT(CONCAT('%',?),'%')\n" +
@@ -73,8 +73,8 @@ public class OracleTests {
     public void test4() {
         String sql = "select *\n" +
                 "from (\n" +
-                "     select ID_, SOFTWARE_ID_\n" +
-                "     from TM_SOFTWARE_INSTANCE\n" +
+                "    select ID_, SOFTWARE_ID_\n" +
+                "    from TM_SOFTWARE_INSTANCE\n" +
                 "    where 1 =1 and (\n" +
                 "        lower(NAME_) like CONCAT(CONCAT('%',?),'%')\n" +
                 "        or lower(VERSION_) like '%?%'\n" +
@@ -87,8 +87,8 @@ public class OracleTests {
     public void test5() {
         String sql = "select *\n" +
                 "from (\n" +
-                "     select ID_, SOFTWARE_ID_\n" +
-                "     from TM_SOFTWARE_INSTANCE\n" +
+                "    select ID_, SOFTWARE_ID_\n" +
+                "    from TM_SOFTWARE_INSTANCE\n" +
                 "    where 1 =1 and \n" +
                 "        lower(NAME_) like CONCAT(CONCAT('%',?),'%')\n" +
                 "        or lower(VERSION_) like '%?%'";
