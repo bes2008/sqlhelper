@@ -116,6 +116,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     protected void setLikeEscaper(@NonNull LikeEscaper likeEscaper) {
         likeEscaper = likeEscaper == null ? BackslashStyleEscaper.INSTANCE : likeEscaper;
         getRealDialect().likeEscaper = likeEscaper;
+        this.likeEscaper = likeEscaper;
     }
 
 

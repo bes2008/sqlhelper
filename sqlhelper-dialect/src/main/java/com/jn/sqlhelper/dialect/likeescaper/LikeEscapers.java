@@ -110,17 +110,25 @@ public class LikeEscapers {
     /**
      * @return key: the parameters placeholder index: all will be escaped ? indexes
      * value: all slots will be insert appentmentOfLikeClause
+     *
+     * 这个方法有两个作用，
+     * 1）对数据进行分段，返回值的key 用来表示分段的起始索引，结束索引
+     * 2）计算每一段的参数个数，value用来表示该段中涉及到的参数个数
      */
     public static Pair<List<Integer>, List<Integer>> findEscapedSlots(String sql) {
-        String normalDelimiter = " \t\n\r\f',";
+        String normalDelimiter = " \t\n\r\f',()";
         StringTokenizer tokenizer = new StringTokenizer(sql.toLowerCase(), normalDelimiter, true);
         int singleQuoteCount = 0;
         List<Integer> parameterPlaceholderIndexes = Collects.emptyArrayList();
         List<Integer> escapeDeclareSlotIndexes = Collects.emptyArrayList();
 
         int readedLength = 0;
+
+        // segment 两个slot之前的字符串，为一个 segment
+
         int segmentStartIndex = 0; // split to segments by 'like' keyword
         int readedParameterCount = 0;
+        int braceCountAfterLike = 0; // 遇到 ( 则 + 1，遇到）则 -1
         boolean inLikeClause = false;
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
@@ -133,30 +141,66 @@ public class LikeEscapers {
             }
             if (Strings.isBlank(token)) {
                 readedLength = readedLength + token.length();
+                continue;
             } else if ("'".equals(token)) {
                 singleQuoteCount++;
-                readedLength++;
+                readedLength = readedLength + token.length();
+                continue;
             } else if (",".equals(token)) {
-                readedLength++;
+                readedLength = readedLength + token.length();
+                continue;
             } else if ("like".equals(token) && singleQuoteCount % 2 == 0) {
                 inLikeClause = true;
                 String segment = sql.substring(segmentStartIndex, readedLength);
                 readedParameterCount = readedParameterCount + SQLs.findPlaceholderParameterCount(segment);
                 readedLength = readedLength + token.length();
                 segmentStartIndex = readedLength;
-            } else if (inLikeClause && singleQuoteCount % 2 == 0 && keywordsAfterLikeClause.contains(token)) {
-                inLikeClause = false;
+                continue;
+            }
 
-                String segment = sql.substring(segmentStartIndex, readedLength);
-                int parameterCountInLikeClause = SQLs.findPlaceholderParameterCount(segment);
-                if (parameterCountInLikeClause > 0) {
-                    escapeDeclareSlotIndexes.add(readedLength);
-                    for (int i = 0; i < parameterCountInLikeClause; i++) {
-                        parameterPlaceholderIndexes.add(readedParameterCount + i);
+            if (inLikeClause && singleQuoteCount % 2 == 0) {
+
+                boolean needCompute = false;
+                boolean addTokenLengthToReaded = false;
+                if ("(".equals(token)) {
+                    braceCountAfterLike++;
+                    readedLength = readedLength + token.length();
+                    addTokenLengthToReaded = true;
+                    continue;
+                } else if (")".equals(token)) {
+                    if (braceCountAfterLike == 0) {
+                        needCompute = true;
+                        addTokenLengthToReaded = false;
                     }
-                    readedParameterCount = readedParameterCount + parameterCountInLikeClause;
+                    braceCountAfterLike--;
+                    if (braceCountAfterLike == 0) {
+                        needCompute = true;
+                        readedLength = readedLength + token.length();
+                        addTokenLengthToReaded = true;
+                    }
+                } else if (keywordsAfterLikeClause.contains(token)) {
+                    // 当 在 like 语句中，找到了一些关键字
+                    needCompute = true;
                 }
-                segmentStartIndex = readedLength;
+
+                if (needCompute) {
+                    inLikeClause = false;
+
+                    String segment = sql.substring(segmentStartIndex, readedLength);
+                    System.out.println(segment);
+                    int parameterCountInLikeClause = SQLs.findPlaceholderParameterCount(segment);
+                    if (parameterCountInLikeClause > 0) {
+                        escapeDeclareSlotIndexes.add(readedLength);
+                        for (int i = 0; i < parameterCountInLikeClause; i++) {
+                            parameterPlaceholderIndexes.add(readedParameterCount + i);
+                        }
+                        readedParameterCount = readedParameterCount + parameterCountInLikeClause;
+                    }
+                    segmentStartIndex = readedLength;
+                }
+                if (!addTokenLengthToReaded) {
+                    readedLength = readedLength + token.length();
+                }
             } else {
                 readedLength = readedLength + token.length();
             }

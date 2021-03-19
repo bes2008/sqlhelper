@@ -40,7 +40,7 @@ public class OracleDialect extends AbstractDialect {
         super();
         setDelegate(new Oracle9iDialect());
         setUrlParser(new OracleUrlParser());
-        setLikeEscaper(new SlashStyleEscaper());
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
     }
 
     public OracleDialect(java.sql.Driver driver) {
@@ -72,7 +72,7 @@ public class OracleDialect extends AbstractDialect {
 
     class OracleBaseDialect extends AbstractDialect {
         OracleBaseDialect() {
-            OracleDialect.this.setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
+            setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
         }
 
         @Override
