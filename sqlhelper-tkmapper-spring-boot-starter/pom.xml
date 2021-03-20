@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlhelper-tkmapper-spring-boot-starter</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
     <dependencyManagement>
         <dependencies>
             <dependency>

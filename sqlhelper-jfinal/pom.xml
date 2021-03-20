@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlhelper-jfinal</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
     <description>
         Supports jFinal (an ORM framework)
     </description>

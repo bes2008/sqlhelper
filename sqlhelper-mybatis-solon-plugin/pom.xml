@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlhelper-mybatis-solon-plugin</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
     <packaging>jar</packaging>
 
     <description>

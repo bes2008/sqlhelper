@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlhelper-mybatisplus</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
     <dependencies>
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>

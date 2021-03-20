@@ -12,6 +12,7 @@
         Supports mango (an ORM framework)
     </description>
     <artifactId>sqlhelper-mango</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
     <dependencies>
         <dependency>
             <groupId>org.jfaster</groupId>
