@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlhelper-examples-service-springjdbc</artifactId>
-
+    <name>${groupId}:${artifactId}:${version}</name>
     <properties>
         <swagger.version>2.9.2</swagger.version>
     </properties>

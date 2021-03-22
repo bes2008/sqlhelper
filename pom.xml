@@ -7,7 +7,7 @@
     <groupId>com.github.fangjinuo.sqlhelper</groupId>
     <artifactId>sqlhelper</artifactId>
     <version>3.4.14</version>
-    <name>sqlhelper</name>
+    <name>${groupId}:${artifactId}:${version}</name>
     <description>
         JDBC Extensions:
         Supports SQL Tools (ORM, Dialect, Pagination, DDL Dump, UrlParser, SqlStatementParser, WallFilter, BatchExecutor for Test)

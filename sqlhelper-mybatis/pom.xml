@@ -10,6 +10,7 @@
         <version>3.4.14</version>
     </parent>
     <artifactId>sqlhelper-mybatis</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
     <packaging>jar</packaging>
     <description>
         Supports mybatis (an ORM framework)

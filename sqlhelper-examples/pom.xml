@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
     <artifactId>sqlhelper-examples</artifactId>
+    <name>${groupId}:${artifactId}:${version}</name>
     <packaging>pom</packaging>
     <modules>
         <module>sqlhelper-examples-model</module>

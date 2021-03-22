@@ -139,14 +139,11 @@ public class LikeEscapers {
                     continue;
                 }
             }
-            if (Strings.isBlank(token)) {
+            if (Strings.isBlank(token) || ",".equals(token)) {
                 readedLength = readedLength + token.length();
                 continue;
             } else if ("'".equals(token)) {
                 singleQuoteCount++;
-                readedLength = readedLength + token.length();
-                continue;
-            } else if (",".equals(token)) {
                 readedLength = readedLength + token.length();
                 continue;
             } else if ("like".equals(token) && singleQuoteCount % 2 == 0) {
@@ -185,9 +182,8 @@ public class LikeEscapers {
 
                 if (needCompute) {
                     inLikeClause = false;
-
+                    braceCountAfterLike = 0;
                     String segment = sql.substring(segmentStartIndex, readedLength);
-                    System.out.println(segment);
                     int parameterCountInLikeClause = SQLs.findPlaceholderParameterCount(segment);
                     if (parameterCountInLikeClause > 0) {
                         escapeDeclareSlotIndexes.add(readedLength);
