@@ -7,6 +7,7 @@ Supports the following databases, your can find them in [DB Engines](https://db-
    + AliSQL (阿里巴巴, 兼容 mysql)
    + AntDB (亚信)
    + Aurora (Amazon Aurora)
+   + ArgoDB (星环科技)
    + Azure (Microsoft Azure Cloud Database)
 + B
    + BigObject

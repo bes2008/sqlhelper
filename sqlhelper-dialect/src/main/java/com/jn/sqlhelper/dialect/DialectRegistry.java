@@ -111,6 +111,7 @@ public class DialectRegistry {
                 AltibaseDialect.class,
                 AntDBDialect.class,
                 AuroraDialect.class,
+                ArgoDBDialect.class,
                 AzureDialect.class,
 
                 BigObjectDialect.class,
