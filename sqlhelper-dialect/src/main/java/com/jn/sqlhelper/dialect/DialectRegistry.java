@@ -107,6 +107,7 @@ public class DialectRegistry {
                 AccessDialect.class,
                 ActorDBDialect.class,
                 AgensGraphDialect.class,
+                AliSQLDialect.class,
                 AltibaseDialect.class,
                 AntDBDialect.class,
                 AuroraDialect.class,
@@ -244,6 +245,7 @@ public class DialectRegistry {
                 VoltDBDialect.class,
 
                 XtremeSQLDialect.class,
+                XuguDialect.class,
 
                 YaacomoDialect.class,
                 YugabyteDBDialect.class
