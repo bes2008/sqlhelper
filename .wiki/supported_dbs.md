@@ -65,6 +65,7 @@ Supports the following databases, your can find them in [DB Engines](https://db-
    + K-DB (浪潮数据库)
    + KarelDB
    + KingBase (人大金仓)
+   + KingDB (金山云数据库 https://www.ksyun.com/nv/product/KingDB.html)
    + Kinetica   
    + Kognitio
 + L

@@ -169,6 +169,7 @@ public class DialectRegistry {
                 KarelDBDialect.class,
                 KDBDialect.class,
                 KingbaseDialect.class,
+                KingDBDialect.class,
                 KineticaDialect.class,
                 KognitioDialect.class,
 
