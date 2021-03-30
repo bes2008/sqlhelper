@@ -34,7 +34,7 @@ Supports the following databases, your can find them in [DB Engines](https://db-
    + Drill (Apache Drill)   
 + E      
    + Elasticsearch
-   + EsgynDB
+   + EsgynDB (易鲸捷)
 + F
    + FileMaker
    + Firebird
@@ -93,7 +93,7 @@ Supports the following databases, your can find them in [DB Engines](https://db-
    + OpenEdge
    + Oracle (8i,9,9i,10g,11g,12c)
    + OrientDB
-   + OSACR (神通数据库)
+   + OSACR (神州通用)
 + P 
    + Paradox
    + PerconaMySQL
@@ -133,6 +133,7 @@ Supports the following databases, your can find them in [DB Engines](https://db-
    + VoltDB
 + X
    + Xtreme (EXtremeSQL, XtremeData)
+   + Xugu (虚谷)
 + Y
    + Yaacomo
    + YugabyteDB
