@@ -18,12 +18,13 @@ import com.jn.langx.util.collection.Collects;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class BatchResult<E> {
     private BatchStatement statement;
     private List<E> parameters;
-    private int rowsAffected;
-    private final Set<Throwable> throwables = Collects.newLinkedHashSet();
+    private volatile int rowsAffected;
+    private final Set<Throwable> throwables = new CopyOnWriteArraySet<Throwable>();
 
     public BatchStatement getStatement() {
         return statement;
