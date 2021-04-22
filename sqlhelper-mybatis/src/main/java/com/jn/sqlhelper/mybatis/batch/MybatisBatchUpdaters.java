@@ -21,6 +21,7 @@ import com.jn.langx.util.*;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.concurrent.completion.CompletableFuture;
 import com.jn.langx.util.function.Consumer2;
+import com.jn.langx.util.function.Function;
 import com.jn.langx.util.function.Supplier;
 import com.jn.langx.util.function.Supplier0;
 import com.jn.sqlhelper.common.batch.BatchMode;
@@ -123,8 +124,7 @@ public class MybatisBatchUpdaters {
      * @param statement
      * @param entities       批量更新的数据
      * @param batchSize      批大小
-     * @param executor       异步任务执行器，若存在该参数，则进行异步执行，若不存在该参数，则在当前线程执行。
-     * @param <E>
+     * @param executor       异步任务执行器，若存在该参数，则进行异步执行，若不存在该参数，则在当前线程执行。前提是 parallel = false
      * @return
      * @throws SQLException
      */
@@ -134,6 +134,31 @@ public class MybatisBatchUpdaters {
                                                  List<E> entities,
                                                  int batchSize,
                                                  @Nullable ExecutorService executor) throws SQLException {
+        return batchUpdate(sessionFactory, batchMode, statement, entities, batchSize, executor, false);
+    }
+
+    /**
+     * 提供批量更新数据的逻辑。
+     * 当最终计算的批次大于1时，那么多个批次会串行执行。
+     * 当期望不在当前线程执行时，请传递executor参数
+     *
+     * @param sessionFactory
+     * @param batchMode
+     * @param statement
+     * @param entities       批量更新的数据
+     * @param batchSize      批大小
+     * @param executor       异步任务执行器，若存在该参数，则进行异步执行，若不存在该参数，则在当前线程执行。前提是 parallel = false
+     * @param parallel       当数据量被分为多个批次时，是否采用并行执行方式，若采用并行执行方式时，必然不在当前线程执行批量更新任务
+     * @return
+     * @throws SQLException
+     */
+    public static <E> BatchResult<E> batchUpdate(@NonNull final SqlSessionFactory sessionFactory,
+                                                 @Nullable final BatchMode batchMode,
+                                                 @NonNull final MybatisBatchStatement statement,
+                                                 List<E> entities,
+                                                 int batchSize,
+                                                 @Nullable ExecutorService executor,
+                                                 boolean parallel) throws SQLException {
 
         batchSize = batchSize < 1 ? 100 : batchSize;
         final BatchResult<E> result = new BatchResult<E>();
@@ -146,44 +171,97 @@ public class MybatisBatchUpdaters {
 
         final List<List<E>> entitiesList = Collects.partitionBySize(entities, batchSize);
 
-        CompletableFuture<BatchResult<E>> future = null;
+        CompletableFuture future = null;
 
-        if (executor == null) {
-            future = CompletableFuture.completedFuture(internalInvokeBatch(sessionFactory, batchMode, statement, entitiesList))
-                    .whenComplete(new Consumer2<BatchResult<E>, Throwable>() {
-                        @Override
-                        public void accept(BatchResult<E> batchResult0, Throwable throwable) {
-                            if (batchResult0 != null) {
-                                result.setRowsAffected(result.getRowsAffected() + batchResult0.getRowsAffected());
-                                result.getThrowables().addAll(batchResult0.getThrowables());
+        if (!parallel) {
+            if (executor == null) {
+                future = CompletableFuture.completedFuture(internalInvokeBatch(sessionFactory, batchMode, statement, entitiesList))
+                        .whenComplete(new Consumer2<BatchResult<E>, Throwable>() {
+                            @Override
+                            public void accept(BatchResult<E> batchResult0, Throwable throwable) {
+                                if (batchResult0 != null) {
+                                    result.setRowsAffected(result.getRowsAffected() + batchResult0.getRowsAffected());
+                                    result.getThrowables().addAll(batchResult0.getThrowables());
+                                }
+                                if (throwable != null) {
+                                    result.getThrowables().add(throwable);
+                                }
                             }
-                            if (throwable != null) {
-                                result.getThrowables().add(throwable);
-                            }
+                        });
+            } else {
+                future = CompletableFuture.supplyAsync(new Supplier0<BatchResult<E>>() {
+                    @Override
+                    public BatchResult<E> get() {
+                        try {
+                            return internalInvokeBatch(sessionFactory, batchMode, statement, entitiesList);
+                        } catch (SQLException e) {
+                            throw Throwables.wrapAsRuntimeException(e);
                         }
-                    });
+                    }
+                }, executor).whenCompleteAsync(new Consumer2<BatchResult<E>, Throwable>() {
+                    @Override
+                    public void accept(BatchResult<E> batchResult0, Throwable throwable) {
+                        if (batchResult0 != null) {
+                            result.setRowsAffected(result.getRowsAffected() + batchResult0.getRowsAffected());
+                            result.getThrowables().addAll(batchResult0.getThrowables());
+                        }
+                        if (throwable != null) {
+                            result.getThrowables().add(throwable);
+                        }
+                    }
+                });
+            }
         } else {
-            future = CompletableFuture.supplyAsync(new Supplier0<BatchResult<E>>() {
-                @Override
-                public BatchResult<E> get() {
-                    try {
-                        return internalInvokeBatch(sessionFactory, batchMode, statement, entitiesList);
-                    } catch (SQLException e) {
-                        throw Throwables.wrapAsRuntimeException(e);
-                    }
-                }
-            }, executor).whenCompleteAsync(new Consumer2<BatchResult<E>, Throwable>() {
-                @Override
-                public void accept(BatchResult<E> batchResult0, Throwable throwable) {
-                    if (batchResult0 != null) {
-                        result.setRowsAffected(result.getRowsAffected() + batchResult0.getRowsAffected());
-                        result.getThrowables().addAll(batchResult0.getThrowables());
-                    }
-                    if (throwable != null) {
-                        result.getThrowables().add(throwable);
-                    }
-                }
-            });
+            List<CompletableFuture<BatchResult<E>>> futures = Collects.emptyArrayList();
+            for (List<E> es : entitiesList) {
+
+                final List<E> segment = es;
+                futures.add(
+                        (executor == null ? CompletableFuture.supplyAsync(new Supplier0<BatchResult<E>>() {
+                            @Override
+                            public BatchResult<E> get() {
+                                try {
+                                    return batch(sessionFactory, batchMode, statement, segment);
+                                } catch (SQLException e) {
+                                    throw Throwables.wrapAsRuntimeException(e);
+                                }
+                            }
+                        }) : CompletableFuture.supplyAsync(new Supplier0<BatchResult<E>>() {
+                            @Override
+                            public BatchResult<E> get() {
+                                try {
+                                    return batch(sessionFactory, batchMode, statement, segment);
+                                } catch (SQLException e) {
+                                    throw Throwables.wrapAsRuntimeException(e);
+                                }
+                            }
+                        }, executor))
+                                .exceptionally(new Function<Throwable, BatchResult<E>>() {
+                                    @Override
+                                    public BatchResult<E> apply(Throwable throwable) {
+                                        BatchResult<E> result = new BatchResult<E>();
+                                        result.setParameters(segment);
+                                        result.setRowsAffected(0);
+                                        result.setStatement(statement);
+                                        result.setThrowables(Collects.newArrayList(throwable));
+                                        return result;
+                                    }
+                                })
+                                .whenCompleteAsync(new Consumer2<BatchResult<E>, Throwable>() {
+                                    @Override
+                                    public void accept(BatchResult<E> batchResult0, Throwable throwable) {
+                                        if (batchResult0 != null) {
+                                            result.setRowsAffected(result.getRowsAffected() + batchResult0.getRowsAffected());
+                                            result.getThrowables().addAll(batchResult0.getThrowables());
+                                        }
+                                        if (throwable != null) {
+                                            result.getThrowables().add(throwable);
+                                        }
+                                    }
+                                }));
+            }
+
+            future = CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]));
         }
         if (future != null) {
             future.join();
