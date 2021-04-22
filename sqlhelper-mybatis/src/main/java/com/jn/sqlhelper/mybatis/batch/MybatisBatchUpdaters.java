@@ -269,6 +269,16 @@ public class MybatisBatchUpdaters {
         return result;
     }
 
+    /**
+     * 串行执行
+     * @param sessionFactory
+     * @param batchMode
+     * @param statement
+     * @param entitiesList
+     * @param <E>
+     * @return
+     * @throws SQLException
+     */
     private static <E> BatchResult<E> internalInvokeBatch(@NonNull final SqlSessionFactory sessionFactory,
                                                           @Nullable final BatchMode batchMode,
                                                           @NonNull final MybatisBatchStatement statement,
