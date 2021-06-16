@@ -33,7 +33,7 @@ public class TableInfoHelpers {
 
             // 2.x
             if (ClassLoaders.hasClass("com.baomidou.mybatisplus.toolkit.TableInfoHelper", TableInfoHelpers.class.getClassLoader())) {
-                helperClass = ClassLoaders.loadClass("com.baomidou.mybatisplus.core.toolkit.TableInfoHelper", TableInfoHelpers.class.getClassLoader());
+                helperClass = ClassLoaders.loadClass("com.baomidou.mybatisplus.toolkit.TableInfoHelper", TableInfoHelpers.class.getClassLoader());
             }
             // 3.0 ~ 3.1.0
             if (helperClass == null && ClassLoaders.hasClass("com.baomidou.mybatisplus.core.toolkit.TableInfoHelper", TableInfoHelpers.class.getClassLoader())) {
