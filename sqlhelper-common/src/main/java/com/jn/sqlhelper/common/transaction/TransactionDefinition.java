@@ -14,13 +14,13 @@
 
 package com.jn.sqlhelper.common.transaction;
 
-import com.jn.langx.Named;
+import com.jn.langx.Nameable;
 
 /**
  * 定义事务
  * @since 3.4.3
  */
-public interface TransactionDefinition extends Named {
+public interface TransactionDefinition extends Nameable {
     int getIsolationLevel();
 
     boolean isReadonly();

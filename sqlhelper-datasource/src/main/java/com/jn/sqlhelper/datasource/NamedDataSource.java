@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.datasource;
 
-import com.jn.langx.Named;
+import com.jn.langx.Nameable;
 import com.jn.langx.annotation.Nullable;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
@@ -25,7 +25,7 @@ import javax.sql.DataSource;
  * 为数据源提供 name, properties 属性
  * @since 3.4.0
  */
-public interface NamedDataSource extends DataSource, Named {
+public interface NamedDataSource extends DataSource, Nameable {
     String getGroup();
 
     void setGroup(String group);

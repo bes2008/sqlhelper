@@ -14,17 +14,16 @@
 
 package com.jn.sqlhelper.common.transaction;
 
+import com.jn.langx.Nameable;
 import com.jn.langx.Named;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.sql.SQLException;
 
 /**
  * JDBC Connection, MyBatis SqlSession, Hibernate Session 等等
  * @since 3.4.3
  */
-public interface TransactionalResource extends Named {
+public interface TransactionalResource extends Nameable {
 
     void commit(boolean force) throws SQLException;
 

@@ -14,10 +14,10 @@
 
 package com.jn.sqlhelper.common.transaction.definition.parser;
 
-import com.jn.langx.Named;
+import com.jn.langx.Nameable;
 import com.jn.sqlhelper.common.transaction.TransactionDefinition;
 
-public interface NamedTransactionDefinitionParser<I> extends TransactionDefinitionParser<I>, Named {
+public interface NamedTransactionDefinitionParser<I> extends TransactionDefinitionParser<I>, Nameable {
     @Override
     void setName(String s);
 
