@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.examples.httpclient.tests.feign;
 
-import com.jn.agileway.feign.codec.EasyjsonDecoder;
+import com.jn.agileway.feign.supports.rpc.rest.EasyjsonDecoder;
 import com.jn.easyjson.core.JSON;
 import com.jn.easyjson.core.JSONBuilder;
 import com.jn.easyjson.core.JSONBuilderProvider;
