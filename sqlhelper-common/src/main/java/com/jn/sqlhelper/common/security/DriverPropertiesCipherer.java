@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.common.security;
 
 
-import com.jn.langx.security.cipher.StringCipherer;
+import com.jn.langx.security.crypto.cipher.StringCipherer;
 
 /**
  * 提供对 username, password 加密、解密功能

@@ -15,8 +15,8 @@
 package com.jn.sqlhelper.cli.commands;
 
 import com.jn.langx.codec.base64.Base64;
-import com.jn.langx.security.JCAEStandardName;
-import com.jn.langx.security.PKIs;
+import com.jn.langx.security.crypto.JCAEStandardName;
+import com.jn.langx.security.crypto.key.PKIs;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
 import com.jn.sqlhelper.common.security.DriverPropertiesRsaCipherer;

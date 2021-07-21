@@ -63,11 +63,6 @@ public class PagingResult<E> {
         return Long.valueOf(getMaxPageCount(pageSize)).intValue();
     }
 
-    @Deprecated
-    public long getMaxPageCount() {
-        return getMaxPageCount(pageSize);
-    }
-
     public long getMaxPageCount(int pageSize) {
         // unknown
         if (this.total < 0) {
