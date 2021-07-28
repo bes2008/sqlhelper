@@ -24,6 +24,7 @@ import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.*;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -138,5 +139,9 @@ public class MybatisUtils {
 
     public static String getSql(BoundSql boundSql) {
         return boundSql.getSql();
+    }
+
+    public static boolean hasInterceptor(@NonNull Configuration configuration,@NonNull Interceptor interceptor){
+        return configuration.getInterceptors().contains(interceptor);
     }
 }

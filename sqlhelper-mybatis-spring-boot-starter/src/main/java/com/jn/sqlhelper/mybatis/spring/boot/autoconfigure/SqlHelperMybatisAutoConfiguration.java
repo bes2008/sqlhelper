@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.mybatis.spring.boot.autoconfigure;
 
+import com.jn.sqlhelper.mybatis.MybatisUtils;
 import com.jn.sqlhelper.mybatis.plugins.CustomScriptLanguageDriver;
 import com.jn.sqlhelper.mybatis.plugins.SqlHelperMybatisPlugin;
 import com.jn.sqlhelper.mybatis.springboot.autoconfigure.SqlHelperMybatisPluginAutoConfiguration;
@@ -39,7 +40,9 @@ public class SqlHelperMybatisAutoConfiguration implements ConfigurationCustomize
         logger.info("===[SQLHelper & MyBatis]=== Start to customize mybatis configuration with mybatis-spring-boot-autoconfigure");
         configuration.setDefaultScriptingLanguage(CustomScriptLanguageDriver.class);
         logger.info("===[SQLHelper & MyBatis]=== Add interceptor {} to mybatis configuration", plugin);
-        configuration.addInterceptor(plugin);
+        if (!MybatisUtils.hasInterceptor(configuration, plugin)) {
+            configuration.addInterceptor(plugin);
+        }
     }
 
     @Autowired
