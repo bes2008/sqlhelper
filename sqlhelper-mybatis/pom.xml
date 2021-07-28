@@ -3,11 +3,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>com.github.fangjinuo.sqlhelper</groupId>
         <artifactId>sqlhelper</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4</version>
     </parent>
     <artifactId>sqlhelper-mybatis</artifactId>
     <name>${groupId}:${artifactId}:${version}</name>
