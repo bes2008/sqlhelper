@@ -15,13 +15,13 @@
 package com.jn.sqlhelper.common.security;
 
 
-import com.jn.langx.security.crypto.cipher.StringCipherer;
+import com.jn.langx.security.crypto.cipher.StringCipher;
 
 /**
  * 提供对 username, password 加密、解密功能
  *
  * @since 3.4.5
  */
-public interface DriverPropertiesCipherer extends StringCipherer {
+public interface DriverPropertiesCipher extends StringCipher {
 
 }

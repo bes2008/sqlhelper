@@ -23,7 +23,7 @@ import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Function;
 import com.jn.langx.util.function.Predicate;
-import com.jn.sqlhelper.common.security.DriverPropertiesCipherer;
+import com.jn.sqlhelper.common.security.DriverPropertiesCipher;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.NamedDataSource;
@@ -73,7 +73,7 @@ public class DynamicDataSourcesAutoConfiguration {
     @Bean(name = "dataSourcesFactoryBean")
     public ListFactoryBean dataSourcesFactoryBean(
             // 这里不用，只是为了控制 该类要在 Spring 内置数据源初始化之前执行
-            DriverPropertiesCipherer cipherer,
+            DriverPropertiesCipher cipherer,
             final CentralizedDataSourceFactory centralizedDataSourceFactory,
             final DynamicDataSourcesProperties dynamicDataSourcesProperties,
             final ObjectProvider<List<DynamicDataSourcesPropertiesCustomizer>> customizersObjectProvider,

@@ -16,8 +16,8 @@ package com.jn.sqlhelper.datasource.supports.spring.boot;
 
 import com.jn.langx.util.ClassLoaders;
 import com.jn.langx.util.Strings;
-import com.jn.sqlhelper.common.security.DriverPropertiesCipherer;
-import com.jn.sqlhelper.common.security.DriverPropertiesRsaCipherer;
+import com.jn.sqlhelper.common.security.DriverPropertiesCipher;
+import com.jn.sqlhelper.common.security.DriverPropertiesRsaCipher;
 import com.jn.sqlhelper.datasource.DataSourceRegistry;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
@@ -113,12 +113,12 @@ public class DynamicDataSourceInfrastructureConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public DriverPropertiesCipherer dataSourcePropertiesCipherer(
+    public DriverPropertiesCipher dataSourcePropertiesCipherer(
             ObjectProvider<DynamicDataSourcesProperties> dynamicDataSourcesPropertiesObjectProvider,
             // 由于 Spring 的构建顺序的原因，这里不能去直接使用 Spring Boot 里的DataSourceProperties, 用了也没有意义
             ObjectProvider<org.springframework.boot.autoconfigure.jdbc.DataSourceProperties> dataSourcePropertiesObjectProvider) {
 
-        DriverPropertiesRsaCipherer cipherer = new DriverPropertiesRsaCipherer();
+        DriverPropertiesRsaCipher cipherer = new DriverPropertiesRsaCipher();
 
 
         DynamicDataSourcesProperties dynamicDataSourcesProperties = dynamicDataSourcesPropertiesObjectProvider.getIfAvailable();

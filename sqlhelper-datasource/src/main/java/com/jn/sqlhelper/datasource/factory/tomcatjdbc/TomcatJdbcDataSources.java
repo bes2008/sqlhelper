@@ -22,7 +22,7 @@ import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
-import com.jn.sqlhelper.common.security.DriverPropertiesCipherer;
+import com.jn.sqlhelper.common.security.DriverPropertiesCipher;
 import org.apache.tomcat.jdbc.pool.DataSourceFactory;
 
 import javax.sql.DataSource;
@@ -47,7 +47,7 @@ public class TomcatJdbcDataSources {
     /**
      * @since 3.4.5
      */
-    public static DataSource createDataSource(final DataSourceProperties properties, DriverPropertiesCipherer cipherer) {
+    public static DataSource createDataSource(final DataSourceProperties properties, DriverPropertiesCipher cipherer) {
         DataSourceFactory dsf = new DataSourceFactory();
         Properties props = properties.getDriverProps();
         if (props == null) {
@@ -111,7 +111,7 @@ public class TomcatJdbcDataSources {
     /**
      * @since 3.4.5
      */
-    public static DataSource createDataSource(Properties properties, @Nullable DriverPropertiesCipherer cipherer) {
+    public static DataSource createDataSource(Properties properties, @Nullable DriverPropertiesCipher cipherer) {
         try {
             DataSourceFactory dsf = new DataSourceFactory();
             DataSources.decryptUsernamePassword(properties, cipherer);

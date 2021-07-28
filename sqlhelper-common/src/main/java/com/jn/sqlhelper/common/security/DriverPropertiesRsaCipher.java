@@ -34,7 +34,7 @@ import java.security.PublicKey;
  *
  * @since 3.4.5
  */
-public class DriverPropertiesRsaCipherer implements DriverPropertiesCipherer, Initializable {
+public class DriverPropertiesRsaCipher implements DriverPropertiesCipher, Initializable {
 
     /**
      * base 64 public key

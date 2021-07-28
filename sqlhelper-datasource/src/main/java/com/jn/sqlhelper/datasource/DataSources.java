@@ -27,7 +27,7 @@ import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.security.SecurityException;
-import com.jn.sqlhelper.common.security.DriverPropertiesCipherer;
+import com.jn.sqlhelper.common.security.DriverPropertiesCipher;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.slf4j.Logger;
@@ -193,7 +193,7 @@ public class DataSources {
         throw new IllegalPropertyException("group or name is empty or null");
     }
 
-    public static void decryptUsernamePassword(Properties driverProperties, @Nullable DriverPropertiesCipherer cipherer) {
+    public static void decryptUsernamePassword(Properties driverProperties, @Nullable DriverPropertiesCipher cipherer) {
         if (cipherer == null) {
             return;
         }
@@ -209,7 +209,7 @@ public class DataSources {
         }
     }
 
-    public static String decrypt(@Nullable DriverPropertiesCipherer cipherer, @NotEmpty String encryptedBase64Text) {
+    public static String decrypt(@Nullable DriverPropertiesCipher cipherer, @NotEmpty String encryptedBase64Text) {
         return decrypt(cipherer, encryptedBase64Text, false);
     }
 
@@ -221,7 +221,7 @@ public class DataSources {
      * @return
      * @since 3.4.5
      */
-    public static String decrypt(@Nullable DriverPropertiesCipherer cipherer, @NotEmpty String encryptedBase64Text, boolean loggerError) {
+    public static String decrypt(@Nullable DriverPropertiesCipher cipherer, @NotEmpty String encryptedBase64Text, boolean loggerError) {
         if (Strings.isBlank(encryptedBase64Text)) {
             return null;
         }

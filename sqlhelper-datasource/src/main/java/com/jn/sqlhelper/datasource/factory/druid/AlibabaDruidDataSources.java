@@ -22,7 +22,7 @@ import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
-import com.jn.sqlhelper.common.security.DriverPropertiesCipherer;
+import com.jn.sqlhelper.common.security.DriverPropertiesCipher;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -46,7 +46,7 @@ public class AlibabaDruidDataSources {
     /**
      * @since 3.4.5
      */
-    public static DataSource createDataSource(DataSourceProperties properties, DriverPropertiesCipherer cipherer) {
+    public static DataSource createDataSource(DataSourceProperties properties, DriverPropertiesCipher cipherer) {
         Properties props = properties.getDriverProps();
         if (props == null) {
             props = new Properties();
@@ -112,7 +112,7 @@ public class AlibabaDruidDataSources {
     /**
      * @since 3.4.5
      */
-    public static DataSource createDataSource(Properties properties, DriverPropertiesCipherer cipherer) {
+    public static DataSource createDataSource(Properties properties, DriverPropertiesCipher cipherer) {
         try {
             DataSources.decryptUsernamePassword(properties, cipherer);
             return DruidDataSourceFactory.createDataSource(properties);

@@ -93,8 +93,8 @@
         <spring.boot.version>1.5.22.RELEASE</spring.boot.version>
         <spring.version>4.3.25.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
-        <easyjson.version>3.1.1</easyjson.version>
-        <langx-java.version>3.6.1</langx-java.version>
+        <easyjson.version>3.1.4</easyjson.version>
+        <langx-java.version>3.6.4</langx-java.version>
         <agileway.version>2.6.0</agileway.version>
 
         <jfinal.version>4.9</jfinal.version>

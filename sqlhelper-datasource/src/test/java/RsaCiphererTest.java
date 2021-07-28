@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import com.jn.sqlhelper.common.security.DriverPropertiesRsaCipherer;
+import com.jn.sqlhelper.common.security.DriverPropertiesRsaCipher;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ public class RsaCiphererTest {
     @Test
     public void test() {
         String username = "admin";
-        DriverPropertiesRsaCipherer cipherer = new DriverPropertiesRsaCipherer();
+        DriverPropertiesRsaCipher cipherer = new DriverPropertiesRsaCipher();
         cipherer.init();
         String encrypted = cipherer.encrypt(username);
         String username2 = cipherer.decrypt(encrypted);
