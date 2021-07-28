@@ -59,7 +59,26 @@
             <artifactId>mybatis</artifactId>
             <version>${mybatis_jdk8.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.fangjinuo.agileway</groupId>
+            <artifactId>agileway-spring</artifactId>
+            <version>${agileway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.agileway</groupId>
+            <artifactId>agileway-web</artifactId>
+            <version>${agileway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.agileway</groupId>
+            <artifactId>agileway-dmmq</artifactId>
+            <version>${agileway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.fangjinuo.agileway</groupId>
+            <artifactId>agileway-aop</artifactId>
+            <version>${agileway.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.github.fangjinuo.audit</groupId>
             <artifactId>audit-spring-boot-starter</artifactId>
@@ -72,6 +91,22 @@
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-autoconfigure</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.fangjinuo.agileway</groupId>
+                    <artifactId>agileway-spring</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.fangjinuo.agileway</groupId>
+                    <artifactId>agileway-web</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.fangjinuo.agileway</groupId>
+                    <artifactId>agileway-aop</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.fangjinuo.agileway</groupId>
+                    <artifactId>agileway-dmmq</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
