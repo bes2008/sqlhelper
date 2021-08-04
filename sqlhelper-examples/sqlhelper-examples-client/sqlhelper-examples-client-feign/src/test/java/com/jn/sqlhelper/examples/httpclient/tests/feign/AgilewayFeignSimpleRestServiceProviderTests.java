@@ -14,7 +14,10 @@
 
 package com.jn.sqlhelper.examples.httpclient.tests.feign;
 
-import com.jn.agileway.feign.*;
+import com.jn.agileway.feign.HttpConnectionContext;
+import com.jn.agileway.feign.HttpConnectionProperties;
+import com.jn.agileway.feign.RestServiceProvider;
+import com.jn.agileway.feign.StubProvider;
 import com.jn.agileway.feign.supports.adaptable.ResponseBodyAdapter;
 import com.jn.easyjson.core.JSONFactory;
 import com.jn.easyjson.core.factory.JsonFactorys;
@@ -47,15 +50,15 @@ public class AgilewayFeignSimpleRestServiceProviderTests {
         RestServiceProvider provider = new RestServiceProvider();
         jsonFactory = JsonFactorys.getJSONFactory(JsonScope.PROTOTYPE);
         provider.setContext(context);
-        provider.setUnifiedRestRestResponseClass(RestRespBody.class);
+        provider.setUnifiedRestResponseClass(RestRespBody.class);
         provider.setResponseBodyAdapter(new ResponseBodyAdapter() {
             @Override
             public Object adapt(Response response, Type type, Object o) {
                 Class clazz = null;
-                if(!Types.isClass(type) &&Types.isParameterizedType(type)){
-                    ParameterizedType parameterizedType = (ParameterizedType)type;
+                if (!Types.isClass(type) && Types.isParameterizedType(type)) {
+                    ParameterizedType parameterizedType = (ParameterizedType) type;
                     clazz = (Class) parameterizedType.getRawType();
-                }else {
+                } else {
                     clazz = (Class) type;
                 }
 
@@ -69,12 +72,12 @@ public class AgilewayFeignSimpleRestServiceProviderTests {
         provider.init();
     }
 
- //   @Test
+    //   @Test
     public void testPagination() {
         System.out.println(jsonFactory.get().toJson(provider.getStub(UserClientService2.class).getUsers()));
     }
 
- //   @Test
+    //   @Test
     public void testGetById() {
         System.out.println(jsonFactory.get().toJson(provider.getStub(UserClientService2.class).getById("0001")));
     }
