@@ -25,10 +25,7 @@ import com.jn.sqlhelper.datasource.DataSourceInitializer;
 import com.jn.sqlhelper.datasource.NamedDataSource;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.configuration.ClassicConfiguration;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Properties;
 
 
@@ -49,7 +46,7 @@ public class FlywayDataSourceInitializer extends AbstractInitializable implement
     protected void doInit() throws InitializationException {
         Preconditions.checkNotNull(dataSource, "the datasource is null");
         // 找出所有的 flyway. 开头的配置项
-        Map<String, String> props = new LinkedHashMap<String, String>();
+        Properties props = new Properties();
         DataSourceProperties dataSourceProperties = dataSource.getDataSourceProperties();
         Properties extProps = dataSourceProperties.getExtProps();
         Predicate2<String, String> predicate = new Predicate2<String, String>() {
@@ -60,11 +57,9 @@ public class FlywayDataSourceInitializer extends AbstractInitializable implement
         };
         props.putAll(Collects.filter(Props.toStringMap(extProps), predicate));
 
-
-        ClassicConfiguration configuration = new ClassicConfiguration();
-        configuration.setDataSource(dataSource);
-        configuration.configure(props);
-        Flyway flyway = new Flyway(configuration);
+        Flyway flyway = new Flyway();
+        flyway.configure(props);
+        flyway.setDataSource(dataSource);
         flyway.migrate();
     }
 }

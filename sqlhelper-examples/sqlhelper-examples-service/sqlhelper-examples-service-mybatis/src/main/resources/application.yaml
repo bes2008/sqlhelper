@@ -6,12 +6,15 @@ mybatis:
   mapper-locations: classpath*:mapper/*.xml
 
 spring:
-  datasource:
-    url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: DZ3DPr9XZT9jj4S8S09GOBdPK1Cwd7TaU9BXbxItaXHq6A8yDnaCuHMaAydTAVN6zPiA3nHFFpJ2H0ETeqcf5Q==
-    name: slave3
+  #datasource:
+  #  url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+  #  driver-class-name: org.h2.Driver
+  #  username: sa
+  #  password: DZ3DPr9XZT9jj4S8S09GOBdPK1Cwd7TaU9BXbxItaXHq6A8yDnaCuHMaAydTAVN6zPiA3nHFFpJ2H0ETeqcf5Q==
+  #  name: slave3
+  h2:
+    console:
+      enabled: true
 
 sqlhelper:
   dynamic-datasource:

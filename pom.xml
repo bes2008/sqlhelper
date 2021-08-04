@@ -101,6 +101,7 @@
         <jfinal.version>4.9</jfinal.version>
         <solon.version>1.0.23</solon.version>
 
+        <flyway.version>3.2.1</flyway.version>
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.compilerVersion>1.6</maven.compiler.compilerVersion>
@@ -289,6 +290,12 @@
                 <groupId>com.github.fangjinuo.langx</groupId>
                 <artifactId>langx-java</artifactId>
                 <version>${langx-java.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>${flyway.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

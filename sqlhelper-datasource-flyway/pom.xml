@@ -33,7 +33,6 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>7.12.0</version>
         </dependency>
     </dependencies>
 
