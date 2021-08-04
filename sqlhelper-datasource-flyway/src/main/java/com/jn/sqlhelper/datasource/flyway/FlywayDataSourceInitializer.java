@@ -63,6 +63,7 @@ public class FlywayDataSourceInitializer extends AbstractInitializable implement
 
         ClassicConfiguration configuration = new ClassicConfiguration();
         configuration.setDataSource(dataSource);
+        configuration.configure(props);
         Flyway flyway = new Flyway(configuration);
         flyway.migrate();
     }
