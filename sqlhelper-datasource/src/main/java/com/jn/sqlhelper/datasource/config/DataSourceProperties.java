@@ -16,8 +16,6 @@ package com.jn.sqlhelper.datasource.config;
 
 import com.jn.langx.configuration.Configuration;
 import com.jn.langx.util.Strings;
-import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.function.Consumer2;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
@@ -80,6 +78,8 @@ public class DataSourceProperties implements Configuration {
      * custom driver properties:
      */
     private Properties driverProps;
+
+    private Properties extProps;
 
     public DataSourceProperties() {
         this.leakDetectionThresholdInMills = 0L;
@@ -270,6 +270,14 @@ public class DataSourceProperties implements Configuration {
         this.driverProps = driverProps;
     }
 
+    public Properties getExtProps() {
+        return extProps;
+    }
+
+    public void setExtProps(Properties extProps) {
+        this.extProps = extProps;
+    }
+
     public String getImplementation() {
         return implementation;
     }
@@ -298,7 +306,7 @@ public class DataSourceProperties implements Configuration {
     @Override
     public String toString() {
         final String driverPropsString = DataSources.getDriverPropertiesForLog(this.driverProps);
-
+        final String expPropsString = DataSources.getDriverPropertiesForLog(this.extProps);
         return "DataSourceProperties{" +
                 "group='" + group + '\'' +
                 ", name='" + name + '\'' +
@@ -321,7 +329,8 @@ public class DataSourceProperties implements Configuration {
                 ", maxPoolSize=" + maxPoolSize +
                 ", initialSize=" + initialSize +
                 ", minIdle=" + minIdle +
-                ", driverProps=" + driverPropsString.toString() +
+                ", driverProps=" + driverPropsString +
+                ", extProps=" + expPropsString +
                 '}';
     }
 }

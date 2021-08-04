@@ -24,9 +24,7 @@ import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Function;
 import com.jn.langx.util.function.Predicate;
 import com.jn.sqlhelper.common.security.DriverPropertiesCipher;
-import com.jn.sqlhelper.datasource.DataSourceRegistry;
-import com.jn.sqlhelper.datasource.DataSources;
-import com.jn.sqlhelper.datasource.NamedDataSource;
+import com.jn.sqlhelper.datasource.*;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.config.DynamicDataSourcesProperties;
 import com.jn.sqlhelper.datasource.config.DynamicDataSourcesPropertiesCustomizer;
@@ -80,6 +78,7 @@ public class DynamicDataSourcesAutoConfiguration {
             // 该参数只是为了兼容Spring Boot 默认的 DataSource配置而已
             ObjectProvider<DataSource> springBootOriginDataSourceProvider,
             ObjectProvider<org.springframework.boot.autoconfigure.jdbc.DataSourceProperties> builtInDataSourceProperties,
+            ObjectProvider<DataSourceInitializerFactory> dataSourceInitializerFactoryObjectProvider,
             final ApplicationContext applicationContext) {
 
         logger.info("===[SQLHelper & Dynamic DataSource]=== the dynamic datasource is enabled");
@@ -146,6 +145,18 @@ public class DynamicDataSourcesAutoConfiguration {
             logger.info(log.toString());
         }
 
+        final DataSourceInitializerFactory initializerFactory = dataSourceInitializerFactoryObjectProvider.getIfAvailable();
+        if (initializerFactory != null) {
+            Collects.forEach(dataSources, new Consumer<NamedDataSource>() {
+                @Override
+                public void accept(NamedDataSource dataSource) {
+                    DataSourceInitializer initializer = initializerFactory.get(dataSource);
+                    initializer.setDataSource(dataSource);
+                    initializer.init();
+                }
+            });
+        }
+
         ListFactoryBean dataSourcesFactoryBean = new ListFactoryBean();
         dataSourcesFactoryBean.setTargetListClass(ArrayList.class);
         dataSourcesFactoryBean.setSourceList(dataSources);
@@ -174,7 +185,7 @@ public class DynamicDataSourcesAutoConfiguration {
             DynamicDataSourcesProperties dataSourcesProperties,
             // 用于控制在 DataSource初始化之后来执行
             @Qualifier("dataSourcesFactoryBean")
-            ListFactoryBean dataSourcesFactoryBean) {
+                    ListFactoryBean dataSourcesFactoryBean) {
 
         final MethodInvocationDataSourceKeySelector selector = new MethodInvocationDataSourceKeySelector();
 

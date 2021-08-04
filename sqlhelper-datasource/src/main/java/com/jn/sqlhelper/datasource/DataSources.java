@@ -256,7 +256,7 @@ public class DataSources {
         Collects.forEach(Collects.propertiesToStringMap(driverProps), new Consumer2<String, String>() {
             @Override
             public void accept(String key, String value) {
-                if ("password".equals(key)) {
+                if (key.contains("password")) {
                     driverPropsString.append(key + "='*******',");
                 } else {
                     driverPropsString.append(key + "='" + value + "',");
