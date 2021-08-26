@@ -25,4 +25,39 @@ class HibernateDialectAdapter extends Dialect {
     public LimitHandler getLimitHandler() {
         return new HibernateLimitHandlerAdapter(delegate);
     }
+
+    @Override
+    public boolean supportsLimit() {
+        return delegate.isSupportsLimit();
+    }
+
+    @Override
+    public boolean supportsLimitOffset() {
+        return delegate.isSupportsLimitOffset();
+    }
+
+    @Override
+    public boolean supportsVariableLimit() {
+        return delegate.isSupportsVariableLimit();
+    }
+
+    @Override
+    public boolean bindLimitParametersInReverseOrder() {
+        return delegate.isBindLimitParametersInReverseOrder();
+    }
+
+    @Override
+    public boolean bindLimitParametersFirst() {
+        return delegate.isBindLimitParametersFirst();
+    }
+
+    @Override
+    public boolean useMaxForLimit() {
+        return delegate.isUseMaxForLimit();
+    }
+
+    @Override
+    public boolean forceLimitUsage() {
+        return delegate.isForceLimitUsage();
+    }
 }
