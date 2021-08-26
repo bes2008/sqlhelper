@@ -23,6 +23,7 @@
         <module>sqlhelper-examples-service-mybatis</module>
         <module>sqlhelper-examples-service-mybatisplus_2x</module>
         <module>sqlhelper-examples-service-mybatisplus_3x</module>
+        <module>sqlhelper-examples-service-hibernate</module>
     </modules>
 
     <dependencies>

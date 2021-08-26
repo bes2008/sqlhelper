@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.jn.sqlhelper.examples.model.User" table="User">
+        <id name="id" column="ID" type="java.lang.String">
+            <generator class="assigned"/>
+        </id>
+        <property name="name" type="timestamp" column="NAME"/>
+        <property name="age" type="java.lang.Integer" column="AGE"/>
+    </class>
+
+</hibernate-mapping>
