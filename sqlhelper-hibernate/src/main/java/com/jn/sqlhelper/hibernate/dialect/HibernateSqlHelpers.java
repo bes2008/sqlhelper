@@ -1,7 +1,9 @@
 package com.jn.sqlhelper.hibernate.dialect;
 
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
-
+/**
+ * @since 3.6.1
+ */
 class HibernateSqlHelpers {
     public static RowSelection toSqlHelperRowSelection(org.hibernate.engine.spi.RowSelection rowSelection) {
         RowSelection rs = new RowSelection();

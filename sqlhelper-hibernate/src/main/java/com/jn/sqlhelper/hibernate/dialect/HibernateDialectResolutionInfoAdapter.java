@@ -1,7 +1,9 @@
 package com.jn.sqlhelper.hibernate.dialect;
 
 import com.jn.sqlhelper.dialect.DialectResolutionInfo;
-
+/**
+ * @since 3.6.1
+ */
 class HibernateDialectResolutionInfoAdapter implements DialectResolutionInfo {
     private org.hibernate.engine.jdbc.dialect.spi.DialectResolutionInfo hibernate;
 

@@ -7,7 +7,9 @@ import org.hibernate.engine.spi.RowSelection;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
+/**
+ * @since 3.6.1
+ */
 class HibernateLimitHandlerAdapter implements LimitHandler {
     private Dialect sqlhelper;
 

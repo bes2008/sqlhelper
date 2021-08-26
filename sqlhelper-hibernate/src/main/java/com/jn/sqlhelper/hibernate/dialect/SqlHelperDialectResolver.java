@@ -6,6 +6,9 @@ import org.hibernate.engine.jdbc.dialect.spi.DialectResolutionInfo;
 import org.hibernate.engine.jdbc.dialect.spi.DialectResolver;
 import com.jn.sqlhelper.dialect.DialectRegistry;
 
+/**
+ * @since 3.6.1
+ */
 public class SqlHelperDialectResolver implements DialectResolver {
     @Override
     public Dialect resolveDialect(DialectResolutionInfo info) {
