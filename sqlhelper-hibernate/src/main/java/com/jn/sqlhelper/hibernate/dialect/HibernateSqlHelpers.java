@@ -14,6 +14,7 @@ class HibernateSqlHelpers {
         if (firstRow != null) {
             rs.setOffset(firstRow.longValue());
         }
+        rs.setLimit(rowSelection.getMaxRows());
         return rs;
     }
 }

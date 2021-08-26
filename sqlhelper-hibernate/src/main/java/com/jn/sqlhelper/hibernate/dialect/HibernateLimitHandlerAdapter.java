@@ -39,7 +39,7 @@ class HibernateLimitHandlerAdapter implements LimitHandler {
 
     @Override
     public int bindLimitParametersAtEndOfQuery(RowSelection selection, PreparedStatement statement, int index) throws SQLException {
-        return sqlhelper.bindLimitParametersAtStartOfQuery(HibernateSqlHelpers.toSqlHelperRowSelection(selection), statement, index);
+        return sqlhelper.bindLimitParametersAtEndOfQuery(HibernateSqlHelpers.toSqlHelperRowSelection(selection), statement, index);
     }
 
     @Override
