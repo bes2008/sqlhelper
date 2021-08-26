@@ -70,7 +70,7 @@ public class DialectRegistry {
         return databaseIdString(databaseMetaData).toLowerCase();
     }
 
-    private static String databaseIdString(DatabaseMetaData databaseMetaData) {
+    public static String databaseIdString(DatabaseMetaData databaseMetaData) {
         try {
             return databaseMetaData.getDatabaseProductName();
         } catch (SQLException ex) {
@@ -500,40 +500,52 @@ public class DialectRegistry {
     public Dialect getDialectByDatabaseMetadata(final DatabaseMetaData databaseMetaData) {
         Dialect dialect = null;
         if (databaseMetaData != null) {
-            String databaseIdString = databaseIdStringLowerCase(databaseMetaData);
-            try {
-                dialect = ((Holder<Dialect>) DialectRegistry.dbToDialectMap.get(databaseIdString)).get();
-            } catch (NullPointerException ex) {
-                // ignore
-            }
-            if (dialect == null) {
-                Enumeration<String> keys = (Enumeration<String>) vendorDatabaseIdMappings.propertyNames();
-                while (keys.hasMoreElements()) {
-                    String key = keys.nextElement();
-                    if (databaseIdString.contains(key.toLowerCase())) {
-                        dialect = getDialectByName(vendorDatabaseIdMappings.getProperty(key));
-                        if (dialect != null) {
-                            dbToDialectMap.put(databaseIdString, new Holder<Dialect>(dialect));
-                            break;
+            dialect = getDialectByResolutionInfo(new DatabaseMetaDataDialectResolutionInfoAdapter(databaseMetaData));
+        }
+        return dialect;
+    }
+
+    public Dialect getDialectByResolutionInfo(DialectResolutionInfo resolutionInfo) {
+        Dialect dialect = null;
+        if (resolutionInfo != null) {
+            String databaseIdString = resolutionInfo.getDatabaseProductName();
+            if (databaseIdString != null) {
+                Holder<Dialect> dialectHolder = dbToDialectMap.get(databaseIdString);
+                if (dialectHolder != null) {
+                    dialect = dialectHolder.get();
+                }
+                if (dialect == null) {
+                    Enumeration<String> keys = (Enumeration<String>) vendorDatabaseIdMappings.propertyNames();
+                    while (keys.hasMoreElements()) {
+                        String key = keys.nextElement();
+                        if (databaseIdString.contains(key.toLowerCase())) {
+                            dialect = getDialectByName(vendorDatabaseIdMappings.getProperty(key));
+                            if (dialect != null) {
+                                dbToDialectMap.put(databaseIdString, new Holder<Dialect>(dialect));
+                                break;
+                            }
                         }
                     }
                 }
-            }
 
-            // sqlserver
-            if (dialect == null) {
-                if (Strings.containsAny(databaseIdString.toLowerCase(), "sql server") || Strings.containsAny(databaseIdString.toLowerCase(), "sqlserver")) {
-                    try {
-                        String productionVersion = databaseMetaData.getDatabaseProductVersion();
-                        String tmpDatabaseId = SQLServerDialect.guessDatabaseId(productionVersion);
-                        if (Emptys.isNotEmpty(tmpDatabaseId)) {
-                            dialect = getDialectByName(vendorDatabaseIdMappings.getProperty(tmpDatabaseId));
-                            if (dialect != null) {
-                                dbToDialectMap.put(databaseIdString, new Holder<Dialect>(dialect));
+                // sqlserver
+                if (dialect == null) {
+                    if (Strings.containsAny(databaseIdString.toLowerCase(), "sql server") || Strings.containsAny(databaseIdString.toLowerCase(), "sqlserver")) {
+                        try {
+                            String productionVersion = resolutionInfo.getDatabaseProductVersion();
+                            if(Strings.isBlank(productionVersion)){
+                                productionVersion = resolutionInfo.getDatabaseMajorVersion()+"";
                             }
+                            String tmpDatabaseId = SQLServerDialect.guessDatabaseId(productionVersion);
+                            if (Emptys.isNotEmpty(tmpDatabaseId)) {
+                                dialect = getDialectByName(vendorDatabaseIdMappings.getProperty(tmpDatabaseId));
+                                if (dialect != null) {
+                                    dbToDialectMap.put(databaseIdString, new Holder<Dialect>(dialect));
+                                }
+                            }
+                        } catch (Throwable ex) {
+                            // ignore it
                         }
-                    } catch (Throwable ex) {
-                        // ignore it
                     }
                 }
             }
