@@ -3,6 +3,7 @@ package com.jn.sqlhelper.examples.hibernate.controller;
 import com.jn.sqlhelper.examples.hibernate.service.UserService;
 import com.jn.sqlhelper.examples.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,12 +23,17 @@ public class UserController {
     }
 
     @PostMapping
-    public void addUser(User user){
+    public void addUser(User user) {
         userService.addUser(user);
     }
 
     @GetMapping
-    public List<User> listAll(){
+    public List<User> listAll() {
         return userService.listUsers();
+    }
+
+    @GetMapping("/_page")
+    public Page<User> pageLikeByName(String name, int pageNo) {
+        return userService.likeByName(name, pageNo, 10);
     }
 }

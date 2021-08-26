@@ -4,6 +4,10 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.sqlhelper.examples.hibernate.dao.UserDao;
 import com.jn.sqlhelper.examples.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,5 +34,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> listUsers() {
         return Collects.asList(userDao.findAll());
+    }
+
+    @Override
+    public Page<User> likeByName(String name, int pageNo, int pageSize) {
+        Pageable pg = new PageRequest(pageNo-1, pageSize, Sort.Direction.ASC, "name");
+        return userDao.findByLimit(name, pg);
     }
 }

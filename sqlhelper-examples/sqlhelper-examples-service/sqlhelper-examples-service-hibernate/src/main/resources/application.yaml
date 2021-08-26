@@ -1,13 +1,13 @@
 server:
-  port: 8084
+  port: 8087
 
 spring:
-  #datasource:
-  #  url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
-  #  driver-class-name: org.h2.Driver
-  #  username: sa
-  #  password: DZ3DPr9XZT9jj4S8S09GOBdPK1Cwd7TaU9BXbxItaXHq6A8yDnaCuHMaAydTAVN6zPiA3nHFFpJ2H0ETeqcf5Q==
-  #  name: slave3
+  datasource:
+    url: jdbc:h2:file:${user.dir}/sqlhelper-examples/sqlhelper-examples-db/src/main/resources/test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 123456
+    name: slave3
   h2:
     console:
       enabled: true
@@ -16,8 +16,12 @@ spring:
     hibernate:
       ddl-auto: none
 
+sqlhelper:
+  dynamic-datasource:
+    enabled: true
+
 swagger:
-  base-package: com.jn.sqlhelper.examples.mybatis.controller
+  base-package: com.jn.sqlhelper.examples.hibernate.controller
   application-title: SQLHelper + JPA + Hibernate
 
 logging:
