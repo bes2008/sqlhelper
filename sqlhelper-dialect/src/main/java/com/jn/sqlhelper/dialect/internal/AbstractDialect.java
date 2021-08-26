@@ -290,4 +290,6 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     public String appendmentAfterLikeClause() {
         return getRealDialect().likeEscaper.appendmentAfterLikeClause();
     }
+
+
 }

@@ -10,6 +10,7 @@ class HibernateDialectAdapter extends Dialect {
     private AbstractDialect delegate;
 
     public HibernateDialectAdapter(AbstractDialect delegate) {
+        super();
         setDelegate(delegate);
     }
 

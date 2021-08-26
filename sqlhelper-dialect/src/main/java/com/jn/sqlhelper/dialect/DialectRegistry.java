@@ -510,6 +510,7 @@ public class DialectRegistry {
         if (resolutionInfo != null) {
             String databaseIdString = resolutionInfo.getDatabaseProductName();
             if (databaseIdString != null) {
+                databaseIdString = Strings.lowerCase(resolutionInfo.getDatabaseProductName(),Locale.ROOT);
                 Holder<Dialect> dialectHolder = dbToDialectMap.get(databaseIdString);
                 if (dialectHolder != null) {
                     dialect = dialectHolder.get();

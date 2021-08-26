@@ -13,6 +13,8 @@ spring:
       enabled: true
   jpa:
     database: default
+    hibernate:
+      ddl-auto: none
 
 swagger:
   base-package: com.jn.sqlhelper.examples.mybatis.controller
