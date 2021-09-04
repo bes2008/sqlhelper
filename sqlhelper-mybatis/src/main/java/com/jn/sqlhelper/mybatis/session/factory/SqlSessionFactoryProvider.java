@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.mybatis.session.factory;
 
-import com.jn.langx.factory.Provider;
+import com.jn.langx.Provider;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 /**

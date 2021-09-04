@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.datasource;
 
-import com.jn.langx.factory.Factory;
+import com.jn.langx.Factory;
 
 public interface DataSourceInitializerFactory extends Factory<NamedDataSource, DataSourceInitializer> {
 }

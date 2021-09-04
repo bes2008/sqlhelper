@@ -17,7 +17,7 @@ package com.jn.sqlhelper.datasource.key;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.annotation.Singleton;
-import com.jn.langx.cluster.loadbalance.LoadBalancer;
+import com.jn.langx.distributed.cluster.loadbalance.LoadBalancer;
 import com.jn.langx.invocation.MethodInvocation;
 import com.jn.langx.invocation.matcher.MethodMatcher;
 import com.jn.langx.lifecycle.Initializable;

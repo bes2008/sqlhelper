@@ -14,7 +14,8 @@
 
 package com.jn.sqlhelper.dialect.likeescaper;
 
-import com.jn.langx.escape.Escaper;
+
+import com.jn.langx.util.escape.Escaper;
 
 import java.util.List;
 

@@ -14,8 +14,8 @@
 
 package com.jn.sqlhelper.datasource.factory;
 
+import com.jn.langx.Provider;
 import com.jn.langx.annotation.*;
-import com.jn.langx.factory.Provider;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.util.ClassLoaders;
 import com.jn.langx.util.Emptys;

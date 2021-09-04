@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.dialect.instrument;
 
-import com.jn.langx.factory.Provider;
+import com.jn.langx.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -95,7 +95,7 @@
         <spring.version>4.3.25.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>3.1.4</easyjson.version>
-        <langx-java.version>3.6.5</langx-java.version>
+        <langx-java.version>4.0.0</langx-java.version>
         <agileway.version>2.6.2</agileway.version>
 
         <jfinal.version>4.9</jfinal.version>
@@ -399,7 +399,7 @@
             <id>envCompany</id>
             <properties>
                 <gpg.executable>D:/Program Files (x86)/GNU/GnuPG/gpg2.exe</gpg.executable>
-                <gpg.homedir>C:/Users/fangjinuo/AppData/Roaming/gnupg</gpg.homedir>
+                <gpg.homedir>C:/Users/Administrator/AppData/Roaming/gnupg</gpg.homedir>
                 <!--
                 <gpg.passphrase>YOUR GPG PASSPHRASE</gpg.passphrase>
                 可以这样配置在pom.xml文件中，也可以在执行mvn 命令时，加上-Dgpg.passphrase=YOUR_GPG_PASSPHRASE

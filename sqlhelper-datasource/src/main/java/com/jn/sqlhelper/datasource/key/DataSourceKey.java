@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.datasource.key;
 
 import com.jn.langx.annotation.NonNull;
-import com.jn.langx.cluster.loadbalance.Node;
+import com.jn.langx.distributed.cluster.loadbalance.Node;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.hash.HashCodeBuilder;
 import com.jn.sqlhelper.datasource.DataSources;
