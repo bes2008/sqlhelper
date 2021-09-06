@@ -186,6 +186,11 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         }
 
         @Override
+        public boolean isForceLimitUsage() {
+            return true;
+        }
+
+        @Override
         public boolean isBindLimitParametersInReverseOrder() {
             return false;
         }
