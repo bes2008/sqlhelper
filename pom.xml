@@ -6,7 +6,7 @@
 
     <groupId>com.github.fangjinuo.sqlhelper</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>3.6.2</version>
+    <version>3.6.3</version>
     <name>${groupId}:${artifactId}:${version}</name>
     <description>
         JDBC Extensions:
