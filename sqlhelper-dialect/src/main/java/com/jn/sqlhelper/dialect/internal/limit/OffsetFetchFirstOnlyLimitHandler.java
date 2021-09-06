@@ -28,6 +28,9 @@ import java.util.Locale;
  * offset ? rows fetch next ? rows only
  * <p>
  * every dialect use the limitHandler should set bindLimitParameterInReverseOrder = false
+ *
+ *
+ * 需要注意的是，offset fetch 通常是在 order by 之后
  */
 public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
 

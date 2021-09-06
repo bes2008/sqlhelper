@@ -55,7 +55,7 @@ public abstract class AbstractLimitHandler extends LimitHandler {
         }
         long firstRow = convertToFirstRowValue(LimitHelper.getFirstRow(selection));
         int lastRow = getMaxOrLimit(selection);
-        boolean hasFirstRow = (getDialect().isSupportsLimitOffset()) && ((firstRow > 0) || (getDialect().isForceLimitUsage()));
+        boolean hasFirstRow = getDialect().isSupportsLimitOffset() && ((firstRow > 0) || (getDialect().isForceLimitUsage()));
         boolean reverse = getDialect().isBindLimitParametersInReverseOrder();
         if (hasFirstRow) {
             statement.setInt(index + (reverse ? 1 : 0), Long.valueOf(firstRow).intValue());
