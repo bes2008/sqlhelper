@@ -10,6 +10,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 })
 public class ApacheDbUtilsApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ApacheDbUtilsApplication.class, args);
+        try {
+            SpringApplication.run(ApacheDbUtilsApplication.class, args);
+            Thread.sleep(10000000);
+        }catch (Throwable ex){
+            ex.printStackTrace();
+        }
     }
 }

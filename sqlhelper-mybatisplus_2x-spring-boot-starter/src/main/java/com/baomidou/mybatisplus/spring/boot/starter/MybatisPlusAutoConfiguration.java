@@ -15,7 +15,6 @@
 package com.baomidou.mybatisplus.spring.boot.starter;
 
 import com.baomidou.mybatisplus.MybatisConfiguration;
-import com.baomidou.mybatisplus.MybatisXMLLanguageDriver;
 import com.baomidou.mybatisplus.entity.GlobalConfiguration;
 import com.baomidou.mybatisplus.incrementer.IKeyGenerator;
 import com.baomidou.mybatisplus.mapper.ISqlInjector;
