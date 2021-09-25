@@ -96,7 +96,7 @@
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>3.1.4</easyjson.version>
         <langx-java.version>4.0.1</langx-java.version>
-        <agileway.version>2.6.2</agileway.version>
+        <agileway.version>2.6.5</agileway.version>
 
         <jfinal.version>4.9</jfinal.version>
         <solon.version>1.0.23</solon.version>
