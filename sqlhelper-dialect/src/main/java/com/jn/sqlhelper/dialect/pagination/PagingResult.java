@@ -15,6 +15,35 @@
 
 package com.jn.sqlhelper.dialect.pagination;
 
+import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.function.Function;
+import com.jn.langx.util.function.Functions;
+
 public class PagingResult<E> extends com.jn.langx.util.pagination.PagingResult<E> {
 
+    public static final <I, O> PagingResult<O> fromCommonPagingResult(com.jn.langx.util.pagination.PagingResult<I> from, Function<I, O> mapper) {
+        PagingResult<O> to = new PagingResult<O>();
+        to.setPageNo(from.getPageNo());
+        to.setPageSize(from.getPageSize());
+        to.setTotal(from.getTotal());
+        Function fun = mapper;
+        if (fun == null) {
+            fun = Functions.noopFunction();
+        }
+        to.setItems(Pipeline.of(from.getItems()).map(fun).asList());
+        return to;
+    }
+
+    public static final <I, O> com.jn.langx.util.pagination.PagingResult<O> fromDatabasePagingResult(PagingResult<I> from, Function<I, O> mapper) {
+        com.jn.langx.util.pagination.PagingResult<O> to = new com.jn.langx.util.pagination.PagingResult<O>();
+        to.setPageNo(from.getPageNo());
+        to.setPageSize(from.getPageSize());
+        to.setTotal(from.getTotal());
+        Function fun = mapper;
+        if (fun == null) {
+            fun = Functions.noopFunction();
+        }
+        to.setItems(Pipeline.of(from.getItems()).map(fun).asList());
+        return to;
+    }
 }
