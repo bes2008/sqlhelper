@@ -16,6 +16,7 @@
 
     <modules>
         <module>sqlhelper-examples-client-feign</module>
+        <module>sqlhelper-examples-client-sqlline</module>
     </modules>
 
     <dependencies>
