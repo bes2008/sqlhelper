@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.common.batch.jdbc;
+package com.jn.sqlhelper.common.batch.xjdbc;
 
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.common.batch.BatchResult;
@@ -26,25 +26,24 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SimpleBatchUpdater<E, STATEMENT extends BatchStatement> implements BatchUpdater<E, STATEMENT> {
+public class JdbcBatchUpdater<E, STATEMENT extends BatchStatement> implements BatchUpdater<E, STATEMENT> {
     Connection connection;
     PreparedStatementSetter<E> setter;
 
     @Override
     public BatchResult<E> batchUpdate(STATEMENT statement, List<E> parametersList) throws SQLException {
         Preconditions.checkNotNull(statement);
-        Preconditions.checkArgument(statement.getBatchMode() == BatchMode.SIMPLE);
-        int sum = 0;
+        Preconditions.checkArgument(statement.getBatchMode() == BatchMode.JDBC_BATCH);
+        PreparedStatement pstmt = connection.prepareStatement(statement.getSql());
         for (int i = 0; i < parametersList.size(); i++) {
-            PreparedStatement pstmt = connection.prepareStatement(statement.getSql());
             setter.setParameters(pstmt, 1, parametersList.get(i));
-            int updated = pstmt.executeUpdate();
-            sum = sum + updated;
+            pstmt.addBatch();
         }
+        int[] updateds = pstmt.executeBatch();
         BatchResult<E> result = new BatchResult<E>();
-        result.setStatement(statement);
         result.setParameters(parametersList);
-        result.setRowsAffected(sum);
+        result.setStatement(statement);
+        result.setRowsAffected(updateds[0]);
         return result;
     }
 }
