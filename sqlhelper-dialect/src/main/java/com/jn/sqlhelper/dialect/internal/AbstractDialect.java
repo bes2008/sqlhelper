@@ -26,6 +26,7 @@ import com.jn.sqlhelper.common.ddl.dump.TableGenerator;
 import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 import com.jn.sqlhelper.common.ddl.model.Table;
 import com.jn.sqlhelper.common.exception.TableNonExistsException;
+import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
 import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.dialect.ddl.generator.CommonTableGenerator;
@@ -52,6 +53,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     private LimitHandler limitHandler;
     private LikeEscaper likeEscaper;
     private Boolean isUseLimitInVariableMode = null;
+    private PlainSqlScriptParser plainSqlScriptParser;
 
     private final Properties properties = new Properties();
 
@@ -60,6 +62,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         setLimitHandler(new DefaultLimitHandler(this));
         setUrlParser(new NoopUrlParser());
         setLikeEscaper(BackslashStyleEscaper.INSTANCE);
+        setPlainSqlScriptParser(PlainSqlScriptParser.INSTANCE);
     }
 
     public AbstractDialect(Driver driver) {
@@ -117,6 +120,10 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         likeEscaper = likeEscaper == null ? BackslashStyleEscaper.INSTANCE : likeEscaper;
         getRealDialect().likeEscaper = likeEscaper;
         this.likeEscaper = likeEscaper;
+    }
+
+    protected void setPlainSqlScriptParser(PlainSqlScriptParser parser){
+        getRealDialect().plainSqlScriptParser = parser;
     }
 
 
@@ -291,5 +298,8 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         return getRealDialect().likeEscaper.appendmentAfterLikeClause();
     }
 
-
+    @Override
+    public PlainSqlScriptParser getPlainSqlScriptParser() {
+        return getRealDialect().plainSqlScriptParser;
+    }
 }

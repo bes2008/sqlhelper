@@ -16,6 +16,7 @@ package com.jn.sqlhelper.dialect;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
+import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
@@ -149,4 +150,6 @@ public interface Dialect extends LikeEscaper {
     String generateTableDDL(@NonNull DatabaseDescription database, String catalog, String schema, @NonNull String tableName) throws SQLException;
 
     UrlParser getUrlParser();
+
+    PlainSqlScriptParser getPlainSqlScriptParser();
 }

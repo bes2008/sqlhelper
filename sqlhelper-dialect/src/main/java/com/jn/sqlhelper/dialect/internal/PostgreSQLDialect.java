@@ -15,6 +15,9 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
+import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
+import com.jn.sqlhelper.dialect.internal.sqlscript.PostgreSQLSqlStatementBuilder;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 import com.jn.sqlhelper.dialect.internal.urlparser.PostgreSQLUrlParser;
@@ -32,6 +35,7 @@ public class PostgreSQLDialect extends AbstractDialect {
         setUrlParser(new PostgreSQLUrlParser());
         setLimitHandler(new LimitOffsetLimitHandler());
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
+        setPlainSqlScriptParser(new PostgreSQLScriptParser());
     }
 
     @Override
@@ -55,4 +59,12 @@ public class PostgreSQLDialect extends AbstractDialect {
         statement.registerOutParameter(col++, 1111);
         return col;
     }
+
+    private static class PostgreSQLScriptParser extends PlainSqlScriptParser{
+        @Override
+        protected PlainSqlStatementBuilder newSqlStatementBuilder() {
+            return new PostgreSQLSqlStatementBuilder();
+        }
+    }
+
 }

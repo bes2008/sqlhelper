@@ -16,6 +16,8 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.util.ClassLoaders;
+import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
+import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 
 /**
@@ -29,6 +31,7 @@ public class DerbyDialect extends AbstractDialect {
         super();
         determineDriverVersion();
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
+        setPlainSqlScriptParser(new DerbySqlScriptParser());
     }
 
     private void determineDriverVersion() {
@@ -58,5 +61,26 @@ public class DerbyDialect extends AbstractDialect {
     public boolean isSupportsVariableLimit() {
         return false;
     }
+
+    private static class DerbySqlScriptParser extends PlainSqlScriptParser{
+        @Override
+        protected PlainSqlStatementBuilder newSqlStatementBuilder() {
+            return new DerbySqlStatementBuilder();
+        }
+    }
+
+    /**
+     * supporting Derby-specific delimiter changes.
+     */
+    private static class DerbySqlStatementBuilder extends PlainSqlStatementBuilder {
+        @Override
+        protected String extractAlternateOpenQuote(String token) {
+            if (token.startsWith("$$")) {
+                return "$$";
+            }
+            return null;
+        }
+    }
+
 
 }

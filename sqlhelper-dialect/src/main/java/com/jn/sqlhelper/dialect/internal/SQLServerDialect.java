@@ -18,6 +18,9 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.langx.annotation.Name;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
+import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlDelimiter;
+import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
+import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.SQLServer2005LimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.TopLimitHandler;
@@ -57,6 +60,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
         setDelegate(new SQLServer2008Dialect());
         setUrlParser(new SqlServerUrlParser());
+        setPlainSqlScriptParser(new SQLServerSqlScriptParser());
     }
 
 
@@ -217,4 +221,36 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
     public char getAfterQuote() {
         return ']';
     }
+
+    private static class SQLServerSqlScriptParser extends PlainSqlScriptParser{
+        @Override
+        protected PlainSqlStatementBuilder newSqlStatementBuilder() {
+            return new SQLServerSqlStatementBuilder();
+        }
+    }
+
+
+    /**
+     * supporting SQL Server-specific delimiter changes.
+     */
+    private static class SQLServerSqlStatementBuilder extends PlainSqlStatementBuilder {
+        @Override
+        protected PlainSqlDelimiter getDefaultDelimiter() {
+            return new PlainSqlDelimiter("GO", true);
+        }
+
+        @Override
+        protected String extractAlternateOpenQuote(String token) {
+            if (token.startsWith("N'")) {
+                return "N'";
+            }
+            return null;
+        }
+
+        @Override
+        protected String computeAlternateCloseQuote(String openQuote) {
+            return "'";
+        }
+    }
+
 }
