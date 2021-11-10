@@ -3,41 +3,38 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.github.fangjinuo.sqlhelper</groupId>
-        <artifactId>sqlhelper</artifactId>
-        <version>3.6.4</version>
+        <groupId>com.github.fangjinuo.sqlhelper.examples.client</groupId>
+        <artifactId>sqlhelper-examples-client</artifactId>
+        <version>3.6.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sqlhelper-examples-client-sqline</artifactId>
+    <artifactId>sqlhelper-examples-client-sqlline</artifactId>
     <name>${groupId}:${artifactId}:${version}</name>
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
-
     <dependencies>
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-dialect</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>sqlline</groupId>
             <artifactId>sqlline</artifactId>
             <version>1.11.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.200</version>
-        </dependency>
-    </dependencies>
 
+
+    </dependencies>
     <build>
-        <testResources>
-            <testResource>
-                <directory>**</directory>
-                <excludes>
-                    <exclude>*.java</exclude>
-                </excludes>
-                <targetPath>${project.build.directory}</targetPath>
-            </testResource>
-        </testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.21.0</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>
