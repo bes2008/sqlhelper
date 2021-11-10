@@ -39,7 +39,11 @@ public class PlainSqlScript{
     @Nullable
     private String dialect;
 
+    public PlainSqlScript(Resource resource, String encoding) {
+        this(null, resource, encoding);
+    }
     public PlainSqlScript(String dialect, Resource resource, String encoding) {
+        this.dialect = dialect;
         this.resource = resource;
         this.encoding = encoding;
     }
@@ -50,5 +54,21 @@ public class PlainSqlScript{
 
     public String getEncoding() {
         return encoding;
+    }
+
+    public String getDialect() {
+        return dialect;
+    }
+
+    public void setDialect(String dialect) {
+        this.dialect = dialect;
+    }
+
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
     }
 }
