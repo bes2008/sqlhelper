@@ -48,7 +48,9 @@ public class SqlScriptTests {
     public void sqlScriptParseTests(String location){
         Resource resource = Resources.loadFileResource(location);
         PlainSqlScript sqlScript = new PlainSqlScript( resource, Charsets.UTF_8.name());
+
         Dialect dialect = DialectRegistry.getInstance().getDialectByName("mysql");
+
         PlainSqlScriptParser parser = dialect.getPlainSqlScriptParser();
         List<PlainSqlStatement> sqls = parser.parse(sqlScript);
         Collects.forEach(sqls, new Consumer<PlainSqlStatement>() {
@@ -59,6 +61,12 @@ public class SqlScriptTests {
             }
         });
 
+    }
+
+    @Test
+    public void dialectTests(){
+        System.out.println(DialectRegistry.guessDatabaseId("jdbc:h2://localhost:3306/mysql"));
+        System.out.println(DialectRegistry.guessDatabaseId("jdbc:mysql://localhost:3306/mydb"));
     }
 
 }
