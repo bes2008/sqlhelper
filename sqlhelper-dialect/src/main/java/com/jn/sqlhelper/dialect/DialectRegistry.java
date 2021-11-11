@@ -340,7 +340,6 @@ public class DialectRegistry {
 
         String[] tokens = Strings.split(tmpProductName, ":");
 
-        final String _productName = tmpProductName;
         final Set<String> productKeywords = vendorDatabaseIdMappings.stringPropertyNames();
         final Holder<String> matchedProductHolder = new Holder<String>();
         Pipeline.of(tokens).filter(new Predicate<String>() {
@@ -350,15 +349,16 @@ public class DialectRegistry {
             }
         }).forEach(new Consumer<String>() {
             @Override
-            public void accept(String token) {
-                List<String> matchedProductKeywords = Pipeline.of(productKeywords).filter(new Predicate<String>() {
-                    @Override
-                    public boolean test(String productKeyword) {
-                        return _productName.contains(productKeyword.toLowerCase());
-                    }
-                }).asList();
-                if (Objs.length(matchedProductKeywords) >=1) {
-                    matchedProductHolder.set(matchedProductKeywords.get(0));
+            public void accept(final String token) {
+                String matchedProductKeyword = Pipeline.of(productKeywords)
+                        .findFirst(new Predicate<String>() {
+                            @Override
+                            public boolean test(String productKeyword) {
+                                return token.contains(productKeyword.toLowerCase());
+                            }
+                        });
+                if (Strings.isNotBlank(matchedProductKeyword)) {
+                    matchedProductHolder.set(matchedProductKeyword);
                 }
             }
         }, new Predicate<String>() {
@@ -373,7 +373,7 @@ public class DialectRegistry {
         if (Strings.isNotBlank(bestProductKeyword)) {
             return vendorDatabaseIdMappings.getProperty(bestProductKeyword);
         }
-        return vendorDatabaseIdMappings.getProperty(bestProductKeyword);
+        return null;
     }
 
     private static Class<? extends Dialect> loadDialectClass(final String className) throws ClassNotFoundException {

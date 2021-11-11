@@ -67,6 +67,7 @@ public class SqlScriptTests {
     public void dialectTests(){
         System.out.println(DialectRegistry.guessDatabaseId("jdbc:h2://localhost:3306/mysql"));
         System.out.println(DialectRegistry.guessDatabaseId("jdbc:mysql://localhost:3306/mydb"));
+        System.out.println(DialectRegistry.guessDatabaseId("H2Database"));
     }
 
 }
