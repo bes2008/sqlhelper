@@ -15,30 +15,31 @@
 
 package com.jn.sqlhelper.dialect.internal.urlparser;
 
+import com.jn.langx.util.Objs;
 import com.jn.sqlhelper.dialect.urlparser.DatabaseInfo;
 
 import java.util.List;
 
 public class DefaultDatabaseInfo implements DatabaseInfo {
-    private final String databaseId;
+    private final String databaseInstance;
     private final String realUrl;
     private final String normalizedUrl;
     private final List<String> host;
     private final String multipleHost;
-    private final String verdor;
+    private final String vendor;
     private final boolean parsingComplete;
 
-    public DefaultDatabaseInfo(final String verdor, final String realUrl, final String normalizedUrl, final List<String> host, final String databaseId) {
-        this(verdor, realUrl, normalizedUrl, host, databaseId, true);
+    public DefaultDatabaseInfo(final String vendor, final String realUrl, final String normalizedUrl, final List<String> host, final String databaseInstance) {
+        this(vendor, realUrl, normalizedUrl, host, databaseInstance, true);
     }
 
-    public DefaultDatabaseInfo(final String verdor, final String realUrl, final String normalizedUrl, final List<String> host, final String databaseId, final boolean parsingComplete) {
-        this.verdor = verdor;
+    public DefaultDatabaseInfo(final String vendor, final String realUrl, final String normalizedUrl, final List<String> host, final String databaseInstance, final boolean parsingComplete) {
+        this.vendor = Objs.useValueIfEmpty(vendor, UNKNOWN);
         this.realUrl = realUrl;
         this.normalizedUrl = normalizedUrl;
         this.host = host;
         this.multipleHost = this.merge(host);
-        this.databaseId = databaseId;
+        this.databaseInstance = databaseInstance;
         this.parsingComplete = parsingComplete;
     }
 
@@ -67,8 +68,8 @@ public class DefaultDatabaseInfo implements DatabaseInfo {
     }
 
     @Override
-    public String getDatabaseId() {
-        return this.databaseId;
+    public String getDatabaseInstance() {
+        return this.databaseInstance;
     }
 
     @Override
@@ -89,8 +90,8 @@ public class DefaultDatabaseInfo implements DatabaseInfo {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("DefaultDatabaseInfo{");
-        sb.append("verdor=").append(this.verdor);
-        sb.append(", databaseId='").append(this.databaseId).append('\'');
+        sb.append("verdor=").append(this.vendor);
+        sb.append(", databaseId='").append(this.databaseInstance).append('\'');
         sb.append(", realUrl='").append(this.realUrl).append('\'');
         sb.append(", normalizedUrl='").append(this.normalizedUrl).append('\'');
         sb.append(", host=").append(this.host);
@@ -102,6 +103,6 @@ public class DefaultDatabaseInfo implements DatabaseInfo {
 
     @Override
     public String getVendor() {
-        return this.verdor;
+        return this.vendor;
     }
 }

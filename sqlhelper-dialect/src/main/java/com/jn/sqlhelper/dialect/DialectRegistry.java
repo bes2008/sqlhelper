@@ -19,10 +19,11 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Objs;
+import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
-import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
-import com.jn.langx.util.function.Functions;
+import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.langx.util.struct.Holder;
@@ -31,6 +32,8 @@ import com.jn.sqlhelper.common.utils.Connections;
 import com.jn.sqlhelper.dialect.annotation.Driver;
 import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.*;
+import com.jn.sqlhelper.dialect.urlparser.DatabaseInfo;
+import com.jn.sqlhelper.dialect.urlparser.JdbcUrlParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -314,46 +317,62 @@ public class DialectRegistry {
         if (productName == null) {
             return null;
         }
-        final String _productName = productName.toLowerCase();
-
-        Set<String> productKeywords = vendorDatabaseIdMappings.stringPropertyNames();
-        List<String> matchedProductKeywords = Pipeline.of(productKeywords).filter(new Predicate<String>() {
-            @Override
-            public boolean test(String productKeyword) {
-                return _productName.contains(productKeyword.toLowerCase());
+        String tmpProductName = productName.toLowerCase();
+        // if arg is a url
+        int urlProtocolIndex = tmpProductName.indexOf("://");
+        if (urlProtocolIndex != -1) {
+            DatabaseInfo databaseInfo = new JdbcUrlParser().parse(productName);
+            if (databaseInfo != null && !DatabaseInfo.UNKNOWN.equals(databaseInfo.getVendor().toLowerCase())) {
+                tmpProductName = databaseInfo.getVendor().toLowerCase();
+            } else {
+                tmpProductName = tmpProductName.substring(0, urlProtocolIndex);
             }
-        }).asList();
-
-        if (matchedProductKeywords.isEmpty()) {
-            return null;
         }
-        if (matchedProductKeywords.size() == 1) {
-            return matchedProductKeywords.get(0);
-        }
-
-        if (matchedProductKeywords.contains(productName)) {
-            return vendorDatabaseIdMappings.getProperty(productName);
+        int urlPropertyFragmentIndex = tmpProductName.indexOf("?");
+        if (urlPropertyFragmentIndex != -1) {
+            DatabaseInfo databaseInfo = new JdbcUrlParser().parse(productName);
+            if (databaseInfo != null && !DatabaseInfo.UNKNOWN.equals(databaseInfo.getVendor().toLowerCase())) {
+                tmpProductName = databaseInfo.getVendor().toLowerCase();
+            } else {
+                tmpProductName = tmpProductName.substring(0, urlPropertyFragmentIndex);
+            }
         }
 
-        String bestProductKeyword = Collects.findFirst(matchedProductKeywords, new Predicate<String>() {
+        String[] tokens = Strings.split(tmpProductName, ":");
+
+        final String _productName = tmpProductName;
+        final Set<String> productKeywords = vendorDatabaseIdMappings.stringPropertyNames();
+        final Holder<String> matchedProductHolder = new Holder<String>();
+        Pipeline.of(tokens).filter(new Predicate<String>() {
             @Override
-            public boolean test(String value) {
-                return _productName.equals(value.toLowerCase());
+            public boolean test(String token) {
+                return !Strings.equalsIgnoreCase(token, "jdbc");
+            }
+        }).forEach(new Consumer<String>() {
+            @Override
+            public void accept(String token) {
+                List<String> matchedProductKeywords = Pipeline.of(productKeywords).filter(new Predicate<String>() {
+                    @Override
+                    public boolean test(String productKeyword) {
+                        return _productName.contains(productKeyword.toLowerCase());
+                    }
+                }).asList();
+                if (Objs.length(matchedProductKeywords) >=1) {
+                    matchedProductHolder.set(matchedProductKeywords.get(0));
+                }
+            }
+        }, new Predicate<String>() {
+            @Override
+            public boolean test(String token) {
+                return !matchedProductHolder.isEmpty();
             }
         });
 
-        if (bestProductKeyword != null) {
+        String bestProductKeyword = matchedProductHolder.get();
+
+        if (Strings.isNotBlank(bestProductKeyword)) {
             return vendorDatabaseIdMappings.getProperty(bestProductKeyword);
         }
-
-        Collection<String> sortedProductKeywords = new TreeSet<String>(new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o1.length() - o2.length();
-            }
-        });
-        sortedProductKeywords.addAll(matchedProductKeywords);
-        bestProductKeyword = Collects.findFirst(sortedProductKeywords, Functions.<String>truePredicate());
         return vendorDatabaseIdMappings.getProperty(bestProductKeyword);
     }
 
@@ -386,49 +405,63 @@ public class DialectRegistry {
         return registerDialectByClass(clazz, null);
     }
 
-    private static Dialect registerDialectByClass(@NonNull final Class<? extends Dialect> clazz, @Nullable Dialect dialect) {
-
+    private static Dialect registerDialectByClass(@NonNull final Class<? extends Dialect> dialectClass, @Nullable Dialect dialect) {
+        Preconditions.checkNotNull(dialectClass);
         // step 1: 生成 database id
-        final Name nameAnno = (Name) Reflects.getAnnotation(clazz, Name.class);
+        final Name nameAnno = (Name) Reflects.getAnnotation(dialectClass, Name.class);
         String name;
         if (nameAnno != null) {
             name = nameAnno.value();
             if (Strings.isBlank(name)) {
-                throw new IllegalStateException("@Name is empty in class" + Reflects.getFQNClassName(clazz));
+                throw new IllegalStateException("@Name is empty in class" + Reflects.getFQNClassName(dialectClass));
             }
         } else {
-            final String simpleClassName = clazz.getSimpleName().toLowerCase();
+            final String simpleClassName = dialectClass.getSimpleName().toLowerCase();
             name = simpleClassName.replaceAll("dialect", "");
         }
         if (dialect == null) {
-            final Driver driverAnno = (Driver) Reflects.getAnnotation(clazz, Driver.class);
+            final Driver driverAnno = (Driver) Reflects.getAnnotation(dialectClass, Driver.class);
             Class<? extends java.sql.Driver> driverClass = null;
             Constructor<? extends Dialect> driverConstructor = null;
             if (driverAnno != null) {
-                final String driverClassName = driverAnno.value();
-                if (Strings.isBlank(driverClassName)) {
-                    throw new IllegalStateException("@Driver is empty in class" + Reflects.getFQNClassName(clazz));
+                String[] driverClassNames = Pipeline.of(driverAnno.value())
+                        .filter(new Predicate<String>() {
+                            @Override
+                            public boolean test(String driverClassName) {
+                                return Strings.isNotBlank(driverClassName);
+                            }
+                        }).toArray(String[].class);
+
+                if (Objs.isEmpty(driverClassNames)) {
+                    throw new IllegalStateException("@Driver is empty in class" + Reflects.getFQNClassName(dialectClass));
                 }
-                try {
-                    driverClass = loadDriverClass(driverClassName);
+                for (int i = 0; i < driverClassNames.length; i++) {
+                    String driverClassName = driverClassNames[i];
                     try {
-                        driverConstructor = clazz.getDeclaredConstructor(java.sql.Driver.class);
+                        driverClass = loadDriverClass(driverClassName);
+                        try {
+                            driverConstructor = dialectClass.getDeclaredConstructor(java.sql.Driver.class);
+                        } catch (Throwable ex) {
+                            logger.info("Can't find the driver based constructor for dialect {}", (Object) name);
+                        }
                     } catch (Throwable ex) {
-                        logger.info("Can't find the driver based constructor for dialect {}", (Object) name);
+                        logger.info("Can't find driver class {} for {} dialect", (Object) driverClassName, (Object) name);
                     }
-                } catch (Throwable ex) {
-                    logger.info("Can't find driver class {} for {} dialect", (Object) driverClassName, (Object) name);
+
+                    if (driverClass != null) {
+                        break;
+                    }
                 }
             }
             if (driverClass == null || driverConstructor == null) {
                 try {
                     try {
-                        dialect = clazz.newInstance();
+                        dialect = dialectClass.newInstance();
                     } catch (InstantiationException e2) {
-                        final String error = StringTemplates.formatWithPlaceholder("Class {}  need a <init>()", Reflects.getFQNClassName(clazz));
+                        final String error = StringTemplates.formatWithPlaceholder("Class {}  need a <init>()", Reflects.getFQNClassName(dialectClass));
                         throw new ClassFormatError(error);
                     } catch (IllegalAccessException e3) {
-                        final String error = StringTemplates.formatWithPlaceholder("Class {}  need a <init>()", Reflects.getFQNClassName(clazz));
+                        final String error = StringTemplates.formatWithPlaceholder("Class {}  need a <init>()", Reflects.getFQNClassName(dialectClass));
                         throw new ClassFormatError(error);
                     }
                 } catch (Throwable ex) {
@@ -449,10 +482,10 @@ public class DialectRegistry {
                             dialect = driverConstructor.newInstance(driver);
                         }
                     } catch (InstantiationException e2) {
-                        final String error = StringTemplates.formatWithPlaceholder("Class {}  need a <init>(Driver)", Reflects.getFQNClassName(clazz));
+                        final String error = StringTemplates.formatWithPlaceholder("Class {}  need a <init>(Driver)", Reflects.getFQNClassName(dialectClass));
                         throw new ClassFormatError(error);
                     } catch (IllegalAccessException e3) {
-                        final String error = StringTemplates.formatWithPlaceholder("Class {} need a public <init>(Driver", Reflects.getFQNClassName(clazz));
+                        final String error = StringTemplates.formatWithPlaceholder("Class {} need a public <init>(Driver", Reflects.getFQNClassName(dialectClass));
                         throw new ClassFormatError(error);
                     } catch (InvocationTargetException e) {
                         logger.error("Register dialect {} fail: {}", name, e.getMessage(), e);
@@ -464,13 +497,13 @@ public class DialectRegistry {
         }
         if (dialect != null) {
             DialectRegistry.nameToDialectMap.put(name, dialect);
-            DialectRegistry.classNameToNameMap.put(clazz.getCanonicalName(), name);
+            DialectRegistry.classNameToNameMap.put(dialectClass.getCanonicalName(), name);
             setDatabaseId(name, name);
         }
 
         // step 2: 扫描兼容性
         if (dialect != null) {
-            SyntaxCompat syntaxCompat = Reflects.getAnnotation(clazz, SyntaxCompat.class);
+            SyntaxCompat syntaxCompat = Reflects.getAnnotation(dialectClass, SyntaxCompat.class);
             if (syntaxCompat != null) {
                 if (Emptys.isNotEmpty(syntaxCompat.value())) {
                     SQLSyntaxCompatTable.getInstance().register(name, syntaxCompat.value());
@@ -510,7 +543,7 @@ public class DialectRegistry {
         if (resolutionInfo != null) {
             String databaseIdString = resolutionInfo.getDatabaseProductName();
             if (databaseIdString != null) {
-                databaseIdString = Strings.lowerCase(resolutionInfo.getDatabaseProductName(),Locale.ROOT);
+                databaseIdString = Strings.lowerCase(resolutionInfo.getDatabaseProductName(), Locale.ROOT);
                 Holder<Dialect> dialectHolder = dbToDialectMap.get(databaseIdString);
                 if (dialectHolder != null) {
                     dialect = dialectHolder.get();
@@ -534,8 +567,8 @@ public class DialectRegistry {
                     if (Strings.containsAny(databaseIdString.toLowerCase(), "sql server") || Strings.containsAny(databaseIdString.toLowerCase(), "sqlserver")) {
                         try {
                             String productionVersion = resolutionInfo.getDatabaseProductVersion();
-                            if(Strings.isBlank(productionVersion)){
-                                productionVersion = resolutionInfo.getDatabaseMajorVersion()+"";
+                            if (Strings.isBlank(productionVersion)) {
+                                productionVersion = resolutionInfo.getDatabaseMajorVersion() + "";
                             }
                             String tmpDatabaseId = SQLServerDialect.guessDatabaseId(productionVersion);
                             if (Emptys.isNotEmpty(tmpDatabaseId)) {
@@ -554,8 +587,8 @@ public class DialectRegistry {
         return dialect;
     }
 
-    public void registerDialectByClassName(final String className) throws ClassNotFoundException {
-        this.registerDialect(null, className);
+    public void registerDialectByClassName(final String dialectClassName) throws ClassNotFoundException {
+        this.registerDialect(null, dialectClassName);
     }
 
     public void registerDialect(final String dialectName, final String className) throws ClassNotFoundException {

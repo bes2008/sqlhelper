@@ -24,5 +24,5 @@ import static java.lang.annotation.ElementType.TYPE;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({TYPE})
 public @interface Driver {
-    String value();
+    String[] value();
 }

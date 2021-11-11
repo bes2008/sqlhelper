@@ -17,11 +17,13 @@ package com.jn.sqlhelper.dialect.urlparser;
 import java.util.List;
 
 public interface DatabaseInfo {
+    public static String UNKNOWN = "unknown";
+
     List<String> getHost();
 
     String getMultipleHost();
 
-    String getDatabaseId();
+    String getDatabaseInstance();
 
     String getRealUrl();
 
