@@ -373,6 +373,10 @@ public class DialectRegistry {
         if (Strings.isNotBlank(bestProductKeyword)) {
             return vendorDatabaseIdMappings.getProperty(bestProductKeyword);
         }
+
+        if( classNameToNameMap.containsKey(tmpProductName)) {
+            return classNameToNameMap.get(tmpProductName);
+        }
         return null;
     }
 
