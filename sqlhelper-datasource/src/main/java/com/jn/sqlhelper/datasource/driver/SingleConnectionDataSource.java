@@ -64,7 +64,7 @@ public class SingleConnectionDataSource extends DriverManagerDataSource implemen
     /**
      * Override auto-commit state?
      */
-    private Boolean autoCommit;
+    private Boolean autoCommit = true;
 
     /**
      * Wrapped Connection

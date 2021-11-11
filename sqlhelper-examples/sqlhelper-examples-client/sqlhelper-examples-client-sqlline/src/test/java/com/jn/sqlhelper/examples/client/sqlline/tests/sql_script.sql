@@ -1,1 +1,3 @@
-select count(*) from user;select * from user;
+
+select count(*) from user;
+select * from user;

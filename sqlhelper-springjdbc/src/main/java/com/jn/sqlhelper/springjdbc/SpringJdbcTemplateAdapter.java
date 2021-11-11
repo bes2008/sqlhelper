@@ -6,10 +6,8 @@ import com.jn.sqlhelper.common.resultset.RowMapper;
 import com.jn.sqlhelper.common.statement.PreparedStatementSetter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.SqlProvider;
 import org.springframework.jdbc.core.StatementCallback;
-import org.springframework.transaction.jta.SpringJtaSynchronizationAdapter;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;

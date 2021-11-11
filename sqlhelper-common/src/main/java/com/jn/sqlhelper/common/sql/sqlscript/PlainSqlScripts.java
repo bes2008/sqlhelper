@@ -12,10 +12,9 @@ public class PlainSqlScripts {
 
     public static void execute(JdbcTemplate sqlHelperJdbcTemplate, PlainSqlScript sqlScript, PlainSqlScriptParser parser) {
         List<PlainSqlStatement> sqlStatements = parser.parse(sqlScript);
-
         for (PlainSqlStatement sqlStatement : sqlStatements) {
             String sql = sqlStatement.getSql();
-            logger.debug("Executing SQL: " + sql);
+            logger.debug("Executing SQL: \n" + sql);
 
             try {
                 sqlHelperJdbcTemplate.execute(sql);

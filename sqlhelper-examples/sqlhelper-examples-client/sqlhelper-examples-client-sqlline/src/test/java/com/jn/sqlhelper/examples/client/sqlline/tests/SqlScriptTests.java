@@ -7,9 +7,13 @@ import com.jn.langx.text.properties.Props;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.io.Charsets;
+import com.jn.sqlhelper.common.jdbc.JdbcTemplate;
+import com.jn.sqlhelper.common.jdbc.SqlHelperJdbcTemplate;
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScript;
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
+import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScripts;
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatement;
+import com.jn.sqlhelper.datasource.driver.SingleConnectionDataSource;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.DialectRegistry;
 import org.junit.Test;
@@ -20,20 +24,20 @@ import java.util.List;
 
 public class SqlScriptTests {
     @Test
-    public void testWithSqlLine() throws Throwable{
+    public void testWithSqlLine() throws Throwable {
         String h2DatabaseUrlTemplate = "jdbc:h2:file:${user.dir}/../../sqlhelper-examples-db/src/main/resources/test";
         String url = StringTemplates.formatWithMap(h2DatabaseUrlTemplate, Props.toStringMap(System.getProperties()));
 
 
-        URL scriptURL= Resources.loadClassPathResource("./sql_script.sql",SqlScriptTests.class).getUrl();
-        String scriptPath= scriptURL.getFile();
+        URL scriptURL = Resources.loadClassPathResource("./sql_script.sql", SqlScriptTests.class).getUrl();
+        String scriptPath = scriptURL.getFile();
 
         String[] args = new String[]{
                 "-u", url,      // url
                 "-n", "sa",     // username
                 "-p", "123456", // password
                 "-d", "org.h2.Driver",   // driver
-                "-f",scriptPath,
+                "-f", scriptPath,
                 "--silent",
                 "--maxHeight=80",
                 "--maxWidth=80"
@@ -42,12 +46,13 @@ public class SqlScriptTests {
     }
 
     @Test
-    public void sqlScriptParseTests(){
+    public void sqlScriptParseTests() {
         sqlScriptParseTests("d:/tmp/bpm_smdb.sql");
     }
-    public void sqlScriptParseTests(String location){
+
+    public void sqlScriptParseTests(String location) {
         Resource resource = Resources.loadFileResource(location);
-        PlainSqlScript sqlScript = new PlainSqlScript( resource, Charsets.UTF_8.name());
+        PlainSqlScript sqlScript = new PlainSqlScript(resource, Charsets.UTF_8.name());
 
         Dialect dialect = DialectRegistry.getInstance().getDialectByName("mysql");
 
@@ -64,7 +69,7 @@ public class SqlScriptTests {
     }
 
     @Test
-    public void dialectTests(){
+    public void dialectTests() {
         showDatabaseId("jdbc:h2://localhost:3306/mysql");
         showDatabaseId("H2Database");
         showDatabaseId("com.h2.Driver");
@@ -77,10 +82,45 @@ public class SqlScriptTests {
         showDatabaseId("jdbc:postgresql://<host>:<port>/<database_name>");
     }
 
-    private void showDatabaseId(String str){
+    private void showDatabaseId(String str) {
         System.out.println(DialectRegistry.guessDatabaseId(str));
     }
 
+
+    @Test
+    public void testSqlScriptExecution() throws Throwable {
+        String h2DatabaseUrlTemplate = "jdbc:h2:file:${user.dir}/target/test";
+        String url = StringTemplates.formatWithMap(h2DatabaseUrlTemplate, Props.toStringMap(System.getProperties()));
+        String scriptPath = StringTemplates.formatWithMap("${user.dir}/../../sqlhelper-examples-db/src/main/resources/sqlscripts/create-table-h2.sql", Props.toStringMap(System.getProperties()));
+
+        String[] args = new String[]{
+                "-u", url,      // url
+                "-n", "sa",     // username
+                "-p", "123456", // password
+                "-d", "org.h2.Driver",   // driver
+                "-f", scriptPath,
+                "--silent",
+                "--maxHeight=80",
+                "--maxWidth=80"
+        };
+        // SqlLine.main(args);
+
+        SingleConnectionDataSource dataSource = new SingleConnectionDataSource(
+                url,
+                "sa",
+                "123456", true
+        );
+        dataSource.setDriverClassName("org.h2.Driver");
+        JdbcTemplate jdbcTemplate = new SqlHelperJdbcTemplate(dataSource);
+        Resource resource = Resources.loadFileResource(scriptPath);
+        PlainSqlScript sqlScript = new PlainSqlScript(resource, Charsets.UTF_8.name());
+
+        String dialectName = DialectRegistry.guessDatabaseId(url);
+        Dialect dialect = DialectRegistry.getInstance().getDialectByName(dialectName);
+        PlainSqlScriptParser parser = dialect.getPlainSqlScriptParser();
+        PlainSqlScripts.execute(jdbcTemplate, sqlScript, parser);
+        dataSource.destroy();
+    }
 
 
 }

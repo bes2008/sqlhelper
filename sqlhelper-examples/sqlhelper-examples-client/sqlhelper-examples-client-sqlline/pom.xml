@@ -22,7 +22,10 @@
             <artifactId>sqlline</artifactId>
             <version>1.11.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <artifactId>sqlhelper-datasource</artifactId>
+        </dependency>
 
     </dependencies>
     <build>
