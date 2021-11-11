@@ -65,9 +65,22 @@ public class SqlScriptTests {
 
     @Test
     public void dialectTests(){
-        System.out.println(DialectRegistry.guessDatabaseId("jdbc:h2://localhost:3306/mysql"));
-        System.out.println(DialectRegistry.guessDatabaseId("jdbc:mysql://localhost:3306/mydb"));
-        System.out.println(DialectRegistry.guessDatabaseId("H2Database"));
+        showDatabaseId("jdbc:h2://localhost:3306/mysql");
+        showDatabaseId("H2Database");
+        showDatabaseId("com.h2.Dirver");
+
+        showDatabaseId("jdbc:mysql://localhost:3306/mydb");
+
+        showDatabaseId("jdbc:sybase:Tds:<host>:<port>?ServiceName=<database_name>");
+        showDatabaseId("com.jn.sqlhelper.dialect.internal.SybaseDialect");
+
+        showDatabaseId("jdbc:postgresql://<host>:<port>/<database_name>");
     }
+
+    private void showDatabaseId(String str){
+        System.out.println(DialectRegistry.guessDatabaseId(str));
+    }
+
+
 
 }
