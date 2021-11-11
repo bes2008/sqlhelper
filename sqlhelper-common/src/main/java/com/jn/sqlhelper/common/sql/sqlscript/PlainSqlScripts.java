@@ -10,7 +10,7 @@ import java.util.List;
 public class PlainSqlScripts {
     private static final Logger logger = LoggerFactory.getLogger(PlainSqlScripts.class);
 
-    public static void execute(JdbcTemplate jdbcTemplate, PlainSqlScript sqlScript, PlainSqlScriptParser parser) {
+    public static void execute(JdbcTemplate sqlHelperJdbcTemplate, PlainSqlScript sqlScript, PlainSqlScriptParser parser) {
         List<PlainSqlStatement> sqlStatements = parser.parse(sqlScript);
 
         for (PlainSqlStatement sqlStatement : sqlStatements) {
@@ -18,7 +18,7 @@ public class PlainSqlScripts {
             logger.debug("Executing SQL: " + sql);
 
             try {
-                jdbcTemplate.execute(sql);
+                sqlHelperJdbcTemplate.execute(sql);
             } catch (SQLException e) {
                 throw new PlainSqlScriptException(sqlScript.getResource(), sqlStatement, e);
             }

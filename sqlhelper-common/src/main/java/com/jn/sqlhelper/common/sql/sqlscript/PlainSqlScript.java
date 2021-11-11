@@ -19,13 +19,8 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.io.resource.Resource;
 import com.jn.langx.util.io.Charsets;
-import com.jn.sqlhelper.common.jdbc.JdbcTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Sql script containing a series of statements terminated by a delimiter (eg: ;).

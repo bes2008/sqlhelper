@@ -71,7 +71,6 @@ public class SimpleDataSource implements DataSource {
 
     @Override
     public void setLoginTimeout(int seconds) throws SQLException {
-        setLoginTimeout(seconds);
     }
 
     @Override

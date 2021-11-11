@@ -58,7 +58,7 @@ public class ConnectionFactory {
             if (connectionConfiguration.getDriverProps() != null && !connectionConfiguration.getDriverProps().isEmpty()) {
                 return DriverManager.getConnection(connectionConfiguration.getUrl(), connectionConfiguration.getDriverProps());
             }
-            DriverManager.getConnection(connectionConfiguration.getUrl(), connectionConfiguration.getUser(), connectionConfiguration.getPassword());
+            return DriverManager.getConnection(connectionConfiguration.getUrl(), connectionConfiguration.getUser(), connectionConfiguration.getPassword());
         } catch (SQLException e) {
             logger.warn("Error occur when get connection with configuration: {}, error message : {}, stack:", connectionConfiguration.toString(), e.getMessage(), e);
         }

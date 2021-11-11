@@ -18,6 +18,8 @@ package com.jn.sqlhelper.datasource.driver;
 import com.jn.langx.lifecycle.Destroyable;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
+import com.jn.sqlhelper.common.connection.ConnectionConfiguration;
+import com.jn.sqlhelper.common.connection.ConnectionFactory;
 import com.jn.sqlhelper.datasource.SmartDataSource;
 
 import java.lang.reflect.InvocationHandler;
@@ -53,6 +55,9 @@ public class SingleConnectionDataSource extends DriverManagerDataSource implemen
 
     /**
      * Create a close-suppressing proxy?
+     *
+     * if ture, the connection will be reused
+     *
      */
     private boolean suppressClose;
 
@@ -81,6 +86,17 @@ public class SingleConnectionDataSource extends DriverManagerDataSource implemen
      * Constructor for bean-style configuration.
      */
     public SingleConnectionDataSource() {
+    }
+
+    public SingleConnectionDataSource(ConnectionFactory connectionFactory, boolean suppressClose){
+        this(connectionFactory.getConnection(), suppressClose);
+    }
+
+    public SingleConnectionDataSource(ConnectionConfiguration connectionConfiguration, boolean suppressClose){
+        this(connectionConfiguration.getUrl(),
+                connectionConfiguration.getUser(),
+                connectionConfiguration.getPassword(), suppressClose);
+        setDriverClassName(connectionConfiguration.getDriver());
     }
 
     /**
