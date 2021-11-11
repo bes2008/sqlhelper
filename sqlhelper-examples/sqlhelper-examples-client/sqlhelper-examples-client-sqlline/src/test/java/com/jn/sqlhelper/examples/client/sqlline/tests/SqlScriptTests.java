@@ -67,7 +67,7 @@ public class SqlScriptTests {
     public void dialectTests(){
         showDatabaseId("jdbc:h2://localhost:3306/mysql");
         showDatabaseId("H2Database");
-        showDatabaseId("com.h2.Dirver");
+        showDatabaseId("com.h2.Driver");
 
         showDatabaseId("jdbc:mysql://localhost:3306/mydb");
 
