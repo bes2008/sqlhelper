@@ -45,7 +45,7 @@ import java.util.Properties;
  *
  * <p>In a J2EE container, it is recommended to use a JNDI DataSource provided by
  * the container. Such a DataSource can be exposed as a DataSource bean in a Spring
- * ApplicationContext via {@link org.springframework.jndi.JndiObjectFactoryBean},
+ * ApplicationContext via JndiObjectFactoryBean,
  * for seamless switching to and from a local DataSource bean like this class.
  * For tests, you can then either set up a mock JNDI environment through Spring's
  *  org.springframework.mock.jndi.SimpleNamingContextBuilder, or switch the

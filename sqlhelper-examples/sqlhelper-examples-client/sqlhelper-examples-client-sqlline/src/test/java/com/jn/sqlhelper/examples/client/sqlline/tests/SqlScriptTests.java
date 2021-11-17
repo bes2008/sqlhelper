@@ -47,7 +47,7 @@ public class SqlScriptTests {
 
     @Test
     public void sqlScriptParseTests() {
-        sqlScriptParseTests("d:/tmp/bpm_smdb.sql");
+        sqlScriptParseTests("d:/tmp/bpm_cmdb_tmp.sql");
     }
 
     public void sqlScriptParseTests(String location) {

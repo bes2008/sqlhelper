@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Builds a SQL statement, one line at a time.
+ * Build a SQL statement, one line at a time.
+ * every sql statement will create a PlainSqlStatementBuilder instance
  */
 public class PlainSqlStatementBuilder {
     /**
