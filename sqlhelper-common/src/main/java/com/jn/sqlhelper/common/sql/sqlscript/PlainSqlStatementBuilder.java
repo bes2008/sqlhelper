@@ -101,6 +101,10 @@ public class PlainSqlStatementBuilder {
         this.delimiter = delimiter;
     }
 
+    public PlainSqlDelimiter getDelimiter(){
+        return this.delimiter;
+    }
+
     /**
      * Checks whether the statement is still empty.
      *
