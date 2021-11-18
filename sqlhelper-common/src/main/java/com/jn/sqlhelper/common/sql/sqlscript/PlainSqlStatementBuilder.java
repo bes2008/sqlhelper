@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * Build a SQL statement, one line at a time.
- * every sql statement will create a PlainSqlStatementBuilder instance
+ * every sql statement will create a PlainSqlStatementBuilder instance.
  */
 public class PlainSqlStatementBuilder {
     /**

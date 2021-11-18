@@ -13,6 +13,12 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  一行只能一个简单的SQL，但不能一行多个SQL语句。
+ *  支持一个SQL语句要跨行。
+ *  不支持字符串跨行。
+ *  对于自定义换行符的语句，要单独成行
+ */
 public class PlainSqlScriptParser implements Parser<PlainSqlScript, List<PlainSqlStatement>> {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     public static final PlainSqlScriptParser INSTANCE = new PlainSqlScriptParser();
@@ -31,7 +37,7 @@ public class PlainSqlScriptParser implements Parser<PlainSqlScript, List<PlainSq
     }
 
     protected PlainSqlStatementBuilder newSqlStatementBuilder(){
-       return new PlainSqlStatementBuilder();
+        return new PlainSqlStatementBuilder();
     }
 
     /**
