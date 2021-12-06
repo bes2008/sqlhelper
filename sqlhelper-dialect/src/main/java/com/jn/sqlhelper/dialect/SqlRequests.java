@@ -20,8 +20,6 @@ import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.orderby.OrderByBuilder;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
-import com.jn.sqlhelper.dialect.pagination.PagingRequest;
-import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
 
 public class SqlRequests extends SQLs {
 
