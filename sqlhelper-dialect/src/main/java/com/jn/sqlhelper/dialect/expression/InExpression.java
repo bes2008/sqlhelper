@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.dialect.expression;
 
-import com.jn.langx.expression.operator.AbstractBinaryOperator;
+import com.jn.langx.el.expression.operator.AbstractBinaryOperator;
 import com.jn.langx.util.hash.HashCodeBuilder;
 
 public class InExpression extends AbstractBinaryOperator<SQLExpression, ListExpression, SQLExpression> implements SQLExpression<SQLExpression>, Notable, SymbolExpression {

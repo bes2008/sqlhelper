@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.jsqlparser.expression;
 
-import com.jn.langx.expression.operator.BinaryOperator;
+import com.jn.langx.el.expression.operator.BinaryOperator;
 import com.jn.langx.util.function.Supplier;
 import com.jn.sqlhelper.dialect.expression.SQLExpression;
 import net.sf.jsqlparser.expression.BinaryExpression;

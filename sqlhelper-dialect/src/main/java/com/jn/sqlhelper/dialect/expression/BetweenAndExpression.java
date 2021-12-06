@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.dialect.expression;
 
-import com.jn.langx.expression.BaseExpression;
+import com.jn.langx.el.expression.BaseExpression;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.hash.HashCodeBuilder;
 

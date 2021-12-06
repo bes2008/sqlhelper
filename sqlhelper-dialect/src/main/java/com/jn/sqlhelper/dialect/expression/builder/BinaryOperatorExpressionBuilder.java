@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.dialect.expression.builder;
 
-import com.jn.langx.expression.operator.BinaryOperator;
+import com.jn.langx.el.expression.operator.BinaryOperator;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.function.Supplier0;

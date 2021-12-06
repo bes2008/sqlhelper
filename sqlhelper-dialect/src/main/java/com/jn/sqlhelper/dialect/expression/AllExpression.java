@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.dialect.expression;
 
-import com.jn.langx.expression.operator.AbstractUnaryOperator;
+import com.jn.langx.el.expression.operator.AbstractUnaryOperator;
 
 public class AllExpression extends AbstractUnaryOperator<SQLExpression<SQLExpression>, SQLExpression> implements SQLExpression<SQLExpression>,SymbolExpression {
 
