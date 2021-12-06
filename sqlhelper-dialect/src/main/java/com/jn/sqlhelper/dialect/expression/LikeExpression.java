@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.dialect.expression;
 
+
 import com.jn.langx.el.expression.operator.AbstractBinaryOperator;
 
 /**
