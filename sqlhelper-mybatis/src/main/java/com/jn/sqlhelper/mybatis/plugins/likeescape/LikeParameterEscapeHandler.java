@@ -20,7 +20,7 @@ import com.jn.langx.pipeline.AbstractHandler;
 import com.jn.langx.pipeline.HandlerContext;
 import com.jn.langx.pipeline.Pipelines;
 import com.jn.langx.util.Emptys;
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.struct.Pair;
 import com.jn.sqlhelper.common.formatter.SqlDmlFormatter;
@@ -84,7 +84,7 @@ public class LikeParameterEscapeHandler extends AbstractHandler {
         // notice: the sqlcontext, sqlrequest is not null
         SqlRequestContext sqlContext = SqlRequestContextHolder.getInstance().get();
         LikeEscaper likeEscaper = getLikeEscaper(mappedStatement, sqlContext.getRequest(), executorInvocation);
-        if (Objects.isNull(likeEscaper)) {
+        if (Objs.isNull(likeEscaper)) {
             logger.warn("Can't find a suitable LikeEscaper for the sql request: {}, statement id: {}", sqlContext.getRequest(), mappedStatement.getId());
             Pipelines.skipHandler(ctx, true);
             return;

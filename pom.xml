@@ -95,7 +95,7 @@
         <spring.version>4.3.25.RELEASE</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <easyjson.version>3.2.11</easyjson.version>
-        <langx-java.version>4.1.0</langx-java.version>
+        <langx-java.version>4.2.1</langx-java.version>
         <agileway.version>2.6.10</agileway.version>
 
         <jfinal.version>4.9</jfinal.version>

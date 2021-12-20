@@ -4,7 +4,7 @@ import com.jn.langx.Converter;
 import com.jn.langx.exception.NoMappedFieldException;
 import com.jn.langx.exception.ValueConvertException;
 import com.jn.langx.text.StringTemplates;
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Collects;
@@ -147,7 +147,7 @@ public class BeanRowMapper<T> implements RowMapper<T> {
 
     private void setValue(FieldInfo fieldInfo, Object target, Object fieldValue) throws Throwable {
         Method method = fieldInfo.getSetter();
-        boolean valueIsNull = Objects.isNull(fieldValue);
+        boolean valueIsNull = Objs.isNull(fieldValue);
 
         if (method != null && Modifiers.isPublic(method)) {
             boolean willInvoke = true;

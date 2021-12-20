@@ -15,7 +15,7 @@
 
 package com.jn.sqlhelper.dialect.pagination;
 
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.function.Consumer;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
@@ -64,13 +64,13 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
 
     private <X> void setContextContent(Consumer<PagingRequestContext> consumer) {
         PagingRequestContext context = get();
-        if (Objects.isNull(context)) {
+        if (Objs.isNull(context)) {
             context = newOne();
-            if (Objects.isNull(context)) {
+            if (Objs.isNull(context)) {
                 variables.remove();
             }
         }
-        if (Objects.isNotNull(context)) {
+        if (Objs.isNotNull(context)) {
             variables.set(context);
             consumer.accept(context);
         }
@@ -78,7 +78,7 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
 
     public PagingRequestContext get() {
         SqlRequestContext context = variables.get();
-        if (Objects.isNotNull(context) && context.isPagingRequest()) {
+        if (Objs.isNotNull(context) && context.isPagingRequest()) {
             return (PagingRequestContext) context;
         }
         return null;
@@ -90,7 +90,7 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
 
     public PagingRequest getPagingRequest() {
         PagingRequestContext context = get();
-        if (Objects.isNotNull(context)) {
+        if (Objs.isNotNull(context)) {
             return context.getRequest();
         }
         return null;
@@ -98,7 +98,7 @@ public class PagingRequestContextHolder extends SqlRequestContextHolder {
 
     public RowSelection getRowSelection() {
         PagingRequestContext context = get();
-        if (Objects.isNotNull(context)) {
+        if (Objs.isNotNull(context)) {
             return context.getRowSelection();
         }
         return null;

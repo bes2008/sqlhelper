@@ -25,7 +25,7 @@
 package com.github.pagehelper;
 
 import com.github.pagehelper.util.PageObjectUtil;
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.sqlhelper.dialect.orderby.SqlStyleOrderByBuilder;
 import com.jn.sqlhelper.dialect.pagination.PagingRequest;
 import com.jn.sqlhelper.dialect.pagination.PagingRequestContextHolder;
@@ -94,7 +94,7 @@ public class PageHelper {
         @Override
         public void clear(boolean clearResult) {
             PagingResult result = this.getResult();
-            if (Objects.isNull(result)) {
+            if (Objs.isNull(result)) {
                 this.page.setPageSize(this.getPageSize());
                 this.page.setPageNum(this.getPageNo());
             } else {

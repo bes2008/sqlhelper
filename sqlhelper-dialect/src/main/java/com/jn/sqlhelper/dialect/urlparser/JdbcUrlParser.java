@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.dialect.urlparser;
 
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.DialectRegistry;
@@ -35,7 +35,7 @@ public class JdbcUrlParser {
         UrlParser parser = null;
 
         for (Dialect dialect : dialects) {
-            if (Objects.isNotNull(dialect.getUrlParser())) {
+            if (Objs.isNotNull(dialect.getUrlParser())) {
                 for (String schema : dialect.getUrlParser().getUrlSchemas()) {
                     if (url.startsWith(schema)) {
                         parser = dialect.getUrlParser();

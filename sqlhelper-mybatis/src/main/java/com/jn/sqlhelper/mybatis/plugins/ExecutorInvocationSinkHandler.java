@@ -2,7 +2,7 @@ package com.jn.sqlhelper.mybatis.plugins;
 
 import com.jn.langx.pipeline.AbstractHandler;
 import com.jn.langx.pipeline.HandlerContext;
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import org.apache.ibatis.plugin.Invocation;
 
 public class ExecutorInvocationSinkHandler extends AbstractHandler {
@@ -14,7 +14,7 @@ public class ExecutorInvocationSinkHandler extends AbstractHandler {
         if (!method.equals("query")) {
             executorInvocation.setResult(invocation.proceed());
         } else {
-            if (executorInvocation.isBoundSqlChanged() && Objects.isNotNull(executorInvocation.getBoundSql())) {
+            if (executorInvocation.isBoundSqlChanged() && Objs.isNotNull(executorInvocation.getBoundSql())) {
                 executorInvocation.setResult(executorInvocation.getExecutor().query(executorInvocation.getMappedStatement(), executorInvocation.getParameter(), executorInvocation.getRowBounds(), executorInvocation.getResultHandler(), executorInvocation.getCacheKey(), executorInvocation.getBoundSql()));
             } else {
                 executorInvocation.setResult(invocation.proceed());

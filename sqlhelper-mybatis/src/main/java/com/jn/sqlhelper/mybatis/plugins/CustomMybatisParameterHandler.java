@@ -1,7 +1,7 @@
 package com.jn.sqlhelper.mybatis.plugins;
 
 import com.jn.langx.util.Emptys;
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
@@ -74,10 +74,10 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
 
     private List<Integer> getEscapeLikeParametersIndexes() {
         SqlRequestContext sqlRequestContext = SqlRequestContextHolder.getInstance().get();
-        if (Objects.isNull(sqlRequestContext) || Objects.isNull(sqlRequestContext.getRequest())) {
+        if (Objs.isNull(sqlRequestContext) || Objs.isNull(sqlRequestContext.getRequest())) {
             return null;
         }
-        if (Objects.isNull(sqlRequestContext.get(MybatisSqlRequestContextKeys.LIKE_ESCAPER))) {
+        if (Objs.isNull(sqlRequestContext.get(MybatisSqlRequestContextKeys.LIKE_ESCAPER))) {
             return null;
         }
         return (List<Integer>) sqlRequestContext.get(MybatisSqlRequestContextKeys.LIKE_ESCAPE_PARAMETERS_INDEXES);

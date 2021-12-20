@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.dialect.instrument;
 
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.hash.HashCodeBuilder;
 import com.jn.sqlhelper.dialect.instrument.groupby.GroupByTransformConfig;
 import com.jn.sqlhelper.dialect.instrument.where.WhereTransformConfig;
@@ -84,23 +84,23 @@ public class TransformConfig implements Serializable {
         if (isMultiTenant != that.isMultiTenant) {
             return false;
         }
-        if (!Objects.equals(limitOffset, that.limitOffset)) {
+        if (!Objs.equals(limitOffset, that.limitOffset)) {
             return false;
         }
-        if (!Objects.equals(dialect, that.dialect)) {
+        if (!Objs.equals(dialect, that.dialect)) {
             return false;
         }
-        if (!Objects.equals(orderBy, that.orderBy)) {
+        if (!Objs.equals(orderBy, that.orderBy)) {
             return false;
         }
-        if (!Objects.equals(likeEscaper, that.likeEscaper)) {
+        if (!Objs.equals(likeEscaper, that.likeEscaper)) {
             return false;
         }
 
-        if (!Objects.equals(whereInstrumentConfigs, that.whereInstrumentConfigs)) {
+        if (!Objs.equals(whereInstrumentConfigs, that.whereInstrumentConfigs)) {
             return false;
         }
-        if (!Objects.equals(tenant, that.tenant)) {
+        if (!Objs.equals(tenant, that.tenant)) {
             return false;
         }
 

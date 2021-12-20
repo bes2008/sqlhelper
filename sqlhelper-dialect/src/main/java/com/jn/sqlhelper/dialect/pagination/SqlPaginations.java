@@ -17,7 +17,7 @@ package com.jn.sqlhelper.dialect.pagination;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
@@ -46,7 +46,7 @@ public class SqlPaginations extends SqlRequests {
         if (index != -1) {
             subquery = sql.substring(index + startFlag.length());
         }
-        if (Objects.nonNull(subquery)) {
+        if (Objs.nonNull(subquery)) {
             index = subquery.lastIndexOf(endFlag);
             if (index != -1) {
                 subquery = subquery.substring(0, index);
@@ -66,7 +66,7 @@ public class SqlPaginations extends SqlRequests {
 
 
     public static boolean isSubqueryPagingRequest(@Nullable PagingRequest request) {
-        if (Objects.isNull(request)) {
+        if (Objs.isNull(request)) {
             return false;
         }
         return request.isSubqueryPaging();
@@ -80,7 +80,7 @@ public class SqlPaginations extends SqlRequests {
     }
 
     public static String getSubqueryPaginationStartFlag(@Nullable PagingRequest request) {
-        if (Objects.isNull(request)) {
+        if (Objs.isNull(request)) {
             return null;
         }
         String flag = request.getSubqueryPagingStartFlag();
@@ -99,7 +99,7 @@ public class SqlPaginations extends SqlRequests {
     }
 
     public static String getSubqueryPaginationEndFlag(@Nullable PagingRequest request) {
-        if (Objects.isNull(request)) {
+        if (Objs.isNull(request)) {
             return null;
         }
         String flag = request.getSubqueryPagingEndFlag();

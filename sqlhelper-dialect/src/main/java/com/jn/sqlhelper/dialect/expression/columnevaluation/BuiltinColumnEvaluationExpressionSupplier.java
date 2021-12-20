@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.dialect.expression.columnevaluation;
 
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
@@ -57,7 +57,7 @@ public class BuiltinColumnEvaluationExpressionSupplier implements ColumnEvaluati
             });
             return builder.build();
         } else if (expressionBuilder instanceof BetweenAndExpression) {
-            Preconditions.checkArgument(Objects.length(columnEvaluation.getValues()) == 2);
+            Preconditions.checkArgument(Objs.length(columnEvaluation.getValues()) == 2);
             return new SQLExpressionBuilders.BetweenAndBuilder()
                     .target(columnExpression)
                     .low(new PlaceholderExpression())

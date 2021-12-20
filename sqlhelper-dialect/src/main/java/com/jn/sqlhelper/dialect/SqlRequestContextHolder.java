@@ -1,9 +1,10 @@
 package com.jn.sqlhelper.dialect;
 
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public class SqlRequestContextHolder {
     private static final Logger logger = LoggerFactory.getLogger(SqlRequestContextHolder.class);
@@ -21,7 +22,7 @@ public class SqlRequestContextHolder {
 
     public boolean isOrderByRequest() {
         SqlRequestContext ctx = get();
-        return Objects.isNotNull(ctx) && ctx.isOrderByRequest();
+        return Objs.isNotNull(ctx) && ctx.isOrderByRequest();
     }
     public void setSqlRequest(final SqlRequest request) {
         setContextContent(new Consumer<SqlRequestContext>() {
@@ -35,13 +36,13 @@ public class SqlRequestContextHolder {
     private <X> void setContextContent(Consumer<SqlRequestContext> consumer) {
         SqlRequestContext context = get();
         try {
-            if (Objects.isNull(context)) {
+            if (Objs.isNull(context)) {
                 context = SqlRequestContext.class.newInstance();
-                if (Objects.isNull(context)) {
+                if (Objs.isNull(context)) {
                     variables.remove();
                 }
             }
-            if (Objects.isNotNull(context)) {
+            if (Objs.isNotNull(context)) {
                 variables.set(context);
                 consumer.accept(context);
             }
@@ -52,7 +53,7 @@ public class SqlRequestContextHolder {
 
     public void clear(){
         SqlRequestContext requestContext = get();
-        if(Objects.isNotNull(requestContext)){
+        if(Objs.isNotNull(requestContext)){
             requestContext.clear();
         }
         variables.remove();

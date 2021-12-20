@@ -479,7 +479,7 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             builder.resultSetType(ms.getResultSetType());
             builder.cache(ms.getCache());
             builder.flushCacheRequired(ms.isFlushCacheRequired());
-            boolean useCache = Objects.isNull(pagingRequest.getCacheCount()) ? ms.isUseCache() : pagingRequest.getCacheCount();
+            boolean useCache = Objs.isNull(pagingRequest.getCacheCount()) ? ms.isUseCache() : pagingRequest.getCacheCount();
             builder.useCache(useCache);
 
             countStatement = builder.build();

@@ -19,7 +19,7 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.annotation.Singleton;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.iter.IteratorIterable;
 import com.jn.langx.util.function.Consumer;
@@ -56,7 +56,7 @@ public class InstrumentationRegistry implements Initializable {
                 public void accept(Instrumentation instrumentation) {
                     String alias = Instrumentations.getAliasName(instrumentation);
                     String classFullName = Reflects.getFQNClassName(instrumentation.getClass());
-                    if (Objects.isNotEmpty(alias)) {
+                    if (Objs.isNotEmpty(alias)) {
                         aliasMap.put(alias, classFullName);
                     }
                     instrumentationMap.put(classFullName, instrumentation);
@@ -71,7 +71,7 @@ public class InstrumentationRegistry implements Initializable {
     }
 
     public void enableInstrumentation(@NonNull String name) {
-        if (Objects.isNotEmpty(name)) {
+        if (Objs.isNotEmpty(name)) {
             logger.info("Start to enable SQL instrumentation: {}", name);
             Instrumentation instrumentation = findInstrumentation(name, false);
             if (instrumentation != null) {

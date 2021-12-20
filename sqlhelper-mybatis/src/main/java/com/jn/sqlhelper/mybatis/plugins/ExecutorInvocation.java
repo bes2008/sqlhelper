@@ -16,7 +16,7 @@ package com.jn.sqlhelper.mybatis.plugins;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -74,7 +74,7 @@ public class ExecutorInvocation {
      * lazy parse bound sql
      */
     private BoundSql parseBoundSql() {
-        if (Objects.isNull(boundSql)) {
+        if (Objs.isNull(boundSql)) {
             Object[] args = invocation.getArgs();
             if (this.methodName.equals("query")) {
                 if (args.length > 4) {
@@ -82,11 +82,11 @@ public class ExecutorInvocation {
                     this.boundSql = (BoundSql) args[5];
                 }
             }
-            if (Objects.isNull(this.boundSql)) {
+            if (Objs.isNull(this.boundSql)) {
                 this.boundSql = this.mappedStatement.getBoundSql(parameter);
             }
             if (this.methodName.equals("query")) {
-                if (Objects.isNull(cacheKey)) {
+                if (Objs.isNull(cacheKey)) {
                     this.cacheKey = this.executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
                 }
             }
@@ -144,11 +144,11 @@ public class ExecutorInvocation {
     }
 
     public BoundSql getBoundSql() {
-        return Objects.isNull(boundSql) ? parseBoundSql() : this.boundSql;
+        return Objs.isNull(boundSql) ? parseBoundSql() : this.boundSql;
     }
 
     public void setBoundSql(BoundSql boundSql) {
-        if (Objects.isNotNull(this.boundSql)) {
+        if (Objs.isNotNull(this.boundSql)) {
             this.boundSqlChanged = true;
         }
         this.boundSql = boundSql;

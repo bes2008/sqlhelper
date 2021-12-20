@@ -14,7 +14,7 @@
 
 package com.jn.sqlhelper.mybatis.plugins;
 
-import com.jn.langx.util.Objects;
+import com.jn.langx.util.Objs;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
 import com.jn.sqlhelper.dialect.SqlRequestContextHolder;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -22,11 +22,11 @@ import org.apache.ibatis.mapping.MappedStatement;
 public class NestedStatements {
     public static boolean isNestedStatement(MappedStatement mappedStatement) {
         SqlRequestContext context = SqlRequestContextHolder.getInstance().get();
-        if (Objects.isNull(context)) {
+        if (Objs.isNull(context)) {
             return false;
         }
         String querySqlId = context.getString(MybatisSqlRequestContextKeys.QUERY_SQL_ID);
 
-        return Objects.isNotNull(querySqlId) && !querySqlId.equals(mappedStatement.getId()) ;
+        return Objs.isNotNull(querySqlId) && !querySqlId.equals(mappedStatement.getId()) ;
     }
 }
