@@ -270,10 +270,12 @@ public class MethodInvocationDataSourceKeySelector implements DataSourceRegistry
         if (key != null) {
             NamedDataSource dataSource = dataSourceRegistry.get(key);
             if (dataSource != null) {
-                MethodInvocationDataSourceKeySelector.setCurrent(key);
+                // MethodInvocationDataSourceKeySelector.setCurrent(key);
+            } else {
+                key = null;
             }
         }
-        key = MethodInvocationDataSourceKeySelector.getCurrent();
+
         if (key == null) {
             key = doSelect(methodInvocation);
         }
