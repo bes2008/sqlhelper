@@ -82,6 +82,7 @@ public class DynamicDataSourcesAutoConfiguration {
             final ApplicationContext applicationContext) {
 
         logger.info("===[SQLHelper & Dynamic DataSource]=== the dynamic datasource is enabled");
+        logger.info("===[SQLHelper & Dynamic DataSource]=== create data sources");
 
         final List<NamedDataSource> dataSources = Collects.emptyArrayList();
         // 处理 Spring Boot 默认数据源
