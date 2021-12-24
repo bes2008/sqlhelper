@@ -2,6 +2,7 @@ package com.jn.sqlhelper.datasource.key.parser;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.logging.Loggers;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 
@@ -13,7 +14,7 @@ public abstract class AbstractDataSourceKeyAnnotationParser<A extends Annotation
     @Override
     public DataSourceKey parse(AnnotatedElement annotatedElement) {
         Preconditions.checkNotNull(annotatedElement);
-
+        Loggers.getLogger(getClass()).info("===[SQLHelper & Dynamic DataSource]=== parse {} for {}", Reflects.getFQNClassName(getAnnotation()), annotatedElement);
         if (!Reflects.hasAnnotation(annotatedElement, getAnnotation())) {
             if (annotatedElement instanceof Method) {
                 Method method = (Method) annotatedElement;

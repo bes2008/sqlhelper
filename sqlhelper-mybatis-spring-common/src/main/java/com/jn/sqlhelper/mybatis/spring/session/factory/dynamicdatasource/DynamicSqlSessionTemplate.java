@@ -90,7 +90,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
                 delegateMapperMap.put(key, mybatisMapperProxy);
             }
         });
-        logger.info("===[SQLHelper & MyBatis Dynamic Datasource]=== Create DynamicMapper: {}", Reflects.getFQNClassName(mapperInterface));
+        logger.info("===[SQLHelper & MyBatis Dynamic DataSource]=== Create DynamicMapper: {}", Reflects.getFQNClassName(mapperInterface));
         DynamicMapper mapper = new DynamicMapper(mapperInterface, delegateMapperMap, selector);
         return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[]{mapperInterface}, mapper);
     }

@@ -20,7 +20,8 @@ sqlhelper:
   dynamic-datasource:
     enabled: true
     key-choices:
-      expression: execution(public * com.jn.sqlhelper.examples.mybatisplus_2x.controller.*Controller.*(..))
+      expression: execution(public * com.jn.sqlhelper.examples.mybatisplus_2x.dao.*Dao.*(..))
+      #expression: execution(public * com.jn.sqlhelper.examples.mybatisplus_2x.controller.*Controller.*(..))
     transaction:
       expression: execution(public * com.jn.sqlhelper.examples.mybatisplus_2x.dao.*Dao.*(..))
     datasources:
