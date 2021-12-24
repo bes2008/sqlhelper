@@ -18,6 +18,7 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer2;
+import com.jn.langx.util.logging.Loggers;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.transaction.Transaction;
 import com.jn.sqlhelper.common.transaction.utils.TransactionThreadContext;
@@ -29,6 +30,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.executor.BatchResult;
 import org.apache.ibatis.session.*;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.slf4j.Logger;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 
 import java.lang.reflect.InvocationHandler;
@@ -44,6 +46,7 @@ import static org.mybatis.spring.SqlSessionUtils.*;
 
 
 public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
+    private static Logger logger = Loggers.getLogger(DynamicSqlSessionTemplate.class);
     private MethodInvocationDataSourceKeySelector selector;
     private SqlSession sessionProxy;
 
@@ -87,6 +90,7 @@ public class DynamicSqlSessionTemplate extends SqlSessionTemplate {
                 delegateMapperMap.put(key, mybatisMapperProxy);
             }
         });
+        logger.info("===[SQLHelper & MyBatis-Plus 2.x]=== Create DynamicMapper: {}", Reflects.getFQNClassName(mapperInterface));
         DynamicMapper mapper = new DynamicMapper(mapperInterface, delegateMapperMap, selector);
         return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[]{mapperInterface}, mapper);
     }
