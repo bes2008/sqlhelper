@@ -18,5 +18,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public interface PreparedStatementSetter<P> {
-    void setParameters(PreparedStatement statement, int startIndex, P parameter) throws SQLException;
+    /**
+     *
+     * @param statement the jdbc statement
+     * @param startIndex 通常从1开始
+     * @param parameters the prepared parameters
+     * @throws SQLException
+     */
+    void setParameters(PreparedStatement statement, int startIndex, P parameters) throws SQLException;
 }

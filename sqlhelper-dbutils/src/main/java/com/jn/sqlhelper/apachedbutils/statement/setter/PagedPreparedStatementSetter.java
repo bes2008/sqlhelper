@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.apachedbutils;
+package com.jn.sqlhelper.apachedbutils.statement.setter;
 
 import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Collects;
@@ -24,7 +24,7 @@ import com.jn.sqlhelper.dialect.parameter.ArrayBasedQueryParameters;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-class PagedPreparedStatementSetter implements PagedPreparedParameterSetter<ArrayBasedQueryParameters> {
+public class PagedPreparedStatementSetter implements PagedPreparedParameterSetter<ArrayBasedQueryParameters> {
     private PreparedStatementSetter delegate;
 
     public PagedPreparedStatementSetter(PreparedStatementSetter setter) {

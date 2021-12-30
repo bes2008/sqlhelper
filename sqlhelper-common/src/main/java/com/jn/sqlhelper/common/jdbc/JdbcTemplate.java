@@ -8,6 +8,9 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * 所有的方法执行完毕，都会自动的调用 Connection#close()方法
+ */
 public interface JdbcTemplate {
     DataSource getDataSource();
 
@@ -23,5 +26,14 @@ public interface JdbcTemplate {
 
     int executeUpdate(String sql, PreparedStatementSetter preparedStatementSetter, Object... params) throws SQLException;
 
+    /**
+     * 调用 存储过程， callable PreparedStatement
+     * @param sql
+     * @param params
+     * @param extractor
+     * @param <T>
+     * @return
+     * @throws SQLException
+     */
     <T> T call(String sql, List<?> params, ResultSetExtractor<T> extractor) throws SQLException;
 }

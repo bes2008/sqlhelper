@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.apachedbutils;
+package com.jn.sqlhelper.apachedbutils.statement.setter;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

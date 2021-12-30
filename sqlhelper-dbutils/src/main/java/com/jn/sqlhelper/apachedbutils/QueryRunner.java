@@ -15,15 +15,20 @@
 package com.jn.sqlhelper.apachedbutils;
 
 import com.jn.langx.annotation.NonNull;
+import com.jn.langx.annotation.Nullable;
+import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.io.IOs;
 import com.jn.sqlhelper.apachedbutils.resultset.SelectCountResultSetHandler;
+import com.jn.sqlhelper.apachedbutils.statement.setter.ArrayPreparedStatementSetter;
+import com.jn.sqlhelper.apachedbutils.statement.setter.PagedPreparedStatementSetter;
+import com.jn.sqlhelper.apachedbutils.statement.setter.PreparedStatementSetter;
 import com.jn.sqlhelper.common.utils.SQLs;
-import com.jn.sqlhelper.dialect.pagination.RowSelection;
+import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorProvider;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
-import com.jn.sqlhelper.dialect.instrument.SQLInstrumentorConfig;
 import com.jn.sqlhelper.dialect.pagination.*;
 import com.jn.sqlhelper.dialect.parameter.ArrayBasedQueryParameters;
 import org.apache.commons.dbutils.ResultSetHandler;
@@ -142,6 +147,88 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
         this.instrumentConfig = instrumentConfig;
     }
 
+
+    public boolean execute(String sql) throws SQLException {
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = this.prepareConnection();
+            statement = connection.createStatement();
+            return statement.execute(sql);
+        } catch (SQLException ex) {
+            throw ex;
+        } finally {
+            IOs.close(statement);
+            IOs.close(connection);
+        }
+    }
+
+    @Override
+    public void fillStatement(PreparedStatement stmt, Object... params) throws SQLException {
+        fillStatement(stmt, new ArrayPreparedStatementSetter(params), params);
+    }
+
+    public void fillStatementWithSetter(PreparedStatement stmt, PreparedStatementSetter preparedStatementSetter, Object... params) throws SQLException {
+        // nothing to do here
+        if (Emptys.isAnyEmpty(params)) {
+            return;
+        }
+        if (preparedStatementSetter == null) {
+            fillStatement(stmt, params);
+        } else {
+            preparedStatementSetter.setValues(stmt);
+        }
+    }
+
+    public int executeUpdate(String sql, PreparedStatementSetter setter, Object... params) throws SQLException {
+        Connection conn = this.prepareConnection();
+        return this.executeUpdate(conn, true, sql, setter, params);
+    }
+
+    /**
+     * Calls update after checking the parameters to ensure nothing is null.
+     *
+     * @param conn      The connection to use for the update call.
+     * @param closeConn True if the connection should be closed, false otherwise.
+     * @param sql       The SQL statement to execute.
+     * @param params    An array of update replacement parameters.  Each row in
+     *                  this array is one set of update replacement values.
+     * @return The number of rows updated.
+     * @throws SQLException If there are database or parameter errors.
+     */
+    private int executeUpdate(Connection conn, boolean closeConn, String sql, PreparedStatementSetter setter, Object... params) throws SQLException {
+        if (conn == null) {
+            throw new SQLException("Null connection");
+        }
+
+        if (sql == null) {
+            if (closeConn) {
+                close(conn);
+            }
+            throw new SQLException("Null SQL statement");
+        }
+
+        PreparedStatement stmt = null;
+        int rows = 0;
+
+        try {
+            stmt = this.prepareStatement(conn, sql);
+            this.fillStatementWithSetter(stmt, setter, params);
+            rows = stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            this.rethrow(e, sql, params);
+
+        } finally {
+            close(stmt);
+            if (closeConn) {
+                close(conn);
+            }
+        }
+
+        return rows;
+    }
+
     /**
      * Execute an SQL SELECT query with a single replacement parameter. The
      * caller is responsible for closing the connection.
@@ -153,11 +240,10 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
      * @param rsh   The handler that converts the results into an object.
      * @return The object returned by the handler.
      * @throws SQLException if a database access error occurs
-     * @deprecated Use {@link #query(Connection, String, ResultSetHandler, Object...)}
      */
     @Override
     public <T> T query(Connection conn, String sql, Object param, ResultSetHandler<T> rsh) throws SQLException {
-        return this.<T>query(conn, false, sql, rsh, new Object[]{param});
+        return this.<T>query(conn, false, sql, null, rsh, new Object[]{param});
     }
 
     /**
@@ -171,11 +257,10 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
      * @param rsh    The handler that converts the results into an object.
      * @return The object returned by the handler.
      * @throws SQLException if a database access error occurs
-     * @deprecated Use {@link #query(Connection, String, ResultSetHandler, Object...)} instead
      */
     @Override
     public <T> T query(Connection conn, String sql, Object[] params, ResultSetHandler<T> rsh) throws SQLException {
-        return this.<T>query(conn, false, sql, rsh, params);
+        return this.<T>query(conn, false, sql, null, rsh, params);
     }
 
     /**
@@ -192,7 +277,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
      */
     @Override
     public <T> T query(Connection conn, String sql, ResultSetHandler<T> rsh, Object... params) throws SQLException {
-        return this.<T>query(conn, false, sql, rsh, params);
+        return this.<T>query(conn, false, sql, null, rsh, params);
     }
 
     /**
@@ -208,7 +293,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
      */
     @Override
     public <T> T query(Connection conn, String sql, ResultSetHandler<T> rsh) throws SQLException {
-        return this.<T>query(conn, false, sql, rsh, (Object[]) null);
+        return this.<T>query(conn, false, sql, null, rsh, (Object[]) null);
     }
 
     /**
@@ -223,13 +308,10 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
      *              the <code>ResultSet</code>.
      * @return An object generated by the handler.
      * @throws SQLException if a database access error occurs
-     * @deprecated Use {@link #query(String, ResultSetHandler, Object...)}
      */
     @Override
     public <T> T query(String sql, Object param, ResultSetHandler<T> rsh) throws SQLException {
-        Connection conn = this.prepareConnection();
-
-        return this.<T>query(conn, true, sql, rsh, new Object[]{param});
+        return this.<T>query(sql, rsh, new Object[]{param});
     }
 
     /**
@@ -245,13 +327,10 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
      *               the <code>ResultSet</code>.
      * @return An object generated by the handler.
      * @throws SQLException if a database access error occurs
-     * @deprecated Use {@link #query(String, ResultSetHandler, Object...)}
      */
     @Override
     public <T> T query(String sql, Object[] params, ResultSetHandler<T> rsh) throws SQLException {
-        Connection conn = this.prepareConnection();
-
-        return this.<T>query(conn, true, sql, rsh, params);
+        return this.<T>query(sql, rsh, params);
     }
 
     /**
@@ -270,9 +349,12 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
      */
     @Override
     public <T> T query(String sql, ResultSetHandler<T> rsh, Object... params) throws SQLException {
-        Connection conn = this.prepareConnection();
+        return this.<T>query(sql, null, rsh, params);
+    }
 
-        return this.<T>query(conn, true, sql, rsh, params);
+    public <T> T query(String sql, @Nullable PreparedStatementSetter setter, ResultSetHandler<T> rsh, Object... params) throws SQLException {
+        Connection conn = this.prepareConnection();
+        return this.<T>query(conn, true, sql, setter, rsh, params);
     }
 
     /**
@@ -287,11 +369,14 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
      * @return An object generated by the handler.
      * @throws SQLException if a database access error occurs
      */
-    @Override
     public <T> T query(String sql, ResultSetHandler<T> rsh) throws SQLException {
+        return this.<T>query(sql, (PreparedStatementSetter) null, rsh);
+    }
+
+    public <T> T query(String sql, @Nullable PreparedStatementSetter setter, ResultSetHandler<T> rsh) throws SQLException {
         Connection conn = this.prepareConnection();
 
-        return this.<T>query(conn, true, sql, rsh, (Object[]) null);
+        return this.<T>query(conn, true, sql, setter, rsh, (Object[]) null);
     }
 
 
@@ -306,7 +391,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
      * @return The results of the query.
      * @throws SQLException If there are database or parameter errors.
      */
-    private <T> T query(Connection conn, boolean closeConn, String sql, ResultSetHandler<T> rsh, Object... params)
+    private <T> T query(Connection conn, boolean closeConn, String sql, @Nullable PreparedStatementSetter setter, ResultSetHandler<T> rsh, Object... params)
             throws SQLException {
         if (conn == null) {
             throw new SQLException("Null connection");
@@ -333,7 +418,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
         try {
             if (!PAGING_CONTEXT.isPagingRequest() || !SQLs.isSelectStatement(sql) || SQLs.isSelectCountStatement(sql)) {
                 stmt = this.prepareStatement(conn, sql);
-                this.fillStatement(stmt, params);
+                this.fillStatementWithSetter(stmt, setter, params);
                 rs = this.wrap(stmt.executeQuery());
                 r = rsh.handle(rs);
             } else {
@@ -394,7 +479,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
             if (PAGING_CONTEXT.isOrderByRequest()) {
                 sql0 = instrumentor.instrumentOrderBySql(sql, PAGING_CONTEXT.getPagingRequest().getOrderBy());
             }
-            rs = this.query(conn, false, sql0, rsh, params);
+            rs = this.query(conn, false, sql0, null, rsh, params);
             invalidatePagingRequest(false);
             if (rs == null) {
                 rs = Collects.emptyArrayList();
@@ -411,7 +496,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
                 boolean needQuery = true;
                 if (needCountInPagingRequest(request)) {
                     String countSql = instrumentor.countSql(sql, request.getCountColumn());
-                    int count = this.query(conn, false, countSql, new SelectCountResultSetHandler(), params);
+                    int count = this.query(conn, false, countSql, null, new SelectCountResultSetHandler(), params);
                     if (count <= 0) {
                         needQuery = false;
                     }
@@ -491,7 +576,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
                 result.setPageNo(request.getPageNo());
                 rs = items;
             } else {
-                return this.query(conn, false, sql, rsh, params);
+                return this.query(conn, false, sql, null, rsh, params);
             }
         } finally {
             instrumentor.finish();
