@@ -4,8 +4,8 @@ import com.jn.sqlhelper.apachedbutils.QueryRunner;
 import com.jn.sqlhelper.apachedbutils.resultset.ResultSetHandlerExtractorAdapter;
 import com.jn.sqlhelper.apachedbutils.resultset.RowMapperResultSetHandler;
 import com.jn.sqlhelper.apachedbutils.resultset.SingleRecordRowMapperResultSetHandler;
-import com.jn.sqlhelper.apachedbutils.statement.setter.ArrayPreparedStatementSetter;
-import com.jn.sqlhelper.apachedbutils.statement.setter.PreparedStatementSetterAdapter;
+import com.jn.sqlhelper.apachedbutils.statement.ArrayPreparedStatementSetter;
+import com.jn.sqlhelper.apachedbutils.statement.PreparedStatementSetterAdapter;
 import com.jn.sqlhelper.common.jdbc.JdbcTemplate;
 import com.jn.sqlhelper.common.resultset.ResultSetExtractor;
 import com.jn.sqlhelper.common.resultset.RowMapper;
@@ -39,19 +39,19 @@ public class DbutilsJdbcTemplateAdapter implements JdbcTemplate {
 
     @Override
     public <T> T executeQuery(String sql, ResultSetExtractor<T> extractor, Object... params) throws SQLException {
-        com.jn.sqlhelper.apachedbutils.statement.setter.PreparedStatementSetter preparedStatementSetter = new ArrayPreparedStatementSetter(params);
+        com.jn.sqlhelper.apachedbutils.statement.PreparedStatementSetter preparedStatementSetter = new ArrayPreparedStatementSetter(params);
         return queryRunner.query(sql, preparedStatementSetter, new ResultSetHandlerExtractorAdapter<T, ResultSetExtractor<T>>(extractor));
     }
 
     @Override
     public <T> List<T> queryList(String sql, RowMapper<T> rowMapper, Object... params) throws SQLException {
-        com.jn.sqlhelper.apachedbutils.statement.setter.PreparedStatementSetter preparedStatementSetter = new ArrayPreparedStatementSetter(params);
+        com.jn.sqlhelper.apachedbutils.statement.PreparedStatementSetter preparedStatementSetter = new ArrayPreparedStatementSetter(params);
         return queryRunner.query(sql, preparedStatementSetter, new RowMapperResultSetHandler<T>(rowMapper));
     }
 
     @Override
     public <T> T queryOne(String sql, RowMapper<T> rowMapper, Object... params) throws SQLException {
-        com.jn.sqlhelper.apachedbutils.statement.setter.PreparedStatementSetter preparedStatementSetter = new ArrayPreparedStatementSetter(params);
+        com.jn.sqlhelper.apachedbutils.statement.PreparedStatementSetter preparedStatementSetter = new ArrayPreparedStatementSetter(params);
         return queryRunner.query(sql, preparedStatementSetter, new SingleRecordRowMapperResultSetHandler<T>(rowMapper));
     }
 

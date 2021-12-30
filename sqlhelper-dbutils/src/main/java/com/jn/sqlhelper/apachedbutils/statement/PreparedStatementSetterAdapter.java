@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.apachedbutils.statement.setter;
+package com.jn.sqlhelper.apachedbutils.statement;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

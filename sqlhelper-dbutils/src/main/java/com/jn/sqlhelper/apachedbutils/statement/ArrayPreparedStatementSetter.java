@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.apachedbutils.statement.setter;
+package com.jn.sqlhelper.apachedbutils.statement;
 
 import org.apache.commons.dbutils.OutParameter;
 

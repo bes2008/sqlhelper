@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.apachedbutils.statement.setter;
+package com.jn.sqlhelper.apachedbutils.statement;
 
 import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Collects;

@@ -12,11 +12,16 @@
  * limitations under the License.
  */
 
-package com.jn.sqlhelper.apachedbutils.statement.setter;
+package com.jn.sqlhelper.apachedbutils.statement;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * 设置 参数。
+ *
+ * 该接口，从Spring Jdbc中迁移过来
+ */
 public interface PreparedStatementSetter {
     void setValues(PreparedStatement statement) throws SQLException;
 }
