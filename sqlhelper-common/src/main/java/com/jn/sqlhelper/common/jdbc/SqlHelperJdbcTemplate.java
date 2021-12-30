@@ -2,7 +2,6 @@ package com.jn.sqlhelper.common.jdbc;
 
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.io.IOs;
-import com.jn.sqlhelper.common.batch.SqlBatchUpdaterFactory;
 import com.jn.sqlhelper.common.resultset.ResultSetExtractor;
 import com.jn.sqlhelper.common.resultset.RowMapper;
 import com.jn.sqlhelper.common.resultset.RowMapperResultSetExtractor;

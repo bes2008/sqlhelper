@@ -18,9 +18,13 @@ import java.util.List;
 public class DbutilsJdbcTemplateAdapter implements JdbcTemplate {
     private QueryRunner queryRunner;
 
+    public DbutilsJdbcTemplateAdapter(QueryRunner queryRunner){
+        this.queryRunner=queryRunner;
+    }
+
     @Override
     public DataSource getDataSource() {
-        return null;
+        return queryRunner.getDataSource();
     }
 
     @Override
