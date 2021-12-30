@@ -15,10 +15,10 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.List;
 
-public class DbutilsJdbcTemplateAdapter implements JdbcTemplate {
+public class DbutilsJdbcTemplate implements JdbcTemplate {
     private QueryRunner queryRunner;
 
-    public DbutilsJdbcTemplateAdapter(QueryRunner queryRunner){
+    public DbutilsJdbcTemplate(QueryRunner queryRunner){
         this.queryRunner=queryRunner;
     }
 
