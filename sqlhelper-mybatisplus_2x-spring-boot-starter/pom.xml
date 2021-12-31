@@ -23,7 +23,10 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatisplus_2x</artifactId>
