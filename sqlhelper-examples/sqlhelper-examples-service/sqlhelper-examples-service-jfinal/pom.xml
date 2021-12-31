@@ -39,7 +39,6 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.0.29</version>
         </dependency>
 
         <!-- cos 文件上传 -->
