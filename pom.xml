@@ -119,6 +119,8 @@
 
         <jackson.version>2.11.0</jackson.version>
 
+        <tomcat.version>8.5.43</tomcat.version>
+
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.compilerVersion>1.6</maven.compiler.compilerVersion>
