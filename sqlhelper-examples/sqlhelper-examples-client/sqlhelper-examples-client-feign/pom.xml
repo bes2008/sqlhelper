@@ -12,6 +12,11 @@
 
     <artifactId>sqlhelper-examples-client-feign</artifactId>
     <name>${groupId}:${artifactId}:${version}</name>
+
+    <properties>
+        <feign.version>10.7.4</feign.version>
+    </properties>
+
     <dependencies>
 
         <dependency>
@@ -27,22 +32,28 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-core</artifactId>
-            <version>10.7.4</version>
+            <version>${feign.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-httpclient</artifactId>
-            <version>10.7.4</version>
+            <version>${feign.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-ribbon</artifactId>
-            <version>10.7.4</version>
+            <version>${feign.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-slf4j</artifactId>
-            <version>10.7.4</version>
+            <version>${feign.version}</version>
         </dependency>
 
         <dependency>
