@@ -40,7 +40,12 @@
             <version>${spring.boot.version}</version>
             <exclusions>
                 <exclusion>
-
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -130,7 +135,6 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.9.5</version>
         </dependency>
         <dependency>
             <groupId>com.github.fangjinuo.langx</groupId>
