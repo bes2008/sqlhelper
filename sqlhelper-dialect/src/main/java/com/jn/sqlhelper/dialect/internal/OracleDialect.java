@@ -22,7 +22,6 @@ import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.SQLDialectException;
 import com.jn.sqlhelper.dialect.annotation.Driver;
-import com.jn.sqlhelper.dialect.likeescaper.SlashStyleEscaper;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
@@ -80,6 +79,8 @@ public class OracleDialect extends AbstractDialect {
     class OracleBaseDialect extends AbstractDialect {
         OracleBaseDialect() {
             setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
+            setUrlParser(new OracleUrlParser());
+            setPlainSqlScriptParser(new OracleSqlScriptParser());
         }
 
         @Override
