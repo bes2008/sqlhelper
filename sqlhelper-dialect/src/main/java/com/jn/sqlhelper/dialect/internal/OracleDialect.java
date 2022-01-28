@@ -74,6 +74,10 @@ public class OracleDialect extends AbstractDialect {
             return;
         }
         setDelegate(new Oracle9Dialect());
+
+        setUrlParser(new OracleUrlParser());
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
+        setPlainSqlScriptParser(new OracleSqlScriptParser());
     }
 
     class OracleBaseDialect extends AbstractDialect {
