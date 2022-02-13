@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>com.jfinal</groupId>
 			<artifactId>jfinal</artifactId>
-			<version>4.9</version>
+			<version>4.9.11</version>
 		</dependency>
 
 		<!-- jfinal-undertow 开发、部署一体化 web 服务器 -->
