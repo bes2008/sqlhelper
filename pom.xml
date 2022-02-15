@@ -98,7 +98,7 @@
         <jline.version>3.18.0</jline.version>
 
         <easyjson.version>3.2.12</easyjson.version>
-        <langx-java.version>4.2.2</langx-java.version>
+        <langx-java.version>4.2.8</langx-java.version>
         <agileway.version>2.6.13</agileway.version>
 
         <jfinal.version>4.9</jfinal.version>
