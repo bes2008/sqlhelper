@@ -98,10 +98,10 @@
         <jline.version>3.18.0</jline.version>
 
         <easyjson.version>3.2.12</easyjson.version>
-        <langx-java.version>4.2.8</langx-java.version>
-        <agileway.version>2.6.13</agileway.version>
+        <langx-java.version>4.3.5</langx-java.version>
+        <agileway.version>2.7.9</agileway.version>
 
-        <jfinal.version>4.9</jfinal.version>
+        <jfinal.version>4.9.20</jfinal.version>
         <solon.version>1.0.23</solon.version>
 
         <snakeyaml.version>1.23</snakeyaml.version>
@@ -110,7 +110,7 @@
         <classmate.version>1.4.0</classmate.version>
         <javax.annoation.version>1.3</javax.annoation.version>
 
-        <audit.version>2.3.12</audit.version>
+        <audit.version>2.3.13</audit.version>
         <aspectjweaver.version>1.9.5</aspectjweaver.version>
         <bytebuddy.version>1.9.10</bytebuddy.version>
         <javassist.version>3.24.0-GA</javassist.version>
