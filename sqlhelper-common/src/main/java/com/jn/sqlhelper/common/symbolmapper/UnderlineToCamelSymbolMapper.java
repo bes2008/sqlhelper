@@ -27,32 +27,4 @@ public class UnderlineToCamelSymbolMapper implements SqlSymbolMapper {
         });
         return Strings.lowerCase(builder.toString(), 0, 1);
     }
-
-    public static String[] split(@Nullable String string, @Nullable String separator) {
-        if (Emptys.isEmpty(string)) {
-            return new String[0];
-        }
-
-        if (Emptys.isEmpty(separator)) {
-            return Pipeline.of(string.split("")).filter(new Predicate<String>() {
-                @Override
-                public boolean test(String value) {
-                    return Strings.isNotBlank(value);
-                }
-            }).toArray(String[].class);
-        }
-
-        StringTokenizer tokenizer = new StringTokenizer(string, separator, false);
-        return Pipeline.of(tokenizer).map(new Function<Object, String>() {
-            @Override
-            public String apply(Object input) {
-                return input.toString().trim();
-            }
-        }).filter(new Predicate<String>() {
-            @Override
-            public boolean test(String value) {
-                return Strings.isNotBlank(value);
-            }
-        }).toArray(String[].class);
-    }
 }
