@@ -83,4 +83,14 @@ public class MethodDataSourceKeyRegistry implements Registry<Method, DataSourceK
         }
         return holder.get();
     }
+
+    @Override
+    public void unregister(Method method) {
+        methodDataSourceKeyCache.remove(method);
+    }
+
+    @Override
+    public boolean contains(Method method) {
+        return methodDataSourceKeyCache.containsKey(method);
+    }
 }

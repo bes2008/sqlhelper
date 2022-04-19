@@ -85,6 +85,16 @@ public class TransactionDefinitionRegistry implements Registry<Method, Transacti
     }
 
     @Override
+    public void unregister(Method method) {
+        methodDataSourceKeyCache.remove(method);
+    }
+
+    @Override
+    public boolean contains(Method method) {
+        return methodDataSourceKeyCache.containsKey(method);
+    }
+
+    @Override
     @NonNull
     public TransactionDefinition get(final Method method) {
         Holder<TransactionDefinition> holder = methodDataSourceKeyCache.get(method);

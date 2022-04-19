@@ -336,6 +336,15 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         return Collects.asList(dataSourceRegistry.keySet());
     }
 
+    @Override
+    public void unregister(DataSourceKey key) {
+        dataSourceRegistry.remove(key);
+    }
+
+    @Override
+    public boolean contains(DataSourceKey key) {
+        return dataSourceRegistry.containsKey(key);
+    }
 
     /**
      * 对数据源进行健康检查
