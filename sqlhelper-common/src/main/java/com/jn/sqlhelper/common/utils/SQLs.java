@@ -15,6 +15,8 @@
 package com.jn.sqlhelper.common.utils;
 
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.regexp.Regexp;
+import com.jn.langx.util.regexp.Regexps;
 import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 
 import java.sql.Connection;
@@ -22,7 +24,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.StringTokenizer;
-import java.util.regex.Pattern;
 
 public class SQLs {
     public static final String WHITESPACE = Strings.WHITESPACE;
@@ -98,8 +99,8 @@ public class SQLs {
         }
     }
 
-    private static final Pattern SELECT_COUNT_PATTERN = Pattern.compile("select\\s+count.*");
-    private static final Pattern COUNT_FUNCTION_PATTERN = Pattern.compile("count(\\s*\\(.*(\\s*\\))?)?");
+    private static final Regexp SELECT_COUNT_PATTERN = Regexps.createRegexp("select\\s+count.*");
+    private static final Regexp COUNT_FUNCTION_PATTERN = Regexps.createRegexp("count(\\s*\\(.*(\\s*\\))?)?");
 
     public static boolean isSelectCountStatement(String sql) {
         String sql0 = sql.trim();

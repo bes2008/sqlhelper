@@ -14,13 +14,13 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.langx.util.regexp.Regexp;
+import com.jn.langx.util.regexp.Regexps;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 
-import java.util.regex.Pattern;
-
 public class MonetDialect extends AbstractDialect {
-    private static final Pattern SAMPLE_SQL_PATTERN = Pattern.compile(".* sample\\w+(\\d+|\\?)$");
+    private static final Regexp SAMPLE_SQL_PATTERN = Regexps.createRegexp(".* sample\\w+(\\d+|\\?)$");
 
     public MonetDialect() {
         super();
