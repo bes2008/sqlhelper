@@ -93,7 +93,7 @@
         <mybatis.plus_2x.version>2.3.3</mybatis.plus_2x.version>
         <junit.version>4.13.1</junit.version>
         <spring.boot.version>1.5.22.RELEASE</spring.boot.version>
-        <spring.version>4.3.25.RELEASE</spring.version>
+        <spring.version>5.3.19</spring.version>
         <jsqlparser.version>2.1</jsqlparser.version>
         <jline.version>3.18.0</jline.version>
 
