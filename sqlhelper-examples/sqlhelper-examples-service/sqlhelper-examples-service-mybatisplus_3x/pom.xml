@@ -16,6 +16,7 @@
         <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
         <mybatis.spring.version>2.0.6</mybatis.spring.version>
         <mybatis.springboot.version>2.1.4</mybatis.springboot.version>
+        <tomcat.version>9.0.46</tomcat.version>
     </properties>
 
     <dependencies>
@@ -143,6 +144,11 @@
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.26</version>
         </dependency>
     </dependencies>
     <build>

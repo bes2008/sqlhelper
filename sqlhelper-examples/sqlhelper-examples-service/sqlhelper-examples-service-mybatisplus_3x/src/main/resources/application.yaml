@@ -72,7 +72,7 @@ mybatis-plus:
 
 logging:
   level:
-    root: info
+    root: debug
     com:
       jn:
         sqlhelper:
