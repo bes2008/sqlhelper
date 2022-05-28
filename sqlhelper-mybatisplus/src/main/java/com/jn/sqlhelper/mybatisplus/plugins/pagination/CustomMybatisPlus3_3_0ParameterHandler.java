@@ -23,6 +23,8 @@ import java.util.Map;
 
 /**
  * 从mybatis-plus 3.3.0 版本开始使用这个Handler
+ *
+ * code migrate from mybatis-plus 3.4.2 version
  */
 public class CustomMybatisPlus3_3_0ParameterHandler extends CustomMybatisParameterHandler {
 
