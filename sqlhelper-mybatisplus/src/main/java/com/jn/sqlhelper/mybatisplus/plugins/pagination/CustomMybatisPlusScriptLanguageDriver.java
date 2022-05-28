@@ -27,6 +27,7 @@ public class CustomMybatisPlusScriptLanguageDriver extends XMLLanguageDriver {
         if (MybatisPlusVersions.UNKNOWN.equals(mybatisPlusVersion) || "3.3.0".compareTo(mybatisPlusVersion) > 0) {
             return new CustomMybatisPlusParameterHandler(mappedStatement, parameterObject, boundSql);
         } else {
+            // mybatis-plus version >= 3.3.0
             return new CustomMybatisPlus3_3_0ParameterHandler(mappedStatement, parameterObject, boundSql);
         }
     }

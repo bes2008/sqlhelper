@@ -14,8 +14,11 @@ import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.reflect.type.Primitives;
 import com.jn.sqlhelper.mybatis.plugins.CustomMybatisParameterHandler;
-import org.apache.ibatis.mapping.*;
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.reflection.MetaObject;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -23,15 +26,22 @@ import java.util.Map;
 
 /**
  * 从mybatis-plus 3.3.0 版本开始使用这个Handler
- *
+ * <p>
  * code migrate from mybatis-plus 3.4.2 version
  */
 public class CustomMybatisPlus3_3_0ParameterHandler extends CustomMybatisParameterHandler {
 
+    protected Object originalParameterObject;
+
     public CustomMybatisPlus3_3_0ParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
         super(mappedStatement, parameterObject, boundSql);
+        this.originalParameterObject = parameterObject;
     }
 
+    @Override
+    protected Object getOriginParameterObject() {
+        return this.originalParameterObject;
+    }
 
     @Override
     protected Object processParameter(Object parameter) {
@@ -170,6 +180,11 @@ public class CustomMybatisPlus3_3_0ParameterHandler extends CustomMybatisParamet
             }
         }
         return parameters;
+    }
+
+    @Override
+    protected boolean useOriginalParameter(boolean isPagingRequest) {
+        return false;
     }
 
 }

@@ -49,6 +49,11 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
         return processBatch(this.mappedStatement,parameterObject);
     }
 
+    @Override
+    protected Object getOriginParameterObject() {
+        return this.originalParameterObject;
+    }
+
     /*
      * 此逻辑自定义全局参数填充器 mybatis-plus的逻辑自定义完以后会修改父类的parameterObject.故必须重写setParameters中获取parameterObject方法
      * e.g.
@@ -171,4 +176,8 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
         }
     }
 
+    @Override
+    protected boolean useOriginalParameter(boolean isPagingRequest) {
+        return true;
+    }
 }

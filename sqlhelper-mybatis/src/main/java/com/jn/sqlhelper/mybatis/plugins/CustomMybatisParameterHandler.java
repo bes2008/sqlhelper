@@ -56,6 +56,10 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
         return parameterObject;
     }
 
+    protected Object getOriginParameterObject() {
+        return this.parameterObject;
+    }
+
     @Override
     public Object getParameterObject() {
         return this.parameterObject;
@@ -93,7 +97,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
                 || isInvalidPagingRequest()
                 || this.isPagingCountStatement()
                 || NestedStatements.isNestedStatement(mappedStatement)) {
-            this.setParameters(ps, this.boundSql.getParameterMappings(), 1, getEscapeLikeParametersIndexes());
+            this.setParameters(useOriginalParameter(false), ps, this.boundSql.getParameterMappings(), 1, getEscapeLikeParametersIndexes());
             return;
         }
         // a pagination request
@@ -115,11 +119,12 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
     @Override
     public int setOriginalParameters(final PreparedStatement ps, final QueryParameters parameters, final int startIndex) {
         final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
-        setParameters(ps, parameterMappings, startIndex, getEscapeLikeParametersIndexes());
+        setParameters(useOriginalParameter(PAGING_CONTEXT.get()!=null),ps, parameterMappings, startIndex, getEscapeLikeParametersIndexes());
         return this.boundSql.getParameterMappings().size();
     }
 
-    private void setParameters(final PreparedStatement ps, List<ParameterMapping> parameterMappings, final int startIndex, List<Integer> escapeLikeParametersIndexes) {
+    private void setParameters(boolean useOriginalParameters, final PreparedStatement ps, List<ParameterMapping> parameterMappings, final int startIndex, List<Integer> escapeLikeParametersIndexes) {
+
         boolean needEscapeLikeParameters = Emptys.isNotEmpty(escapeLikeParametersIndexes);
         LikeEscaper likeEscaper = null;
         if (needEscapeLikeParameters) {
@@ -132,7 +137,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
                 if (parameterMapping.getMode() != ParameterMode.OUT) {
                     final String propertyName = parameterMapping.getProperty();
                     Object value;
-                    Object parameterObject = getParameterObject();
+                    Object parameterObject = useOriginalParameters ? getOriginParameterObject():getParameterObject();
                     if (this.boundSql.hasAdditionalParameter(propertyName)) {
                         value = this.boundSql.getAdditionalParameter(propertyName);
                     } else if (parameterObject == null) {
@@ -171,7 +176,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
         // find before parameters
         final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
         List<ParameterMapping> before = Collects.limit(parameterMappings, queryParameters.getBeforeSubqueryParameterCount());
-        setParameters(statement, before, startIndex, getEscapeLikeParametersIndexes());
+        setParameters(useOriginalParameter(true),statement, before, startIndex, getEscapeLikeParametersIndexes());
         return queryParameters.getBeforeSubqueryParameterCount();
     }
 
@@ -182,7 +187,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
                 .limit(parameterMappings.size() - queryParameters.getAfterSubqueryParameterCount())
                 .skip(queryParameters.getBeforeSubqueryParameterCount())
                 .asList();
-        setParameters(statement, subquery, startIndex, getEscapeLikeParametersIndexes());
+        setParameters(useOriginalParameter(true),statement, subquery, startIndex, getEscapeLikeParametersIndexes());
         return subquery.size();
     }
 
@@ -190,7 +195,12 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
     public int setAfterSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
         final List<ParameterMapping> parameterMappings = this.boundSql.getParameterMappings();
         List<ParameterMapping> after = Collects.skip(parameterMappings, parameterMappings.size() - queryParameters.getAfterSubqueryParameterCount());
-        setParameters(statement, after, startIndex, getEscapeLikeParametersIndexes());
+        setParameters(useOriginalParameter(true),statement, after, startIndex, getEscapeLikeParametersIndexes());
         return queryParameters.getBeforeSubqueryParameterCount();
     }
+
+    protected boolean useOriginalParameter(boolean isPagingRequest){
+        return !isPagingRequest;
+    }
+
 }
