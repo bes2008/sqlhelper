@@ -35,12 +35,13 @@ import java.util.*;
 public class CustomMybatisPlus2xParameterHandler extends CustomMybatisParameterHandler {
     protected Object originalParameterObject;
     public CustomMybatisPlus2xParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
-        super(mappedStatement, processBatch(mappedStatement, parameterObject), boundSql);
+        super(mappedStatement, parameterObject, boundSql);
         this.originalParameterObject = parameterObject;
     }
 
-    protected Object getOriginParameterObject() {
-        return this.originalParameterObject;
+    @Override
+    protected Object processParameter(Object parameterObject) {
+        return processBatch(this.mappedStatement, parameterObject);
     }
 
     /*

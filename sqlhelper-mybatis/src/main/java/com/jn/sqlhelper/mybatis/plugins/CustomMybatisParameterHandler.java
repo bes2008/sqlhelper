@@ -14,10 +14,7 @@ import com.jn.sqlhelper.dialect.pagination.QueryParameters;
 import com.jn.sqlhelper.mybatis.MybatisUtils;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
-import org.apache.ibatis.mapping.BoundSql;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.ParameterMapping;
-import org.apache.ibatis.mapping.ParameterMode;
+import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.JdbcType;
@@ -38,24 +35,29 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
 
     protected final TypeHandlerRegistry typeHandlerRegistry;
     protected final MappedStatement mappedStatement;
+    /**
+     * 经过处理后的 参数
+     */
     protected Object parameterObject;
     protected final BoundSql boundSql;
     protected final Configuration configuration;
+    protected final SqlCommandType sqlCommandType;
 
     public CustomMybatisParameterHandler(final MappedStatement mappedStatement, final Object parameterObject, final BoundSql boundSql) {
         this.mappedStatement = mappedStatement;
         this.configuration = mappedStatement.getConfiguration();
         this.typeHandlerRegistry = mappedStatement.getConfiguration().getTypeHandlerRegistry();
-        this.parameterObject = parameterObject;
+        this.sqlCommandType = mappedStatement.getSqlCommandType();
         this.boundSql = boundSql;
+        this.parameterObject = processParameter(parameterObject);
+    }
+
+    protected Object processParameter(Object parameterObject) {
+        return parameterObject;
     }
 
     @Override
     public Object getParameterObject() {
-        return this.parameterObject;
-    }
-
-    protected Object getOriginParameterObject() {
         return this.parameterObject;
     }
 
@@ -100,7 +102,10 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
             queryParameters.setRowSelection(PAGING_CONTEXT.getRowSelection());
             queryParameters.setCallable(MybatisUtils.isCallableStatement(this.mappedStatement));
             PagingRequestContext request = PAGING_CONTEXT.get();
-            queryParameters.setParameters(this.getParameterObject(), request.getInteger(PagingRequestContext.BEFORE_SUBQUERY_PARAMETERS_COUNT, 0), request.getInteger(PagingRequestContext.AFTER_SUBQUERY_PARAMETERS_COUNT, 0));
+            queryParameters.setParameters(this.getParameterObject(),
+                    request.getInteger(PagingRequestContext.BEFORE_SUBQUERY_PARAMETERS_COUNT, 0),
+                    request.getInteger(PagingRequestContext.AFTER_SUBQUERY_PARAMETERS_COUNT, 0)
+            );
             SqlHelperMybatisPlugin.getInstrumentor().bindParameters(ps, this, queryParameters, true);
         } catch (SQLException ex) {
             logger.error("errorCode:{},message:{}", ex.getErrorCode(), ex.getMessage(), ex);
@@ -127,7 +132,7 @@ public class CustomMybatisParameterHandler implements ParameterHandler, PagedPre
                 if (parameterMapping.getMode() != ParameterMode.OUT) {
                     final String propertyName = parameterMapping.getProperty();
                     Object value;
-                    Object parameterObject = getOriginParameterObject();
+                    Object parameterObject = getParameterObject();
                     if (this.boundSql.hasAdditionalParameter(propertyName)) {
                         value = this.boundSql.getAdditionalParameter(propertyName);
                     } else if (parameterObject == null) {

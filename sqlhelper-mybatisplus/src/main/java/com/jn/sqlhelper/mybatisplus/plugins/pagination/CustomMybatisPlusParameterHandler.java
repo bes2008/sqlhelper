@@ -33,16 +33,20 @@ import org.apache.ibatis.reflection.MetaObject;
 
 import java.util.*;
 
+/**
+ * 最多用到mybatis-plus 3.2.x 版本
+ */
 public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHandler {
     protected Object originalParameterObject;
 
     public CustomMybatisPlusParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
-        super(mappedStatement, processBatch(mappedStatement, parameterObject), boundSql);
+        super(mappedStatement, parameterObject, boundSql);
         this.originalParameterObject = parameterObject;
     }
 
-    protected Object getOriginParameterObject() {
-        return this.originalParameterObject;
+    @Override
+    protected Object processParameter(Object parameterObject) {
+        return processBatch(this.mappedStatement,parameterObject);
     }
 
     /*
