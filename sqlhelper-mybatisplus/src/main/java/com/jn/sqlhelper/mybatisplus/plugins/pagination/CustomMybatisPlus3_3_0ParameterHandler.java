@@ -31,16 +31,9 @@ import java.util.Map;
  */
 public class CustomMybatisPlus3_3_0ParameterHandler extends CustomMybatisParameterHandler {
 
-    protected Object originalParameterObject;
 
     public CustomMybatisPlus3_3_0ParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
         super(mappedStatement, parameterObject, boundSql);
-        this.originalParameterObject = parameterObject;
-    }
-
-    @Override
-    protected Object getOriginParameterObject() {
-        return this.originalParameterObject;
     }
 
     @Override
@@ -180,11 +173,6 @@ public class CustomMybatisPlus3_3_0ParameterHandler extends CustomMybatisParamet
             }
         }
         return parameters;
-    }
-
-    @Override
-    protected boolean useOriginalParameter(boolean isPagingRequest) {
-        return false;
     }
 
 }

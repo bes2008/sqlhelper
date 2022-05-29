@@ -36,22 +36,15 @@ import java.util.*;
 /**
  * 最多用到mybatis-plus 3.2.x 版本
  */
-public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHandler {
-    protected Object originalParameterObject;
+public class CustomMybatisPlus3_0_0ParameterHandler extends CustomMybatisParameterHandler {
 
-    public CustomMybatisPlusParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
+    public CustomMybatisPlus3_0_0ParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
         super(mappedStatement, parameterObject, boundSql);
-        this.originalParameterObject = parameterObject;
     }
 
     @Override
     protected Object processParameter(Object parameterObject) {
         return processBatch(this.mappedStatement,parameterObject);
-    }
-
-    @Override
-    protected Object getOriginParameterObject() {
-        return this.originalParameterObject;
     }
 
     /*
@@ -118,7 +111,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
                 return parameterObject;
             }
         } else {
-            return null;
+            return parameterObject;
         }
     }
 
@@ -176,8 +169,4 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
         }
     }
 
-    @Override
-    protected boolean useOriginalParameter(boolean isPagingRequest) {
-        return true;
-    }
 }
