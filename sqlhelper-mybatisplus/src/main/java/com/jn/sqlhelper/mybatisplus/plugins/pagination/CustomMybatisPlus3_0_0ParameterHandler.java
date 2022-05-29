@@ -34,7 +34,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import java.util.*;
 
 /**
- * 最多用到mybatis-plus 3.2.x 版本
+ * 适用mybatis plus 版本： [3.0.0, 3.2.x]
  */
 public class CustomMybatisPlus3_0_0ParameterHandler extends CustomMybatisParameterHandler {
 

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 从mybatis-plus 3.3.0 版本开始使用这个Handler
+ * 适用mybatis plus 版本： [3.3.0, )
  * <p>
  * code migrate from mybatis-plus 3.4.2 version
  */
