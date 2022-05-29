@@ -13,10 +13,10 @@
     <properties>
         <!--
          <mybatis.plus_3x.version>3.1.2</mybatis.plus_3x.version>
-        <mybatis.plus_3x.version>3.4.2</mybatis.plus_3x.version>
+         <mybatis.plus_3x.version>3.2.0</mybatis.plus_3x.version>
          <mybatis.plus_3x.version>3.4.1</mybatis.plus_3x.version>
          -->
-        <mybatis.plus_3x.version>3.2.0</mybatis.plus_3x.version>
+        <mybatis.plus_3x.version>3.4.2</mybatis.plus_3x.version>
 
         <!-- 测试 Spring 1.x 时， 注掉这部分内容即可-->
         <!--
@@ -90,6 +90,8 @@
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
+            <!--测试mybatis 3.3.0 以下的版本时，需要将注释部分打开-->
+            <!--
             <exclusions>
                 <exclusion>
                     <groupId>com.baomidou</groupId>
@@ -100,6 +102,7 @@
                     <artifactId>mybatis-plus-core</artifactId>
                 </exclusion>
             </exclusions>
+            -->
         </dependency>
         <!--mybatis 需要在 3.5.1+ -->
         <dependency>
