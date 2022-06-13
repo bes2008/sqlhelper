@@ -5,21 +5,43 @@
     <parent>
         <groupId>com.github.fangjinuo.sqlhelper.examples.service</groupId>
         <artifactId>sqlhelper-examples-service</artifactId>
-        <version>3.6.12</version>
+        <version>3.6.13</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sqlhelper-examples-service-mybatisplus_3x</artifactId>
     <name>${groupId}:${artifactId}:${version}</name>
     <properties>
+        <!--
+         <mybatis.plus_3x.version>3.1.2</mybatis.plus_3x.version>
+         <mybatis.plus_3x.version>3.2.0</mybatis.plus_3x.version>
+         <mybatis.plus_3x.version>3.4.1</mybatis.plus_3x.version>
+         -->
+        <mybatis.plus_3x.version>3.4.2</mybatis.plus_3x.version>
+
         <!-- 测试 Spring 1.x 时， 注掉这部分内容即可-->
+        <!--
         <spring.version>5.2.9.RELEASE</spring.version>
         <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
         <mybatis.spring.version>2.0.6</mybatis.spring.version>
         <mybatis.springboot.version>2.1.4</mybatis.springboot.version>
         <tomcat.version>9.0.46</tomcat.version>
+        -->
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis.plus_3x.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -68,6 +90,19 @@
         <dependency>
             <groupId>com.github.fangjinuo.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
+            <!--测试mybatis 3.3.0 以下的版本时，需要将注释部分打开-->
+            <!--
+            <exclusions>
+                <exclusion>
+                    <groupId>com.baomidou</groupId>
+                    <artifactId>mybatis-plus-boot-starter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.baomidou</groupId>
+                    <artifactId>mybatis-plus-core</artifactId>
+                </exclusion>
+            </exclusions>
+            -->
         </dependency>
         <!--mybatis 需要在 3.5.1+ -->
         <dependency>

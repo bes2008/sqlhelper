@@ -33,14 +33,14 @@ import org.apache.ibatis.reflection.MetaObject;
 import java.util.*;
 
 public class CustomMybatisPlus2xParameterHandler extends CustomMybatisParameterHandler {
-    protected Object originalParameterObject;
+
     public CustomMybatisPlus2xParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
-        super(mappedStatement, processBatch(mappedStatement, parameterObject), boundSql);
-        this.originalParameterObject = parameterObject;
+        super(mappedStatement, parameterObject, boundSql);
     }
 
-    protected Object getOriginParameterObject() {
-        return this.originalParameterObject;
+    @Override
+    protected Object processParameter(Object parameterObject) {
+        return processBatch(this.mappedStatement, parameterObject);
     }
 
     /*
@@ -107,7 +107,7 @@ public class CustomMybatisPlus2xParameterHandler extends CustomMybatisParameterH
                 return parameterObject;
             }
         } else {
-            return null;
+            return parameterObject;
         }
     }
 

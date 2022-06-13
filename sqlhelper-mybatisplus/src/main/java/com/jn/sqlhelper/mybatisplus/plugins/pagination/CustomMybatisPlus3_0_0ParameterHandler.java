@@ -33,16 +33,18 @@ import org.apache.ibatis.reflection.MetaObject;
 
 import java.util.*;
 
-public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHandler {
-    protected Object originalParameterObject;
+/**
+ * 适用mybatis plus 版本： [3.0.0, 3.2.x]
+ */
+public class CustomMybatisPlus3_0_0ParameterHandler extends CustomMybatisParameterHandler {
 
-    public CustomMybatisPlusParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
-        super(mappedStatement, processBatch(mappedStatement, parameterObject), boundSql);
-        this.originalParameterObject = parameterObject;
+    public CustomMybatisPlus3_0_0ParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
+        super(mappedStatement, parameterObject, boundSql);
     }
 
-    protected Object getOriginParameterObject() {
-        return this.originalParameterObject;
+    @Override
+    protected Object processParameter(Object parameterObject) {
+        return processBatch(this.mappedStatement,parameterObject);
     }
 
     /*
@@ -109,7 +111,7 @@ public class CustomMybatisPlusParameterHandler extends CustomMybatisParameterHan
                 return parameterObject;
             }
         } else {
-            return null;
+            return parameterObject;
         }
     }
 

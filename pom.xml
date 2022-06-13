@@ -6,7 +6,7 @@
 
     <groupId>com.github.fangjinuo.sqlhelper</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>3.6.12</version>
+    <version>3.6.13</version>
     <name>${groupId}:${artifactId}:${version}</name>
     <description>
         JDBC Extensions:
@@ -89,7 +89,6 @@
         <mybatis.plus_3x.version>3.4.1</mybatis.plus_3x.version>
         -->
         <mybatis.plus_3x.version>3.4.2</mybatis.plus_3x.version>
-
         <mybatis.plus_2x.version>2.3.3</mybatis.plus_2x.version>
         <junit.version>4.13.1</junit.version>
         <spring.boot.version>1.5.22.RELEASE</spring.boot.version>
