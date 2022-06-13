@@ -23,8 +23,14 @@ import java.sql.SQLException;
 
 public abstract class AbstractLimitHandler extends LimitHandler {
 
+    protected int offsetBased = 0;
+
+    public void setOffsetBased(int offsetBased) {
+        this.offsetBased = offsetBased;
+    }
+
     protected long convertToFirstRowValue(long zeroBasedFirstResult) {
-        return zeroBasedFirstResult;
+        return zeroBasedFirstResult + offsetBased;
     }
 
     @Override

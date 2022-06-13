@@ -116,12 +116,13 @@ public class DialectRegistry {
                 AuroraDialect.class,
                 ArgoDBDialect.class,
                 AzureDialect.class,
+                As400Dialect.class,
 
+                BesMagicDataDialect.class,
                 BigObjectDialect.class,
                 BrytlytDialect.class,
 
                 CacheDialect.class,
-                CirroDBDialect.class,
                 CitusDialect.class,
                 ClickHouseDialect.class,
                 ClustrixDialect.class,
@@ -251,6 +252,7 @@ public class DialectRegistry {
 
                 XtremeSQLDialect.class,
                 XuguDialect.class,
+                XCloudDBDialect.class,
 
                 YaacomoDialect.class,
                 YugabyteDBDialect.class

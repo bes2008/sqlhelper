@@ -26,11 +26,16 @@ import java.util.Locale;
  */
 public class LimitCommaLimitHandler extends AbstractLimitHandler {
     private boolean isSupportForUpdate;
+    private boolean withBrace = false;
+
+    private int offsetBased = 0;
 
     @Override
     public String processSql(String sql, RowSelection rowSelection) {
         return getLimitString(sql, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
     }
+
+
 
     @Override
     protected String getLimitString(String sql, long offset, int limit) {
@@ -53,9 +58,17 @@ public class LimitCommaLimitHandler extends AbstractLimitHandler {
         sql2.append(sql);
 
         if (getDialect().isUseLimitInVariableMode()) {
-            sql2.append(hasOffset ? " limit ?, ?" : " limit ?");
+            if (withBrace) {
+                sql2.append(hasOffset ? " limit (?, ?)" : " limit ?");
+            } else {
+                sql2.append(hasOffset ? " limit ?, ?" : " limit ?");
+            }
         } else {
-            sql2.append(hasOffset ? (" limit " + offset + ", " + limit) : (" limit " + limit));
+            if (withBrace) {
+                sql2.append(hasOffset ? (" limit (" + offset + ", " + limit + ")") : (" limit " + limit));
+            } else {
+                sql2.append(hasOffset ? (" limit " + offset + ", " + limit) : (" limit " + limit));
+            }
         }
         if (isForUpdate) {
             sql2.append(" " + forUpdateClause);
@@ -70,5 +83,22 @@ public class LimitCommaLimitHandler extends AbstractLimitHandler {
     public LimitCommaLimitHandler setSupportForUpdate(boolean supportForUpdate) {
         isSupportForUpdate = supportForUpdate;
         return this;
+    }
+
+    public boolean isWithBrace() {
+        return withBrace;
+    }
+
+    public LimitCommaLimitHandler setWithBrace(boolean withBrace) {
+        this.withBrace = withBrace;
+        return this;
+    }
+
+    public int getOffsetBased() {
+        return offsetBased;
+    }
+
+    public void setOffsetBased(int offsetBased) {
+        this.offsetBased = offsetBased;
     }
 }

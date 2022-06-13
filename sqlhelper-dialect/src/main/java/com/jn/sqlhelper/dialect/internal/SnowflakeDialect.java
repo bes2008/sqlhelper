@@ -39,10 +39,6 @@ public class SnowflakeDialect extends AbstractDialect {
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
     }
 
-    @Override
-    public boolean isSupportsLimit() {
-        return super.isSupportsLimit();
-    }
 
     @Override
     public boolean isSupportsLimitOffset() {
