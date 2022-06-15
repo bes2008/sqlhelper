@@ -18,6 +18,7 @@ import com.jn.langx.annotation.Name;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
+import com.jn.langx.text.properties.Props;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
@@ -38,7 +39,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.DatabaseMetaData;
@@ -267,19 +267,12 @@ public class DialectRegistry {
 
     private static void loadDatabaseIdMappings() {
         logger.info("Start to load database id mappings");
-        InputStream inputStream = DialectRegistry.class.getResourceAsStream("/sqlhelper-dialect-databaseid.properties");
-        if (inputStream != null) {
-            try {
-                vendorDatabaseIdMappings.load(inputStream);
-            } catch (Throwable ex) {
-                logger.error(ex.getMessage(), ex);
-            } finally {
-                try {
-                    inputStream.close();
-                } catch (Throwable ex) {
-                    // Ignore it
-                }
-            }
+
+        try {
+            Properties props = Props.loadFromClasspath("/sqlhelper-dialect-databaseid.properties");
+            vendorDatabaseIdMappings.putAll(props);
+        } catch (Throwable ex) {
+            logger.error(ex.getMessage(), ex);
         }
     }
 
@@ -376,7 +369,7 @@ public class DialectRegistry {
             return vendorDatabaseIdMappings.getProperty(bestProductKeyword);
         }
 
-        if( classNameToNameMap.containsKey(tmpProductName)) {
+        if (classNameToNameMap.containsKey(tmpProductName)) {
             return classNameToNameMap.get(tmpProductName);
         }
         return null;
