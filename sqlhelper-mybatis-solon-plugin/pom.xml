@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.fangjinuo.sqlhelper</groupId>
         <artifactId>sqlhelper</artifactId>
-        <version>3.6.13</version>
+        <version>3.6.14</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
