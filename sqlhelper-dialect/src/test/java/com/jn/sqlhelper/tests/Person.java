@@ -69,7 +69,7 @@ public class Person implements Comparable<Person> {
 
     @Override
     public String toString() {
-        return StringTemplates.format("id: {0}, name: {1}, age: {2}", this.id, this.name, this.age);
+        return StringTemplates.formatWithIndex("id: {0}, name: {1}, age: {2}", this.id, this.name, this.age);
     }
 
     @Override

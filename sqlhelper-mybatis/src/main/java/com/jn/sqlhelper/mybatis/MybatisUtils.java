@@ -17,6 +17,7 @@ package com.jn.sqlhelper.mybatis;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Emptys;
+import com.jn.langx.util.Objs;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.SqlRequest;
 import com.jn.sqlhelper.dialect.SqlRequestContext;
@@ -27,6 +28,7 @@ import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.transaction.Transaction;
 import org.slf4j.Logger;
@@ -143,5 +145,10 @@ public class MybatisUtils {
 
     public static boolean hasInterceptor(@NonNull Configuration configuration,@NonNull Interceptor interceptor){
         return configuration.getInterceptors().contains(interceptor);
+    }
+
+    public static boolean hasStatement(SqlSession session, String statementId){
+        Configuration configuration = session.getConfiguration();
+        return configuration.hasStatement(statementId);
     }
 }
