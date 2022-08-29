@@ -207,7 +207,7 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
                 if (!dataSourceKey.getGroup().equals(group)) {
                     return false;
                 }
-                return antPathMatcher.match(dataSourceKey.getName());
+                return antPathMatcher.matches(dataSourceKey.getName());
             }
         }).asList();
 

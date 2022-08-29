@@ -37,7 +37,7 @@ public class WriteOperationMethodMatcher implements MethodMatcher {
     @Override
     public boolean matches(Method method) {
         String methodName = method.getName();
-        return matcher.match(methodName);
+        return matcher.matches(methodName);
     }
 
     @Override
