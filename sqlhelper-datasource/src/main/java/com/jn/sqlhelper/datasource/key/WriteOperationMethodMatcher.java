@@ -35,13 +35,13 @@ public class WriteOperationMethodMatcher implements MethodMatcher {
     }
 
     @Override
-    public boolean matches(Method method) {
+    public Boolean matches(Method method) {
         String methodName = method.getName();
         return matcher.matches(methodName);
     }
 
     @Override
-    public boolean matches(MethodInvocation methodInvocation) {
+    public Boolean matches(MethodInvocation methodInvocation) {
         return matches(methodInvocation.getJoinPoint());
     }
 
