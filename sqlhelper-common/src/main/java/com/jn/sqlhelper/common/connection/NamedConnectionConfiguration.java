@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.common.connection;
 
-import com.jn.easyjson.core.JSONBuilderProvider;
+import com.jn.easyjson.core.util.JSONs;
 import com.jn.langx.configuration.Configuration;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.diff.MapDiffResult;
@@ -53,7 +53,7 @@ public class NamedConnectionConfiguration extends ConnectionConfiguration implem
 
     @Override
     public String toString() {
-        return JSONBuilderProvider.simplest().toJson(this);
+        return JSONs.toJson(this);
     }
 
     @Override

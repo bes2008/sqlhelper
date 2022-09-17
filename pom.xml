@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.fangjinuo.sqlhelper</groupId>
+    <groupId>io.github.bes2008.solution.sqlhelper</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>3.6.16</version>
+    <version>4.0.0</version>
     <name>${groupId}:${artifactId}:${version}</name>
     <description>
         JDBC Extensions:
@@ -45,10 +45,8 @@
     </modules>
     <developers>
         <developer>
-            <id>jinuo.fang</id>
-            <name>jinuo.fang</name>
-            <email>fs1194361820@163.com</email>
-            <url>http://www.cnblogs.com/f1194361820</url>
+            <id>bes2008</id>
+            <name>bes2008</name>
         </developer>
     </developers>
     <distributionManagement>
@@ -63,14 +61,14 @@
     </distributionManagement>
     <scm>
         <tag>${project.version}</tag>
-        <url>https://github.com/fangjinuo/sqlhelper.git</url>
-        <connection>https://github.com/fangjinuo/sqlhelper.git</connection>
-        <developerConnection>https://github.com/fangjinuo/sqlhelper.git</developerConnection>
+        <url>https://github.com/bes2008/sqlhelper.git</url>
+        <connection>https://github.com/bes2008/sqlhelper.git</connection>
+        <developerConnection>https://github.com/bes2008/sqlhelper.git</developerConnection>
     </scm>
     <licenses>
         <license>
             <name>Apache 2.0</name>
-            <url>https://github.com/fangjinuo/sqlhelper/blob/master/LICENSE</url>
+            <url>https://github.com/bes2008/sqlhelper/blob/master/LICENSE</url>
             <distribution>manual</distribution>
         </license>
     </licenses>
@@ -96,9 +94,9 @@
         <jsqlparser.version>2.1</jsqlparser.version>
         <jline.version>3.18.0</jline.version>
 
-        <easyjson.version>3.2.25</easyjson.version>
-        <langx-java.version>4.8.1</langx-java.version>
-        <agileway.version>3.1.10</agileway.version>
+        <easyjson.version>4.0.0</easyjson.version>
+        <langx-java.version>5.0.0</langx-java.version>
+        <agileway.version>4.0.0</agileway.version>
 
         <jfinal.version>4.9.20</jfinal.version>
         <solon.version>1.0.23</solon.version>
@@ -109,7 +107,7 @@
         <classmate.version>1.4.0</classmate.version>
         <javax.annoation.version>1.3</javax.annoation.version>
 
-        <audit.version>2.3.19</audit.version>
+        <audit.version>3.0.0</audit.version>
         <aspectjweaver.version>1.9.5</aspectjweaver.version>
         <bytebuddy.version>1.9.10</bytebuddy.version>
         <javassist.version>3.24.0-GA</javassist.version>
@@ -240,19 +238,19 @@
             </dependency>
 
             <dependency>
-                <groupId>com.github.fangjinuo.easyjson</groupId>
+                <groupId>io.github.bes2008.solution.easyjson</groupId>
                 <artifactId>easyjson-core</artifactId>
                 <version>${easyjson.version}</version>
                 <scope>provided</scope>
                 <exclusions>
                     <exclusion>
-                        <groupId>com.github.fangjinuo.langx</groupId>
+                        <groupId>io.github.bes2008.solution.langx</groupId>
                         <artifactId>langx-java</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.easyjson</groupId>
+                <groupId>io.github.bes2008.solution.easyjson</groupId>
                 <artifactId>easyjson-jackson</artifactId>
                 <version>${easyjson.version}</version>
                 <exclusions>
@@ -261,7 +259,7 @@
                         <artifactId>jackson-databind</artifactId>
                     </exclusion>
                     <exclusion>
-                        <groupId>com.github.fangjinuo.langx</groupId>
+                        <groupId>io.github.bes2008.solution.langx</groupId>
                         <artifactId>langx-java</artifactId>
                     </exclusion>
                 </exclusions>
@@ -299,106 +297,106 @@
                 <version>${mybatis.spring.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-datasource</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-datasource-flyway</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-jsqlparser</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-dialect</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis-spring-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis-solon-plugin</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-dbutils</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-springjdbc</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-springjdbc-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatisplus-commons</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatisplus</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatisplus_2x</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatisplus-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-mybatisplus_2x-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-tkmapper-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper</groupId>
                 <artifactId>sqlhelper-hibernate</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -410,7 +408,7 @@
             </dependency>
 
             <dependency>
-                <groupId>com.github.fangjinuo.langx</groupId>
+                <groupId>io.github.bes2008.solution.langx</groupId>
                 <artifactId>langx-java</artifactId>
                 <version>${langx-java.version}</version>
             </dependency>
@@ -494,7 +492,7 @@
             <version>${slf4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.langx</groupId>
+            <groupId>io.github.bes2008.solution.langx</groupId>
             <artifactId>langx-java</artifactId>
         </dependency>
 
@@ -656,7 +654,7 @@
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>sonatype_oss</serverId>
-                            <nexusUrl>https://oss.sonatype.org</nexusUrl>
+                            <nexusUrl>https://s01.oss.sonatype.org</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                             <sslAllowAll>true</sslAllowAll>
                             <stagingProgressPauseDurationSeconds>20</stagingProgressPauseDurationSeconds>

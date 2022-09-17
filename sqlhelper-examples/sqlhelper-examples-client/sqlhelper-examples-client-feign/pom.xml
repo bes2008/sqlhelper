@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.fangjinuo.sqlhelper.examples.client</groupId>
         <artifactId>sqlhelper-examples-client</artifactId>
-        <version>3.6.16</version>
+        <version>4.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,7 +20,7 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <groupId>io.github.bes2008.solution.sqlhelper</groupId>
             <artifactId>sqlhelper-dialect</artifactId>
         </dependency>
 
@@ -57,7 +57,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.fangjinuo.agileway</groupId>
+            <groupId>io.github.bes2008.solution.agileway</groupId>
             <artifactId>agileway-feign</artifactId>
             <version>${agileway.version}</version>
             <exclusions>
@@ -66,7 +66,7 @@
                     <artifactId>feign-core</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>com.github.fangjinuo.easyjson</groupId>
+                    <groupId>io.github.bes2008.solution.easyjson</groupId>
                     <artifactId>easyjson-jackson</artifactId>
                 </exclusion>
             </exclusions>

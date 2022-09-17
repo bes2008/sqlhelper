@@ -5,7 +5,7 @@
 1、import dependencies:
 ```xml
 <dependency>
-    <groupId>com.github.fangjinuo.sqlhelper</groupId>
+    <groupId>io.github.bes2008.solution.sqlhelper</groupId>
     <artifactId>sqlhelper-mybatis</artifactId>
     <version>${sqlhelper.version}</version>
 </dependency>

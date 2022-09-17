@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.github.fangjinuo.sqlhelper</groupId>
+        <groupId>io.github.bes2008.solution.sqlhelper</groupId>
         <artifactId>sqlhelper</artifactId>
-        <version>3.6.16</version>
+        <version>4.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
@@ -215,7 +215,7 @@
             </dependency>
 
             <dependency>
-                <groupId>com.github.fangjinuo.audit</groupId>
+                <groupId>io.github.bes2008.solution.audit</groupId>
                 <artifactId>audit-spring-boot-starter</artifactId>
                 <version>${audit.version}</version>
                 <exclusions>
@@ -231,7 +231,7 @@
             </dependency>
 
             <dependency>
-                <groupId>com.github.fangjinuo.audit</groupId>
+                <groupId>io.github.bes2008.solution.audit</groupId>
                 <artifactId>audit-spring-boot-autoconfigure</artifactId>
                 <version>${audit.version}</version>
                 <exclusions>
@@ -244,15 +244,15 @@
                         <artifactId>spring-boot-autoconfigure</artifactId>
                     </exclusion>
                     <exclusion>
-                        <groupId>com.github.fangjinuo.langx</groupId>
+                        <groupId>io.github.bes2008.solution.langx</groupId>
                         <artifactId>langx-java</artifactId>
                     </exclusion>
                     <exclusion>
-                        <groupId>com.github.fangjinuo.langx</groupId>
+                        <groupId>io.github.bes2008.solution.langx</groupId>
                         <artifactId>langx-java8</artifactId>
                     </exclusion>
                     <exclusion>
-                        <groupId>com.github.fangjinuo.langx</groupId>
+                        <groupId>io.github.bes2008.solution.langx</groupId>
                         <artifactId>langx-java-reflect-aspectj</artifactId>
                     </exclusion>
                     <exclusion>
@@ -262,7 +262,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.audit</groupId>
+                <groupId>io.github.bes2008.solution.audit</groupId>
                 <artifactId>audit-core</artifactId>
                 <exclusions>
                     <exclusion>
@@ -273,12 +273,12 @@
             </dependency>
 
             <dependency>
-                <groupId>com.github.fangjinuo.langx</groupId>
+                <groupId>io.github.bes2008.solution.langx</groupId>
                 <artifactId>langx-java8</artifactId>
                 <version>${langx-java.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.langx</groupId>
+                <groupId>io.github.bes2008.solution.langx</groupId>
                 <artifactId>langx-java-reflect-aspectj</artifactId>
                 <version>${langx-java.version}</version>
             </dependency>
@@ -294,7 +294,7 @@
             <version>1.4.199</version>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.easyjson</groupId>
+            <groupId>io.github.bes2008.solution.easyjson</groupId>
             <artifactId>easyjson-jackson</artifactId>
         </dependency>
     </dependencies>

@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.github.fangjinuo.sqlhelper</groupId>
+        <groupId>io.github.bes2008.solution.sqlhelper</groupId>
         <artifactId>sqlhelper</artifactId>
-        <version>3.6.16</version>
+        <version>4.0.0</version>
     </parent>
     <artifactId>sqlhelper-mybatis</artifactId>
     <name>${groupId}:${artifactId}:${version}</name>
@@ -22,11 +22,11 @@
             <version>${mybatis_jdk6_7.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <groupId>io.github.bes2008.solution.sqlhelper</groupId>
             <artifactId>sqlhelper-dialect</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <groupId>io.github.bes2008.solution.sqlhelper</groupId>
             <artifactId>sqlhelper-datasource</artifactId>
         </dependency>
     </dependencies>

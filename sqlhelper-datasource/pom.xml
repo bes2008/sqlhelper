@@ -4,9 +4,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.github.fangjinuo.sqlhelper</groupId>
+        <groupId>io.github.bes2008.solution.sqlhelper</groupId>
         <artifactId>sqlhelper</artifactId>
-        <version>3.6.16</version>
+        <version>4.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -50,14 +50,14 @@
             <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.agileway</groupId>
+            <groupId>io.github.bes2008.solution.agileway</groupId>
             <artifactId>agileway-aop</artifactId>
             <version>${agileway.version}</version>
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.agileway</groupId>
+            <groupId>io.github.bes2008.solution.agileway</groupId>
             <artifactId>agileway-spring</artifactId>
             <version>${agileway.version}</version>
             <scope>provided</scope>
@@ -78,7 +78,7 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <groupId>io.github.bes2008.solution.sqlhelper</groupId>
             <artifactId>sqlhelper-common</artifactId>
         </dependency>
         <dependency>

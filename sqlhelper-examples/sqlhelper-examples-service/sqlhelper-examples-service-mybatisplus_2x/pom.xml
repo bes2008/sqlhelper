@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.fangjinuo.sqlhelper.examples.service</groupId>
         <artifactId>sqlhelper-examples-service</artifactId>
-        <version>3.6.16</version>
+        <version>4.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sqlhelper-examples-service-mybatisplus_2x</artifactId>
@@ -30,7 +30,7 @@
 
         <!-- startup mybatis-plus 2.x jdk6_7 -->
         <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <groupId>io.github.bes2008.solution.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatisplus_2x-spring-boot-starter</artifactId>
         </dependency>
 
@@ -41,40 +41,40 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <groupId>io.github.bes2008.solution.sqlhelper</groupId>
             <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <groupId>io.github.bes2008.solution.sqlhelper</groupId>
             <artifactId>sqlhelper-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper</groupId>
+            <groupId>io.github.bes2008.solution.sqlhelper</groupId>
             <artifactId>sqlhelper-jsqlparser</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.agileway</groupId>
+            <groupId>io.github.bes2008.solution.agileway</groupId>
             <artifactId>agileway-spring</artifactId>
             <version>${agileway.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.agileway</groupId>
+            <groupId>io.github.bes2008.solution.agileway</groupId>
             <artifactId>agileway-web</artifactId>
             <version>${agileway.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.agileway</groupId>
+            <groupId>io.github.bes2008.solution.agileway</groupId>
             <artifactId>agileway-dmmq</artifactId>
             <version>${agileway.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.agileway</groupId>
+            <groupId>io.github.bes2008.solution.agileway</groupId>
             <artifactId>agileway-aop</artifactId>
             <version>${agileway.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.audit</groupId>
+            <groupId>io.github.bes2008.solution.audit</groupId>
             <artifactId>audit-spring-boot-starter</artifactId>
             <version>${audit.version}</version>
             <exclusions>
@@ -83,19 +83,19 @@
                     <artifactId>spring-boot-autoconfigure</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>com.github.fangjinuo.agileway</groupId>
+                    <groupId>io.github.bes2008.solution.agileway</groupId>
                     <artifactId>agileway-spring</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>com.github.fangjinuo.agileway</groupId>
+                    <groupId>io.github.bes2008.solution.agileway</groupId>
                     <artifactId>agileway-web</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>com.github.fangjinuo.agileway</groupId>
+                    <groupId>io.github.bes2008.solution.agileway</groupId>
                     <artifactId>agileway-dmmq</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>com.github.fangjinuo.agileway</groupId>
+                    <groupId>io.github.bes2008.solution.agileway</groupId>
                     <artifactId>agileway-aop</artifactId>
                 </exclusion>
             </exclusions>
@@ -112,7 +112,7 @@
             <version>1.9.5</version>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.langx</groupId>
+            <groupId>io.github.bes2008.solution.langx</groupId>
             <artifactId>langx-java8</artifactId>
             <version>${langx-java.version}</version>
         </dependency>

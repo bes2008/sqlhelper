@@ -7,7 +7,7 @@
 2. 加入 sqlhelper 迁移依赖
 ```xml
   <dependency>
-    <groupId>com.github.fangjinuo.sqlhelper</groupId>
+    <groupId>io.github.bes2008.solution.sqlhelper</groupId>
     <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
     <version>${project.version}</version>
   </dependency>
