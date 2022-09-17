@@ -120,7 +120,7 @@
 
         <tomcat.version>8.5.43</tomcat.version>
 
-        <hibernate.version>5.4.3.Final</hibernate.version>
+        <hibernate.version>5.4.24.Final</hibernate.version>
         <jboss.logging.version>3.3.0.Final</jboss.logging.version>
 
         <maven.compiler.source>1.6</maven.compiler.source>
