@@ -8,7 +8,7 @@
         <version>4.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
+    <groupId>io.github.bes2008.solution.sqlhelper.examples</groupId>
     <artifactId>sqlhelper-examples</artifactId>
     <name>${groupId}:${artifactId}:${version}</name>
     <packaging>pom</packaging>
@@ -58,19 +58,19 @@
                 <version>${jackson.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper.examples</groupId>
                 <artifactId>sqlhelper-examples-model</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper.examples</groupId>
                 <artifactId>sqlhelper-examples-db</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
+                <groupId>io.github.bes2008.solution.sqlhelper.examples</groupId>
                 <artifactId>sqlhelper-examples-swagger</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.github.fangjinuo.sqlhelper.examples.service</groupId>
+        <groupId>io.github.bes2008.solution.sqlhelper.examples.service</groupId>
         <artifactId>sqlhelper-examples-service</artifactId>
         <version>4.0.0</version>
     </parent>
@@ -21,11 +21,11 @@
 
 
         <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
+            <groupId>io.github.bes2008.solution.sqlhelper.examples</groupId>
             <artifactId>sqlhelper-examples-db</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.fangjinuo.sqlhelper.examples</groupId>
+            <groupId>io.github.bes2008.solution.sqlhelper.examples</groupId>
             <artifactId>sqlhelper-examples-swagger</artifactId>
         </dependency>
 
