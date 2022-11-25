@@ -107,13 +107,13 @@ public class SQLs {
         String sql0 = sql.trim();
         // with xx as ( select x ...
         if (Strings.startsWithIgnoreCase(sql0, "with")) {
-            StringTokenizer stringTokenizer = new StringTokenizer(sql0);
+            StrTokenizer stringTokenizer = new StrTokenizer(sql0);
             int i = 0;
             boolean hasSelectKeyword = false;
             boolean hasCountKeyword = false;
 
-            while (i < 7 && stringTokenizer.hasMoreTokens()) {
-                String token = stringTokenizer.nextToken();
+            while (i < 7 && stringTokenizer.hasNext()) {
+                String token = stringTokenizer.next();
                 if ("select".equals(token.toLowerCase())) {
                     hasSelectKeyword = true;
                     continue;
