@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.common.utils;
 
+import com.jn.langx.text.StrTokenizer;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.regexp.Regexp;
 import com.jn.langx.util.regexp.Regexps;
@@ -84,10 +85,10 @@ public class SQLs {
         String sql0 = sql.trim();
         // with xx as ( select x ...
         if (Strings.startsWithIgnoreCase(sql0, "with")) {
-            StringTokenizer stringTokenizer = new StringTokenizer(sql0);
+            StrTokenizer stringTokenizer = new StrTokenizer(sql0);
             int i = 0;
-            while (i < 5 && stringTokenizer.hasMoreTokens()) {
-                String token = stringTokenizer.nextToken();
+            while (i < 5 && stringTokenizer.hasNext()) {
+                String token = stringTokenizer.next();
                 if ("select".equals(token.toLowerCase())) {
                     return true;
                 }
