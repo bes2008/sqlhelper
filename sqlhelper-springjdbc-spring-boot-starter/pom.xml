@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlhelper-springjdbc-spring-boot-starter</artifactId>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
     <dependencyManagement>
         <dependencies>
             <dependency>

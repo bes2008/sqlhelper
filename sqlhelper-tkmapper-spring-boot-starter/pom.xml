@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlhelper-tkmapper-spring-boot-starter</artifactId>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
 
     <properties>
         <tkmapper.spring.boot.version>2.1.5</tkmapper.spring.boot.version>

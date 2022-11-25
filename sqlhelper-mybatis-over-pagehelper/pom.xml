@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sqlhelper-mybatis-over-pagehelper</artifactId>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
     <description>
         supports migrate from mybatis-pagehelper
     </description>

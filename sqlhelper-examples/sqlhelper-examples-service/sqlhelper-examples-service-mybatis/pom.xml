@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sqlhelper-examples-service-mybatis</artifactId>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
     <properties>
         <!-- 测试 Spring 1.x 时， 注掉这部分内容即可-->
         <!--

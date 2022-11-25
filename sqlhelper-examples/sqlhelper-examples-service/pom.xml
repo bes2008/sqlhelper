@@ -11,7 +11,7 @@
 
     <groupId>io.github.bes2008.solution.sqlhelper.examples.service</groupId>
     <artifactId>sqlhelper-examples-service</artifactId>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
     <packaging>pom</packaging>
 
     <properties>

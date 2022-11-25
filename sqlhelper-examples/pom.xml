@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.bes2008.solution.sqlhelper.examples</groupId>
     <artifactId>sqlhelper-examples</artifactId>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
     <packaging>pom</packaging>
     <modules>
         <module>sqlhelper-examples-model</module>
