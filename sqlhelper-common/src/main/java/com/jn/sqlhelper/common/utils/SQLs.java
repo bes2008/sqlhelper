@@ -23,8 +23,6 @@ import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
-import java.util.Locale;
-import java.util.StringTokenizer;
 
 public class SQLs {
     public static final String WHITESPACE = Strings.WHITESPACE;
