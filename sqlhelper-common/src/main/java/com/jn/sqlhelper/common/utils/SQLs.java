@@ -132,29 +132,29 @@ public class SQLs {
 
     public static boolean isUpdateStatement(String sql) {
         sql = sql.trim();
-        return sql.toLowerCase(Locale.getDefault()).replaceAll("\\s", " ").matches("update \\w+(\\.\\w)* set");
+        return Strings.lowerCase(sql).replaceAll("\\s", " ").matches("update \\w+(\\.\\w)* set");
     }
 
     public static boolean isDeleteStatement(String sql) {
         sql = sql.trim();
-        return sql.toLowerCase(Locale.getDefault()).replaceAll("\\s", " ").startsWith("delete from");
+        return Strings.lowerCase(sql).replaceAll("\\s", " ").startsWith("delete from");
     }
 
     public static boolean isInsertStatement(String sql) {
         sql = sql.trim();
-        return sql.toLowerCase(Locale.getDefault()).replaceAll("\\s", " ").startsWith("insert into");
+        return Strings.lowerCase(sql).replaceAll("\\s", " ").startsWith("insert into");
     }
 
 
     // DDL
     public static boolean isCreateStatement(String sql) {
         sql = sql.trim();
-        return sql.toLowerCase(Locale.getDefault()).replaceAll("\\s", " ").startsWith("create table");
+        return Strings.lowerCase(sql).replaceAll("\\s", " ").startsWith("create table");
     }
 
     public static boolean isDropTableStatement(String sql) {
         sql = sql.trim();
-        return sql.toLowerCase(Locale.getDefault()).replaceAll("\\s", " ").startsWith("drop table");
+        return Strings.lowerCase(sql).replaceAll("\\s", " ").startsWith("drop table");
     }
 
     public static boolean isQuote(String tok) {
