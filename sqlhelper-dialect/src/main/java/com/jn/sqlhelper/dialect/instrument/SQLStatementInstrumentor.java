@@ -270,8 +270,8 @@ public class SQLStatementInstrumentor implements Initializable {
         if (orderBy == null) {
             throw new IllegalArgumentException("Illegal argument : orderBy");
         }
-        sql = instrumentLimitSql(dialect, sql, selection);
         sql = instrumentOrderBySql(sql, orderBy);
+        sql = instrumentLimitSql(dialect, sql, selection);
         if (this.config.isCacheInstrumentedSql()) {
             getInstrumentedStatement(originalSql).setOrderByLimitSql(orderBy, dialect.getDatabaseId(), sql, selection.hasOffset());
         }
