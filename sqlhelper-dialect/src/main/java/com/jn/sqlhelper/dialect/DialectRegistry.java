@@ -143,6 +143,7 @@ public class DialectRegistry {
 
                 ElasticsearchDialect.class,
                 EsgynDBDialect.class,
+                ExasolDialect.class,
 
                 FileMakerDialect.class,
                 FirebirdDialect.class,

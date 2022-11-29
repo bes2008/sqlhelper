@@ -21,7 +21,7 @@ import java.util.Locale;
 /**
  * select * from
  * where xxxx
- * limit $limit offset $Offset
+ * limit $limit offset $offset
  * <p>
  * every dialect use the limitHandler should set bindLimitParameterInReverseOrder = true
  */
