@@ -134,12 +134,14 @@ public class DialectRegistry {
                 CTreeDialect.class,
                 CubridDialect.class,
 
+                DatabricksDialect.class,
                 DB2Dialect.class,
                 DbfDialect.class,
                 DerbyDialect.class,
                 DmDialect.class,
                 DorisDialect.class,
                 DrillDialect.class,
+                DuckDBDialect.class,
 
                 ElasticsearchDialect.class,
                 EsgynDBDialect.class,
@@ -189,6 +191,7 @@ public class DialectRegistry {
                 MemSQLDialect.class,
                 MimerSQLDialect.class,
                 MonetDialect.class,
+                ModeShapeDialect.class,
                 MSQLDialect.class,
                 MySQLDialect.class,
 
