@@ -241,6 +241,7 @@ public class DialectRegistry {
                 TimesTenDialect.class,
                 TrafodionDialect.class,
                 TransbaseDialect.class,
+                TrinoDialect.class,
 
                 UxDBDialect.class,
 
