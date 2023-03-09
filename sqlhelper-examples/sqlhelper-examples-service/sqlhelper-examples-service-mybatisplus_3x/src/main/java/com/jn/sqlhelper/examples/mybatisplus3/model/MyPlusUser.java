@@ -28,7 +28,7 @@ import javax.persistence.Id;
 public class MyPlusUser {
     @Column(name = "ID")
     @Id
-    @TableId(value = "id", type = IdType.UUID)
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
     @Column(name="NAME")
     private String name;

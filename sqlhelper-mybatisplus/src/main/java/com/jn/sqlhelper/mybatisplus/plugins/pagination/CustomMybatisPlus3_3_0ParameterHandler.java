@@ -99,13 +99,13 @@ public class CustomMybatisPlus3_3_0ParameterHandler extends CustomMybatisParamet
             final IdentifierGenerator identifierGenerator = GlobalConfigUtils.getGlobalConfig(this.configuration).getIdentifierGenerator();
             Object idValue = metaObject.getValue(keyProperty);
             if (Objs.isNotEmpty(idValue)) {
-                if (idType.getKey() == IdType.ASSIGN_ID.getKey()) {
+                if (idType.getKey() == MyBatisPlus3IdType.ASSIGN_ID.getKey()) {
                     if (Number.class.isAssignableFrom(tableInfo.getKeyType())) {
                         metaObject.setValue(keyProperty, identifierGenerator.nextId(entity));
                     } else {
                         metaObject.setValue(keyProperty, identifierGenerator.nextId(entity).toString());
                     }
-                } else if (idType.getKey() == IdType.ASSIGN_UUID.getKey()) {
+                } else if (idType.getKey() == MyBatisPlus3IdType.ASSIGN_UUID.getKey()) {
                     metaObject.setValue(keyProperty, identifierGenerator.nextUUID(entity));
                 }
             }

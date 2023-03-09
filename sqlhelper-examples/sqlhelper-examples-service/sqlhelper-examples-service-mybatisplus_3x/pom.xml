@@ -15,8 +15,10 @@
          <mybatis.plus_3x.version>3.1.2</mybatis.plus_3x.version>
          <mybatis.plus_3x.version>3.2.0</mybatis.plus_3x.version>
          <mybatis.plus_3x.version>3.4.1</mybatis.plus_3x.version>
+         <mybatis.plus_3x.version>3.4.2</mybatis.plus_3x.version>
          -->
-        <mybatis.plus_3x.version>3.4.2</mybatis.plus_3x.version>
+
+        <mybatis.plus_3x.version>3.5.3.1</mybatis.plus_3x.version>
 
         <!-- 测试 Spring 1.x 时， 注掉这部分内容即可-->
         <!--

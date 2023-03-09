@@ -15,12 +15,10 @@
 package com.jn.sqlhelper.mybatisplus.spring.boot.autoconfigure;
 
 
-import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
-import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
-import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
-import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
+import com.baomidou.mybatisplus.autoconfigure.*;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
@@ -102,7 +100,13 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
         if (gc != null) {
             globalConfig = new GlobalConfig();
             globalConfig.setBanner(gc.isBanner());
-            globalConfig.setDatacenterId(gc.getDatacenterId());
+            // mybatis-plus 3.5.3 中移除了 datacenterid 属性
+            if(Reflects.getPublicMethod(GlobalConfig.class, "setDatacenterId", String.class)!=null){
+                String datacenterid = Reflects.invokePublicMethod(gc,"getDatacenterId",new Class[0], new Object[0],true, true);
+                Reflects.invokePublicMethod(globalConfig, "setDatacenterId", new Class[]{String.class}, new Object[]{datacenterid}, true, true);
+                //globalConfig.setDatacenterId(gc.getDatacenterId());
+            }
+
             globalConfig.setDbConfig(gc.getDbConfig());
             globalConfig.setEnableSqlRunner(gc.isEnableSqlRunner());
             // 该字段必须保证，每个数据源一份
@@ -110,7 +114,13 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
             globalConfig.setMetaObjectHandler(gc.getMetaObjectHandler());
             globalConfig.setSqlInjector(gc.getSqlInjector());
             globalConfig.setSuperMapperClass(gc.getSuperMapperClass());
-            globalConfig.setWorkerId(gc.getWorkerId());
+            // mybatis-plus 3.5.3 中移除了 workerId 属性
+            if(Reflects.getPublicMethod(GlobalConfig.class, "setWorkerId", String.class)!=null){
+                String datacenterid = Reflects.invokePublicMethod(gc,"getWorkerId",new Class[0], new Object[0],true, true);
+                Reflects.invokePublicMethod(globalConfig, "setWorkerId", new Class[]{String.class}, new Object[]{datacenterid}, true, true);
+                //globalConfig.setWorkerId(gc.getWorkerId());
+            }
+
             // mybatis-plus高版本移除了 setSqlParserCache(), isSqlParserCache()
             // globalConfig.setSqlParserCache(gc.isSqlParserCache());
 
@@ -121,7 +131,14 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
         if (configurationPrototype != null) {
             MybatisConfiguration configuration = new MybatisConfiguration();
             if (globalConfig != null) {
-                configuration.setGlobalConfig(globalConfig);
+                // mybatis-plus 3.5.3 中移除了 globalConfig 属性
+                if(Reflects.getPublicMethod(MybatisConfiguration.class, "setGlobalConfig", GlobalConfig.class)!=null){
+                    Reflects.invokePublicMethod(configuration, "setGlobalConfig", new Class[]{GlobalConfig.class}, new Object[]{globalConfig}, true, true);
+                }
+                //configuration.setGlobalConfig(globalConfig);
+
+                // @since sqlhelper 4.0.3
+                GlobalConfigUtils.setGlobalConfig(configuration, globalConfig);
             }
 
             configuration.setAggressiveLazyLoading(configurationPrototype.isAggressiveLazyLoading());
@@ -180,7 +197,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
     }
 
     @Bean(name = "sqlSessionFactory")
-    public DynamicSqlSessionFactory dynamicSqlSessionFactory(
+    public DynamicSqlSessionFactory sqlSessionFactory(
             final ObjectProvider<DataSourceRegistry> registryProvider,
             @Qualifier("dataSourcesFactoryBean")
                     ListFactoryBean dataSourcesFactoryBean,
@@ -191,6 +208,10 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
             final ResourceLoader resourceLoader,
             final ObjectProvider<DatabaseIdProvider> databaseIdProvider,
             final ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider,
+            /**
+             * 从sqlhelper 4.0.3 开始新加该参数，为了应对mybatis-plus 3.5.3
+             */
+            final ObjectProvider<List<SqlSessionFactoryBeanCustomizer>> sqlSessionFactoryBeanCustomizers,
             final ObjectProvider<List<MybatisPlusPropertiesCustomizer>> mybatisPlusPropertiesCustomizerProvider) throws BeanCreationException {
         List<DataSource> dataSources = null;
         try {
@@ -224,7 +245,7 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
                     try {
                         logger.info("===[SQLHelper & MyBatis-Plus 3.x]=== Create mybatis SqlSessionFactory instance for datasource {}", namedDataSource.getDataSourceKey());
                         MybatisPlusProperties newProperties = cloneMybatisPlusProperties(properties);
-                        SqlSessionFactory delegate = createSqlSessionFactory(dataSource, newProperties, interceptorsProvider, typeHandlerProvider, languageDriverProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider, mybatisPlusPropertiesCustomizerProvider);
+                        SqlSessionFactory delegate = createSqlSessionFactory(dataSource, newProperties, interceptorsProvider, typeHandlerProvider, languageDriverProvider, resourceLoader, databaseIdProvider,configurationCustomizersProvider,sqlSessionFactoryBeanCustomizers,  mybatisPlusPropertiesCustomizerProvider);
                         if (delegate != null) {
 
                             if (transactionFactoryCustomizer != null) {
@@ -257,6 +278,10 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
                                                       ResourceLoader resourceLoader,
                                                       ObjectProvider<DatabaseIdProvider> databaseIdProviderObjectProvider,
                                                       ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider,
+                                                      /**
+                                                       * 从sqlhelper 4.0.3 开始新加该参数，为了应对mybatis-plus 3.5.3
+                                                       */
+                                                      ObjectProvider<List<SqlSessionFactoryBeanCustomizer>> sqlSessionFactoryBeanCustomizers,
                                                       ObjectProvider<List<MybatisPlusPropertiesCustomizer>> mybatisPlusPropertiesCustomizerProvider) throws Exception {
 
         MybatisPlusAutoConfiguration mybatisAutoConfiguration = null;
@@ -307,6 +332,34 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
                             resourceLoader,
                             databaseIdProviderObjectProvider,
                             configurationCustomizersProvider,
+                            mybatisPlusPropertiesCustomizerProvider,
+                            this.applicationContext
+                    });
+        }
+        // 从 mybatis-plus 3.5 开始
+        if(mybatisAutoConfiguration==null){
+            mybatisAutoConfiguration = Reflects.newInstance(MybatisPlusAutoConfiguration.class,
+                    new Class[]{
+                            MybatisPlusProperties.class,
+                            ObjectProvider.class,
+                            ObjectProvider.class,
+                            ObjectProvider.class,
+                            ResourceLoader.class,
+                            ObjectProvider.class,
+                            ObjectProvider.class,
+                            ObjectProvider.class,
+                            ObjectProvider.class,
+                            ApplicationContext.class
+                    },
+                    new Object[]{
+                            properties,
+                            interceptorsProvider,
+                            typeHandlerProvider,
+                            languageDriverProvider,
+                            resourceLoader,
+                            databaseIdProviderObjectProvider,
+                            configurationCustomizersProvider,
+                            sqlSessionFactoryBeanCustomizers,
                             mybatisPlusPropertiesCustomizerProvider,
                             this.applicationContext
                     });
