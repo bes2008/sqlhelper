@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.Throwables;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
@@ -367,7 +368,12 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
 
         Preconditions.checkNotNull(mybatisAutoConfiguration, "the mybatis-plus 3.x autoconfiguration is null");
         mybatisAutoConfiguration.afterPropertiesSet();
-        return mybatisAutoConfiguration.sqlSessionFactory(dataSource);
+        try {
+            return mybatisAutoConfiguration.sqlSessionFactory(dataSource);
+        }catch (Throwable e){
+            logger.error(e.getMessage(), e);
+            throw Throwables.wrapAsRuntimeException(e);
+        }
     }
 
     @Bean
