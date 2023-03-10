@@ -101,11 +101,11 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
         if (gc != null) {
             globalConfig = new GlobalConfig();
             globalConfig.setBanner(gc.isBanner());
-            // mybatis-plus 3.5.3 中移除了 datacenterid 属性
+            // mybatis-plus 3.5.0 中移除了 datacenterid 属性
             if(Reflects.getPublicMethod(GlobalConfig.class, "setDatacenterId", String.class)!=null){
                 String datacenterid = Reflects.invokePublicMethod(gc,"getDatacenterId",new Class[0], new Object[0],true, true);
                 Reflects.invokePublicMethod(globalConfig, "setDatacenterId", new Class[]{String.class}, new Object[]{datacenterid}, true, true);
-                //globalConfig.setDatacenterId(gc.getDatacenterId());
+                // globalConfig.setDatacenterId(gc.getDatacenterId());
             }
 
             globalConfig.setDbConfig(gc.getDbConfig());
@@ -115,11 +115,11 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
             globalConfig.setMetaObjectHandler(gc.getMetaObjectHandler());
             globalConfig.setSqlInjector(gc.getSqlInjector());
             globalConfig.setSuperMapperClass(gc.getSuperMapperClass());
-            // mybatis-plus 3.5.3 中移除了 workerId 属性
+            // mybatis-plus 3.5.0 中移除了 workerId 属性
             if(Reflects.getPublicMethod(GlobalConfig.class, "setWorkerId", String.class)!=null){
                 String datacenterid = Reflects.invokePublicMethod(gc,"getWorkerId",new Class[0], new Object[0],true, true);
                 Reflects.invokePublicMethod(globalConfig, "setWorkerId", new Class[]{String.class}, new Object[]{datacenterid}, true, true);
-                //globalConfig.setWorkerId(gc.getWorkerId());
+                // globalConfig.setWorkerId(gc.getWorkerId());
             }
 
             // mybatis-plus高版本移除了 setSqlParserCache(), isSqlParserCache()
