@@ -78,7 +78,7 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
         return maxRows;
     }
 
-    public void setMaxRows(int maxRows) {
+    public void setMaxRows(Integer maxRows) {
         this.maxRows = maxRows;
     }
 
@@ -86,7 +86,7 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
         return this.fetchSize;
     }
 
-    public R setFetchSize(int fetchSize) {
+    public R setFetchSize(Integer fetchSize) {
         this.fetchSize = fetchSize;
         return (R) this;
     }
@@ -102,7 +102,6 @@ public class SqlRequest<R extends SqlRequest, C extends SqlRequestContext<R>> im
     public void setLikeParameterIndexes(List<Integer> likeParameterIndexes) {
         this.likeParameterIndexes = likeParameterIndexes;
     }
-
 
     public void clear() {
         likeEscaper = null;
