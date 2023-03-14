@@ -67,7 +67,6 @@ public class SQLSyntaxCompatTable {
      *
      * @param databaseId your test database id
      * @param compatDatabaseId for examples : mysql
-     * @return
      */
     public boolean isCompatible(String databaseId, String compatDatabaseId) {
         return getCompatDatabases(databaseId).contains(compatDatabaseId);

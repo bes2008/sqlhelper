@@ -28,12 +28,6 @@ public interface JdbcTemplate {
 
     /**
      * 调用 存储过程， callable PreparedStatement
-     * @param sql
-     * @param params
-     * @param extractor
-     * @param <T>
-     * @return
-     * @throws SQLException
      */
     <T> T call(String sql, List<?> params, ResultSetExtractor<T> extractor) throws SQLException;
 }

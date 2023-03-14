@@ -34,8 +34,6 @@ public @interface Column {
     /**
      * 这里是个数组，通常情况下，一个entity的某个字段只能代表一个列
      * 如果这里配置了多个，则说明不同的数据库上可能有不同的名称。
-     *
-     * @return
      */
     String[] value() default {};
 

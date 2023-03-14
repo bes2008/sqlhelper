@@ -28,7 +28,6 @@ import java.lang.annotation.Target;
 public @interface Table {
     /**
      * 不同的数据库可能会映射到不同的表名上
-     * @return
      */
     String[] value() default {};
 }
