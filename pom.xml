@@ -97,7 +97,7 @@
 
         <easyjson.version>4.0.3</easyjson.version>
         <langx-java.version>5.1.3</langx-java.version>
-        <agileway.version>4.0.2</agileway.version>
+        <agileway.version>4.1.2</agileway.version>
 
         <jfinal.version>4.9.20</jfinal.version>
         <solon.version>1.0.23</solon.version>

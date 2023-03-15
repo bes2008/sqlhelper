@@ -72,12 +72,12 @@ public class AgilewayFeignSimpleRestServiceProviderTests {
         provider.init();
     }
 
-    //   @Test
+     @Test
     public void testPagination() {
         System.out.println(jsonFactory.get().toJson(provider.getStub(UserClientService2.class).getUsers()));
     }
 
-    //   @Test
+     @Test
     public void testGetById() {
         System.out.println(jsonFactory.get().toJson(provider.getStub(UserClientService2.class).getById("0001")));
     }
