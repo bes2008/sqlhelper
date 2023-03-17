@@ -216,20 +216,17 @@ public class DataSources {
     /**
      * 用于对 username, password 解密
      *
-     * @param cipherer
-     * @param encryptedBase64Text
-     * @return
      * @since 3.4.5
      */
-    public static String decrypt(@Nullable DriverPropertiesCipher cipherer, @NotEmpty String encryptedBase64Text, boolean loggerError) {
+    public static String decrypt(@Nullable DriverPropertiesCipher cipher, @NotEmpty String encryptedBase64Text, boolean loggerError) {
         if (Strings.isBlank(encryptedBase64Text)) {
             return null;
         }
-        if (cipherer == null) {
+        if (cipher == null) {
             return encryptedBase64Text;
         }
         try {
-            return cipherer.decrypt(encryptedBase64Text);
+            return cipher.decrypt(encryptedBase64Text);
         } catch (IllegalArgumentException ex) {
             if (loggerError) {
                 logger.warn(ex.getMessage(), ex);
@@ -246,8 +243,6 @@ public class DataSources {
     /**
      * 获取DataSource配置项
      *
-     * @param driverProps
-     * @return
      * @since 3.4.6
      */
     public static String getDriverPropertiesForLog(Properties driverProps) {
