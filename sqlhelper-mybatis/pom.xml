@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.github.bes2008.solution.sqlhelper</groupId>
         <artifactId>sqlhelper</artifactId>
-        <version>4.0.4</version>
+        <version>4.0.5</version>
     </parent>
     <artifactId>sqlhelper-mybatis</artifactId>
     <name>${project.groupId}:${project.artifactId}:${project.version}</name>
