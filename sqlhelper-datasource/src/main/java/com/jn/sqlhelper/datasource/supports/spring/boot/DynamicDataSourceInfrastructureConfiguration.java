@@ -107,6 +107,27 @@ public class DynamicDataSourceInfrastructureConfiguration {
         return dataSourceRegistry;
     }
 
+    /**
+     * 提供默认的基于 RSA 加解密工具，用于对数据加密
+     *
+     * @since 4.0.5
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public DriverPropertiesCipher driverPropertiesCipher(ObjectProvider<DynamicDataSourcesProperties> dynamicDataSourcesPropertiesObjectProvider) {
+        DynamicDataSourcesProperties dynamicDataSourcesProperties = dynamicDataSourcesPropertiesObjectProvider.getIfAvailable();
+        DriverPropertiesRsaCipher cipher = new DriverPropertiesRsaCipher();
+        if (dynamicDataSourcesProperties != null) {
+            if (Strings.isNotBlank(dynamicDataSourcesProperties.getPublicKey())) {
+                cipher.setPublicKey(dynamicDataSourcesProperties.getPublicKey());
+            }
+            if (Strings.isNotBlank(dynamicDataSourcesProperties.getPrivateKey())) {
+                cipher.setPrivateKey(dynamicDataSourcesProperties.getPrivateKey());
+            }
+        }
+        return cipher;
+    }
+
 
     /**
      * @since 3.4.5
@@ -116,19 +137,14 @@ public class DynamicDataSourceInfrastructureConfiguration {
     public DriverPropertiesCipher dataSourcePropertiesCipherer(
             ObjectProvider<DynamicDataSourcesProperties> dynamicDataSourcesPropertiesObjectProvider,
             // 由于 Spring 的构建顺序的原因，这里不能去直接使用 Spring Boot 里的DataSourceProperties, 用了也没有意义
-            ObjectProvider<org.springframework.boot.autoconfigure.jdbc.DataSourceProperties> dataSourcePropertiesObjectProvider) {
+            ObjectProvider<org.springframework.boot.autoconfigure.jdbc.DataSourceProperties> dataSourcePropertiesObjectProvider,
+            ObjectProvider<DriverPropertiesCipher> cipherProvider
+    ) {
 
-        DriverPropertiesRsaCipher cipherer = new DriverPropertiesRsaCipher();
-
+        DriverPropertiesCipher cipher = cipherProvider.getIfAvailable();
 
         DynamicDataSourcesProperties dynamicDataSourcesProperties = dynamicDataSourcesPropertiesObjectProvider.getIfAvailable();
-        if (dynamicDataSourcesProperties != null) {
-            if (Strings.isNotBlank(dynamicDataSourcesProperties.getPublicKey())) {
-                cipherer.setPublicKey(dynamicDataSourcesProperties.getPublicKey());
-            }
-            if (Strings.isNotBlank(dynamicDataSourcesProperties.getPrivateKey())) {
-                cipherer.setPrivateKey(dynamicDataSourcesProperties.getPrivateKey());
-            }
+        if (dynamicDataSourcesProperties != null && cipher != null) {
 
             // 直接就开始进行 解密操作
             List<DataSourceProperties> dataSourcePropertiesList = dynamicDataSourcesProperties.getDatasources();
@@ -136,12 +152,12 @@ public class DynamicDataSourceInfrastructureConfiguration {
                 for (DataSourceProperties dataSourceProperties : dataSourcePropertiesList) {
                     String username = dataSourceProperties.getUsername();
                     if (Strings.isNotBlank(username)) {
-                        username = DataSources.decrypt(cipherer, username);
+                        username = DataSources.decrypt(cipher, username);
                         dataSourceProperties.setUsername(username);
                     }
                     String password = dataSourceProperties.getPassword();
                     if (Strings.isNotBlank(password)) {
-                        password = DataSources.decrypt(cipherer, password);
+                        password = DataSources.decrypt(cipher, password);
                         dataSourceProperties.setPassword(password);
                     }
                 }
@@ -154,17 +170,17 @@ public class DynamicDataSourceInfrastructureConfiguration {
         if (springBuiltinDataSourceProperties != null) {
             String username = springBuiltinDataSourceProperties.getUsername();
             if (Strings.isNotBlank(username)) {
-                username = DataSources.decrypt(cipherer, username);
+                username = DataSources.decrypt(cipher, username);
                 springBuiltinDataSourceProperties.setUsername(username);
             }
             String password = springBuiltinDataSourceProperties.getPassword();
             if (Strings.isNotBlank(password)) {
-                password = DataSources.decrypt(cipherer, password);
+                password = DataSources.decrypt(cipher, password);
                 springBuiltinDataSourceProperties.setPassword(password);
             }
         }
 
-        return cipherer;
+        return cipher;
     }
 
 
