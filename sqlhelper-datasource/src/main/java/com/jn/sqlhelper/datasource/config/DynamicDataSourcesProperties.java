@@ -87,6 +87,10 @@ public class DynamicDataSourcesProperties {
      */
     private int healthCheckTimeout = 120;
 
+    /**
+     * 健康检查的线程池core线程数量
+     * @since 4.0.6
+     */
     private int healthCheckCoreThreads = 1;
 
     public int getHealthCheckCoreThreads() {
