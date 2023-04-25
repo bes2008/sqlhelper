@@ -87,6 +87,16 @@ public class DynamicDataSourcesProperties {
      */
     private int healthCheckTimeout = 120;
 
+    private int healthCheckCoreThreads = 1;
+
+    public int getHealthCheckCoreThreads() {
+        return healthCheckCoreThreads;
+    }
+
+    public void setHealthCheckCoreThreads(int healthCheckCoreThreads) {
+        this.healthCheckCoreThreads = healthCheckCoreThreads;
+    }
+
     public String getPublicKey() {
         return publicKey;
     }

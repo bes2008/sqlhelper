@@ -103,6 +103,7 @@ public class DynamicDataSourceInfrastructureConfiguration {
         DataSourceKeyDataSourceParser dataSourceKeyParser = dataSourceKeyParserProvider.getIfAvailable();
         dataSourceRegistry.setKeyParser(dataSourceKeyParser);
         dataSourceRegistry.setHealthCheckTimeout(dynamicDataSourcesProperties.getHealthCheckTimeout());
+        dataSourceRegistry.setHealthCheckCoreThreads(dynamicDataSourcesProperties.getHealthCheckCoreThreads());
         dataSourceRegistry.init();
         return dataSourceRegistry;
     }

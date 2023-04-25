@@ -31,6 +31,7 @@ import com.jn.langx.util.function.Predicate2;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.logging.Level;
 import com.jn.langx.util.logging.Loggers;
+import com.jn.langx.util.os.Platform;
 import com.jn.langx.util.pattern.patternset.AntPathMatcher;
 import com.jn.langx.util.struct.Holder;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
@@ -79,7 +80,7 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
      */
     private final Set<DataSourceKey> failKeys = new CopyOnWriteArraySet<DataSourceKey>();
 
-    private final ScheduledExecutorService healthCheckExecutor = new ScheduledThreadPoolExecutor(16, new CommonThreadFactory("SQLHelper-DataSource-HealthChecker", true));
+    private ScheduledExecutorService healthCheckExecutor;
     private final Map<DataSourceKey, Future> healthCheckTaskTraceMap = new ConcurrentHashMap<DataSourceKey, Future>();
     /**
      * TimeUnit: seconds
@@ -90,6 +91,8 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
      */
     private int healthCheckTimeout = 30;
     private boolean inited = false;
+
+    private int healthCheckCoreThreads = 1;
 
     @Override
     public void init() throws InitializationException {
@@ -122,6 +125,12 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
     private void enableHealthCheck(NamedDataSource namedDataSource) {
         DataSourceKey key = namedDataSource.getDataSourceKey();
         if (healthCheckTimeout > 0) {
+            synchronized (this) {
+                if (healthCheckExecutor == null) {
+                    int corePoolSize = Maths.max(1, this.healthCheckCoreThreads);
+                    healthCheckExecutor = new ScheduledThreadPoolExecutor(corePoolSize, new CommonThreadFactory("SQLHelper-DataSource-HealthChecker", true));
+                }
+            }
             // 此时认为数据源有变化
             if (healthCheckTaskTraceMap.containsKey(key)) {
                 Future future = healthCheckTaskTraceMap.remove(key);
@@ -140,6 +149,10 @@ public class DataSourceRegistry implements Registry<DataSourceKey, DataSource>, 
         } else {
             this.healthCheckTimeout = -1;
         }
+    }
+
+    public void setHealthCheckCoreThreads(int healthCheckCoreThreads) {
+        this.healthCheckCoreThreads = healthCheckCoreThreads;
     }
 
     public int getHealthCheckTimeout() {
