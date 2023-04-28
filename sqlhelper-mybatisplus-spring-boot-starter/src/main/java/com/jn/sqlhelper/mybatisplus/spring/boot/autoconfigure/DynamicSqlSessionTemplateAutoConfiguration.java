@@ -210,7 +210,8 @@ public class DynamicSqlSessionTemplateAutoConfiguration implements ApplicationCo
             final ObjectProvider<DatabaseIdProvider> databaseIdProvider,
             final ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider,
             /**
-             * 从sqlhelper 4.0.3 开始新加该参数，为了应对mybatis-plus 3.5.3
+             * 从sqlhelper 4.0.3 开始新加该参数，为了应对mybatis-plus 3.5.3。
+             * 但是 mybatis-plus 3.5.3 版本才开始加这个接口
              */
             final ObjectProvider<List<SqlSessionFactoryBeanCustomizer>> sqlSessionFactoryBeanCustomizers,
             final ObjectProvider<List<MybatisPlusPropertiesCustomizer>> mybatisPlusPropertiesCustomizerProvider) throws BeanCreationException {
