@@ -12,9 +12,9 @@
     <name>${project.groupId}:${project.artifactId}:${project.version}</name>
     <properties>
         <!-- 测试 Spring 1.x 时， 注掉这部分内容即可-->
-        <!--
-        <spring.version>5.2.9.RELEASE</spring.version>
-        <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
+<!--
+        <spring.version>5.3.27</spring.version>
+        <spring.boot.version>2.7.12</spring.boot.version>
         <mybatis.spring.version>2.0.6</mybatis.spring.version>
         <mybatis.springboot.version>2.1.4</mybatis.springboot.version>
         -->
@@ -163,9 +163,9 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.1.0.Final</version>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>2.0.2</version>
         </dependency>
     </dependencies>
     <build>
