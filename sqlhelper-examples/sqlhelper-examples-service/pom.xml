@@ -15,7 +15,14 @@
     <packaging>pom</packaging>
 
     <properties>
-        <tomcat.version>8.5.43</tomcat.version>
+
+        <!-- 测试 Spring 1.x 时， 注掉这部分内容即可-->
+        <!-- -->
+        <spring.version>5.3.27</spring.version>
+        <spring.boot.version>2.7.12</spring.boot.version>
+        <mybatis.spring.version>2.0.6</mybatis.spring.version>
+        <mybatis.springboot.version>2.1.4</mybatis.springboot.version>
+        <tomcat.version>9.0.75</tomcat.version>
     </properties>
 
 
