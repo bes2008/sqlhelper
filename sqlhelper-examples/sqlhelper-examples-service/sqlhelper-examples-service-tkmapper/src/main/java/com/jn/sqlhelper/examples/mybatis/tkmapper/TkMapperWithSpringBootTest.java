@@ -27,5 +27,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TkMapperWithSpringBootTest {
     public static void main(String[] args) {
         SpringApplication.run(TkMapperWithSpringBootTest.class, args);
+        System.out.println("123");
     }
 }

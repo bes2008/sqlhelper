@@ -122,6 +122,7 @@
         <tomcat.version>8.5.43</tomcat.version>
 
         <hibernate.version>5.4.3.Final</hibernate.version>
+        <jakarta.validation.version>1.1.0</jakarta.validation.version>
         <jboss.logging.version>3.3.0.Final</jboss.logging.version>
 
         <maven.compiler.source>1.6</maven.compiler.source>
@@ -134,6 +135,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>${jakarta.validation.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>

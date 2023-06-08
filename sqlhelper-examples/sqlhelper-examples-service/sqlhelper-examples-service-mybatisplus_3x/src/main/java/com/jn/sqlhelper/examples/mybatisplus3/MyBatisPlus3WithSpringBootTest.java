@@ -17,6 +17,7 @@ package com.jn.sqlhelper.examples.mybatisplus3;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication(scanBasePackages = {
         "com.jn.sqlhelper.examples.mybatisplus3",
@@ -26,6 +27,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("com.jn.sqlhelper.examples.mybatisplus3.dao")
 public class MyBatisPlus3WithSpringBootTest {
     public static void main(String[] args) {
-        SpringApplication.run(MyBatisPlus3WithSpringBootTest.class, args);
+        ApplicationContext applicationContext= SpringApplication.run(MyBatisPlus3WithSpringBootTest.class, args);
+        System.out.println(applicationContext.getStartupDate());
     }
 }

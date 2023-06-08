@@ -55,7 +55,7 @@ sqlhelper:
         password: 123456
 logging:
   level:
-    root: info
+    root: debug
     com:
       jn:
         sqlhelper:

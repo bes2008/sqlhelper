@@ -12,13 +12,25 @@
     <name>${project.groupId}:${project.artifactId}:${project.version}</name>
     <properties>
         <tk.mapper.version>4.1.5</tk.mapper.version>
+        <mybatis.version>3.5.9</mybatis.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>io.github.bes2008.solution.sqlhelper</groupId>
             <artifactId>sqlhelper-tkmapper-spring-boot-starter</artifactId>
-        </dependency>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mybatis</groupId>
+                    <artifactId>mybatis</artifactId>
+                </exclusion>
 
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>io.github.bes2008.solution.sqlhelper.examples</groupId>
@@ -79,6 +91,10 @@
                 <exclusion>
                     <groupId>io.github.bes2008.solution.agileway</groupId>
                     <artifactId>agileway-aop</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

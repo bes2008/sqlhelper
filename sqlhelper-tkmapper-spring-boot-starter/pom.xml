@@ -13,7 +13,10 @@
     <name>${project.groupId}:${project.artifactId}:${project.version}</name>
 
     <properties>
+        <!--
         <tkmapper.spring.boot.version>2.1.5</tkmapper.spring.boot.version>
+        -->
+        <tkmapper.spring.boot.version>4.2.0</tkmapper.spring.boot.version>
     </properties>
 
     <dependencyManagement>
