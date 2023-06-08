@@ -13,6 +13,9 @@ spring:
       enabled: true
   flyway:
     enabled: false
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 swagger:
   base-package: com.jn.sqlhelper.examples.apache.dbutils.controller

@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void removeUser(String id) {
-        userDao.delete(id);
+        userDao.deleteById(id);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> likeByName(String name, int pageNo, int pageSize) {
-        Pageable pg = new PageRequest(pageNo-1, pageSize, Sort.Direction.ASC, "name");
+        Pageable pg = PageRequest.of(pageNo-1, pageSize, Sort.Direction.ASC, "name");
         return userDao.findByLimit(name, pg);
     }
 }
