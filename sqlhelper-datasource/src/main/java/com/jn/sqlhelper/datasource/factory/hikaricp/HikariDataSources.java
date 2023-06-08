@@ -26,8 +26,6 @@ import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.common.security.DriverPropertiesCipher;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -37,7 +35,6 @@ import java.util.Properties;
  * @since 3.4.0
  */
 public class HikariDataSources {
-    private static final Logger logger = LoggerFactory.getLogger(HikariDataSources.class);
 
     private HikariDataSources() {
     }
