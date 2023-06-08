@@ -18,6 +18,7 @@ import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.jn.langx.util.Maths;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
+import com.jn.sqlhelper.common.security.JdbcSecuritys;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.DataSources;
@@ -40,7 +41,7 @@ public class AlibabaDruidDataSources {
     }
 
     public static DataSource createDataSource(DataSourceProperties properties) {
-        return createDataSource(properties, null);
+        return createDataSource(properties, JdbcSecuritys.getDefaultDriverPropertiesCipher());
     }
 
     /**
@@ -105,7 +106,7 @@ public class AlibabaDruidDataSources {
     }
 
     public static DataSource createDataSource(Properties properties) {
-        return createDataSource(properties, null);
+        return createDataSource(properties, JdbcSecuritys.getDefaultDriverPropertiesCipher());
     }
 
 

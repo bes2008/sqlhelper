@@ -19,14 +19,19 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.NotEmpty;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.exception.IllegalPropertyException;
+import com.jn.langx.registry.GenericRegistry;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.security.SecurityException;
+import com.jn.langx.util.id.UuidGenerator;
+import com.jn.langx.util.spi.CommonServiceProvider;
 import com.jn.sqlhelper.common.security.DriverPropertiesCipher;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
@@ -37,7 +42,6 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.UUID;
 
 /**
  * @since 3.4.0
@@ -60,6 +64,7 @@ public class DataSources {
     public static final String DATASOURCE_PRIMARY_NAME = "primary";
     public static final DataSourceKey DATASOURCE_PRIMARY = new DataSourceKey(DATASOURCE_PRIMARY_GROUP, DATASOURCE_PRIMARY_NAME);
     public static final String DATASOURCE_NAME_WILDCARD = "*";
+
 
     /**
      * Close the given Connection, obtained from the given DataSource,
@@ -142,7 +147,7 @@ public class DataSources {
             name = ((Named) dataSource).getName();
         }
         if (Strings.isBlank(name)) {
-            name = UUID.randomUUID().toString();
+            name = UuidGenerator.INSTANCE.get();
         }
         return toNamedDataSource(dataSource, name, null);
     }
@@ -192,6 +197,8 @@ public class DataSources {
         }
         throw new IllegalPropertyException("group or name is empty or null");
     }
+
+
 
     public static void decryptUsernamePassword(Properties driverProperties, @Nullable DriverPropertiesCipher cipherer) {
         if (cipherer == null) {

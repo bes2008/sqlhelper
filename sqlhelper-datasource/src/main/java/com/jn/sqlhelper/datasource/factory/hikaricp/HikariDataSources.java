@@ -18,6 +18,7 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Emptys;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.sqlhelper.common.security.JdbcSecuritys;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.DataSources;
@@ -42,7 +43,7 @@ public class HikariDataSources {
     }
 
     public static DataSource createDataSource(final DataSourceProperties props) {
-        return createDataSource(props, null);
+        return createDataSource(props, JdbcSecuritys.getDefaultDriverPropertiesCipher());
     }
 
     /**
@@ -91,7 +92,7 @@ public class HikariDataSources {
     }
 
     public static DataSource createDataSource(final Properties props) {
-        return createDataSource(props, null);
+        return createDataSource(props, JdbcSecuritys.getDefaultDriverPropertiesCipher());
     }
 
     /**

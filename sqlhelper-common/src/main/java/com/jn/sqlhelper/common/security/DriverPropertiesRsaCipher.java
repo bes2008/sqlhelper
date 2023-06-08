@@ -36,6 +36,8 @@ import java.security.PublicKey;
  */
 public class DriverPropertiesRsaCipher implements DriverPropertiesCipher, Initializable {
 
+    private String name;
+
     /**
      * base 64 public key
      */
@@ -109,5 +111,10 @@ public class DriverPropertiesRsaCipher implements DriverPropertiesCipher, Initia
         Cipher cipher = Ciphers.createCipher(Ciphers.createAlgorithmTransformation(transformation), null, Cipher.DECRYPT_MODE, privateKey, null);
         byte[] originData = Ciphers.decrypt(cipher, Base64.decodeBase64(encryptedBase64Text));
         return new String(originData, Charsets.UTF_8);
+    }
+
+    @Override
+    public String getName() {
+        return JdbcSecuritys.DEFAULT_DRIVER_PROPERTIES_CIPHER_NAME;
     }
 }

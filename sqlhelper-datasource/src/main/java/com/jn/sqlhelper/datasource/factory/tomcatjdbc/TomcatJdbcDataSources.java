@@ -18,6 +18,7 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Maths;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
+import com.jn.sqlhelper.common.security.JdbcSecuritys;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.DataSources;
@@ -41,7 +42,7 @@ public class TomcatJdbcDataSources {
     }
 
     public static DataSource createDataSource(final DataSourceProperties properties) {
-        return createDataSource(properties, null);
+        return createDataSource(properties, JdbcSecuritys.getDefaultDriverPropertiesCipher());
     }
 
     /**
@@ -105,7 +106,7 @@ public class TomcatJdbcDataSources {
     }
 
     public static DataSource createDataSource(Properties properties) {
-        return createDataSource(properties, null);
+        return createDataSource(properties, JdbcSecuritys.getDefaultDriverPropertiesCipher());
     }
 
     /**

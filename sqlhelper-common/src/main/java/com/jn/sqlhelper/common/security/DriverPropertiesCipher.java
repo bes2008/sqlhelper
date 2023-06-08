@@ -15,6 +15,7 @@
 package com.jn.sqlhelper.common.security;
 
 
+import com.jn.langx.Named;
 import com.jn.langx.security.crypto.cipher.StringCipher;
 
 /**
@@ -22,6 +23,6 @@ import com.jn.langx.security.crypto.cipher.StringCipher;
  *
  * @since 3.4.5
  */
-public interface DriverPropertiesCipher extends StringCipher {
+public interface DriverPropertiesCipher extends StringCipher, Named {
 
 }

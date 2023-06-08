@@ -17,6 +17,7 @@ package com.jn.sqlhelper.datasource.factory.c3p0;
 import com.jn.langx.util.Maths;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.Throwables;
+import com.jn.sqlhelper.common.security.JdbcSecuritys;
 import com.jn.sqlhelper.common.transaction.utils.Isolation;
 import com.jn.sqlhelper.common.transaction.utils.Transactions;
 import com.jn.sqlhelper.datasource.config.DataSourceProperties;
@@ -38,7 +39,7 @@ public class C3p0DataSources {
     }
 
     public static DataSource createDataSource(final DataSourceProperties properties) {
-        return createDataSource(properties, null);
+        return createDataSource(properties, JdbcSecuritys.getDefaultDriverPropertiesCipher());
     }
 
     /**
@@ -103,7 +104,7 @@ public class C3p0DataSources {
     }
 
     public static DataSource createDataSource(Properties properties) {
-        return createDataSource(properties, null);
+        return createDataSource(properties, JdbcSecuritys.getDefaultDriverPropertiesCipher());
     }
 
     /**
