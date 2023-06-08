@@ -165,7 +165,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
 
     @Override
     public void fillStatement(PreparedStatement stmt, Object... params) throws SQLException {
-        fillStatement(stmt, new ArrayPreparedStatementSetter(params), params);
+        fillStatementWithSetter(stmt, new ArrayPreparedStatementSetter(params), params);
     }
 
     public void fillStatementWithSetter(PreparedStatement stmt, PreparedStatementSetter preparedStatementSetter, Object... params) throws SQLException {
@@ -243,7 +243,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
      */
     @Override
     public <T> T query(Connection conn, String sql, Object param, ResultSetHandler<T> rsh) throws SQLException {
-        return this.<T>query(conn, false, sql, null, rsh, new Object[]{param});
+        return this.<T>query(conn, false, sql, null, rsh, param);
     }
 
     /**
@@ -311,7 +311,7 @@ public class QueryRunner extends org.apache.commons.dbutils.QueryRunner {
      */
     @Override
     public <T> T query(String sql, Object param, ResultSetHandler<T> rsh) throws SQLException {
-        return this.<T>query(sql, rsh, new Object[]{param});
+        return this.<T>query(sql, rsh, param);
     }
 
     /**
