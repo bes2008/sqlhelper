@@ -16,10 +16,6 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.github.bes2008.solution.sqlhelper.examples</groupId>
             <artifactId>sqlhelper-examples-db</artifactId>
         </dependency>
@@ -97,6 +93,10 @@
                 <exclusion>
                     <groupId>io.github.bes2008.solution.agileway</groupId>
                     <artifactId>agileway-aop</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
