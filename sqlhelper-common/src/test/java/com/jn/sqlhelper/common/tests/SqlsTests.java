@@ -22,15 +22,18 @@ public class SqlsTests {
     public void testIsSelectCount() {
         String sql = null;
         sql = "select count(1) from t";
-        System.out.println(sql + ",\t" + SQLs.isSelectCountStatement(sql));
+        System.out.println(sql + "==>\t" + SQLs.isSelectCountStatement(sql));
 
         sql = "select \t count(1) from t";
-        System.out.println(sql + ",\t" + SQLs.isSelectCountStatement(sql));
+        System.out.println(sql + "==>\t" + SQLs.isSelectCountStatement(sql));
 
         sql = "with temp as ( select count(1) from t";
-        System.out.println(sql + ",\t" + SQLs.isSelectCountStatement(sql));
+        System.out.println(sql + "==>\t" + SQLs.isSelectCountStatement(sql));
 
         sql = "select \t count(1) from t";
-        System.out.println(sql + ",\t" + SQLs.isSelectCountStatement(sql));
+        System.out.println(sql + "==>\t" + SQLs.isSelectCountStatement(sql));
+
+        sql = "select \t county from t";
+        System.out.println(sql + "==>\t" + SQLs.isSelectCountStatement(sql));
     }
 }

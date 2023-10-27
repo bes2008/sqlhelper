@@ -98,7 +98,8 @@ public class SQLs {
         }
     }
 
-    private static final Regexp SELECT_COUNT_PATTERN = Regexps.createRegexp("select\\s+count.*");
+    private static final Regexp SELECT_COUNT_PATTERN = Regexps.createRegexp("select\\s+count\\s*\\(.*\\)\\s*.*\\s+from .*");
+    //private static final Regexp SELECT_COUNT_PATTERN = Regexps.createRegexp("select\\s+count(\\s+).*");
     private static final Regexp COUNT_FUNCTION_PATTERN = Regexps.createRegexp("count(\\s*\\(.*(\\s*\\))?)?");
 
     public static boolean isSelectCountStatement(String sql) {
