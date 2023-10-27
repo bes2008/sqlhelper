@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.github.bes2008.solution.sqlhelper.examples.service</groupId>
         <artifactId>sqlhelper-examples-service</artifactId>
-        <version>4.0.7</version>
+        <version>4.0.8</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
