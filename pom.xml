@@ -37,7 +37,6 @@
         <module>sqlhelper-tkmapper-spring-boot-starter</module>
         <module>sqlhelper-springjdbc</module>
         <module>sqlhelper-springjdbc-spring-boot-starter</module>
-        <module>sqlhelper-examples</module>
         <module>sqlhelper-cli</module>
         <module>sqlhelper-cli-assembly</module>
         <module>sqlhelper-batchinsert</module>
