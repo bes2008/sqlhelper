@@ -38,7 +38,6 @@
         <module>sqlhelper-springjdbc</module>
         <module>sqlhelper-springjdbc-spring-boot-starter</module>
         <module>sqlhelper-cli</module>
-        <module>sqlhelper-cli-assembly</module>
         <module>sqlhelper-batchinsert</module>
         <module>sqlhelper-datasource-flyway</module>
     </modules>
@@ -95,7 +94,7 @@
         <jline.version>3.18.0</jline.version>
 
         <easyjson.version>4.1.2</easyjson.version>
-        <langx-java.version>5.2.8</langx-java.version>
+        <langx-java.version>5.3.0</langx-java.version>
         <agileway.version>4.3.1</agileway.version>
 
         <jfinal.version>4.9.20</jfinal.version>
@@ -419,6 +418,17 @@
                 <artifactId>langx-java</artifactId>
                 <version>${langx-java.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.github.bes2008.solution.langx</groupId>
+                <artifactId>langx-java-distributed</artifactId>
+                <version>${langx-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.bes2008.solution.langx</groupId>
+                <artifactId>langx-java-el</artifactId>
+                <version>${langx-java.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.flywaydb</groupId>

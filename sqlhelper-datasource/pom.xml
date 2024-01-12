@@ -126,5 +126,9 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.bes2008.solution.langx</groupId>
+            <artifactId>langx-java-distributed</artifactId>
+        </dependency>
     </dependencies>
 </project>

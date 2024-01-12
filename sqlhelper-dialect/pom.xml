@@ -21,6 +21,10 @@
             <groupId>io.github.bes2008.solution.sqlhelper</groupId>
             <artifactId>sqlhelper-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.github.bes2008.solution.langx</groupId>
+            <artifactId>langx-java-el</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
