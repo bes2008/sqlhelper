@@ -6,7 +6,7 @@
 
     <groupId>io.github.bes2008.solution.sqlhelper</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>4.0.8</version>
+    <version>4.1.0</version>
     <name>${project.groupId}:${project.artifactId}:${project.version}</name>
     <description>
         JDBC Extensions:
@@ -94,9 +94,9 @@
         <jsqlparser.version>2.1</jsqlparser.version>
         <jline.version>3.18.0</jline.version>
 
-        <easyjson.version>4.1.2</easyjson.version>
-        <langx-java.version>5.3.0</langx-java.version>
-        <agileway.version>4.3.1</agileway.version>
+        <easyjson.version>4.1.4</easyjson.version>
+        <langx-java.version>5.3.4</langx-java.version>
+        <agileway.version>4.4.0</agileway.version>
 
         <jfinal.version>4.9.20</jfinal.version>
         <solon.version>1.0.23</solon.version>
@@ -126,7 +126,6 @@
 
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
-        <maven.compiler.compilerVersion>1.6</maven.compiler.compilerVersion>
 
         <project.major.version>${project.version}</project.major.version>
         <project.internal.version>${project.version}</project.internal.version>
