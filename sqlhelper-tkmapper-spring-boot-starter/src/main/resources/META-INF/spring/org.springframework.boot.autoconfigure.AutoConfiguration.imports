@@ -1,0 +1,3 @@
+com.jn.sqlhelper.tkmapper.spring.boot.autoconfigure.SqlHelperTkMapperAutoConfiguration
+com.jn.sqlhelper.tkmapper.spring.boot.autoconfigure.DynamicDataSourceTransactionFactoryCustomizer
+com.jn.sqlhelper.tkmapper.spring.boot.autoconfigure.DynamicSqlSessionTemplateAutoConfiguration
