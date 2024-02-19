@@ -1,0 +1,3 @@
+com.jn.sqlhelper.mybatis.springboot.autoconfigure.DatabaseIdProviderAutoConfiguration
+com.jn.sqlhelper.mybatis.springboot.autoconfigure.SqlHelperMybatisPluginAutoConfiguration
+com.jn.sqlhelper.mybatis.springboot.autoconfigure.SqlSessionFactoryProviderAutoConfiguration
