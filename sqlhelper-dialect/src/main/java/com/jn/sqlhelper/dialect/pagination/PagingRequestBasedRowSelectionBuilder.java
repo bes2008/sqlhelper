@@ -17,10 +17,10 @@ public class PagingRequestBasedRowSelectionBuilder implements RowSelectionBuilde
             long offset = 0L;
             int limit = request.getPageSize();
             if (request.isGetAllFromNonZeroOffsetRequest()) {
-                offset = (pageNo - 1) * getDefaultPageSize();
+                offset = (pageNo - 1L) * getDefaultPageSize();
                 limit = Integer.MAX_VALUE;
             } else {
-                offset = pageNo > 0 ? (pageNo - 1) * request.getPageSize() : 0;
+                offset = pageNo > 0 ? (pageNo - 1L) * request.getPageSize() : 0;
             }
             rowSelection.setLimit(limit);
             if (offset - 1 + rowSelection.getLimit() > Integer.MAX_VALUE) {

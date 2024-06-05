@@ -9,6 +9,7 @@ import com.jn.langx.pipeline.HandlerContext;
 import com.jn.langx.pipeline.Pipelines;
 import com.jn.langx.util.*;
 import com.jn.langx.util.collection.Collects;
+import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.instrument.SQLStatementInstrumentor;
 import com.jn.sqlhelper.dialect.orderby.OrderBy;
 import com.jn.sqlhelper.dialect.pagination.*;
@@ -181,15 +182,14 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                             }
                             result.setTotal(count);
                             int maxPageCount = result.getMaxPage();
-                            if (maxPageCount >= 0) {
-                                if (requestPageNo > maxPageCount) {
+                            if (maxPageCount >= 0 && (requestPageNo > maxPageCount)) {
                                     if (isUseLastPageIfPageOut(request)) {
                                         request.setPageNo(maxPageCount);
                                         result.setPageNo(maxPageCount);
                                     } else {
                                         needQuery = false;
                                     }
-                                }
+
                             }
                         } else {
                             result.setTotal(-1);
@@ -228,10 +228,11 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
                     Pipelines.inbound(ctx);
                 } catch (Throwable ex) {
                     throw Throwables.wrapAsRuntimeException(ex);
+                }finally {
+                    SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
+                    instrumentor.finish();
                 }
             }
-            SQLStatementInstrumentor instrumentor = SqlHelperMybatisPlugin.getInstrumentor();
-            instrumentor.finish();
         }
     }
 
@@ -320,8 +321,8 @@ public class PaginationHandler extends AbstractHandler implements Initializable 
             }
 
             PagingRequestContext ctx = PAGING_CONTEXT.get();
-            ctx.setInteger(PagingRequestContext.BEFORE_SUBQUERY_PARAMETERS_COUNT, SqlPaginations.findPlaceholderParameterCount(beforeSubqueryPartition));
-            ctx.setInteger(PagingRequestContext.AFTER_SUBQUERY_PARAMETERS_COUNT, SqlPaginations.findPlaceholderParameterCount(afterSubqueryPartition));
+            ctx.setInteger(PagingRequestContext.BEFORE_SUBQUERY_PARAMETERS_COUNT, SQLs.findPlaceholderParameterCount(beforeSubqueryPartition));
+            ctx.setInteger(PagingRequestContext.AFTER_SUBQUERY_PARAMETERS_COUNT, SQLs.findPlaceholderParameterCount(afterSubqueryPartition));
         }
         if (logger.isDebugEnabled()) {
             logger.debug("\n-------------after pagination ---------------:\n{}", pageSql);
