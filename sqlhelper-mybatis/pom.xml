@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.github.bes2008.solution.sqlhelper</groupId>
         <artifactId>sqlhelper</artifactId>
-        <version>4.1.1</version>
+        <version>4.1.2</version>
     </parent>
     <artifactId>sqlhelper-mybatis</artifactId>
     <name>${project.groupId}:${project.artifactId}:${project.version}</name>
@@ -30,18 +30,4 @@
             <artifactId>sqlhelper-datasource</artifactId>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
