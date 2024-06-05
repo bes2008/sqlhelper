@@ -58,24 +58,20 @@ public class MybatisBatchUpdaters {
 
     public static <E> MybatisBatchUpdater<E> createBatchUpdater(@NonNull SqlSessionFactory sessionFactory, @Nullable BatchMode batchType) {
         MybatisBatchUpdater<E> updater = null;
-        if (batchType != null) {
-            switch (batchType) {
-                case SIMPLE:
-                    updater = new SimpleBatchUpdater<E>();
-                    break;
-                case BATCH_SQL:
-                    updater = new BatchSqlBatchUpdater<E>();
-                    break;
-                case JDBC_BATCH:
-                    updater = new JdbcBatchUpdater<E>();
-                    break;
-                default:
-                    break;
-            }
+        batchType = Objs.useValueIfNull(batchType, BatchMode.JDBC_BATCH);
+        switch (batchType) {
+            case SIMPLE:
+                updater = new SimpleBatchUpdater<E>();
+                break;
+            case BATCH_SQL:
+                updater = new BatchSqlBatchUpdater<E>();
+                break;
+            case JDBC_BATCH:
+            default:
+                updater = new JdbcBatchUpdater<E>();
+                break;
         }
-        if (Objs.isNotNull(updater)) {
-            updater.setSessionFactory(sessionFactory);
-        }
+        updater.setSessionFactory(sessionFactory);
         return updater;
     }
 
@@ -272,13 +268,6 @@ public class MybatisBatchUpdaters {
 
     /**
      * 串行执行
-     * @param sessionFactory
-     * @param batchMode
-     * @param statement
-     * @param entitiesList
-     * @param <E>
-     * @return
-     * @throws SQLException
      */
     private static <E> BatchResult<E> internalInvokeBatch(@NonNull final SqlSessionFactory sessionFactory,
                                                           @Nullable final BatchMode batchMode,
@@ -306,12 +295,6 @@ public class MybatisBatchUpdaters {
 
     /**
      * @param sessionFactory 这个sessionFactory 不能是 DynamicSqlSessionFactory, 如果是你拿到的是DynamicSqlSessionFactory，可以基于 SqlSessionFactoryProvider来进行帮忙获取真实的session factory
-     * @param batchMode
-     * @param statement
-     * @param entities
-     * @param <E>
-     * @return
-     * @throws SQLException
      */
     private static <E> BatchResult<E> batch(@NonNull SqlSessionFactory sessionFactory,
                                             @Nullable BatchMode batchMode,
@@ -360,7 +343,7 @@ public class MybatisBatchUpdaters {
             if (!result.hasThrowable()) {
                 return result;
             }
-            logger.warn("Error when execute batch update based on database's batch sql, may be the statement {} not a batch sql, will use jdbc batch method execute it. error: {}", statement.getSql(), result.getThrowables().get(0));
+            logger.warn("Error when execute batch update based on database's batch sql, may be the statement {} not a batch sql, will use jdbc batch method execute it. error: {}", statement.getSql(), result.getThrowables().get(0).getMessage(), result.getThrowables().get(0));
         }
         boolean supportsJdbcBatch = dialect != null && dialect.isSupportsBatchUpdates();
         if (supportsJdbcBatch) {

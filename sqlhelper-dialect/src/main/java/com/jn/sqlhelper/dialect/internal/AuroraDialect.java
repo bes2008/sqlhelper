@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.langx.util.ClassLoaders;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
@@ -48,15 +49,18 @@ public class AuroraDialect extends AbstractDialect {
         } else if (findPostgreSQLDriver()) {
             workingWith = WorkingWith.PostgreSQL;
         }
+        if(workingWith==null){
+            workingWith=WorkingWith.MySQL;
+        }
         setLimitHandler(limitHandlerMap.get(workingWith));
     }
 
     private static boolean findMySQLDriver() {
-        return true;
+        return ClassLoaders.hasClass("com.mysql.jdbc.Driver", AuroraDialect.class.getClassLoader()) || ClassLoaders.hasClass("com.mysql.cj.jdbc.Driver", AuroraDialect.class.getClassLoader()) ;
     }
 
     private static boolean findPostgreSQLDriver() {
-        return false;
+        return ClassLoaders.hasClass("org.postgresql.Driver", AuroraDialect.class.getClassLoader());
     }
 
     @Override

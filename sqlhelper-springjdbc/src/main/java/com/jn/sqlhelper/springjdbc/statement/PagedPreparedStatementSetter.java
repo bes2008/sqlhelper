@@ -44,7 +44,7 @@ public class PagedPreparedStatementSetter implements PagedPreparedParameterSette
     @Override
     public int setSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
         PagedPreparedParameterSetter setter = getPaginationSetter(statement);
-        if (Emptys.isNotNull(setter)) {
+        if (setter!=null) {
             return setter.setSubqueryParameters(statement, queryParameters, startIndex);
         }
         return 0;
@@ -53,7 +53,7 @@ public class PagedPreparedStatementSetter implements PagedPreparedParameterSette
     @Override
     public int setAfterSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
         PagedPreparedParameterSetter setter = getPaginationSetter(statement);
-        if (Emptys.isNotNull(setter)) {
+        if (setter!=null) {
             return setter.setAfterSubqueryParameters(statement, queryParameters, startIndex);
         }
         return 0;
