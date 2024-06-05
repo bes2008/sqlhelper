@@ -87,7 +87,7 @@ public class BatchInsertExecutor {
         try {
             for (int i = 0; i < futures.size(); i++) {
                 BatchInsertResult result = futures.get(i).get();
-                if (result.getExpectResult() == result.getExpectResult()) {
+                if (result.getExpectResult() == result.getRealInsertNum()) {
                     logger.info(result.getTime() + ": success");
                 } else {
                     logger.warn(result.getTime() + ": fail");

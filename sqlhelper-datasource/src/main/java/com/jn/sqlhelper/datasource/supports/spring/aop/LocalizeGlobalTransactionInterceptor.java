@@ -45,9 +45,7 @@ public class LocalizeGlobalTransactionInterceptor implements MethodInterceptor {
         TransactionDefinition definition = definitionRegistry.get(invocation.getMethod());
         if (definition == null) {
             if (logger.isDebugEnabled()) {
-                if (definitionRegistry == null) {
-                    logger.debug("can't find any transaction definition , so will do it not with a transaction manager, the method is: {}", Reflects.getMethodString(invocation.getMethod()));
-                }
+                logger.debug("can't find any transaction definition , so will do it not with a transaction manager, the method is: {}", Reflects.getMethodString(invocation.getMethod()));
             }
             return invocation.proceed();
         }

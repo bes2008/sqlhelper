@@ -24,6 +24,7 @@ import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.function.Function;
 import com.jn.langx.util.function.Supplier;
 import com.jn.langx.util.function.Supplier0;
+import com.jn.langx.util.io.IOs;
 import com.jn.sqlhelper.common.batch.BatchMode;
 import com.jn.sqlhelper.common.batch.BatchResult;
 import com.jn.sqlhelper.dialect.Dialect;
@@ -338,10 +339,14 @@ public class MybatisBatchUpdaters {
             dialect = DialectRegistry.getInstance().getDialectByName(databaseId);
         }
         if (Objs.isNull(dialect)) {
-            SqlSession session = sessionFactory.openSession();
-            Connection connection = session.getConnection();
-            dialect = DialectRegistry.getInstance().getDialectByDatabaseMetadata(connection.getMetaData());
-            session.close();
+            SqlSession session = null;
+            try {
+                session = sessionFactory.openSession();
+                Connection connection = session.getConnection();
+                dialect = DialectRegistry.getInstance().getDialectByDatabaseMetadata(connection.getMetaData());
+            }finally {
+                IOs.close(session);
+            }
         }
 
 

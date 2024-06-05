@@ -209,14 +209,20 @@ public class SQLStatementInstrumentor implements Initializable {
         if (LimitHelper.useLimit(dialect, selection) && dialect.isSupportsVariableLimit()) {
             String originalSql = sql;
             if (this.config.isCacheInstrumentedSql()) {
-                sql = getInstrumentedStatement(originalSql).getLimitSql(dialect.getDatabaseId(), selection.hasOffset());
+                InstrumentedStatement instrumentedStatement= getInstrumentedStatement(originalSql);
+                if(instrumentedStatement!=null){
+                    sql = instrumentedStatement.getLimitSql(dialect.getDatabaseId(), selection.hasOffset());
+                }
                 if (sql != null) {
                     return sql;
                 }
             }
             sql = dialect.getLimitSql(originalSql, selection);
             if (this.config.isCacheInstrumentedSql()) {
-                getInstrumentedStatement(originalSql).setLimitSql(dialect.getDatabaseId(), sql, selection.hasOffset());
+                InstrumentedStatement instrumentedStatement= getInstrumentedStatement(originalSql);
+                if(instrumentedStatement!=null){
+                    instrumentedStatement.setLimitSql(dialect.getDatabaseId(), sql, selection.hasOffset());
+                }
             }
         }
         return sql;
@@ -224,7 +230,8 @@ public class SQLStatementInstrumentor implements Initializable {
 
     public String instrumentOrderBySql(String sql, OrderBy orderBy) {
         if (this.config.isCacheInstrumentedSql()) {
-            String orderBySql = getInstrumentedStatement(sql).getOrderBySql(orderBy);
+            InstrumentedStatement instrumentedStatement = getInstrumentedStatement(sql);
+            String orderBySql = instrumentedStatement!=null ?instrumentedStatement.getOrderBySql(orderBy):null;
             if (orderBySql != null) {
                 return orderBySql;
             }
@@ -237,7 +244,10 @@ public class SQLStatementInstrumentor implements Initializable {
             String sql2 = sqlStatementWrapper.getSql();
             if (sql2 != null) {
                 if (this.config.isCacheInstrumentedSql()) {
-                    getInstrumentedStatement(sql).setOrderBySql(orderBy, sql2);
+                    InstrumentedStatement instrumentedStatement = getInstrumentedStatement(sql);
+                    if(instrumentedStatement!=null){
+                        instrumentedStatement.setOrderBySql(orderBy, sql2);
+                    }
                 }
                 return sql2;
             }
@@ -273,7 +283,10 @@ public class SQLStatementInstrumentor implements Initializable {
         sql = instrumentOrderBySql(sql, orderBy);
         sql = instrumentLimitSql(dialect, sql, selection);
         if (this.config.isCacheInstrumentedSql()) {
-            getInstrumentedStatement(originalSql).setOrderByLimitSql(orderBy, dialect.getDatabaseId(), sql, selection.hasOffset());
+            InstrumentedStatement instrumentedStatement=getInstrumentedStatement(originalSql);
+            if(instrumentedStatement!=null){
+                instrumentedStatement.setOrderByLimitSql(orderBy, dialect.getDatabaseId(), sql, selection.hasOffset());
+            }
         }
         return sql;
     }
@@ -295,9 +308,12 @@ public class SQLStatementInstrumentor implements Initializable {
             transformConfig.setWhereInstrumentConfigs(Collects.asList(whereTransformConfig));
 
             if (this.config.isCacheInstrumentedSql()) {
-                String tenantSql = getInstrumentedStatement(sql).getInstrumentedSql(transformConfig);
-                if (tenantSql != null) {
-                    return tenantSql;
+                InstrumentedStatement instrumentedStatement=getInstrumentedStatement(sql);
+                if(instrumentedStatement!=null) {
+                    String tenantSql = instrumentedStatement.getInstrumentedSql(transformConfig);
+                    if (tenantSql != null) {
+                        return tenantSql;
+                    }
                 }
             }
 
@@ -306,7 +322,10 @@ public class SQLStatementInstrumentor implements Initializable {
             String newSql = statementWrapper.getSql();
             if (newSql != null) {
                 if (this.config.isCacheInstrumentedSql()) {
-                    getInstrumentedStatement(sql).setInstrumentedSql(transformConfig, newSql);
+                    InstrumentedStatement instrumentedStatement=getInstrumentedStatement(sql);
+                    if(instrumentedStatement!=null) {
+                        instrumentedStatement.setInstrumentedSql(transformConfig, newSql);
+                    }
                 }
                 return newSql;
             }
@@ -385,7 +404,11 @@ public class SQLStatementInstrumentor implements Initializable {
 
         // cache it
         if (this.config.isCacheInstrumentedSql()) {
-            getInstrumentedStatement(originalSql).setCountSql(countSql);
+            InstrumentedStatement instrumentedStatement =getInstrumentedStatement(originalSql);
+            if(instrumentedStatement!=null){
+                instrumentedStatement.setCountSql(countSql);
+            }
+
         }
         return countSql;
     }
@@ -393,11 +416,7 @@ public class SQLStatementInstrumentor implements Initializable {
 
     private InstrumentedStatement getInstrumentedStatement(String originalSql) {
         if (this.config.isCacheInstrumentedSql()) {
-            try {
-                return this.instrumentSqlCache.get(originalSql);
-            } catch (Throwable e) {
-                // ignore it
-            }
+            return this.instrumentSqlCache.get(originalSql);
         }
         return null;
     }

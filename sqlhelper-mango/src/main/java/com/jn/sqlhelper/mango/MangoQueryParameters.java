@@ -27,14 +27,12 @@ public class MangoQueryParameters extends BaseQueryParameters<BoundSql> {
         }
         this.beforeSubqueryParameters = new BoundSql(boundSql.getSql(), beforeArgs, beforeTypeHandlers);
 
-        int c = 0;
         List<Object> afterArgs = Collects.emptyArrayList();
         List<TypeHandler<?>> afterTypeHandlers = Collects.emptyArrayList();
         this.afterSubqueryParameters = new BoundSql(boundSql.getSql());
-        for (int i = subqueryParameters.getArgs().size() - 1; i < afterSubqueryCount; i--) {
+        for (int i = subqueryParameters.getArgs().size() - 1; i >=0 && i < afterSubqueryCount; i--) {
             afterArgs.add(subqueryParameters.getArgs().remove(i));
             afterTypeHandlers.add(subqueryParameters.getTypeHandlers().remove(i));
-            c++;
         }
         this.afterSubqueryParameters = new BoundSql(boundSql.getSql(), afterArgs, afterTypeHandlers);
     }
