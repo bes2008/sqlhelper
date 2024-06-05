@@ -15,6 +15,7 @@
 package com.jn.sqlhelper.batchinsert;
 
 import com.jn.langx.util.Dates;
+import com.jn.langx.util.concurrent.threadlocal.GlobalThreadLocalMap;
 import com.jn.sqlhelper.common.connection.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +29,8 @@ import java.util.concurrent.Future;
 public class BatchInsertExecutor {
     private static final Logger logger = LoggerFactory.getLogger(BatchInsertExecutor.class);
 
-    private ConnectionFactory connFactory = null;
+    private ConnectionFactory connFactory;
 
-    private final Random random = new Random(1000);
     protected Calendar start;
     private final long end;
     private final ExecutorService executor;
@@ -70,10 +70,12 @@ public class BatchInsertExecutor {
     public void startup() {
 
         logger.info("startup() insert time: {}", Dates.format(new Date(), Dates.yyyy_MM_dd_HH_mm_ss));
-        long time = end;
+        long time;
         while ((time = nextTime()) <= end) {
-            logger.info(Dates.format(new Date(time), Dates.yyyy_MM_dd_HH_mm_ss));
-            BatchInsertTask task = taskFactory.createTask(Dates.format(new Date(time), Dates.yyyy_MM_dd_HH_mm_ss), random.nextInt());
+            if(logger.isInfoEnabled()) {
+                logger.info(Dates.format(new Date(time), Dates.yyyy_MM_dd_HH_mm_ss));
+            }
+            BatchInsertTask task = taskFactory.createTask(Dates.format(new Date(time), Dates.yyyy_MM_dd_HH_mm_ss), GlobalThreadLocalMap.getRandom().nextInt());
             submitTask(task);
         }
     }
@@ -88,9 +90,9 @@ public class BatchInsertExecutor {
             for (int i = 0; i < futures.size(); i++) {
                 BatchInsertResult result = futures.get(i).get();
                 if (result.getExpectResult() == result.getRealInsertNum()) {
-                    logger.info(result.getTime() + ": success");
+                    logger.info("success! time: {}",result.getTime() );
                 } else {
-                    logger.warn(result.getTime() + ": fail");
+                    logger.warn("failed! time: {}",result.getTime() );
                 }
             }
         } finally {

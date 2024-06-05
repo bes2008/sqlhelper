@@ -17,17 +17,14 @@ package com.jn.sqlhelper.batchinsert;
 import com.jn.sqlhelper.common.connection.ConnectionFactory;
 
 import java.sql.SQLException;
-import java.util.Random;
 import java.util.concurrent.Callable;
 
 public abstract class BatchInsertTask implements Callable<BatchInsertResult> {
-    protected Random random;
     protected String start;
     protected ConnectionFactory connFactory;
 
-    public BatchInsertTask(String startTime, long seed) {
+    public BatchInsertTask(String startTime) {
         this.start = startTime;
-        this.random = new Random(seed);
     }
 
     public void setConnFactory(ConnectionFactory connFactory) {
