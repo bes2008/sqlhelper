@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.el.expression.operator.AbstractBinaryOperator;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.hash.HashCodeBuilder;
 
 public class InExpression extends AbstractBinaryOperator<SQLExpression, ListExpression, SQLExpression> implements SQLExpression<SQLExpression>, Notable, SymbolExpression {
@@ -37,6 +38,25 @@ public class InExpression extends AbstractBinaryOperator<SQLExpression, ListExpr
                 .append(not() ? " not in " : " in ")
                 .append(getRight().toString());
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj==null){
+            return false;
+        }
+        if(obj.getClass()!= InExpression.class){
+            return false;
+        }
+        InExpression that = (InExpression)obj;
+        if(!Objs.equals(this.isNotExpression, that.isNotExpression)){
+            return false;
+        }
+        if(!Objs.equals(this.toString(), that.toString())){
+            return false;
+        }
+        return true;
+
     }
 
     public int hashCode(){

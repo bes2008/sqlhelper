@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.el.expression.BaseExpression;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.hash.HashCodeBuilder;
 
@@ -64,6 +65,30 @@ public class BetweenAndExpression extends BaseExpression<SQLExpression> implemen
                 .with(low)
                 .with(high)
                 .build();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj==null){
+            return false;
+        }
+        if(obj.getClass()!= BetweenAndExpression.class){
+            return false;
+        }
+        BetweenAndExpression that = (BetweenAndExpression)obj;
+        if(!Objs.equals(this.isNotExpression, that.isNotExpression)){
+            return false;
+        }
+        if(!Objs.equals(this.target, that.target)){
+            return false;
+        }
+        if(!Objs.equals(this.low, that.low)){
+            return false;
+        }
+        if(!Objs.equals(this.high, that.high)){
+            return false;
+        }
+        return true;
     }
 
     @Override

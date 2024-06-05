@@ -10,6 +10,7 @@ import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.io.IOs;
 import com.jn.langx.util.io.file.Files;
+import com.jn.langx.util.logging.Loggers;
 import com.jn.langx.util.os.Platform;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.cli.utils.ProjectBanner;
@@ -111,7 +112,10 @@ public class CLI {
                 pidFile.getParentFile().mkdirs();
             }
             if (!pidFile.exists()) {
-                pidFile.createNewFile();
+                boolean actionResult= pidFile.createNewFile();
+                if(!actionResult){
+                    Loggers.getLogger(CLI.class).warn("create pid file failed: {}", pidFile);
+                }
             }
             fw = new FileWriter(pidFile, false);
             IOs.write(pid, fw);

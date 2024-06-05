@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.el.expression.operator.AbstractUnaryOperator;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.hash.HashCodeBuilder;
 
 public class IsNullExpression extends AbstractUnaryOperator<SQLExpression<SQLExpression>, SQLExpression> implements SQLExpression<SQLExpression>, Notable, SymbolExpression {
@@ -38,6 +39,25 @@ public class IsNullExpression extends AbstractUnaryOperator<SQLExpression<SQLExp
                 .append(not() ? " not" : "")
                 .append(" null");
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj==null){
+            return false;
+        }
+        if(obj.getClass()!= IsNullExpression.class){
+            return false;
+        }
+        IsNullExpression that = (IsNullExpression)obj;
+        if(!Objs.equals(this.isNotExpression, that.isNotExpression)){
+            return false;
+        }
+        if(!Objs.equals(this.toString(), that.toString())){
+            return false;
+        }
+        return true;
+
     }
 
     public int hashCode() {

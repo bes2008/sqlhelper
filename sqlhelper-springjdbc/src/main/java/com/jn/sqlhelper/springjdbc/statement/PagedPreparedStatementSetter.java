@@ -35,7 +35,7 @@ public class PagedPreparedStatementSetter implements PagedPreparedParameterSette
     @Override
     public int setBeforeSubqueryParameters(PreparedStatement statement, QueryParameters queryParameters, int startIndex) throws SQLException {
         PagedPreparedParameterSetter setter = getPaginationSetter(statement);
-        if (Emptys.isNotNull(setter)) {
+        if (setter!=null) {
             return setter.setBeforeSubqueryParameters(statement, queryParameters, startIndex);
         }
         return 0;

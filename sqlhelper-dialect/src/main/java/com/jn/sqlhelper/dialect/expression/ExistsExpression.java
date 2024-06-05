@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.el.expression.operator.AbstractUnaryOperator;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.hash.HashCodeBuilder;
 
 public class ExistsExpression extends AbstractUnaryOperator<SQLExpression<SQLExpression>, SQLExpression> implements SQLExpression<SQLExpression>, Notable, SymbolExpression {
@@ -39,6 +40,25 @@ public class ExistsExpression extends AbstractUnaryOperator<SQLExpression<SQLExp
                 .append(getTarget().toString())
                 .append(")")
                 .toString();
+
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj==null){
+            return false;
+        }
+        if(obj.getClass()!= ExistsExpression.class){
+            return false;
+        }
+        ExistsExpression that = (ExistsExpression)obj;
+        if(!Objs.equals(this.isNotExpression, that.isNotExpression)){
+            return false;
+        }
+        if(!Objs.equals(this.toString(), that.toString())){
+            return false;
+        }
+        return true;
 
     }
 

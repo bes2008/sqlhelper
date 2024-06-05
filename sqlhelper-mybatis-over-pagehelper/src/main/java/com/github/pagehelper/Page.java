@@ -266,7 +266,7 @@ public class Page<E> extends ArrayList<E> implements Closeable {
             this.startRow = -1;
             this.endRow = -1;
         } else if (pageSize > 0) {
-            this.startRow = (pageNum - 1) * pageSize;
+            this.startRow = (pageNum - 1L) * pageSize;
             this.endRow = startRow + pageSize;
         }
     }

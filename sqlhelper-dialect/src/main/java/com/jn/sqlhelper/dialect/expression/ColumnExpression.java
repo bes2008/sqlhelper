@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect.expression;
 
 import com.jn.langx.el.expression.BaseExpression;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.hash.HashCodeBuilder;
 import com.jn.sqlhelper.common.utils.SQLs;
 
@@ -107,5 +108,36 @@ public class ColumnExpression extends BaseExpression<SQLExpression> implements S
                 .with(table)
                 .with(column)
                 .build();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj==null){
+            return false;
+        }
+        if(obj.getClass()!= ColumnExpression.class){
+            return false;
+        }
+        ColumnExpression that = (ColumnExpression)obj;
+        if(!Objs.equals(this.catalogAtStart, that.catalogAtStart)){
+            return false;
+        }
+        if(!Objs.equals(this.separator, that.separator)){
+            return false;
+        }
+        if(!Objs.equals(this.catalog, that.catalog)){
+            return false;
+        }
+        if(!Objs.equals(this.schema, that.schema)){
+            return false;
+        }
+        if(!Objs.equals(this.table, that.table)){
+            return false;
+        }
+        if(!Objs.equals(this.column, that.column)){
+            return false;
+        }
+        return true;
+
     }
 }

@@ -20,8 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 
-public class NoopLimitHandler
-        extends AbstractLimitHandler {
+public class NoopLimitHandler extends AbstractLimitHandler {
     public static final NoopLimitHandler INSTANCE = new NoopLimitHandler();
 
     @Override
@@ -42,7 +41,7 @@ public class NoopLimitHandler
     @Override
     public void setMaxRows(RowSelection selection, PreparedStatement statement) throws SQLException {
         if (LimitHelper.hasMaxRows(selection)) {
-            int maxRows = selection.getLimit() + Long.valueOf(convertToFirstRowValue(LimitHelper.getFirstRow(selection))).intValue();
+            int maxRows = selection.getLimit() + (int)(convertToFirstRowValue(LimitHelper.getFirstRow(selection)));
             if (maxRows < 0) {
                 statement.setMaxRows(Integer.MAX_VALUE);
             } else {

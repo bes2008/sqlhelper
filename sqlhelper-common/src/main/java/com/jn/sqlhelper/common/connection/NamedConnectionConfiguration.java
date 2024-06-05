@@ -2,6 +2,7 @@ package com.jn.sqlhelper.common.connection;
 
 import com.jn.easyjson.core.util.JSONs;
 import com.jn.langx.configuration.Configuration;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.diff.MapDiffResult;
 import com.jn.langx.util.function.Consumer2;
@@ -80,6 +81,11 @@ public class NamedConnectionConfiguration extends ConnectionConfiguration implem
         Map<String, String> map2 = Collects.propertiesToStringMap(o2.getDriverProps(), true);
         MapDiffResult<String, String> diffResult = Collects.diff(map1, map2);
         return diffResult.getAdds().isEmpty() && diffResult.getRemoves().isEmpty() && diffResult.getUpdates().isEmpty();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objs.hash(this.name, getUrl(), getUrl(), getPassword(), getDriver(), getDriverProps());
     }
 
     @Override
