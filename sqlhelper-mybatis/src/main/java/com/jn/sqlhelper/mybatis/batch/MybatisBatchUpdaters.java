@@ -19,11 +19,6 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.*;
 import com.jn.langx.util.collection.Collects;
-import com.jn.langx.util.concurrent.completion.CompletableFuture;
-import com.jn.langx.util.function.Consumer2;
-import com.jn.langx.util.function.Function;
-import com.jn.langx.util.function.Supplier;
-import com.jn.langx.util.function.Supplier0;
 import com.jn.langx.util.io.IOs;
 import com.jn.sqlhelper.common.batch.BatchMode;
 import com.jn.sqlhelper.common.batch.BatchResult;
@@ -39,7 +34,11 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class MybatisBatchUpdaters {
     private static final Logger logger = LoggerFactory.getLogger(MybatisBatchUpdaters.class);
@@ -173,7 +172,7 @@ public class MybatisBatchUpdaters {
         if (!parallel) {
             if (executor == null) {
                 future = CompletableFuture.completedFuture(internalInvokeBatch(sessionFactory, batchMode, statement, entitiesList))
-                        .whenComplete(new Consumer2<BatchResult<E>, Throwable>() {
+                        .whenComplete(new BiConsumer<BatchResult<E>, Throwable>() {
                             @Override
                             public void accept(BatchResult<E> batchResult0, Throwable throwable) {
                                 if (batchResult0 != null) {
@@ -186,7 +185,7 @@ public class MybatisBatchUpdaters {
                             }
                         });
             } else {
-                future = CompletableFuture.supplyAsync(new Supplier0<BatchResult<E>>() {
+                future = CompletableFuture.supplyAsync(new Supplier<BatchResult<E>>() {
                     @Override
                     public BatchResult<E> get() {
                         try {
@@ -195,7 +194,7 @@ public class MybatisBatchUpdaters {
                             throw Throwables.wrapAsRuntimeException(e);
                         }
                     }
-                }, executor).whenCompleteAsync(new Consumer2<BatchResult<E>, Throwable>() {
+                }, executor).whenCompleteAsync(new BiConsumer<BatchResult<E>, Throwable>() {
                     @Override
                     public void accept(BatchResult<E> batchResult0, Throwable throwable) {
                         if (batchResult0 != null) {
@@ -214,7 +213,7 @@ public class MybatisBatchUpdaters {
 
                 final List<E> segment = es;
                 futures.add(
-                        (executor == null ? CompletableFuture.supplyAsync(new Supplier0<BatchResult<E>>() {
+                        (executor == null ? CompletableFuture.supplyAsync(new Supplier<BatchResult<E>>() {
                             @Override
                             public BatchResult<E> get() {
                                 try {
@@ -223,7 +222,7 @@ public class MybatisBatchUpdaters {
                                     throw Throwables.wrapAsRuntimeException(e);
                                 }
                             }
-                        }) : CompletableFuture.supplyAsync(new Supplier0<BatchResult<E>>() {
+                        }) : CompletableFuture.supplyAsync(new Supplier<BatchResult<E>>() {
                             @Override
                             public BatchResult<E> get() {
                                 try {
@@ -244,7 +243,7 @@ public class MybatisBatchUpdaters {
                                         return result;
                                     }
                                 })
-                                .whenCompleteAsync(new Consumer2<BatchResult<E>, Throwable>() {
+                                .whenCompleteAsync(new BiConsumer<BatchResult<E>, Throwable>() {
                                     @Override
                                     public void accept(BatchResult<E> batchResult0, Throwable throwable) {
                                         if (batchResult0 != null) {
