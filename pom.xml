@@ -96,7 +96,7 @@
 
         <easyjson.version>4.1.6</easyjson.version>
         <langx-java.version>5.4.0</langx-java.version>
-        <agileway.version>4.4.6</agileway.version>
+        <agileway.version>5.0.0</agileway.version>
 
         <jfinal.version>4.9.20</jfinal.version>
         <solon.version>1.0.23</solon.version>
@@ -123,8 +123,8 @@
         <jakarta.validation.version>1.1.0</jakarta.validation.version>
         <jboss.logging.version>3.3.0.Final</jboss.logging.version>
 
-        <maven.compiler.source>1.6</maven.compiler.source>
-        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <project.major.version>${project.version}</project.major.version>
         <project.internal.version>${project.version}</project.internal.version>

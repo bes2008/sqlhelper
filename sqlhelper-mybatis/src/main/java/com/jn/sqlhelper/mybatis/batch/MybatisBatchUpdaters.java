@@ -19,6 +19,7 @@ import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.*;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.function.Consumer2;
 import com.jn.langx.util.io.IOs;
 import com.jn.sqlhelper.common.batch.BatchMode;
 import com.jn.sqlhelper.common.batch.BatchResult;
@@ -302,7 +303,7 @@ public class MybatisBatchUpdaters {
         Preconditions.checkArgument(Emptys.isNotEmpty(entities));
 
         // build batch statement
-        Preconditions.checkArgument(hasStatement(sessionFactory, statement), new Supplier<Object[], String>() {
+        Preconditions.checkArgument(hasStatement(sessionFactory, statement), new com.jn.langx.util.function.Supplier<Object[], String>() {
             @Override
             public String get(Object[] objects) {
                 return StringTemplates.formatWithPlaceholder("The statement {} is not exists", statement.getSql());
