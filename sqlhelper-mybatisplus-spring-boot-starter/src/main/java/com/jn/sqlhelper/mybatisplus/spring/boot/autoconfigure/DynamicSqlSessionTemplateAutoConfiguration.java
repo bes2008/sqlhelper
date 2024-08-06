@@ -63,8 +63,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 
 import javax.sql.DataSource;
-import java.lang.reflect.Method;
-import java.util.HashSet;
 import java.util.List;
 
 @ConditionalOnProperty(name = "sqlhelper.dynamic-datasource.enabled", havingValue = "true", matchIfMissing = false)
