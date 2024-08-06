@@ -83,7 +83,7 @@
         <mybatis.plus_3x.version>3.4.1</mybatis.plus_3x.version>
         <mybatis.plus_3x.version>3.4.2</mybatis.plus_3x.version>
         -->
-        <mybatis.plus_3x.version>3.5.7</mybatis.plus_3x.version>
+        <mybatis.plus_3x.version>3.5.3.2</mybatis.plus_3x.version>
 
         <junit.version>4.13.1</junit.version>
         <spring.boot.version>2.7.18</spring.boot.version>

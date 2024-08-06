@@ -15,7 +15,7 @@
   + 升级 mybatis-spring-boot: 1.3.4 -> 2.3.2
   + 升级 snakeyaml: 1.29 -> 1.33
   + 升级 logback: 1.2.9 -> 1.2.13
-  + 升级 mybatis-plus: 3.5.3.1 -> 3.5.7
+  + 升级 mybatis-plus: 3.5.3.1 -> 3.5.3.2
   + 升级 spring: 5.2.9 -> 5.3.37
   + 升级 spring-boot: 2.3.4 -> 2.7.18
 

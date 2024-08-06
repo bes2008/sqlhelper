@@ -98,5 +98,14 @@
             <optional>true</optional>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>io.github.bes2008.solution.easyjson</groupId>
+            <artifactId>easyjson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.bes2008.solution.easyjson</groupId>
+            <artifactId>easyjson-jackson</artifactId>
+        </dependency>
     </dependencies>
 </project>
