@@ -36,7 +36,9 @@
         <module>sqlhelper-springjdbc</module>
         <module>sqlhelper-springjdbc-spring-boot-starter</module>
         <module>sqlhelper-cli</module>
+        <!--
         <module>sqlhelper-cli-assembly</module>
+        -->
         <module>sqlhelper-batchinsert</module>
         <module>sqlhelper-datasource-flyway</module>
     </modules>
