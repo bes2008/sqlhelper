@@ -19,14 +19,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
             <version>${spring.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,15 +50,11 @@
             <groupId>io.github.bes2008.solution.agileway</groupId>
             <artifactId>agileway-aop</artifactId>
             <version>${agileway.version}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>io.github.bes2008.solution.agileway</groupId>
             <artifactId>agileway-spring</artifactId>
             <version>${agileway.version}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
             <exclusions>
                 <exclusion>
                     <groupId>io.github.bes2008.solution.easyjson</groupId>
@@ -71,21 +64,33 @@
                     <groupId>io.github.bes2008.solution.easyjson</groupId>
                     <artifactId>easyjson-jackson</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>io.github.bes2008.solution.agileway</groupId>
+                    <artifactId>agileway-redis-springdata2</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.github.bes2008.solution.agileway</groupId>
+                    <artifactId>agileway-vfs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.github.bes2008.solution.agileway</groupId>
+                    <artifactId>agileway-httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.github.bes2008.solution.agileway</groupId>
+                    <artifactId>agileway-httpcontainer-common</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
             <version>${spring.version}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectjweaver.version}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>io.github.bes2008.solution.sqlhelper</groupId>
@@ -95,8 +100,6 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${hikaricp.version}</version>
-            <optional>true</optional>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -104,7 +107,6 @@
             <artifactId>commons-dbcp2</artifactId>
             <version>2.4.0</version>
             <optional>true</optional>
-            <scope>compile</scope>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -118,7 +120,6 @@
             <artifactId>c3p0</artifactId>
             <version>0.9.5.5</version>
             <optional>true</optional>
-            <scope>compile</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jdbc -->
@@ -127,7 +128,6 @@
             <artifactId>tomcat-jdbc</artifactId>
             <version>${tomcat.version}</version>
             <optional>true</optional>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>

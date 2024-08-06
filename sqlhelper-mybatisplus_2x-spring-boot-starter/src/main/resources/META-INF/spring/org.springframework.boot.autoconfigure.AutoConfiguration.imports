@@ -1,4 +1,0 @@
-com.jn.sqlhelper.mybatisplus2x.spring.boot.autoconfigure.SqlHelperMybatisPlus2xAutoConfiguration
-com.jn.sqlhelper.mybatisplus2x.spring.boot.autoconfigure.DynamicSqlSessionTemplateAutoConfiguration
-com.jn.sqlhelper.mybatisplus2x.spring.boot.autoconfigure.DynamicDataSourceTransactionFactoryCustomizer
-com.baomidou.mybatisplus.spring.boot.starter.MybatisPlusAutoConfiguration

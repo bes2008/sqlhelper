@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
-            <version>${mybatis_jdk6_7.version}</version>
+            <version>${mybatis_jdk8.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.bes2008.solution.sqlhelper</groupId>
