@@ -71,11 +71,11 @@
     </licenses>
     <packaging>pom</packaging>
     <properties>
-        <slf4j.version>1.7.0</slf4j.version>
+        <slf4j.version>1.7.36</slf4j.version>
         <logback.version>1.2.9</logback.version>
         <mybatis_jdk8.version>3.5.14</mybatis_jdk8.version>
-        <mybatis.spring.version>1.3.2</mybatis.spring.version>
-        <mybatis.springboot.version>1.3.5</mybatis.springboot.version>
+        <mybatis.spring.version>2.1.2</mybatis.spring.version>
+        <mybatis.springboot.version>2.3.2</mybatis.springboot.version>
 
         <!--
         <mybatis.plus_3x.version>3.1.2</mybatis.plus_3x.version>
@@ -98,7 +98,7 @@
         <jfinal.version>4.9.20</jfinal.version>
         <solon.version>1.0.23</solon.version>
 
-        <snakeyaml.version>1.29</snakeyaml.version>
+        <snakeyaml.version>1.33</snakeyaml.version>
 
         <flyway.version>3.2.1</flyway.version>
         <classmate.version>1.4.0</classmate.version>
@@ -109,8 +109,11 @@
         <javassist.version>3.24.0-GA</javassist.version>
         <jna.version>5.3.1</jna.version>
 
-        <druid.version>1.1.24</druid.version>
-        <hikaricp.version>2.4.7</hikaricp.version>
+        <!--JDBC Pool-->
+        <druid.version>1.2.23</druid.version>
+        <hikaricp.version>5.1.0</hikaricp.version>
+        <commons-dbcp2.version>2.12.0</commons-dbcp2.version>
+        <c3p0.version>0.10.1</c3p0.version>
 
         <jackson.version>2.11.0</jackson.version>
 
@@ -165,6 +168,13 @@
                 <artifactId>jul-to-slf4j</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.jboss.logging</groupId>
+                <artifactId>jboss-logging</artifactId>
+                <version>${jboss.logging.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>ch.qos.logback</groupId>
@@ -307,11 +317,6 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
                 <version>${hibernate.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.logging</groupId>
-                <artifactId>jboss-logging</artifactId>
-                <version>${jboss.logging.version}</version>
             </dependency>
 
             <dependency>

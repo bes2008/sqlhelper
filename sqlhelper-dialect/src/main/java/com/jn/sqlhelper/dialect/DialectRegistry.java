@@ -412,7 +412,7 @@ public class DialectRegistry {
     private static Dialect registerDialectByClass(@NonNull final Class<? extends Dialect> dialectClass, @Nullable Dialect dialect) {
         Preconditions.checkNotNull(dialectClass);
         // step 1: 生成 database id
-        final Name nameAnno = (Name) Reflects.getAnnotation(dialectClass, Name.class);
+        final Name nameAnno = Reflects.<Name>getAnnotation(dialectClass, Name.class);
         String name;
         if (nameAnno != null) {
             name = nameAnno.value();
@@ -421,10 +421,10 @@ public class DialectRegistry {
             }
         } else {
             final String simpleClassName = dialectClass.getSimpleName().toLowerCase();
-            name = simpleClassName.replaceAll("dialect", "");
+            name =  Strings.replace(simpleClassName, "dialect", "");
         }
         if (dialect == null) {
-            final Driver driverAnno = (Driver) Reflects.getAnnotation(dialectClass, Driver.class);
+            final Driver driverAnno = Reflects.<Driver>getAnnotation(dialectClass, Driver.class);
             Class<? extends java.sql.Driver> driverClass = null;
             Constructor<? extends Dialect> driverConstructor = null;
             if (driverAnno != null) {
@@ -446,10 +446,10 @@ public class DialectRegistry {
                         try {
                             driverConstructor = dialectClass.getDeclaredConstructor(java.sql.Driver.class);
                         } catch (Throwable ex) {
-                            logger.info("Can't find the driver based constructor for dialect {}", (Object) name);
+                            logger.info("Can't find the driver based constructor for dialect {}", name);
                         }
                     } catch (Throwable ex) {
-                        logger.info("Can't find driver class {} for {} dialect", (Object) driverClassName, (Object) name);
+                        logger.info("Can't find driver class {} for {} dialect", driverClassName, name);
                     }
 
                     if (driverClass != null) {
@@ -507,7 +507,7 @@ public class DialectRegistry {
 
         // step 2: 扫描兼容性
         if (dialect != null) {
-            SyntaxCompat syntaxCompat = Reflects.getAnnotation(dialectClass, SyntaxCompat.class);
+            SyntaxCompat syntaxCompat = Reflects.<SyntaxCompat>getAnnotation(dialectClass, SyntaxCompat.class);
             if (syntaxCompat != null) {
                 if (Emptys.isNotEmpty(syntaxCompat.value())) {
                     SQLSyntaxCompatTable.getInstance().register(name, syntaxCompat.value());
@@ -523,7 +523,7 @@ public class DialectRegistry {
     }
 
     public Dialect getDialectByClassName(final String className) {
-        final String dialectName = (String) DialectRegistry.classNameToNameMap.get(className);
+        final String dialectName = DialectRegistry.classNameToNameMap.get(className);
         if (dialectName != null) {
             return this.getDialectByName(dialectName);
         }
