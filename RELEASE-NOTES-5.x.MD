@@ -14,6 +14,9 @@
   + 升级 mybatis-spring: 1.3.2 -> 2.1.2
   + 升级 mybatis-spring-boot: 1.3.4 -> 2.3.2
   + 升级 snakeyaml: 1.29 -> 1.33
+  + 升级 logback: 1.2.9 -> 1.2.13
+
+   
 ## v5.0.0
 1. 全面支持JDK1.8
 2. 升级依赖langx-java：5.4.0

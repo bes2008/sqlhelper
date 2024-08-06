@@ -72,7 +72,7 @@
     <packaging>pom</packaging>
     <properties>
         <slf4j.version>1.7.36</slf4j.version>
-        <logback.version>1.2.9</logback.version>
+        <logback.version>1.2.13</logback.version>
         <mybatis_jdk8.version>3.5.14</mybatis_jdk8.version>
         <mybatis.spring.version>2.1.2</mybatis.spring.version>
         <mybatis.springboot.version>2.3.2</mybatis.springboot.version>
