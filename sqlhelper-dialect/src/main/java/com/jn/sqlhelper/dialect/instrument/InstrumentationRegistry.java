@@ -25,11 +25,11 @@ import com.jn.langx.util.collection.iter.IteratorIterable;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.langx.util.spi.CommonServiceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.ServiceLoader;
 
 @Singleton
 public class InstrumentationRegistry implements Initializable {
@@ -50,8 +50,7 @@ public class InstrumentationRegistry implements Initializable {
     public void init() throws InitializationException {
         if (!inited) {
             this.inited = true;
-            ServiceLoader<Instrumentation> loader = ServiceLoader.load(Instrumentation.class);
-            Collects.forEach(loader, new Consumer<Instrumentation>() {
+            Collects.forEach(CommonServiceProvider.loadService(Instrumentation.class), new Consumer<Instrumentation>() {
                 @Override
                 public void accept(Instrumentation instrumentation) {
                     String alias = Instrumentations.getAliasName(instrumentation);

@@ -26,12 +26,12 @@ import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
 import com.jn.langx.util.function.Supplier0;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.langx.util.spi.CommonServiceProvider;
 import com.jn.sqlhelper.datasource.DataSources;
 import com.jn.sqlhelper.datasource.key.DataSourceKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
@@ -46,8 +46,7 @@ public final class DataSourceFactoryProvider implements Provider<String, DataSou
     }
 
     public void init() {
-        ServiceLoader<DataSourceFactory> factoryLoader = ServiceLoader.load(DataSourceFactory.class);
-        Collects.forEach(factoryLoader, new Consumer<DataSourceFactory>() {
+        Collects.forEach(CommonServiceProvider.loadService(DataSourceFactory.class), new Consumer<DataSourceFactory>() {
             @Override
             public void accept(DataSourceFactory dataSourceFactory) {
                 if (dataSourceFactory == null) {
