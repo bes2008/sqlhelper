@@ -15,8 +15,14 @@
 package com.jn.sqlhelper.dialect.instrument;
 
 import com.jn.langx.annotation.Name;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.collection.Lists;
 import com.jn.langx.util.reflect.Reflects;
+import com.jn.sqlhelper.dialect.Dialect;
+import com.jn.sqlhelper.dialect.pagination.RowSelection;
+
+import java.util.List;
 
 public class Instrumentations {
     public static String getAliasName(Instrumentation instrumentation) {
@@ -27,4 +33,18 @@ public class Instrumentations {
         }
         return null;
     }
+
+    public static List rebuildParameters(Dialect dialect, List queryParams, RowSelection selection){
+        List result = Lists.newArrayList();
+        int parameterIndex = 0;
+
+        parameterIndex += dialect.rebuildLimitParametersAtStartOfQuery(selection, result, parameterIndex);
+        if(!Objs.isEmpty(queryParams)){
+            result.addAll(queryParams);
+            parameterIndex+=queryParams.size();
+        }
+        parameterIndex += dialect.rebuildLimitParametersAtEndOfQuery(selection, result, parameterIndex);
+        return result;
+    }
+
 }
