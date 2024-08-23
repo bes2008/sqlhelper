@@ -6,7 +6,7 @@
 
     <groupId>io.github.bes2008.solution.sqlhelper</groupId>
     <artifactId>sqlhelper</artifactId>
-    <version>5.0.1</version>
+    <version>5.0.2</version>
     <name>${project.groupId}:${project.artifactId}:${project.version}</name>
     <description>
         JDBC Extensions:
