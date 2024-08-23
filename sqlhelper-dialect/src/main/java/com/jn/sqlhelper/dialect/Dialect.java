@@ -25,6 +25,7 @@ import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 public interface Dialect extends LikeEscaper {
     String getDatabaseId();
@@ -102,11 +103,15 @@ public interface Dialect extends LikeEscaper {
      */
     boolean isBindLimitParametersFirst();
 
-    int bindLimitParametersAtStartOfQuery(RowSelection paramRowSelection, PreparedStatement paramPreparedStatement, int paramInt)
+    int bindLimitParametersAtStartOfQuery(RowSelection paramRowSelection, PreparedStatement paramPreparedStatement, int index)
             throws SQLException;
 
-    int bindLimitParametersAtEndOfQuery(RowSelection paramRowSelection, PreparedStatement paramPreparedStatement, int paramInt)
+    int bindLimitParametersAtEndOfQuery(RowSelection paramRowSelection, PreparedStatement paramPreparedStatement, int index)
             throws SQLException;
+
+    int rebuildLimitParametersAtStartOfQuery(RowSelection paramRowSelection, List queryParams, int index);
+
+    int rebuildLimitParametersAtEndOfQuery(RowSelection paramRowSelection, List queryParams, int index);
 
     boolean isUseMaxForLimit();
 

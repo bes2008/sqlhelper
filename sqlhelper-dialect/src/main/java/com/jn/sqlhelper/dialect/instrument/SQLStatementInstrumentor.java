@@ -22,9 +22,11 @@ import com.jn.langx.cache.CacheBuilder;
 import com.jn.langx.cache.Loader;
 import com.jn.langx.lifecycle.Initializable;
 import com.jn.langx.lifecycle.InitializationException;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Collects;
+import com.jn.langx.util.collection.Lists;
 import com.jn.langx.util.collection.Pipeline;
 import com.jn.langx.util.function.Consumer;
 import com.jn.langx.util.function.Predicate;
@@ -489,6 +491,19 @@ public class SQLStatementInstrumentor implements Initializable {
             logger.error("Set sql parameter fail, errorCode: {}, stack:{}", ex.getErrorCode(), ex);
         }
         return statement;
+    }
+
+    public List rebuildParameters(Dialect dialect, List queryParams, RowSelection selection){
+        List result = Lists.newArrayList();
+        int parameterIndex = 0;
+
+        parameterIndex += dialect.rebuildLimitParametersAtStartOfQuery(selection, result, parameterIndex);
+        if(!Objs.isEmpty(queryParams)){
+            result.addAll(queryParams);
+            parameterIndex+=queryParams.size();
+        }
+        parameterIndex += dialect.rebuildLimitParametersAtEndOfQuery(selection, result, parameterIndex);
+        return result;
     }
 
     public SQLInstrumentorConfig getConfig() {

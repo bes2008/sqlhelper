@@ -22,6 +22,18 @@ public final class RowSelection {
     private Integer fetchSize;
     private Integer maxRows = -1;
 
+    public RowSelection(){
+    }
+
+    public RowSelection(int offset, int limit){
+        this((long) offset, limit);
+    }
+
+    public RowSelection(long offset, int limit){
+        this.setOffset(offset);
+        this.setLimit(limit);
+    }
+
     public Long getOffset() {
         return this.offset;
     }

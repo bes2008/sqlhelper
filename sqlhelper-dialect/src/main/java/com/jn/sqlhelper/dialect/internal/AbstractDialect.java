@@ -216,6 +216,15 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         return getLimitHandler().bindLimitParametersAtStartOfQuery(selection, statement, index);
     }
 
+    public int rebuildLimitParametersAtEndOfQuery(RowSelection selection, List queryParams, int index)  {
+        return getLimitHandler().rebuildLimitParametersAtEndOfQuery(selection, queryParams, index);
+    }
+
+    @Override
+    public int rebuildLimitParametersAtStartOfQuery(RowSelection selection, List queryParams, int index) {
+        return getLimitHandler().rebuildLimitParametersAtStartOfQuery(selection, queryParams, index);
+    }
+
     public UrlParser getUrlParser() {
         return getRealDialect().urlParser;
     }

@@ -20,6 +20,7 @@ import com.jn.sqlhelper.dialect.pagination.RowSelection;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 
 public abstract class LimitHandler {
@@ -51,6 +52,11 @@ public abstract class LimitHandler {
 
     public abstract int bindLimitParametersAtEndOfQuery(RowSelection rowSelection, PreparedStatement preparedStatement, int index)
             throws SQLException;
+
+    public abstract int rebuildLimitParametersAtStartOfQuery(RowSelection rowSelection, List queryParams, int index);
+
+    public abstract int rebuildLimitParametersAtEndOfQuery(RowSelection rowSelection, List queryParams, int index);
+
 
     public abstract void setMaxRows(RowSelection rowSelection, PreparedStatement preparedStatement)
             throws SQLException;
