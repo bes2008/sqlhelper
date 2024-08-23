@@ -1,6 +1,15 @@
+## v5.0.2
++ 特性：
+  + 支持分页时，对原始参数列表变更
++ 依赖：
+  + langx-java: 5.4.1 => 5.4.4
+  + agileway: 5.0.1 => 5.0.4
+  + logback: 1.2.13 => 1.3.14
+  + junit4: 4.13.1 => 4.13.2
+  + jline: 3.18.0 => 3.26.0 
 ## v5.0.1
 + 特性：
-  + 不再支持mybatis-plus2
+  + 不再支持~~mybatis-plus2~~
 + 依赖：
   + 升级 spring-shell：2.0.1 -> 2.1.15
   + 升级 jakarta.validation-api：1.1.0 -> 2.0.1
@@ -10,7 +19,6 @@
   + 升级 c3p0: 0.9.5.5 -> 0.10.1
   + 升级 slf4j: 1.7.0 -> 1.7.36
   + 升级 druid: 1.1.24 -> 1.2.23
-  + 升级 hikaricp: 2.4.7 -> 5.1.0
   + 升级 mybatis-spring: 1.3.2 -> 2.1.2
   + 升级 mybatis-spring-boot: 1.3.4 -> 2.3.2
   + 升级 snakeyaml: 1.29 -> 1.33
