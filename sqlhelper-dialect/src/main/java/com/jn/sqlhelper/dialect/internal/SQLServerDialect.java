@@ -58,7 +58,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
     public SQLServerDialect() {
         super();
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
-        setDelegate(new SQLServer2008Dialect());
+        setDelegate(new SQLServer2014Dialect());
         setUrlParser(new SqlServerUrlParser());
         setPlainSqlScriptParser(new SQLServerSqlScriptParser());
     }
@@ -96,6 +96,8 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
                     break;
                 case 14:
                     databaseId = "sqlserver2017";
+                    break;
+                default:
                     break;
             }
             return databaseId;
