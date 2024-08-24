@@ -37,7 +37,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-@Driver("oracle.jdbc.driver.OracleDriver")
+@Driver({"oracle.jdbc.OracleDriver","oracle.jdbc.driver.OracleDriver"})
 public class OracleDialect extends AbstractDialect {
     private static final int PARAM_LIST_SIZE_LIMIT = 1000;
 
@@ -50,6 +50,10 @@ public class OracleDialect extends AbstractDialect {
     }
 
     public OracleDialect(java.sql.Driver driver) {
+        setUrlParser(new OracleUrlParser());
+        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
+        setPlainSqlScriptParser(new OracleSqlScriptParser());
+
         int majorVersion = driver.getMajorVersion();
         int minorVersion = driver.getMinorVersion();
         if (majorVersion < 9) {
@@ -75,9 +79,6 @@ public class OracleDialect extends AbstractDialect {
         }
         setDelegate(new Oracle9Dialect());
 
-        setUrlParser(new OracleUrlParser());
-        setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
-        setPlainSqlScriptParser(new OracleSqlScriptParser());
     }
 
     class OracleBaseDialect extends AbstractDialect {
