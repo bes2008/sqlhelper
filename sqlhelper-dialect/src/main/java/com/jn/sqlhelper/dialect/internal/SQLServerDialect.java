@@ -58,7 +58,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
     public SQLServerDialect() {
         super();
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
-        setDelegate(new SQLServer2014Dialect());
+        setDelegate(new SQLServer2012Dialect());
         setUrlParser(new SqlServerUrlParser());
         setPlainSqlScriptParser(new SQLServerSqlScriptParser());
     }
