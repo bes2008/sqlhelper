@@ -109,9 +109,7 @@ public interface Dialect extends LikeEscaper {
     int bindLimitParametersAtEndOfQuery(RowSelection paramRowSelection, PreparedStatement paramPreparedStatement, int index)
             throws SQLException;
 
-    int rebuildLimitParametersAtStartOfQuery(RowSelection paramRowSelection, List queryParams, int index);
-
-    int rebuildLimitParametersAtEndOfQuery(RowSelection paramRowSelection, List queryParams, int index);
+    List rebuildParameters(RowSelection paramRowSelection, List queryParams);
 
     boolean isUseMaxForLimit();
 

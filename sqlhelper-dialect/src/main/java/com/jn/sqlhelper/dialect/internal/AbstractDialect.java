@@ -18,8 +18,10 @@ import com.jn.langx.annotation.Name;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.text.StringTemplates;
+import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Lists;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.common.ddl.dump.DatabaseLoader;
 import com.jn.sqlhelper.common.ddl.dump.TableGenerator;
@@ -216,12 +218,24 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         return getLimitHandler().bindLimitParametersAtStartOfQuery(selection, statement, index);
     }
 
-    public int rebuildLimitParametersAtEndOfQuery(RowSelection selection, List queryParams, int index)  {
+    public final List rebuildParameters(RowSelection selection, List queryParams){
+        List result = Lists.newArrayList();
+        int parameterIndex = 0;
+
+        parameterIndex += this.rebuildLimitParametersAtStartOfQuery(selection, result, parameterIndex);
+        if(!Objs.isEmpty(queryParams)){
+            result.addAll(queryParams);
+            parameterIndex+=queryParams.size();
+        }
+        parameterIndex += this.rebuildLimitParametersAtEndOfQuery(selection, result, parameterIndex);
+        return result;
+    }
+
+    protected int rebuildLimitParametersAtEndOfQuery(RowSelection selection, List queryParams, int index)  {
         return getLimitHandler().rebuildLimitParametersAtEndOfQuery(selection, queryParams, index);
     }
 
-    @Override
-    public int rebuildLimitParametersAtStartOfQuery(RowSelection selection, List queryParams, int index) {
+    protected int rebuildLimitParametersAtStartOfQuery(RowSelection selection, List queryParams, int index) {
         return getLimitHandler().rebuildLimitParametersAtStartOfQuery(selection, queryParams, index);
     }
 
