@@ -49,6 +49,8 @@ import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
  *     12.0             2014            SQL Server 2014
  *     13.0             2016            SQL Server 2016
  *     14.0             2017            SQL Server 2017
+ *     15.x             2019            SQL Server 2019
+ *     16.x             2022            SQL Server 2022
  * </pre>
  */
 @Name("sqlserver")
@@ -66,7 +68,6 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
 
     /**
      * @param productionVersion databaseMeta.getProductionVersion
-     * @return
      */
     public static String guessDatabaseId(String productionVersion) {
         Preconditions.checkNotNull(productionVersion);
@@ -96,6 +97,12 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
                     break;
                 case 14:
                     databaseId = "sqlserver2017";
+                    break;
+                case 15:
+                    databaseId = "sqlserver2019";
+                    break;
+                case 16:
+                    databaseId = "sqlserver2022";
                     break;
                 default:
                     break;
@@ -212,6 +219,12 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
 
     @Name("sqlserver2017")
     public static class SQLServer2017Dialect extends SQLServer2016Dialect {
+    }
+    @Name("sqlserver2019")
+    public static class SQLServer2019Dialect extends SQLServer2017Dialect {
+    }
+    @Name("sqlserver2022")
+    public static class SQLServer2022Dialect extends SQLServer2019Dialect {
     }
 
     @Override
