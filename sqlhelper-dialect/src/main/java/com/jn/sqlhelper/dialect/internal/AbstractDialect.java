@@ -145,6 +145,11 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     }
 
     @Override
+    public boolean isSupportsVariableLimitInSubquery() {
+        return this.delegate == null ? isSupportsVariableLimit() : this.delegate.isSupportsVariableLimitInSubquery();
+    }
+
+    @Override
     public void setUseLimitInVariableMode(boolean variableMode) {
         AbstractDialect d = getRealDialect();
         if (d.isSupportsVariableLimit()) {

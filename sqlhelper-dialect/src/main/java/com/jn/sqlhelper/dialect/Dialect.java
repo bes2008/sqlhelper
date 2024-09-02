@@ -62,6 +62,8 @@ public interface Dialect extends LikeEscaper {
      */
     boolean isSupportsVariableLimit();
 
+    boolean isSupportsVariableLimitInSubquery();
+
     /**
      * Whether set limit or offset with placeholder '?'
      *
