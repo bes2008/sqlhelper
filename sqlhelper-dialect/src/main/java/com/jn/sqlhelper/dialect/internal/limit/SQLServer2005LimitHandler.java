@@ -27,8 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class SQLServer2005LimitHandler
-        extends AbstractLimitHandler {
+public class SQLServer2005LimitHandler extends AbstractLimitHandler {
 
     private static final Pattern SELECT_DISTINCT_PATTERN = buildShallowIndexPattern("select distinct ", true);
     private static final Pattern SELECT_PATTERN = buildShallowIndexPattern("select(.*)", true);
@@ -48,7 +47,7 @@ public class SQLServer2005LimitHandler
     }
 
     @Override
-    public String processSql(String sql,boolean isSubquery, RowSelection selection) {
+    public String processSql(String sql,boolean isSubquery, boolean useLimitVariable, RowSelection selection) {
         StringBuilder sb = new StringBuilder(sql);
         if (sb.charAt(sb.length() - 1) == ';') {
             sb.setLength(sb.length() - 1);
@@ -64,9 +63,15 @@ public class SQLServer2005LimitHandler
 
             encloseWithOuterQuery(sb);
 
-
-            sb.insert(0, "WITH query AS (").append(") SELECT ").append(selectClause).append(" FROM query ");
-            sb.append("WHERE __sqlhelper_row_nr__ >= ? AND __sqlhelper_row_nr__ < ?");
+            if(!useLimitVariable){
+                int firstRow = (int)convertToFirstRowValue(LimitHelper.getFirstRow(selection));
+                int lastRow = getMaxOrLimit(selection);
+                sb.insert(0, "WITH query AS (").append(") SELECT ").append(selectClause).append(" FROM query ");
+                sb.append("WHERE __sqlhelper_row_nr__ >= "+firstRow+" AND __sqlhelper_row_nr__ < "+lastRow);
+            }else {
+                sb.insert(0, "WITH query AS (").append(") SELECT ").append(selectClause).append(" FROM query ");
+                sb.append("WHERE __sqlhelper_row_nr__ >= ? AND __sqlhelper_row_nr__ < ?");
+            }
         } else {
             addTopExpression(sb);
         }

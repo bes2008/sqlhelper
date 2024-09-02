@@ -26,12 +26,12 @@ public class TopLimitHandler extends AbstractLimitHandler {
     private boolean useSkipTop = false;
 
     @Override
-    public String processSql(String sql,boolean isSubquery, RowSelection rowSelection) {
-        return getLimitString(sql,isSubquery, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
+    public String processSql(String sql,boolean isSubquery, boolean useLimitVariable, RowSelection rowSelection) {
+        return getLimitString(sql,isSubquery,useLimitVariable, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
     }
 
     @Override
-    protected String getLimitString(String sql,boolean isSubquery, long offset, int limit) {
+    protected String getLimitString(String sql,boolean isSubquery, boolean useLimitVariable, long offset, int limit) {
         /*
          *  reference: http://docs.openlinksw.com/virtuoso/topselectoption/
          *  Select Syntax:
@@ -67,7 +67,7 @@ public class TopLimitHandler extends AbstractLimitHandler {
             return sql;
         }
         StringBuilder sql2 = new StringBuilder(sql.length() + 50).append(sql);
-        if (getDialect().isUseLimitInVariableMode(isSubquery)) {
+        if (useLimitVariable && getDialect().isUseLimitInVariableMode(isSubquery)) {
             if (hasOffset) {
                 if (!isUseSkipTop()) {
                     sql2.insert(insertionPoint, " TOP ?, ? ");

@@ -54,6 +54,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     private UrlParser urlParser;
     private LimitHandler limitHandler;
     private LikeEscaper likeEscaper;
+    // limit 的参数默认是否要使用 `?`，如果没有指定值，则根据数据库是否支持来进行计算
     private Boolean isUseLimitInVariableMode = null;
     private PlainSqlScriptParser plainSqlScriptParser;
 
@@ -215,7 +216,12 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     @Override
     public String getLimitSql(String query, boolean isSubQuery, RowSelection rowSelection) {
-        return getLimitHandler().processSql(query, isSubQuery, rowSelection);
+        return this.getLimitSql(query, isSubQuery,true, rowSelection);
+    }
+
+    @Override
+    public String getLimitSql(String query, boolean isSubQuery, boolean useLimitVariable, RowSelection rowSelection) {
+        return getLimitHandler().processSql(query, isSubQuery, useLimitVariable, rowSelection);
     }
 
     @Override
@@ -239,10 +245,12 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     @Override
     public List rebuildParameters(boolean isSubquery, RowSelection selection, List queryParams) {
-        if(!isSupportsLimitOffset()){
-            return queryParams;
-        }
-        if(!isUseLimitInVariableMode(isSubquery)){
+        return rebuildParameters(isSubquery, true, selection, queryParams);
+    }
+
+    @Override
+    public List rebuildParameters(boolean isSubquery, boolean useLimitVaribale, RowSelection selection, List queryParams) {
+        if(!useLimitVaribale || !isSupportsLimitOffset() || !isUseLimitInVariableMode(isSubquery)){
             return queryParams;
         }
         List result = Lists.newArrayList();

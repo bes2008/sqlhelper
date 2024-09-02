@@ -20,13 +20,9 @@ import java.util.Locale;
 
 public class OracleXLimitHandler extends AbstractLimitHandler {
     @Override
-    public String processSql(String sql,boolean isSubquery, RowSelection selection) {
+    public String processSql(String sql,boolean isSubquery, boolean useLimitVariable, RowSelection selection) {
         boolean hasOffset = LimitHelper.hasFirstRow(selection);
-        return getLimitString(sql,isSubquery, hasOffset);
-    }
 
-    @Override
-    public String getLimitString(String sql,boolean isSubquery, boolean hasOffset) {
         sql = sql.trim();
         String forUpdateClause = null;
         boolean isForUpdate = false;
@@ -44,10 +40,21 @@ public class OracleXLimitHandler extends AbstractLimitHandler {
             pagingSelect.append("select * from ( ");
         }
         pagingSelect.append(sql);
-        if (hasOffset) {
-            pagingSelect.append(" ) sqlhelper_rowtable_ where rownum <= ?) where rownum_ > ?");
-        } else {
-            pagingSelect.append(" ) sqlhelper_rowtable_ where rownum <= ?");
+        pagingSelect.append(" ) sqlhelper_rowtable_");
+        if(useLimitVariable && getDialect().isUseLimitInVariableMode(isSubquery)){
+            if (hasOffset) {
+                pagingSelect.append(" where rownum <= ?) where rownum_ > ?");
+            } else {
+                pagingSelect.append(" where rownum <= ?");
+            }
+        }else{
+            int firstRow = (int)convertToFirstRowValue(LimitHelper.getFirstRow(selection));
+            int lastRow = getMaxOrLimit(selection);
+            if (hasOffset) {
+                pagingSelect.append(" where rownum <= "+lastRow+") where rownum_ > "+firstRow);
+            } else {
+                pagingSelect.append(" where rownum <= "+lastRow);
+            }
         }
 
         if (isForUpdate) {

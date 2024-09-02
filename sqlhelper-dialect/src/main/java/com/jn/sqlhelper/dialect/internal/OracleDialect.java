@@ -124,13 +124,8 @@ public class OracleDialect extends AbstractDialect {
 
     private static class Oracle8i9LimitHandler extends AbstractLimitHandler {
         @Override
-        public String processSql(String sql,boolean isSubquery, RowSelection selection) {
+        public String processSql(String sql,boolean isSubquery, boolean useLimitVariable, RowSelection selection) {
             boolean hasOffset = LimitHelper.hasFirstRow(selection);
-            return getLimitString(sql,isSubquery, hasOffset);
-        }
-
-        @Override
-        public String getLimitString(String sql,boolean isSubquery, boolean hasOffset) {
             sql = sql.trim();
             boolean isForUpdate = false;
             if (sql.toLowerCase(Locale.ROOT).endsWith(" for update")) {
@@ -145,11 +140,23 @@ public class OracleDialect extends AbstractDialect {
                 pagingSelect.append("select * from ( ");
             }
             pagingSelect.append(sql);
-            if (hasOffset) {
-                pagingSelect.append(" ) sqlhelper_rowtable_ ) where rownum_ <= ? and rownum_ > ?");
-            } else {
-                pagingSelect.append(" ) sqlhelper_rowtable_ where rownum <= ?");
+
+            if(useLimitVariable && this.getDialect().isUseLimitInVariableMode(isSubquery)){
+                if (hasOffset) {
+                    pagingSelect.append(" ) sqlhelper_rowtable_ ) where rownum_ <= ? and rownum_ > ?");
+                } else {
+                    pagingSelect.append(" ) sqlhelper_rowtable_ where rownum <= ?");
+                }
+            }else{
+                int firstRow = (int)convertToFirstRowValue(LimitHelper.getFirstRow(selection));
+                int lastRow = getMaxOrLimit(selection);
+                if (hasOffset) {
+                    pagingSelect.append(" ) sqlhelper_rowtable_ ) where rownum_ <= "+lastRow+" and rownum_ > " + firstRow +" ");
+                } else {
+                    pagingSelect.append(" ) sqlhelper_rowtable_ where rownum <= "+lastRow+" ");
+                }
             }
+
 
             if (isForUpdate) {
                 pagingSelect.append(" for update");

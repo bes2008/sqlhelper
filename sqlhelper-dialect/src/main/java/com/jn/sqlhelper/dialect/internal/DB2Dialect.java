@@ -35,7 +35,7 @@ public class DB2Dialect extends AbstractDialect {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, boolean isSubquery, RowSelection selection) {
+            public String processSql(String sql, boolean isSubquery, boolean useLimitVariable, RowSelection selection) {
                 if (isDB2_400OrNewer()) {
                     if (LimitHelper.hasFirstRow(selection)) {
                         return "select * from ( select inner2_.*, rownumber() over(order by order of inner2_) as rownumber_ from ( " + sql + " fetch first " + getMaxOrLimit(selection) + " rows only ) as inner2_ ) as inner1_ where rownumber_ > " + selection.getOffset() + " order by rownumber_";

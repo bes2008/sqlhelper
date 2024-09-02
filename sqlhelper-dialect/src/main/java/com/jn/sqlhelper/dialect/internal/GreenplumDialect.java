@@ -25,12 +25,7 @@ public class GreenplumDialect extends AbstractDialect {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, boolean isSubquery, RowSelection rowSelection) {
-                return getLimitString(sql, isSubquery, LimitHelper.hasFirstRow(rowSelection));
-            }
-
-            @Override
-            protected String getLimitString(String sql, boolean isSubquery, boolean hasOffset) {
+            public String processSql(String sql, boolean isSubquery, boolean useLimitVariable, RowSelection rowSelection) {
                 //
                 /*
                  *
@@ -74,12 +69,21 @@ public class GreenplumDialect extends AbstractDialect {
 
                 StringBuilder sql2 = new StringBuilder(sql.length() + 100);
                 sql2.append(sql);
-                if (hasOffset) {
-                    sql2.append(" LIMIT ? OFFSET ? ");
-                } else {
-                    sql2.append(" LIMIT ?  ");
+                if(useLimitVariable && isUseLimitInVariableMode(isSubquery)){
+                    if (rowSelection.hasOffset()) {
+                        sql2.append(" LIMIT ? OFFSET ? ");
+                    } else {
+                        sql2.append(" LIMIT ?  ");
+                    }
+                }else {
+                    int firstRow = (int)convertToFirstRowValue(LimitHelper.getFirstRow(rowSelection));
+                    int lastRow = getMaxOrLimit(rowSelection);
+                    sql2.append(" LIMIT "+ lastRow) ;
+                    if (rowSelection.hasOffset()) {
+                        sql2.append(" OFFSET " + firstRow);
+                    }
                 }
-
+                sql2.append(" ");
                 if (isForUpdate) {
                     sql2.append(forUpdateClause);
                 }

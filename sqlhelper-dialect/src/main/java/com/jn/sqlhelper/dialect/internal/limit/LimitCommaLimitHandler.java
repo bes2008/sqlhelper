@@ -31,14 +31,12 @@ public class LimitCommaLimitHandler extends AbstractLimitHandler {
     private int offsetBased = 0;
 
     @Override
-    public String processSql(String sql,boolean isSubquery, RowSelection rowSelection) {
-        return getLimitString(sql,isSubquery, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
+    public String processSql(String sql,boolean isSubquery, boolean useLimitVariable, RowSelection rowSelection) {
+        return getLimitString(sql,isSubquery, useLimitVariable, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
     }
 
-
-
     @Override
-    protected String getLimitString(String sql,boolean isSubquery, long offset, int limit) {
+    protected String getLimitString(String sql,boolean isSubquery, boolean useLimitVariable, long offset, int limit) {
         boolean hasOffset = offset > 0;
 
         sql = sql.trim();
@@ -57,7 +55,7 @@ public class LimitCommaLimitHandler extends AbstractLimitHandler {
         StringBuilder sql2 = new StringBuilder(sql.length() + 100);
         sql2.append(sql);
 
-        if (getDialect().isUseLimitInVariableMode(isSubquery)) {
+        if (useLimitVariable && getDialect().isUseLimitInVariableMode(isSubquery)) {
             if (withBrace) {
                 sql2.append(hasOffset ? " limit (?, ?)" : " limit ?");
             } else {

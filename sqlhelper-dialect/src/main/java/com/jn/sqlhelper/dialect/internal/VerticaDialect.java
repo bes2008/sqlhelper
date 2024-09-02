@@ -27,13 +27,13 @@ public class VerticaDialect extends AbstractDialect {
     public VerticaDialect() {
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, boolean isSubquery, RowSelection rowSelection) {
-                return getLimitString(sql, isSubquery, LimitHelper.hasFirstRow(rowSelection));
-            }
-
-            @Override
-            protected String getLimitString(String sql, boolean isSubquery, boolean hasOffset) {
-                return sql + " limit ?";
+            public String processSql(String sql, boolean isSubquery, boolean useLimitVariable, RowSelection selection) {
+                if(useLimitVariable && getDialect().isUseLimitInVariableMode(isSubquery)) {
+                    return sql + " limit ?";
+                }else {
+                    int lastRow = getMaxOrLimit(selection);
+                    return sql + " limit " + lastRow;
+                }
             }
         });
         setPlainSqlScriptParser(new VerticaSqlScriptParser());

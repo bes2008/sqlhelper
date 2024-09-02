@@ -36,17 +36,17 @@ public abstract class LimitHandler {
 
 
     public final String processSql(String sql, RowSelection rowSelection){
-        return processSql(sql, false, rowSelection);
+        return processSql(sql, false, true, rowSelection);
     }
 
-    public abstract String processSql(String sql, boolean isSubquery, RowSelection rowSelection);
+    public abstract String processSql(String sql, boolean isSubquery, boolean useLimitVariable, RowSelection rowSelection);
 
-    protected String getLimitString(String sql, boolean isSubquery, long offset, int limit) {
-        return getLimitString(sql, isSubquery, (offset > 0) || (getDialect().isForceLimitUsage()));
+    protected String getLimitString(String sql, boolean isSubquery, boolean useLimitVariable,  long offset, int limit) {
+        return getLimitString(sql, isSubquery, useLimitVariable,(offset > 0) || (getDialect().isForceLimitUsage()));
     }
 
 
-    protected String getLimitString(String sql, boolean isSubquery, boolean hasOffset) {
+    protected String getLimitString(String sql, boolean isSubquery, boolean useLimitVariable, boolean hasOffset) {
         throw new UnsupportedOperationException("Paged queries not supported by " + getClass().getName());
     }
 

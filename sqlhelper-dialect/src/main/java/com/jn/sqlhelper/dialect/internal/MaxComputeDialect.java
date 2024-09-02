@@ -30,14 +30,14 @@ public class MaxComputeDialect extends AbstractDialect {
 
     private static class MaxComputeLimitHandler extends AbstractLimitHandler {
         @Override
-        public String processSql(String sql,boolean isSubquery, RowSelection rowSelection) {
-            return getLimitString(sql,isSubquery, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
+        public String processSql(String sql,boolean isSubquery, boolean useLimitVariable, RowSelection rowSelection) {
+            return getLimitString(sql,isSubquery, useLimitVariable, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
         }
 
         @Override
-        protected String getLimitString(String sql,boolean isSubquery, long offset, int limit) {
+        protected String getLimitString(String sql,boolean isSubquery, boolean useLimitVariable, long offset, int limit) {
             if (offset == 0) {
-                if (getDialect().isUseLimitInVariableMode()) {
+                if (useLimitVariable && getDialect().isUseLimitInVariableMode(isSubquery)) {
                     return sql + " limit ?";
                 } else {
                     return sql + " limit " + limit;
@@ -46,7 +46,14 @@ public class MaxComputeDialect extends AbstractDialect {
                 StringBuilder sqlBuilder = new StringBuilder(sql.length() + 256);
                 sqlBuilder.append("select * from ( select row_number() over() as sqlhelper_ROW_ID, * from (")
                         .append(sql)
-                        .append(" ) ) sqlhelper_tmp  where sqlhelper_ROW_ID between ? and ?");
+                        .append(" ) ) sqlhelper_tmp  where sqlhelper_ROW_ID ");
+                if (useLimitVariable && getDialect().isUseLimitInVariableMode(isSubquery)) {
+                    sqlBuilder.append(" between ? and ? ");
+                } else {
+                    int firstRow = (int)convertToFirstRowValue(offset);
+                    int lastRow = getDialect().isUseMaxForLimit() ? (limit + (int)firstRow) : limit;
+                    sqlBuilder.append(" between "+firstRow+" and "+ lastRow);
+                }
                 return sqlBuilder.toString();
             }
         }

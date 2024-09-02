@@ -27,16 +27,20 @@ public class MaxDBDialect extends AbstractDialect {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, boolean isSubquery, RowSelection rowSelection) {
-                boolean hasOffset = LimitHelper.hasFirstRow(rowSelection);
-                return getLimitString(sql, isSubquery, hasOffset);
-            }
-
-            @Override
-            protected String getLimitString(String sql, boolean isSubquery, boolean hasOffset) {
-                sql = "select * from (" + sql + ") where rowno < ? ";
-                if (hasOffset) {
-                    sql = sql + " and rowno >= ?";
+            public String processSql(String sql, boolean isSubquery, boolean useLimitVariable, RowSelection selection) {
+                boolean hasOffset = LimitHelper.hasFirstRow(selection);
+                if(useLimitVariable && isUseLimitInVariableMode(isSubquery)) {
+                    sql = "select * from (" + sql + ") where rowno < ? ";
+                    if (hasOffset) {
+                        sql = sql + " and rowno >= ?";
+                    }
+                }else{
+                    int firstRow = (int)convertToFirstRowValue(LimitHelper.getFirstRow(selection));
+                    int lastRow = getMaxOrLimit(selection);
+                    sql = "select * from (" + sql + ") where rowno < " + lastRow;
+                    if (hasOffset) {
+                        sql = sql + " and rowno >= " + firstRow;
+                    }
                 }
                 return sql;
             }

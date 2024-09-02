@@ -86,6 +86,17 @@ public interface Dialect extends LikeEscaper {
      */
     String getLimitSql(String query, RowSelection rowSelection);
     String getLimitSql(String query, boolean isSubQuery, RowSelection rowSelection);
+
+    /**
+     * 创建分页SQL
+     * @param query 要处理的query sql
+     * @param isSubQuery 该sql 是否位于子查询的位置
+     * @param useLimitVariable 创建分页sql时，是否让 offset, limit使用 `?`
+     * @param rowSelection
+     * @return 生成的分页SQL
+     */
+    String getLimitSql(String query, boolean isSubQuery, boolean useLimitVariable, RowSelection rowSelection);
+
     /**
      * Whether bind parameter in reverse or not.
      * <p>
@@ -116,6 +127,15 @@ public interface Dialect extends LikeEscaper {
     List rebuildParameters(RowSelection paramRowSelection, List queryParams);
     List rebuildParameters(boolean isSubquery, RowSelection paramRowSelection, List queryParams);
 
+    /**
+     * 对分页SQL语句重新设置参数列表
+     * @param isSubquery 当前分页SQL是否位于子查询位置
+     * @param useLimitVaribale 当前分页SQL的offset, limit参数是否使用 `?`
+     * @param paramRowSelection
+     * @param queryParams 原始参数
+     * @return 重建后的参数
+     */
+    List rebuildParameters(boolean isSubquery, boolean useLimitVaribale, RowSelection paramRowSelection, List queryParams);
     boolean isUseMaxForLimit();
 
     int registerResultSetOutParameter(CallableStatement paramCallableStatement, int paramInt)

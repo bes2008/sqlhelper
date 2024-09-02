@@ -20,12 +20,12 @@ import java.util.Locale;
 
 public class FirstOrderLimitHandler extends AbstractLimitHandler {
     @Override
-    public String processSql(String sql,boolean isSubquery, RowSelection rowSelection) {
-        return getLimitString(sql, isSubquery, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
+    public String processSql(String sql,boolean isSubquery, boolean useLimitVariable, RowSelection rowSelection) {
+        return getLimitString(sql, isSubquery, useLimitVariable, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
     }
 
     @Override
-    protected String getLimitString(String sql,boolean isSubquery, long offset, int limit) {
+    protected String getLimitString(String sql,boolean isSubquery, boolean useLimitVariable, long offset, int limit) {
         boolean hasOffset = offset > 0;
         sql = sql.trim();
 
@@ -43,7 +43,7 @@ public class FirstOrderLimitHandler extends AbstractLimitHandler {
         sql2.append(sql);
 
         // you can look FIRST as limit
-        if (getDialect().isUseLimitInVariableMode(isSubquery)) {
+        if (useLimitVariable && getDialect().isUseLimitInVariableMode(isSubquery)) {
             if (hasOffset) {
                 sql2.append(" FIRST ? TO ? ");
             } else {

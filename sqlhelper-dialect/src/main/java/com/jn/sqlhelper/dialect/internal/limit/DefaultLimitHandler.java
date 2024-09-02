@@ -29,8 +29,8 @@ public class DefaultLimitHandler extends AbstractLimitHandler {
     }
 
     @Override
-    public String processSql(String sql,boolean isSubquery, RowSelection selection) {
+    public String processSql(String sql,boolean isSubquery, boolean useLimitVariable, RowSelection selection) {
         boolean useLimitOffset = (getDialect().isSupportsLimit()) && (getDialect().isSupportsLimitOffset()) && (LimitHelper.hasFirstRow(selection)) && (LimitHelper.hasMaxRows(selection));
-        return getLimitString(sql, isSubquery, useLimitOffset ? LimitHelper.getFirstRow(selection) : 0, getMaxOrLimit(selection));
+        return getLimitString(sql, isSubquery,useLimitVariable, useLimitOffset ? LimitHelper.getFirstRow(selection) : 0, getMaxOrLimit(selection));
     }
 }

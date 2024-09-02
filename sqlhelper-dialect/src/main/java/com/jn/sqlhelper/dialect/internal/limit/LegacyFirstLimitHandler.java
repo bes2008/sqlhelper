@@ -24,7 +24,7 @@ public class LegacyFirstLimitHandler extends AbstractLimitHandler {
     public static final LegacyFirstLimitHandler INSTANCE = new LegacyFirstLimitHandler();
 
     @Override
-    public String processSql(String sql, boolean isSubquery, RowSelection selection) {
+    public String processSql(String sql, boolean isSubquery, boolean useLimitVariable, RowSelection selection) {
         return new StringBuilder(sql.length() + 16).append(sql).insert(sql.toLowerCase(Locale.ROOT).indexOf("select") + 6, " first " + getMaxOrLimit(selection)).toString();
     }
 }

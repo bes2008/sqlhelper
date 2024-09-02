@@ -24,14 +24,14 @@ import com.jn.sqlhelper.dialect.pagination.RowSelection;
  */
 public class ReturnResultsLimitHandler extends AbstractLimitHandler {
     @Override
-    public String processSql(String sql,boolean isSubquery, RowSelection rowSelection) {
-        return getLimitString(sql,isSubquery, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
+    public String processSql(String sql,boolean isSubquery, boolean useLimitVariable, RowSelection rowSelection) {
+        return getLimitString(sql,isSubquery, useLimitVariable, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
     }
 
     @Override
-    protected String getLimitString(String sql,boolean isSubquery, long offset, int limit) {
+    protected String getLimitString(String sql,boolean isSubquery, boolean useLimitVariable, long offset, int limit) {
         boolean hasOffset = offset > 0;
-        if (getDialect().isUseLimitInVariableMode(isSubquery)) {
+        if (useLimitVariable && getDialect().isUseLimitInVariableMode(isSubquery)) {
             return sql + " RETURN RESULT " + (hasOffset ? " ? TO ?" : " ?");
         } else {
             return sql + " RETURN RESULT " + (hasOffset ? (offset + " TO ") : "") + limit;

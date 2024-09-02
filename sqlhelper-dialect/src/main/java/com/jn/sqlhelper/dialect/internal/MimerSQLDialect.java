@@ -28,7 +28,7 @@ public class MimerSQLDialect extends AbstractDialect {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, boolean isSubquery, RowSelection rowSelection) {
+            public String processSql(String sql, boolean isSubquery, boolean useLimitVariable, RowSelection rowSelection) {
                 return null;
             }
         });

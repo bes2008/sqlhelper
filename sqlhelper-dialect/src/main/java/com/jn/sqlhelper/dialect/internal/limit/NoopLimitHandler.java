@@ -24,7 +24,7 @@ public class NoopLimitHandler extends AbstractLimitHandler {
     public static final NoopLimitHandler INSTANCE = new NoopLimitHandler();
 
     @Override
-    public String processSql(String sql,boolean isSubquery, RowSelection selection) {
+    public String processSql(String sql,boolean isSubquery, boolean useLimitVariable, RowSelection selection) {
         return sql;
     }
 

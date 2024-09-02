@@ -16,6 +16,7 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.util.regexp.Regexp;
 import com.jn.langx.util.regexp.Regexps;
+import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 
@@ -25,16 +26,12 @@ public class MonetDialect extends AbstractDialect {
     public MonetDialect() {
         super();
         setLimitHandler(new AbstractLimitHandler() {
-            @Override
-            public String processSql(String sql, boolean isSubquery, RowSelection rowSelection) {
-                return getLimitString(sql, isSubquery , rowSelection.hasOffset());
-            }
 
             /**
              * https://www.monetdb.org/Documentation/Manuals/SQLreference/SQLSyntaxOverview#SELECT
              */
             @Override
-            protected String getLimitString(String sql, boolean isSubquery, boolean hasOffset) {
+            public String processSql(String sql, boolean isSubquery, boolean useLimitVariable, RowSelection selection) {
                 sql = sql.trim();
                 while (sql.endsWith(";")) {
                     sql = sql.substring(0, sql.length() - 1);
@@ -50,7 +47,18 @@ public class MonetDialect extends AbstractDialect {
                     sql = sql.substring(0, lastIndex);
                 }
 
-                sql = sql + (hasOffset ? " limit ? offset ? " : " limit ? ") + (hasSampleClause ? sampleSql : "");
+                boolean hasOffset = selection.hasOffset();
+                if(useLimitVariable && isUseLimitInVariableMode(isSubquery)) {
+                    sql = sql + (hasOffset ? " limit ? offset ? " : " limit ? ") ;
+                }else{
+                    int lastRow = getMaxOrLimit(selection);
+                    sql = sql + " limit " + lastRow;
+                    if(hasOffset){
+                        int firstRow = (int)convertToFirstRowValue(LimitHelper.getFirstRow(selection));
+                        sql = sql + " offset "+ firstRow;
+                    }
+                }
+                sql = sql + (hasSampleClause ? sampleSql : "");
                 return sql;
             }
         });

@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 
@@ -24,12 +25,7 @@ public class IgniteDialect extends AbstractDialect {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, boolean isSubquery, RowSelection rowSelection) {
-                return null;
-            }
-
-            @Override
-            protected String getLimitString(String sql, boolean isSubquery, boolean hasOffset) {
+            public String processSql(String sql, boolean isSubquery, boolean useLimitVariable, RowSelection selection) {
                 /**
                  * https://apacheignite-sql.readme.io/docs/select
                  *
@@ -56,10 +52,21 @@ public class IgniteDialect extends AbstractDialect {
                 }
                 StringBuilder sql2 = new StringBuilder(sql.length() + 100);
                 sql2.append(sql);
-                if (hasOffset) {
-                    sql2.append(" limit ? offset ? ");
-                } else {
-                    sql2.append(" limit ? ");
+                boolean hasOffset = selection.hasOffset();
+                if(useLimitVariable && isUseLimitInVariableMode(isSubquery)){
+                    if (hasOffset) {
+                        sql2.append(" limit ? offset ? ");
+                    } else {
+                        sql2.append(" limit ? ");
+                    }
+                }else {
+                    int firstRow = (int)convertToFirstRowValue(LimitHelper.getFirstRow(selection));
+                    int lastRow = getMaxOrLimit(selection);
+                    if (hasOffset) {
+                        sql2.append(" limit "+lastRow+" offset " + firstRow +" ");
+                    } else {
+                        sql2.append(" limit " + lastRow +" ");
+                    }
                 }
                 if (isForSample) {
                     sql2.append(forSampleClause);

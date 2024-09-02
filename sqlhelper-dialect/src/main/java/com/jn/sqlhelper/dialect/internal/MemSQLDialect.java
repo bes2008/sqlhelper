@@ -25,12 +25,7 @@ public class MemSQLDialect extends AbstractDialect {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, boolean isSubquery, RowSelection rowSelection) {
-                return getLimitString(sql,isSubquery, LimitHelper.hasFirstRow(rowSelection));
-            }
-
-            @Override
-            protected String getLimitString(String sql, boolean isSubquery, boolean hasOffset) {
+            public String processSql(String sql, boolean isSubquery, boolean useLimitVariable, RowSelection selection) {
                 /*
                  *
                  *
@@ -90,12 +85,22 @@ public class MemSQLDialect extends AbstractDialect {
 
                 // its limit clause supports two styles:
                 // 1) LIMIT $offset, $limit
-                // 2) LIMIT $limit, $offset
-                // we choice 1)
-                if (hasOffset) {
-                    sql2.append(" limit ?, ? ");
-                } else {
-                    sql2.append(" limit ? ");
+                // 2) LIMIT $limit OFFSET $offset
+
+                // we use 2)
+                if(useLimitVariable && isUseLimitInVariableMode(isSubquery)) {
+                    if (selection.hasOffset()) {
+                        sql2.append(" limit ? OFFSET ? ");
+                    } else {
+                        sql2.append(" limit ? ");
+                    }
+                }else{
+                    int firstRow = (int)convertToFirstRowValue(LimitHelper.getFirstRow(selection));
+                    int lastRow = getMaxOrLimit(selection);
+                    sql2.append(" limit " + lastRow +" ");
+                    if (selection.hasOffset()) {
+                        sql2.append(" OFFSET " + firstRow);
+                    }
                 }
 
                 if (isIntoOutfile) {
@@ -112,7 +117,7 @@ public class MemSQLDialect extends AbstractDialect {
 
     @Override
     public boolean isBindLimitParametersInReverseOrder() {
-        return false;
+        return true;
     }
 
     @Override

@@ -29,14 +29,23 @@ public class FirebirdDialect extends InterbaseDialect {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, boolean isSubQuery, RowSelection selection) {
+            public String processSql(String sql, boolean isSubQuery, boolean useLimitVariable, RowSelection selection) {
                 boolean hasOffset = LimitHelper.hasFirstRow(selection);
-                return getLimitString(sql,isSubQuery, hasOffset);
-            }
+                sql = sql.trim();
+                StringBuilder sqlbuiler = new StringBuilder(sql.length() + 20).append(sql);
 
-            @Override
-            public String getLimitString(String sql, boolean isSubQuery, boolean hasOffset) {
-                return new StringBuilder(sql.length() + 20).append(sql).insert(6, hasOffset ? " first ? skip ?" : " first ?").toString();
+                String substring = "";
+                if(useLimitVariable && isUseLimitInVariableMode(isSubQuery)){
+                    substring = hasOffset ? " first ? skip ?" : " first ?";
+                }else{
+                    int firstRow = (int)convertToFirstRowValue(LimitHelper.getFirstRow(selection));
+                    int lastRow = getMaxOrLimit(selection);
+                    substring = " first "+lastRow ;
+                    if(hasOffset){
+                        substring = " skip "+ firstRow +" ";
+                    }
+                }
+                return sqlbuiler.insert(6, substring).toString();
             }
         });
 
