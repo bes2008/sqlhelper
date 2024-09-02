@@ -234,6 +234,17 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     }
 
     public final List rebuildParameters(RowSelection selection, List queryParams){
+        return rebuildParameters(false, selection, queryParams);
+    }
+
+    @Override
+    public List rebuildParameters(boolean isSubquery, RowSelection selection, List queryParams) {
+        if(!isSupportsLimitOffset()){
+            return queryParams;
+        }
+        if(!isUseLimitInVariableMode(isSubquery)){
+            return queryParams;
+        }
         List result = Lists.newArrayList();
         int parameterIndex = 0;
 

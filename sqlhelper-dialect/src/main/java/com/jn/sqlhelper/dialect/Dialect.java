@@ -114,6 +114,7 @@ public interface Dialect extends LikeEscaper {
             throws SQLException;
 
     List rebuildParameters(RowSelection paramRowSelection, List queryParams);
+    List rebuildParameters(boolean isSubquery, RowSelection paramRowSelection, List queryParams);
 
     boolean isUseMaxForLimit();
 
