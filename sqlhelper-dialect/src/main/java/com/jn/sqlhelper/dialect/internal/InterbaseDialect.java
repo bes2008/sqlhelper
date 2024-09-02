@@ -23,13 +23,13 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 public class InterbaseDialect extends AbstractDialect {
     private static final AbstractLimitHandler LIMIT_HANDLER = new AbstractLimitHandler() {
         @Override
-        public String processSql(String sql, RowSelection selection) {
+        public String processSql(String sql, boolean isSubquery, RowSelection selection) {
             boolean hasOffset = LimitHelper.hasFirstRow(selection);
-            return getLimitString(sql, hasOffset);
+            return getLimitString(sql, isSubquery, hasOffset);
         }
 
         @Override
-        public String getLimitString(String sql, boolean hasOffset) {
+        public String getLimitString(String sql, boolean isSubquery, boolean hasOffset) {
             return sql + " rows ?";
         }
     };

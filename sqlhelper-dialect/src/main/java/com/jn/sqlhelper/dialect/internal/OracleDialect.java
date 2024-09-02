@@ -124,13 +124,13 @@ public class OracleDialect extends AbstractDialect {
 
     private static class Oracle8i9LimitHandler extends AbstractLimitHandler {
         @Override
-        public String processSql(String sql, RowSelection selection) {
+        public String processSql(String sql,boolean isSubquery, RowSelection selection) {
             boolean hasOffset = LimitHelper.hasFirstRow(selection);
-            return getLimitString(sql, hasOffset);
+            return getLimitString(sql,isSubquery, hasOffset);
         }
 
         @Override
-        public String getLimitString(String sql, boolean hasOffset) {
+        public String getLimitString(String sql,boolean isSubquery, boolean hasOffset) {
             sql = sql.trim();
             boolean isForUpdate = false;
             if (sql.toLowerCase(Locale.ROOT).endsWith(" for update")) {

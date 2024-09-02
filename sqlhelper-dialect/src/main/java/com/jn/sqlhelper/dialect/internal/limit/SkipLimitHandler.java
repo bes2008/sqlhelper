@@ -16,17 +16,17 @@ public class SkipLimitHandler extends AbstractLimitHandler {
     }
 
     @Override
-    public String processSql(String sql, RowSelection selection) {
+    public String processSql(String sql,boolean isSubquery, RowSelection selection) {
         final boolean hasOffset = LimitHelper.hasFirstRow(selection);
         String sqlLimit = "";
         if (hasOffset) {
-            if (getDialect().isSupportsVariableLimit()) {
+            if (getDialect().isUseLimitInVariableMode(isSubquery)) {
                 sqlLimit = " SKIP ? ";
             } else {
                 sqlLimit = " SKIP " + selection.getOffset();
             }
         }
-        if (getDialect().isSupportsVariableLimit()) {
+        if (getDialect().isUseLimitInVariableMode(isSubquery)) {
             sqlLimit = sqlLimit + " " + firstNKeyword + " ? ";
         } else {
             sqlLimit = sqlLimit + " " + firstNKeyword + " " + getMaxOrLimit(selection) + " ";

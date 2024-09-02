@@ -26,7 +26,7 @@ public class CacheDialect extends AbstractDialect {
         super();
         setLimitHandler(new TopLimitHandler() {
             @Override
-            public String getLimitString(String sql, boolean hasOffset) {
+            public String getLimitString(String sql,boolean isSubquery, boolean hasOffset) {
                 if (hasOffset) {
                     throw new UnsupportedOperationException("query result offset is not supported");
                 }

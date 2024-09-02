@@ -26,15 +26,15 @@ public class MonetDialect extends AbstractDialect {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, RowSelection rowSelection) {
-                return getLimitString(sql, rowSelection.getOffset() > 0);
+            public String processSql(String sql, boolean isSubquery, RowSelection rowSelection) {
+                return getLimitString(sql, isSubquery , rowSelection.hasOffset());
             }
 
             /**
              * https://www.monetdb.org/Documentation/Manuals/SQLreference/SQLSyntaxOverview#SELECT
              */
             @Override
-            protected String getLimitString(String sql, boolean hasOffset) {
+            protected String getLimitString(String sql, boolean isSubquery, boolean hasOffset) {
                 sql = sql.trim();
                 while (sql.endsWith(";")) {
                     sql = sql.substring(0, sql.length() - 1);

@@ -161,9 +161,14 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     @Override
     public boolean isUseLimitInVariableMode() {
+        return isUseLimitInVariableMode(false);
+    }
+
+    @Override
+    public boolean isUseLimitInVariableMode(boolean isSubquery) {
         AbstractDialect d = getRealDialect();
         if (d.isUseLimitInVariableMode == null) {
-            return d.isSupportsVariableLimit();
+            return isSubquery? d.isSupportsVariableLimitInSubquery() : d.isSupportsVariableLimit();
         } else {
             return d.isUseLimitInVariableMode;
         }
@@ -206,6 +211,11 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     @Override
     public String getLimitSql(String sql, RowSelection selection) {
         return getLimitHandler().processSql(sql, selection);
+    }
+
+    @Override
+    public String getLimitSql(String query, boolean isSubQuery, RowSelection rowSelection) {
+        return getLimitHandler().processSql(query, isSubQuery, rowSelection);
     }
 
     @Override

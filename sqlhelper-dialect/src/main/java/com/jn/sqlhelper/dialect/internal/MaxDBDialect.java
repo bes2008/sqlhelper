@@ -27,13 +27,13 @@ public class MaxDBDialect extends AbstractDialect {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, RowSelection rowSelection) {
+            public String processSql(String sql, boolean isSubquery, RowSelection rowSelection) {
                 boolean hasOffset = LimitHelper.hasFirstRow(rowSelection);
-                return getLimitString(sql, hasOffset);
+                return getLimitString(sql, isSubquery, hasOffset);
             }
 
             @Override
-            protected String getLimitString(String sql, boolean hasOffset) {
+            protected String getLimitString(String sql, boolean isSubquery, boolean hasOffset) {
                 sql = "select * from (" + sql + ") where rowno < ? ";
                 if (hasOffset) {
                     sql = sql + " and rowno >= ?";

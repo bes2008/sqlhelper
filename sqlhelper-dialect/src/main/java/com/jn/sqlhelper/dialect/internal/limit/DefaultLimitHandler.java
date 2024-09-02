@@ -19,8 +19,7 @@ import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.internal.AbstractDialect;
 
 
-public class DefaultLimitHandler
-        extends AbstractLimitHandler {
+public class DefaultLimitHandler extends AbstractLimitHandler {
     public DefaultLimitHandler(AbstractDialect dialect) {
         setDialect(dialect);
     }
@@ -30,8 +29,8 @@ public class DefaultLimitHandler
     }
 
     @Override
-    public String processSql(String sql, RowSelection selection) {
+    public String processSql(String sql,boolean isSubquery, RowSelection selection) {
         boolean useLimitOffset = (getDialect().isSupportsLimit()) && (getDialect().isSupportsLimitOffset()) && (LimitHelper.hasFirstRow(selection)) && (LimitHelper.hasMaxRows(selection));
-        return getLimitString(sql, useLimitOffset ? LimitHelper.getFirstRow(selection) : 0, getMaxOrLimit(selection));
+        return getLimitString(sql, isSubquery, useLimitOffset ? LimitHelper.getFirstRow(selection) : 0, getMaxOrLimit(selection));
     }
 }

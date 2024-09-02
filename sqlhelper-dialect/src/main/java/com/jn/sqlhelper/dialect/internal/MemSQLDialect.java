@@ -25,12 +25,12 @@ public class MemSQLDialect extends AbstractDialect {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, RowSelection rowSelection) {
-                return getLimitString(sql, LimitHelper.hasFirstRow(rowSelection));
+            public String processSql(String sql, boolean isSubquery, RowSelection rowSelection) {
+                return getLimitString(sql,isSubquery, LimitHelper.hasFirstRow(rowSelection));
             }
 
             @Override
-            protected String getLimitString(String sql, boolean hasOffset) {
+            protected String getLimitString(String sql, boolean isSubquery, boolean hasOffset) {
                 /*
                  *
                  *

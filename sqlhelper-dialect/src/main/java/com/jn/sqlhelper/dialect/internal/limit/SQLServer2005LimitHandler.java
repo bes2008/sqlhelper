@@ -48,7 +48,7 @@ public class SQLServer2005LimitHandler
     }
 
     @Override
-    public String processSql(String sql, RowSelection selection) {
+    public String processSql(String sql,boolean isSubquery, RowSelection selection) {
         StringBuilder sb = new StringBuilder(sql);
         if (sb.charAt(sb.length() - 1) == ';') {
             sb.setLength(sb.length() - 1);

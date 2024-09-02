@@ -32,12 +32,12 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler {
     private boolean supportLockInModeClause;
 
     @Override
-    public String processSql(String sql, RowSelection rowSelection) {
-        return getLimitString(sql, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
+    public String processSql(String sql,boolean isSubquery, RowSelection rowSelection) {
+        return getLimitString(sql, isSubquery, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
     }
 
     @Override
-    protected String getLimitString(String sql, long offset, int limit) {
+    protected String getLimitString(String sql,boolean isSubquery, long offset, int limit) {
         boolean hasOffset = offset > 0;
         sql = sql.trim();
         String forUpdateClause = "";
@@ -66,7 +66,7 @@ public class LimitOffsetLimitHandler extends AbstractLimitHandler {
         StringBuilder sql2 = new StringBuilder(sql.length() + 100);
         sql2.append(sql);
 
-        if (getDialect().isUseLimitInVariableMode()) {
+        if (getDialect().isUseLimitInVariableMode(isSubquery)) {
             if (hasOffset) {
                 sql2.append(" limit ? offset ? " + (hasOffsetRowsSuffix ? "rows" : ""));
             } else {

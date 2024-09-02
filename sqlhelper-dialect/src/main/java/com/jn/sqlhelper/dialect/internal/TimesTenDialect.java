@@ -23,7 +23,7 @@ public class TimesTenDialect extends AbstractDialect {
         super();
         setLimitHandler(new FirstLimitHandler() {
             @Override
-            public String getLimitString(String querySelect, long offset, int limit) {
+            public String getLimitString(String querySelect,boolean isSubquery, long offset, int limit) {
                 if (offset > 0) {
                     throw new UnsupportedOperationException("query result offset is not supported");
                 }

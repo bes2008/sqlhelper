@@ -29,13 +29,13 @@ public class FirebirdDialect extends InterbaseDialect {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, RowSelection selection) {
+            public String processSql(String sql, boolean isSubQuery, RowSelection selection) {
                 boolean hasOffset = LimitHelper.hasFirstRow(selection);
-                return getLimitString(sql, hasOffset);
+                return getLimitString(sql,isSubQuery, hasOffset);
             }
 
             @Override
-            public String getLimitString(String sql, boolean hasOffset) {
+            public String getLimitString(String sql, boolean isSubQuery, boolean hasOffset) {
                 return new StringBuilder(sql.length() + 20).append(sql).insert(6, hasOffset ? " first ? skip ?" : " first ?").toString();
             }
         });

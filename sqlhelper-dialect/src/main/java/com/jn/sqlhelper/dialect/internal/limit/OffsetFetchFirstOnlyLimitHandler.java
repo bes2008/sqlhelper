@@ -35,12 +35,12 @@ import java.util.Locale;
 public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
 
     @Override
-    public String processSql(String sql, RowSelection rowSelection) {
-        return getLimitString(sql, rowSelection.getOffset(), getMaxOrLimit(rowSelection));
+    public String processSql(String sql,boolean isSubquery, RowSelection rowSelection) {
+        return getLimitString(sql,isSubquery, rowSelection.getOffset(), getMaxOrLimit(rowSelection));
     }
 
     @Override
-    protected String getLimitString(String sql, long offset, int limit) {
+    protected String getLimitString(String sql,boolean isSubquery, long offset, int limit) {
         // https://fmhelp.filemaker.com/docs/16/en/fm16_sql_reference.pdf
         // https://documentation.progress.com/output/ua/OpenEdge_latest/#page/dmsrf%2Foffset-and-fetch-clauses.html%23wwID0E6CPQ
         boolean hasOffset = offset > 0;
@@ -84,7 +84,7 @@ public class OffsetFetchFirstOnlyLimitHandler extends AbstractLimitHandler {
         StringBuilder sql2 = new StringBuilder(sql.length() + 100);
         sql2.append(sql);
 
-        if (getDialect().isUseLimitInVariableMode()) {
+        if (getDialect().isUseLimitInVariableMode(isSubquery)) {
             if (hasOffset || !supportSimplifyFirstOnly) {
                 sql2.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
             } else {

@@ -71,6 +71,8 @@ public interface Dialect extends LikeEscaper {
      */
     boolean isUseLimitInVariableMode();
 
+    boolean isUseLimitInVariableMode(boolean isSubquery);
+
     /**
      * Whether set limit or offset with placeholder '?'
      */
@@ -83,7 +85,7 @@ public interface Dialect extends LikeEscaper {
      * @return The modified query statement with the limit applied.
      */
     String getLimitSql(String query, RowSelection rowSelection);
-
+    String getLimitSql(String query, boolean isSubQuery, RowSelection rowSelection);
     /**
      * Whether bind parameter in reverse or not.
      * <p>

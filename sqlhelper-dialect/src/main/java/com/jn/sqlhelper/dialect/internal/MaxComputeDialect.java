@@ -30,12 +30,12 @@ public class MaxComputeDialect extends AbstractDialect {
 
     private static class MaxComputeLimitHandler extends AbstractLimitHandler {
         @Override
-        public String processSql(String sql, RowSelection rowSelection) {
-            return getLimitString(sql, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
+        public String processSql(String sql,boolean isSubquery, RowSelection rowSelection) {
+            return getLimitString(sql,isSubquery, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
         }
 
         @Override
-        protected String getLimitString(String sql, long offset, int limit) {
+        protected String getLimitString(String sql,boolean isSubquery, long offset, int limit) {
             if (offset == 0) {
                 if (getDialect().isUseLimitInVariableMode()) {
                     return sql + " limit ?";
@@ -50,11 +50,6 @@ public class MaxComputeDialect extends AbstractDialect {
                 return sqlBuilder.toString();
             }
         }
-    }
-
-    @Override
-    public boolean isUseLimitInVariableMode() {
-        return true;
     }
 
     @Override

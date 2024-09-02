@@ -24,13 +24,13 @@ import com.jn.sqlhelper.dialect.pagination.RowSelection;
  */
 public class LimitOnlyLimitHandler extends AbstractLimitHandler {
     @Override
-    public String processSql(String sql, RowSelection rowSelection) {
-        return getLimitString(sql, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
+    public String processSql(String sql,boolean isSubquery, RowSelection rowSelection) {
+        return getLimitString(sql,isSubquery, LimitHelper.getFirstRow(rowSelection), getMaxOrLimit(rowSelection));
     }
 
     @Override
-    protected String getLimitString(String sql, long offset, int limit) {
-        if (getDialect().isUseLimitInVariableMode()) {
+    protected String getLimitString(String sql,boolean isSubquery, long offset, int limit) {
+        if (getDialect().isUseLimitInVariableMode(isSubquery)) {
             return sql + " limit ?";
         } else {
             return sql + " limit " + limit;

@@ -20,11 +20,11 @@ import com.jn.sqlhelper.dialect.pagination.RowSelection;
 
 public class FirstLimitHandler extends LegacyFirstLimitHandler {
     @Override
-    public String processSql(String sql, RowSelection selection) {
+    public String processSql(String sql, boolean isSubquery, RowSelection selection) {
         boolean hasOffset = LimitHelper.hasFirstRow(selection);
         if (hasOffset) {
             throw new UnsupportedOperationException("query result offset is not supported");
         }
-        return super.processSql(sql, selection);
+        return super.processSql(sql, isSubquery, selection);
     }
 }

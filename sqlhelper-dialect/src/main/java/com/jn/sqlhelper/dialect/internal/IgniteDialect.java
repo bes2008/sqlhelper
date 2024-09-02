@@ -24,12 +24,12 @@ public class IgniteDialect extends AbstractDialect {
         super();
         setLimitHandler(new AbstractLimitHandler() {
             @Override
-            public String processSql(String sql, RowSelection rowSelection) {
+            public String processSql(String sql, boolean isSubquery, RowSelection rowSelection) {
                 return null;
             }
 
             @Override
-            protected String getLimitString(String sql, boolean hasOffset) {
+            protected String getLimitString(String sql, boolean isSubquery, boolean hasOffset) {
                 /**
                  * https://apacheignite-sql.readme.io/docs/select
                  *
