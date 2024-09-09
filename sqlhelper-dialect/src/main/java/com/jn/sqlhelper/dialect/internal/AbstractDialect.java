@@ -291,6 +291,8 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         throw new TableNonExistsException(StringTemplates.formatWithPlaceholder("Table {} is not exists", SQLs.getTableFQN(database, catalog, schema, tableName)));
     }
 
+    private static String IDENTIFIER_BEFORE_QUOTES="\"'`[";
+    private static String IDENTIFIER_AFTER_QUOTES="\"'`]";
     @Override
     public String getQuotedIdentifier(String identifier) {
         if (identifier == null) {
@@ -298,16 +300,8 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         }
         if (delegate == null) {
             identifier = identifier.trim();
-            if (!Strings.isBlank("" + getBeforeQuote())) {
-                while (identifier.charAt(0) == getBeforeQuote()) {
-                    identifier = identifier.substring(1);
-                }
-            }
-            if (!Strings.isBlank("" + getAfterQuote())) {
-                while (identifier.charAt(identifier.length() - 1) == getAfterQuote()) {
-                    identifier = identifier.substring(0, identifier.length() - 1);
-                }
-            }
+            identifier = Strings.stripStart(identifier, IDENTIFIER_BEFORE_QUOTES);
+            identifier = Strings.stripEnd(identifier, IDENTIFIER_AFTER_QUOTES);
             return getBeforeQuote() + identifier + getAfterQuote();
         }
         return delegate.getQuotedIdentifier(identifier);
