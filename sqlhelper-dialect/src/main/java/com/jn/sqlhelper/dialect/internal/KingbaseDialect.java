@@ -33,6 +33,6 @@ public class KingbaseDialect extends AbstractDialect {
 
     @Override
     public IdentifierCase unquotedIdentifierCase() {
-        return IdentifierCase.LOWERCASE;
+        return IdentifierCase.LOWER_CASE;
     }
 }

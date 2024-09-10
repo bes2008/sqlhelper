@@ -15,7 +15,7 @@ public class GaussDbDialect extends AbstractDialect {
 
     @Override
     public IdentifierCase unquotedIdentifierCase() {
-        return IdentifierCase.LOWERCASE;
+        return IdentifierCase.LOWER_CASE;
     }
 
     @Override

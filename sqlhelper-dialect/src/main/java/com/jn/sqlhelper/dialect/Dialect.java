@@ -146,11 +146,13 @@ public interface Dialect extends LikeEscaper {
 
     public enum IdentifierCase {
         // identifier 在 数据库中，是否会被自动转换为 大写形式
-        UPPERCASE,
+        UPPER_CASE,
         // identifier 在 数据库中，是否会被自动转换为 小写形式
-        LOWERCASE,
-        // identifier 在 数据库中，不会被自动转换大小写
-        NOCASE
+        LOWER_CASE,
+        // 忽略大小写，无所谓，使用时加不加引号都不影响。
+        IGNORE_CASE,
+        // identifier 在 数据库中，不会被自动转换大小写，保持原样。
+        NO_CASE
     }
 
     /**

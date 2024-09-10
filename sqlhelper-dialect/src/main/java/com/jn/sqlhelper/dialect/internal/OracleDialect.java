@@ -90,7 +90,7 @@ public class OracleDialect extends AbstractDialect {
 
         @Override
         public IdentifierCase unquotedIdentifierCase() {
-            return IdentifierCase.UPPERCASE;
+            return IdentifierCase.UPPER_CASE;
         }
 
         @Override
