@@ -36,6 +36,6 @@ public class DmDialect extends AbstractDialect {
 
     @Override
     public IdentifierCase unquotedIdentifierCase() {
-        return IdentifierCase.IGNORE_CASE;
+        return IdentifierCase.UPPER_CASE;
     }
 }
