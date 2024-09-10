@@ -30,4 +30,9 @@ public class KingbaseDialect extends AbstractDialect {
     public boolean isBindLimitParametersInReverseOrder() {
         return true;
     }
+
+    @Override
+    public IdentifierCase unquotedIdentifierCase() {
+        return IdentifierCase.LOWERCASE;
+    }
 }
