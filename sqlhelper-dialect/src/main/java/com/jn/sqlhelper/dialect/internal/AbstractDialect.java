@@ -308,13 +308,19 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     @Override
     public final String getQuotedIdentifier(String identifier) {
+        return getQuotedIdentifier(identifier, null);
+    }
+
+    public final String getQuotedIdentifier(String identifier, IdentifierCase identifierCase) {
         if (identifier == null) {
             return null;
         }
         if (delegate == null) {
             identifier = getUnquoteIdentifier(identifier);
 
-            IdentifierCase identifierCase = unquotedIdentifierCase();
+            if(identifierCase==null){
+                identifierCase = unquotedIdentifierCase();
+            }
             switch (identifierCase){
                 case LOWER_CASE:
                     identifier = Strings.lowerCase(identifier);
@@ -333,7 +339,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
             }
             return getBeforeQuote() + identifier + getAfterQuote();
         }
-        return delegate.getQuotedIdentifier(identifier);
+        return delegate.getQuotedIdentifier(identifier, identifierCase);
     }
 
     @Override

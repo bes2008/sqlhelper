@@ -172,6 +172,8 @@ public interface Dialect extends LikeEscaper {
      */
     String getQuotedIdentifier(String identifier);
 
+    String getQuotedIdentifier(String identifier, IdentifierCase identifierCase);
+
     String getUnquoteIdentifier(String identifier);
 
     /**
