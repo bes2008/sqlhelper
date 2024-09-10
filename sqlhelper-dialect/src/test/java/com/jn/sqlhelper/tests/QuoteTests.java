@@ -12,8 +12,8 @@ public class QuoteTests {
 
     @Test
     public void test() {
-        List<String> columns = Lists.newArrayList("user", "id", "role");
-        List<String> dialectIds = Lists.newArrayList("mysql", "oracle", "dm", "sqlserver2012", "magicdata", "postgresql", "derby");
+        List<String> columns = Lists.newArrayList("user", "id", "role", "exists","count");
+        List<String> dialectIds = Lists.newArrayList("mysql", "oracle", "dm", "sqlserver2012", "magicdata", "postgresql", "derby", "kingbase");
         testQuotedColumns(columns, dialectIds);
     }
 
