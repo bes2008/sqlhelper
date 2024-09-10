@@ -39,6 +39,11 @@ public class PostgreSQLDialect extends AbstractDialect {
     }
 
     @Override
+    public IdentifierCase unquotedIdentifierCase() {
+        return IdentifierCase.LOWERCASE;
+    }
+
+    @Override
     public boolean isSupportsLimit() {
         return true;
     }

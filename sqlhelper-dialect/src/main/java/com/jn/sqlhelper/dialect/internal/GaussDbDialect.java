@@ -13,6 +13,10 @@ public class GaussDbDialect extends AbstractDialect {
         setLimitHandler(new LimitOffsetLimitHandler());
     }
 
+    @Override
+    public IdentifierCase unquotedIdentifierCase() {
+        return IdentifierCase.LOWERCASE;
+    }
 
     @Override
     public boolean isSupportsLimit() {

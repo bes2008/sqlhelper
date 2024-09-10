@@ -44,6 +44,10 @@ public class BesMagicDataDialect extends AbstractDialect {
         setPlainSqlScriptParser(new BesMagicDataSQLScriptParser());
     }
 
+    @Override
+    public IdentifierCase unquotedIdentifierCase() {
+        return IdentifierCase.LOWERCASE;
+    }
 
     @Override
     public boolean isSupportsLimit() {

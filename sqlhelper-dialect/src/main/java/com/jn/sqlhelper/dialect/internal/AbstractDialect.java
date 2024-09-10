@@ -314,7 +314,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         if (delegate == null) {
             identifier = getUnquoteIdentifier(identifier);
 
-            IdentifierCase identifierCase = identifierCase();
+            IdentifierCase identifierCase = unquotedIdentifierCase();
             switch (identifierCase){
                 case LOWERCASE:
                     identifier = Strings.lowerCase(identifier);
@@ -336,7 +336,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
     }
 
     @Override
-    public IdentifierCase identifierCase() {
+    public IdentifierCase unquotedIdentifierCase() {
         return IdentifierCase.NOCASE;
     }
 

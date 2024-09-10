@@ -157,8 +157,10 @@ public interface Dialect extends LikeEscaper {
      * 在DDL 中，如果 identifier 没有被 引号引用时，在数据库中应该被存储为什么形式。
      * 根据 SQL-92 标准，应该是大写形式，但并不是所有的数据库都实现了这个。
      *
+     *
+     * 日常写SQL时，尽量不要加引号，因为一旦加了引号，引号中的内容必须与数据库中存储的保持一致才能正确识别。
      */
-    IdentifierCase identifierCase();
+    IdentifierCase unquotedIdentifierCase();
 
     /**
      * Database identifier: tableName, columnName, schema, keyword.
