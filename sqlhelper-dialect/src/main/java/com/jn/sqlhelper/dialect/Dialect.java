@@ -144,6 +144,20 @@ public interface Dialect extends LikeEscaper {
     void setMaxRows(RowSelection paramRowSelection, PreparedStatement paramPreparedStatement)
             throws SQLException;
 
+    public enum IdentifierCase {
+        // identifier 在 数据库中，是否会被自动转换为 大写形式
+        UPPERCASE,
+        // identifier 在 数据库中，是否会被自动转换为 小写形式
+        LOWERCASE,
+        // identifier 在 数据库中，不会被自动转换大小写
+        NOCASE
+    }
+
+    /**
+     * identifier 在 数据库中，是否会被自动转换为 大小写形式
+     */
+    IdentifierCase identifierCase();
+
     /**
      * Database identifier: tableName, columnName, schema, keyword.
      *

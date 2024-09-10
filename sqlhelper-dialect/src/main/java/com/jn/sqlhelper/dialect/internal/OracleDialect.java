@@ -89,6 +89,11 @@ public class OracleDialect extends AbstractDialect {
         }
 
         @Override
+        public IdentifierCase identifierCase() {
+            return IdentifierCase.UPPERCASE;
+        }
+
+        @Override
         public boolean isSupportsLimit() {
             return true;
         }

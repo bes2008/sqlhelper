@@ -302,9 +302,28 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
             identifier = identifier.trim();
             identifier = Strings.stripStart(identifier, IDENTIFIER_BEFORE_QUOTES);
             identifier = Strings.stripEnd(identifier, IDENTIFIER_AFTER_QUOTES);
+
+            IdentifierCase identifierCase = identifierCase();
+            switch (identifierCase){
+                case LOWERCASE:
+                    identifier = Strings.lowerCase(identifier);
+                    break;
+                case UPPERCASE:
+                    identifier = Strings.upperCase(identifier);
+                    break;
+                case NOCASE:
+                default:
+                    break;
+            }
+
             return getBeforeQuote() + identifier + getAfterQuote();
         }
         return delegate.getQuotedIdentifier(identifier);
+    }
+
+    @Override
+    public IdentifierCase identifierCase() {
+        return IdentifierCase.NOCASE;
     }
 
     @Override
