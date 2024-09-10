@@ -65,6 +65,10 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         setPlainSqlScriptParser(new SQLServerSqlScriptParser());
     }
 
+    @Override
+    public IdentifierCase unquotedIdentifierCase() {
+        return IdentifierCase.IGNORE_CASE;
+    }
 
     /**
      * @param productionVersion databaseMeta.getProductionVersion
@@ -125,6 +129,11 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         }
 
         @Override
+        public IdentifierCase unquotedIdentifierCase() {
+            return IdentifierCase.IGNORE_CASE;
+        }
+
+        @Override
         public boolean isSupportsLimit() {
             return true;
         }
@@ -155,6 +164,11 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         public SQLServer2005Dialect() {
             setLimitHandler(new SQLServer2005LimitHandler());
             setDelegate(null);
+        }
+
+        @Override
+        public IdentifierCase unquotedIdentifierCase() {
+            return IdentifierCase.IGNORE_CASE;
         }
 
         @Override
