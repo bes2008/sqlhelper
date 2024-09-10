@@ -293,15 +293,26 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     private static String IDENTIFIER_BEFORE_QUOTES="\"'`[";
     private static String IDENTIFIER_AFTER_QUOTES="\"'`]";
+
     @Override
-    public String getQuotedIdentifier(String identifier) {
+    public final String getUnquoteIdentifier(String identifier) {
+        if (identifier == null) {
+            return null;
+        }
+        identifier = identifier.trim();
+        identifier = Strings.stripStart(identifier, IDENTIFIER_BEFORE_QUOTES);
+        identifier = Strings.stripEnd(identifier, IDENTIFIER_AFTER_QUOTES);
+
+        return identifier;
+    }
+
+    @Override
+    public final String getQuotedIdentifier(String identifier) {
         if (identifier == null) {
             return null;
         }
         if (delegate == null) {
-            identifier = identifier.trim();
-            identifier = Strings.stripStart(identifier, IDENTIFIER_BEFORE_QUOTES);
-            identifier = Strings.stripEnd(identifier, IDENTIFIER_AFTER_QUOTES);
+            identifier = getUnquoteIdentifier(identifier);
 
             IdentifierCase identifierCase = identifierCase();
             switch (identifierCase){

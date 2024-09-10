@@ -154,7 +154,9 @@ public interface Dialect extends LikeEscaper {
     }
 
     /**
-     * identifier 在 数据库中，是否会被自动转换为 大小写形式
+     * 在DDL 中，如果 identifier 没有被 引号引用时，在数据库中应该被存储为什么形式。
+     * 根据 SQL-92 标准，应该是大写形式，但并不是所有的数据库都实现了这个。
+     *
      */
     IdentifierCase identifierCase();
 
@@ -165,6 +167,8 @@ public interface Dialect extends LikeEscaper {
      * @return `identifier`
      */
     String getQuotedIdentifier(String identifier);
+
+    String getUnquoteIdentifier(String identifier);
 
     /**
      * Get quote for symbol (e.g. table name, field name)
