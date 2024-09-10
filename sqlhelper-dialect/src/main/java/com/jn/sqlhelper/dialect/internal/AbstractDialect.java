@@ -327,6 +327,9 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
                     break;
             }
 
+            if(Strings.contains(identifier, ".")){
+                return identifier;
+            }
             return getBeforeQuote() + identifier + getAfterQuote();
         }
         return delegate.getQuotedIdentifier(identifier);
