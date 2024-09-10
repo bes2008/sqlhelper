@@ -53,11 +53,11 @@ public class DialectRegistry {
     private static final Map<String, String> classNameToNameMap = new TreeMap<String, String>();
     // key:DatabaseMetaData.getProduceName() + getDriver();
     private static final Map<String, Holder<Dialect>> dbToDialectMap = new HashMap<String, Holder<Dialect>>();
-    private static final Properties vendorDatabaseIdMappings = new Properties();
+    private static final Properties vendorDatabaseNameMappings = new Properties();
     private static final DialectRegistry registry = new DialectRegistry();
 
     static {
-        loadDatabaseIdMappings();
+        loadDatabaseNameMappings();
         registerBuiltinDialects();
         loadCustomDialects();
     }
@@ -270,29 +270,42 @@ public class DialectRegistry {
         logger.info("Registered dialects: {}", nameToDialectMap.keySet());
     }
 
-    private static void loadDatabaseIdMappings() {
-        logger.info("Start to load database id mappings");
+    private static void loadDatabaseNameMappings() {
+        logger.info("Start to load database mappings (product or vendor name => dialect name)");
 
         try {
-            Properties props = Props.loadFromClasspath("/sqlhelper-dialect-databaseid.properties");
-            vendorDatabaseIdMappings.putAll(props);
+            Properties props = Props.loadFromClasspath("/sqlhelper-dialect-database.properties");
+            vendorDatabaseNameMappings.putAll(props);
         } catch (Throwable ex) {
             logger.error(ex.getMessage(), ex);
         }
     }
 
     public static Properties getVendorDatabaseIdMappings() {
-        return vendorDatabaseIdMappings;
+        return vendorDatabaseNameMappings;
     }
 
+    public static void setDatabaseName(String keywordsInDriver, String databaseId) {
+        setDatabaseNameIfAbsent(keywordsInDriver, databaseId);
+    }
+
+    @Deprecated
     public static void setDatabaseId(String keywordsInDriver, String databaseId) {
-        setDatabaseIdIfAbsent(keywordsInDriver, databaseId);
+        setDatabaseName(keywordsInDriver, databaseId);
     }
 
-    public static void setDatabaseIdIfAbsent(String keywordsInDriver, String databaseId) {
-        if (!vendorDatabaseIdMappings.containsKey(keywordsInDriver)) {
-            vendorDatabaseIdMappings.setProperty(keywordsInDriver, databaseId);
+    public static void setDatabaseNameIfAbsent(String keywordsInDriver, String databaseId) {
+        if (!vendorDatabaseNameMappings.containsKey(keywordsInDriver)) {
+            vendorDatabaseNameMappings.setProperty(keywordsInDriver, databaseId);
         }
+    }
+
+    /**
+     * 由 setDatabaseNameIfAbsent 替代
+     */
+    @Deprecated
+    public static void setDatabaseIdIfAbsent(String keywordsInDriver, String databaseId) {
+        setDatabaseNameIfAbsent(keywordsInDriver, databaseId);
     }
 
     public static String guessDatabaseId(DataSource dataSource) {
@@ -312,6 +325,11 @@ public class DialectRegistry {
      *
      * @return database id
      */
+    public static String guessDatabaseName(final String productName) {
+        return guessDatabaseId(productName);
+    }
+
+    @Deprecated
     public static String guessDatabaseId(final String productName) {
 
         if (productName == null) {
@@ -340,7 +358,7 @@ public class DialectRegistry {
 
         String[] tokens = Strings.split(tmpProductName, ":");
 
-        final Set<String> productKeywords = vendorDatabaseIdMappings.stringPropertyNames();
+        final Set<String> productKeywords = vendorDatabaseNameMappings.stringPropertyNames();
         final Holder<String> matchedProductHolder = new Holder<String>();
         Pipeline.of(tokens).filter(new Predicate<String>() {
             @Override
@@ -371,7 +389,7 @@ public class DialectRegistry {
         String bestProductKeyword = matchedProductHolder.get();
 
         if (Strings.isNotBlank(bestProductKeyword)) {
-            return vendorDatabaseIdMappings.getProperty(bestProductKeyword);
+            return vendorDatabaseNameMappings.getProperty(bestProductKeyword);
         }
 
         if (classNameToNameMap.containsKey(tmpProductName)) {
@@ -502,7 +520,7 @@ public class DialectRegistry {
         if (dialect != null) {
             DialectRegistry.nameToDialectMap.put(name, dialect);
             DialectRegistry.classNameToNameMap.put(dialectClass.getCanonicalName(), name);
-            setDatabaseId(name, name);
+            setDatabaseName(name, name);
         }
 
         // step 2: 扫描兼容性
@@ -534,6 +552,22 @@ public class DialectRegistry {
         return DialectRegistry.nameToDialectMap.get(databaseId);
     }
 
+    /**
+     * @since 5.0.5
+     * @param databaseId dialect or name
+     * @return the dialect object
+     */
+    public Dialect gaussDialect(final String databaseId) {
+        Dialect dialect = getDialectByName(databaseId);
+        if(dialect == null && Strings.isNotBlank(databaseId)){
+            String guessedDatabaseId = guessDatabaseId(databaseId);
+            if(Strings.isNotEmpty(guessedDatabaseId)){
+                dialect = getDialectByName(guessedDatabaseId);
+            }
+        }
+        return dialect;
+    }
+
     public Dialect getDialectByDatabaseMetadata(final DatabaseMetaData databaseMetaData) {
         Dialect dialect = null;
         if (databaseMetaData != null) {
@@ -553,11 +587,11 @@ public class DialectRegistry {
                     dialect = dialectHolder.get();
                 }
                 if (dialect == null) {
-                    Enumeration<String> keys = (Enumeration<String>) vendorDatabaseIdMappings.propertyNames();
+                    Enumeration<String> keys = (Enumeration<String>) vendorDatabaseNameMappings.propertyNames();
                     while (keys.hasMoreElements()) {
                         String key = keys.nextElement();
                         if (databaseIdString.contains(key.toLowerCase())) {
-                            dialect = getDialectByName(vendorDatabaseIdMappings.getProperty(key));
+                            dialect = getDialectByName(vendorDatabaseNameMappings.getProperty(key));
                             if (dialect != null) {
                                 dbToDialectMap.put(databaseIdString, new Holder<Dialect>(dialect));
                                 break;
@@ -576,7 +610,7 @@ public class DialectRegistry {
                             }
                             String tmpDatabaseId = SQLServerDialect.guessDatabaseId(productionVersion);
                             if (Emptys.isNotEmpty(tmpDatabaseId)) {
-                                dialect = getDialectByName(vendorDatabaseIdMappings.getProperty(tmpDatabaseId));
+                                dialect = getDialectByName(vendorDatabaseNameMappings.getProperty(tmpDatabaseId));
                                 if (dialect != null) {
                                     dbToDialectMap.put(databaseIdString, new Holder<Dialect>(dialect));
                                 }

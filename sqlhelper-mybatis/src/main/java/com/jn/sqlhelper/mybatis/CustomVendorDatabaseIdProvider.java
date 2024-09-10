@@ -55,7 +55,7 @@ public class CustomVendorDatabaseIdProvider extends VendorDatabaseIdProvider imp
                 String databaseId = p.getProperty(key);
                 if (Strings.isNotBlank(databaseId)) {
                     databaseId = Strings.trim(databaseId);
-                    DialectRegistry.setDatabaseIdIfAbsent(key, databaseId);
+                    DialectRegistry.setDatabaseNameIfAbsent(key, databaseId);
                 }
             }
         });
