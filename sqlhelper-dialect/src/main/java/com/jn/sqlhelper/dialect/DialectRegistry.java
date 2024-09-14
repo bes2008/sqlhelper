@@ -237,6 +237,8 @@ public class DialectRegistry {
                 SQLServerDialect.SQLServer2014Dialect.class,
                 SQLServerDialect.SQLServer2016Dialect.class,
                 SQLServerDialect.SQLServer2017Dialect.class,
+                SQLServerDialect.SQLServer2019Dialect.class,
+                SQLServerDialect.SQLServer2022Dialect.class,
                 SQReamDialect.class,
 
                 TajoDialect.class,
