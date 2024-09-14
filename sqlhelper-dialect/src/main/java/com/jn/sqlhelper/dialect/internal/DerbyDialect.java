@@ -33,7 +33,10 @@ public class DerbyDialect extends AbstractDialect {
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
         setPlainSqlScriptParser(new DerbySqlScriptParser());
     }
-
+    public IdentifierCase unquotedIdentifierCase(){
+        // ref: https://db.apache.org/derby/docs/10.17/ref/index.html
+        return IdentifierCase.UPPER_CASE;
+    }
     private void determineDriverVersion() {
         try {
             ClassLoaders.loadClass("org.apache.derby.tools.sysinfo", DerbyDialect.class.getClassLoader());
