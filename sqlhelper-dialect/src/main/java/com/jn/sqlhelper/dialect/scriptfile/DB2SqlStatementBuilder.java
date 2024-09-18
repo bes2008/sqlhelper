@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.dialect.sql.scriptfile;
+package com.jn.sqlhelper.dialect.scriptfile;
 
 import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlDelimiter;
@@ -7,7 +7,7 @@ import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
 /**
  * supporting DB2-specific delimiter changes.
  */
-public class DB2ZosSqlStatementBuilder extends PlainSqlStatementBuilder {
+public class  DB2SqlStatementBuilder extends PlainSqlStatementBuilder {
     /**
      * Are we currently inside a BEGIN END; block?
      */
@@ -46,4 +46,3 @@ public class DB2ZosSqlStatementBuilder extends PlainSqlStatementBuilder {
         return getDefaultDelimiter();
     }
 }
-

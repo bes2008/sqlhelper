@@ -3,7 +3,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
-import com.jn.sqlhelper.dialect.sql.scriptfile.DB2SqlScriptParser;
+import com.jn.sqlhelper.dialect.scriptfile.DB2SqlScriptParser;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;

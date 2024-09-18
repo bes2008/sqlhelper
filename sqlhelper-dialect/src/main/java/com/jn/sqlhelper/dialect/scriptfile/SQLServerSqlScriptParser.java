@@ -1,11 +1,10 @@
-package com.jn.sqlhelper.dialect.sql.scriptfile;
+package com.jn.sqlhelper.dialect.scriptfile;
 
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
-
-public class MySqlScriptParser  extends PlainSqlScriptParser {
+public class SQLServerSqlScriptParser extends PlainSqlScriptParser {
     @Override
     protected PlainSqlStatementBuilder newSqlStatementBuilder() {
-        return new MySQLSqlStatementBuilder();
+        return new SQLServerSqlStatementBuilder();
     }
 }

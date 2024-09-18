@@ -1,6 +1,6 @@
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.sqlhelper.dialect.sql.scriptfile.PostgreSQLScriptParser;
+import com.jn.sqlhelper.dialect.scriptfile.PostgreSQLScriptParser;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 import com.jn.sqlhelper.dialect.urlparser.PostgreSQLUrlParser;

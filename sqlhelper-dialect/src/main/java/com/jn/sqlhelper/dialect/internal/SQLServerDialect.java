@@ -8,7 +8,7 @@ import com.jn.sqlhelper.dialect.internal.limit.SQLServer2005LimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.TopLimitHandler;
 import com.jn.sqlhelper.dialect.urlparser.SqlServerUrlParser;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
-import com.jn.sqlhelper.dialect.sql.scriptfile.SQLServerSqlScriptParser;
+import com.jn.sqlhelper.dialect.scriptfile.SQLServerSqlScriptParser;
 
 /**
  * SQLServer 版本说明

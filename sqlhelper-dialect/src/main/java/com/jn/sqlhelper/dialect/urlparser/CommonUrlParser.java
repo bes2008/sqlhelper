@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect.urlparser;
 
 import com.jn.sqlhelper.dialect.Dialect;
+import com.jn.sqlhelper.dialect.UrlParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

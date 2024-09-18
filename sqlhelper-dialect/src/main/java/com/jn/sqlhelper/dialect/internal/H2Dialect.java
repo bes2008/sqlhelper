@@ -2,7 +2,7 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
-import com.jn.sqlhelper.dialect.sql.scriptfile.H2SqlScriptParser;
+import com.jn.sqlhelper.dialect.scriptfile.H2SqlScriptParser;
 
 
 public class H2Dialect extends AbstractDialect {

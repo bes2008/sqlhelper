@@ -1,30 +1,31 @@
-package com.jn.sqlhelper.dialect.sql.scriptfile;
+package com.jn.sqlhelper.dialect.scriptfile;
 
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlDelimiter;
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
 
 /**
- * supporting Hsql-specific delimiter changes.
+ * supporting SQLite-specific delimiter changes.
  */
-public class HsqlSqlStatementBuilder extends PlainSqlStatementBuilder {
+public class SQLiteSqlStatementBuilder extends PlainSqlStatementBuilder {
     /**
-     * Are we inside a BEGIN ATOMIC block.
+     * Are we inside a BEGIN block.
      */
-    private boolean insideAtomicBlock;
+    private boolean insideBeginEndBlock;
 
     @Override
     protected PlainSqlDelimiter changeDelimiterIfNecessary(String line, PlainSqlDelimiter delimiter) {
-        if (line.contains("BEGIN ATOMIC")) {
-            insideAtomicBlock = true;
+        if (line.contains("BEGIN")) {
+            insideBeginEndBlock = true;
         }
 
         if (line.endsWith("END;")) {
-            insideAtomicBlock = false;
+            insideBeginEndBlock = false;
         }
 
-        if (insideAtomicBlock) {
+        if (insideBeginEndBlock) {
             return null;
         }
         return getDefaultDelimiter();
     }
 }
+

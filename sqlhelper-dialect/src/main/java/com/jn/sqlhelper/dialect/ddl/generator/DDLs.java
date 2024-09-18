@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.dialect.sql.ddl.generator;
+package com.jn.sqlhelper.dialect.ddl.generator;
 
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.text.StringTemplates;

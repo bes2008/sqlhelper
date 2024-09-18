@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.dialect.sql.scriptfile;
+package com.jn.sqlhelper.dialect.scriptfile;
 
 import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlDelimiter;

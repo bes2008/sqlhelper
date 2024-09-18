@@ -4,6 +4,7 @@ import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.dialect.Dialect;
 import com.jn.sqlhelper.dialect.DialectRegistry;
+import com.jn.sqlhelper.dialect.UrlParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

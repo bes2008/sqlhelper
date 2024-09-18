@@ -6,7 +6,7 @@ import com.jn.sqlhelper.dialect.annotation.Driver;
 import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
-import com.jn.sqlhelper.dialect.sql.scriptfile.PostgreSQLScriptParser;
+import com.jn.sqlhelper.dialect.scriptfile.PostgreSQLScriptParser;
 
 /**
  * 基于OpenGauss改造

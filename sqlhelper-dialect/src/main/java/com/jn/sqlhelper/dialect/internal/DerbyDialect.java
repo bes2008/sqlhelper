@@ -2,7 +2,7 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.util.ClassLoaders;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
-import com.jn.sqlhelper.dialect.sql.scriptfile.DerbySqlScriptParser;
+import com.jn.sqlhelper.dialect.scriptfile.DerbySqlScriptParser;
 
 /**
  * http://db.apache.org/derby/docs/10.14/ref/index.html

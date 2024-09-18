@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.dialect.sql.ddl.generator;
+package com.jn.sqlhelper.dialect.ddl.generator;
 
 import com.jn.langx.util.Preconditions;
 import com.jn.sqlhelper.common.ddl.dump.AbstractTableGenerator;

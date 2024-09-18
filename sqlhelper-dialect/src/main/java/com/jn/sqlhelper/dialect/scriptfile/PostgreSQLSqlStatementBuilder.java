@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jn.sqlhelper.dialect.sql.scriptfile;
+package com.jn.sqlhelper.dialect.scriptfile;
 
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlDelimiter;
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
