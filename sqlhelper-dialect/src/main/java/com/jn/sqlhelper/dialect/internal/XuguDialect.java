@@ -15,7 +15,7 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;
-import com.jn.sqlhelper.dialect.internal.urlparser.XuguUrlParser;
+import com.jn.sqlhelper.dialect.urlparser.XuguUrlParser;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 
 import java.sql.CallableStatement;

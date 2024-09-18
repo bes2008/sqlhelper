@@ -1,4 +1,4 @@
-package com.jn.sqlhelper.dialect.internal.urlparser;
+package com.jn.sqlhelper.dialect.urlparser;
 
 import com.jn.langx.util.Objs;
 import com.jn.sqlhelper.dialect.urlparser.DatabaseInfo;

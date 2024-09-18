@@ -16,7 +16,7 @@ package com.jn.sqlhelper.dialect;
 
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
-import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
+import com.jn.sqlhelper.dialect.urlparser.UrlParser;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 

@@ -4,7 +4,7 @@ import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.dialect.annotation.Driver;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOnlyLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.SkipLimitHandler;
-import com.jn.sqlhelper.dialect.internal.urlparser.InformixUrlParser;
+import com.jn.sqlhelper.dialect.urlparser.InformixUrlParser;
 
 /**
  * https://www.ibm.com/support/knowledgecenter/en/SSGU8G_11.50.0/com.ibm.sqls.doc/ids_sqs_0987.htm

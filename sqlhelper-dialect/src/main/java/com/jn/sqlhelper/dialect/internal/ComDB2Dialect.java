@@ -1,7 +1,7 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
-import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
+import com.jn.sqlhelper.dialect.urlparser.UrlParser;
 
 /**
  * https://bloomberg.github.io/comdb2/sql.html#select-statement

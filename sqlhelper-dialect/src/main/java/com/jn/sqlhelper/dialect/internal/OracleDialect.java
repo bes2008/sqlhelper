@@ -6,7 +6,7 @@ import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;
-import com.jn.sqlhelper.dialect.internal.urlparser.OracleUrlParser;
+import com.jn.sqlhelper.dialect.urlparser.OracleUrlParser;
 import com.jn.sqlhelper.dialect.sql.scriptfile.OracleSqlScriptParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

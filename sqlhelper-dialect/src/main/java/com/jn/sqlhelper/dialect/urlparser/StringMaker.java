@@ -1,6 +1,6 @@
-package com.jn.sqlhelper.dialect.internal.urlparser;
+package com.jn.sqlhelper.dialect.urlparser;
 
-class StringMaker {
+public class StringMaker {
     private String value;
     private String indexing;
     private int begin;

@@ -2,7 +2,7 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
-import com.jn.sqlhelper.dialect.internal.urlparser.OscarUrlParser;
+import com.jn.sqlhelper.dialect.urlparser.OscarUrlParser;
 
 public class OscarDialect extends AbstractDialect {
     public OscarDialect() {

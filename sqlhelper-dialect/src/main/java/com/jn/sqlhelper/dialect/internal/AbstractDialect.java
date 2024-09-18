@@ -13,9 +13,9 @@ import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.DefaultLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
-import com.jn.sqlhelper.dialect.internal.urlparser.CommonUrlParser;
-import com.jn.sqlhelper.dialect.internal.urlparser.NoopUrlParser;
-import com.jn.sqlhelper.dialect.internal.urlparser.UrlParser;
+import com.jn.sqlhelper.dialect.urlparser.CommonUrlParser;
+import com.jn.sqlhelper.dialect.urlparser.NoopUrlParser;
+import com.jn.sqlhelper.dialect.urlparser.UrlParser;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 
