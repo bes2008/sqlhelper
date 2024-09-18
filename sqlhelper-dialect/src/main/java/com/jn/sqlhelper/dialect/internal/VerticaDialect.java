@@ -14,13 +14,9 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.langx.util.Strings;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlDelimiter;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
-import com.jn.sqlhelper.dialect.sql.scriptfile.PostgreSQLSqlStatementBuilder;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
+import com.jn.sqlhelper.dialect.sql.scriptfile.VerticaSqlScriptParser;
 
 public class VerticaDialect extends AbstractDialect {
     public VerticaDialect() {
@@ -48,52 +44,6 @@ public class VerticaDialect extends AbstractDialect {
         return true;
     }
 
-    private static class VerticaSqlScriptParser extends PlainSqlScriptParser{
-        @Override
-        protected PlainSqlStatementBuilder newSqlStatementBuilder() {
-            return new VerticaStatementBuilder();
-        }
-    }
-
-    /**
-     * supporting Vertica specific syntax.
-     */
-    private static class VerticaStatementBuilder extends PostgreSQLSqlStatementBuilder {
-
-        /**
-         * Are we currently inside a BEGIN END; block?
-         */
-        private boolean insideBeginEndBlock;
-
-        /**
-         * Holds the beginning of the statement.
-         */
-        private String statementStart = "";
-
-        @Override
-        protected PlainSqlDelimiter changeDelimiterIfNecessary(String line, PlainSqlDelimiter delimiter) {
-            if (Strings.countOccurrencesOf(statementStart, " ") < 4) {
-                statementStart += line;
-                statementStart += " ";
-            }
-
-            if (statementStart.startsWith("CREATE FUNCTION")) {
-                if (line.startsWith("BEGIN") || line.endsWith("BEGIN")) {
-                    insideBeginEndBlock = true;
-                }
-
-                if (line.endsWith("END;")) {
-                    insideBeginEndBlock = false;
-                }
-            }
-
-            if (insideBeginEndBlock) {
-                return null;
-            }
-            return getDefaultDelimiter();
-        }
-
-    }
 
 
 }

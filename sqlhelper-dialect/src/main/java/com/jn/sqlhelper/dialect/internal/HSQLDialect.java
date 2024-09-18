@@ -1,10 +1,8 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlDelimiter;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
+import com.jn.sqlhelper.dialect.sql.scriptfile.HSQLSqlScriptParser;
 
 /**
  * HyperSQL
@@ -27,39 +25,6 @@ public class HSQLDialect extends AbstractDialect {
     @Override
     public boolean isBindLimitParametersFirst() {
         return false;
-    }
-
-    private static class HSQLSqlScriptParser extends PlainSqlScriptParser{
-        @Override
-        protected PlainSqlStatementBuilder newSqlStatementBuilder() {
-            return new HsqlSqlStatementBuilder();
-        }
-    }
-
-    /**
-     * supporting Hsql-specific delimiter changes.
-     */
-    private static class HsqlSqlStatementBuilder extends PlainSqlStatementBuilder {
-        /**
-         * Are we inside a BEGIN ATOMIC block.
-         */
-        private boolean insideAtomicBlock;
-
-        @Override
-        protected PlainSqlDelimiter changeDelimiterIfNecessary(String line, PlainSqlDelimiter delimiter) {
-            if (line.contains("BEGIN ATOMIC")) {
-                insideAtomicBlock = true;
-            }
-
-            if (line.endsWith("END;")) {
-                insideAtomicBlock = false;
-            }
-
-            if (insideAtomicBlock) {
-                return null;
-            }
-            return getDefaultDelimiter();
-        }
     }
 
 

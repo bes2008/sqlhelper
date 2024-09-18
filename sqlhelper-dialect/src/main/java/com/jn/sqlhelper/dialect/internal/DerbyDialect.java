@@ -1,9 +1,8 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.util.ClassLoaders;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
+import com.jn.sqlhelper.dialect.sql.scriptfile.DerbySqlScriptParser;
 
 /**
  * http://db.apache.org/derby/docs/10.14/ref/index.html
@@ -50,25 +49,6 @@ public class DerbyDialect extends AbstractDialect {
         return false;
     }
 
-    private static class DerbySqlScriptParser extends PlainSqlScriptParser{
-        @Override
-        protected PlainSqlStatementBuilder newSqlStatementBuilder() {
-            return new DerbySqlStatementBuilder();
-        }
-    }
-
-    /**
-     * supporting Derby-specific delimiter changes.
-     */
-    private static class DerbySqlStatementBuilder extends PlainSqlStatementBuilder {
-        @Override
-        protected String extractAlternateOpenQuote(String token) {
-            if (token.startsWith("$$")) {
-                return "$$";
-            }
-            return null;
-        }
-    }
 
 
 }
