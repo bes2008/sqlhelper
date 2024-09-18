@@ -1,3 +1,7 @@
+## 5.0.7
+1. 将urlparser, sqlfile parser,ddl generator从dialect独立
+## 5.0.6
+1. 处理derby的引号
 ## 5.0.5
 + 特性：
   + 支持直接猜测dialect

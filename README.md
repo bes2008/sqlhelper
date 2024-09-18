@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/badge/license-LGPL3.0-green.svg)](https://github.com/fangjinuo/sqlhelper/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-Apache2.0-green.svg)](https://github.com/fangjinuo/sqlhelper/blob/master/LICENSE)
 
 [![Build Status](https://www.travis-ci.org/fangjinuo/sqlhelper.svg?branch=master)](https://travis-ci.org/fangjinuo/sqlhelper)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9c27e94ffa3a4ee58279c36236b2b075)](https://www.codacy.com/manual/fs1194361820/sqlhelper?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fangjinuo/sqlhelper&amp;utm_campaign=Badge_Grade)
@@ -23,7 +23,7 @@
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-1.x-green.svg)](https://spring.io/projects/spring-boot/)
 [![SpringBoot](https://img.shields.io/badge/SpringBoot-2.x-green.svg)](https://spring.io/projects/spring-boot/)
 
-[![maven](https://img.shields.io/badge/maven-v4.0.0-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:4.0.0)
+[![maven](https://img.shields.io/badge/maven-v5.0.7-green.svg)](https://search.maven.org/search?q=g:com.github.fangjinuo.sqlhelper%20AND%20v:5.0.7)
 
 
 
