@@ -23,5 +23,7 @@ public class ProductIdGuessTests {
         System.out.println(DialectRegistry.guessDatabaseId("KingbaseES"));
         System.out.println(DialectRegistry.guessDatabaseId("kingbaseES"));
         System.out.println(DialectRegistry.guessDatabaseId("jdbc:besmagicdata://localhost:8888"));
+        System.out.println(DialectRegistry.guessDatabaseId("jdbc:oracle:thin:@//localhost:8888"));
+        System.out.println(DialectRegistry.guessDatabaseId("jdbc:mysql://localhost:8888"));
     }
 }

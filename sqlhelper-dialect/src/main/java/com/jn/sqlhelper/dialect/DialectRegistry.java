@@ -340,6 +340,9 @@ public class DialectRegistry {
         String tmpProductName = productName.toLowerCase();
         // if arg is a url
         int urlProtocolIndex = tmpProductName.indexOf("://");
+        if (urlProtocolIndex==-1){
+            urlProtocolIndex = tmpProductName.indexOf(":@//");
+        }
         if (urlProtocolIndex != -1) {
             DatabaseInfo databaseInfo = JdbcUrlParser.INSTANCE.parse(productName);
             if (databaseInfo != null && !DatabaseInfo.UNKNOWN.equals(databaseInfo.getVendor().toLowerCase())) {
