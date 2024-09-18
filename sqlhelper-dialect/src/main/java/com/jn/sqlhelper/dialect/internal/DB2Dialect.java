@@ -1,12 +1,9 @@
 package com.jn.sqlhelper.dialect.internal;
 
-import com.jn.langx.util.Strings;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlDelimiter;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
+import com.jn.sqlhelper.dialect.sql.scriptfile.DB2SqlScriptParser;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
@@ -65,100 +62,6 @@ public class DB2Dialect extends AbstractDialect {
         return col;
     }
 
-    private static class DB2SqlScriptParser extends PlainSqlScriptParser {
-        @Override
-        protected PlainSqlStatementBuilder newSqlStatementBuilder() {
-            return new DB2SqlStatementBuilder();
-        }
-    }
-
-
-    /**
-     * supporting DB2-specific delimiter changes.
-     */
-    private static class DB2SqlStatementBuilder extends PlainSqlStatementBuilder {
-        /**
-         * Are we currently inside a BEGIN END; block?
-         */
-        private boolean insideBeginEndBlock;
-
-        /**
-         * Holds the beginning of the statement.
-         */
-        private String statementStart = "";
-
-        @Override
-        protected PlainSqlDelimiter changeDelimiterIfNecessary(String line, PlainSqlDelimiter delimiter) {
-            if (Strings.countOccurrencesOf(statementStart, " ") < 4) {
-                statementStart += line;
-                statementStart += " ";
-            }
-
-            if (statementStart.startsWith("CREATE FUNCTION")
-                    || statementStart.startsWith("CREATE PROCEDURE")
-                    || statementStart.startsWith("CREATE TRIGGER")
-                    || statementStart.startsWith("CREATE OR REPLACE FUNCTION")
-                    || statementStart.startsWith("CREATE OR REPLACE PROCEDURE")
-                    || statementStart.startsWith("CREATE OR REPLACE TRIGGER")) {
-                if (line.startsWith("BEGIN")) {
-                    insideBeginEndBlock = true;
-                }
-
-                if (line.endsWith("END;")) {
-                    insideBeginEndBlock = false;
-                }
-            }
-
-            if (insideBeginEndBlock) {
-                return null;
-            }
-            return getDefaultDelimiter();
-        }
-    }
-
-
-    /**
-     * supporting DB2-specific delimiter changes.
-     */
-    private static class DB2ZosSqlStatementBuilder extends PlainSqlStatementBuilder {
-        /**
-         * Are we currently inside a BEGIN END; block?
-         */
-        private boolean insideBeginEndBlock;
-
-        /**
-         * Holds the beginning of the statement.
-         */
-        private String statementStart = "";
-
-        @Override
-        protected PlainSqlDelimiter changeDelimiterIfNecessary(String line, PlainSqlDelimiter delimiter) {
-            if (Strings.countOccurrencesOf(statementStart, " ") < 4) {
-                statementStart += line;
-                statementStart += " ";
-            }
-
-            if (statementStart.startsWith("CREATE FUNCTION")
-                    || statementStart.startsWith("CREATE PROCEDURE")
-                    || statementStart.startsWith("CREATE TRIGGER")
-                    || statementStart.startsWith("CREATE OR REPLACE FUNCTION")
-                    || statementStart.startsWith("CREATE OR REPLACE PROCEDURE")
-                    || statementStart.startsWith("CREATE OR REPLACE TRIGGER")) {
-                if (line.startsWith("BEGIN")) {
-                    insideBeginEndBlock = true;
-                }
-
-                if (line.endsWith("END;")) {
-                    insideBeginEndBlock = false;
-                }
-            }
-
-            if (insideBeginEndBlock) {
-                return null;
-            }
-            return getDefaultDelimiter();
-        }
-    }
 
 
 }
