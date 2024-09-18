@@ -27,7 +27,6 @@ public class UxDBDialect extends AbstractDialect {
 
     public UxDBDialect() {
         super();
-        setUrlParser(new PostgreSQLUrlParser());
         setLimitHandler(new LimitOffsetLimitHandler());
     }
 

@@ -197,8 +197,4 @@ public interface Dialect extends LikeEscaper {
 
     boolean isSupportsBatchSql();
 
-
-    UrlParser getUrlParser();
-
-    PlainSqlScriptParser getPlainSqlScriptParser();
 }

@@ -12,10 +12,8 @@ public class MySQLDialect extends AbstractDialect {
 
     public MySQLDialect() {
         super();
-        setUrlParser(new MySqlUrlParser());
         setLimitHandler(new LimitCommaLimitHandler());
         setLikeEscaper(BackslashStyleEscaper.INSTANCE);
-        setPlainSqlScriptParser(new MySqlScriptParser());
     }
 
     @Override

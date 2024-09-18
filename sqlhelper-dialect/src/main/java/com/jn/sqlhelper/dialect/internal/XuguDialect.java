@@ -33,7 +33,6 @@ public class XuguDialect extends AbstractDialect {
 
     public XuguDialect() {
         super();
-        setUrlParser(new XuguUrlParser());
         setLimitHandler(new OracleXLimitHandler());
         setLikeEscaper(BackslashStyleEscaper.INSTANCE);
     }

@@ -12,7 +12,6 @@ public class SQLiteDialect extends AbstractDialect {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
-        setPlainSqlScriptParser(new SQLiteSqlScriptParser());
     }
 
     @Override

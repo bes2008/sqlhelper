@@ -23,15 +23,11 @@ public class OracleDialect extends AbstractDialect {
     public OracleDialect() {
         super();
         setDelegate(new Oracle9iDialect());
-        setUrlParser(new OracleUrlParser());
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
-        setPlainSqlScriptParser(new OracleSqlScriptParser());
     }
 
     public OracleDialect(java.sql.Driver driver) {
-        setUrlParser(new OracleUrlParser());
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
-        setPlainSqlScriptParser(new OracleSqlScriptParser());
 
         int majorVersion = driver.getMajorVersion();
         int minorVersion = driver.getMinorVersion();
@@ -63,8 +59,6 @@ public class OracleDialect extends AbstractDialect {
     class OracleBaseDialect extends AbstractDialect {
         OracleBaseDialect() {
             setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
-            setUrlParser(new OracleUrlParser());
-            setPlainSqlScriptParser(new OracleSqlScriptParser());
         }
 
         @Override

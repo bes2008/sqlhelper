@@ -32,8 +32,6 @@ public class DB2Dialect extends AbstractDialect {
             }
         });
 
-        setPlainSqlScriptParser(new DB2SqlScriptParser());
-
     }
 
 

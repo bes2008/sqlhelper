@@ -6,7 +6,6 @@ import com.jn.sqlhelper.dialect.urlparser.OscarUrlParser;
 
 public class OscarDialect extends AbstractDialect {
     public OscarDialect() {
-        setUrlParser(new OscarUrlParser());
         setLimitHandler(new LimitOffsetLimitHandler());
     }
 

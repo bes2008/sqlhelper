@@ -10,7 +10,6 @@ public class MSQLDialect extends AbstractDialect {
     public MSQLDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
-        setUrlParser(new MySqlUrlParser());
     }
 
     @Override

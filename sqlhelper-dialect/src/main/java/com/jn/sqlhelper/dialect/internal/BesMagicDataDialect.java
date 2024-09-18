@@ -39,7 +39,6 @@ public class BesMagicDataDialect extends AbstractDialect {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
-        setPlainSqlScriptParser(new PostgreSQLScriptParser());
     }
 
     @Override

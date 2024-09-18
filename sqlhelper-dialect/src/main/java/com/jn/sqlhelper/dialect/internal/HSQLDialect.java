@@ -14,7 +14,6 @@ public class HSQLDialect extends AbstractDialect {
     public HSQLDialect() {
         super();
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler().setSupportUsingIndexClauseInSelectEnd(true));
-        setPlainSqlScriptParser(new HSQLSqlScriptParser());
     }
 
     @Override

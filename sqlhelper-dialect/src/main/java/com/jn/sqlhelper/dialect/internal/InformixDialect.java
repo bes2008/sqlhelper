@@ -16,7 +16,6 @@ public class InformixDialect extends AbstractDialect {
     public InformixDialect() {
         super();
         setDelegate(new Informix10Dialect());
-        setUrlParser(new InformixUrlParser());
     }
 
     public InformixDialect(java.sql.Driver driver) {
@@ -26,7 +25,6 @@ public class InformixDialect extends AbstractDialect {
         } else {
             setDelegate(new Informix9Dialect());
         }
-        setUrlParser(new InformixUrlParser());
     }
 
     @Override

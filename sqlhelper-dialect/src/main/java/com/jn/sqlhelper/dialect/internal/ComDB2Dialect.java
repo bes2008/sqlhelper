@@ -15,9 +15,8 @@ import com.jn.sqlhelper.dialect.urlparser.UrlParser;
  * https://bloomberg.github.io/comdb2/sql.html
  */
 public class ComDB2Dialect extends AbstractDialect {
-    @Override
-    protected void setUrlParser(UrlParser urlParser) {
-        super.setUrlParser(urlParser);
+
+    public ComDB2Dialect(){
         setLimitHandler(new LimitOffsetLimitHandler());
     }
 

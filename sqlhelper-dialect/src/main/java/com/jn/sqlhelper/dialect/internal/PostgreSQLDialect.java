@@ -15,10 +15,8 @@ public class PostgreSQLDialect extends AbstractDialect {
 
     public PostgreSQLDialect() {
         super();
-        setUrlParser(new PostgreSQLUrlParser());
         setLimitHandler(new LimitOffsetLimitHandler());
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
-        setPlainSqlScriptParser(new PostgreSQLScriptParser());
     }
 
     @Override

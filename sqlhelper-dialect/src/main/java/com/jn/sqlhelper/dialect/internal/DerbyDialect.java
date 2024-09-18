@@ -15,7 +15,6 @@ public class DerbyDialect extends AbstractDialect {
         super();
         determineDriverVersion();
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
-        setPlainSqlScriptParser(new DerbySqlScriptParser());
     }
     public IdentifierCase unquotedIdentifierCase(){
         // ref: https://db.apache.org/derby/docs/10.17/ref/index.html

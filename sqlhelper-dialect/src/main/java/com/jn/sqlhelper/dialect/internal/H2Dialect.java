@@ -11,7 +11,6 @@ public class H2Dialect extends AbstractDialect {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
         setLikeEscaper(new BackslashStyleEscaper());
-        setPlainSqlScriptParser(new H2SqlScriptParser());
     }
 
     @Override

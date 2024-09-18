@@ -31,7 +31,6 @@ public class VerticaDialect extends AbstractDialect {
                 }
             }
         });
-        setPlainSqlScriptParser(new VerticaSqlScriptParser());
     }
 
     @Override

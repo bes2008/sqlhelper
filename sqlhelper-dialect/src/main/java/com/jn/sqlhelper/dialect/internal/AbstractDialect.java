@@ -8,7 +8,6 @@ import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Lists;
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
 import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.DefaultLimitHandler;
@@ -29,21 +28,17 @@ import java.util.Properties;
 
 public abstract class AbstractDialect<T extends AbstractDialect> implements Dialect {
     private AbstractDialect delegate = null;
-    private UrlParser urlParser;
     private LimitHandler limitHandler;
     private LikeEscaper likeEscaper;
     // limit 的参数默认是否要使用 `?`，如果没有指定值，则根据数据库是否支持来进行计算
     private Boolean isUseLimitInVariableMode = null;
-    private PlainSqlScriptParser plainSqlScriptParser;
 
     private final Properties properties = new Properties();
 
 
     public AbstractDialect() {
         setLimitHandler(new DefaultLimitHandler(this));
-        setUrlParser(new NoopUrlParser());
         setLikeEscaper(BackslashStyleEscaper.INSTANCE);
-        setPlainSqlScriptParser(PlainSqlScriptParser.INSTANCE);
     }
 
     public AbstractDialect(Driver driver) {
@@ -89,22 +84,11 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         this.delegate = delegate;
     }
 
-    protected void setUrlParser(@NonNull UrlParser urlParser) {
-        Preconditions.checkNotNull(urlParser);
-        if (urlParser instanceof CommonUrlParser) {
-            ((CommonUrlParser) urlParser).setDialect(this);
-        }
-        getRealDialect().urlParser = urlParser;
-    }
 
     protected void setLikeEscaper(@NonNull LikeEscaper likeEscaper) {
         likeEscaper = likeEscaper == null ? BackslashStyleEscaper.INSTANCE : likeEscaper;
         getRealDialect().likeEscaper = likeEscaper;
         this.likeEscaper = likeEscaper;
-    }
-
-    protected void setPlainSqlScriptParser(PlainSqlScriptParser parser){
-        getRealDialect().plainSqlScriptParser = parser;
     }
 
 
@@ -251,11 +235,6 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         return getLimitHandler().rebuildLimitParametersAtStartOfQuery(selection, queryParams, index);
     }
 
-    public UrlParser getUrlParser() {
-        return getRealDialect().urlParser;
-    }
-
-
     private static String IDENTIFIER_BEFORE_QUOTES="\"'`[";
     private static String IDENTIFIER_AFTER_QUOTES="\"'`]";
 
@@ -354,8 +333,4 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         return getRealDialect().likeEscaper.appendmentAfterLikeClause();
     }
 
-    @Override
-    public PlainSqlScriptParser getPlainSqlScriptParser() {
-        return getRealDialect().plainSqlScriptParser;
-    }
 }
