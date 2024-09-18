@@ -4,7 +4,6 @@ import com.jn.langx.annotation.Name;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Objs;
-import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Lists;
 import com.jn.langx.util.reflect.Reflects;
@@ -12,9 +11,6 @@ import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.DefaultLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
-import com.jn.sqlhelper.dialect.urlparser.CommonUrlParser;
-import com.jn.sqlhelper.dialect.urlparser.NoopUrlParser;
-import com.jn.sqlhelper.dialect.urlparser.UrlParser;
 import com.jn.sqlhelper.dialect.likeescaper.LikeEscaper;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 
