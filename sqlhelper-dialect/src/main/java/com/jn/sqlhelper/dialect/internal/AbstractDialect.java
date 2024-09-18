@@ -17,21 +17,13 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.langx.annotation.Name;
 import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
-import com.jn.langx.text.StringTemplates;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
 import com.jn.langx.util.collection.Lists;
 import com.jn.langx.util.reflect.Reflects;
-import com.jn.sqlhelper.common.ddl.dump.DatabaseLoader;
-import com.jn.sqlhelper.common.ddl.dump.TableGenerator;
-import com.jn.sqlhelper.common.ddl.model.DatabaseDescription;
-import com.jn.sqlhelper.common.ddl.model.Table;
-import com.jn.sqlhelper.common.exception.TableNonExistsException;
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
-import com.jn.sqlhelper.common.utils.SQLs;
 import com.jn.sqlhelper.dialect.*;
-import com.jn.sqlhelper.dialect.ddl.generator.CommonTableGenerator;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.DefaultLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.LimitHandler;
@@ -277,19 +269,6 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         return getRealDialect().urlParser;
     }
 
-    protected TableGenerator createTableGenerator(DatabaseDescription databaseDescription) {
-        return new CommonTableGenerator(databaseDescription, this);
-    }
-
-    public final String generateTableDDL(@NonNull DatabaseDescription database, String catalog, String schema, @NonNull String tableName) throws SQLException {
-        Preconditions.checkNotNull(database);
-        Preconditions.checkNotNull(tableName);
-        Table table = new DatabaseLoader().loadTable(database, catalog, schema, tableName);
-        if (table != null) {
-            return createTableGenerator(database).generate(table);
-        }
-        throw new TableNonExistsException(StringTemplates.formatWithPlaceholder("Table {} is not exists", SQLs.getTableFQN(database, catalog, schema, tableName)));
-    }
 
     private static String IDENTIFIER_BEFORE_QUOTES="\"'`[";
     private static String IDENTIFIER_AFTER_QUOTES="\"'`]";
