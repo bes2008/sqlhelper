@@ -11,5 +11,3 @@ com.jn.sqlhelper.dialect.urlparser.OscarUrlParser
 com.jn.sqlhelper.dialect.urlparser.PostgreSQLUrlParser
 com.jn.sqlhelper.dialect.urlparser.SqlServerUrlParser
 com.jn.sqlhelper.dialect.urlparser.XuguUrlParser
-com.jn.sqlhelper.dialect.urlparser.CommonUrlParser
-com.jn.sqlhelper.dialect.urlparser.NoopUrlParser

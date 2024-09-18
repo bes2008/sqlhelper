@@ -73,7 +73,7 @@ public class CubridUrlParser extends CommonUrlParser {
         final List<String> hostList = new ArrayList<String>(1);
         final String hostAndPort = host + ":" + portString;
         hostList.add(hostAndPort);
-        return new DefaultDatabaseInfo("cubrid", jdbcUrl, normalizedUrl, hostList, db);
+        return new DefaultDatabaseInfo(getName(), jdbcUrl, normalizedUrl, hostList, db);
     }
 
     static {

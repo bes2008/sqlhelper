@@ -22,5 +22,6 @@ public class ProductIdGuessTests {
     public void test(){
         System.out.println(DialectRegistry.guessDatabaseId("KingbaseES"));
         System.out.println(DialectRegistry.guessDatabaseId("kingbaseES"));
+        System.out.println(DialectRegistry.guessDatabaseId("jdbc:besmagicdata://localhost:8888"));
     }
 }

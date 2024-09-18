@@ -66,7 +66,7 @@ public class MySqlUrlParser extends CommonUrlParser {
         final List<String> hostList = Arrays.asList(parsedHost);
         final String databaseId = maker.next().afterLast('/').before('?').value();
         final String normalizedUrl = maker.clear().before('?').value();
-        return new DefaultDatabaseInfo("mysql", jdbcUrl, normalizedUrl, hostList, databaseId);
+        return new DefaultDatabaseInfo(getName(), jdbcUrl, normalizedUrl, hostList, databaseId);
     }
 
     private DatabaseInfo parseNormal(final String jdbcUrl) {

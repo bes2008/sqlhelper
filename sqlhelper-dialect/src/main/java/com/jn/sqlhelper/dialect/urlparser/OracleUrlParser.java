@@ -46,7 +46,7 @@ public class OracleUrlParser extends CommonUrlParser {
     private DatabaseInfo createOracleDatabaseInfo(final KeyValue keyValue, final String url) {
         final Description description = new Description(keyValue);
         final List<String> jdbcHost = description.getJdbcHost();
-        return new DefaultDatabaseInfo("oracle", url, url, jdbcHost, description.getDatabaseId());
+        return new DefaultDatabaseInfo(getName(), url, url, jdbcHost, description.getDatabaseId());
     }
 
     private DefaultDatabaseInfo parseSimpleUrl(final String url, final StringMaker maker) {
@@ -55,6 +55,6 @@ public class OracleUrlParser extends CommonUrlParser {
         final String databaseId = maker.next().afterLast(':', '/').value();
         final List<String> hostList = new ArrayList<String>(1);
         hostList.add(host + ":" + port);
-        return new DefaultDatabaseInfo("oracle", url, url, hostList, databaseId);
+        return new DefaultDatabaseInfo(getName(), url, url, hostList, databaseId);
     }
 }

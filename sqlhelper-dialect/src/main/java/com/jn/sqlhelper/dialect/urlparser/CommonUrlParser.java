@@ -1,6 +1,5 @@
 package com.jn.sqlhelper.dialect.urlparser;
 
-import com.jn.sqlhelper.dialect.Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,22 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CommonUrlParser implements UrlParser {
+public abstract class CommonUrlParser implements UrlParser {
     private final Logger logger = LoggerFactory.getLogger(CommonUrlParser.class);
-    private Dialect dialect;
-
-    public Dialect getDialect() {
-        return dialect;
-    }
-
-    public void setDialect(Dialect dialect) {
-        this.dialect = dialect;
-    }
-
-    @Override
-    public String getName() {
-        return "COMMON";
-    }
 
     @Override
     public DatabaseInfo parse(String jdbcUrl) {
@@ -60,7 +45,7 @@ public class CommonUrlParser implements UrlParser {
         hostList.add(host);
         final String databaseId = maker.next().afterLast('/').before('?').value();
         final String normalizedUrl = maker.clear().before('?').value();
-        return new DefaultDatabaseInfo(getDialect().getDatabaseId(), url, normalizedUrl, hostList, databaseId);
+        return new DefaultDatabaseInfo(getName(), url, normalizedUrl, hostList, databaseId);
     }
 
     @Override

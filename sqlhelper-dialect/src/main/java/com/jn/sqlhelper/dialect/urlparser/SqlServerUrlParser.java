@@ -37,6 +37,6 @@ public class SqlServerUrlParser extends CommonUrlParser {
             databaseId = maker.next().after("databasename=").before(';').value();
         }
         final String normalizedUrl = maker.clear().before(";").value();
-        return new DefaultDatabaseInfo("sqlserver", url, normalizedUrl, hostList, databaseId);
+        return new DefaultDatabaseInfo(getName(), url, normalizedUrl, hostList, databaseId);
     }
 }

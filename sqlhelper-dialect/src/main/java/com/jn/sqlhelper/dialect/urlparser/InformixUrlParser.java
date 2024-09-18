@@ -32,6 +32,6 @@ public class InformixUrlParser extends CommonUrlParser {
         hostList.add(host);
         final String databaseId = maker.next().afterLast('/').before(':').value();
         final String normalizedUrl = maker.clear().before(':').value();
-        return new DefaultDatabaseInfo("informix-sqli", url, normalizedUrl, hostList, databaseId);
+        return new DefaultDatabaseInfo(getName(), url, normalizedUrl, hostList, databaseId);
     }
 }

@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.dialect.scriptfile.PostgreSQLScriptParser;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
@@ -11,6 +12,7 @@ import java.sql.SQLException;
 /**
  * https://www.postgresql.org/docs/current/queries-limit.html
  */
+@Name("postgresql")
 public class PostgreSQLDialect extends AbstractDialect {
 
     public PostgreSQLDialect() {
