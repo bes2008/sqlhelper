@@ -18,10 +18,9 @@ import com.jn.langx.util.Strings;
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlDelimiter;
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
 import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
-import com.jn.sqlhelper.dialect.internal.sqlscript.PostgreSQLSqlStatementBuilder;
+import com.jn.sqlhelper.dialect.sql.scriptfile.PostgreSQLSqlStatementBuilder;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.internal.limit.AbstractLimitHandler;
-import com.jn.sqlhelper.dialect.internal.limit.LimitHelper;
 
 public class VerticaDialect extends AbstractDialect {
     public VerticaDialect() {

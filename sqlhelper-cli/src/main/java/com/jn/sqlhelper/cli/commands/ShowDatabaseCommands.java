@@ -21,7 +21,7 @@ import com.jn.sqlhelper.common.ddl.model.Index;
 import com.jn.sqlhelper.common.ddl.model.Table;
 import com.jn.sqlhelper.common.utils.Connections;
 import com.jn.sqlhelper.common.utils.SQLs;
-import com.jn.sqlhelper.dialect.ddl.generator.CommonTableGenerator;
+import com.jn.sqlhelper.dialect.sql.ddl.generator.CommonTableGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,13 +2,11 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlScriptParser;
-import com.jn.sqlhelper.common.sql.sqlscript.PlainSqlStatementBuilder;
 import com.jn.sqlhelper.dialect.annotation.Driver;
 import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
-import com.jn.sqlhelper.dialect.internal.sqlscript.PostgreSQLSqlStatementBuilder;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
+import com.jn.sqlhelper.dialect.sql.scriptfile.PostgreSQLScriptParser;
 
 /**
  * 基于OpenGauss改造
@@ -41,7 +39,7 @@ public class BesMagicDataDialect extends AbstractDialect {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
-        setPlainSqlScriptParser(new BesMagicDataSQLScriptParser());
+        setPlainSqlScriptParser(new PostgreSQLScriptParser());
     }
 
     @Override
@@ -64,12 +62,6 @@ public class BesMagicDataDialect extends AbstractDialect {
         return true;
     }
 
-    private static class BesMagicDataSQLScriptParser extends PlainSqlScriptParser {
-        @Override
-        protected PlainSqlStatementBuilder newSqlStatementBuilder() {
-            return new PostgreSQLSqlStatementBuilder();
-        }
-    }
 
 
 }
