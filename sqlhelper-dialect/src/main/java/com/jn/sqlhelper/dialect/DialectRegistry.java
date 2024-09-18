@@ -341,7 +341,7 @@ public class DialectRegistry {
         // if arg is a url
         int urlProtocolIndex = tmpProductName.indexOf("://");
         if (urlProtocolIndex != -1) {
-            DatabaseInfo databaseInfo = new JdbcUrlParser().parse(productName);
+            DatabaseInfo databaseInfo = JdbcUrlParser.INSTANCE.parse(productName);
             if (databaseInfo != null && !DatabaseInfo.UNKNOWN.equals(databaseInfo.getVendor().toLowerCase())) {
                 tmpProductName = databaseInfo.getVendor().toLowerCase();
             } else {
@@ -350,7 +350,7 @@ public class DialectRegistry {
         }
         int urlPropertyFragmentIndex = tmpProductName.indexOf("?");
         if (urlPropertyFragmentIndex != -1) {
-            DatabaseInfo databaseInfo = new JdbcUrlParser().parse(productName);
+            DatabaseInfo databaseInfo = JdbcUrlParser.INSTANCE.parse(productName);
             if (databaseInfo != null && !DatabaseInfo.UNKNOWN.equals(databaseInfo.getVendor().toLowerCase())) {
                 tmpProductName = databaseInfo.getVendor().toLowerCase();
             } else {

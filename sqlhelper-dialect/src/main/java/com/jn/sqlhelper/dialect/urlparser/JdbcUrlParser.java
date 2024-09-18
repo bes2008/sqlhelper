@@ -3,6 +3,9 @@ package com.jn.sqlhelper.dialect.urlparser;
 import com.jn.langx.registry.GenericRegistry;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
+import com.jn.langx.util.collection.Pipeline;
+import com.jn.langx.util.function.Consumer;
+import com.jn.langx.util.spi.CommonServiceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,10 +15,16 @@ public class JdbcUrlParser {
     private static final Logger logger = LoggerFactory.getLogger(JdbcUrlParser.class);
 
 
-    private GenericRegistry<UrlParser> urlParserGenericRegistry = new GenericRegistry<UrlParser>();
+    private static final GenericRegistry<UrlParser> urlParserRegistry = new GenericRegistry<UrlParser>();
 
     static {
-
+        Pipeline.of(new CommonServiceProvider<UrlParser>().get(UrlParser.class))
+                .forEach(new Consumer<UrlParser>() {
+                    @Override
+                    public void accept(UrlParser urlParser) {
+                        urlParserRegistry.register(urlParser);
+                    }
+                });
     }
 
     private JdbcUrlParser(){
@@ -24,7 +33,7 @@ public class JdbcUrlParser {
     public static final JdbcUrlParser INSTANCE = new JdbcUrlParser();
     public DatabaseInfo parse(final String url) {
         Preconditions.checkNotNull(url);
-        List<UrlParser> dialects = urlParserGenericRegistry.instances();
+        List<UrlParser> dialects = urlParserRegistry.instances();
         UrlParser parser = null;
 
         for ( UrlParser p : dialects) {

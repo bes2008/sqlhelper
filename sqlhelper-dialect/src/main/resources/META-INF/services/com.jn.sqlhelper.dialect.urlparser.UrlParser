@@ -1,0 +1,15 @@
+com.jn.sqlhelper.dialect.urlparser.JtdsUrlParser
+com.jn.sqlhelper.dialect.urlparser.BesMagicDataUrlParser
+com.jn.sqlhelper.dialect.urlparser.CubridUrlParser
+com.jn.sqlhelper.dialect.urlparser.DmUrlParser
+com.jn.sqlhelper.dialect.urlparser.InformixUrlParser
+com.jn.sqlhelper.dialect.urlparser.KingbaseUrlParser
+com.jn.sqlhelper.dialect.urlparser.MariaDBUrlParser
+com.jn.sqlhelper.dialect.urlparser.MySqlUrlParser
+com.jn.sqlhelper.dialect.urlparser.OracleUrlParser
+com.jn.sqlhelper.dialect.urlparser.OscarUrlParser
+com.jn.sqlhelper.dialect.urlparser.PostgreSQLUrlParser
+com.jn.sqlhelper.dialect.urlparser.SqlServerUrlParser
+com.jn.sqlhelper.dialect.urlparser.XuguUrlParser
+com.jn.sqlhelper.dialect.urlparser.CommonUrlParser
+com.jn.sqlhelper.dialect.urlparser.NoopUrlParser
