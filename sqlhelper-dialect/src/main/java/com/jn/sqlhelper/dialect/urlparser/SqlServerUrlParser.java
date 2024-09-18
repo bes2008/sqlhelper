@@ -20,6 +20,11 @@ public class SqlServerUrlParser extends CommonUrlParser {
     }
 
     @Override
+    public String getName() {
+        return "sqlserver";
+    }
+
+    @Override
     protected DatabaseInfo parse0(final String url, String urlPrefix) {
         final StringMaker maker = new StringMaker(url);
         maker.lower().after("jdbc:sqlserver:");

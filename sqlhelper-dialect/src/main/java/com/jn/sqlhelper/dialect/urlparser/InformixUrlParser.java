@@ -11,6 +11,11 @@ public class InformixUrlParser extends CommonUrlParser {
 
     }
 
+    @Override
+    public String getName() {
+        return "informix";
+    }
+
     private static final List<String> URL_SCHEMAS = Arrays.asList(new String[]{URL_PREFIX});
 
     @Override

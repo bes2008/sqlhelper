@@ -32,6 +32,11 @@ public class CubridUrlParser extends CommonUrlParser {
     }
 
     @Override
+    public String getName() {
+        return "cubrid";
+    }
+
+    @Override
     public DatabaseInfo parse(final String jdbcUrl) {
         final Matcher matcher = CubridUrlParser.PREFIX_PATTERN.matcher(jdbcUrl);
         if (!matcher.find()) {

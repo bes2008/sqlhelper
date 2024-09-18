@@ -1,28 +1,37 @@
 package com.jn.sqlhelper.dialect.urlparser;
 
+import com.jn.langx.registry.GenericRegistry;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Preconditions;
-import com.jn.sqlhelper.dialect.Dialect;
-import com.jn.sqlhelper.dialect.DialectRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
+import java.util.List;
 
 public class JdbcUrlParser {
     private static final Logger logger = LoggerFactory.getLogger(JdbcUrlParser.class);
-    private DialectRegistry dialectRegistry = DialectRegistry.getInstance();
 
+
+    private GenericRegistry<UrlParser> urlParserGenericRegistry = new GenericRegistry<UrlParser>();
+
+    static {
+
+    }
+
+    private JdbcUrlParser(){
+
+    }
+    public static final JdbcUrlParser INSTANCE = new JdbcUrlParser();
     public DatabaseInfo parse(final String url) {
         Preconditions.checkNotNull(url);
-        Collection<Dialect> dialects = dialectRegistry.getDialects();
+        List<UrlParser> dialects = urlParserGenericRegistry.instances();
         UrlParser parser = null;
 
-        for (Dialect dialect : dialects) {
-            if (Objs.isNotNull(dialect.getUrlParser())) {
-                for (String schema : dialect.getUrlParser().getUrlSchemas()) {
+        for ( UrlParser p : dialects) {
+            if(!Objs.isEmpty(p.getUrlSchemas())) {
+                for (String schema : p.getUrlSchemas()) {
                     if (url.startsWith(schema)) {
-                        parser = dialect.getUrlParser();
+                        parser = p;
                         break;
                     }
                 }

@@ -17,4 +17,8 @@ public class DmUrlParser extends CommonUrlParser {
 
     }
 
+    @Override
+    public String getName() {
+        return "dm";
+    }
 }

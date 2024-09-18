@@ -17,4 +17,8 @@ public class BesMagicDataUrlParser extends CommonUrlParser {
 
     }
 
+    @Override
+    public String getName() {
+        return "besmagicdata";
+    }
 }

@@ -13,6 +13,11 @@ public class JtdsUrlParser extends CommonUrlParser {
     }
 
     @Override
+    public String getName() {
+        return "jtds:sqlserver";
+    }
+
+    @Override
     public List<String> getUrlSchemas() {
         return URL_SCHEMAS;
     }

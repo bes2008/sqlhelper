@@ -21,6 +21,11 @@ public class CommonUrlParser implements UrlParser {
     }
 
     @Override
+    public String getName() {
+        return "COMMON";
+    }
+
+    @Override
     public DatabaseInfo parse(String jdbcUrl) {
         if (jdbcUrl == null) {
             this.logger.info("jdbcUrl may not be null");

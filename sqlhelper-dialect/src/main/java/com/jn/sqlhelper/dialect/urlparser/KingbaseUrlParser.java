@@ -9,6 +9,11 @@ public class KingbaseUrlParser extends CommonUrlParser {
     public KingbaseUrlParser() {
     }
 
+    @Override
+    public String getName() {
+        return "kingbase";
+    }
+
     private static final List<String> URL_SCHEMAS = Arrays.asList(new String[]{URL_PREFIX});
 
     @Override

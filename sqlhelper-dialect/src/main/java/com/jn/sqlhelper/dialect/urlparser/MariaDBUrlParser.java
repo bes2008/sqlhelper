@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-
 public class MariaDBUrlParser extends CommonUrlParser {
     private static final String URL_PREFIX = "jdbc:mariadb:";
     private static final String MYSQL_URL_PREFIX = "jdbc:mysql:";
@@ -20,6 +18,11 @@ public class MariaDBUrlParser extends CommonUrlParser {
     }
 
     public MariaDBUrlParser() {
+    }
+
+    @Override
+    public String getName() {
+        return "mariadb";
     }
 
     private DatabaseInfo parse0(final String url, final Type type) {

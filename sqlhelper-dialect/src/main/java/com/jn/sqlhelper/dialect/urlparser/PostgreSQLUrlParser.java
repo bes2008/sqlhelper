@@ -23,6 +23,11 @@ public class PostgreSQLUrlParser extends CommonUrlParser {
     }
 
     @Override
+    public String getName() {
+        return "postgresql";
+    }
+
+    @Override
     public DatabaseInfo parse(final String jdbcUrl) {
         if (jdbcUrl == null) {
             logger.info("jdbcUrl may not be null");

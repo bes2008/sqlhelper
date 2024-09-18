@@ -22,6 +22,11 @@ public class OracleUrlParser extends CommonUrlParser {
     }
 
     @Override
+    public String getName() {
+        return "oracle";
+    }
+
+    @Override
     protected DatabaseInfo parse0(final String jdbcUrl, String urlPrefix) {
         final StringMaker maker = new StringMaker(jdbcUrl);
         maker.after("jdbc:oracle:").after(":");

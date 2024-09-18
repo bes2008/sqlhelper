@@ -15,4 +15,9 @@ public class OscarUrlParser extends CommonUrlParser {
     public OscarUrlParser() {
 
     }
+
+    @Override
+    public String getName() {
+        return "oscar";
+    }
 }

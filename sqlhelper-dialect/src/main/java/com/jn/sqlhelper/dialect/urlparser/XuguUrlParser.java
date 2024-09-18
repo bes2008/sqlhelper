@@ -16,6 +16,11 @@ public class XuguUrlParser extends CommonUrlParser {
     private static final List<String> URL_SCHEMAS = Collects.newArrayList(URL_PREFIX);
 
     @Override
+    public String getName() {
+        return "xugu";
+    }
+
+    @Override
     public List<String> getUrlSchemas() {
         return URL_SCHEMAS;
     }
