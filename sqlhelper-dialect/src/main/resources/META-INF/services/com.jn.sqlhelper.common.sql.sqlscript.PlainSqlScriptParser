@@ -1,0 +1,12 @@
+com.jn.sqlhelper.dialect.scriptfile.DB2SqlScriptParser
+com.jn.sqlhelper.dialect.scriptfile.DB2ZosScriptParser
+com.jn.sqlhelper.dialect.scriptfile.DerbySqlScriptParser
+com.jn.sqlhelper.dialect.scriptfile.H2SqlScriptParser
+com.jn.sqlhelper.dialect.scriptfile.HSQLSqlScriptParser
+com.jn.sqlhelper.dialect.scriptfile.MagicDataSqlScriptParser
+com.jn.sqlhelper.dialect.scriptfile.MySqlScriptParser
+com.jn.sqlhelper.dialect.scriptfile.OracleSqlScriptParser
+com.jn.sqlhelper.dialect.scriptfile.PostgreSQLScriptParser
+com.jn.sqlhelper.dialect.scriptfile.SQLiteSqlScriptParser
+com.jn.sqlhelper.dialect.scriptfile.SQLServerSqlScriptParser
+com.jn.sqlhelper.dialect.scriptfile.VerticaSqlScriptParser
