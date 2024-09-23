@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.langx.annotation.Name;
 import com.jn.langx.util.ClassLoaders;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 import com.jn.sqlhelper.dialect.scriptfile.DerbySqlScriptParser;
@@ -7,6 +8,7 @@ import com.jn.sqlhelper.dialect.scriptfile.DerbySqlScriptParser;
 /**
  * http://db.apache.org/derby/docs/10.14/ref/index.html
  */
+@Name("derby")
 public class DerbyDialect extends AbstractDialect {
     private int driverVersionMajor;
     private int driverVersionMinor;

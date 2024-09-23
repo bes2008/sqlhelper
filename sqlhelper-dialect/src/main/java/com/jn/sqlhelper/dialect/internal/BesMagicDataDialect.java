@@ -2,6 +2,7 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
+import com.jn.sqlhelper.dialect.DialectNames;
 import com.jn.sqlhelper.dialect.annotation.Driver;
 import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
@@ -31,7 +32,7 @@ import com.jn.sqlhelper.dialect.scriptfile.PostgreSQLScriptParser;
         *[{FOR{UPDATE|SHARE}[OF table_name[,...]][NOWAIT]}[...]];
  * </pre>
  */
-@Name("besmagicdata")
+@Name(DialectNames.MAGICDATA)
 @SyntaxCompat(SQLSyntaxCompatTable.POSTGRESQL)
 @Driver("com.bes.magicdata.Driver")
 public class BesMagicDataDialect extends AbstractDialect {

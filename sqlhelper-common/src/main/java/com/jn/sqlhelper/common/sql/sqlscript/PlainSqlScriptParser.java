@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.common.sql.sqlscript;
 
+import com.jn.langx.Named;
 import com.jn.langx.Parser;
 import com.jn.langx.io.resource.Resource;
 import com.jn.langx.io.resource.Resources;
@@ -19,9 +20,8 @@ import java.util.List;
  *  不支持字符串跨行。
  *  对于自定义换行符的语句，要单独成行
  */
-public class PlainSqlScriptParser implements Parser<PlainSqlScript, List<PlainSqlStatement>> {
+public abstract class PlainSqlScriptParser implements Parser<PlainSqlScript, List<PlainSqlStatement>>, Named {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    public static final PlainSqlScriptParser INSTANCE = new PlainSqlScriptParser();
     @Override
     public List<PlainSqlStatement> parse(PlainSqlScript sqlScript) {
         Resource sqlScriptResource = sqlScript.getResource();
