@@ -6,7 +6,7 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 public class KingbaseDialect extends AbstractDialect {
     public KingbaseDialect() {
         setLimitHandler(new LimitOffsetLimitHandler());
-        setSqlCompatibilityTypes(SqlCompatibilityType.ORACLE, SqlCompatibilityType.POSTGRESQL);
+        setSqlCompatibilityTypes(SqlCompatibilityType.ORACLE, SqlCompatibilityType.POSTGRESQL, SqlCompatibilityType.MYSQL);
     }
 
     @Override
@@ -26,6 +26,6 @@ public class KingbaseDialect extends AbstractDialect {
 
     @Override
     public SqlCompatibilityType getDefaultSqlCompatibilityType() {
-        return SqlCompatibilityType.POSTGRESQL;
+        return SqlCompatibilityType.ORACLE;
     }
 }
