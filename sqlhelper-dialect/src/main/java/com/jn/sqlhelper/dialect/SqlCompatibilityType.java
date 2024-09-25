@@ -9,6 +9,7 @@ public enum SqlCompatibilityType implements CommonEnum {
     TERADATA(3,"teradata","teradata"),
     POSTGRESQL(4,"postgresql","postgresql"),
     SQLSERVER(5,"sqlserver","sqlserver"),
+    // 后续的 SQL标准，可以从 11 开始
     SQL92(12,"sql92","sql92"),
 
 
