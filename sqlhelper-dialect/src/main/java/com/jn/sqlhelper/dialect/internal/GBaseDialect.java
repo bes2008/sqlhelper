@@ -2,6 +2,7 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
@@ -18,6 +19,7 @@ public class GBaseDialect extends AbstractDialect {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
         setLikeEscaper(new BackslashStyleEscaper(true));
+        setSqlCompatibilityTypes(SqlCompatibilityType.MYSQL, SqlCompatibilityType.ORACLE);
     }
 
     @Override
@@ -38,5 +40,10 @@ public class GBaseDialect extends AbstractDialect {
     @Override
     public char getAfterQuote() {
         return '`';
+    }
+
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.MYSQL;
     }
 }

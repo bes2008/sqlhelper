@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.scriptfile.PostgreSQLScriptParser;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
@@ -19,6 +20,7 @@ public class PostgreSQLDialect extends AbstractDialect {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
+        setSqlCompatibilityTypes(SqlCompatibilityType.POSTGRESQL);
     }
 
     @Override
@@ -48,5 +50,8 @@ public class PostgreSQLDialect extends AbstractDialect {
         return col;
     }
 
-
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.POSTGRESQL;
+    }
 }

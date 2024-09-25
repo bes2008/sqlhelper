@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;
 
 /**
@@ -9,6 +10,7 @@ public class KDBDialect extends AbstractDialect {
     public KDBDialect() {
         super();
         setLimitHandler(new OracleXLimitHandler());
+        setSqlCompatibilityTypes(SqlCompatibilityType.ORACLE);
     }
 
     @Override

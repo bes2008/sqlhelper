@@ -195,4 +195,12 @@ public interface Dialect extends LikeEscaper {
 
     boolean isSupportsBatchSql();
 
+    SqlCompatibilityType getDefaultSqlCompatibilityType();
+
+    /**
+     * @return 返回支持的 SQL兼容类型
+     */
+    List<SqlCompatibilityType> supportedSqlCompatibilityTypes();
+
+    boolean isSupportedCompatibilityType(SqlCompatibilityType type);
 }

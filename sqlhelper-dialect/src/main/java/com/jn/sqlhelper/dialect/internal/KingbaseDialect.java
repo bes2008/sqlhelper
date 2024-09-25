@@ -1,10 +1,12 @@
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 public class KingbaseDialect extends AbstractDialect {
     public KingbaseDialect() {
         setLimitHandler(new LimitOffsetLimitHandler());
+        setSqlCompatibilityTypes(SqlCompatibilityType.ORACLE, SqlCompatibilityType.POSTGRESQL);
     }
 
     @Override
@@ -20,5 +22,10 @@ public class KingbaseDialect extends AbstractDialect {
     @Override
     public IdentifierCase unquotedIdentifierCase() {
         return IdentifierCase.LOWER_CASE;
+    }
+
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.POSTGRESQL;
     }
 }

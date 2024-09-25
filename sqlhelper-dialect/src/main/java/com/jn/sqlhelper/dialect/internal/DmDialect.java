@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
 /**
@@ -8,6 +9,8 @@ import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 public class DmDialect extends AbstractDialect {
     public DmDialect() {
         setLimitHandler(new LimitOffsetLimitHandler());
+        setSqlCompatibilityTypes(SqlCompatibilityType.ORACLE);
+        setSqlCompatibilityTypes(SqlCompatibilityType.SQL92, SqlCompatibilityType.ORACLE, SqlCompatibilityType.MYSQL, SqlCompatibilityType.SQLSERVER, SqlCompatibilityType.TERADATA, SqlCompatibilityType.NON_COMPATIBILITY);
     }
 
     @Override
@@ -23,5 +26,10 @@ public class DmDialect extends AbstractDialect {
     @Override
     public IdentifierCase unquotedIdentifierCase() {
         return IdentifierCase.UPPER_CASE;
+    }
+
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.ORACLE;
     }
 }

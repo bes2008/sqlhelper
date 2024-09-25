@@ -5,7 +5,9 @@ import com.jn.langx.annotation.NonNull;
 import com.jn.langx.annotation.Nullable;
 import com.jn.langx.util.Objs;
 import com.jn.langx.util.Strings;
+import com.jn.langx.util.collection.Collects;
 import com.jn.langx.util.collection.Lists;
+import com.jn.langx.util.collection.Sets;
 import com.jn.langx.util.reflect.Reflects;
 import com.jn.sqlhelper.dialect.*;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
@@ -20,6 +22,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 
 public abstract class AbstractDialect<T extends AbstractDialect> implements Dialect {
@@ -31,6 +34,7 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
 
     private final Properties properties = new Properties();
 
+    private Set<SqlCompatibilityType> sqlCompatibilityTypes = Sets.newHashSet();
 
     public AbstractDialect() {
         setLimitHandler(new DefaultLimitHandler(this));
@@ -329,4 +333,22 @@ public abstract class AbstractDialect<T extends AbstractDialect> implements Dial
         return getRealDialect().likeEscaper.appendmentAfterLikeClause();
     }
 
+    protected void setSqlCompatibilityTypes(SqlCompatibilityType... sqlCompatibilityTypes) {
+        Collects.addAll(getRealDialect().sqlCompatibilityTypes, sqlCompatibilityTypes);
+    }
+
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.NON_COMPATIBILITY;
+    }
+
+    @Override
+    public List<SqlCompatibilityType> supportedSqlCompatibilityTypes() {
+        return Lists.immutableList(getRealDialect().sqlCompatibilityTypes);
+    }
+
+    @Override
+    public final boolean isSupportedCompatibilityType(SqlCompatibilityType type) {
+        return supportedSqlCompatibilityTypes().contains(type);
+    }
 }

@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 
 /**
@@ -12,6 +13,7 @@ public class SequoiaDBDialect extends AbstractDialect {
     public SequoiaDBDialect() {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
+        setSqlCompatibilityTypes(SqlCompatibilityType.MYSQL,SqlCompatibilityType.POSTGRESQL);
     }
 
     @Override
@@ -22,5 +24,10 @@ public class SequoiaDBDialect extends AbstractDialect {
     @Override
     public boolean isSupportsLimit() {
         return true;
+    }
+
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.POSTGRESQL;
     }
 }

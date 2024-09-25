@@ -14,6 +14,7 @@
 
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.internal.limit.OracleXLimitHandler;
 import com.jn.sqlhelper.dialect.urlparser.XuguUrlParser;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
@@ -35,6 +36,7 @@ public class XuguDialect extends AbstractDialect {
         super();
         setLimitHandler(new OracleXLimitHandler());
         setLikeEscaper(BackslashStyleEscaper.INSTANCE);
+        setSqlCompatibilityTypes(SqlCompatibilityType.ORACLE,SqlCompatibilityType.MYSQL);
     }
 
     @Override
@@ -65,5 +67,10 @@ public class XuguDialect extends AbstractDialect {
     @Override
     public boolean isSupportsBatchSql() {
         return true;
+    }
+
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.ORACLE;
     }
 }

@@ -3,6 +3,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
 import com.jn.sqlhelper.dialect.DialectNames;
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.annotation.Driver;
 import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
@@ -40,6 +41,7 @@ public class BesMagicDataDialect extends AbstractDialect {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
+        setSqlCompatibilityTypes(SqlCompatibilityType.ORACLE, SqlCompatibilityType.MYSQL, SqlCompatibilityType.POSTGRESQL, SqlCompatibilityType.TERADATA);
     }
 
     @Override
@@ -62,6 +64,8 @@ public class BesMagicDataDialect extends AbstractDialect {
         return true;
     }
 
-
-
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.POSTGRESQL;
+    }
 }

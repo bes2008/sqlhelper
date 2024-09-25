@@ -3,6 +3,7 @@ package com.jn.sqlhelper.dialect.internal;
 import com.jn.langx.annotation.Name;
 import com.jn.langx.util.Preconditions;
 import com.jn.langx.util.Strings;
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.SQLServer2005LimitHandler;
 import com.jn.sqlhelper.dialect.internal.limit.TopLimitHandler;
@@ -44,6 +45,7 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         super();
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
         setDelegate(new SQLServer2012Dialect());
+        setSqlCompatibilityTypes(SqlCompatibilityType.SQLSERVER);
     }
 
     @Override
@@ -232,8 +234,8 @@ public class SQLServerDialect extends AbstractTransactSQLDialect {
         return ']';
     }
 
-
-
-
-
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.SQLSERVER;
+    }
 }

@@ -1,4 +1,5 @@
 package com.jn.sqlhelper.dialect.internal;
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.pagination.RowSelection;
 import com.jn.sqlhelper.dialect.SQLDialectException;
 import com.jn.sqlhelper.dialect.annotation.Driver;
@@ -24,8 +25,12 @@ public class OracleDialect extends AbstractDialect {
         super();
         setDelegate(new Oracle9iDialect());
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
+        setSqlCompatibilityTypes(SqlCompatibilityType.ORACLE);
     }
-
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.ORACLE;
+    }
     public OracleDialect(java.sql.Driver driver) {
         setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
 
@@ -59,6 +64,12 @@ public class OracleDialect extends AbstractDialect {
     class OracleBaseDialect extends AbstractDialect {
         OracleBaseDialect() {
             setLikeEscaper(BackslashStyleEscaper.NON_DEFAULT_INSTANCE);
+            setSqlCompatibilityTypes(SqlCompatibilityType.ORACLE);
+        }
+
+        @Override
+        public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+            return SqlCompatibilityType.ORACLE;
         }
 
         @Override

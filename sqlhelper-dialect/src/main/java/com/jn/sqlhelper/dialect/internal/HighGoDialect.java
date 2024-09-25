@@ -2,6 +2,7 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
@@ -15,6 +16,7 @@ public class HighGoDialect extends AbstractDialect {
     public HighGoDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
+        setSqlCompatibilityTypes(SqlCompatibilityType.ORACLE, SqlCompatibilityType.MYSQL,SqlCompatibilityType.POSTGRESQL);
     }
 
     @Override
@@ -32,4 +34,8 @@ public class HighGoDialect extends AbstractDialect {
         return true;
     }
 
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.POSTGRESQL;
+    }
 }

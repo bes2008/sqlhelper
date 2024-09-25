@@ -2,6 +2,7 @@ package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
 import com.jn.sqlhelper.common.ddl.SQLSyntaxCompatTable;
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.annotation.SyntaxCompat;
 import com.jn.sqlhelper.dialect.internal.limit.LimitOffsetLimitHandler;
 
@@ -11,6 +12,7 @@ public class GaussDbDialect extends AbstractDialect {
     public GaussDbDialect() {
         super();
         setLimitHandler(new LimitOffsetLimitHandler());
+        setSqlCompatibilityTypes(SqlCompatibilityType.TERADATA,SqlCompatibilityType.MYSQL,SqlCompatibilityType.ORACLE,SqlCompatibilityType.POSTGRESQL);
     }
 
     @Override
@@ -33,4 +35,8 @@ public class GaussDbDialect extends AbstractDialect {
         return true;
     }
 
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.POSTGRESQL;
+    }
 }

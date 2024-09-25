@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.OffsetFetchFirstOnlyLimitHandler;
 
@@ -11,6 +12,7 @@ public class AzureDialect extends AbstractDialect {
         super();
         setLimitHandler(new OffsetFetchFirstOnlyLimitHandler());
         setLikeEscaper(BackslashStyleEscaper.INSTANCE);
+        setSqlCompatibilityTypes(SqlCompatibilityType.SQLSERVER);
     }
 
     @Override
@@ -23,4 +25,9 @@ public class AzureDialect extends AbstractDialect {
         return true;
     }
 
+
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.SQLSERVER;
+    }
 }

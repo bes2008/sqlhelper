@@ -1,6 +1,7 @@
 package com.jn.sqlhelper.dialect.internal;
 
 import com.jn.langx.annotation.Name;
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.internal.limit.SkipLimitHandler;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 
@@ -12,6 +13,7 @@ public class GBase8sDialect extends AbstractDialect {
     public GBase8sDialect() {
         setLimitHandler(new SkipLimitHandler());
         setLikeEscaper(new BackslashStyleEscaper(true));
+        setSqlCompatibilityTypes(SqlCompatibilityType.MYSQL, SqlCompatibilityType.ORACLE);
     }
 
     @Override
@@ -24,4 +26,8 @@ public class GBase8sDialect extends AbstractDialect {
         return true;
     }
 
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.ORACLE;
+    }
 }

@@ -1,5 +1,6 @@
 package com.jn.sqlhelper.dialect.internal;
 
+import com.jn.sqlhelper.dialect.SqlCompatibilityType;
 import com.jn.sqlhelper.dialect.likeescaper.BackslashStyleEscaper;
 import com.jn.sqlhelper.dialect.internal.limit.LimitCommaLimitHandler;
 import com.jn.sqlhelper.dialect.urlparser.MySqlUrlParser;
@@ -14,6 +15,7 @@ public class MySQLDialect extends AbstractDialect {
         super();
         setLimitHandler(new LimitCommaLimitHandler());
         setLikeEscaper(BackslashStyleEscaper.INSTANCE);
+        setSqlCompatibilityTypes(SqlCompatibilityType.MYSQL);
     }
 
     @Override
@@ -56,5 +58,8 @@ public class MySQLDialect extends AbstractDialect {
         return true;
     }
 
-
+    @Override
+    public SqlCompatibilityType getDefaultSqlCompatibilityType() {
+        return SqlCompatibilityType.MYSQL;
+    }
 }
