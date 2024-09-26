@@ -1,3 +1,7 @@
+## 5.0.9
+1. dialect支持数据库兼容配置
+## 5.0.8
+1. 支持自动注册 PlainSqlScriptParser
 ## 5.0.7
 1. 将urlparser, sqlfile parser,ddl generator从dialect独立
 ## 5.0.6
